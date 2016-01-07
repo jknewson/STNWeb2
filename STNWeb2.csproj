@@ -11,7 +11,7 @@
     <DebugType>full</DebugType>
     <DebugSymbols>true</DebugSymbols>
     <TypeScriptToolsVersion>1.5</TypeScriptToolsVersion>
-    <UseIISExpress>true</UseIISExpress>
+    <UseIISExpress>false</UseIISExpress>
     <IISExpressSSLPort />
     <IISExpressAnonymousAuthentication />
     <IISExpressWindowsAuthentication />
@@ -41,7 +41,7 @@
     <Content Include="src\component\hwm\quickHWMCtrl.js" />
     <Content Include="src\component\hwm\hwmList.html" />
     <Content Include="src\component\logInOut\login.html" />
-    <Content Include="src\component\logInOut\LogInOutCtrl.js" />
+    <Content Include="src\component\logInOut\logInOutCtrl.js" />
     <Content Include="src\component\main\mainView.html" />
     <Content Include="src\component\main\mainCtrl.js" />
     <Content Include="src\component\map\map.html" />
@@ -53,7 +53,7 @@
     <Content Include="src\component\member\membersList.html" />
     <Content Include="src\component\ModalsCtrl.js" />
     <Content Include="src\component\objectivePoint\objectivePointCtrl.js" />
-    <Content Include="src\component\objectivePoint\ObjectivePointModalCtrl.js" />
+    <Content Include="src\component\objectivePoint\objectivePointModalCtrl.js" />
     <Content Include="src\component\objectivePoint\objectivePointList.html" />
     <Content Include="src\component\peak\peakCtrl.js" />
     <Content Include="src\component\peak\peakList.html" />
@@ -64,7 +64,6 @@
     <Content Include="src\component\reporting\reportingCtrl.js" />
     <Content Include="src\component\reporting\reportingDashboard.html" />
     <Content Include="src\component\reporting\reportingDashboardCtrl.js" />
-    <Content Include="src\component\reporting\Reporting%28partials%29.html" />
     <Content Include="src\component\reporting\reporting.html" />
     <Content Include="src\component\reporting\reportModalCtrl.js" />
     <Content Include="src\component\reporting\submitReport.html" />
@@ -126,7 +125,6 @@
     <Content Include="src\images\Members1.png" />
     <Content Include="src\images\Tables1.png" />
     <Content Include="src\index.html" />
-    <Content Include="src\services\businessServices.js" />
     <Content Include="src\services\STNResource.js" />
     <Content Include="src\shared\directives\STNDirectives.js" />
     <Content Include="web.config" />
@@ -168,7 +166,7 @@
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>60324</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
-          <IISUrl>http://localhost:60324/</IISUrl>
+          <IISUrl>https://localhost/STNWeb2</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
           <UseCustomServer>False</UseCustomServer>
           <CustomServerUrl>

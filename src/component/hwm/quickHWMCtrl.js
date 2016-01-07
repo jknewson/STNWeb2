@@ -4,10 +4,10 @@
 
     var STNControllers = angular.module('STNControllers');
     //#region QuickHWM
-    STNControllers.controller('QuickHWMCtrl', ['$scope', '$rootScope', '$cookies', '$location', '$state', '$http', '$uibModal', '$filter',
+    STNControllers.controller('quickHWMCtrl', ['$scope', '$rootScope', '$cookies', '$location', '$state', '$http', '$uibModal', '$filter',
         'allHorDatums', 'allHorCollMethods', 'allStates', 'allCounties', 'allOPTypes', 'allVertDatums', 'allVertColMethods', 
-        'allOPQualities', 'allHWMTypes', 'allHWMQualities', 'allMarkers', 'SITE', 'OBJECTIVE_POINT', 'HWM', QuickHWMCtrl]);
-    function QuickHWMCtrl($scope, $rootScope, $cookies, $location, $state, $http, $uibModal, $filter, allHorDatums, allHorCollMethods, allStates,
+        'allOPQualities', 'allHWMTypes', 'allHWMQualities', 'allMarkers', 'SITE', 'OBJECTIVE_POINT', 'HWM', quickHWMCtrl]);
+    function quickHWMCtrl($scope, $rootScope, $cookies, $location, $state, $http, $uibModal, $filter, allHorDatums, allHorCollMethods, allStates,
         allCounties, allOPTypes, allVertDatums, allVertColMethods, allOPQualities, allHWMTypes, allHWMQualities, allMarkers, SITE, OBJECTIVE_POINT, HWM) {
         if ($cookies.get('STNCreds') == undefined || $cookies.get('STNCreds') == "") {
             $scope.auth = false;

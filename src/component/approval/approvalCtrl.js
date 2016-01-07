@@ -4,8 +4,8 @@
 
     var STNControllers = angular.module('STNControllers');
  //#region Approval Controller
-    STNControllers.controller('ApprovalCtrl', ['$scope', '$cookies', '$rootScope', '$location', '$http', 'stateList', 'instrumentList',  'allSensorTypes', 'HWM', 'DATA_FILE', 'INSTRUMENT', 'MEMBER', 'SITE', ApprovalCtrl]);
-    function ApprovalCtrl($scope, $cookies, $rootScope, $location, $http, stateList, instrumentList, allSensorTypes, HWM, DATA_FILE, INSTRUMENT, MEMBER, SITE) {
+    STNControllers.controller('approvalCtrl', ['$scope', '$cookies', '$rootScope', '$location', '$http', 'stateList', 'instrumentList',  'allSensorTypes', 'HWM', 'DATA_FILE', 'INSTRUMENT', 'MEMBER', 'SITE', approvalCtrl]);
+    function approvalCtrl($scope, $cookies, $rootScope, $location, $http, stateList, instrumentList, allSensorTypes, HWM, DATA_FILE, INSTRUMENT, MEMBER, SITE) {
         if ($cookies.get('STNCreds') == undefined || $cookies.get('STNCreds') == "") {
             $scope.auth = false;
             $location.path('/login');

@@ -778,7 +778,7 @@
                         },
                         'aSite': {
                             controller: 'siteCtrl',
-                            templateUrl: 'component/sites/siteInfoView.html'
+                            templateUrl: 'component/site/siteInfoView.html'
                         },
                         'op': {
                             controller: 'objectivePointCtrl',

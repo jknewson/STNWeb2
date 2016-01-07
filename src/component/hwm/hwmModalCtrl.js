@@ -3,8 +3,8 @@
     'use strict';
 
     var ModalControllers = angular.module('ModalControllers');
- ModalControllers.controller('HWMmodalCtrl', ['$scope', '$cookies', '$http', '$uibModalInstance', '$uibModal', 'allDropdowns', 'thisHWM', 'hwmSite', 'allMembers', 'HWM', HWMmodalCtrl]);
-    function HWMmodalCtrl($scope, $cookies, $http, $uibModalInstance, $uibModal, allDropdowns, thisHWM, hwmSite, allMembers, HWM) {
+    ModalControllers.controller('hwmModalCtrl', ['$scope', '$cookies', '$http', '$uibModalInstance', '$uibModal', 'allDropdowns', 'thisHWM', 'hwmSite', 'allMembers', 'HWM', hwmModalCtrl]);
+    function hwmModalCtrl($scope, $cookies, $http, $uibModalInstance, $uibModal, allDropdowns, thisHWM, hwmSite, allMembers, HWM) {
         //TODO:: check to see if they chose an event.. if not, they need to before creating a hwm
         //dropdowns
         $scope.hwmTypeList = allDropdowns[0];
@@ -52,6 +52,7 @@
             $scope.EventName = $scope.eventList.filter(function (e) { return e.EVENT_ID == $scope.aHWM.EVENT_ID; })[0].EVENT_NAME;
             $uibModalInstance.dismiss('cancel');
         };
+
         //convert deg min sec to dec degrees
         var azimuth = function (deg, min, sec) {
             var azi = 0;
@@ -111,6 +112,7 @@
                 }
             }
         }
+
         //  lat/long =is number
         $scope.isNum = function (evt) {
             var theEvent = evt || window.event;
@@ -181,8 +183,6 @@
                         var sendBack = [updatedHWM, 'updated'];
                         $uibModalInstance.close(sendBack);
                     });                
-                } else {
-                    alert("Please populate all required fields.");
                 }
             }//end save()
 
@@ -233,7 +233,7 @@
                 HDATUM_ID: hwmSite.HDATUM_ID,
                 HCOLLECT_METHOD_ID: hwmSite.HCOLLECT_METHOD_ID,
                 FLAG_DATE: makeAdate(""),
-                FLAG_TEAM_ID: $scope.LoggedInMember.MEMBER_ID //need to make this FLAG_MEMBER_ID ... and at SiteCtrl level get all members and pass to these modals to filter for member info to show
+                FLAG_TEAM_ID: $scope.LoggedInMember.MEMBER_ID //need to make this FLAG_MEMBER_ID ... and at siteCtrl level get all members and pass to these modals to filter for member info to show
             };
             $scope.EventName = $cookies.get('SessionEventName');
             $scope.FlagMember = $scope.LoggedInMember;
@@ -261,18 +261,11 @@
                         var sendBack = [createdHWM, 'created'];
                         $uibModalInstance.close(sendBack);
                     });
-                } else {
-                    alert("Please populate all required fields");
                 }
             }//end create()
             //#endregion new HWM
         }
         //radio button defaults
         $scope.aHWM.decDegORdms = 'dd';
-
-
-
     } //end HWM
-
-
 })();

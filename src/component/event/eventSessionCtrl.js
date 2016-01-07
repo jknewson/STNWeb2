@@ -5,14 +5,14 @@
     var STNControllers = angular.module('STNControllers');
 
 //#region EventSession
-    STNControllers.controller('EventSessionCtrl', ['$scope', '$rootScope', '$cookies', '$uibModal', '$location', '$state', 'EVENT', 'EVENT_TYPE', 'STATE', EventSessionCtrl]);
-    function EventSessionCtrl($scope, $rootScope, $cookies, $uibModal, $location, $state, EVENT, EVENT_TYPE, STATE) {
+    STNControllers.controller('eventSessionCtrl', ['$scope', '$rootScope', '$cookies', '$uibModal', '$location', '$state', 'EVENT', 'EVENT_TYPE', 'STATE', eventSessionCtrl]);
+    function eventSessionCtrl($scope, $rootScope, $cookies, $uibModal, $location, $state, EVENT, EVENT_TYPE, STATE) {
         $scope.openEventModal = function () {
             $(".page-loading").removeClass("hidden");
             //modal
             var modalInstance = $uibModal.open({
                 templateUrl: 'ChooseEvent.html',
-                controller: 'SessionEventmodalCtrl',
+                controller: 'eventSessionModalCtrl',
                 size: 'md',
                 backdrop: 'static',
                 windowClass: 'rep-dialog',

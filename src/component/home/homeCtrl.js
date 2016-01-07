@@ -4,8 +4,8 @@
 
     var STNControllers = angular.module('STNControllers');
     //#region Home Controller 
-    STNControllers.controller('HomeCtrl', ['$scope', '$rootScope', '$location', '$cookies', '$http', HomeCtrl]);
-    function HomeCtrl($scope, $rootScope, $location, $cookies, $http) {
+    STNControllers.controller('homeCtrl', ['$scope', '$rootScope', '$location', '$cookies', '$http', homeCtrl]);
+    function homeCtrl($scope, $rootScope, $location, $cookies, $http) {
         if ($cookies.get('STNCreds') == undefined || $cookies.get('STNCreds') == "") {
             $scope.auth = false;
             $location.path('/login');

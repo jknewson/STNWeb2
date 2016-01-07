@@ -3,8 +3,8 @@
     'use strict';
 
     var ModalControllers = angular.module('ModalControllers');
-    ModalControllers.controller('ReportModalCtrl', ['$scope', '$uibModalInstance', 'report', 'submitPerson', 'contacts', ReportModalCtrl]);
-        function ReportModalCtrl($scope, $uibModalInstance, report, submitPerson, contacts) {
+    ModalControllers.controller('reportModalCtrl', ['$scope', '$uibModalInstance', 'report', 'submitPerson', 'contacts', reportModalCtrl]);
+    function reportModalCtrl($scope, $uibModalInstance, report, submitPerson, contacts) {
             $scope.ReportView = {};
             $scope.ReportView.Report = report;
             $scope.ReportView.submitter = submitPerson;
