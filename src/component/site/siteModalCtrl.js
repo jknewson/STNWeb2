@@ -3,8 +3,8 @@
     'use strict';
 
     var ModalControllers = angular.module('ModalControllers');
-ModalControllers.controller('SITEmodalCtrl', ['$scope', '$cookies', '$location', '$state', '$http', '$timeout', '$uibModal', '$uibModalInstance', '$filter', 'allDropDownParts', 'thisSiteStuff', 'SITE', 'SITE_HOUSING', 'MEMBER', 'INSTRUMENT', 'INSTRUMENT_STATUS', 'LANDOWNER_CONTACT', SITEmodalCtrl]);
-    function SITEmodalCtrl($scope, $cookies, $location, $state, $http, $timeout, $uibModal, $uibModalInstance, $filter, allDropDownParts, thisSiteStuff, SITE, SITE_HOUSING, MEMBER, INSTRUMENT, INSTRUMENT_STATUS, LANDOWNER_CONTACT) {
+    ModalControllers.controller('siteModalCtrl', ['$scope', '$cookies', '$location', '$state', '$http', '$timeout', '$uibModal', '$uibModalInstance', '$filter', 'allDropDownParts', 'thisSiteStuff', 'SITE', 'SITE_HOUSING', 'MEMBER', 'INSTRUMENT', 'INSTRUMENT_STATUS', 'LANDOWNER_CONTACT', siteModalCtrl]);
+function siteModalCtrl($scope, $cookies, $location, $state, $http, $timeout, $uibModal, $uibModalInstance, $filter, allDropDownParts, thisSiteStuff, SITE, SITE_HOUSING, MEMBER, INSTRUMENT, INSTRUMENT_STATUS, LANDOWNER_CONTACT) {
         //dropdowns
         $scope.HorizontalDatumList = allDropDownParts[0];
         $scope.HorCollMethodList = allDropDownParts[1];
@@ -219,14 +219,15 @@ ModalControllers.controller('SITEmodalCtrl', ['$scope', '$cookies', '$location',
                             LANDOWNER_CONTACT.update({ id: $scope.aSite.LANDOWNERCONTACT_ID }, $scope.landowner).$promise.then(function () {
                                 PUTsite();
                             });
-                        }
-                        if ($scope.landowner.FNAME != undefined || $scope.landowner.LNAME != undefined || $scope.landowner.TITLE != undefined ||
+                        } else if ($scope.landowner.FNAME != undefined || $scope.landowner.LNAME != undefined || $scope.landowner.TITLE != undefined ||
                                 $scope.landowner.ADDRESS != undefined || $scope.landowner.CITY != undefined || $scope.landowner.PRIMARYPHONE != undefined) {
                             //they added something.. POST (rather than just clicking button and not)
                             LANDOWNER_CONTACT.save($scope.landowner, function success(response) {
                                 $scope.aSite.LANDOWNERCONTACT_ID = response.LANDOWNERCONTACTID;
                                 PUTsite();
                             }, function error(errorResponse) { toastr.error("Error adding Landowner: " + errorResponse.statusText); });
+                        } else {
+                            PUTsite();
                         }
                     } else {
                         PUTsite();

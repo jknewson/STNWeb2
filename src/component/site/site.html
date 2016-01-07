@@ -838,7 +838,7 @@
         <h3 class="modal-title">HWM</h3>
     </div>
 
-    <form class="form-horizontal" name="HWMForm" novalidate>
+    <form class="form-horizontal" name="HWMForm">
         <fieldset>
             <div class="modal-body">
                 <!-- Waterbody: -->
@@ -1151,10 +1151,10 @@
 <!-- MODAL for Sensor-->
 <script type="text/ng-template" id="Sensormodal.html">
     <div class="modal-header">
-        <h3 class="modal-title">Sensor</h3>
+        <h3 class="modal-title">Deploy Sensor</h3>
     </div>
 
-    <form class="form-horizontal" name="SensorForm" novalidate>
+    <form class="form-horizontal" name="SensorForm">
         <fieldset>
             <div class="modal-body">
 
@@ -1163,7 +1163,7 @@
                     <label class="col-md-3 control-label" for="EVENT_ID">Event:</label>
                     <div class="col-md-6">
                         <div class="col-md-8">{{EventName}}</div>
-                        <div class="col-md-3" ng-show="userRole == 'Admin' && aSensor.INSTRUMENT_ID != undefined">
+                        <div class="col-md-3" ng-show="userRole == 'Admin' && whichButton == 'edit'">
                             <button type="button" ng-click="showChangeEventDD()" class="btn btn-primary">Change Event</button>
                         </div>
                     </div>
@@ -1313,24 +1313,25 @@
                 <div class="form-group">
                     <div class="col-md-12">
                         <span>
-                            <button ng-show="aSensor.INSTRUMENT_ID == undefined" class="btn btn-primary" ng-click="deploy(SensorForm.$valid)">
+                            <button ng-if="whichButton == 'deploy' || whichButton == 'deployP'" class="btn btn-primary" ng-click="deploy(SensorForm.$valid)">
                                 <span>Deploy</span>
                             </button>
-                            <span>
-                                <button ng-show="aSensor.INSTRUMENT_ID != undefined" class="btn btn-primary" ng-click="save(SensorForm.$valid)">
-                                    <span>Save</span>
-                                </button>
-                            </spa        n>
-                            <span>
-                                <button ng-show="aSensor.INSTRUMENT_ID != undefined" class="btn btn-danger" ng-click="delete(SensorForm.$valid)">
-                                    <span>Save</span>
-                                </button>
-                            </span>
-                            <span>
-                                <button type="button" class="btn btn-warning" ng-click="cancel()">
-                                    <span>Cancel</span>
-                                </button>
-                            </span>
+                        </span>
+                        <span>
+                            <button ng-show="whichButton == 'edit'" class="btn btn-primary" ng-click="save(SensorForm.$valid)">
+                                <span>Save</span>
+                            </button>
+                        </span>
+                        <span>
+                            <button ng-show="whichButton == 'edit'" class="btn btn-danger" ng-click="delete(SensorForm.$valid)">
+                                <span>Save</span>
+                            </button>
+                        </span>
+                        <span>
+                            <button type="button" class="btn btn-warning" ng-click="cancel()">
+                                <span>Cancel</span>
+                            </button>
+                        </span>
                     </div>
                 </div>
             </div>

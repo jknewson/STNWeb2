@@ -4,8 +4,8 @@
 
     var STNControllers = angular.module('STNControllers');
    //#region INSTRUMENT
-    STNControllers.controller('SensorCtrl', ['$scope', '$cookies', '$location', '$state', '$http', '$uibModal', '$filter', '$timeout', 'thisSite', 'thisSiteSensors', 'allSensorBrands', 'allStatusTypes', 'allDeployTypes', 'allSensorTypes', 'allSensDeps', 'allHousingTypes', 'allEvents', 'INSTRUMENT', 'INSTRUMENT_STATUS', 'SITE', 'MEMBER', 'DEPLOYMENT_TYPE', SensorCtrl]);
-    function SensorCtrl($scope, $cookies, $location, $state, $http, $uibModal, $filter, $timeout, thisSite, thisSiteSensors, allSensorBrands, allStatusTypes, allDeployTypes, allSensorTypes, allSensDeps, allHousingTypes, allEvents, INSTRUMENT, INSTRUMENT_STATUS, SITE, MEMBER, DEPLOYMENT_TYPE) {
+    STNControllers.controller('sensorCtrl', ['$scope', '$cookies', '$location', '$state', '$http', '$uibModal', '$filter', '$timeout', 'thisSite', 'thisSiteSensors', 'allSensorBrands', 'allStatusTypes', 'allDeployTypes', 'allSensorTypes', 'allSensDeps', 'allHousingTypes', 'allEvents', 'INSTRUMENT', 'INSTRUMENT_STATUS', 'SITE', 'MEMBER', 'DEPLOYMENT_TYPE', sensorCtrl]);
+    function sensorCtrl($scope, $cookies, $location, $state, $http, $uibModal, $filter, $timeout, thisSite, thisSiteSensors, allSensorBrands, allStatusTypes, allDeployTypes, allSensorTypes, allSensDeps, allHousingTypes, allEvents, INSTRUMENT, INSTRUMENT_STATUS, SITE, MEMBER, DEPLOYMENT_TYPE) {
         if ($cookies.get('STNCreds') == undefined || $cookies.get('STNCreds') == "") {
             $scope.auth = false;
             $location.path('/login');
@@ -23,6 +23,50 @@
                 }
             }
             $scope.deployTypeList.push({DEPLOYMENT_TYPE_ID: tempDepTypeID, METHOD: "Temperature (Pressure Transducer)" });
+
+            //get new Date().toUTCString() with standard time instead of military (optional - pass in a date to have be utc)
+            var utcDateTime = function (d) {
+                var getMonth = function (mo) {
+                    switch (mo) {
+                        case 'Jan':
+                            return '01';
+                        case 'Feb':
+                            return '02';
+                        case 'Mar':
+                            return '03';
+                        case 'Apr':
+                            return '04';
+                        case 'May':
+                            return '05';
+                        case 'Jun':
+                            return '06';
+                        case 'Jul':
+                            return '07';
+                        case 'Aug':
+                            return '08';
+                        case 'Sep':
+                            return '09';
+                        case 'Oct':
+                            return '10';
+                        case 'Nov':
+                            return '11';
+                        case 'Dec':
+                            return '12';
+                    }
+                };
+                var Time_Stamp = d != undefined ? new Date(d).toUTCString() : new Date().toUTCString();// "Wed, 09 Dec 2015 17:18:26 GMT" == change to standard time for storage
+                var mo = Time_Stamp.substr(8, 3);
+                var actualMo = getMonth(mo);
+                var day = Time_Stamp.substr(5, 2);
+                var year = Time_Stamp.substr(12, 4);
+                var hr = Time_Stamp.substr(17, 2);
+                var standardHrs = hr > 12 ? '0' + (hr - 12).toString() : hr.toString();
+                var min = Time_Stamp.substr(20, 2);
+                var sec = Time_Stamp.substr(23, 2);
+                var amPm = hr > 12 ? 'PM' : 'AM';
+                var time_stampNEW = actualMo + '/' + day + '/' + year + ' ' + standardHrs + ':' + min + ':' + sec + ' ' + amPm; //12/09/2015 04:22:32PM
+                return new Date(time_stampNEW);
+            };
 
             $scope.sensDepTypes = allSensDeps;
             $scope.showProposed = false; //they want to add a proposed sensor, open options
@@ -99,7 +143,7 @@
                 
                 var modalInstance = $uibModal.open({
                     templateUrl: 'Sensormodal.html',
-                    controller: 'SensormodalCtrl',
+                    controller: 'sensormodalCtrl',
                     size: 'lg',
                     backdrop: 'static',
                     windowClass: 'rep-dialog',

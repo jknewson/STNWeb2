@@ -4,8 +4,8 @@
 
     var STNControllers = angular.module('STNControllers');
     //#region Site Search Controller
-    STNControllers.controller('SiteSearchCtrl', ['$scope', '$cookies', '$rootScope', '$location', 'stateList', 'sensorTypes', 'networkNames', 'SITE', SiteSearchCtrl]);
-    function SiteSearchCtrl($scope, $cookies, $rootScope, $location, stateList, sensorTypes, networkNames, SITE) {
+    STNControllers.controller('siteSearchCtrl', ['$scope', '$cookies', '$rootScope', '$location', 'stateList', 'sensorTypes', 'networkNames', 'SITE', siteSearchCtrl]);
+    function siteSearchCtrl($scope, $cookies, $rootScope, $location, stateList, sensorTypes, networkNames, SITE) {
         if ($cookies.get('STNCreds') == undefined || $cookies.get('STNCreds') == "") {
             $scope.auth = false;
             $location.path('/login');

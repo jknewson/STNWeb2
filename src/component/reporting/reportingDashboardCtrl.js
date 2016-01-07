@@ -3,8 +3,8 @@
     'use strict';
 
     var STNControllers = angular.module('STNControllers');
- STNControllers.controller('ReportingDashCtrl', ['$scope', '$cookies', '$filter', '$uibModal', '$state', '$http', 'CONTACT', 'MEMBER', 'allReportsAgain', ReportingDashCtrl]);
-    function ReportingDashCtrl($scope, $cookies, $filter, $uibModal, $state, $http, CONTACT, MEMBER, allReportsAgain) {
+    STNControllers.controller('reportingDashCtrl', ['$scope', '$cookies', '$filter', '$uibModal', '$state', '$http', 'CONTACT', 'MEMBER', 'allReportsAgain', reportingDashCtrl]);
+    function reportingDashCtrl($scope, $cookies, $filter, $uibModal, $state, $http, CONTACT, MEMBER, allReportsAgain) {
         $scope.reportsToDate = allReportsAgain;
         $scope.todayRpts = []; $scope.yesterdayRpts = []; $scope.pickDateRpts = []; $scope.pickAdateReports = false;
         $scope.today = new Date();
@@ -17,7 +17,7 @@
             //modal
             var modalInstance = $uibModal.open({
                 templateUrl: 'ViewReport.html',
-                controller: 'ReportModalCtrl',
+                controller: 'reportModalCtrl',
                 size: 'lg',
                 windowClass: 'rep-dialog',
                 resolve: {  //TODO :: Change this to get ReportModel --includes contacts

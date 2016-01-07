@@ -3,8 +3,8 @@
     'use strict';
 
     var ModalControllers = angular.module('ModalControllers');
- ModalControllers.controller('SessionEventmodalCtrl', ['$scope', '$rootScope', '$cookies', '$uibModalInstance', 'allEvents', 'allEventTypes', 'allStates', 'EVENT', SessionEventmodalCtrl]);
-    function SessionEventmodalCtrl($scope, $rootScope, $cookies, $uibModalInstance, allEvents, allEventTypes, allStates, EVENT) {
+    ModalControllers.controller('eventSessionModalCtrl', ['$scope', '$rootScope', '$cookies', '$uibModalInstance', 'allEvents', 'allEventTypes', 'allStates', 'EVENT', eventSessionModalCtrl]);
+ function eventSessionModalCtrl($scope, $rootScope, $cookies, $uibModalInstance, allEvents, allEventTypes, allStates, EVENT) {
         $scope.EventList = allEvents;
         $scope.EventTypeList = allEventTypes;
         $scope.StateList = allStates;

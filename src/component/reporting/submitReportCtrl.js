@@ -3,8 +3,8 @@
     'use strict';
 
     var STNControllers = angular.module('STNControllers');
-    STNControllers.controller('SubmitReportCtrl', ['$scope', '$http', '$cookies', '$uibModal', '$state', 'CONTACT', 'REPORT', SubmitReportCtrl]);
-    function SubmitReportCtrl($scope, $http, $cookies, $uibModal, $state, CONTACT, REPORT) {
+    STNControllers.controller('submitReportCtrl', ['$scope', '$http', '$cookies', '$uibModal', '$state', 'CONTACT', 'REPORT', submitReportCtrl]);
+    function submitReportCtrl($scope, $http, $cookies, $uibModal, $state, CONTACT, REPORT) {
         //#make sure this clears except for if they care needing to complete a report
         if ($scope.$parent.needToComplete != true) {
             $scope.$parent.newReport = {};
@@ -211,7 +211,7 @@
                     //modal confirming they want to save this without marking it complete
                     var modalInstance = $uibModal.open({
                         templateUrl: 'saveReportModal.html',
-                        controller: 'ConfirmReportModalCtrl',
+                        controller: 'confirmReportModalCtrl',
                         size: 'sm'
                     });
                     modalInstance.result.then(function () {

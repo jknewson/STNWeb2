@@ -4,8 +4,8 @@
 
     var STNControllers = angular.module('STNControllers');
  //#region Map Controller
-    STNControllers.controller('MapCtrl', ['$scope', '$rootScope', '$cookies', '$location', MapCtrl]);
-    function MapCtrl($scope, $rootScope, $cookies, $location) {
+    STNControllers.controller('mapCtrl', ['$scope', '$rootScope', '$cookies', '$location', mapCtrl]);
+    function mapCtrl($scope, $rootScope, $cookies, $location) {
         var cred = $cookies.get('STNCreds');
         if (cred == undefined || cred == "") {
             $scope.auth = false;

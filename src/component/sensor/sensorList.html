@@ -5,7 +5,7 @@
             <span>Sensors</span>
             <span class="badge pull-right">{{sensorCount.total}}</span>
         </uib-accordion-heading>
-
+        <div class="col-md-12" ng-show="!sessionEventExists" style="border:solid 1px red">To deploy a sensor, first choose a session Event above.</div>
         <label class="col-md-9">-- Proposed Sensors --</label>
         <div class="btn-group pull-right">
             <div class="btn-group">
@@ -26,11 +26,19 @@
             </div>
         </div>
         <br clear="all" />
+        <!-- only proposed sensors here -->
         <div ng-repeat="s in SiteSensors">
             <div ng-if="s.InstrumentStats[0].STATUS_TYPE_ID == 4">
-                <!-- only proposed sensors here -->
                 <ul>
-                    <li style="list-style:none">{{s.Instrument.Deployment_Type}} Sensor</li>
+                    <li style="list-style:none">
+                        {{s.Instrument.Deployment_Type}} Sensor
+                        <div ng-show="sessionEventExists" class="pull-right">
+                            <button type="button" class="btn btn-primary" style="padding:0" ng-click="showDEPSensorModal(s)" tooltip-placement="right" uib-tooltip="Deploy this proposed sensor">
+                                <span>Deploy it</span>
+                            </button>
+                        </div>
+                    </li>
+
                 </ul>
             </div>
         </div>
@@ -38,27 +46,28 @@
         <label class="col-md-9">-- Deployed Sensors --</label>
         <div ng-show="sessionEventExists" class="btn-group pull-right">
             <div class="btn-group">
-                <button type="button" class="borderLess" ng-click="showSensorModal(0)" tooltip-placement="right" uib-tooltip="Deploy a new Sensor">
+                <button type="button" class="borderLess" ng-click="showDEPSensorModal(0)" tooltip-placement="right" uib-tooltip="Deploy a new Sensor">
                     <span class="glyphicon glyphicon-plus"></span>
                 </button>
             </div>
         </div>
-        <div class="col-md-12" ng-show="!sessionEventExists">To deploy a sensor, first choose a session Event above.</div>
+
         <br clear="all" />
+        <!-- only deployed sensors here -->
         <div ng-repeat="s in SiteSensors">
             <div ng-if="s.InstrumentStats[0].STATUS_TYPE_ID == 1">
-                <!-- only deployed sensors here -->
+
                 <ul>
-                    <li style="list-style:none"><a class="btn borderLess" ng-click="showHWMModal(s)">{{s.Instrument.Deployment_Type}} Sensor</a></li>
+                    <li style="list-style:none"><a class="btn borderLess" ng-click="showDEPSensorModal(s)">{{s.Instrument.Deployment_Type}} Sensor</a></li>
                 </ul>
             </div>
         </div>
-        <label class="col-md-9">-- Retrieved Sensors --</label>
 
+        <!-- only retrieved sensors here -->
+        <label class="col-md-9">-- Retrieved Sensors --</label>
         <br clear="all" />
         <div ng-repeat="s in SiteSensors">
             <div ng-if="s.InstrumentStats[0].STATUS_TYPE_ID == 2">
-                <!-- only retrieved sensors here -->
                 <ul>
                     <li style="list-style:none">{{s.Instrument.Deployment_Type}} Sensor</li>
                 </ul>
