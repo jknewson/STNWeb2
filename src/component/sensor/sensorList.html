@@ -1,0 +1,69 @@
+﻿<uib-accordion close-others="false">
+    <uib-accordion-group is-open="status.sensorOpen">
+        <uib-accordion-heading>
+            <i style="margin-right:10px" class="pull-left glyphicon" ng-class="{'glyphicon-chevron-down': status.sensorOpen, 'glyphicon-chevron-right': !status.sensorOpen}"></i>
+            <span>Sensors</span>
+            <span class="badge pull-right">{{sensorCount.total}}</span>
+        </uib-accordion-heading>
+
+        <label class="col-md-9">-- Proposed Sensors --</label>
+        <div class="btn-group pull-right">
+            <div class="btn-group">
+                <button type="button" class="borderLess" ng-click="showHideProposed()" tooltip-placement="right" uib-tooltip="Show/Hide Proposed Sensors">
+                    <span class="glyphicon glyphicon-plus"></span>
+                </button>
+            </div>
+        </div>
+        <div class="col-md-10" style="border:1px solid gray; padding:3px;" ng-show="showProposed">
+            <ul style="padding-left:0">
+                <li style="list-style:none;" ng-repeat="ps in deployTypeList">
+                    <input type="checkbox" ng-model="ps.selected" ng-click="" ng-value="{{ps.selected}}" />
+                    <span>{{ps.METHOD}}</span>
+                </li>
+            </ul>
+            <div class="col-md-12 center-block">
+                <button type="button" class="btn btn-primary center-block" ng-click="AddProposed()">Add</button>
+            </div>
+        </div>
+        <br clear="all" />
+        <div ng-repeat="s in SiteSensors">
+            <div ng-if="s.InstrumentStats[0].STATUS_TYPE_ID == 4">
+                <!-- only proposed sensors here -->
+                <ul>
+                    <li style="list-style:none">{{s.Instrument.Deployment_Type}} Sensor</li>
+                </ul>
+            </div>
+        </div>
+
+        <label class="col-md-9">-- Deployed Sensors --</label>
+        <div ng-show="sessionEventExists" class="btn-group pull-right">
+            <div class="btn-group">
+                <button type="button" class="borderLess" ng-click="showSensorModal(0)" tooltip-placement="right" uib-tooltip="Deploy a new Sensor">
+                    <span class="glyphicon glyphicon-plus"></span>
+                </button>
+            </div>
+        </div>
+        <div class="col-md-12" ng-show="!sessionEventExists">To deploy a sensor, first choose a session Event above.</div>
+        <br clear="all" />
+        <div ng-repeat="s in SiteSensors">
+            <div ng-if="s.InstrumentStats[0].STATUS_TYPE_ID == 1">
+                <!-- only deployed sensors here -->
+                <ul>
+                    <li style="list-style:none"><a class="btn borderLess" ng-click="showHWMModal(s)">{{s.Instrument.Deployment_Type}} Sensor</a></li>
+                </ul>
+            </div>
+        </div>
+        <label class="col-md-9">-- Retrieved Sensors --</label>
+
+        <br clear="all" />
+        <div ng-repeat="s in SiteSensors">
+            <div ng-if="s.InstrumentStats[0].STATUS_TYPE_ID == 2">
+                <!-- only retrieved sensors here -->
+                <ul>
+                    <li style="list-style:none">{{s.Instrument.Deployment_Type}} Sensor</li>
+                </ul>
+            </div>
+        </div>
+
+    </uib-accordion-group>
+</uib-accordion>

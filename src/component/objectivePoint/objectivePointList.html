@@ -1,0 +1,19 @@
+﻿<uib-accordion close-others="false">
+    <uib-accordion-group is-open="status.opOpen">
+        <uib-accordion-heading>
+            <i style="margin-right:10px" class="pull-left glyphicon" ng-class="{'glyphicon-chevron-down': status.opOpen, 'glyphicon-chevron-right': !status.opOpen}"></i>
+            <span>Objective Points</span>
+            <span class="badge pull-right">{{opCount.total}}</span>
+        </uib-accordion-heading>
+        <div class="btn-group pull-right">
+            <div class="btn-group">
+                <button type="button" class="borderLess" ng-click="showOPModal(0)" tooltip-placement="right" uib-tooltip="Add an OP">
+                    <span class="glyphicon glyphicon-plus"></span>
+                </button>
+            </div>            
+        </div>
+        <ul>
+            <li ng-repeat="op in SiteObjectivePoints"><a class="btn" ng-click="showOPModal(op)">{{op.NAME}}</a></li>
+        </ul>
+    </uib-accordion-group>
+</uib-accordion>

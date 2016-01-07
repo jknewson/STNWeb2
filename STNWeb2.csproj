@@ -1,0 +1,190 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.Default.props" Condition="Exists('$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.Default.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <ProjectGuid>{DC826620-92E7-4DBC-A9B9-BAE4FBC99D04}</ProjectGuid>
+    <ProjectTypeGuids>{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
+    <OutputType>Library</OutputType>
+    <OutputPath>bin</OutputPath>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <DebugType>full</DebugType>
+    <DebugSymbols>true</DebugSymbols>
+    <TypeScriptToolsVersion>1.5</TypeScriptToolsVersion>
+    <UseIISExpress>true</UseIISExpress>
+    <IISExpressSSLPort />
+    <IISExpressAnonymousAuthentication />
+    <IISExpressWindowsAuthentication />
+    <IISExpressUseClassicPipelineMode />
+  </PropertyGroup>
+  <ItemGroup>
+    <Content Include="src\app.js" />
+    <Content Include="src\component\approval\approval.html" />
+    <Content Include="src\component\approval\approvalCtrl.js" />
+    <Content Include="src\component\event\eventCtrl.js" />
+    <Content Include="src\component\event\eventInfoCtrl.js" />
+    <Content Include="src\component\event\eventSessionCtrl.js" />
+    <Content Include="src\component\event\eventHolderView.html" />
+    <Content Include="src\component\event\eventInfo.html" />
+    <Content Include="src\component\event\eventSessionModalCtrl.js" />
+    <Content Include="src\component\event\eventsList.html" />
+    <Content Include="src\component\file\file.html" />
+    <Content Include="src\component\file\fileCtrl.js" />
+    <Content Include="src\component\file\fileUploadCtrl.js" />
+    <Content Include="src\component\file\fileList.html" />
+    <Content Include="src\component\help\helpCtrl.js" />
+    <Content Include="src\component\home\homeBase.html" />
+    <Content Include="src\component\home\homeCtrl.js" />
+    <Content Include="src\component\hwm\hwmCtrl.js" />
+    <Content Include="src\component\hwm\hwmModalCtrl.js" />
+    <Content Include="src\component\hwm\quickHWM.html" />
+    <Content Include="src\component\hwm\quickHWMCtrl.js" />
+    <Content Include="src\component\hwm\hwmList.html" />
+    <Content Include="src\component\logInOut\login.html" />
+    <Content Include="src\component\logInOut\LogInOutCtrl.js" />
+    <Content Include="src\component\main\mainView.html" />
+    <Content Include="src\component\main\mainCtrl.js" />
+    <Content Include="src\component\map\map.html" />
+    <Content Include="src\component\map\mapCtrl.js" />
+    <Content Include="src\component\member\memberCtrl.js" />
+    <Content Include="src\component\member\memberHolderView.html" />
+    <Content Include="src\component\member\memberInfo.html" />
+    <Content Include="src\component\member\memberInfoCtrl.js" />
+    <Content Include="src\component\member\membersList.html" />
+    <Content Include="src\component\ModalsCtrl.js" />
+    <Content Include="src\component\objectivePoint\objectivePointCtrl.js" />
+    <Content Include="src\component\objectivePoint\ObjectivePointModalCtrl.js" />
+    <Content Include="src\component\objectivePoint\objectivePointList.html" />
+    <Content Include="src\component\peak\peakCtrl.js" />
+    <Content Include="src\component\peak\peakList.html" />
+    <Content Include="src\component\reporting\completedReportView.html" />
+    <Content Include="src\component\reporting\confirmReportModalCtrl.js" />
+    <Content Include="src\component\reporting\generateReport.html" />
+    <Content Include="src\component\reporting\projectAlertModalCtrl.js" />
+    <Content Include="src\component\reporting\reportingCtrl.js" />
+    <Content Include="src\component\reporting\reportingDashboard.html" />
+    <Content Include="src\component\reporting\reportingDashboardCtrl.js" />
+    <Content Include="src\component\reporting\Reporting%28partials%29.html" />
+    <Content Include="src\component\reporting\reporting.html" />
+    <Content Include="src\component\reporting\reportModalCtrl.js" />
+    <Content Include="src\component\reporting\submitReport.html" />
+    <Content Include="src\component\reporting\submitReportCtrl.js" />
+    <Content Include="src\component\resources\agency.html" />
+    <Content Include="src\component\resources\contactType.html" />
+    <Content Include="src\component\resources\deploymentPriority.html" />
+    <Content Include="src\component\resources\deploymentType.html" />
+    <Content Include="src\component\resources\eventStatus.html" />
+    <Content Include="src\component\resources\eventType.html" />
+    <Content Include="src\component\resources\fileType.html" />
+    <Content Include="src\component\resources\horizontalCollectionMethod.html" />
+    <Content Include="src\component\resources\horizontalDatum.html" />
+    <Content Include="src\component\resources\housingType.html" />
+    <Content Include="src\component\resources\hwmQuality.html" />
+    <Content Include="src\component\resources\hwmType.html" />
+    <Content Include="src\component\resources\instrumentCollectionCondition.html" />
+    <Content Include="src\component\resources\marker.html" />
+    <Content Include="src\component\resources\networkNames.html" />
+    <Content Include="src\component\resources\networkType.html" />
+    <Content Include="src\component\resources\objectivePointQuality.html" />
+    <Content Include="src\component\resources\objectivePointType.html" />
+    <Content Include="src\component\resources\resourcesCtrl.js" />
+    <Content Include="src\component\resources\resourcesHolderView.html" />
+    <Content Include="src\component\resources\resourcesList.html" />
+    <Content Include="src\component\resources\sensorBrand.html" />
+    <Content Include="src\component\resources\sensorType.html" />
+    <Content Include="src\component\resources\statusType.html" />
+    <Content Include="src\component\resources\verticalCollectionMethod.html" />
+    <Content Include="src\component\resources\verticalDatum.html" />
+    <Content Include="src\component\sensor\sensorCtrl.js" />
+    <Content Include="src\component\sensor\sensorModalCtrl.js" />
+    <Content Include="src\component\sensor\sensorList.html" />
+    <Content Include="src\component\settings\settings.html" />
+    <Content Include="src\component\settings\settingsCtrl.js" />
+    <Content Include="src\component\siteSearch\siteSearch.html" />
+    <Content Include="src\component\siteSearch\siteSearchCtrl.js" />
+    <Content Include="src\component\site\site.html" />
+    <Content Include="src\component\site\siteCtrl.js" />
+    <Content Include="src\component\site\siteInfoView.html" />
+    <Content Include="src\component\site\siteModalCtrl.js" />
+    <Content Include="src\component\STNCtrl.js" />
+    <Content Include="src\css\app.css" />
+    <Content Include="src\css\bootstrap-multiselect.css" />
+    <Content Include="src\css\bootstrap-table.css" />
+    <Content Include="src\css\bootstrap-theme.css" />
+    <Content Include="src\css\bootstrap-theme.min.css" />
+    <Content Include="src\css\bootstrap.css" />
+    <Content Include="src\css\bootstrap.min.css" />
+    <Content Include="src\css\bootstrap_3.1.1.css" />
+    <Content Include="src\css\isteven-multi-select.css" />
+    <Content Include="src\css\ng-tags-input.min.css" />
+    <Content Include="src\css\select.css" />
+    <Content Include="src\css\toastr.css" />
+    <Content Include="src\css\xeditable.css" />
+    <Content Include="src\fonts\glyphicons-halflings-regular.svg" />
+    <Content Include="src\images\Events1.png" />
+    <Content Include="src\images\loading1.gif" />
+    <Content Include="src\images\Members1.png" />
+    <Content Include="src\images\Tables1.png" />
+    <Content Include="src\index.html" />
+    <Content Include="src\services\businessServices.js" />
+    <Content Include="src\services\STNResource.js" />
+    <Content Include="src\shared\directives\STNDirectives.js" />
+    <Content Include="web.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include=".gitattributes" />
+    <Content Include=".gitignore" />
+    <Content Include="bower.json" />
+    <Content Include="packages.config" />
+    <Content Include="src\css\bootstrap-theme.css.map" />
+    <Content Include="src\css\bootstrap.css.map" />
+    <Content Include="src\fonts\glyphicons-halflings-regular.eot" />
+    <Content Include="src\fonts\glyphicons-halflings-regular.ttf" />
+    <Content Include="src\fonts\glyphicons-halflings-regular.woff" />
+    <Content Include="src\fonts\glyphicons-halflings-regular.woff2" />
+    <None Include="web.Debug.config">
+      <DependentUpon>web.config</DependentUpon>
+    </None>
+    <None Include="web.Release.config">
+      <DependentUpon>web.config</DependentUpon>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="dist\" />
+  </ItemGroup>
+  <PropertyGroup>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">12.0</VisualStudioVersion>
+  </PropertyGroup>
+  <PropertyGroup>
+    <RootNamespace>STNWeb2</RootNamespace>
+  </PropertyGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\WebApplications\Microsoft.WebApplication.targets" Condition="Exists('$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\WebApplications\Microsoft.WebApplication.targets')" />
+  <ProjectExtensions>
+    <VisualStudio>
+      <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
+        <WebProjectProperties>
+          <UseIIS>True</UseIIS>
+          <AutoAssignPort>True</AutoAssignPort>
+          <DevelopmentServerPort>60324</DevelopmentServerPort>
+          <DevelopmentServerVPath>/</DevelopmentServerVPath>
+          <IISUrl>http://localhost:60324/</IISUrl>
+          <NTLMAuthentication>False</NTLMAuthentication>
+          <UseCustomServer>False</UseCustomServer>
+          <CustomServerUrl>
+          </CustomServerUrl>
+          <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
+        </WebProjectProperties>
+      </FlavorProperties>
+    </VisualStudio>
+  </ProjectExtensions>
+  <PropertyGroup Condition="'$(Configuration)' == 'Debug'">
+    <TypeScriptRemoveComments>false</TypeScriptRemoveComments>
+    <TypeScriptSourceMap>true</TypeScriptSourceMap>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)' == 'Release'">
+    <TypeScriptRemoveComments>true</TypeScriptRemoveComments>
+    <TypeScriptSourceMap>false</TypeScriptSourceMap>
+  </PropertyGroup>
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.targets" Condition="Exists('$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.targets')" />
+</Project>
