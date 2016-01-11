@@ -3,15 +3,15 @@
     'use strict';
 
     var ModalControllers = angular.module('ModalControllers');
-    ModalControllers.controller('siteModalCtrl', ['$scope', '$cookies', '$location', '$state', '$http', '$timeout', '$uibModal', '$uibModalInstance', '$filter', 'allDropDownParts', 'thisSiteStuff', 'SITE', 'SITE_HOUSING', 'MEMBER', 'INSTRUMENT', 'INSTRUMENT_STATUS', 'LANDOWNER_CONTACT', siteModalCtrl]);
-function siteModalCtrl($scope, $cookies, $location, $state, $http, $timeout, $uibModal, $uibModalInstance, $filter, allDropDownParts, thisSiteStuff, SITE, SITE_HOUSING, MEMBER, INSTRUMENT, INSTRUMENT_STATUS, LANDOWNER_CONTACT) {
+    ModalControllers.controller('siteModalCtrl', ['$scope', '$cookies', '$q', '$location', '$state', '$http', '$timeout', '$uibModal', '$uibModalInstance', '$filter', 'allDropDownParts', 'thisSiteStuff', 'SITE', 'SITE_HOUSING', 'MEMBER', 'INSTRUMENT', 'INSTRUMENT_STATUS', 'LANDOWNER_CONTACT', siteModalCtrl]);
+    function siteModalCtrl($scope, $cookies, $q, $location, $state, $http, $timeout, $uibModal, $uibModalInstance, $filter, allDropDownParts, thisSiteStuff, SITE, SITE_HOUSING, MEMBER, INSTRUMENT, INSTRUMENT_STATUS, LANDOWNER_CONTACT) {
         //dropdowns
         $scope.HorizontalDatumList = allDropDownParts[0];
         $scope.HorCollMethodList = allDropDownParts[1];
         $scope.StateList = allDropDownParts[2];
         $scope.AllCountyList = allDropDownParts[3];
         $scope.stateCountyList = [];
-        $scope.HousingTypeList = allDropDownParts[4];
+        $scope.allHousingTypeList = allDropDownParts[4];
         $scope.DepPriorityList = allDropDownParts[5]
         $scope.NetNameList = allDropDownParts[6];
         $scope.NetTypeList = allDropDownParts[7];
@@ -19,7 +19,8 @@ function siteModalCtrl($scope, $cookies, $location, $state, $http, $timeout, $ui
         $scope.SensorDeployment = allDropDownParts[9];
 
         //globals 
-        $scope.addedHouseType = [];
+        $scope.houseDirty = false; $scope.netNameDirty = false; $scope.netTypeDirty = false;
+        $scope.siteHouseTypesTable = [];
         $scope.aSite = {};
         $scope.aSite.decDegORdms = 'dd';
         $scope.DMS = {}; //holder of deg min sec values
@@ -29,9 +30,11 @@ function siteModalCtrl($scope, $cookies, $location, $state, $http, $timeout, $ui
         $scope.addLandowner = false; //hide landowner fields
         $scope.disableSensorParts = false; //toggle to disable/enable sensor housing installed and add proposed sensor
         $scope.showSiteHouseTable = false;
-        $scope.addedHouseType = []; //holder for when adding housing type to page from multiselect
+        $scope.siteHouseTypesTable = []; //holder for when adding housing type to page from multiselect
         $scope.siteHousesModel = {};
-        //$scope.LOCATION = { Latitude: '28.206323', Longitude: '-80.650249' };
+        $scope.siteHousesToRemove = []; //holder for editing site to add removing house types to for PUT
+        $scope.siteNetworkNames = []; //holds the NetworkName (list of strings) to pass back;
+        $scope.siteNetworkTypes = []; //holds the NetworkType (list of strings) to pass back;
         //convert deg min sec to dec degrees
         var azimuth = function (deg, min, sec) {
             var azi = 0;
@@ -44,6 +47,65 @@ function siteModalCtrl($scope, $cookies, $location, $state, $http, $timeout, $ui
                 return (azi).toFixed(5);
             }
         }
+
+        //lat modal 
+        var openLatModal = function (w) {
+            var latModal = $uibModal.open({
+                template: '<div class="modal-header"><h3 class="modal-title">Error</h3></div>' +
+                    '<div class="modal-body"><p>The Latitude must be between 0 and 73.0</p></div>' +
+                    '<div class="modal-footer"><button class="btn btn-primary" ng-enter="ok()" ng-click="ok()">OK</button></div>',
+                controller: function ($scope, $uibModalInstance) {
+                    $scope.ok = function () {
+                        $uibModalInstance.close();
+                    };
+                },
+                size: 'sm'
+            });
+            latModal.result.then(function (fieldFocus) {
+                if (w == 'latlong') $("#LATITUDE_DD").focus();
+                else $("#LaDeg").focus();
+            });
+        };
+
+        //long modal
+        var openLongModal = function (w) {
+            var longModal = $uibModal.open({
+                template: '<div class="modal-header"><h3 class="modal-title">Error</h3></div>' +
+                    '<div class="modal-body"><p>The Longitude must be between -175.0 and -60.0</p></div>' +
+                    '<div class="modal-footer"><button class="btn btn-primary" ng-enter="ok()" ng-click="ok()">OK</button></div>',
+                controller: function ($scope, $uibModalInstance) {
+                    $scope.ok = function () {
+                        $uibModalInstance.close();
+                    };
+                },
+                size: 'sm'
+            });
+            longModal.result.then(function (fieldFocus) {
+                if (w == 'latlong') $("#LONGITUDE_DD").focus();
+                else $("#LoDeg").focus();
+            });
+        };
+
+        //make sure lat/long are right number range
+        $scope.checkValue = function (d) {
+            if (d == 'dms') {
+                //check the degree value
+                if ($scope.DMS.LADeg < 0 || $scope.DMS.LADeg > 73) {
+                    openLatModal('dms');
+                }
+                if ($scope.DMS.LODeg < -175 || $scope.DMS.LODeg > -60) {
+                    openLongModal('dms');
+                }
+            } else {
+                //check the latitude/longitude
+                if ($scope.aSite.LATITUDE_DD < 0 || $scope.aSite.LATITUDE_DD > 73) {
+                    openLatModal('latlong');
+                }
+                if ($scope.aSite.LONGITUDE_DD < -175 || $scope.aSite.LONGITUDE_DD > -60) {
+                    openLongModal('latlong');
+                }
+            }
+        };
 
         //convert dec degrees to dms
         var deg_to_dms = function (deg) {
@@ -90,8 +152,14 @@ function siteModalCtrl($scope, $cookies, $location, $state, $http, $timeout, $ui
             }
         }
 
+        //networkType check event --trigger dirty
+        $scope.netTypeChg = function () {
+            $scope.netTypeDirty = true;
+        };
+
         //networkName check event.. if "Not Defined" chosen, disable the other 2 checkboxes
         $scope.whichOne = function (n) {
+            $scope.netNameDirty = true;
             if (n.NAME == "Not Defined" && n.selected == true) {
                 //they checked "not defined"
                 for (var nn = 0; nn < $scope.NetNameList.length; nn++) {
@@ -121,10 +189,218 @@ function siteModalCtrl($scope, $cookies, $location, $state, $http, $timeout, $ui
             }
         };
 
+        //site PUT
+        $scope.save = function (valid) {
+            if (valid == true) {
+                $(".page-loading").removeClass("hidden");
+                //update the site
+                $http.defaults.headers.common['Authorization'] = 'Basic ' + $cookies.get('STNCreds');
+                $http.defaults.headers.common['Accept'] = 'application/json';
+                //did they add or edit the landowner
+                //TODO :: check if the landowner fields are $dirty first..
+                
+                if ($scope.addLandowner == true) {
+                    //there's a landowner.. edit or add?
+                    if ($scope.aSite.LANDOWNERCONTACT_ID != null) {
+                        //did they change anything to warrent a put
+                        LANDOWNER_CONTACT.update({ id: $scope.aSite.LANDOWNERCONTACT_ID }, $scope.landowner).$promise.then(function () {
+                            putSiteAndParts();
+                        });
+                    } else if ($scope.landowner.FNAME != undefined || $scope.landowner.LNAME != undefined || $scope.landowner.TITLE != undefined ||
+                            $scope.landowner.ADDRESS != undefined || $scope.landowner.CITY != undefined || $scope.landowner.PRIMARYPHONE != undefined) {
+                        //they added something.. POST (rather than just clicking button and not)
+                        LANDOWNER_CONTACT.save($scope.landowner, function success(response) {
+                            $scope.aSite.LANDOWNERCONTACT_ID = response.LANDOWNERCONTACTID;
+                            putSiteAndParts();
+                        }, function error(errorResponse) { toastr.error("Error adding Landowner: " + errorResponse.statusText); });
+                    } else putSiteAndParts();
+                } else putSiteAndParts();
+            }
+        };//end save
+        var putSiteAndParts = function () {
+            SITE.update({ id: $scope.aSite.SITE_ID }, $scope.aSite, function success(response) {      
+                //update site housings
+                var defer = $q.defer();
+                var RemovePromises = [];
+                var AddPromises = [];
+                //Remove siteHousings (these are just SITE_HOUSING_ID 's
+                angular.forEach($scope.siteHousesToRemove, function (shID) {
+                    var delSHProm = SITE_HOUSING.delete({ id: shID }).$promise;
+                    RemovePromises.push(delSHProm);
+                });
+
+                //Remove NetNames
+                if ($scope.netNameDirty == true) {
+                    angular.forEach($scope.NetNameList, function (nnL) {
+                        if (nnL.selected == false) {
+                            //delete it
+                            $http.defaults.headers.common['X-HTTP-Method-Override'] = 'DELETE';
+                            var NNtoDelete = { NETWORK_NAME_ID: nnL.NETWORK_NAME_ID, NAME: nnL.NAME };
+                            var delNNProm = SITE.deleteSiteNetworkName({ id: $scope.aSite.SITE_ID }, NNtoDelete).$promise;
+                            RemovePromises.push(delNNProm);
+                            delete $http.defaults.headers.common['X-HTTP-Method-Override'];
+                        }
+                    });
+                }//end netName dirty
+
+                //Remove NetTypes
+                if ($scope.netTypeDirty == true) {
+                    angular.forEach($scope.NetTypeList, function (ntL) {
+                        if (ntL.selected == false) {
+                            //delete it if they are removing it
+                            $http.defaults.headers.common['X-HTTP-Method-Override'] = 'DELETE';
+                            var NTtoDelete = { NETWORK_TYPE_ID: ntL.NETWORK_TYPE_ID, NETWORK_TYPE_NAME: ntL.NETWORK_TYPE_NAME };
+                            var delNTProm = SITE.deleteSiteNetworkType({ id: $scope.aSite.SITE_ID }, NTtoDelete).$promise;
+                            RemovePromises.push(delNTProm);
+                            delete $http.defaults.headers.common['X-HTTP-Method-Override'];
+                        }                        
+                    });
+                };//end netType dirty
+
+                //Add siteHousings
+                if ($scope.houseDirty == true) {
+                    angular.forEach($scope.siteHouseTypesTable, function (ht) {
+                        var addHtProm;
+                        if (ht.SITE_HOUSING_ID != undefined) {
+                            //PUT it
+                            addHtProm = SITE_HOUSING.update({ id: ht.SITE_HOUSING_ID }, ht).$promise;
+                        } else {
+                            //POST it
+                            addHtProm = SITE.postSiteHousing({ id: $scope.aSite.SITE_ID }, ht).$promise;
+                        }
+                        AddPromises.push(addHtProm);
+                    });
+                }//end they touched it
+
+                //Add NetNames
+                angular.forEach($scope.NetNameList, function (AnnL) {
+                    if (AnnL.selected == true) {
+                        $scope.siteNetworkNames.push(AnnL.NAME);
+                        //post it (if it's there already, it won't do anything)
+                        var NNtoAdd = { NETWORK_NAME_ID: AnnL.NETWORK_NAME_ID, NAME: AnnL.NAME };
+                        var addNNProm = SITE.postSiteNetworkName({ id: $scope.aSite.SITE_ID }, NNtoAdd).$promise;
+                        AddPromises.push(addNNProm);
+                    }
+                });
+                //Add NetTypes
+                angular.forEach($scope.NetTypeList, function (AnTL) {
+                    if (AnTL.selected == true) {
+                        $scope.siteNetworkTypes.push(AnTL.NETWORK_TYPE_NAME);
+                      //  post it (if it's there already, it won't do anything)
+                        var NTtoAdd = { NETWORK_TYPE_ID: AnTL.NETWORK_TYPE_ID, NETWORK_TYPE_NAME: AnTL.NETWORK_TYPE_NAME };
+                        var addNTProm = SITE.postSiteNetworkType({ id: $scope.aSite.SITE_ID }, NTtoAdd).$promise;
+                        AddPromises.push(addNTProm);
+                    }
+                });
+
+                //ok now run the removes, then the adds and then pass the stuff back out of here.
+                $q.all(RemovePromises).then(function () {
+              //      $scope.originalSiteHousings = []; //clear this out after deleting all of them;
+                    $q.all(AddPromises).then(function () {
+                        var sendBack = [$scope.aSite, $scope.siteNetworkNames, $scope.siteNetworkTypes]
+                        $uibModalInstance.close(sendBack);
+                        $(".page-loading").addClass("hidden");
+                        toastr.success("Site updated");
+                        $location.path('/Site/' + $scope.aSite.SITE_ID + '/SiteDashboard').replace();//.notify(false);
+                        $scope.apply;
+                    }).catch(function error(msg) {
+                        console.error(msg);
+                    });
+                }).catch(function error(msg) {
+                    console.error(msg);
+                }); //all added
+            }, function error(errorResponse) {
+                toastr.error("Error updating Site: " + errorResponse.statusText);
+            });//end SITE.save(...
+        }; // end PUTsite()
+
+        //create this site clicked
+        $scope.create = function (valid) {
+            if (valid == true) {
+                $(".page-loading").removeClass("hidden");
+                //POST landowner, if they added one
+                $http.defaults.headers.common['Authorization'] = 'Basic ' + $cookies.get('STNCreds');
+                $http.defaults.headers.common['Accept'] = 'application/json';
+                delete $scope.aSite.Creator;
+                if ($scope.addLandowner == true) {
+                    if ($scope.landowner.FNAME != undefined || $scope.landowner.LNAME != undefined || $scope.landowner.TITLE != undefined ||
+                                   $scope.landowner.ADDRESS != undefined || $scope.landowner.CITY != undefined || $scope.landowner.PRIMARYPHONE != undefined) {
+                        LANDOWNER_CONTACT.save($scope.landowner, function success(response) {
+                            $scope.aSite.LANDOWNERCONTACT_ID = response.LANDOWNERCONTACTID;
+                            //now post the site
+                            postSiteAndParts();
+                        }, function error(errorResponse) {
+                            $(".page-loading").addClass("hidden");
+                            toastr.error("Error posting landowner: " + errorResponse.statusText);
+                        });
+                    } else {
+                        postSiteAndParts();
+                    }
+                } else {
+                    postSiteAndParts();
+                }
+            }
+        };
+        var postSiteAndParts = function () {
+            //make sure longitude is < 0, otherwise * (-1),
+            var createdSiteID = 0;            
+            //POST site
+            //SITE.save($scope.aSite, function success(response) {
+         //       createdSiteID = response.SITE_ID;
+                var defer = $q.defer();
+                var postPromises = [];
+                //site_housingTypes (if any)
+                angular.forEach($scope.siteHouseTypesTable, function (htype) {
+                    htype.SITE_ID = createdSiteID;
+                    delete htype.TYPE_NAME;
+               //     var hTPromise = SITE.postSiteHousing({ id: createdSiteID }, htype).$promise;
+                //    postPromises.push(hTPromise);
+                });
+                //site_NetworkNames
+                angular.forEach($scope.NetNameList, function (nName) {
+                    if (nName.selected == true) {
+                        var siteNetName = { NETWORK_NAME_ID: nName.NETWORK_NAME_ID, NAME: nName.NAME };
+                //        var nNPromise = SITE.postSiteNetworkName({ id: createdSiteID }, siteNetName).$promise;
+                //        postPromises.push(nNPromise);
+                    }
+                });
+                //site_NetworkTypes
+                angular.forEach($scope.NetTypeList, function (nType) {
+                    if (nType.selected == true) {
+                        var siteNetType = { NETWORK_TYPE_ID: nType.NETWORK_TYPE_ID, NETWORK_TYPE_NAME: nType.NETWORK_TYPE_NAME };
+                //        var nTPromise = SITE.postSiteNetworkType({ id: createdSiteID }, siteNetType).$promise;
+                 //       postPromises.push(nTPromise);
+                    }
+                });
+                if ($scope.disableSensorParts == false) {
+                    for (var ps = 0; ps < $scope.ProposedSens.length; ps++) {
+                        if ($scope.ProposedSens[ps].selected == true) {
+                            //POST it
+                            var sensorTypeID = $scope.SensorDeployment.filter(function (sd) { return sd.DEPLOYMENT_TYPE_ID == $scope.ProposedSens[ps].DEPLOYMENT_TYPE_ID; })[0].SENSOR_TYPE_ID;
+                            var inst = { DEPLOYMENT_TYPE_ID: $scope.ProposedSens[ps].DEPLOYMENT_TYPE_ID, SITE_ID: createdSiteID, SENSOR_TYPE_ID: sensorTypeID };
+                 //           var instrPromise = INSTRUMENT.save(inst).$promise.then(function (insResponse) {
+                 //               var instStat = { INSTRUMENT_ID: insResponse.INSTRUMENT_ID, STATUS_TYPE_ID: 4, COLLECTION_TEAM_ID: $scope.aSite.MEMBER_ID, TIME_STAMP: new Date(), TIME_ZONE: 'UTC' };
+                 //               INSTRUMENT_STATUS.save(instStat).$promise;
+                  //          }).$promise;
+                 //           postPromises.push(instrPromise);
+                        }
+                    }
+                };
+
+               // $q.all(postPromises).then(function (response) {
+               //     $uibModalInstance.dismiss('cancel');
+                //    $(".page-loading").addClass("hidden");
+                //    $location.path('/Site/' + createdSiteID + '/SiteDashboard').replace();//.notify(false);
+                //    $scope.apply;
+               // });
+           // }, function error(errorResponse) {
+           //     toastr.error("Error creating Site: " + errorResponse.statusText);
+            //});
+        };
+        
         if (thisSiteStuff != undefined) {
             //#region existing site 
-            //$scope.aSite[0], $scope.originalSiteHousings[1], $scope.addedHouseType[2], thisSiteNetworkNames[3], siteNetworkTypes[4], $scope.landowner[5]
-            //testing angular.copy -- when hitting cancel after making changes in the modal, those changes still affect the scope aSite in the dashboard
+            //$scope.aSite[0], $scope.originalSiteHousings[1], $scope.siteHouseTypesTable[2], thisSiteNetworkNames[3], siteNetworkTypes[4], $scope.landowner[5]
             $scope.aSite = angular.copy(thisSiteStuff[0]);            
             //if this site is not appropriate for sensor, dim next 2 fields
             if ($scope.aSite.SENSOR_NOT_APPROPRIATE > 0) {
@@ -142,27 +418,26 @@ function siteModalCtrl($scope, $cookies, $location, $state, $http, $timeout, $ui
 
             //apply any site housings for EDIT
             if (thisSiteStuff[1].length > 0) {
-                //var test = ;
-                $scope.originalSiteHousings = thisSiteStuff[1];
+                $scope.originalSiteHousings = thisSiteStuff[1]; //for multiselect .selected = true/false
                 $scope.showSiteHouseTable = true;
-                $scope.addedHouseType = thisSiteStuff[2];
+                $scope.siteHouseTypesTable = thisSiteStuff[2]; //for table to show all info on house type
                 $scope.landowner = thisSiteStuff[5];
                 $scope.addLandowner = $scope.landowner.FNAME != undefined || $scope.landowner.LNAME != undefined || $scope.landowner.ADDRESS != undefined || $scope.landowner.PRIMARYPHONE != undefined ? true : false;
 
-                //go through HousingTypeList and add selected Property.
-                for (var i = 0; i < $scope.HousingTypeList.length; i++) {
+                //go through allHousingTypeList and add selected Property.
+                for (var i = 0; i < $scope.allHousingTypeList.length; i++) {
                     //for each one, if thisSiteHousings has this id, add 'selected:true' else add 'selected:false'
                     for (var y = 0; y < $scope.originalSiteHousings.length; y++) {
-                        if ($scope.originalSiteHousings[y].HOUSING_TYPE_ID == $scope.HousingTypeList[i].HOUSING_TYPE_ID) {
-                            $scope.HousingTypeList[i].selected = true;
+                        if ($scope.originalSiteHousings[y].HOUSING_TYPE_ID == $scope.allHousingTypeList[i].HOUSING_TYPE_ID) {
+                            $scope.allHousingTypeList[i].selected = true;
                             y = $scope.originalSiteHousings.length; //ensures it doesn't set it as false after setting it as true
                         }
                         else {
-                            $scope.HousingTypeList[i].selected = false;
+                            $scope.allHousingTypeList[i].selected = false;
                         }
                     }
                     if ($scope.originalSiteHousings.length == 0)
-                        $scope.HousingTypeList[i].selected = false;
+                        $scope.allHousingTypeList[i].selected = false;
                 }
 
             }//end if thisSiteHousings != undefined
@@ -182,7 +457,7 @@ function siteModalCtrl($scope, $cookies, $location, $state, $http, $timeout, $ui
                             $scope.NetNameList[a].selected = false;
                     }
                 }
-                if ($scope.NetNameList[0].selected = true) {
+                if ($scope.NetNameList[0].selected == true) {
                     //make these match so rest get disabled
                     $scope.checked = "Not Defined";
                 }
@@ -202,106 +477,7 @@ function siteModalCtrl($scope, $cookies, $location, $state, $http, $timeout, $ui
                             $scope.NetTypeList[ni].selected = false;
                     }
                 }
-            }//end if thisSiteNetworkNames != undefined
-
-            //site PUT
-            $scope.save = function (valid) {
-                if (valid == true) {
-                    $(".page-loading").removeClass("hidden");
-                    //update the site
-                    $http.defaults.headers.common['Authorization'] = 'Basic ' + $cookies.get('STNCreds');
-                    $http.defaults.headers.common['Accept'] = 'application/json';
-                    //did they add or edit the landowner
-                    if ($scope.addLandowner == true) {
-                        //there's a landowner.. edit or add?
-                        if ($scope.aSite.LANDOWNERCONTACT_ID != null) {
-                            //put
-                            LANDOWNER_CONTACT.update({ id: $scope.aSite.LANDOWNERCONTACT_ID }, $scope.landowner).$promise.then(function () {
-                                PUTsite();
-                            });
-                        } else if ($scope.landowner.FNAME != undefined || $scope.landowner.LNAME != undefined || $scope.landowner.TITLE != undefined ||
-                                $scope.landowner.ADDRESS != undefined || $scope.landowner.CITY != undefined || $scope.landowner.PRIMARYPHONE != undefined) {
-                            //they added something.. POST (rather than just clicking button and not)
-                            LANDOWNER_CONTACT.save($scope.landowner, function success(response) {
-                                $scope.aSite.LANDOWNERCONTACT_ID = response.LANDOWNERCONTACTID;
-                                PUTsite();
-                            }, function error(errorResponse) { toastr.error("Error adding Landowner: " + errorResponse.statusText); });
-                        } else {
-                            PUTsite();
-                        }
-                    } else {
-                        PUTsite();
-                    }
-                }
-            };//end save
-
-            var PUTsite = function () {                
-                SITE.update({ id: $scope.aSite.SITE_ID }, $scope.aSite, function success(response) {
-                    toastr.success("Site updated");
-                    //update site housings (remove them all and add what's here) //did they add one? did they remove one? did they edit one?                                  
-                    for (var sh = 0; sh < $scope.originalSiteHousings.length; sh++) {
-                        SITE_HOUSING.delete({ id: $scope.originalSiteHousings[sh].SITE_HOUSING_ID }, $scope.originalSiteHousings[sh]).$promise;
-                    }//end for each old sitehouse (delete)
-
-                    //clear this out after deleting all of them;
-                    setTimeout(function () { $scope.originalSiteHousings = []; }, 3000);
-                    //now POST if any
-                    for (var siteh = 0; siteh < $scope.addedHouseType.length; siteh++) {
-                        SITE.postSiteHousing({ id: $scope.aSite.SITE_ID }, $scope.addedHouseType[siteh], function success(okResponse) {
-                            var i = siteh;
-                            $scope.originalSiteHousings.push($scope.addedHouseType[i]);
-                        }, function error(errorR) {
-                            $(".page-loading").addClass("hidden");
-                            var notsuccessful;
-                        }).$promise;
-                    }//end foreach newsitehousings (post)
-
-                    //update site networkNames (delete all and re-add)
-                    for (var nn = 0; nn < $scope.NetNameList.length; nn++) {
-                        if ($scope.NetNameList[nn].selected == true) {
-                            //post it (if it's there already, it won't do anything)
-                            var NNtoAdd = { NETWORK_NAME_ID: $scope.NetNameList[nn].NETWORK_NAME_ID, NAME: $scope.NetNameList[nn].NAME };
-                            SITE.postSiteNetworkName({ id: $scope.aSite.SITE_ID }, NNtoAdd, function success(responseSNNames) {
-                                var nothingNeeded;
-                            }, function error(errorResponse) {
-                                toastr.error("Error: " + errorResponse.statusText);
-                            }).$promise;
-                        } else {
-                            //delete it
-                            $http.defaults.headers.common['X-HTTP-Method-Override'] = 'DELETE';
-                            var NNtoDelete = { NETWORK_NAME_ID: $scope.NetNameList[nn].NETWORK_NAME_ID, NAME: $scope.NetNameList[nn].NAME };
-                            SITE.deleteSiteNetworkName({ id: $scope.aSite.SITE_ID }, NNtoDelete).$promise;
-                            delete $http.defaults.headers.common['X-HTTP-Method-Override'];
-                        }
-                    }//end for each NetNameList
-
-                    //update site networkTypes (delete all and re-add)
-                    for (var nt = 0; nt < $scope.NetTypeList.length; nt++) {
-                        if ($scope.NetTypeList[nt].selected == true) {
-                            //post it (if it's there already, it won't do anything)
-                            var NTtoAdd = { NETWORK_TYPE_ID: $scope.NetTypeList[nt].NETWORK_TYPE_ID, NETWORK_TYPE_NAME: $scope.NetTypeList[nt].NETWORK_TYPE_NAME };
-                            SITE.postSiteNetworkType({ id: $scope.aSite.SITE_ID }, NTtoAdd, function success(responseSNTypes) {
-                                var nothingNeeded;
-                            }, function error(errorResponse) {
-                                toastr.error("Error: " + errorResponse.statusText);
-                            }).$promise;
-                        } else {
-                            //delete it
-                            $http.defaults.headers.common['X-HTTP-Method-Override'] = 'DELETE';
-                            var NTtoDelete = { NETWORK_TYPE_ID: $scope.NetTypeList[nt].NETWORK_TYPE_ID, NETWORK_TYPE_NAME: $scope.NetTypeList[nt].NETWORK_TYPE_NAME };
-                            SITE.deleteSiteNetworkType({ id: $scope.aSite.SITE_ID }, NTtoDelete).$promise;
-                            delete $http.defaults.headers.common['X-HTTP-Method-Override'];
-                        }
-                    } //end for each NetTypeList
-                }, function error(errorResponse) {
-                    toastr.error("Error updating Site: " + errorResponse.statusText);
-                }).$promise.then(function () {
-                    $uibModalInstance.close($scope.aSite);
-                    $(".page-loading").addClass("hidden");
-                    $location.path('/Site/' + $scope.aSite.SITE_ID + '/SiteDashboard').replace();//.notify(false);
-                    $scope.apply;
-                });//end SITE.save(...
-            }; // end PUTsite()
+            }//end if thisSiteNetworkNames != undefined            
             //#endregion existing site 
         }
         else {
@@ -318,125 +494,7 @@ function siteModalCtrl($scope, $cookies, $location, $state, $http, $timeout, $ui
             }, function error(errorResponse) {
                 toastr.error("Error getting Member info: " + errorResponse.statusText);
             });
-
-            //create this site clicked
-            $scope.create = function (valid) {
-                if (valid == true) {
-                    $(".page-loading").removeClass("hidden");
-                    //POST landowner, if they added one
-                    $http.defaults.headers.common['Authorization'] = 'Basic ' + $cookies.get('STNCreds');
-                    $http.defaults.headers.common['Accept'] = 'application/json';
-                    delete $scope.aSite.Creator;
-                    if ($scope.addLandowner == true) {
-                        if ($scope.landowner.FNAME != undefined || $scope.landowner.LNAME != undefined || $scope.landowner.TITLE != undefined ||
-                                       $scope.landowner.ADDRESS != undefined || $scope.landowner.CITY != undefined || $scope.landowner.PRIMARYPHONE != undefined) {
-                            LANDOWNER_CONTACT.save($scope.landowner, function success(response) {
-                                $scope.aSite.LANDOWNERCONTACT_ID = response.LANDOWNERCONTACTID;
-                                //now post the site
-                                postSite();
-                            }, function error(errorResponse) {
-                                $(".page-loading").addClass("hidden");
-                                toastr.error("Error posting landowner: " + errorResponse.statusText);
-                            });
-                        } else {
-                            postSite();
-                        }
-                    } else {
-                        postSite();
-                    }
-                } 
-            };
-
-            var postSite = function () {
-                //make sure longitude is < 0, otherwise * (-1),
-                var createdSiteID = 0;
-                if ($scope.aSite.LONGITUDE_DD > 0)
-                    $scope.aSite.LONGITUDE_DD = $scope.aSite.LONGITUDE_DD * (-1);
-                //POST site
-                SITE.save($scope.aSite, function success(response) {
-                    createdSiteID = response.SITE_ID;
-                    //POST site_HouseTypes 
-                    for (var ht = 0; ht < $scope.addedHouseType.length; ht++) {
-                        $scope.addedHouseType[ht].SITE_ID = createdSiteID;
-                        delete $scope.addedHouseType[ht].TYPE_NAME;
-                        //now post it
-                        SITE.postSiteHousing({ id: createdSiteID }, $scope.addedHouseType[ht], function success(houseResponse) {
-                            toastr.success("Site Housing Added");
-                        }, function error(errorResponse) {
-                            $(".page-loading").removeClass("hidden");
-                            toastr.error("Error added Site Housing: " + errorResponse.statusText);
-                        }).$promise;
-                    }//end foreach addedHouseType
-                    //now go deal with networkNames and networkTypes
-                    POSTnetworks(createdSiteID);
-
-                }, function error(errorResponse) {
-                    toastr.error("Error creating Site: " + errorResponse.statusText);
-                });
-            };
-
-            var POSTnetworks = function (newSiteId) {
-                //POST site_NetworkNames
-                //loop through $scope.NetNameList for selected == true --post each
-                for (var nn = 0; nn < $scope.NetNameList.length; nn++) {
-                    if ($scope.NetNameList[nn].selected == true) {
-                        //post it
-                        var siteNetName = { NETWORK_NAME_ID: $scope.NetNameList[nn].NETWORK_NAME_ID, NAME: $scope.NetNameList[nn].NAME };
-                        SITE.postSiteNetworkName({ id: newSiteId }, siteNetName, function success(netNameResponse) {
-                            toastr.success("Site Network Name added");
-                        }, function error(errorResponse) {
-                            $(".page-loading").removeClass("hidden");
-                            toastr.error("Error adding Network Name: " + errorResponse.statusText);
-                        }).$promise;
-                    }//end if selected
-                }//end for each netnamelist
-
-                //POST site_NetworkTypes 
-                //loop through $scope.NetTypeList for selected == true --post each
-                for (var nt = 0; nt < $scope.NetTypeList.length; nt++) {
-                    if ($scope.NetTypeList[nt].selected == true) {
-                        //post it
-                        var siteNetType = { NETWORK_TYPE_ID: $scope.NetTypeList[nt].NETWORK_TYPE_ID, NETWORK_TYPE_NAME: $scope.NetTypeList[nt].NETWORK_TYPE_NAME };
-                        SITE.postSiteNetworkType({ id: newSiteId }, siteNetType, function success(netTypeResponse) {
-                            toastr.success("Site Network Type added");
-                        }, function error(errorResponse) {
-                            $(".page-loading").removeClass("hidden");
-                            toastr.error("Error adding Network Type: " + errorResponse.statusText);
-                        }).$promise;
-                    }//end if selected
-                }//end for each nettypelist
-
-                //see if they checked any proposed sensors and POST those 
-                if ($scope.disableSensorParts == false) {
-                    for (var ps = 0; ps < $scope.ProposedSens.length; ps++) {
-                        if ($scope.ProposedSens[ps].selected == true) {
-                            //POST it
-                            var sensorTypeID = $scope.SensorDeployment.filter(function (sd) { return sd.DEPLOYMENT_TYPE_ID == $scope.ProposedSens[ps].DEPLOYMENT_TYPE_ID; })[0].SENSOR_TYPE_ID;
-                            var inst = { DEPLOYMENT_TYPE_ID: $scope.ProposedSens[ps].DEPLOYMENT_TYPE_ID, SITE_ID: newSiteId, SENSOR_TYPE_ID: sensorTypeID };
-                            INSTRUMENT.save(inst, function success(instResponse) {
-                                //INSTRUMENT_STATUS (INSTRUMENT_ID, STATUS_TYPE_ID =4, COLLECTION_TEAM_ID = memberID)
-                                var instStat = { INSTRUMENT_ID: instResponse.INSTRUMENT_ID, STATUS_TYPE_ID: 4, COLLECTION_TEAM_ID: $scope.aSite.MEMBER_ID };
-                                INSTRUMENT_STATUS.save(instStat, function success(insStatResponse) {
-                                    toastr.success("Proposed Sensor Added");
-                                }, function error(errorResponse) {
-                                    $(".page-loading").removeClass("hidden");
-                                    toastr.error("Error adding Proposed Sensor");
-                                }).$promise;
-                            }).$promise;
-                        }//end if selected == true
-                    }//end for each proposedSens
-                } //end if sensor parts aren't disabled
-                //now update page
-                $timeout(function () {
-                    $uibModalInstance.dismiss('cancel');
-                    $(".page-loading").addClass("hidden");
-                    $location.path('/Site/' + newSiteId + '/SiteDashboard').replace();//.notify(false);
-                    $scope.apply;
-                }, 3000);
-            }; //end POSTnetworks
-
             //#endregion this is a NEW SITE CREATE (site == undefined)
-
         }//end new site
 
         //  lat/long =is number
@@ -451,19 +509,27 @@ function siteModalCtrl($scope, $cookies, $location, $state, $http, $timeout, $ui
 
         //multiselect one checked..
         $scope.HouseTypeClick = function (ht) {
-            //add/remove house type and inputs to table row                
+            $scope.houseDirty = true; //they clicked it..used when post/put
+            //add/remove house type and inputs to table row -- foreach on post or put will handle the rest
+           
+            //new site being created
             if (ht.selected == true) {
                 var houseT = { TYPE_NAME: ht.TYPE_NAME, HOUSING_TYPE_ID: ht.HOUSING_TYPE_ID, LENGTH: ht.LENGTH, MATERIAL: ht.MATERIAL, NOTES: ht.NOTES, AMOUNT: 1 };
-                $scope.addedHouseType.push(houseT);
+                $scope.siteHouseTypesTable.push(houseT);
                 $scope.showSiteHouseTable = true;
             }
             if (ht.selected == false) {
-                var i = $scope.addedHouseType.indexOf($scope.addedHouseType.filter(function (h) { return h.TYPE_NAME == ht.TYPE_NAME; })[0]);
-                $scope.addedHouseType.splice(i, 1);
-                if ($scope.addedHouseType.length == 0) {
+                if ($scope.aSite.SITE_ID != undefined) {
+                    var sH_ID = $scope.siteHouseTypesTable.filter(function (h) { return h.TYPE_NAME == ht.TYPE_NAME; })[0].SITE_HOUSING_ID;
+                    $scope.siteHousesToRemove.push(sH_ID); //edit page, add SITE_HOUSING_ID to remove list for PUT
+                }
+                var i = $scope.siteHouseTypesTable.indexOf($scope.siteHouseTypesTable.filter(function (h) { return h.TYPE_NAME == ht.TYPE_NAME; })[0]);
+                $scope.siteHouseTypesTable.splice(i, 1);
+                if ($scope.siteHouseTypesTable.length == 0) {
                     $scope.showSiteHouseTable = false;
                 }
             }
+            
         };
 
         //get address parts and existing sites 

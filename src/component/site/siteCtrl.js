@@ -21,7 +21,7 @@
             $scope.status = {
                 mapOpen: false, siteOpen: true, opOpen: false, sensorOpen: false, hwmOpen: false, filesOpen: false, peakOpen: false
             };
-            $scope.addedHouseType = []; //holder for when adding housing type to page from multiselect
+            $scope.thisSiteHouseTypeModel = []; //holder for when adding housing type to page from multiselect
             
             //open modal to edit or create a site
             $scope.openSiteCreate = function () {
@@ -40,21 +40,22 @@
                             },
                             thisSiteStuff: function () {
                                 if ($scope.aSite.SITE_ID != undefined) {
-                                    var origSiteHouses = $scope.originalSiteHousings != undefined ? $scope.originalSiteHousings : [];
-                                    var addedHouses = $scope.addedHouseType != undefined ? $scope.addedHouseType : [];
+                                    var origSiteHouses = $scope.originalSiteHousings != undefined ? $scope.originalSiteHousings : []; //needed for multi select to set prop selected
+                                    var sHouseTypeModel = $scope.thisSiteHouseTypeModel.length > 0 ? $scope.thisSiteHouseTypeModel : [];
                                     var sNetNames = thisSiteNetworkNames != undefined ? thisSiteNetworkNames : [];
                                     var sNetTypes = thisSiteNetworkTypes != undefined ? thisSiteNetworkTypes : [];
                                     var lo = $scope.landowner != undefined ? $scope.landowner : {
                                 };
-                                var siteRelatedStuff = [$scope.aSite, origSiteHouses, addedHouses, sNetNames, sNetTypes, lo];
+                                    var siteRelatedStuff = [$scope.aSite, origSiteHouses, sHouseTypeModel, sNetNames, sNetTypes, lo];
                                 return siteRelatedStuff;
                             }
                         }
                     }
                 });
                 modalInstance.result.then(function (r) {
-                    //nothing to do here
-                    $scope.aSite = r;
+                    $scope.aSite = r[0];
+                    $scope.siteNetworkNames = r[1];
+                    $scope.siteNetworkTypes = r[2];
                 });
             };
 
@@ -71,14 +72,12 @@
                    
                     //apply any site housings
                     if (thisSiteHousings.length > 0) {
-                        $scope.originalSiteHousings = thisSiteHousings;
+                        $scope.originalSiteHousings = angular.copy(thisSiteHousings);
                         $scope.showSiteHouseTable = true;
-
+                        //format for table
                         for (var z = 0; z < $scope.originalSiteHousings.length; z++) {
                                 //for each housingtypelist..make selected = true for these                       
-                            var houseTypeName = allHousingTypes.filter(function (h) {
-                                return h.HOUSING_TYPE_ID == $scope.originalSiteHousings[z].HOUSING_TYPE_ID;
-                            })[0].TYPE_NAME;
+                            var houseTypeName = allHousingTypes.filter(function (h) { return h.HOUSING_TYPE_ID == $scope.originalSiteHousings[z].HOUSING_TYPE_ID; })[0].TYPE_NAME;
                             var houseT = {
                                 TYPE_NAME: houseTypeName,
                                 HOUSING_TYPE_ID : $scope.originalSiteHousings[z].HOUSING_TYPE_ID,
@@ -88,7 +87,7 @@
                                 NOTES: $scope.originalSiteHousings[z].NOTES,
                                 AMOUNT: $scope.originalSiteHousings[z].AMOUNT
                             };
-                            $scope.addedHouseType.push(houseT);
+                            $scope.thisSiteHouseTypeModel.push(houseT);
                         }
                     }//end if thisSiteHousings != undefined
 
