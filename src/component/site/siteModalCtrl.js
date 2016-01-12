@@ -345,16 +345,16 @@
             //make sure longitude is < 0, otherwise * (-1),
             var createdSiteID = 0;            
             //POST site
-            //SITE.save($scope.aSite, function success(response) {
-         //       createdSiteID = response.SITE_ID;
+            SITE.save($scope.aSite, function success(response) {
+                createdSiteID = response.SITE_ID;
                 var defer = $q.defer();
                 var postPromises = [];
                 //site_housingTypes (if any)
                 angular.forEach($scope.siteHouseTypesTable, function (htype) {
                     htype.SITE_ID = createdSiteID;
                     delete htype.TYPE_NAME;
-               //     var hTPromise = SITE.postSiteHousing({ id: createdSiteID }, htype).$promise;
-                //    postPromises.push(hTPromise);
+                    var hTPromise = SITE.postSiteHousing({ id: createdSiteID }, htype).$promise;
+                    postPromises.push(hTPromise);
                 });
                 //site_NetworkNames
                 angular.forEach($scope.NetNameList, function (nName) {
@@ -378,24 +378,24 @@
                             //POST it
                             var sensorTypeID = $scope.SensorDeployment.filter(function (sd) { return sd.DEPLOYMENT_TYPE_ID == $scope.ProposedSens[ps].DEPLOYMENT_TYPE_ID; })[0].SENSOR_TYPE_ID;
                             var inst = { DEPLOYMENT_TYPE_ID: $scope.ProposedSens[ps].DEPLOYMENT_TYPE_ID, SITE_ID: createdSiteID, SENSOR_TYPE_ID: sensorTypeID };
-                 //           var instrPromise = INSTRUMENT.save(inst).$promise.then(function (insResponse) {
-                 //               var instStat = { INSTRUMENT_ID: insResponse.INSTRUMENT_ID, STATUS_TYPE_ID: 4, COLLECTION_TEAM_ID: $scope.aSite.MEMBER_ID, TIME_STAMP: new Date(), TIME_ZONE: 'UTC' };
-                 //               INSTRUMENT_STATUS.save(instStat).$promise;
-                  //          }).$promise;
-                 //           postPromises.push(instrPromise);
+                            var instrPromise = INSTRUMENT.save(inst).$promise.then(function (insResponse) {
+                                var instStat = { INSTRUMENT_ID: insResponse.INSTRUMENT_ID, STATUS_TYPE_ID: 4, COLLECTION_TEAM_ID: $scope.aSite.MEMBER_ID, TIME_STAMP: new Date(), TIME_ZONE: 'UTC' };
+                                INSTRUMENT_STATUS.save(instStat).$promise;
+                            }).$promise;
+                            postPromises.push(instrPromise);
                         }
                     }
                 };
 
-               // $q.all(postPromises).then(function (response) {
-               //     $uibModalInstance.dismiss('cancel');
-                //    $(".page-loading").addClass("hidden");
-                //    $location.path('/Site/' + createdSiteID + '/SiteDashboard').replace();//.notify(false);
-                //    $scope.apply;
-               // });
-           // }, function error(errorResponse) {
-           //     toastr.error("Error creating Site: " + errorResponse.statusText);
-            //});
+                $q.all(postPromises).then(function (response) {
+                    $uibModalInstance.dismiss('cancel');
+                    $(".page-loading").addClass("hidden");
+                    $location.path('/Site/' + createdSiteID + '/SiteDashboard').replace();//.notify(false);
+                    $scope.apply;
+                });
+            }, function error(errorResponse) {
+                toastr.error("Error creating Site: " + errorResponse.statusText);
+            });
         };
         
         if (thisSiteStuff != undefined) {

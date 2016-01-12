@@ -4,8 +4,8 @@
 
     var STNControllers = angular.module('STNControllers');
    //#region INSTRUMENT
-    STNControllers.controller('sensorCtrl', ['$scope', '$cookies', '$location', '$state', '$http', '$uibModal', '$filter', '$timeout', 'thisSite', 'thisSiteSensors', 'allSensorBrands', 'allStatusTypes', 'allDeployTypes', 'allSensorTypes', 'allSensDeps', 'allHousingTypes', 'allEvents', 'INSTRUMENT', 'INSTRUMENT_STATUS', 'SITE', 'MEMBER', 'DEPLOYMENT_TYPE', sensorCtrl]);
-    function sensorCtrl($scope, $cookies, $location, $state, $http, $uibModal, $filter, $timeout, thisSite, thisSiteSensors, allSensorBrands, allStatusTypes, allDeployTypes, allSensorTypes, allSensDeps, allHousingTypes, allEvents, INSTRUMENT, INSTRUMENT_STATUS, SITE, MEMBER, DEPLOYMENT_TYPE) {
+    STNControllers.controller('sensorCtrl', ['$scope', '$q', '$cookies', '$location', '$state', '$http', '$uibModal', '$filter', '$timeout', 'thisSite', 'thisSiteSensors', 'allSensorBrands', 'allStatusTypes', 'allDeployTypes', 'allSensorTypes', 'allSensDeps', 'allHousingTypes', 'allEvents', 'INSTRUMENT', 'INSTRUMENT_STATUS', 'SITE', 'MEMBER', 'DEPLOYMENT_TYPE', sensorCtrl]);
+    function sensorCtrl($scope, $q, $cookies, $location, $state, $http, $uibModal, $filter, $timeout, thisSite, thisSiteSensors, allSensorBrands, allStatusTypes, allDeployTypes, allSensorTypes, allSensDeps, allHousingTypes, allEvents, INSTRUMENT, INSTRUMENT_STATUS, SITE, MEMBER, DEPLOYMENT_TYPE) {
         if ($cookies.get('STNCreds') == undefined || $cookies.get('STNCreds') == "") {
             $scope.auth = false;
             $location.path('/login');
@@ -13,9 +13,9 @@
             //global vars
             $scope.sensorCount = { total: thisSiteSensors.length };           
             $scope.statusTypeList = allStatusTypes;
-            $scope.deployTypeList = allDeployTypes;
+            $scope.deployTypeList = angular.copy(allDeployTypes);
             var tempDepTypeID = 0;
-            //fix deployment types so that "Temperature" becomes 2 : Temperature (Met sensor)-SensorType:2 and Temperature (pressure transducer)-SensorType:1
+            //fix deployment types so that "Temperature" becomes 2 : Temperature (Met sensor)-SensorType:2 and Temperature (pressure transducer)-SensorType:1 -- just for proposed
             for (var d = 0; d < $scope.deployTypeList.length; d++) {
                 if ($scope.deployTypeList[d].METHOD === "Temperature") {
                     tempDepTypeID = $scope.deployTypeList[d].DEPLOYMENT_TYPE_ID;
@@ -71,6 +71,7 @@
             $scope.sensDepTypes = allSensDeps;
             $scope.showProposed = false; //they want to add a proposed sensor, open options
             $scope.SiteSensors = thisSiteSensors;
+            //show/hide proposed sensors to add
             $scope.showHideProposed = function () {
                 $scope.showProposed = !$scope.showProposed;
             }
@@ -82,6 +83,7 @@
                 for (var dt = 0; dt < $scope.deployTypeList.length; dt++) {
                     if ($scope.deployTypeList[dt].selected == true) {
                         if ($scope.deployTypeList[dt].METHOD.substring(0, 4) == "Temp") {
+                            //temperature proposed sensor
                             proposedToAdd = {
                                 DEPLOYMENT_TYPE_ID: $scope.deployTypeList[dt].DEPLOYMENT_TYPE_ID,
                                 SITE_ID: thisSite.SITE_ID,
@@ -90,6 +92,7 @@
                                 Deployment_Type: $scope.deployTypeList[dt].METHOD
                             }
                         } else {
+                            //any other type
                             proposedToAdd = {
                                 DEPLOYMENT_TYPE_ID: $scope.deployTypeList[dt].DEPLOYMENT_TYPE_ID,
                                 SITE_ID: thisSite.SITE_ID,
@@ -98,9 +101,11 @@
                                 Deployment_Type: $scope.deployTypeList[dt].METHOD
                             }
                         }
-                        //now post it
+                        //now post it (Instrument first, then Instrument Status
                         $http.defaults.headers.common['Authorization'] = 'Basic ' + $cookies.get('STNCreds');
                         $http.defaults.headers.common['Accept'] = 'application/json';
+                       
+                        
                         INSTRUMENT.save(proposedToAdd).$promise.then(function (response) {
                             proposedToAdd.INSTRUMENT_ID = response.INSTRUMENT_ID;
                             var propStatToAdd = { INSTRUMENT_ID: response.INSTRUMENT_ID, STATUS_TYPE_ID: 4, COLLECTION_TEAM_ID: $cookies.get('mID'), TIME_STAMP: Time_STAMP, TIME_ZONE: 'UTC' };
@@ -113,8 +118,7 @@
                                 //clean up ...all unchecked and then hide
                                 for (var dep = 0; dep < $scope.deployTypeList.length; dep++) {
                                     $scope.deployTypeList[dep].selected = false;
-                                }
-                                
+                                }                                
 
                                 $timeout(function () {
                                     // anything you want can go here and will safely be run on the next digest.
