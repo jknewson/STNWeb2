@@ -3,8 +3,8 @@
     'use strict';
 
     var ModalControllers = angular.module('ModalControllers');
-    ModalControllers.controller('sensormodalCtrl', ['$scope', '$cookies', '$http', '$uibModalInstance', '$uibModal', 'allDropdowns', 'allDepTypes', 'thisSensor', 'SensorSite', 'siteOPs', 'allMembers', 'INSTRUMENT', 'INSTRUMENT_STATUS', sensormodalCtrl]);
-   function sensormodalCtrl($scope, $cookies, $http, $uibModalInstance, $uibModal, allDropdowns, allDepTypes, thisSensor, SensorSite, siteOPs, allMembers, INSTRUMENT, INSTRUMENT_STATUS) {
+    ModalControllers.controller('sensormodalCtrl', ['$scope', '$timeout', '$cookies', '$http', '$uibModalInstance', '$uibModal', 'allDropdowns', 'allDepTypes', 'thisSensor', 'SensorSite', 'siteOPs', 'allMembers', 'INSTRUMENT', 'INSTRUMENT_STATUS', sensormodalCtrl]);
+   function sensormodalCtrl($scope, $timeout, $cookies, $http, $uibModalInstance, $uibModal, allDropdowns, allDepTypes, thisSensor, SensorSite, siteOPs, allMembers, INSTRUMENT, INSTRUMENT_STATUS) {
        $(".page-loading").addClass("hidden"); //loading...
        //dropdowns [0]allSensorTypes, [1]allSensorBrands, [2]allHousingTypes, [3]allSensDeps, [4]allEvents
        $scope.sensorTypeList = allDropdowns[0];
@@ -70,6 +70,30 @@
            return new Date(time_stampNEW);
        };
 
+       //get timezone and timestamp for their timezone for showing.. post/put will convert it to utc
+       var getTimeZoneStamp = function () {
+           var sendThis = [];
+           var d = new Date();
+           var offset = (d.toString()).substring(35);
+           var zone = "";
+           switch (offset.substr(0, 3)) {
+               case "Cen":
+                   zone = 'CST';
+                   break;
+               case "Eas":
+                   zone = 'EST';
+                   break;
+               case "Mou":
+                   zone = 'MST';
+                   break;
+               case "Pac":
+                   zone = 'PST';
+                   break;
+           }
+           
+           return sendThis = [d, zone];
+
+       }
        //button click to show event dropdown to change it on existing hwm (admin only)
        $scope.showChangeEventDD = function () {
            $scope.showEventDD = !$scope.showEventDD;
@@ -94,8 +118,7 @@
                    }
                }
            }
-
-       }
+       };
 
        // $scope.sessionEvent = $cookies.get('SessionEventName');
        $scope.LoggedInMember = allMembers.filter(function (m) { return m.MEMBER_ID == $cookies.get('mID'); })[0];
@@ -167,29 +190,32 @@
 
                $scope.aSensStatus.STATUS_TYPE_ID = 1; //deployed status
                $scope.aSensStatus.COLLECTION_TEAM_ID = $cookies.get('mID'); //user that logged in is deployer
-               var createdSensor = {}; var createdSenStat = {};
+               var createdSensor = {}; var depSenStat = {};
                $http.defaults.headers.common['Authorization'] = 'Basic ' + $cookies.get('STNCreds');
                $http.defaults.headers.common['Accept'] = 'application/json';
 
-               //deploying proposed or creating new deployment
+               //DEPLOY PROPOSED or CREATE NEW deployment
                if ($scope.aSensor.INSTRUMENT_ID != undefined) {
                    //put instrument, post status for deploying proposed sensor
                    INSTRUMENT.update({ id: $scope.aSensor.INSTRUMENT_ID }, $scope.aSensor).$promise.then(function (response) {
                        //create instrumentstatus too need: STATUS_TYPE_ID and INSTRUMENT_ID
                        createdSensor = response;
-                       createdSensor.Deployment_Type = response.DEPLOYMENT_TYPE_ID != null ? $scope.depTypeList.filter(function (d) { return d.DEPLOYMENT_TYPE_ID == response.DEPLOYMENT_TYPE_ID; })[0].METHOD : "";
+                       createdSensor.Deployment_Type = $scope.aSensor.Deployment_Type;
                        $scope.aSensStatus.INSTRUMENT_ID = response.INSTRUMENT_ID;
                        INSTRUMENT_STATUS.save($scope.aSensStatus).$promise.then(function (statResponse) {
                            //build the createdSensor to send back and add to the list page
-                           createdSenStat = statResponse;
+                           depSenStat = statResponse;
                            var sensorObjectToSendBack = {
                                Instrument: createdSensor,
-                               InstrumentStats: [createdSenStat]
+                               InstrumentStats: [depSenStat, $scope.proposedStateStatus]
                            };
-                           toastr.success("Sensor deployed");
-                           var state = $scope.whichButton == 'deployP' ? 'proposedDeployed' : 'newDeployed';
-                           var sendBack = [sensorObjectToSendBack, state];
-                           $uibModalInstance.close(sendBack);
+                           $timeout(function () {
+                               // anything you want can go here and will safely be run on the next digest.
+                               toastr.success("Sensor deployed");
+                               var state = $scope.whichButton == 'deployP' ? 'proposedDeployed' : 'newDeployed';
+                               var sendBack = [sensorObjectToSendBack, state];
+                               $uibModalInstance.close(sendBack);
+                           });
                        });
                    });
                } else {
@@ -253,18 +279,19 @@
            //#region existing deployed Sensor .. break apart the 'thisSensor' into 'aSensor' and 'aSensStatus'
            $scope.aSensor = angular.copy(thisSensor.Instrument);
            $scope.aSensStatus = angular.copy(thisSensor.InstrumentStats[0]);
-
+           $scope.proposedStateStatus = angular.copy(thisSensor.InstrumentStats[0]);
            //are we deploying a proposed sensor or editing a deployed sensor??
            if ($scope.aSensStatus.Status == "Proposed") {
                //deploying proposed
                $scope.whichButton = 'deployP';
-               $scope.aSensor.INTERVAL = ''; //clear out the '0' value here
+               $scope.aSensor.INTERVAL = $scope.aSensor.INTERVAL == 0 ? '' : $scope.aSensor.INTERVAL; //clear out the '0' value here
                $scope.IntervalType.type = 'Seconds'; //default
                //set filteredDeploymentTypes to correct ones based on SENSOR_TYPE_ID
                $scope.getDepTypes();
                $scope.aSensStatus.Status = "Deployed";
-               $scope.aSensStatus.TIME_STAMP = utcDateTime();
-               $scope.aSensStatus.TIME_ZONE = 'UTC'; //default
+               var timeParts = getTimeZoneStamp();
+               $scope.aSensStatus.TIME_STAMP = timeParts[0];
+               $scope.aSensStatus.TIME_ZONE = timeParts[1]; //will be converted to utc on post/put
                $scope.EventName = $cookies.get('SessionEventName');
                $scope.CollectionMember = $scope.LoggedInMember;
            } else {
@@ -282,8 +309,9 @@
            //#region Deploying new Sensor
            $scope.whichButton = 'deploy';
            $scope.IntervalType.type = 'Seconds'; //default
-           $scope.aSensStatus.TIME_STAMP = utcDateTime();
-           $scope.aSensStatus.TIME_ZONE = 'UTC'; //default
+           var timeParts = getTimeZoneStamp();
+           $scope.aSensStatus.TIME_STAMP = timeParts[0];
+           $scope.aSensStatus.TIME_ZONE = timeParts[1]; //will be converted to utc on post/put          
            $scope.EventName = $cookies.get('SessionEventName');
            $scope.CollectionMember = $scope.LoggedInMember;
 

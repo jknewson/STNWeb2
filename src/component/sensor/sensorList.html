@@ -5,7 +5,7 @@
             <span>Sensors</span>
             <span class="badge pull-right">{{sensorCount.total}}</span>
         </uib-accordion-heading>
-        <div class="col-md-12" ng-show="!sessionEventExists" style="border:solid 1px red">To deploy a sensor, first choose a session Event above.</div>
+        <div class="col-md-12" ng-show="!sessionEventExists" style="border:solid 1px red">To deploy or retrieve a sensor, first choose a session Event above.</div>
         <label class="col-md-9">-- Proposed Sensors --</label>
         <div class="btn-group pull-right">
             <div class="btn-group">
@@ -33,7 +33,7 @@
                     <li style="list-style:none">
                         {{s.Instrument.Deployment_Type}} Sensor
                         <div ng-show="sessionEventExists" class="pull-right">
-                            <button type="button" class="btn btn-primary" style="padding:0" ng-click="showDEPSensorModal(s)" tooltip-placement="right" uib-tooltip="Deploy this proposed sensor">
+                            <button type="button" class="btn btn-primary" style="padding:0" ng-click="showSensorModal(s)" tooltip-placement="right" uib-tooltip="Deploy this proposed sensor">
                                 <span>Deploy it</span>
                             </button>
                         </div>
@@ -46,7 +46,7 @@
         <label class="col-md-9">-- Deployed Sensors --</label>
         <div ng-show="sessionEventExists" class="btn-group pull-right">
             <div class="btn-group">
-                <button type="button" class="borderLess" ng-click="showDEPSensorModal(0)" tooltip-placement="right" uib-tooltip="Deploy a new Sensor">
+                <button type="button" class="borderLess" ng-click="showSensorModal(0)" tooltip-placement="right" uib-tooltip="Deploy a new Sensor">
                     <span class="glyphicon glyphicon-plus"></span>
                 </button>
             </div>
@@ -58,7 +58,7 @@
             <div ng-if="s.InstrumentStats[0].STATUS_TYPE_ID == 1">
 
                 <ul>
-                    <li style="list-style:none"><a class="btn borderLess" ng-click="showDEPSensorModal(s)">{{s.Instrument.Deployment_Type}} Sensor</a></li>
+                    <li style="list-style:none"><a class="btn borderLess" ng-click="showSensorModal(s)">{{s.Instrument.Deployment_Type}} Sensor</a></li>
                 </ul>
             </div>
         </div>

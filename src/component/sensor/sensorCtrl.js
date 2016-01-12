@@ -24,50 +24,6 @@
             }
             $scope.deployTypeList.push({DEPLOYMENT_TYPE_ID: tempDepTypeID, METHOD: "Temperature (Pressure Transducer)" });
 
-            //get new Date().toUTCString() with standard time instead of military (optional - pass in a date to have be utc)
-            var utcDateTime = function (d) {
-                var getMonth = function (mo) {
-                    switch (mo) {
-                        case 'Jan':
-                            return '01';
-                        case 'Feb':
-                            return '02';
-                        case 'Mar':
-                            return '03';
-                        case 'Apr':
-                            return '04';
-                        case 'May':
-                            return '05';
-                        case 'Jun':
-                            return '06';
-                        case 'Jul':
-                            return '07';
-                        case 'Aug':
-                            return '08';
-                        case 'Sep':
-                            return '09';
-                        case 'Oct':
-                            return '10';
-                        case 'Nov':
-                            return '11';
-                        case 'Dec':
-                            return '12';
-                    }
-                };
-                var Time_Stamp = d != undefined ? new Date(d).toUTCString() : new Date().toUTCString();// "Wed, 09 Dec 2015 17:18:26 GMT" == change to standard time for storage
-                var mo = Time_Stamp.substr(8, 3);
-                var actualMo = getMonth(mo);
-                var day = Time_Stamp.substr(5, 2);
-                var year = Time_Stamp.substr(12, 4);
-                var hr = Time_Stamp.substr(17, 2);
-                var standardHrs = hr > 12 ? '0' + (hr - 12).toString() : hr.toString();
-                var min = Time_Stamp.substr(20, 2);
-                var sec = Time_Stamp.substr(23, 2);
-                var amPm = hr > 12 ? 'PM' : 'AM';
-                var time_stampNEW = actualMo + '/' + day + '/' + year + ' ' + standardHrs + ':' + min + ':' + sec + ' ' + amPm; //12/09/2015 04:22:32PM
-                return new Date(time_stampNEW);
-            };
-
             $scope.sensDepTypes = allSensDeps;
             $scope.showProposed = false; //they want to add a proposed sensor, open options
             $scope.SiteSensors = thisSiteSensors;
@@ -79,7 +35,7 @@
             //add these checked Proposed sensors to this site
             $scope.AddProposed = function () {
                 var proposedToAdd = {}; var propStatToAdd = {};
-                var Time_STAMP = utcDateTime();
+                var Time_STAMP = new Date();
                 for (var dt = 0; dt < $scope.deployTypeList.length; dt++) {
                     if ($scope.deployTypeList[dt].selected == true) {
                         if ($scope.deployTypeList[dt].METHOD.substring(0, 4) == "Temp") {
@@ -111,6 +67,7 @@
                             var propStatToAdd = { INSTRUMENT_ID: response.INSTRUMENT_ID, STATUS_TYPE_ID: 4, COLLECTION_TEAM_ID: $cookies.get('mID'), TIME_STAMP: Time_STAMP, TIME_ZONE: 'UTC' };
                             
                             INSTRUMENT_STATUS.save(propStatToAdd).$promise.then(function (statResponse) {
+                                statResponse.Status = 'Proposed';
                                 var instToPushToList = {
                                     Instrument: proposedToAdd,
                                     InstrumentStats: [statResponse]
@@ -175,8 +132,13 @@
                     }
                 });
                 modalInstance.result.then(function (createdSensor) {
-                    //is there a new op or just closed modal
-                    if (createdSensor[1] == 'created') {
+                    //'deployP' -> createdSensor[1] will be: 'proposedDeployed' deploy new -> createdSensor[1] will be: 'newDeployed';
+                    if (createdSensor[1] == 'proposedDeployed') {
+                        var test;
+                        var indexClicked = $scope.SiteSensors.indexOf(sensorClicked);
+                        $scope.SiteSensors[indexClicked] = createdSensor[0];
+                    }
+                    if (createdSensor[1] == 'newDeployed') {
                         $scope.SiteSensors.push(createdSensor[0]); thisSiteSensors.push(createdSensor[0]);
                         $scope.sensorCount.total = $scope.SiteSensors.length;
                     }
@@ -198,7 +160,7 @@
                 $scope.sessionEventName = newValue != undefined ? newValue : "All Events";
                 $scope.sessionEventExists = $scope.sessionEventName != "All Events" ? true : false;
                 if (newValue != undefined) {
-                    $scope.SiteSensors = thisSiteSensors.filter(function (h) { return h.Instrument.EVENT_ID == $cookies.get('SessionEventID'); });
+                    $scope.SiteSensors = thisSiteSensors.filter(function (h) { return (h.Instrument.EVENT_ID == $cookies.get('SessionEventID')) || h.InstrumentStats[0].STATUS_TYPE_ID == 4; });
                     $scope.sensorCount = { total: $scope.SiteSensors.length };
                 } else {
                     $scope.SiteSensors = thisSiteSensors;
