@@ -19,6 +19,7 @@
     "commit": "0eb4e891c6a9ce2930f87433f7a11d09d57c599e"
   },
   "_source": "git://github.com/angular-ui/ui-validate.git",
-  "_target": "*",
-  "_originalSource": "angular-ui-validate"
+  "_target": "~1.2.2",
+  "_originalSource": "angular-ui-validate",
+  "_direct": true
 }

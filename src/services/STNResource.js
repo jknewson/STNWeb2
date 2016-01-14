@@ -3,7 +3,7 @@
 
     //look up common service module, and register the new factory with that module 
     var STNResource = angular.module('STNResource', ['ngResource']);
-    var rootURL = "/STNServices";
+    var rootURL = "http://stntest.wim.usgs.gov/STNServices";
     
     //#region AGENCY
     STNResource.factory('AGENCY', ['$resource', function ($resource) {
