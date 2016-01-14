@@ -4,15 +4,14 @@
 
     var STNControllers = angular.module('STNControllers');
    //#region INSTRUMENT
-    STNControllers.controller('sensorCtrl', ['$scope', '$q', '$cookies', '$location', '$state', '$http', '$uibModal', '$filter', '$timeout', 'thisSite', 'thisSiteSensors', 'allSensorBrands', 'allStatusTypes', 'allDeployTypes', 'allSensorTypes', 'allSensDeps', 'allHousingTypes', 'allEvents', 'INSTRUMENT', 'INSTRUMENT_STATUS', 'SITE', 'MEMBER', 'DEPLOYMENT_TYPE', sensorCtrl]);
-    function sensorCtrl($scope, $q, $cookies, $location, $state, $http, $uibModal, $filter, $timeout, thisSite, thisSiteSensors, allSensorBrands, allStatusTypes, allDeployTypes, allSensorTypes, allSensDeps, allHousingTypes, allEvents, INSTRUMENT, INSTRUMENT_STATUS, SITE, MEMBER, DEPLOYMENT_TYPE) {
+    STNControllers.controller('sensorCtrl', ['$scope', '$q', '$cookies', '$location', '$state', '$http', '$uibModal', '$filter', '$timeout', 'thisSite', 'thisSiteSensors', 'allSensorBrands', 'allDeployTypes', 'allSensorTypes', 'allSensDeps', 'allHousingTypes', 'allEvents', 'INSTRUMENT', 'INSTRUMENT_STATUS', 'SITE', 'MEMBER', 'DEPLOYMENT_TYPE', 'STATUS_TYPE', 'INST_COLL_CONDITION', sensorCtrl]);
+    function sensorCtrl($scope, $q, $cookies, $location, $state, $http, $uibModal, $filter, $timeout, thisSite, thisSiteSensors, allSensorBrands, allDeployTypes, allSensorTypes, allSensDeps, allHousingTypes, allEvents, INSTRUMENT, INSTRUMENT_STATUS, SITE, MEMBER, DEPLOYMENT_TYPE, STATUS_TYPE, INST_COLL_CONDITION) {
         if ($cookies.get('STNCreds') == undefined || $cookies.get('STNCreds') == "") {
             $scope.auth = false;
             $location.path('/login');
         } else {
             //global vars
-            $scope.sensorCount = { total: thisSiteSensors.length };           
-            $scope.statusTypeList = allStatusTypes;
+            $scope.sensorCount = { total: thisSiteSensors.length }; 
             $scope.deployTypeList = angular.copy(allDeployTypes);
             var tempDepTypeID = 0;
             //fix deployment types so that "Temperature" becomes 2 : Temperature (Met sensor)-SensorType:2 and Temperature (pressure transducer)-SensorType:1 -- just for proposed
@@ -64,7 +63,7 @@
                         
                         INSTRUMENT.save(proposedToAdd).$promise.then(function (response) {
                             proposedToAdd.INSTRUMENT_ID = response.INSTRUMENT_ID;
-                            var propStatToAdd = { INSTRUMENT_ID: response.INSTRUMENT_ID, STATUS_TYPE_ID: 4, COLLECTION_TEAM_ID: $cookies.get('mID'), TIME_STAMP: Time_STAMP, TIME_ZONE: 'UTC' };
+                            var propStatToAdd = { INSTRUMENT_ID: response.INSTRUMENT_ID, STATUS_TYPE_ID: 4, MEMBER_ID: $cookies.get('mID'), TIME_STAMP: Time_STAMP, TIME_ZONE: 'UTC',  };
                             
                             INSTRUMENT_STATUS.save(propStatToAdd).$promise.then(function (statResponse) {
                                 statResponse.Status = 'Proposed';
@@ -90,13 +89,62 @@
                 }//end foreach deployTypeList
             }//end AddProposed()
 
-            //want to deploy/view a sensor, 
-            /*which modal? 
-             1: deploy proposed (sensor, 'depProp'), deploy new('0', 'deploy'), see deployed to view/edit(sensor, 'viewDep'). 
-             2: retrieve deployed(sensor, 'retrieve'). 
-             3: view/edit retrieved with deployed on top(sensor, 'viewRet')
-             */
-            $scope.showSensorModal = function (sensorClicked, modalNeeded) {
+            $scope.showRetrieveModal = function (sensorClicked, actionDesired) {
+                //need statusTypes, CollectConditions               
+                var indexClicked = $scope.SiteSensors.indexOf(sensorClicked);
+                $(".page-loading").removeClass("hidden"); //loading...
+
+                var modalInstance = $uibModal.open({
+                    templateUrl: 'SensorRetrievalModal.html',
+                    controller: 'sensorRetrievalModalCtrl',
+                    size: 'lg',
+                    backdrop: 'static',
+                    windowClass: 'rep-dialog',
+                    resolve: {
+                        desiredAction: function () {
+                            return actionDesired;
+                        },
+                        thisSensor: function () {
+                            return sensorClicked != 0 ? sensorClicked : "empty";
+                        },
+                        SensorSite: function () {
+                            return thisSite;
+                        },
+                        siteOPs: function () {
+                            return SITE.getSiteOPs({ id: thisSite.SITE_ID }).$promise;
+                        },
+                        allMembers: function () {
+                            $http.defaults.headers.common['Authorization'] = 'Basic ' + $cookies.get('STNCreds');
+                            $http.defaults.headers.common['Accept'] = 'application/json';
+                            return MEMBER.getAll().$promise;
+                        },
+                        allStatusTypes: function () {
+                            return STATUS_TYPE.getAll().$promise;
+                        },
+                        allInstCollCond: function () {
+                            return INST_COLL_CONDITION.getAll().$promise;
+                        }
+                    }
+                });
+                modalInstance.result.then(function (retrievedSensor) {
+                    if (createdSensor[1] == 'newRetrieve') {
+                        $scope.SiteSensors.push(createdSensor[0]); thisSiteSensors.push(createdSensor[0]);
+                        $scope.sensorCount.total = $scope.SiteSensors.length;
+                    }
+                    if (createdSensor[1] == 'editR') {
+                        //this is from edit -- refresh page?
+                        var indexClicked = $scope.SiteSensors.indexOf(sensorClicked);
+                        $scope.SiteSensors[indexClicked] = createdSensor[0];
+                    }
+                    if (createdSensor[1] == 'deletedR') {
+                        var indexClicked1 = $scope.SiteSensors.indexOf(sensorClicked);
+                        $scope.SiteSensors.splice(indexClicked1, 1);
+                        $scope.sensorCount.total = $scope.SiteSensors.length;
+                    }
+                });
+            };//end showRetrieveModal
+
+            $scope.showSensorModal = function (sensorClicked, actionDesired) {
                 var passAllLists = [allSensorTypes, allSensorBrands, allHousingTypes, allSensDeps, allEvents];
                 var indexClicked = $scope.SiteSensors.indexOf(sensorClicked);
                 $(".page-loading").removeClass("hidden"); //loading...
@@ -104,11 +152,14 @@
                 
                 var modalInstance = $uibModal.open({
                     templateUrl: 'Sensormodal.html',
-                    controller: 'sensormodalCtrl',
+                    controller: 'sensorModalCtrl',
                     size: 'lg',
                     backdrop: 'static',
                     windowClass: 'rep-dialog',
                     resolve: {
+                        desiredAction: function () {
+                            return actionDesired
+                        },
                         allDropdowns: function () {
                             return passAllLists;
                         },
@@ -142,7 +193,7 @@
                         $scope.SiteSensors.push(createdSensor[0]); thisSiteSensors.push(createdSensor[0]);
                         $scope.sensorCount.total = $scope.SiteSensors.length;
                     }
-                    if (createdSensor[1] == 'updated') {
+                    if (createdSensor[1] == 'edit') {
                         //this is from edit -- refresh page?
                         var indexClicked = $scope.SiteSensors.indexOf(sensorClicked);
                         $scope.SiteSensors[indexClicked] = createdSensor[0];
@@ -154,6 +205,7 @@
                     }
                 });
             };
+
 
             // watch for the session event to change and update
             $scope.$watch(function () { return $cookies.get('SessionEventName'); }, function (newValue) {

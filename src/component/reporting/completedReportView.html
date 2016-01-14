@@ -186,7 +186,7 @@
             </tr>
             <tr>
                 <td colspan="2">
-                    <span class="required">Peaks of record on gages to date<br /> ( > 20 years of record)</span>
+                    <span class="required">Peaks of record on gages to date<br /> ( &#62; 20 years of record)</span>
                 </td>
                 <td colspan="2">
                     {{}}
@@ -460,7 +460,7 @@
     <!--Section 4: Notes-->
     <uib-accordion-group heading="Section 4: Notes">
         <div>Notes detailing the day's field activities (optional)</div>
-        <textarea class="form-control" id="inputNOTES" type="text" rows="5" cols="90" ng-model="newReport.NOTES" />
+        <textarea class="form-control" id="NOTES" type="text" rows="5" cols="90" ng-model="newReport.NOTES" />
         <div>*Limit 2000 characters</div>
     </uib-accordion-group>
     <!-- Section 5: Contacts -->
@@ -478,38 +478,38 @@
         <div><b>Deployed Staff (required)</b></div>
         <div class="col-sm-12" style="margin-bottom:15px;">
             <div class="col-md-3 form-group required">
-                <span class="col-md-12 control-label req" for="inputFNAME">First Name:</span>
+                <span class="col-md-12 control-label req" for="FNAME">First Name:</span>
                 <div class="col-md-12">
-                    <input class="form-control" id="inputFNAME" name="FNAME" type="text" ng-model="DeployStaff.FNAME" required />
+                    <input class="form-control" id="D_FNAME" name="FNAME" type="text" ng-model="DeployStaff.FNAME" required />
                 </div>
             </div>
 
             <div class="col-md-3 form-group required">
-                <span class="col-md-12 control-label req" for="inputLNAME">Last Name:</span>
+                <span class="col-md-12 control-label req" for="LNAME">Last Name:</span>
                 <div class="col-md-12">
-                    <input class="form-control" id="inputLNAME" name="LNAME" type="text" ng-model="DeployStaff.LNAME" required />
+                    <input class="form-control" id="D_LNAME" name="LNAME" type="text" ng-model="DeployStaff.LNAME" required />
                 </div>
             </div>
 
             <div class="col-md-4 form-group required">
-                <span class="col-md-12 control-label req" for="inputEMAIL">Email:</span>
+                <span class="col-md-12 control-label req" for="EMAIL">Email:</span>
                 <div class="col-md-12">
-                    <input class="form-control" id="inputEMAIL" name="EMAIL" type="email" ng-model="DeployStaff.EMAIL" required />
+                    <input class="form-control" id="D_EMAIL" name="EMAIL" type="email" ng-model="DeployStaff.EMAIL" required />
                 </div>
             </div>
 
             <div class="col-md-3 form-group required">
-                <span class="col-md-12 control-label req" for="inputPHONE">Phone:</span>
+                <span class="col-md-12 control-label req" for="PHONE">Phone:</span>
                 <div class="col-md-12">
-                    <input class="form-control" id="inputPHONE" name="PHONE"
+                    <input class="form-control" id="D_PHONE" name="PHONE"
                            type="text" my-input-mask="{mask: '(999) 999-9999[ x99999]', greedy:false}" ng-model="DeployStaff.PHONE" required />
                 </div>
             </div>
 
             <div class="col-md-3 form-group">
-                <span class="col-md-12 control-label" for="inputALTERNATE_PHONE">Alternate Phone:</span>
+                <span class="col-md-12 control-label" for="ALTERNATE_PHONE">Alternate Phone:</span>
                 <div class="col-md-12">
-                    <input class="form-control" id="inputALTERNATE_PHONE" name="ALTERNATE_PHONE"
+                    <input class="form-control" id="D_ALTERNATE_PHONE" name="ALTERNATE_PHONE"
                            type="text" my-input-mask="{mask: '(999) 999-9999[ x99999]', greedy:false}" ng-model="DeployStaff.ALTERNATE_PHONE" />
                 </div>
             </div>
@@ -519,38 +519,38 @@
         <div><b>General (optional)</b></div>
         <div class="col-sm-12" style="margin-bottom:15px;">
             <div class="col-md-3 form-group">
-                <span class="col-md-12 control-label" for="inputFNAME">First Name:</span>
+                <span class="col-md-12 control-label" for="FNAME">First Name:</span>
                 <div class="col-md-12">
-                    <input class="form-control" id="inputFNAME" name="FNAME" type="text" ng-model="GenStaff.FNAME" />
+                    <input class="form-control" id="G_FNAME" name="FNAME" type="text" ng-model="GenStaff.FNAME" />
                 </div>
             </div>
 
             <div class="col-md-3 form-group">
-                <span class="col-md-12 control-label" for="inputLNAME">Last Name:</span>
+                <span class="col-md-12 control-label" for="LNAME">Last Name:</span>
                 <div class="col-md-12">
-                    <input class="form-control" id="inputLNAME" name="LNAME" type="text" ng-model="GenStaff.LNAME" />
+                    <input class="form-control" id="G_LNAME" name="LNAME" type="text" ng-model="GenStaff.LNAME" />
                 </div>
             </div>
 
             <div class="col-md-4 form-group">
-                <span class="col-md-12 control-label" for="inputEMAIL">Email:</span>
+                <span class="col-md-12 control-label" for="EMAIL">Email:</span>
                 <div class="col-md-12">
-                    <input class="form-control" id="inputEMAIL" name="EMAIL" type="email" ng-model="GenStaff.EMAIL" />
+                    <input class="form-control" id="G_EMAIL" name="EMAIL" type="email" ng-model="GenStaff.EMAIL" />
                 </div>
             </div>
 
             <div class="col-md-3 form-group">
-                <span class="col-md-12 control-label" for="inputPHONE">Phone:</span>
+                <span class="col-md-12 control-label" for="PHONE">Phone:</span>
                 <div class="col-md-12">
-                    <input class="form-control" id="inputPHONE" name="PHONE"
+                    <input class="form-control" id="G_PHONE" name="PHONE"
                            type="text" my-input-mask="{mask: '(999) 999-9999[ x99999]', greedy:false}" ng-model="GenStaff.PHONE" />
                 </div>
             </div>
 
             <div class="col-md-3 form-group">
-                <span class="col-md-12 control-label" for="inputALTERNATE_PHONE">Alternate Phone:</span>
+                <span class="col-md-12 control-label" for="ALTERNATE_PHONE">Alternate Phone:</span>
                 <div class="col-md-12">
-                    <input class="form-control" id="inputALTERNATE_PHONE" name="ALTERNATE_PHONE"
+                    <input class="form-control" id="G_ALTERNATE_PHONE" name="ALTERNATE_PHONE"
                            type="text" my-input-mask="{mask: '(999) 999-9999[ x99999]', greedy:false}" ng-model="GenStaff.ALTERNATE_PHONE" />
                 </div>
             </div>
@@ -560,38 +560,38 @@
         <div><b>Inland Flood (optional)</b></div>
         <div class="col-sm-12" style="margin-bottom:15px;">
             <div class="col-md-3 form-group">
-                <span class="col-md-12 control-label" for="inputFNAME">First Name:</span>
+                <span class="col-md-12 control-label" for="FNAME">First Name:</span>
                 <div class="col-md-12">
-                    <input class=" form-control" id="inputFNAME" name="FNAME" type="text" ng-model="InlandStaff.FNAME" />
+                    <input class=" form-control" id="I_FNAME" name="FNAME" type="text" ng-model="InlandStaff.FNAME" />
                 </div>
             </div>
 
             <div class="col-md-3 form-group">
-                <span class="col-md-12 control-label" for="inputLNAME">Last Name:</span>
+                <span class="col-md-12 control-label" for="LNAME">Last Name:</span>
                 <div class="col-md-12">
-                    <input class="form-control" id="inputLNAME" name="LNAME" type="text" ng-model="InlandStaff.LNAME" />
+                    <input class="form-control" id="I_LNAME" name="LNAME" type="text" ng-model="InlandStaff.LNAME" />
                 </div>
             </div>
 
             <div class="col-md-4 form-group">
-                <span class="col-md-12 control-label" for="inputEMAIL">Email:</span>
+                <span class="col-md-12 control-label" for="EMAIL">Email:</span>
                 <div class="col-md-12">
-                    <input class="form-control" id="inputEMAIL" name="EMAIL" type="email" ng-model="InlandStaff.EMAIL" />
+                    <input class="form-control" id="I_EMAIL" name="EMAIL" type="email" ng-model="InlandStaff.EMAIL" />
                 </div>
             </div>
 
             <div class="col-md-3 form-group">
-                <span class="col-md-12 control-label" for="inputPHONE">Phone:</span>
+                <span class="col-md-12 control-label" for="PHONE">Phone:</span>
                 <div class="col-md-12">
-                    <input class="form-control" id="inputPHONE" name="PHONE"
+                    <input class="form-control" id="I_PHONE" name="PHONE"
                            type="text" my-input-mask="{mask: '(999) 999-9999[ x99999]', greedy:false}" ng-model="InlandStaff.PHONE" />
                 </div>
             </div>
 
             <div class="col-md-3 form-group">
-                <span class="col-md-12 control-label" for="inputALTERNATE_PHONE">Alternate Phone:</span>
+                <span class="col-md-12 control-label" for="ALTERNATE_PHONE">Alternate Phone:</span>
                 <div class="col-md-12">
-                    <input class="form-control" id="inputALTERNATE_PHONE" name="ALTERNATE_PHONE"
+                    <input class="form-control" id="I_ALTERNATE_PHONE" name="ALTERNATE_PHONE"
                            type="text" my-input-mask="{mask: '(999) 999-9999[ x99999]', greedy:false}" ng-model="InlandStaff.ALTERNATE_PHONE" />
                 </div>
             </div>
@@ -601,38 +601,38 @@
         <div><b>Coastal Flood (optional)</b></div>
         <div class="col-sm-12" style="margin-bottom:15px;">
             <div class="col-md-3 form-group">
-                <span class="col-md-12 control-label" for="inputFNAME">First Name:</span>
+                <span class="col-md-12 control-label" for="FNAME">First Name:</span>
                 <div class="col-md-12">
-                    <input class="form-control" id="inputFNAME" name="FNAME" type="text" ng-model="CoastStaff.FNAME" />
+                    <input class="form-control" id="C_FNAME" name="FNAME" type="text" ng-model="CoastStaff.FNAME" />
                 </div>
             </div>
 
             <div class="col-md-3 form-group">
-                <span class="col-md-12 control-label" for="inputLNAME">Last Name:</span>
+                <span class="col-md-12 control-label" for="LNAME">Last Name:</span>
                 <div class="col-md-12">
-                    <input class="form-control" id="inputLNAME" name="LNAME" type="text" ng-model="CoastStaff.LNAME" />
+                    <input class="form-control" id="C_LNAME" name="LNAME" type="text" ng-model="CoastStaff.LNAME" />
                 </div>
             </div>
 
             <div class="col-md-4 form-group">
-                <span class="col-md-12 control-label" for="inputEMAIL">Email:</span>
+                <span class="col-md-12 control-label" for="EMAIL">Email:</span>
                 <div class="col-md-12">
-                    <input class="form-control" id="inputEMAIL" name="EMAIL" type="email" ng-model="CoastStaff.EMAIL" />
+                    <input class="form-control" id="C_EMAIL" name="EMAIL" type="email" ng-model="CoastStaff.EMAIL" />
                 </div>
             </div>
 
             <div class="col-md-3 form-group">
-                <span class="col-md-12 control-label" for="inputPHONE">Phone:</span>
+                <span class="col-md-12 control-label" for="PHONE">Phone:</span>
                 <div class="col-md-12">
-                    <input class="form-control" id="inputPHONE" name="PHONE"
+                    <input class="form-control" id="C_PHONE" name="PHONE"
                            type="text" my-input-mask="{mask: '(999) 999-9999[ x99999]', greedy:false}" ng-model="CoastStaff.PHONE" />
                 </div>
             </div>
 
             <div class="col-md-3 form-group">
-                <span class="col-md-12 control-label" for="inputALTERNATE_PHONE">Alternate Phone:</span>
+                <span class="col-md-12 control-label" for="ALTERNATE_PHONE">Alternate Phone:</span>
                 <div class="col-md-12">
-                    <input class="form-control" id="inputALTERNATE_PHONE" name="ALTERNATE_PHONE"
+                    <input class="form-control" id="C_ALTERNATE_PHONE" name="ALTERNATE_PHONE"
                            type="text" my-input-mask="{mask: '(999) 999-9999[ x99999]', greedy:false}" ng-model="CoastStaff.ALTERNATE_PHONE" />
                 </div>
             </div>
@@ -642,38 +642,38 @@
         <div><b>Water Quality (optional)</b></div>
         <div class="col-sm-12" style="margin-bottom:15px;">
             <div class="col-md-3 form-group">
-                <span class="col-md-12 control-label req" for="inputFNAME">First Name:</span>
+                <span class="col-md-12 control-label req" for="FNAME">First Name:</span>
                 <div class="col-md-12">
-                    <input class="form-control" id="inputFNAME" name="FNAME" type="text" ng-model="WaterStaff.FNAME" />
+                    <input class="form-control" id="W_FNAME" name="FNAME" type="text" ng-model="WaterStaff.FNAME" />
                 </div>
             </div>
 
             <div class="col-md-3 form-group">
-                <span class="col-md-12 control-label" for="inputLNAME">Last Name:</span>
+                <span class="col-md-12 control-label" for="LNAME">Last Name:</span>
                 <div class="col-md-12">
-                    <input class="form-control" id="inputLNAME" name="LNAME" type="text" ng-model="WaterStaff.LNAME" />
+                    <input class="form-control" id="W_LNAME" name="LNAME" type="text" ng-model="WaterStaff.LNAME" />
                 </div>
             </div>
 
             <div class="col-md-4 form-group">
-                <span class="col-md-12 control-label" for="inputEMAIL">Email:</span>
+                <span class="col-md-12 control-label" for="EMAIL">Email:</span>
                 <div class="col-md-12">
-                    <input class="form-control" id="inputEMAIL" name="EMAIL" type="email" ng-model="WaterStaff.EMAIL" />
+                    <input class="form-control" id="W_EMAIL" name="EMAIL" type="email" ng-model="WaterStaff.EMAIL" />
                 </div>
             </div>
 
             <div class="col-md-3 form-group">
-                <span class="col-md-12 control-label" for="inputPHONE">Phone:</span>
+                <span class="col-md-12 control-label" for="PHONE">Phone:</span>
                 <div class="col-md-12">
-                    <input class="form-control" id="inputPHONE" name="PHONE"
+                    <input class="form-control" id="W_PHONE" name="PHONE"
                            type="text" my-input-mask="{mask: '(999) 999-9999[ x99999]', greedy:false}" ng-model="WaterStaff.PHONE" />
                 </div>
             </div>
 
             <div class="col-md-3 form-group">
-                <span class="col-md-12 control-label" for="inputALTERNATE_PHONE">Alternate Phone:</span>
+                <span class="col-md-12 control-label" for="ALTERNATE_PHONE">Alternate Phone:</span>
                 <div class="col-md-12">
-                    <input class="form-control" id="inputALTERNATE_PHONE" name="ALTERNATE_PHONE"
+                    <input class="form-control" id="W_ALTERNATE_PHONE" name="ALTERNATE_PHONE"
                            type="text" my-input-mask="{mask: '(999) 999-9999[ x99999]', greedy:false}" ng-model="WaterStaff.ALTERNATE_PHONE" />
                 </div>
             </div>
@@ -682,7 +682,7 @@
 
     <div>
         <input type="checkbox" name="COMPLETE" ng-model="newReport.COMPLETE" ng-true-value="'1'" ng-false-value="'0'" />
-        </span>Check if this Report is Complete. (If left unchecked, you may come back later to finish it)
+        <span>Check if this Report is Complete. (If left unchecked, you may come back later to finish it)</span>
     </div>
     <div class="form-group">
         <div class="col-md-4 col-md-offset-2">

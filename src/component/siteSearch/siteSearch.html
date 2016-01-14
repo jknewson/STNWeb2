@@ -6,17 +6,13 @@
 <br />
 <form name="siteSearchForm">
     <div class="form-group col-md-6">
-        <label class="col-md-4 control-label" for="inputEVENT_ID">Events:</label>
+        <label class="col-md-4 control-label" for="EVENT_ID">Events:</label>
         <div class="col-md-6">{{sessionEvent}}
-            <!--<select class="form-control" id="inputEVENT_ID" name="EVENT_ID" ng-model="Chosen.event"
-                    ng-options="e.EVENT_ID as (e.EVENT_NAME + ' --- ' + (e.EVENT_START_DATE | date: 'MM/dd/yyyy') + ' to ' + ((e.EVENT_END_DATE || '-Not Set-') | date: 'MM/dd/yyyy'))  for e in events | orderBy: '-EVENT_START_DATE'">
-                <option value=""></option>
-            </select>-->
         </div>
     </div>
 
     <div class="form-group col-md-6">
-        <label class="col-md-4 control-label" for="inputEVENT_ID">States:</label>
+        <label class="col-md-4 control-label" for="EVENT_ID">States:</label>
         <div class="col-md-6">
             <div isteven-multi-select
                  input-model="states"
@@ -35,9 +31,9 @@
     <br />
 
     <div class="form-group col-md-6">
-        <label class="col-md-4 control-label" for="inputEVENT_ID">Sensor Types:</label>
+        <label class="col-md-4 control-label" for="EVENT_ID">Sensor Types:</label>
         <div class="col-md-6">
-            <select class="form-control" id="inputSENSOR_TYPE_ID" name="SENSOR_TYPE_ID" ng-model="Chosen.sensor"
+            <select class="form-control" id="SENSOR_TYPE_ID" name="SENSOR_TYPE_ID" ng-model="Chosen.sensor"
                     ng-options="s.SENSOR_TYPE_ID as s.SENSOR for s in senTypes | orderBy: 'SENSOR'">
                 <option value=""></option>
             </select>
@@ -45,9 +41,9 @@
     </div>
 
     <div class="form-group col-md-6">
-        <label class="col-md-4 control-label" for="inputEVENT_ID">Network Names:</label>
+        <label class="col-md-4 control-label" for="EVENT_ID">Network Names:</label>
         <div class="col-md-6">
-            <select class="form-control" id="inputNETWORK_NAME_ID" name="NETWORK_NAME_ID" ng-model="Chosen.network"
+            <select class="form-control" id="NETWORK_NAME_ID" name="NETWORK_NAME_ID" ng-model="Chosen.network"
                     ng-options="n.NETWORK_NAME_ID as n.NAME for n in netNames | orderBy: 'NAME'">
                 <option value=""></option>
             </select>
@@ -58,28 +54,28 @@
 
     <div>
         <div class="form-group col-md-3">
-            <label class="col-md-7 control-label" for="inputEVENT_ID">HWM Only Sites:</label>
+            <label class="col-md-7 control-label" for="EVENT_ID">HWM Only Sites:</label>
             <div class="col-md-1">
                 <input type="checkbox" ng-model="checkboxModel.hwmOnly" ng-true-value="'1'" ng-false-value="'0'" />
             </div>
         </div>
 
         <div class="form-group col-md-3">
-            <label class="col-md-8 control-label" for="inputEVENT_ID">Sensor Only Sites:</label>
+            <label class="col-md-8 control-label" for="EVENT_ID">Sensor Only Sites:</label>
             <div class="col-md-1">
                 <input type="checkbox" ng-model="checkboxModel.senOnly" ng-true-value="'1'" ng-false-value="'0'" />
             </div>
         </div>
 
         <div class="form-group col-md-3">
-            <label class="col-md-7 control-label" for="inputEVENT_ID">RDG Only Sites:</label>
+            <label class="col-md-7 control-label" for="EVENT_ID">RDG Only Sites:</label>
             <div class="col-md-1">
                 <input type="checkbox" ng-model="checkboxModel.rdgOnly" ng-true-value="'1'" ng-false-value="'0'" />
             </div>
         </div>
 
         <div class="form-group col-md-3">
-            <label class="col-md-7 control-label" for="inputEVENT_ID">Has OP Defined:</label>
+            <label class="col-md-7 control-label" for="EVENT_ID">Has OP Defined:</label>
             <div class="col-md-1">
                 <input type="checkbox" ng-model="checkboxModel.opDefined" ng-true-value="'1'" ng-false-value="'0'" />
             </div>

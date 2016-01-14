@@ -62,9 +62,9 @@
             <fieldset>
 
                 <div class="form-group required">
-                    <label class="col-md-3 control-label req" for="inputAGENCY_NAME">Agency Name:</label>
+                    <label class="col-md-3 control-label req" for="AGENCY_NAME">Agency Name:</label>
                     <div class="col-md-6">
-                        <input class="form-control" id="inputAGENCY_NAME" name="AGENCY_NAME" type="text" placeholder="" ng-model="newAg.AGENCY_NAME" required />
+                        <input class="form-control" id="AGENCY_NAME" name="AGENCY_NAME" type="text" placeholder="" ng-model="newAg.AGENCY_NAME" required />
                     </div>
                     <!--&nbsp;
             <span class="glyphicon glyphicon-question-sign" data-toggle="tooltip"
@@ -74,39 +74,39 @@
                 </div>
 
                 <div class="form-group">
-                    <label class="col-md-3 control-label" for="inputADDRESS">Address:</label>
+                    <label class="col-md-3 control-label" for="ADDRESS">Address:</label>
                     <div class="col-md-6">
-                        <input class="form-control" id="inputADDRESS" name="ADDRESS" type="text" placeholder="" ng-model="newAg.ADDRESS" />
+                        <input class="form-control" id="ADDRESS" name="ADDRESS" type="text" placeholder="" ng-model="newAg.ADDRESS" />
                     </div>
                 </div>
 
                 <div class="form-group">
-                    <label class="col-md-3 control-label" for="inputCITY">City:</label>
+                    <label class="col-md-3 control-label" for="CITY">City:</label>
                     <div class="col-md-6">
-                        <input class="form-control" id="inputCITY" name="CITY" type="text" placeholder="" ng-model="newAg.CITY" />
+                        <input class="form-control" id="CITY" name="CITY" type="text" placeholder="" ng-model="newAg.CITY" />
                     </div>
                 </div>
 
                 <div class="form-group">
-                    <label class="col-md-3 control-label" for="inputSTATE">State:</label>
+                    <label class="col-md-3 control-label" for="STATE">State:</label>
                     <div class="col-md-6">
-                        <select class="form-control" id="inputSTATE" name="STATE" ng-model="newAg.STATE" ng-options="s.STATE_ABBREV as s.STATE_ABBREV for s in stateList | orderBy: 'STATE_NAME'">
+                        <select class="form-control" id="STATE" name="STATE" ng-model="newAg.STATE" ng-options="s.STATE_ABBREV as s.STATE_ABBREV for s in stateList | orderBy: 'STATE_NAME'">
                             <option value=""></option>
                         </select>
                     </div>
                 </div>
 
                 <div class="form-group">
-                    <label class="col-md-3 control-label" for="inputZIP">Zip:</label>
+                    <label class="col-md-3 control-label" for="ZIP">Zip:</label>
                     <div class="col-md-6">
-                        <input class="form-control" id="inputZIP" name="ZIP" type="text" placeholder="" ng-model="newAg.ZIP" />
+                        <input class="form-control" id="ZIP" name="ZIP" type="text" placeholder="" ng-model="newAg.ZIP" />
                     </div>
                 </div>
 
                 <div class="form-group">
-                    <label class="col-md-3 control-label req" for="inputPHONE">Phone:</label>
+                    <label class="col-md-3 control-label req" for="PHONE">Phone:</label>
                     <div class="col-md-6">
-                        <input class="form-control" id="inputPHONE" name="PHONE" type="text" my-input-mask="{mask: '(999) 999-9999[ x99999]', greedy:false}"
+                        <input class="form-control" id="PHONE" name="PHONE" type="text" my-input-mask="{mask: '(999) 999-9999[ x99999]', greedy:false}"
                                ng-model="newAg.PHONE" />
                     </div>
                 </div>
