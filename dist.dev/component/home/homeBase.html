@@ -1,0 +1,159 @@
+<div class="">
+    <!--<div><a ui-sref="fileUpload">Upload file</a></div>-->
+    <div style="border:red 1px solid;padding:5px;margin-bottom:10px">
+        <span style="font-family:'BryantBold';font-size:large;">Important usage notes and instructions</span>
+        <div style="margin:5px">
+            <p>
+                Many of the supplemental GIS data layers found in the map tab are from a range of sources and are not maintained by WiM. We offer
+                these map layers as a  decision-support supplement to the main STN sites layer, but we cannot guarantee their performance and availability.
+                Many of these externally maintained layers are large datasets and may load slowly depending on network
+                conditions, and in some cases may fail to load when bandwidth is low.
+            </p>
+        </div>
+    </div>
+
+    <!--<div class="col-md-5 panel panel-default" style="padding:0;margin:1em;">
+        <div class="panel-heading">
+            <h3 class="panel-title">
+                First choose Event
+            </h3>
+        </div>
+        <div class="panel-body">
+            <div class="form-group">
+                <label class="col-md-3 control-label" for="inputEVENT">Event:</label>
+                <div class="col-md-9">
+                    <select class="form-control" id="inputEVENT_ID" name="EVENT_ID" ng-model="ChooseEvent.id"
+                            ng-change="EventChosen()" ng-options="e.EVENT_ID as e.EVENT_NAME for e in allEvents">
+                        <option value="">Choose an Event</option>
+                    </select>
+                </div>
+            </div>
+            <div ng-show="ShowEventCounts">
+                <div>There are: {{totInstrs}} Instruments for this event.</div>
+                <div> -- Deployed Instruments: {{depInstrs}}</div>
+                <div> -- Retrieved Instruments: {{retInstrs}}</div>
+                <div> -- Lost Instruments: {{lostInstrs}}</div>
+                <br />
+                <div>There are: {{totHWMs}} HWMs for this event.</div>
+                <br />
+                <div>There are: {{totPeople}} people in the field for this event.</div>
+            </div>
+        </div>
+    </div>-->
+
+    <!--<div class="col-md-5 panel panel-default pull-right" style="padding:0;margin:1em;">
+        <div class="panel-heading">
+            <h3 class="panel-title">
+                Then choose Collection Team
+            </h3>
+        </div>
+        <div class="panel-body">
+            <div class="form-group">
+                <div ng-show="teamsBack" id="teamHolder">
+                    <ul>
+                        <label><strong>Teams:</strong></label>
+                        <li style="list-style:none;" ng-repeat="t in CollectTeams">
+                            <input type="radio" ng-model="t.selected" ng-click="teamClick(t)" ng-value="{{t.COLLECT_TEAM_ID}}" />
+                            <span><a style="cursor:pointer" ng-click="showTeamMembers(t)">{{t.DESCRIPTION}}</a></span>
+                        </li>
+                    </ul>
+                </div>
+                <button ng-show="ShowEventCounts" class="btn btn-default" ng-click="AddNewTeam()">Add Team</button>
+            </div>
+        </div>
+    </div>-->
+</div>
+
+<!-- Modal for Team Member Details -->
+<script type="text/ng-template" id="TeamMembers.html">
+    <div class="modal-header">
+        <h3 class="modal-title">Team Members</h3>
+    </div>
+    <div class="modal-body">
+        <div ng-repeat="tm in TeamMemberList" class="panel panel-default">
+            <div class="panel-heading">MEMBER: {{tm.FNAME}} {{tm.LNAME}}</div>
+            <div class="panel-body">
+                <div class="col-md-12">
+                    <label class="col-md-5">User Name:</label>
+                    <span class="col-md-6">{{tm.USERNAME}}</span>
+                </div>
+                <div class="col-md-12">
+                    <label class="col-md-5">Agency:</label>
+                    <span class="col-md-7">{{tm.agency}}</span>
+                </div>
+                <div class="col-md-12">
+                    <label class="col-md-5">Role:</label>
+                    <span class="col-md-7">{{tm.role}}</span>
+                </div>
+                <div class="col-md-12">
+                    <label class="col-md-5">Phone:</label>
+                    <span class="col-md-7">{{tm.PHONE}}</span>
+                </div>
+                <div class="col-md-12">
+                    <label class="col-md-5">Email:</label>
+                    <span class="col-md-7">{{tm.EMAIL}}</span>
+                </div>
+                <div class="col-md-12">
+                    <label class="col-md-5">RSS Feed:</label>
+                    <span class="col-md-7">{{tm.RSSFEED}}</span>
+                </div>
+                <div class="col-md-12">
+                    <label class="col-md-5">Emergency Contact Name:</label>
+                    <span class="col-md-7">{{tm.EMERGENCY_CONTACT_NAME}}</span>
+                </div>
+                <div class="col-md-12">
+                    <label class="col-md-5">Emergency Contact Phone:</label>
+                    <span class="col-md-7">{{tm.EMERGENCY_CONTACT_PHONE}}</span>
+                </div>
+            </div>
+        </div>
+        <br clear="all" />
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-primary" ng-click="ok()">OK</button>
+    </div>
+</script>
+
+<!-- Modal for Creating New Team -->
+<script type="text/ng-template" id="NewTeamCreate.html">
+    <div class="modal-header">
+        <h3 class="modal-title">Create New Team</h3>
+    </div>
+
+    <div class="modal-body">
+        <form name="newCollectionTeam">
+            <div class="form-group">
+                <div class="form-group">
+                    <label class="col-md-4 control-label" for="inputPROJ_OBJECTIVES">Username(s) of the who you are with:</label>
+                    <div class="col-md-6">
+                        <div isteven-multi-select
+                             input-model="members"
+                             default-label="Who are you with?"
+                             output-model="newTeam.MEMBER_WITH"
+                             button-label="USERNAME"
+                             item-label="USERNAME"
+                             max-height="200px"
+                             min-search-length="1"
+                             tick-property="selected"
+                             helper-elements="filter"
+                             search-property="USERNAME">
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <br clear="all" />
+            <div class="form-group">
+                <label class="col-md-4 control-label req" for="inputTEAM_NAME">Team Name:</label>
+                <div class="col-md-6">
+                    <input class="form-control" ng-model="newTeam.TEAM_NAME" type="text" required />
+                </div>
+            </div>
+        </form><br clear="all" />
+    </div>
+
+    <div class="modal-footer">
+        <button class="btn btn-primary" ng-disabled="newCollectionTeam.$invalid" ng-click="CreateTeam()">Create Team</button>
+        <button class="btn btn-warning" ng-click="cancel()">Cancel</button>
+    </div>
+</script>

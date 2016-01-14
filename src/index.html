@@ -6,97 +6,19 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
 
-    <!-- style sheets
-    <link href="css/bootstrap_3.1.1.css" rel="stylesheet" />-->
-    <link href="../bower_components/bootstrap/dist/css/bootstrap.css" rel="stylesheet" />
-    <link href="css/bootstrap-table.css" rel="stylesheet" />
-    <link href="css/app.css" rel="stylesheet" />
-    <link href="../bower_components/toastr/toastr.css" rel="stylesheet" />
-    <link href="../bower_components/isteven-angular-multiselect/isteven-multi-select.css" rel="stylesheet" />
-    <link href="../bower_components/angular-xeditable/dist/css/xeditable.css" rel="stylesheet" />
-    <link href="css/ng-tags-input.min.css" rel="stylesheet" />
-    <link href="../bower_components/angular-ui-bootstrap-datetimepicker/datetimepicker.css" rel="stylesheet" />
+    <!-- bower:css -->
+    <!-- endinject -->
 
-    <!--NEW library scripts -->
-    <script src="../bower_components/jquery/dist/jquery.min.js"></script>
-    <!--<script src="bower_components/angular/angular.min.js"></script>-->
-    <script src="../bower_components/angular/angular.js"></script>
-    <script src="../bower_components/angular-route/angular-route.min.js"></script> <!-- (this uses 1.4.7 ... vendor has 1.3.15)-->
-    <script src="../bower_components/angular-resource/angular-resource.min.js"></script>
-    <script src="../bower_components/angular-cookies/angular-cookies.min.js"></script>
-    <script src="../bower_components/angular-ui-router/release/angular-ui-router.min.js"></script>
-    <script src="../bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
-    <script src="../bower_components/angular-bootstrap/ui-bootstrap-tpls.js"></script> <!--includes templates-->
-    <script src="../bower_components/angular-ui-mask/dist/mask.min.js"></script> <!--for data masking ui-mask="(999)-****", unique, validate I think-->
-    <script src="../bower_components/isteven-angular-multiselect/isteven-multi-select.js"></script>
-    <script src="../bower_components/toastr/toastr.js"></script>
-    <script src="../bower_components/angular-ui-validate/dist/validate.min.js"></script>
-    <script src="../bower_components/angular-input-modified/dist/angular-input-modified.min.js"></script>
-    <script src="../bower_components/angular-xeditable/dist/js/xeditable.min.js"></script>
-    <script src="../bower_components/angular-filter/dist/angular-filter.min.js"></script>
-    <script src="//maps.googleapis.com/maps/api/js?v=3.21"></script> <!-- used for the address find on site create page-->
-    <script src="../bower_components/checklist-model/checklist-model.js"></script>
-    <script src="../bower_components/angular-ui-bootstrap-datetimepicker/datetimepicker.js"></script> <!-- date and time picker for sensor timestamp
-    <script src="../bower_components/bootstrap-datepicker/dist/js/bootstrap-datepicker.js"></script>-->
+    <!-- inject:css -->
+    <!-- endinject -->
 
-    <!--
-    <script src="../bower_components/angular-simple-logger/dist/angular-simple-logger.min.js"></script>
-    <script src="../bower_components/angular-leaflet-directive/dist/angular-leaflet-directive.min.js"></script>
-    <script src="../bower_components/leaflet/dist/leaflet.js"></script>-->
-    <script src="../vendor/checklist-model.js"></script>
-    <script src="../vendor/jquery.inputmask.bundle.js"></script>
-    <script src="../vendor/ng-file-upload-all.min.js"></script>
-    <script src="../vendor/ng-file-upload.min.js"></script>
+    <!-- bower:js -->
+    <!-- endinject -->
 
-    <!--<script src="js/vendor/ng-tags-input.min.js"></script>
-    <script src="//maps.googleapis.com/maps/api/js?v=3.exp&sensor=false"></script> <!-- used for the address find on site create page              <!--    added -->
+    <!-- inject:js -->
+    <!-- endinject -->
 
-
-    <!--application scripts -->
-    <script src="app.js"></script>
-
-    <!--Services-->
-    <script src="services/STNResource.js"></script>
-    <!-- Controllers -->
-    <script src="component/STNCtrl.js"></script>
-    <script src="component/ModalsCtrl.js"></script>
-    <script src="component/approval/approvalCtrl.js"></script>
-    <script src="component/event/eventCtrl.js"></script>
-    <script src="component/event/eventInfoCtrl.js"></script>
-    <script src="component/event/eventSessionCtrl.js"></script>
-    <script src="component/event/eventSessionModalCtrl.js"></script>
-    <script src="component/file/fileCtrl.js"></script>
-    <script src="component/file/fileUploadCtrl.js"></script>
-    <script src="component/help/helpCtrl.js"></script>
-    <script src="component/home/homeCtrl.js"></script>
-    <script src="component/hwm/hwmCtrl.js"></script>
-    <script src="component/hwm/hwmModalCtrl.js"></script>
-    <script src="component/hwm/quickHWMCtrl.js"></script>
-    <script src="component/logInOut/logInOutCtrl.js"></script>
-    <script src="component/main/mainCtrl.js"></script>
-    <script src="component/map/mapCtrl.js"></script>
-    <script src="component/member/memberCtrl.js"></script>
-    <script src="component/member/memberInfoCtrl.js"></script>
-    <script src="component/objectivePoint/objectivePointCtrl.js"></script>
-    <script src="component/objectivePoint/objectivePointModalCtrl.js"></script>
-    <script src="component/peak/peakCtrl.js"></script>
-    <script src="component/reporting/confirmReportModalCtrl.js"></script>
-    <script src="component/reporting/projectAlertModalCtrl.js"></script>
-    <script src="component/reporting/reportingCtrl.js"></script>
-    <script src="component/reporting/reportingDashboardCtrl.js"></script>
-    <script src="component/reporting/reportModalCtrl.js"></script>
-    <script src="component/reporting/submitReportCtrl.js"></script>
-    <script src="component/resources/resourcesCtrl.js"></script>
-    <script src="component/sensor/sensorCtrl.js"></script>
-    <script src="component/sensor/sensorModalCtrl.js"></script>
-    <script src="component/settings/settingsCtrl.js"></script>
-    <script src="component/site/siteCtrl.js"></script>
-    <script src="component/site/siteModalCtrl.js"></script>
-    <script src="component/siteSearch/siteSearchCtrl.js"></script>
-
-    <!--Directives-->
-    <script src="shared/directives/STNDirectives.js"></script>
-
+    <!--<script src="app.js"></script>-->
 </head>
 
 <body ng-app="app">
