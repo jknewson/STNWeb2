@@ -25,110 +25,110 @@
                 <fieldset>
                     <!--Site Description*-->
                     <div class="form-group">
-                        <label class="col-md-4 control-label" for="inputSITE_DESCRIPTION">Site Description:</label>
+                        <label class="col-md-4 control-label" for="SITE_DESCRIPTION">Site Description:</label>
                         <div class="col-md-7">
-                            <textarea readonly="readonly" class="form-control" id="inputSITE_DESCRIPTION" type="text" rows="3" ng-model="aSite.SITE_DESCRIPTION" />
+                            <textarea readonly="readonly" class="form-control" id="SITE_DESCRIPTION" type="text" rows="3" ng-model="aSite.SITE_DESCRIPTION" />
                         </div>
                     </div>
 
                     <!--Internal Notes-->
                     <div class="form-group">
-                        <label class="col-md-4 control-label" for="inputSITE_NOTES">Internal Notes:</label>
+                        <label class="col-md-4 control-label" for="SITE_NOTES">Internal Notes:</label>
                         <div class="col-md-7">
-                            <textarea ng-if="aSite.SITE_NOTES" readonly="readonly" class="form-control" id="inputSITE_NOTES" type="text" rows="3" ng-model="aSite.SITE_NOTES" />
+                            <textarea ng-if="aSite.SITE_NOTES" readonly="readonly" class="form-control" id="SITE_NOTES" type="text" rows="3" ng-model="aSite.SITE_NOTES" />
                             <span ng-if="aSite.SITE_NOTES == undefined">---</span>
                         </div>
                     </div>
 
                     <!--Latitude*-->
                     <div class="form-group">
-                        <label class="col-md-4 control-label" for="inputLATITUDE_DD">Latitude:</label>
+                        <label class="col-md-4 control-label" for="LATITUDE_DD">Latitude:</label>
                         <div class="col-md-7"><span>{{aSite.LATITUDE_DD}}</span></div>
                     </div>
 
                     <!--Longitude*-->
                     <div class="form-group">
-                        <label class="col-md-4 control-label" for="inputLONGITUDE_DD">Longitude:</label>
+                        <label class="col-md-4 control-label" for="LONGITUDE_DD">Longitude:</label>
                         <div class="col-md-7"><span>{{aSite.LONGITUDE_DD}}</span></div>
                     </div>
 
                     <!--Horizontal Datum*-->
                     <div class="form-group">
-                        <label class="col-md-4 control-label" for="inputHDATUM_ID">Horizontal Datum:</label>
+                        <label class="col-md-4 control-label" for="HDATUM_ID">Horizontal Datum:</label>
                         <div class="col-md-7"><span>{{aSite.HorizontalDatum}}</span></div>
                     </div>
 
                     <!--Horizontal Collection Method*-->
                     <div class="form-group">
-                        <label class="col-md-4 control-label" for="inputHCOLLECT_METHOD_ID">Horizontal Collection Method:</label>
+                        <label class="col-md-4 control-label" for="HCOLLECT_METHOD_ID">Horizontal Collection Method:</label>
                         <div class="col-md-7"><span>{{aSite.HorizontalCollectMethod}}</span></div>
                     </div>
 
                     <!--Address-->
                     <div class="form-group">
-                        <label class="col-md-4 control-label" for="inputADDRESS">Address:</label>
+                        <label class="col-md-4 control-label" for="ADDRESS">Address:</label>
                         <div class="col-md-7"><span>{{aSite.ADDRESS || "---"}}</span></div>
                     </div>
 
                     <!--City-->
                     <div class="form-group">
-                        <label class="col-md-4 control-label" for="inputCITY">City:</label>
+                        <label class="col-md-4 control-label" for="CITY">City:</label>
                         <div class="col-md-7"><span>{{aSite.CITY || "---"}}</span></div>
                     </div>
 
                     <!--State*-->
                     <div class="form-group">
-                        <label class="col-md-4 control-label" for="inputSTATE">State:</label>
+                        <label class="col-md-4 control-label" for="STATE">State:</label>
                         <div class="col-md-7"><span>{{aSite.STATE || "---"}}</span></div>
                     </div>
 
                     <!--Zip-->
                     <div class="form-group">
-                        <label class="col-md-4 control-label" for="inputZIP">Zip:</label>
+                        <label class="col-md-4 control-label" for="ZIP">Zip:</label>
                         <div class="col-md-7"><span>{{aSite.ZIP || "---"}}</span></div>
                     </div>
 
                     <!--County*-->
                     <div class="form-group">
-                        <label class="col-md-4 control-label" for="inputCOUNTY">County:</label>
+                        <label class="col-md-4 control-label" for="COUNTY">County:</label>
                         <div class="col-md-7"><span>{{aSite.COUNTY || "---"}}</span></div>
                     </div>
 
                     <!--Waterbody*-->
                     <div class="form-group">
-                        <label class="col-md-4 control-label" for="inputWATERBODY">Waterbody:</label>
+                        <label class="col-md-4 control-label" for="WATERBODY">Waterbody:</label>
                         <div class="col-md-7"><span>{{aSite.WATERBODY}}</span></div>
                     </div>
 
                     <!--Drainage Area-->
                     <div class="form-group">
-                        <label class="col-md-4 control-label" for="inputDRAINAGE_AREA_SQMI">Drainage Area (sq mi):</label>
+                        <label class="col-md-4 control-label" for="DRAINAGE_AREA_SQMI">Drainage Area (sq mi):</label>
                         <div class="col-md-7"><span>{{aSite.DRAINAGE_AREA_SQMI || "---"}}</span></div>
                     </div>
 
                     <!--Station ID for USGS gage-->
                     <div class="form-group">
-                        <label class="col-md-4 control-label" for="inputUSGS_SID">Station ID for USGS gage:</label>
+                        <label class="col-md-4 control-label" for="USGS_SID">Station ID for USGS gage:</label>
                         <div class="col-md-7"><span>{{aSite.USGS_SID || "---"}}</span></div>
                     </div>
 
                     <!--Station ID for NOAA gage-->
                     <div class="form-group">
-                        <label class="col-md-4 control-label" for="inputNOAA_SID">Station ID for NOAA gage:</label>
+                        <label class="col-md-4 control-label" for="NOAA_SID">Station ID for NOAA gage:</label>
                         <div class="col-md-7"><span>{{aSite.NOAA_SID || "---"}}</span></div>
                     </div>
 
                     <!--Other Station ID-->
                     <div class="form-group">
-                        <label class="col-md-4 control-label" for="inputOTHER_SID">Other Station ID:</label>
+                        <label class="col-md-4 control-label" for="OTHER_SID">Other Station ID:</label>
                         <div class="col-md-7"><span>{{aSite.OTHER_SID || "---"}}</span></div>
                     </div>
 
                     <!--Safety Notes-->
                     <div class="form-group">
-                        <label class="col-md-4 control-label" for="inputSAFETY_NOTES">Safety Notes:</label>
+                        <label class="col-md-4 control-label" for="SAFETY_NOTES">Safety Notes:</label>
                         <div class="col-md-7">
-                            <textarea ng-if="aSite.SAFETY_NOTES" readonly="readonly" class="form-control" id="inputSAFETY_NOTES" type="text" rows="3" ng-model="aSite.SAFETY_NOTES" />
+                            <textarea ng-if="aSite.SAFETY_NOTES" readonly="readonly" class="form-control" type="text" rows="3" ng-model="aSite.SAFETY_NOTES" />
                             <span ng-if="aSite.SAFETY_NOTES == undefined">---</span>
                         </div>
                     </div>
@@ -166,12 +166,12 @@
                     <hr />
                     <!--Priority-->
                     <div class="form-group">
-                        <label class="col-md-4 control-label" for="inputPRIORITY_ID">Priority:</label>
+                        <label class="col-md-4 control-label" for="PRIORITY_ID">Priority:</label>
                         <div class="col-md-7"><span>{{aSite.PriorityName}}</span></div>
                     </div>
                     <!--Network Type-->
                     <div class="form-group">
-                        <label class="col-md-4 control-label" for="inputNETWORK_TYPE">Site Location Type in the Network:</label>
+                        <label class="col-md-4 control-label" for="NETWORK_TYPE">Site Location Type in the Network:</label>
                         <div class="col-md-7">
                             <ul style="padding-left:0">
                                 <li style="list-style:none;" ng-repeat="nt in siteNetworkTypes">
@@ -183,7 +183,7 @@
                     </div>
                     <!--Network NAME-->
                     <div class="form-group">
-                        <label class="col-md-4 control-label" for="inputNETWORK_NAME">Network Name:</label>
+                        <label class="col-md-4 control-label" for="NETWORK_NAME">Network Name:</label>
                         <div class="col-md-7">
                             <ul style="padding-left:0">
                                 <li style="list-style:none;" ng-repeat="nn in siteNetworkNames">
@@ -195,13 +195,13 @@
                     </div>
                     <!--Zone-->
                     <div class="form-group">
-                        <label class="col-md-4 control-label" for="inputZONE">Zone:</label>
+                        <label class="col-md-4 control-label" for="ZONE">Zone:</label>
                         <div class="col-md-7"><span>{{aSite.ZONE || "---"}}</span></div>
                     </div>
 
                     <!--Sensor Not Appropriate-->
                     <div class="form-group">
-                        <label class="col-md-4 control-label" for="inputSENSOR_NOT_APPROPRIATE">Check if Sensor is not Appropriate here:</label>
+                        <label class="col-md-4 control-label" for="SENSOR_NOT_APPROPRIATE">Check if Sensor is not Appropriate here:</label>
                         <div class="col-md-7">
                             <input type="checkbox" disabled="disabled" name="SENSOR_NOT_APPROPRIATE" ng-model="aSite.SENSOR_NOT_APPROPRIATE" ng-true-value="1" ng-false-value="0" />
                         </div>
@@ -209,13 +209,13 @@
 
                     <!--Permanent Sensor Housing?-->
                     <div class="form-group sensorInfo" ng-class="{darkClass:disableSensorParts}">
-                        <label class="col-md-4 control-label" for="inputIS_PERMANENT_HOUSING_INSTALLED">Permanent Sensor Housing Installed?</label>
+                        <label class="col-md-4 control-label" for="IS_PERMANENT_HOUSING_INSTALLED">Permanent Sensor Housing Installed?</label>
                         <div class="col-md-7"><span>{{aSite.IS_PERMANENT_HOUSING_INSTALLED || "---"}}</span></div>
                     </div>
 
                     <!--Site creator-->
                     <div class="form-group">
-                        <label class="col-md-4 control-label" for="inputMEMBER_ID">Site Creator:</label>
+                        <label class="col-md-4 control-label" for="MEMBER_ID">Site Creator:</label>
                         <div class="col-md-7">
                             <span>{{aSite.Creator || "---"}}</span>
                         </div>
@@ -229,52 +229,52 @@
                     <div ng-show="addLandowner">
                         <!--First Name:-->
                         <div class="form-group">
-                            <label class="col-md-4 control-label" for="inputFNAME">First Name:</label>
+                            <label class="col-md-4 control-label" for="FNAME">First Name:</label>
                             <div class="col-md-7"><span>{{landowner.FNAME || "---"}}</span></div>
                         </div>
                         <!--Last Name:-->
                         <div class="form-group">
-                            <label class="col-md-4 control-label" for="inputLNAME">Last Name:</label>
+                            <label class="col-md-4 control-label" for="LNAME">Last Name:</label>
                             <div class="col-md-7"><span>{{landowner.LNAME || "---"}}</span></div>
                         </div>
                         <!--Affiliation/Title:-->
                         <div class="form-group">
-                            <label class="col-md-4 control-label" for="inputTITLE">Affiliation/Title:</label>
+                            <label class="col-md-4 control-label" for="TITLE">Affiliation/Title:</label>
                             <div class="col-md-7"><span>{{landowner.TITLE || "---"}}</span></div>
                         </div>
                         <!--Address:-->
                         <div class="form-group">
-                            <label class="col-md-4 control-label" for="inputADDRESS">Address:</label>
+                            <label class="col-md-4 control-label" for="ADDRESS">Address:</label>
                             <div class="col-md-7"><span>{{landowner.ADDRESS || "---"}}</span></div>
                         </div>
                         <!--City:-->
                         <div class="form-group">
-                            <label class="col-md-4 control-label" for="inputCITY">City:</label>
+                            <label class="col-md-4 control-label" for="CITY">City:</label>
                             <div class="col-md-7"><span>{{landowner.CITY || "---"}}</span></div>
                         </div>
                         <!--State-->
                         <div class="form-group">
-                            <label class="col-md-4 control-label" for="inputSTATE">State:</label>
+                            <label class="col-md-4 control-label" for="STATE">State:</label>
                             <div class="col-md-7"><span>{{landowner.STATE || "---"}}</span></div>
                         </div>
                         <!--Zip:-->
                         <div class="form-group">
-                            <label class="col-md-4 control-label" for="inputLOZIP">Zip:</label>
+                            <label class="col-md-4 control-label" for="LOZIP">Zip:</label>
                             <div class="col-md-7"><span>{{landowner.ZIP || "---"}}</span></div>
                         </div>
                         <!--Primary Phone:-->
                         <div class="form-group">
-                            <label class="col-md-4 control-label" for="inputPRIMARYPHONE">Primary Phone:</label>
+                            <label class="col-md-4 control-label" for="PRIMARYPHONE">Primary Phone:</label>
                             <div class="col-md-7"><span>{{landowner.PRIMARYPHONE || "---"}}</span></div>
                         </div>
                         <!--Secondary Phone:-->
                         <div class="form-group">
-                            <label class="col-md-4 control-label" for="inputSECONDARYPHONE">Secondary Phone:</label>
+                            <label class="col-md-4 control-label" for="SECONDARYPHONE">Secondary Phone:</label>
                             <div class="col-md-7"><span>{{landowner.SECONDARYPHONE || "---"}}</span></div>
                         </div>
                         <!--Email:-->
                         <div class="form-group">
-                            <label class="col-md-4 control-label" for="inputEMAIL">Email:</label>
+                            <label class="col-md-4 control-label" for="EMAIL">Email:</label>
                             <div class="col-md-7"><span>{{landowner.EMAIL || "---"}}</span></div>
                         </div>
                     </div>
@@ -287,7 +287,7 @@
                     <!--end Landowner contact area-->
                     <!--Access Permission Granted-->
                     <div class="form-group">
-                        <label class="col-md-4 control-label" for="inputACCESS_GRANTED">Access Permission Granted:</label>
+                        <label class="col-md-4 control-label" for="ACCESS_GRANTED">Access Permission Granted:</label>
                         <div class="col-md-7"><span>{{aSite.ACCESS_GRANTED || "---"}}</span></div>
                     </div>
                 </fieldset>

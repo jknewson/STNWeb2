@@ -7,9 +7,9 @@
         </div>
         <!-- Event Name -->
         <div class="form-group required" ng-class="{'has-error':eventForm.EVENT_NAME.$invalid && eventForm.EVENT_NAME.$dirty}">
-            <label class="col-md-3 control-label req" for="inputEVENT_NAME">Event Name:</label>
+            <label class="col-md-3 control-label req" for="EVENT_NAME">Event Name:</label>
             <div class="col-md-3">
-                <input ng-if="loggedInRole == 'Admin'" class="form-control" id="inputEVENT_NAME" name="EVENT_NAME" ng-model="anEvent.EVENT_NAME"
+                <input ng-if="loggedInRole == 'Admin'" class="form-control" id="EVENT_NAME" name="EVENT_NAME" ng-model="anEvent.EVENT_NAME"
                        type="text" placeholder="Event Name" ng-model-options="{ updateOn: 'blur' }" ng-change="SaveOnBlur()"
                        required />
                 <span ng-if="loggedInRole != 'Admin'">{{anEvent.EVENT_NAME}}</span>
@@ -18,9 +18,9 @@
 
         <!-- Event Description -->
         <div class="form-group">
-            <label class="col-md-3 control-label" for="inputEVENT_DESCRIPTION">Description:</label>
+            <label class="col-md-3 control-label" for="EVENT_DESCRIPTION">Description:</label>
             <div class="col-md-6">
-                <textarea ng-if="loggedInRole == 'Admin'" class="form-control" id="inputEVENT_DESCRIPTION"
+                <textarea ng-if="loggedInRole == 'Admin'" class="form-control" id="EVENT_DESCRIPTION"
                           type="text" rows="3" placeholder="Event Description" ng-model="anEvent.EVENT_DESCRIPTION"
                           ng-model-options="{ updateOn: 'blur' }" ng-change="SaveOnBlur()" />
                 <span ng-if="loggedInRole != 'Admin'">{{anEvent.EVENT_DESCRIPTION}}</span>
@@ -30,10 +30,10 @@
         <!-- Event Start Date -->
 
         <div class="form-group">
-            <label class="col-md-3 control-label" for="inputEVENT_START_DATE">Event Start Date:</label>
+            <label class="col-md-3 control-label" for="EVENT_START_DATE">Event Start Date:</label>
             <div class="col-md-6">
                 <div class="input-group">
-                    <input ng-show="loggedInRole == 'Admin'" class="form-control" id="inputEVENT_START_DATE" name="sd" ng-disabled="undetermined"
+                    <input ng-show="loggedInRole == 'Admin'" class="form-control" id="EVENT_START_DATE" name="sd" ng-disabled="undetermined"
                            type="text" uib-datepicker-popup="MMMM dd, yyyy" is-open="datepickrs.sd"
                            ng-model-options="{ updateOn: 'blur' }" ng-change="SaveOnBlur(0)"
                            ng-model="anEvent.EVENT_START_DATE" />
@@ -50,11 +50,11 @@
 
         <!-- Event End Date -->
         <div class="form-group">
-            <label class="col-md-3 control-label" for="inputEVENT_END_DATE">Event End Date:</label>
+            <label class="col-md-3 control-label" for="EVENT_END_DATE">Event End Date:</label>
             <div class="col-md-6">
                 <div>
                     <div class="input-group">
-                        <input ng-show="loggedInRole == 'Admin'" class="form-control" id="inputEVENT_END_DATE" name="ed" ng-disabled="undetermined"
+                        <input ng-show="loggedInRole == 'Admin'" class="form-control" id="EVENT_END_DATE" name="ed" ng-disabled="undetermined"
                                type="text" uib-datepicker-popup="MMMM dd, yyyy" is-open="datepickrs.ed"
                                ng-model-options="{ updateOn: 'blur' }" ng-change="SaveOnBlur(0)"
                                ng-model="anEvent.EVENT_END_DATE" />
@@ -71,9 +71,9 @@
 
         <!-- Event Type -->
         <div class="form-group required">
-            <label class="col-md-3 control-label req" for="inputEVENT_TYPE_ID">Event Type:</label>
+            <label class="col-md-3 control-label req" for="EVENT_TYPE_ID">Event Type:</label>
             <div class="col-md-3">
-                <select ng-if="loggedInRole == 'Admin'" class=" form-control" id="selectEVENT_TYPE_ID" name="EVENT_TYPE_ID" ng-model="anEvent.EVENT_TYPE_ID"
+                <select ng-if="loggedInRole == 'Admin'" class=" form-control" id="EVENT_TYPE_ID" name="EVENT_TYPE_ID" ng-model="anEvent.EVENT_TYPE_ID"
                         ng-options="et.EVENT_TYPE_ID as et.TYPE for et in eventTypeList | orderBy: 'TYPE'" ng-model-options="{ updateOn: 'blur' }" ng-change="SaveOnBlur()"
                         required>
                     <option value="">Select Event Type</option>
@@ -84,9 +84,9 @@
 
         <!-- Event Status -->
         <div class="form-group required">
-            <label class="col-md-3 control-label req" for="inputEVENT_STATUS_ID">Event Status:</label>
+            <label class="col-md-3 control-label req" for="EVENT_STATUS_ID">Event Status:</label>
             <div class="col-md-3">
-                <select ng-if="loggedInRole == 'Admin'" class=" form-control" id="selectEVENT_STATUS_ID" name="EVENT_STATUS_ID" ng-model="anEvent.EVENT_STATUS_ID"
+                <select ng-if="loggedInRole == 'Admin'" class=" form-control" id="EVENT_STATUS_ID" name="EVENT_STATUS_ID" ng-model="anEvent.EVENT_STATUS_ID"
                         ng-options="es.EVENT_STATUS_ID as es.STATUS for es in eventStatList | orderBy: 'STATUS'" ng-model-options="{ updateOn: 'blur' }" ng-change="SaveOnBlur()"
                         required>
                     <option value="">Select Event Status</option>
@@ -97,9 +97,9 @@
 
         <!-- Event Coordinator -->
         <div class="form-group required">
-            <label class="col-md-3 control-label req" for="inputEVENT_COORDINATOR">Event Coordinator:</label>
+            <label class="col-md-3 control-label req" for="EVENT_COORDINATOR">Event Coordinator:</label>
             <div class="col-md-3">
-                <select ng-if="loggedInRole == 'Admin'" class=" form-control" id="selectEVENT_COORDINATOR" name="EVENT_COORDINATOR" ng-model="anEvent.EVENT_COORDINATOR"
+                <select ng-if="loggedInRole == 'Admin'" class=" form-control" id="EVENT_COORDINATOR" name="EVENT_COORDINATOR" ng-model="anEvent.EVENT_COORDINATOR"
                         ng-options="ec.MEMBER_ID as ec.FNAME + ' ' + ec.LNAME for ec in eventCoordList | orderBy: 'LNAME'" ng-model-options="{ updateOn: 'blur' }" ng-change="SaveOnBlur()"
                         required>
                     <option value="">Select Event Coordinator</option>

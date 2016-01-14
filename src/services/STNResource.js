@@ -406,7 +406,6 @@
     }]);
     //#endregion of OP_CONTROL_IDENTIFIER
 
-
     //#region OP_QUALITY
     STNResource.factory('OP_QUALITY', ['$resource', function ($resource) {
         return $resource(rootURL + '/ObjectivePointQualities/:id.json',

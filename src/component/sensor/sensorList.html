@@ -30,11 +30,11 @@
         <div ng-repeat="s in SiteSensors">
             <div ng-if="s.InstrumentStats[0].STATUS_TYPE_ID == 4">
                 <ul>
-                    <li style="list-style:none">
-                        {{s.Instrument.Deployment_Type}} Sensor
+                    <li style="list-style:none;padding-bottom: 15px;">
+                        <span class="col-sm-10 borderLess">{{s.Instrument.Deployment_Type}} Sensor</span>
                         <div ng-show="sessionEventExists" class="pull-right">
-                            <button type="button" class="btn btn-primary" style="padding:0" ng-click="showSensorModal(s)" tooltip-placement="right" uib-tooltip="Deploy this proposed sensor">
-                                <span>Deploy it</span>
+                            <button type="button" class="btn btn-primary" style="padding:0" ng-click="showSensorModal(s,'depProp')" tooltip-placement="right" uib-tooltip="Deploy this proposed sensor">
+                                <span>Deploy</span>
                             </button>
                         </div>
                     </li>
@@ -56,9 +56,17 @@
         <!-- only deployed sensors here -->
         <div ng-repeat="s in SiteSensors">
             <div ng-if="s.InstrumentStats[0].STATUS_TYPE_ID == 1">
-
                 <ul>
-                    <li style="list-style:none"><a class="btn borderLess" ng-click="showSensorModal(s)">{{s.Instrument.Deployment_Type}} Sensor</a></li>
+                    <li style="list-style:none;padding-bottom: 15px;">
+                        <span class="col-sm-9 borderLess">
+                            <a class="btn borderLess" ng-click="showSensorModal(s, 'editDep')">{{s.Instrument.Deployment_Type}} Sensor</a>
+                        </span>
+                        <div ng-show="sessionEventExists" class="pull-right">
+                            <button type="button" class="btn btn-primary" style="padding:0" ng-click="showRetrieveModal(s,'retrieve')" tooltip-placement="right" uib-tooltip="Retrieve this sensor">
+                                <span>Retrieve</span>
+                            </button>
+                        </div>
+                    </li>
                 </ul>
             </div>
         </div>
@@ -69,7 +77,11 @@
         <div ng-repeat="s in SiteSensors">
             <div ng-if="s.InstrumentStats[0].STATUS_TYPE_ID == 2">
                 <ul>
-                    <li style="list-style:none">{{s.Instrument.Deployment_Type}} Sensor</li>
+                    <li style="list-style:none;padding-bottom: 15px;">
+                        <span class="col-sm-9 borderLess">
+                            <a class="btn borderLess" ng-click="showRetrieveModal(s, 'editRet')">{{s.Instrument.Deployment_Type}} Sensor</a>
+                        </span>                       
+                    </li>
                 </ul>
             </div>
         </div>

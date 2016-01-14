@@ -655,7 +655,6 @@
                                 return s.getSitePeaks({ id: $stateParams.id }).$promise;
                             }
                         },
-
                         hd: 'HORIZONTAL_DATUM',
                         allHorDatums: function (hd) {
                             return hd.getAll().$promise;
@@ -723,10 +722,6 @@
                         sent: 'SENSOR_TYPE',
                         allSensorTypes: function (sent) {
                             return sent.getAll().$promise;
-                        },
-                        statT: 'STATUS_TYPE',
-                        allStatusTypes: function (statT) {
-                            return statT.getAll().$promise;
                         },
                         sb: 'SENSOR_BRAND',
                         allSensorBrands: function (sb){
