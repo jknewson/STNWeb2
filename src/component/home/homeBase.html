@@ -20,9 +20,9 @@
         </div>
         <div class="panel-body">
             <div class="form-group">
-                <label class="col-md-3 control-label" for="inputEVENT">Event:</label>
+                <label class="col-md-3 control-label" for="EVENT">Event:</label>
                 <div class="col-md-9">
-                    <select class="form-control" id="inputEVENT_ID" name="EVENT_ID" ng-model="ChooseEvent.id"
+                    <select class="form-control" id="EVENT_ID" name="EVENT_ID" ng-model="ChooseEvent.id"
                             ng-change="EventChosen()" ng-options="e.EVENT_ID as e.EVENT_NAME for e in allEvents">
                         <option value="">Choose an Event</option>
                     </select>
@@ -124,7 +124,7 @@
         <form name="newCollectionTeam">
             <div class="form-group">
                 <div class="form-group">
-                    <label class="col-md-4 control-label" for="inputPROJ_OBJECTIVES">Username(s) of the who you are with:</label>
+                    <label class="col-md-4 control-label" for="PROJ_OBJECTIVES">Username(s) of the who you are with:</label>
                     <div class="col-md-6">
                         <div isteven-multi-select
                              input-model="members"
@@ -144,7 +144,7 @@
             </div>
             <br clear="all" />
             <div class="form-group">
-                <label class="col-md-4 control-label req" for="inputTEAM_NAME">Team Name:</label>
+                <label class="col-md-4 control-label req" for="TEAM_NAME">Team Name:</label>
                 <div class="col-md-6">
                     <input class="form-control" ng-model="newTeam.TEAM_NAME" type="text" required />
                 </div>

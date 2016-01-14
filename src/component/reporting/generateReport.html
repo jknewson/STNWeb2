@@ -10,9 +10,9 @@
         <div class="panel-heading"><h4 class="panel-title">Select Event, Date, and State(s)</h4></div>
         <div class="panel-body">
             <div class="form-group col-md-12 required">
-                <label class="col-md-12 control-label req" for="inputEVENT_ID">Event:</label>
+                <label class="col-md-12 control-label req" for="EVENT_ID">Event:</label>
                 <div class="col-md-4">
-                    <select class="form-control" id="inputEVENT_ID" name="EVENT_ID" ng-change="genRepChange()"
+                    <select class="form-control" id="EVENT_ID" name="EVENT_ID" ng-change="genRepChange()"
                             ng-model="genSummary.EVENT_ID" ng-options="e.EVENT_ID as e.EVENT_NAME for e in events" required>
                         <option value="">Select an event</option>
                     </select>
@@ -20,9 +20,9 @@
             </div>
 
             <div class="form-group col-md-12 required">
-                <label class="col-md-12 control-label req" for="inputSUM_DATE">Date:</label>
+                <label class="col-md-12 control-label req" for="SUM_DATE">Date:</label>
                 <div class="col-md-4 input-group" style="padding-left:15px;padding-right:15px;">
-                    <input datepicker-append-to-body="true" class="form-control" id="inputSUM_DATE" name="sd" type="text" uib-datepicker-popup="MMMM dd, yyyy"
+                    <input datepicker-append-to-body="true" class="form-control" id="SUM_DATE" name="sd" type="text" uib-datepicker-popup="MMMM dd, yyyy"
                            is-open="datepickrs.sd" ng-model="genSummary.SUM_DATE" required />
                     <span class="input-group-btn">
                         <button class="btn btn-default" ng-click="open($event, 'sd')">
@@ -33,7 +33,7 @@
             </div>
 
             <div class="form-group col-md-12">
-                <label class="col-md-12 control-label" for="inputSUM_STATE">State:</label>
+                <label class="col-md-12 control-label" for="SUM_STATE">State:</label>
                 <div class="col-md-6">
                     <div isteven-multi-select
                          input-model="states"
@@ -60,7 +60,7 @@
     </div>
 
     <div class="panel panel-default">
-        <div class="panel-heading"><h4 class="panel-title">Select Desired Output</div>
+        <div class="panel-heading"><h4 class="panel-title">Select Desired Output</h4></div>
         <div class="panel-body">
             <button class="btn btn-primary" ng-click="displayMetricSum(genReportForm.$valid)">Display Metrics Summary</button>
             <button class="btn btn-primary" ng-click="displayContactsSum(genReportForm.$valid)">Display Contacts Summary</button>

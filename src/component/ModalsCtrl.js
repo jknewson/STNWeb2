@@ -92,6 +92,9 @@
                 
                 $scope.nameToRmv = "Flagged on: " + dateWOtime;
                 break;
+            case "Sensor":
+                $scope.nameToRmv = nameToRemove.Deployment_Type;
+                break;
         }
         //#endregion
 
