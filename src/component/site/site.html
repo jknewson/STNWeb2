@@ -124,7 +124,7 @@
                 <div class="form-group required" ng-class="{'has-error':siteForm.HDATUM_ID.$invalid && siteForm.HDATUM_ID.$dirty}">
                     <label class="col-md-4 control-label req" for="HDATUM_ID">Horizontal Datum:</label>
                     <div class="col-md-7">
-                        <select class="form-control" id="HDATUM_ID" name="HDATUM_ID" ng-model="aSite.HDATUM_ID"
+                        <select class="form-control" name="HDATUM_ID" ng-model="aSite.HDATUM_ID"
                                 ng-options="hd.DATUM_ID as hd.DATUM_NAME for hd in HorizontalDatumList" required>
                             <option value=""></option>
                         </select>
@@ -135,7 +135,7 @@
                 <div class="form-group required" ng-class="{'has-error':siteForm.HCOLLECT_METHOD_ID.$invalid && siteForm.HCOLLECT_METHOD_ID.$dirty}">
                     <label class="col-md-4 control-label req" for="HCOLLECT_METHOD_ID">Horizontal Collection Method:</label>
                     <div class="col-md-7">
-                        <select class="form-control" id="HCOLLECT_METHOD_ID" name="HCOLLECT_METHOD_ID" ng-model="aSite.HCOLLECT_METHOD_ID"
+                        <select class="form-control" name="HCOLLECT_METHOD_ID" ng-model="aSite.HCOLLECT_METHOD_ID"
                                 ng-options="hc.HCOLLECT_METHOD_ID as hc.HCOLLECT_METHOD for hc in HorCollMethodList" required>
                             <option value=""></option>
                         </select>
@@ -146,7 +146,7 @@
                 <div class="form-group">
                     <label class="col-md-4 control-label" for="ADDRESS">Address:</label>
                     <div class="col-md-7">
-                        <input class="form-control" id="ADDRESS" name="ADDRESS" ng-model="aSite.ADDRESS" type="text" />
+                        <input class="form-control" name="ADDRESS" ng-model="aSite.ADDRESS" type="text" />
                     </div>
                 </div>
 
@@ -154,7 +154,7 @@
                 <div class="form-group">
                     <label class="col-md-4 control-label" for="CITY">City:</label>
                     <div class="col-md-7">
-                        <input class="form-control" id="CITY" name="CITY" ng-model="aSite.CITY" type="text" />
+                        <input class="form-control" name="CITY" ng-model="aSite.CITY" type="text" />
                     </div>
                 </div>
 
@@ -162,7 +162,7 @@
                 <div class="form-group required" ng-class="{'has-error':siteForm.STATE.$invalid && siteForm.STATE.$dirty}">
                     <label class="col-md-4 control-label req" for="STATE">State:</label>
                     <div class="col-md-7">
-                        <select class="form-control" id="STATE" name="STATE" ng-model="aSite.STATE" ng-change="updateCountyList(aSite.STATE)"
+                        <select class="form-control" name="STATE" ng-model="aSite.STATE" ng-change="updateCountyList(aSite.STATE)"
                                 ng-options="state.STATE_ABBREV as state.STATE_NAME for state in StateList" required>
                             <option value=""></option>
                         </select>
@@ -173,7 +173,7 @@
                 <div class="form-group">
                     <label class="col-md-4 control-label" for="ZIP">Zip:</label>
                     <div class="col-md-7">
-                        <input class="form-control" id="ZIP" name="ZIP" ng-model="aSite.ZIP" type="text" ui-mask="{{'99999'}}" />
+                        <input class="form-control" name="ZIP" ng-model="aSite.ZIP" type="text" ui-mask="{{'99999'}}" />
                     </div>
                 </div>
 
@@ -181,7 +181,7 @@
                 <div class="form-group required" ng-class="{'has-error':siteForm.COUNTY.$invalid && siteForm.COUNTY.$dirty}">
                     <label class="col-md-4 control-label req" for="COUNTY">County:</label>
                     <div class="col-md-7">
-                        <select class="form-control" id="COUNTY" name="COUNTY" ng-model="aSite.COUNTY" ng-options="c.COUNTY_NAME as c.COUNTY_NAME for c in stateCountyList" required>
+                        <select class="form-control" name="COUNTY" ng-model="aSite.COUNTY" ng-options="c.COUNTY_NAME as c.COUNTY_NAME for c in stateCountyList" required>
                             <option value=""></option>
                         </select>
                     </div>
@@ -191,7 +191,7 @@
                 <div class="form-group required" ng-class="{'has-error':siteForm.WATERBODY.$invalid && siteForm.WATERBODY.$dirty}">
                     <label class="col-md-4 control-label req" for="WATERBODY">Waterbody:</label>
                     <div class="col-md-7">
-                        <input class="form-control" id="WATERBODY" name="WATERBODY" ng-model="aSite.WATERBODY" type="text" required />
+                        <input class="form-control" name="WATERBODY" ng-model="aSite.WATERBODY" type="text" required />
                     </div>
                 </div>
 
@@ -199,7 +199,7 @@
                 <div class="form-group">
                     <label class="col-md-4 control-label" for="DRAINAGE_AREA_SQMI">Drainage Area (sq mi):</label>
                     <div class="col-md-7">
-                        <input class="form-control" id="DRAINAGE_AREA_SQMI" name="DRAINAGE_AREA_SQMI" ng-model="aSite.DRAINAGE_AREA_SQMI" type="text" />
+                        <input class="form-control" name="DRAINAGE_AREA_SQMI" ng-model="aSite.DRAINAGE_AREA_SQMI" type="text" />
                     </div>
                 </div>
 
@@ -207,7 +207,7 @@
                 <div class="form-group">
                     <label class="col-md-4 control-label" for="USGS_SID">Station ID for USGS gage:</label>
                     <div class="col-md-7">
-                        <input class="form-control" id="USGS_SID" name="USGS_SID" ng-model="aSite.USGS_SID" type="text" />
+                        <input class="form-control" name="USGS_SID" ng-model="aSite.USGS_SID" type="text" />
                     </div>
                 </div>
 
@@ -215,7 +215,7 @@
                 <div class="form-group">
                     <label class="col-md-4 control-label" for="NOAA_SID">Station ID for NOAA gage:</label>
                     <div class="col-md-7">
-                        <input class="form-control" id="NOAA_SID" name="NOAA_SID" ng-model="aSite.NOAA_SID" type="text" />
+                        <input class="form-control" name="NOAA_SID" ng-model="aSite.NOAA_SID" type="text" />
                     </div>
                 </div>
 
@@ -223,7 +223,7 @@
                 <div class="form-group">
                     <label class="col-md-4 control-label" for="OTHER_SID">Other Station ID:</label>
                     <div class="col-md-7">
-                        <input class="form-control" id="OTHER_SID" name="OTHER_SID" placeholder="Please add details in the Site Description" ng-model="aSite.OTHER_SID" type="text" />
+                        <input class="form-control" name="OTHER_SID" placeholder="Please add details in the Site Description" ng-model="aSite.OTHER_SID" type="text" />
                     </div>
                 </div>
 
@@ -231,7 +231,7 @@
                 <div class="form-group">
                     <label class="col-md-4 control-label" for="SAFETY_NOTES">Safety Notes:</label>
                     <div class="col-md-7">
-                        <textarea class="form-control" id="SAFETY_NOTES" type="text" rows="3" ng-model="aSite.SAFETY_NOTES" />
+                        <textarea class="form-control" type="text" rows="3" ng-model="aSite.SAFETY_NOTES" />
                     </div>
                 </div>
 
@@ -288,7 +288,7 @@
                 <div class="form-group">
                     <label class="col-md-4 control-label" for="PRIORITY_ID">Priority:</label>
                     <div class="col-md-7">
-                        <select class="form-control" id="PRIORITY_ID" name="PRIORITY_ID" ng-model="aSite.PRIORITY_ID" ng-options="p.PRIORITY_ID as p.PRIORITY_NAME for p in DepPriorityList">
+                        <select class="form-control" name="PRIORITY_ID" ng-model="aSite.PRIORITY_ID" ng-options="p.PRIORITY_ID as p.PRIORITY_NAME for p in DepPriorityList">
                             <option value=""></option>
                         </select>
                     </div>
@@ -324,7 +324,7 @@
                 <div class="form-group">
                     <label class="col-md-4 control-label" for="ZONE">Zone:</label>
                     <div class="col-md-7">
-                        <input class="form-control" id="ZONE" name="ZONE" ng-model="aSite.ZONE" type="text" />
+                        <input class="form-control" name="ZONE" ng-model="aSite.ZONE" type="text" />
                     </div>
                 </div>
 
@@ -526,7 +526,7 @@
                 <div class="form-group required" ng-class="{'has-error':OPForm.OP_TYPE_ID.$invalid && OPForm.OP_TYPE_ID.$dirty}">
                     <label class="col-md-3 control-label req" for="OP_TYPE_ID">Type:</label>
                     <div class="col-md-6">
-                        <select class="form-control" id="OP_TYPE_ID" name="OP_TYPE_ID" ng-model="OP.OP_TYPE_ID"
+                        <select class="form-control" name="OP_TYPE_ID" ng-model="OP.OP_TYPE_ID"
                                 ng-options="opt.OBJECTIVE_POINT_TYPE_ID as opt.OP_TYPE for opt in OPTypeList" required>
                             <option value=""></option>
                         </select>
@@ -537,7 +537,7 @@
                 <div class="form-group required" ng-class="{'has-error':OPForm.NAME.$invalid && OPForm.NAME.$dirty}">
                     <label class="col-md-3 control-label req" for="NAME">Name:</label>
                     <div class="col-md-6">
-                        <input class="form-control" id="NAME" name="NAME" ng-model="OP.NAME" type="text" required />
+                        <input class="form-control" name="NAME" ng-model="OP.NAME" type="text" required />
                     </div>
                 </div>
 
@@ -545,7 +545,7 @@
                 <div class="form-group required" ng-class="{'has-error':OPForm.DESCRIPTION.$invalid && OPForm.DESCRIPTION.$dirty}">
                     <label class="col-md-3 control-label req" for="DESCRIPTION">Description:</label>
                     <div class="col-md-6">
-                        <textarea class="form-control" id="DESCRIPTION" name="DESCRIPTION" type=" text" rows="3" ng-model="OP.DESCRIPTION" required />
+                        <textarea class="form-control" name="DESCRIPTION" type=" text" rows="3" ng-model="OP.DESCRIPTION" required />
                     </div>
                 </div>
 
@@ -563,7 +563,7 @@
                     <div class="col-md-6">
                         <div ng-repeat="id in addedIdentifiers">
                             <div class="col-md-12" style="margin-bottom:5px">
-                                <div class="col-md-7"><input class="form-control" id="OPControl" name="OPControl" ng-model="id.IDENTIFIER" type="text" /></div>
+                                <div class="col-md-7"><input class="form-control" name="OPControl" ng-model="id.IDENTIFIER" type="text" /></div>
                                 <input type="hidden" name="OP_CONTROL_IDENTIFIER_ID" ng-model="id.OP_CONTROL_IDENTIFIER_ID" />
                                 <input type="hidden" name="OBJECTIVE_POINT_ID" ng-model="id.OBJECTIVE_POINT_ID" />
 
@@ -640,7 +640,7 @@
                 <div class="form-group">
                     <label class="col-md-3 control-label" for="HDATUM_ID">Horizontal Datum:</label>
                     <div class="col-md-6">
-                        <select class="form-control" id="HDATUM_ID" name="HDATUM_ID" ng-model="OP.HDATUM_ID"
+                        <select class="form-control" name="HDATUM_ID" ng-model="OP.HDATUM_ID"
                                 ng-options="hd.DATUM_ID as hd.DATUM_NAME for hd in HDList">
                             <option value=""></option>
                         </select>
@@ -651,7 +651,7 @@
                 <div class="form-group">
                     <label class="col-md-3 control-label" for="HCOLLECT_METHOD_ID">Horizontal Collection Method:</label>
                     <div class="col-md-6">
-                        <select class="form-control" id="HCOLLECT_METHOD_ID" name="HCOLLECT_METHOD_ID" ng-model="OP.HCOLLECT_METHOD_ID"
+                        <select class="form-control"  name="HCOLLECT_METHOD_ID" ng-model="OP.HCOLLECT_METHOD_ID"
                                 ng-options="hcm.HCOLLECT_METHOD_ID as hcm.HCOLLECT_METHOD for hcm in HCollectMethodList">
                             <option value=""></option>
                         </select>
@@ -675,7 +675,7 @@
                 <div class="form-group">
                     <label class="col-md-3 control-label" for="ELEV_FT">Elevation:</label>
                     <div class="col-md-6">
-                        <input class="form-control" ng-keypress="isNum($event)" id="ELEV_FT" name="ELEV_FT" ng-model="OP.ELEV_FT" type="text" />
+                        <input class="form-control" ng-keypress="isNum($event)" name="ELEV_FT" ng-model="OP.ELEV_FT" type="text" />
                     </div>
                 </div>
 
@@ -683,7 +683,7 @@
                 <div class="form-group">
                     <label class="col-md-3 control-label" for="VDATUM_ID">Vertical Datum:</label>
                     <div class="col-md-6">
-                        <select class="form-control" id="VDATUM_ID" name="VDATUM_ID" ng-model="OP.VDATUM_ID"
+                        <select class="form-control" name="VDATUM_ID" ng-model="OP.VDATUM_ID"
                                 ng-options="vd.DATUM_ID as vd.DATUM_ABBREVIATION for vd in VDatumList">
                             <option value=""></option>
                         </select>
@@ -694,7 +694,7 @@
                 <div class="form-group">
                     <label class="col-md-3 control-label" for="VCOLLECT_METHOD_ID">Vertical Collection Method:</label>
                     <div class="col-md-6">
-                        <select class="form-control" id="VCOLLECT_METHOD_ID" name="VCOLLECT_METHOD_ID" ng-model="OP.VCOLLECT_METHOD_ID"
+                        <select class="form-control" name="VCOLLECT_METHOD_ID" ng-model="OP.VCOLLECT_METHOD_ID"
                                 ng-options="vcm.VCOLLECT_METHOD_ID as vcm.VCOLLECT_METHOD for vcm in VCollectMethodList">
                             <option value=""></option>
                         </select>
@@ -734,7 +734,7 @@
                 <div class="form-group">
                     <label class="col-md-3 control-label" for="OP_QUALITY_ID">Quality:</label>
                     <div class="col-md-6">
-                        <select class="form-control" id="OP_QUALITY_ID" name="OP_QUALITY_ID" ng-model="OP.OP_QUALITY_ID"
+                        <select class="form-control" name="OP_QUALITY_ID" ng-model="OP.OP_QUALITY_ID"
                                 ng-options="opq.OP_QUALITY_ID as opq.QUALITY for opq in OPQualityList">
                             <option value=""></option>
                         </select>
@@ -745,7 +745,7 @@
                 <div class="form-group">
                     <label class="col-md-3 control-label" for="OP_NOTES">Objective Point Notes:</label>
                     <div class="col-md-6">
-                        <textarea class="form-control" id="OP_NOTES" type="text" rows="3" ng-model="OP.OP_NOTES" />
+                        <textarea class="form-control" type="text" rows="3" ng-model="OP.OP_NOTES" />
                     </div>
                 </div>
 
@@ -753,7 +753,7 @@
                 <div class="form-group required" ng-class="{'has-error':OPForm.DATE_ESTABLISHED.$invalid && OPForm.DATE_ESTABLISHED.$dirty}">
                     <label class="col-md-3 control-label req" for="DATE_ESTABLISHED">Date Established:</label>
                     <div class="col-md-6 input-group" style="padding-right:14px;padding-left:14px">
-                        <input class="form-control" id="DATE_ESTABLISHED" name="de" type="text" uib-datepicker-popup="MMM dd, yyyy"
+                        <input class="form-control" name="de" type="text" uib-datepicker-popup="MMM dd, yyyy"
                                is-open="datepickrs.de" ng-model="OP.DATE_ESTABLISHED" required />
                         <span class="input-group-btn">
                             <button class="btn btn-default" ng-click="open($event, 'de')">
@@ -767,7 +767,7 @@
                 <div class="form-group">
                     <label class="col-md-3 control-label" for="DATE_RECOVERED">Date Recovered:</label>
                     <div class="col-md-6 input-group" style="padding-right:14px;padding-left:14px">
-                        <input class="form-control" id="DATE_RECOVERED" name="dr" type="text" uib-datepicker-popup="MMM dd, yyyy"
+                        <input class="form-control" name="dr" type="text" uib-datepicker-popup="MMM dd, yyyy"
                                is-open="datepickrs.dr" ng-model="OP.DATE_RECOVERED" />
                         <span class="input-group-btn">
                             <button class="btn btn-default" ng-click="open($event, 'dr')">
@@ -845,7 +845,7 @@
                 <div class="form-group">
                     <label class="col-md-3 control-label" for="WATERBODY">Waterbody:</label>
                     <div class="col-md-6">
-                        <input class="form-control" id="WATERBODY" name="WATERBODY" ng-model="aHWM.WATERBODY" type="text" />
+                        <input class="form-control" name="WATERBODY" ng-model="aHWM.WATERBODY" type="text" />
                     </div>
                 </div>
 
@@ -865,7 +865,7 @@
                     <div class="form-group">
                         <label class="col-md-3 control-label">Events:</label>
                         <div class="col-md-6">
-                            <select class="form-control" id="EVENT_ID" name="EVENT_ID" ng-model="adminChanged.EVENT_ID" ng-change="ChangeEvent()"
+                            <select class="form-control" name="EVENT_ID" ng-model="adminChanged.EVENT_ID" ng-change="ChangeEvent()"
                                     ng-options="e.EVENT_ID as (e.EVENT_NAME + ' --- ' + (e.EVENT_START_DATE | date: 'MM/dd/yyyy') + ' to ' + ((e.EVENT_END_DATE || '-Not Set-') | date: 'MM/dd/yyyy'))  for e in eventList | orderBy: '-EVENT_START_DATE'"
                                 <option value=""></option>
                             </select>
@@ -877,7 +877,7 @@
                 <div class="form-group required" ng-class="{'has-error':HWMForm.HWM_TYPE_ID.$invalid && HWMForm.HWM_TYPE_ID.$dirty}">
                     <label class="col-md-3 control-label req" for="HWM_TYPE_ID">HWM Type:</label>
                     <div class="col-md-6">
-                        <select class="form-control" id="HWM_TYPE_ID" name="HWM_TYPE_ID" ng-model="aHWM.HWM_TYPE_ID"
+                        <select class="form-control" name="HWM_TYPE_ID" ng-model="aHWM.HWM_TYPE_ID"
                                 ng-options="htype.HWM_TYPE_ID as htype.HWM_TYPE for htype in hwmTypeList" required>
                             <option value=""></option>
                         </select>
@@ -916,7 +916,7 @@
                 <div class="form-group required" ng-class="{'has-error':HWMForm.HWM_QUALITY_ID.$invalid && HWMForm.HWM_QUALITY_ID.$dirty}">
                     <label class="col-md-3 control-label req">HWM Quality:</label>
                     <div class="col-md-6">
-                        <select class="form-control" id="HWM_QUALITY_ID" name="HWM_QUALITY_ID" ng-model="aHWM.HWM_QUALITY_ID"
+                        <select class="form-control" name="HWM_QUALITY_ID" ng-model="aHWM.HWM_QUALITY_ID"
                                 ng-options="hqual.HWM_QUALITY_ID as hqual.HWM_QUALITY for hqual in hwmQualList" required>
                             <option value=""></option>
                         </select>
@@ -943,7 +943,7 @@
                 <div class="form-group">
                     <label class="col-md-3 control-label" for="HWM_LOCATIONDESCRIPTION">Location Description:</label>
                     <div class="col-md-6">
-                        <textarea class="form-control" id="HWM_LOCATIONDESCRIPTION" name="HWM_LOCATIONDESCRIPTION" type=" text" rows="3" ng-model="aHWM.HWM_LOCATIONDESCRIPTION" />
+                        <textarea class="form-control" name="HWM_LOCATIONDESCRIPTION" type=" text" rows="3" ng-model="aHWM.HWM_LOCATIONDESCRIPTION" />
                     </div>
                 </div>
 
@@ -1004,7 +1004,7 @@
                 <div class="form-group required" ng-class="{'has-error':HWMForm.HDATUM_ID.$invalid && HWMForm.HDATUM_ID.$dirty}">
                     <label class="col-md-3 control-label req">Horizontal Datum:</label>
                     <div class="col-md-6">
-                        <select class="form-control" id="HDATUM_ID" name="HDATUM_ID" ng-model="aHWM.HDATUM_ID"
+                        <select class="form-control" name="HDATUM_ID" ng-model="aHWM.HDATUM_ID"
                                 ng-options="hd.DATUM_ID as hd.DATUM_NAME for hd in HDatumsList" required>
                             <option value=""></option>
                         </select>
@@ -1015,7 +1015,7 @@
                 <div class="form-group required" ng-class="{'has-error':HWMForm.HCOLLECT_METHOD_ID.$invalid && HWMForm.HCOLLECT_METHOD_ID.$dirty}">
                     <label class="col-md-3 control-label req">Horizontal Collection Method:</label>
                     <div class="col-md-6">
-                        <select class="form-control" id="HCOLLECT_METHOD_ID" name="HCOLLECT_METHOD_ID" ng-model="aHWM.HCOLLECT_METHOD_ID"
+                        <select class="form-control" name="HCOLLECT_METHOD_ID" ng-model="aHWM.HCOLLECT_METHOD_ID"
                                 ng-options="hcm.HCOLLECT_METHOD_ID as hcm.HCOLLECT_METHOD for hcm in hCollMList" required>
                             <option value=""></option>
                         </select>
@@ -1034,7 +1034,7 @@
                 <div class="form-group">
                     <label class="col-md-3 control-label" for="VDATUM_ID">Vertical Datum:</label>
                     <div class="col-md-6">
-                        <select class="form-control" id="VDATUM_ID" name="VDATUM_ID" ng-model="aHWM.VDATUM_ID"
+                        <select class="form-control" name="VDATUM_ID" ng-model="aHWM.VDATUM_ID"
                                 ng-options="vd.DATUM_ID as vd.DATUM_NAME for vd in VDatumsList">
                             <option value=""></option>
                         </select>
@@ -1081,7 +1081,7 @@
                 <div class="form-group">
                     <label class="col-md-3 control-label" for="VDATUM_ID">Vertical Collection Method:</label>
                     <div class="col-md-6">
-                        <select class="form-control" id="VDATUM_ID" name="VCOLLECT_METHOD_ID" ng-model="aHWM.VCOLLECT_METHOD_ID"
+                        <select class="form-control" name="VCOLLECT_METHOD_ID" ng-model="aHWM.VCOLLECT_METHOD_ID"
                                 ng-options="vcm.VCOLLECT_METHOD_ID as vcm.VCOLLECT_METHOD for vcm in vCollMList">
                             <option value=""></option>
                         </select>
@@ -1092,7 +1092,7 @@
                 <div class="form-group">
                     <label class="col-md-3 control-label" for="MARKER_ID">Marker:</label>
                     <div class="col-md-6">
-                        <select class="form-control" id="MARKER_ID" name="MARKER_ID" ng-model="aHWM.MARKER_ID"
+                        <select class="form-control" name="MARKER_ID" ng-model="aHWM.MARKER_ID"
                                 ng-options="vd.MARKER_ID as vd.MARKER1 for vd in markerList">
                             <option value=""></option>
                         </select>
@@ -1103,7 +1103,7 @@
                 <div class="form-group">
                     <label class="col-md-3 control-label" for="HWM_NOTES">Notes:</label>
                     <div class="col-md-6">
-                        <textarea class="form-control" id="HWM_NOTES" name="HWM_NOTES" type=" text" rows="3" ng-model="aHWM.HWM_NOTES" />
+                        <textarea class="form-control" name="HWM_NOTES" type=" text" rows="3" ng-model="aHWM.HWM_NOTES" />
                     </div>
                 </div>
 
@@ -1299,7 +1299,7 @@
                 <div class="form-group required">
                     <label class="col-md-3 control-label" for="TIME_ZONE">Time Zone:</label>
                     <div class="col-md-6">
-                        <select class="form-control" id="TIME_ZONE" name="TIME_ZONE" ng-model="aSensStatus.TIME_ZONE"
+                        <select class="form-control" name="TIME_ZONE" ng-model="aSensStatus.TIME_ZONE"
                                 ng-options="vcm for vcm in timeZoneList">
                             <option value=""></option>
                         </select>
@@ -1314,7 +1314,7 @@
                 <div class="form-group">
                     <label class="col-md-3 control-label" for="NOTES">Note:</label>
                     <div class="col-md-6">
-                        <textarea class="form-control" id="NOTES" name="NOTES" type=" text" rows="3" ng-model="aSensStatus.NOTES" />
+                        <textarea class="form-control" name="NOTES" type=" text" rows="3" ng-model="aSensStatus.NOTES" elastic />
                     </div>
                 </div>
 
@@ -1374,37 +1374,31 @@
                     <div class="col-md-3 col-md-offset-1">Event:</div>
                     <div class="col-md-6">{{EventName}}</div>
                 </div>
-
                 <!-- Sensor Type: -->
                 <div class="form-group">
                     <div class="col-md-3 col-md-offset-1">Sensor Type:</div>
                     <div class="col-md-6">{{aSensor.Sensor_Type}}</div>
                 </div>
-
                 <!-- Sensor Brand: -->
                 <div class="form-group">
                     <div class="col-md-3 col-md-offset-1">Sensor Brand:</div>
                     <div class="col-md-6">{{aSensor.Sensor_Brand}}</div>
                 </div>
-
                 <!-- Serial Number: -->
                 <div class="form-group">
                     <div class="col-md-3 col-md-offset-1">Serial Number:</div>
                     <div class="col-md-6">{{aSensor.SERIAL_NUMBER}}</div>
                 </div>
-
                 <!-- Housing Serial Number: -->
                 <div class="form-group">
                     <div class="col-md-3 col-md-offset-1">Housing Serial Number:</div>
                     <div class="col-md-6">{{aSensor.HOUSING_SERIAL_NUMBER}}</div>
                 </div>
-
                 <!-- Housing Types: -->
                 <div class="form-group">
                     <div class="col-md-3 col-md-offset-1">Housing Types:</div>
                     <div class="col-md-6">{{aSensor.Housing_Type}}</div>
                 </div>
-
                 <!-- Vented (only if Sensor Type is Pressure Transducer)-->
                 <div ng-show="aSensor.SENSOR_TYPE_ID == 1">
                     <div class="form-group">
@@ -1412,63 +1406,121 @@
                         <div class="col-md-6">{{aSensor.VENTED}}</div>
                     </div>
                 </div>
-
                 <!-- Deployment Type: -->
                 <div class="form-group">
                     <div class="col-md-3 col-md-offset-1">Deployment Type:</div>
                     <div class="col-md-6">{{aSensor.Deployment_Type}}</div>
                 </div>
-
                 <!-- Location Description: -->
                 <div class="form-group">
                     <div class="col-md-3 col-md-offset-1">Location Description:</div>
                     <div class="col-md-6">
-                        <textarea class="form-control" readonly="readonly" id="LOCATION_DESCRIPTION" name="LOCATION_DESCRIPTION" type=" text" rows="2" ng-model="aSensor.LOCATION_DESCRIPTION" />
+                        <textarea class="form-control" readonly="readonly" name="LOCATION_DESCRIPTION" type=" text" rows="2" ng-model="aSensor.LOCATION_DESCRIPTION" elastic />
                     </div>
                 </div>
-
                 <!-- Interval: -->
                 <div class="form-group">
                     <div class="col-md-3 col-md-offset-1">Interval:</div>
                     <div class="col-md-6">{{aSensor.INTERVAL}} seconds</div>
                 </div>
-
-                <!-- Deploy Time: -->
+                <!-- Deploy Date: -->
                 <div class="form-group">
-                    <div class="col-md-3 col-md-offset-1">Deploy Time:</div>
-                    <div class="col-md-6">{{aSensStatus.TIME_STAMP | date: 'MM/dd/yyyy hh:mm a' }} {{aSensStatus.TIME_ZONE}}</div>
+                    <div class="col-md-3 col-md-offset-1">Deploy Date and Time:</div>
+                    <div class="col-md-6">{{depSensStatus.TIME_STAMP | date: 'MM/dd/yyyy hh:mm a' }} {{depSensStatus.TIME_ZONE}}</div>
                 </div>
-
                 <!-- Note: -->
                 <div class="form-group">
                     <div class="col-md-3 col-md-offset-1">Note:</div>
                     <div class="col-md-6">
-                        <textarea class="form-control" readonly="readonly" id="NOTES" name="NOTES" type=" text" rows="2" ng-model="aSensStatus.NOTES" />
+                        <textarea class="form-control" readonly="readonly" name="NOTES" type=" text" rows="2" ng-model="depSensStatus.NOTES" elastic />
                     </div>
                 </div>
-                <!-- Collection Member: -->
+                <!-- Deploy Member: -->
                 <div class="form-group">
                     <div class="col-md-3 col-md-offset-1">Deploy Member:</div>
                     <div class="col-md-6">{{Deployer.FNAME}} {{Deployer.LNAME}}</div>
                 </div>
 
+                <hr />
+                <label>Retrieval Information</label>
+                <!-- Status Type:* -->
+                <div class="form-group required" ng-class="{'has-error':SensorFormR.STATUS_TYPE_ID.$invalid && SensorFormR.STATUS_TYPE_ID.$dirty}">
+                    <label class="col-md-3 control-label req" for="STATUS_TYPE_ID">Status:</label>
+                    <div class="col-md-6">
+                        <select class="form-control" name="STATUS_TYPE_ID" ng-model="aRetrieval.STATUS_TYPE_ID"
+                                ng-options="s.STATUS_TYPE_ID as s.STATUS for s in statusTypeList" required>
+                            <option value=""></option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Collection Condition:* -->
+                <div class="form-group required" ng-class="{'has-error':SensorFormR.INST_COLLECTION_ID.$invalid && SensorFormR.INST_COLLECTION_ID.$dirty}">
+                    <label class="col-md-3 control-label req" for="INST_COLLECTION_ID">Collection Conditions:</label>
+                    <div class="col-md-6">
+                        <select class="form-control" name="INST_COLLECTION_ID" ng-model="aSensor.INST_COLLECTION_ID"
+                                ng-options="ins.ID as ins.CONDITION for ins in collectCondList" required>
+                            <option value=""></option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Note: -->
+                <div class="form-group">
+                    <label class="col-md-3 control-label" for="NOTES">Note:</label>
+                    <div class="col-md-6">
+                        <textarea class="form-control" name="NOTES" type=" text" rows="3" ng-model="aRetrieval.NOTES" elastic />
+                    </div>
+                </div>
+
+
+                <!-- Retrieve Time: * -->
+                <div class="form-group required" ng-class="{'has-error':SensorFormR.TIME_STAMP.$invalid && SensorFormR.TIME_STAMP.$dirty}">
+                    <label class="col-md-3 control-label req" style="margin-top:3%" for="TIME_STAMP">Retrieve Date and Time:</label>
+                    <div class="col-md-6">
+                        <datetimepicker hour-step="1" minute-step="1" ng-model="aRetrieval.TIME_STAMP" show-meridian="true"
+                                        date-format="MM/dd/yyyy" readonly-date="false" readonly-time="false" date-options="dateOptions"
+                                        hidden-time="false" hidden-date="false" show-spinners="true">
+                        </datetimepicker>
+                    </div>
+                </div>
+
+                <!-- Time Zone:* -->
+                <div class="form-group required">
+                    <label class="col-md-3 control-label" for="TIME_ZONE">Time Zone:</label>
+                    <div class="col-md-6">
+                        <select class="form-control" name="TIME_ZONE" ng-model="aRetrieval.TIME_ZONE"
+                                ng-options="vcm for vcm in timeZoneList">
+                            <option value=""></option>
+                        </select>
+                    </div>
+                    <button type="button" class="borderLess" tooltip-placement="right" uib-tooltip="Date/Time will be stored in UTC.">
+                        <span class="glyphicon glyphicon-question-sign"></span>
+                    </button>
+                </div>
+
+                <!-- Retrieve Member: -->
+                <div class="form-group required">
+                    <label class="col-md-3 control-label">Retrieve Member:</label>
+                    <div class="col-md-6">{{Retriever.FNAME}} {{Retriever.LNAME}}</div>
+                </div>
             </div>
 
             <div class="modal-footer">
                 <div class="form-group">
                     <div class="col-md-12">
                         <span>
-                            <button ng-if="whichButton == 'Retrieve'" class="btn btn-primary" ng-click="retrieve(SensorForm.$valid)">
+                            <button ng-if="whichButton == 'Retrieve'" class="btn btn-primary" ng-click="retrieveS(SensorFormR.$valid)">
                                 <span>Retrieve</span>
                             </button>
                         </span>
                         <span>
-                            <button ng-show="whichButton == 'Edit'" class="btn btn-primary" ng-click="save(SensorForm.$valid)">
+                            <button ng-show="whichButton == 'Edit'" class="btn btn-primary" ng-click="saveRS(SensorFormR.$valid)">
                                 <span>Save</span>
                             </button>
                         </span>
                         <span>
-                            <button ng-show="whichButton == 'Edit'" class="btn btn-danger" ng-click="deleteS(SensorForm.$valid)">
+                            <button ng-show="whichButton == 'Edit'" class="btn btn-danger" ng-click="deleteRS(SensorFormR.$valid)">
                                 <span>Delete</span>
                             </button>
                         </span>

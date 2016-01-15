@@ -110,6 +110,9 @@
                         SensorSite: function () {
                             return thisSite;
                         },
+                        allEventList: function () {
+                            return allEvents;
+                        },
                         siteOPs: function () {
                             return SITE.getSiteOPs({ id: thisSite.SITE_ID }).$promise;
                         },
@@ -127,16 +130,10 @@
                     }
                 });
                 modalInstance.result.then(function (retrievedSensor) {
-                    if (createdSensor[1] == 'newRetrieve') {
-                        $scope.SiteSensors.push(createdSensor[0]); thisSiteSensors.push(createdSensor[0]);
-                        $scope.sensorCount.total = $scope.SiteSensors.length;
+                    if (retrievedSensor[1] == 'retrieved') {
+                        $scope.SiteSensors[indexClicked] = retrievedSensor[0];
                     }
-                    if (createdSensor[1] == 'editR') {
-                        //this is from edit -- refresh page?
-                        var indexClicked = $scope.SiteSensors.indexOf(sensorClicked);
-                        $scope.SiteSensors[indexClicked] = createdSensor[0];
-                    }
-                    if (createdSensor[1] == 'deletedR') {
+                    if (retrievedSensor[1] == 'deletedR') {
                         var indexClicked1 = $scope.SiteSensors.indexOf(sensorClicked);
                         $scope.SiteSensors.splice(indexClicked1, 1);
                         $scope.sensorCount.total = $scope.SiteSensors.length;
