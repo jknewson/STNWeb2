@@ -186,10 +186,10 @@
                $http.defaults.headers.common['Accept'] = 'application/json';
                INSTRUMENT.update({ id: $scope.aSensor.INSTRUMENT_ID }, $scope.aSensor).$promise.then(function (response) {
                    updatedSensor = response;
-                   if ($scope.SensorForm.DEPLOYMENT_TYPE_ID.$dirty) updatedSensor.Deployment_Type = $scope.depTypeList.filter(function (d) { return d.DEPLOYMENT_TYPE_ID == $scope.aSensor.DEPLOYMENT_TYPE_ID; })[0].METHOD;
-                   if ($scope.SensorForm.HOUSING_TYPE_ID.$dirty) updatedSensor.Housing_Type = $scope.houseTypeList.filter(function (h) { return h.HOUSING_TYPE_ID == $scope.aSensor.HOUSING_TYPE_ID; })[0].TYPE_NAME;
-                   if ($scope.SensorForm.SENSOR_BRAND_ID.$dirty) updatedSensor.Sensor_Brand = $scope.sensorBrandList.filter(function (s) { return s.SENSOR_BRAND_ID == $scope.aSensor.SENSOR_BRAND_ID; })[0].BRAND_NAME;
-                   if ($scope.SensorForm.SENSOR_TYPE_ID.$dirty) updatedSensor.Sensor_Type = $scope.sensorTypeList.filter(function (t) { return t.SENSOR_TYPE_ID == $scope.aSensor.SENSOR_TYPE_ID; })[0].SENSOR;
+                   updatedSensor.Deployment_Type = $scope.depTypeList.filter(function (d) { return d.DEPLOYMENT_TYPE_ID == $scope.aSensor.DEPLOYMENT_TYPE_ID; })[0].METHOD;
+                   updatedSensor.Housing_Type = $scope.houseTypeList.filter(function (h) { return h.HOUSING_TYPE_ID == $scope.aSensor.HOUSING_TYPE_ID; })[0].TYPE_NAME;
+                   updatedSensor.Sensor_Brand = $scope.sensorBrandList.filter(function (s) { return s.SENSOR_BRAND_ID == $scope.aSensor.SENSOR_BRAND_ID; })[0].BRAND_NAME;
+                   updatedSensor.Sensor_Type = $scope.sensorTypeList.filter(function (t) { return t.SENSOR_TYPE_ID == $scope.aSensor.SENSOR_TYPE_ID; })[0].SENSOR;
 
                    INSTRUMENT_STATUS.update({ id: $scope.aSensStatus.INSTRUMENT_STATUS_ID }, $scope.aSensStatus).$promise.then(function (statResponse) {
                        updatedSenStat = statResponse;
@@ -364,19 +364,87 @@
     } //end SENSOR
 
 
-ModalControllers.controller('sensorRetrievalModalCtrl', ['$scope', '$timeout', '$cookies', '$http', '$uibModalInstance', '$uibModal', 'desiredAction', 'thisSensor', 'SensorSite', 'siteOPs', 'allMembers', 'allStatusTypes', 'allInstCollCond', sensorRetrievalModalCtrl]);
-function sensorRetrievalModalCtrl($scope, $timeout, $cookies, $http, $uibModalInstance, $uibModal, desiredAction, thisSensor, SensorSite, siteOPs, allMembers, allStatusTypes, allInstCollCond) {
+    ModalControllers.controller('sensorRetrievalModalCtrl', ['$scope', '$timeout', '$cookies', '$http', '$uibModalInstance', '$uibModal', 'desiredAction', 'thisSensor', 'SensorSite', 'siteOPs', 'allEventList', 'allMembers', 'allStatusTypes', 'allInstCollCond', 'INSTRUMENT', 'INSTRUMENT_STATUS', sensorRetrievalModalCtrl]);
+    function sensorRetrievalModalCtrl($scope, $timeout, $cookies, $http, $uibModalInstance, $uibModal, desiredAction, thisSensor, SensorSite, siteOPs, allEventList, allMembers, allStatusTypes, allInstCollCond, INSTRUMENT, INSTRUMENT_STATUS) {
         $(".page-loading").addClass("hidden"); //loading...
-        $scope.EventName = "TEST";
         $scope.aSensor = thisSensor.Instrument;
-        $scope.aSensStatus = thisSensor.InstrumentStats[0];
-        $scope.Deployer = allMembers.filter(function (m) { return m.MEMBER_ID == $scope.aSensStatus.MEMBER_ID; })[0];
+        $scope.EventName = allEventList.filter(function (r) {return r.EVENT_ID == $scope.aSensor.EVENT_ID;})[0].EVENT_NAME;
+        $scope.depSensStatus = thisSensor.InstrumentStats[0];
+        $scope.Deployer = allMembers.filter(function (m) { return m.MEMBER_ID == $scope.depSensStatus.MEMBER_ID; })[0];
         $scope.whichButton = desiredAction == 'retrieve' ? 'Retrieve' : 'Edit';
-        //cancel
+        $scope.statusTypeList = allStatusTypes.filter(function (s) { return s.STATUS == "Retrieved" || s.STATUS == "Lost"});
+        $scope.collectCondList = allInstCollCond;
+        $scope.timeZoneList = ['UTC', 'PST', 'MST', 'CST', 'EST'];
+        $scope.userRole = $cookies.get('usersRole');
+        $scope.aRetrieval = {TIME_STAMP: new Date(), TIME_ZONE: 'CST', INSTRUMENT_ID: $scope.aSensor.INSTRUMENT_ID, MEMBER_ID: $cookies.get('mID')};
+        $scope.Retriever = allMembers.filter(function (am) { return am.MEMBER_ID == $cookies.get('mID'); })[0];
+    //cancel
         $scope.cancel = function () {           
             $uibModalInstance.dismiss('cancel');
         };
 
-    }
+        $scope.retrieveS = function (valid) {
+            if (valid) {
+                $http.defaults.headers.common['Authorization'] = 'Basic ' + $cookies.get('STNCreds');
+                $http.defaults.headers.common['Accept'] = 'application/json';
+                var updatedSensor = {}; var createRetSens = {};
+                INSTRUMENT.update({ id: $scope.aSensor.INSTRUMENT_ID }, $scope.aSensor).$promise.then(function (response) {
+                    //create instrumentstatus too need: STATUS_TYPE_ID and INSTRUMENT_ID
+                    updatedSensor = response;
+                    updatedSensor.Deployment_Type = $scope.aSensor.Deployment_Type;
+                    INSTRUMENT_STATUS.save($scope.aRetrieval).$promise.then(function (statResponse) {
+                        //build the createdSensor to send back and add to the list page
+                        createRetSens = statResponse; 
+                        var sensorObjectToSendBack = {
+                            Instrument: updatedSensor,
+                            InstrumentStats: [createRetSens, $scope.depSensStatus]
+                        };
+                        $timeout(function () {
+                            // anything you want can go here and will safely be run on the next digest.
+                            toastr.success("Sensor retrieved");
+                            var state = 'retrieved';
+                            var sendBack = [sensorObjectToSendBack, state];
+                            $uibModalInstance.close(sendBack);
+                        });
+                    });
+                });
+            }//end if valid
+        };//end retrieveS
+
+        //delete aSensor and sensor statuses
+        $scope.deleteRS = function () {
+            //TODO:: Delete the files for this sensor too or reassign to the Site?? Services or client handling?
+            var DeleteModalInstance = $uibModal.open({
+                templateUrl: 'removemodal.html',
+                controller: 'ConfirmModalCtrl',
+                size: 'sm',
+                resolve: {
+                    nameToRemove: function () {
+                        return $scope.aSensor
+                    },
+                    what: function () {
+                        return "Sensor";
+                    }
+                }
+            });
+
+            DeleteModalInstance.result.then(function (sensorToRemove) {
+                $http.defaults.headers.common['Authorization'] = 'Basic ' + $cookies.get('STNCreds');
+                //this will delete the instrument and all it's statuses
+                INSTRUMENT.delete({ id: sensorToRemove.INSTRUMENT_ID }).$promise.then(function () {
+                    //remove the statuses too
+                    toastr.success("Sensor Removed");
+                    var sendBack = ["de", 'deleted'];
+                    $uibModalInstance.close(sendBack);
+                }, function error(errorResponse) {
+                    toastr.error("Error: " + errorResponse.statusText);
+                });
+            }, function () {
+                //logic for cancel
+            });//end modal
+        }
+
+
+    }//end sensorRetrievalModalCtrl
 
 })();
