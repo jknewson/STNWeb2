@@ -7,7 +7,7 @@
     //#region member Controller (abstract)
     SettingsControllers.controller('memberCtrl', ['$scope', '$rootScope', '$cookies', '$location', '$http', '$filter', 'MEMBER', 'allRoles', 'allAgencies', memberCtrl]);
     function memberCtrl($scope, $rootScope, $cookies, $location, $http, $filter, MEMBER, allRoles, allAgencies) {
-        if ($cookies.get('STNCreds') == undefined || $cookies.get('STNCreds') == "") {
+        if ($cookies.get('STNCreds') === undefined || $cookies.get('STNCreds') === "") {
             $scope.auth = false;
             $location.path('/login');
         } else {
@@ -38,8 +38,8 @@
 
             $scope.roleList = allRoles;
             $scope.agencyList = allAgencies;
-            $http.defaults.headers.common['Authorization'] = 'Basic ' + $cookies.get('STNCreds');
-            $http.defaults.headers.common['Accept'] = 'application/json';
+            $http.defaults.headers.common.Authorization = 'Basic ' + $cookies.get('STNCreds');
+            $http.defaults.headers.common.Accept = 'application/json';
             MEMBER.getAll().$promise.then(function (response) {
                 $scope.memberList = [];
                 for (var x = 0; x < response.length; x++) {

@@ -12,7 +12,7 @@
         thisSite, thisSiteNetworkNames, thisSiteNetworkTypes, thisSiteHousings, thisSiteOPs, thisSiteSensors, thisSiteHWMs, thisSiteFiles, thisSitePeaks,
         SITE, LANDOWNER_CONTACT, MEMBER, DEPLOYMENT_TYPE, INSTRUMENT, INSTRUMENT_STATUS, SITE_HOUSING, NETWORK_NAME,
         allHorDatums, allHorCollMethods, allStates, allCounties, allDeployPriorities, allHousingTypes, allNetworkNames, allNetworkTypes, allDeployTypes, allSensDeps) {
-        if ($cookies.get('STNCreds') == undefined || $cookies.get('STNCreds') == "") {
+        if ($cookies.get('STNCreds') === undefined || $cookies.get('STNCreds') === "") {
             $scope.auth = false;
             $location.path('/login');
         } else {
@@ -39,12 +39,12 @@
                                 return dropdownParts;
                             },
                             thisSiteStuff: function () {
-                                if ($scope.aSite.SITE_ID != undefined) {
-                                    var origSiteHouses = $scope.originalSiteHousings != undefined ? $scope.originalSiteHousings : []; //needed for multi select to set prop selected
+                                if ($scope.aSite.SITE_ID !== undefined) {
+                                    var origSiteHouses = $scope.originalSiteHousings !== undefined ? $scope.originalSiteHousings : []; //needed for multi select to set prop selected
                                     var sHouseTypeModel = $scope.thisSiteHouseTypeModel.length > 0 ? $scope.thisSiteHouseTypeModel : [];
-                                    var sNetNames = thisSiteNetworkNames != undefined ? thisSiteNetworkNames : [];
-                                    var sNetTypes = thisSiteNetworkTypes != undefined ? thisSiteNetworkTypes : [];
-                                    var lo = $scope.landowner != undefined ? $scope.landowner : {
+                                    var sNetNames = thisSiteNetworkNames !== undefined ? thisSiteNetworkNames : [];
+                                    var sNetTypes = thisSiteNetworkTypes !== undefined ? thisSiteNetworkTypes : [];
+                                    var lo = $scope.landowner !== undefined ? $scope.landowner : {
                                 };
                                     var siteRelatedStuff = [$scope.aSite, origSiteHouses, sHouseTypeModel, sNetNames, sNetTypes, lo];
                                 return siteRelatedStuff;
@@ -60,15 +60,15 @@
             };
 
             // is this create new site or view existing??            
-            if (thisSite != undefined) {
+            if (thisSite !== undefined) {
                 //#region existingSite
-                if (thisSite.SITE_ID != undefined) {
+                if (thisSite.SITE_ID !== undefined) {
                     $scope.aSite = thisSite;                  
 
                     $scope.aSite.decDegORdms = 'dd';
                     $scope.aSite.HorizontalDatum = $scope.aSite.HDATUM_ID > 0 ? allHorDatums.filter(function (hd) { return hd.DATUM_ID == $scope.aSite.HDATUM_ID; })[0].DATUM_NAME : "---";
-                    $scope.aSite.HorizontalCollectMethod = $scope.aSite.HCOLLECT_METHOD_ID != undefined && $scope.aSite.HCOLLECT_METHOD_ID > 0 ? allHorCollMethods.filter(function (hc) { return hc.HCOLLECT_METHOD_ID == $scope.aSite.HCOLLECT_METHOD_ID; })[0].HCOLLECT_METHOD : "---";
-                    $scope.aSite.PriorityName = $scope.aSite.PRIORITY_ID != undefined && $scope.aSite.PRIORITY_ID > 0 ? allDeployPriorities.filter(function (dp) { return dp.PRIORITY_ID == $scope.aSite.PRIORITY_ID; })[0].PRIORITY_NAME: "---";
+                    $scope.aSite.HorizontalCollectMethod = $scope.aSite.HCOLLECT_METHOD_ID !== undefined && $scope.aSite.HCOLLECT_METHOD_ID > 0 ? allHorCollMethods.filter(function (hc) { return hc.HCOLLECT_METHOD_ID == $scope.aSite.HCOLLECT_METHOD_ID; })[0].HCOLLECT_METHOD : "---";
+                    $scope.aSite.PriorityName = $scope.aSite.PRIORITY_ID !== undefined && $scope.aSite.PRIORITY_ID > 0 ? allDeployPriorities.filter(function (dp) { return dp.PRIORITY_ID == $scope.aSite.PRIORITY_ID; })[0].PRIORITY_NAME: "---";
                    
                     //apply any site housings
                     if (thisSiteHousings.length > 0) {
@@ -107,16 +107,16 @@
                             $scope.siteNetworkTypes.push(nt.NETWORK_TYPE_NAME);
                         }
                     }
-                    if ($scope.aSite.SENSOR_NOT_APPROPRIATE != null || $scope.aSite.SENSOR_NOT_APPROPRIATE > 0)
+                    if ($scope.aSite.SENSOR_NOT_APPROPRIATE !== null || $scope.aSite.SENSOR_NOT_APPROPRIATE > 0)
                         $scope.sensorNotAppr = "Yes";
                     else
                         $scope.sensorNotAppr = "No";
 
 
                     //get member name for display
-                    if ($scope.aSite.MEMBER_ID != null) {
-                        $http.defaults.headers.common['Authorization'] = 'Basic ' + $cookies.get('STNCreds');
-                        $http.defaults.headers.common['Accept'] = 'application/json';
+                    if ($scope.aSite.MEMBER_ID !== null) {
+                        $http.defaults.headers.common.Authorization = 'Basic ' + $cookies.get('STNCreds');
+                        $http.defaults.headers.common.Accept = 'application/json';
                         MEMBER.query({ id: $scope.aSite.MEMBER_ID }).$promise.then(function (response) {
                             $scope.aSite.Creator = response.FNAME + " " + response.LNAME;
                         }, function (error) {
@@ -125,9 +125,9 @@
                     }
 
                     //get the landownerCOntact with getCreds
-                    if ($scope.aSite.LANDOWNERCONTACT_ID != null) {
-                        $http.defaults.headers.common['Authorization'] = 'Basic ' + $cookies.get('STNCreds');
-                        $http.defaults.headers.common['Accept'] = 'application/json';
+                    if ($scope.aSite.LANDOWNERCONTACT_ID !== null && $scope.aSite.LANDOWNERCONTACT_ID !== undefined) {
+                        $http.defaults.headers.common.Authorization = 'Basic ' + $cookies.get('STNCreds');
+                        $http.defaults.headers.common.Accept = 'application/json';
                         SITE.getSiteLandOwner({ id: $scope.aSite.SITE_ID }, function success(response) {
                             $scope.landowner = response;
                             $scope.addLandowner = true;

@@ -25,12 +25,12 @@
         $scope.UnquantChecked = function () {
             if ($scope.OP.UNQUANTIFIED == 1)
                 $scope.OP.UNCERTAINTY = "";
-        }
+        };
 
         //called a few times to format just the date (no time)
         var makeAdate = function (d) {
             var aDate = new Date();
-            if (d != "") {
+            if (d !== "" && d !== undefined) {
                 //provided date
                 aDate = new Date(d);
             }
@@ -41,7 +41,7 @@
             var monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
             var dateWOtime = new Date(monthNames[month] + " " + day + ", " + year);
             return dateWOtime;
-        }
+        };
 
         if (thisOP != "empty") {
             //#region existing OP
@@ -49,7 +49,7 @@
             //formatted as date for datepicker
             $scope.OP.DATE_ESTABLISHED = makeAdate($scope.OP.DATE_ESTABLISHED);
 
-            if ($scope.OP.DATE_RECOVERED != null)
+            if ($scope.OP.DATE_RECOVERED !== null)
                 $scope.OP.DATE_RECOVERED = makeAdate($scope.OP.DATE_RECOVERED);
 
             if (thisOPControls.length > 0) {
@@ -99,7 +99,7 @@
         $scope.addNewIdentifier = function () {
             $scope.addedIdentifiers.push({ OBJECTIVE_POINT_ID: $scope.OP.OBJECTIVE_POINT_ID, IDENTIFIER: "", IDENTIFIER_TYPE: "" });
             $scope.showControlIDinput = true;
-        }
+        };
 
         //Datepicker
         $scope.datepickrs = {};
@@ -131,7 +131,7 @@
                 azi = 1.0 * deg + 1.0 * min / 60.0 + 1.0 * sec / 3600.0;
                 return (azi).toFixed(5);
             }
-        }
+        };
 
         //convert dec degrees to dms
         var deg_to_dms = function (deg) {
@@ -147,13 +147,13 @@
             var s = ((minfloat - m) * 60).toFixed(3);
 
             return ("" + d + ":" + m + ":" + s);
-        }
+        };
 
         //they changed radio button for dms dec deg
         $scope.latLongChange = function () {
             if ($scope.OP.decDegORdms == "dd") {
                 //they clicked Dec Deg..
-                if ($scope.DMS.LADeg != undefined) {
+                if ($scope.DMS.LADeg !== undefined) {
                     //convert what's here for each lat and long
                     $scope.OP.LATITUDE_DD = azimuth($scope.DMS.LADeg, $scope.DMS.LAMin, $scope.DMS.LASec);
                     $scope.OP.LONGITUDE_DD = azimuth($scope.DMS.LODeg, $scope.DMS.LOMin, $scope.DMS.LOSec);
@@ -162,7 +162,7 @@
                 }
             } else {
                 //they clicked dms (convert lat/long to dms)
-                if ($scope.OP.LATITUDE_DD != undefined) {
+                if ($scope.OP.LATITUDE_DD !== undefined) {
                     var latDMS = (deg_to_dms($scope.OP.LATITUDE_DD)).toString();
                     var ladDMSarray = latDMS.split(':');
                     $scope.DMS.LADeg = ladDMSarray[0];
@@ -178,33 +178,33 @@
                     $scope.OP.LATITUDE_DD = undefined; $scope.OP.LONGITUDE_DD = undefined;
                 }
             }
-        }
+        };
 
         //just need an OBJECTIVE_POINT object to post/put
         var trimOP = function (op) {
             var OBJ_PT = {
-                OBJECTIVE_POINT_ID: op.OBJECTIVE_POINT_ID != undefined ? op.OBJECTIVE_POINT_ID : 0,
+                OBJECTIVE_POINT_ID: op.OBJECTIVE_POINT_ID !== undefined ? op.OBJECTIVE_POINT_ID : 0,
                 NAME: op.NAME,
                 DESCRIPTION: op.DESCRIPTION,
-                ELEV_FT: op.ELEV_FT != undefined ? op.ELEV_FT : null,
+                ELEV_FT: op.ELEV_FT !== undefined ? op.ELEV_FT : null,
                 DATE_ESTABLISHED: op.DATE_ESTABLISHED,
-                OP_IS_DESTROYED: op.OP_IS_DESTROYED != undefined ? op.OP_IS_DESTROYED : 0,
-                OP_NOTES: op.OP_NOTES != undefined ? op.OP_NOTES : null,
+                OP_IS_DESTROYED: op.OP_IS_DESTROYED !== undefined ? op.OP_IS_DESTROYED : 0,
+                OP_NOTES: op.OP_NOTES !== undefined ? op.OP_NOTES : null,
                 SITE_ID: op.SITE_ID,
-                VDATUM_ID: op.VDATUM_ID != undefined ? op.VDATUM_ID : 0,
+                VDATUM_ID: op.VDATUM_ID !== undefined ? op.VDATUM_ID : 0,
                 LATITUDE_DD: op.LATITUDE_DD,
                 LONGITUDE_DD: op.LONGITUDE_DD,
-                HDATUM_ID: op.HDATUM_ID != undefined ? op.HDATUM_ID : 0,
-                HCOLLECT_METHOD_ID: op.HCOLLECT_METHOD_ID != undefined ? op.HCOLLECT_METHOD_ID : 0,
-                VCOLLECT_METHOD_ID: op.VCOLLECT_METHOD_ID != undefined ? op.VCOLLECT_METHOD_ID : 0,
+                HDATUM_ID: op.HDATUM_ID !== undefined ? op.HDATUM_ID : 0,
+                HCOLLECT_METHOD_ID: op.HCOLLECT_METHOD_ID !== undefined ? op.HCOLLECT_METHOD_ID : 0,
+                VCOLLECT_METHOD_ID: op.VCOLLECT_METHOD_ID !== undefined ? op.VCOLLECT_METHOD_ID : 0,
                 OP_TYPE_ID: op.OP_TYPE_ID,
-                DATE_RECOVERED: op.DATE_RECOVERED != undefined ? op.DATE_RECOVERED : null,
-                UNCERTAINTY: op.UNCERTAINTY != undefined ? op.UNCERTAINTY : null,
-                UNQUANTIFIED: op.UNQUANTIFIED != undefined ? op.UNQUANTIFIED : null,
-                OP_QUALITY_ID: op.OP_QUALITY_ID != undefined ? op.OP_QUALITY_ID : null,
-            }
+                DATE_RECOVERED: op.DATE_RECOVERED !== undefined ? op.DATE_RECOVERED : null,
+                UNCERTAINTY: op.UNCERTAINTY !== undefined ? op.UNCERTAINTY : null,
+                UNQUANTIFIED: op.UNQUANTIFIED !== undefined ? op.UNQUANTIFIED : null,
+                OP_QUALITY_ID: op.OP_QUALITY_ID !== undefined ? op.OP_QUALITY_ID : null,
+            };
             return OBJ_PT;
-        }
+        };
 
         //cancel modal
         $scope.cancel = function () {
@@ -220,7 +220,7 @@
             }
             //$scope.OP.FTorCM needs to be 'ft'. if 'cm' ==convert value to ft 
             if (theOP.FTorCM == "cm") {
-                $scope.OP.FTorCM = 'ft'
+                $scope.OP.FTorCM = 'ft';
                 $scope.OP.UNCERTAINTY = $scope.OP.UNCERTAINTY / 30.48;
             }
             //$scope.OP.decDegORdms needs to be 'dd'. if 'dms' ==convert $scope.DMS values to dd
@@ -231,13 +231,13 @@
                 $scope.DMS = {};
                 $scope.OP.SITE_ID = $scope.thisOPsite.SITE_ID;
             }
-        }
+        };
 
         //Create this OP
         $scope.create = function () {
             if (this.OPForm.$valid) {
-                $http.defaults.headers.common['Authorization'] = 'Basic ' + $cookies.get('STNCreds');
-                $http.defaults.headers.common['Accept'] = 'application/json';
+                $http.defaults.headers.common.Authorization = 'Basic ' + $cookies.get('STNCreds');
+                $http.defaults.headers.common.Accept = 'application/json';
                 var createdOP = {};
                 //post
                 formatDefaults($scope.OP); //$scope.OP.FTorMETER, FTorCM, decDegORdms                               
@@ -256,31 +256,31 @@
                     $uibModalInstance.close(sendBack);
                 });
             }
-        } //end Create
+        }; //end Create
 
         //X was clicked next to existing Control Identifier to have it removed, store in remove array for Save()
         $scope.RemoveID = function (opControl) {
             //only add to remove list if it's an existing one to DELETE
             var i = $scope.addedIdentifiers.indexOf(opControl);
-            if (opControl.OP_CONTROL_IDENTIFIER_ID != undefined) {
+            if (opControl.OP_CONTROL_IDENTIFIER_ID !== undefined) {
                 $scope.removeOPCarray.push(opControl);
                 $scope.addedIdentifiers.splice(i, 1);
             } else {
                 $scope.addedIdentifiers.splice(i, 1);
             }
-        }
+        };
 
         //Save this OP
         $scope.save = function () {
             if ($scope.OPForm.$valid) {
-                $http.defaults.headers.common['Authorization'] = 'Basic ' + $cookies.get('STNCreds');
-                $http.defaults.headers.common['Accept'] = 'application/json';
+                $http.defaults.headers.common.Authorization = 'Basic ' + $cookies.get('STNCreds');
+                $http.defaults.headers.common.Accept = 'application/json';
 
                 var updatedOP = {};
                 //if there's an OP_CONTROL_IDENTIFIER_ID, PUT .. else POST
                 if ($scope.addedIdentifiers.length > 0) {
                     for (var i = 0; i < $scope.addedIdentifiers.length; i++) {
-                        if ($scope.addedIdentifiers[i].OP_CONTROL_IDENTIFIER_ID != undefined) {
+                        if ($scope.addedIdentifiers[i].OP_CONTROL_IDENTIFIER_ID !== undefined) {
                             //existing: PUT
                             OP_CONTROL_IDENTIFIER.update({ id: $scope.addedIdentifiers[i].OP_CONTROL_IDENTIFIER_ID }, $scope.addedIdentifiers[i]).$promise;
                         } else {
@@ -310,7 +310,7 @@
                     $uibModalInstance.close(sendBack);
                 });
             }
-        } //end Save
+        }; //end Save
 
         //delete this OP from the SITE
         $scope.deleteOP = function () {
@@ -330,7 +330,7 @@
             });
 
             DeleteModalInstance.result.then(function (opToRemove) {
-                $http.defaults.headers.common['Authorization'] = 'Basic ' + $cookies.get('STNCreds');
+                $http.defaults.headers.common.Authorization = 'Basic ' + $cookies.get('STNCreds');
                 OBJECTIVE_POINT.delete({ id: opToRemove.OBJECTIVE_POINT_ID }, opToRemove).$promise.then(function () {
                     toastr.success("Objective Point Removed");
                     var sendBack = ["de", 'deleted'];
@@ -341,7 +341,7 @@
             }, function () {
                 //logic for cancel
             });//end modal
-        }
+        };
     }//end OPmodalCtrl
 
 })();

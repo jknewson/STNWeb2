@@ -9,24 +9,24 @@
         $scope.EventTypeList = allEventTypes;
         $scope.StateList = allStates;
         var chosenEv = $cookies.get('SessionEventID'); //see if we need to select the session event
-        $scope.event = { EventChosen: chosenEv != undefined ? Number(chosenEv) : "" };
+        $scope.event = { EventChosen: chosenEv !== undefined ? Number(chosenEv) : "" };
 
         $(".page-loading").addClass("hidden");
         //filters chosen, only show these events
         $scope.filterEvents = function () {
             //?Date: null, Type: 0, State: null
-            var d = $scope.event.DATE != null && $scope.event.DATE != undefined ? $scope.event.DATE : null;
-            var t = $scope.event.TYPE != null && $scope.event.TYPE != undefined ? $scope.event.TYPE : 0;
-            var s = $scope.event.STATE != null && $scope.event.STATE != undefined ? $scope.event.STATE : null;
+            var d = $scope.event.DATE !== null && $scope.event.DATE !== undefined ? $scope.event.DATE : null;
+            var t = $scope.event.TYPE !== null && $scope.event.TYPE !== undefined ? $scope.event.TYPE : 0;
+            var s = $scope.event.STATE !== null && $scope.event.STATE !== undefined ? $scope.event.STATE : null;
             EVENT.getFilteredEvents({ Date: d, Type: t, State: s }).$promise.then(function (response) {
                 $scope.EventList = response;
             });
-        }
+        };
         //clear the filters
         $scope.clearFilters = function () {
-            $scope.event = { EventChosen: chosenEv != undefined ? Number(chosenEv) : "" };
+            $scope.event = { EventChosen: chosenEv !== undefined ? Number(chosenEv) : "" };
             $scope.EventList = allEvents;
-        }
+        };
         //event has been chosen. Set it as session event
         $scope.setEvent = function () {
             $scope.evID = $scope.event.EventChosen;
@@ -36,7 +36,7 @@
 
             $rootScope.sessionEvent = "Session Event: " + eventName.EVENT_NAME + ".";
             $uibModalInstance.dismiss('cancel');
-        }
+        };
 
         //they want to clear the session event
         $scope.clearEvent = function () {
@@ -45,7 +45,7 @@
             $cookies.remove('SessionEventName');
             $rootScope.sessionEvent = "";
             $uibModalInstance.dismiss('cancel');
-        }
+        };
 
         //Datepicker
         $scope.datepickrs = {};
@@ -62,7 +62,7 @@
         };
 
         $(".page-loading").addClass("hidden");
-    };
+    }
 
 
 })();

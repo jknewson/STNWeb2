@@ -37,6 +37,6 @@
     "commit": "4f22d28d8c53b35864702f25a3bc3a790e043681"
   },
   "_source": "git://github.com/zhaber/datetimepicker.git",
-  "_target": "~0.14.0",
+  "_target": "~0.14.4",
   "_originalSource": "angular-ui-bootstrap-datetimepicker"
 }

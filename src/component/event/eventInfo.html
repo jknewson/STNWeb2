@@ -10,7 +10,7 @@
             <label class="col-md-3 control-label req" for="EVENT_NAME">Event Name:</label>
             <div class="col-md-3">
                 <input ng-if="loggedInRole == 'Admin'" class="form-control" id="EVENT_NAME" name="EVENT_NAME" ng-model="anEvent.EVENT_NAME"
-                       type="text" placeholder="Event Name" ng-model-options="{ updateOn: 'blur' }" ng-change="SaveOnBlur()"
+                       type="text" placeholder="Event Name" ng-model-options="{ updateOn: 'blur' }" ng-change="SaveOnBlur(eventForm.$valid)"
                        required />
                 <span ng-if="loggedInRole != 'Admin'">{{anEvent.EVENT_NAME}}</span>
             </div>
@@ -22,7 +22,7 @@
             <div class="col-md-6">
                 <textarea ng-if="loggedInRole == 'Admin'" class="form-control" id="EVENT_DESCRIPTION"
                           type="text" rows="3" placeholder="Event Description" ng-model="anEvent.EVENT_DESCRIPTION"
-                          ng-model-options="{ updateOn: 'blur' }" ng-change="SaveOnBlur()" />
+                          ng-model-options="{ updateOn: 'blur' }" ng-change="SaveOnBlur(eventForm.$valid)" />
                 <span ng-if="loggedInRole != 'Admin'">{{anEvent.EVENT_DESCRIPTION}}</span>
             </div>
         </div>
@@ -74,7 +74,7 @@
             <label class="col-md-3 control-label req" for="EVENT_TYPE_ID">Event Type:</label>
             <div class="col-md-3">
                 <select ng-if="loggedInRole == 'Admin'" class=" form-control" id="EVENT_TYPE_ID" name="EVENT_TYPE_ID" ng-model="anEvent.EVENT_TYPE_ID"
-                        ng-options="et.EVENT_TYPE_ID as et.TYPE for et in eventTypeList | orderBy: 'TYPE'" ng-model-options="{ updateOn: 'blur' }" ng-change="SaveOnBlur()"
+                        ng-options="et.EVENT_TYPE_ID as et.TYPE for et in eventTypeList | orderBy: 'TYPE'" ng-model-options="{ updateOn: 'blur' }" ng-change="SaveOnBlur(eventForm.$valid)"
                         required>
                     <option value="">Select Event Type</option>
                 </select>
@@ -87,7 +87,7 @@
             <label class="col-md-3 control-label req" for="EVENT_STATUS_ID">Event Status:</label>
             <div class="col-md-3">
                 <select ng-if="loggedInRole == 'Admin'" class=" form-control" id="EVENT_STATUS_ID" name="EVENT_STATUS_ID" ng-model="anEvent.EVENT_STATUS_ID"
-                        ng-options="es.EVENT_STATUS_ID as es.STATUS for es in eventStatList | orderBy: 'STATUS'" ng-model-options="{ updateOn: 'blur' }" ng-change="SaveOnBlur()"
+                        ng-options="es.EVENT_STATUS_ID as es.STATUS for es in eventStatList | orderBy: 'STATUS'" ng-model-options="{ updateOn: 'blur' }" ng-change="SaveOnBlur(eventForm.$valid)"
                         required>
                     <option value="">Select Event Status</option>
                 </select>
@@ -100,7 +100,7 @@
             <label class="col-md-3 control-label req" for="EVENT_COORDINATOR">Event Coordinator:</label>
             <div class="col-md-3">
                 <select ng-if="loggedInRole == 'Admin'" class=" form-control" id="EVENT_COORDINATOR" name="EVENT_COORDINATOR" ng-model="anEvent.EVENT_COORDINATOR"
-                        ng-options="ec.MEMBER_ID as ec.FNAME + ' ' + ec.LNAME for ec in eventCoordList | orderBy: 'LNAME'" ng-model-options="{ updateOn: 'blur' }" ng-change="SaveOnBlur()"
+                        ng-options="ec.MEMBER_ID as ec.FNAME + ' ' + ec.LNAME for ec in eventCoordList | orderBy: 'LNAME'" ng-model-options="{ updateOn: 'blur' }" ng-change="SaveOnBlur(eventForm.$valid)"
                         required>
                     <option value="">Select Event Coordinator</option>
                 </select>

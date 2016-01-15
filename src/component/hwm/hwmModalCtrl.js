@@ -24,12 +24,12 @@
         //button click to show event dropdown to change it on existing hwm (admin only)
         $scope.showChangeEventDD = function () {
             $scope.showEventDD = !$scope.showEventDD;
-        }
+        };
 
         //change event = apply it to the $scope.EventName
         $scope.ChangeEvent = function () {
             $scope.EventName = $scope.eventList.filter(function (el) { return el.EVENT_ID == $scope.adminChanged.EVENT_ID; })[0].EVENT_NAME;
-        }
+        };
         // $scope.sessionEvent = $cookies.get('SessionEventName');
         $scope.LoggedInMember = allMembers.filter(function (m) { return m.MEMBER_ID == $cookies.get('mID'); })[0];
 
@@ -64,7 +64,7 @@
                 azi = 1.0 * deg + 1.0 * min / 60.0 + 1.0 * sec / 3600.0;
                 return (azi).toFixed(5);
             }
-        }
+        };
 
         //convert dec degrees to dms
         var deg_to_dms = function (deg) {
@@ -80,13 +80,13 @@
             var s = ((minfloat - m) * 60).toFixed(3);
 
             return ("" + d + ":" + m + ":" + s);
-        }
+        };
 
         //they changed radio button for dms dec deg
         $scope.latLongChange = function () {
             if ($scope.aHWM.decDegORdms == "dd") {
                 //they clicked Dec Deg..
-                if ($scope.DMS.LADeg != undefined) {
+                if ($scope.DMS.LADeg !== undefined) {
                     //convert what's here for each lat and long
                     $scope.aHWM.LATITUDE_DD = azimuth($scope.DMS.LADeg, $scope.DMS.LAMin, $scope.DMS.LASec);
                     $scope.aHWM.LONGITUDE_DD = azimuth($scope.DMS.LODeg, $scope.DMS.LOMin, $scope.DMS.LOSec);
@@ -95,7 +95,7 @@
                 }
             } else {
                 //they clicked dms (convert lat/long to dms)
-                if ($scope.aHWM.LATITUDE_DD != undefined) {
+                if ($scope.aHWM.LATITUDE_DD !== undefined) {
                     var latDMS = (deg_to_dms($scope.aHWM.LATITUDE_DD)).toString();
                     var ladDMSarray = latDMS.split(':');
                     $scope.DMS.LADeg = ladDMSarray[0];
@@ -111,7 +111,7 @@
                     $scope.aHWM.LATITUDE_DD = undefined; $scope.aHWM.LONGITUDE_DD = undefined;
                 }
             }
-        }
+        };
 
         //  lat/long =is number
         $scope.isNum = function (evt) {
@@ -126,7 +126,7 @@
         //called a few times to format just the date (no time)
         var makeAdate = function (d) {
             var aDate = new Date();
-            if (d != "") {
+            if (d !== "" && d !== undefined) {
                 //provided date
                 aDate = new Date(d);
             }
@@ -136,7 +136,7 @@
             var monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
             var dateWOtime = new Date(monthNames[month] + " " + day + ", " + year);
             return dateWOtime;
-        }//end makeAdate()
+        };//end makeAdate()
 
         if (thisHWM != "empty") {
             //#region existing HWM
@@ -147,7 +147,7 @@
             $scope.aHWM.FLAGGED_DATE = makeAdate($scope.aHWM.FLAGGED_DATE);
 
             //if this is surveyed, date format and get survey member's name
-            if ($scope.aHWM.SURVEY_DATE != null) {
+            if ($scope.aHWM.SURVEY_DATE !== null) {
                 $scope.aHWM.SURVEY_DATE = makeAdate($scope.aHWM.SURVEY_DATE);
                 $scope.SurveyMember = allMembers.filter(function (m) { return m.MEMBER_ID == $scope.aHWM.SURVEY_TEAM_ID; })[0];
             }
@@ -156,35 +156,35 @@
             $scope.FlagMember = allMembers.filter(function (m) { return m.MEMBER_ID == $scope.aHWM.FLAG_TEAM_ID; })[0];
 
             //save aHWM
-            $scope.save = function () {                
+            $scope.save = function () {
                 if ($scope.HWMForm.$valid) {
                     var updatedHWM = {};
-                    if ($scope.adminChanged.EVENT_ID != undefined) {
+                    if ($scope.adminChanged.EVENT_ID !== undefined) {
                         //admin changed the event for this hwm..
                         $scope.aHWM.EVENT_ID = $scope.adminChanged.EVENT_ID;
                     }
                     //if they added a survey date, apply survey member as logged in member
-                    if ($scope.aHWM.SURVEY_DATE != undefined)
+                    if ($scope.aHWM.SURVEY_DATE !== undefined)
                         $scope.aHWM.SURVEY_TEAM_ID = $cookies.get('mID');
 
-                    if ($scope.aHWM.ELEV_FT != undefined) {
+                    if ($scope.aHWM.ELEV_FT !== undefined && $scope.aHWM.ELEV_FT !== null) {
                         //make sure they added the survey date if they added an elevation
-                        if ($scope.aHWM.SURVEY_DATE == undefined)
+                        if ($scope.aHWM.SURVEY_DATE === undefined)
                             $scope.aHWM.SURVEY_DATE = makeAdate("");
 
                         $scope.aHWM.SURVEY_TEAM_ID = $cookies.get('mID');
                     }
-                
-                    $http.defaults.headers.common['Authorization'] = 'Basic ' + $cookies.get('STNCreds');
-                    $http.defaults.headers.common['Accept'] = 'application/json';
+
+                    $http.defaults.headers.common.Authorization = 'Basic ' + $cookies.get('STNCreds');
+                    $http.defaults.headers.common.Accept = 'application/json';
                     HWM.update({ id: $scope.aHWM.HWM_ID }, $scope.aHWM).$promise.then(function (response) {
                         toastr.success("HWM updated");
                         updatedHWM = response;
                         var sendBack = [updatedHWM, 'updated'];
                         $uibModalInstance.close(sendBack);
-                    });                
+                    });
                 }
-            }//end save()
+            };//end save()
 
             //delete aHWM
             $scope.deleteHWM = function () {
@@ -195,7 +195,7 @@
                     size: 'sm',
                     resolve: {
                         nameToRemove: function () {
-                            return $scope.aHWM
+                            return $scope.aHWM;
                         },
                         what: function () {
                             return "HWM";
@@ -204,7 +204,7 @@
                 });
 
                 DeleteModalInstance.result.then(function (hwmToRemove) {
-                    $http.defaults.headers.common['Authorization'] = 'Basic ' + $cookies.get('STNCreds');
+                    $http.defaults.headers.common.Authorization = 'Basic ' + $cookies.get('STNCreds');
                     HWM.delete({ id: hwmToRemove.HWM_ID }, hwmToRemove).$promise.then(function () {
                         toastr.success("HWM Removed");
                         var sendBack = ["de", 'deleted'];
@@ -215,7 +215,7 @@
                 }, function () {
                     //logic for cancel
                 });//end modal
-            }
+            };
 
             //#endregion existing HWM
         } else {
@@ -242,19 +242,19 @@
                 if (this.HWMForm.$valid) {
                     var createdHWM = {};
                     //if they entered a survey date or elevation, then set survey member as the flag member (flagging and surveying at same time
-                    if ($scope.aHWM.SURVEY_DATE != undefined) 
+                    if ($scope.aHWM.SURVEY_DATE !== undefined && $scope.aHWM.SURVEY_DATE !== null)
                         $scope.aHWM.SURVEY_TEAM_ID = $scope.FLAG_TEAM_ID;
 
-                    if ($scope.aHWM.ELEV_FT != undefined) {
+                    if ($scope.aHWM.ELEV_FT !== undefined && $scope.aHWM.ELEV_FT !== null) {
                         //make sure they added the survey date if they added an elevation
-                        if ($scope.aHWM.SURVEY_DATE == undefined)
+                        if ($scope.aHWM.SURVEY_DATE === undefined)
                             $scope.aHWM.SURVEY_DATE = makeAdate("");
 
                         $scope.aHWM.SURVEY_TEAM_ID = $scope.FLAG_TEAM_ID;
                     }
 
-                    $http.defaults.headers.common['Authorization'] = 'Basic ' + $cookies.get('STNCreds');
-                    $http.defaults.headers.common['Accept'] = 'application/json';
+                    $http.defaults.headers.common.Authorization = 'Basic ' + $cookies.get('STNCreds');
+                    $http.defaults.headers.common.Accept = 'application/json';
                     HWM.save($scope.aHWM).$promise.then(function (response) {
                         createdHWM = response;
                         toastr.success("HWM created");
@@ -262,7 +262,7 @@
                         $uibModalInstance.close(sendBack);
                     });
                 }
-            }//end create()
+            };//end create()
             //#endregion new HWM
         }
         //radio button defaults
