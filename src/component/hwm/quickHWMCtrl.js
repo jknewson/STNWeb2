@@ -9,7 +9,7 @@
         'allOPQualities', 'allHWMTypes', 'allHWMQualities', 'allMarkers', 'SITE', 'OBJECTIVE_POINT', 'HWM', quickHWMCtrl]);
     function quickHWMCtrl($scope, $rootScope, $cookies, $location, $state, $http, $uibModal, $filter, allHorDatums, allHorCollMethods, allStates,
         allCounties, allOPTypes, allVertDatums, allVertColMethods, allOPQualities, allHWMTypes, allHWMQualities, allMarkers, SITE, OBJECTIVE_POINT, HWM) {
-        if ($cookies.get('STNCreds') == undefined || $cookies.get('STNCreds') == "") {
+        if ($cookies.get('STNCreds') === undefined || $cookies.get('STNCreds') === "") {
             $scope.auth = false;
             $location.path('/login');
         } else {
@@ -19,7 +19,7 @@
             //called a few times to format just the date (no time)
             var makeAdate = function (d) {
                 var aDate = new Date();
-                if (d != "") {
+                if (d !== "" && d !== undefined) {
                     //provided date
                     aDate = new Date(d);
                 }
@@ -30,7 +30,7 @@
                 var monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
                 var dateWOtime = new Date(monthNames[month] + " " + day + ", " + year);
                 return dateWOtime;
-            }//end makeAdate()
+            };//end makeAdate()
             $scope.decDegORdms = {};
             $scope.aSite = { MEMBER_ID: $cookies.get('mID') };
             $scope.aOP = {DATE_ESTABLISHED: makeAdate("")};
@@ -53,7 +53,7 @@
             $scope.addNewIdentifier = function () {
                 $scope.addedIdentifiers.push({ OBJECTIVE_POINT_ID: $scope.aOP.OBJECTIVE_POINT_ID, IDENTIFIER: "", IDENTIFIER_TYPE: "" });
                 $scope.showControlIDinput = true;
-            }//end addNewIdentifier for OP
+            };//end addNewIdentifier for OP
 
             //#region Datepicker
             $scope.datepickrs = {};
@@ -81,7 +81,7 @@
                     azi = 1.0 * deg + 1.0 * min / 60.0 + 1.0 * sec / 3600.0;
                     return (azi).toFixed(5);
                 }
-            }
+            };
 
             //convert dec degrees to dms
             var deg_to_dms = function (deg) {
@@ -97,13 +97,13 @@
                 var s = ((minfloat - m) * 60).toFixed(3);
 
                 return ("" + d + ":" + m + ":" + s);
-            }
+            };
 
             //they changed radio button for dms dec deg
             $scope.latLongChange = function () {
                 if ($scope.decDegORdms.val == "dd") {
                     //they clicked Dec Deg..
-                    if ($scope.DMS.LADeg != undefined) {
+                    if ($scope.DMS.LADeg !== undefined) {
                         //convert what's here for each lat and long
                         $scope.aSite.LATITUDE_DD = azimuth($scope.DMS.LADeg, $scope.DMS.LAMin, $scope.DMS.LASec);
                         $scope.aSite.LONGITUDE_DD = azimuth($scope.DMS.LODeg, $scope.DMS.LOMin, $scope.DMS.LOSec);
@@ -111,7 +111,7 @@
                     }
                 } else {
                     //they clicked dms (convert lat/long to dms)
-                    if ($scope.aSite.LATITUDE_DD != undefined) {
+                    if ($scope.aSite.LATITUDE_DD !== undefined) {
                         var latDMS = (deg_to_dms($scope.aSite.LATITUDE_DD)).toString();
                         var ladDMSarray = latDMS.split(':');
                         $scope.DMS.LADeg = ladDMSarray[0];
@@ -125,7 +125,7 @@
                         $scope.DMS.LOSec = longDMSarray[2];
                     }
                 }
-            }
+            };
 
             //  lat/long =is number
             $scope.isNum = function (evt) {
@@ -157,11 +157,11 @@
                             });
                         });
 
-                        $scope.aSite.ADDRESS = components.street_number != undefined ? components.street_number + " " + components.route : components.route;
+                        $scope.aSite.ADDRESS = components.street_number !== undefined ? components.street_number + " " + components.route : components.route;
                         $scope.aSite.CITY = components.locality;
 
                         var thisState = $scope.stateList.filter(function (s) { return s.STATE_NAME == components.administrative_area_level_1; })[0];
-                        if (thisState != undefined) {
+                        if (thisState !== undefined) {
                             $scope.aSite.STATE = thisState.STATE_ABBREV;
                             $scope.stateCountyList = $scope.allCountyList.filter(function (c) { return c.STATE_ID == thisState.STATE_ID; });
                             $scope.aSite.COUNTY = components.administrative_area_level_2;
@@ -177,14 +177,14 @@
                         toastr.error("There was an error getting address. Please try again.");
                     }
                 });
-               // 
-            }//end getAddress()
+                // 
+            };//end getAddress()
 
             //#endregion lat/long stuff
             
             // watch for the session event to change and update
             $scope.$watch(function () { return $cookies.get('SessionEventName'); }, function (newValue) {
-                $scope.sessionEventName = newValue != undefined ? newValue : "All Events";
+                $scope.sessionEventName = newValue !== undefined ? newValue : "All Events";
                 $scope.sessionEventExists = $scope.sessionEventName != "All Events" ? true : false;
             });
 
@@ -192,39 +192,39 @@
             $scope.updateCountyList = function (s) {
                 var thisState = $scope.stateList.filter(function (st) { return st.STATE_ABBREV == s; })[0];
                 $scope.stateCountyList = $scope.allCountyList.filter(function (c) { return c.STATE_ID == thisState.STATE_ID; });
-            }//end updateCountyList() for Site
+            };//end updateCountyList() for Site
 
             //make uncertainty cleared and disabled when 'unquantified' is checked
             $scope.UnquantChecked = function () {
                 if ($scope.aOP.UNQUANTIFIED == 1)
                     $scope.aOP.UNCERTAINTY = "";
-            }//end unquantChecked() for op
+            };//end unquantChecked() for op
 
             //just need an OBJECTIVE_POINT object to post/put
             var trimOP = function (op) {
                 var OBJ_PT = {
-                    OBJECTIVE_POINT_ID: op.OBJECTIVE_POINT_ID != undefined ? op.OBJECTIVE_POINT_ID : 0,
+                    OBJECTIVE_POINT_ID: op.OBJECTIVE_POINT_ID !== undefined ? op.OBJECTIVE_POINT_ID : 0,
                     NAME: op.NAME,
                     DESCRIPTION: op.DESCRIPTION,
-                    ELEV_FT: op.ELEV_FT != undefined ? op.ELEV_FT : null,
+                    ELEV_FT: op.ELEV_FT !== undefined ? op.ELEV_FT : null,
                     DATE_ESTABLISHED: op.DATE_ESTABLISHED,
-                    OP_IS_DESTROYED: op.OP_IS_DESTROYED != undefined ? op.OP_IS_DESTROYED : 0,
-                    OP_NOTES: op.OP_NOTES != undefined ? op.OP_NOTES : null,
+                    OP_IS_DESTROYED: op.OP_IS_DESTROYED !== undefined ? op.OP_IS_DESTROYED : 0,
+                    OP_NOTES: op.OP_NOTES !== undefined ? op.OP_NOTES : null,
                     SITE_ID: op.SITE_ID,
-                    VDATUM_ID: op.VDATUM_ID != undefined ? op.VDATUM_ID : 0,
+                    VDATUM_ID: op.VDATUM_ID !== undefined ? op.VDATUM_ID : 0,
                     LATITUDE_DD: op.LATITUDE_DD,
                     LONGITUDE_DD: op.LONGITUDE_DD,
-                    HDATUM_ID: op.HDATUM_ID != undefined ? op.HDATUM_ID : 0,
-                    HCOLLECT_METHOD_ID: op.HCOLLECT_METHOD_ID != undefined ? op.HCOLLECT_METHOD_ID : 0,
-                    VCOLLECT_METHOD_ID: op.VCOLLECT_METHOD_ID != undefined ? op.VCOLLECT_METHOD_ID : 0,
+                    HDATUM_ID: op.HDATUM_ID !== undefined ? op.HDATUM_ID : 0,
+                    HCOLLECT_METHOD_ID: op.HCOLLECT_METHOD_ID !== undefined ? op.HCOLLECT_METHOD_ID : 0,
+                    VCOLLECT_METHOD_ID: op.VCOLLECT_METHOD_ID !== undefined ? op.VCOLLECT_METHOD_ID : 0,
                     OP_TYPE_ID: op.OP_TYPE_ID,
-                    DATE_RECOVERED: op.DATE_RECOVERED != undefined ? op.DATE_RECOVERED : null,
-                    UNCERTAINTY: op.UNCERTAINTY != undefined ? op.UNCERTAINTY : null,
-                    UNQUANTIFIED: op.UNQUANTIFIED != undefined ? op.UNQUANTIFIED : null,
-                    OP_QUALITY_ID: op.OP_QUALITY_ID != undefined ? op.OP_QUALITY_ID : null,
-                }
+                    DATE_RECOVERED: op.DATE_RECOVERED !== undefined ? op.DATE_RECOVERED : null,
+                    UNCERTAINTY: op.UNCERTAINTY !== undefined ? op.UNCERTAINTY : null,
+                    UNQUANTIFIED: op.UNQUANTIFIED !== undefined ? op.UNQUANTIFIED : null,
+                    OP_QUALITY_ID: op.OP_QUALITY_ID !== undefined ? op.OP_QUALITY_ID : null,
+                };
                 return OBJ_PT;
-            }
+            };
 
             //fix default radios and lat/long
             var formatDefaults = function (theOP) {
@@ -235,20 +235,20 @@
                 }
                 //$scope.OP.FTorCM needs to be 'ft'. if 'cm' ==convert value to ft 
                 if (theOP.FTorCM == "cm") {
-                    $scope.aOP.FTorCM = 'ft'
+                    $scope.aOP.FTorCM = 'ft';
                     $scope.aOP.UNCERTAINTY = $scope.aOP.UNCERTAINTY / 30.48;
-                }                
-            }
+                }
+            };
 
             $scope.siteErrors = false; $scope.opErrors = false; $scope.hwmErrors = false; 
             $scope.create = function () {
                 $(".page-loading").removeClass("hidden");
-                 var theForm = $scope.qhwmForm.quickHWM; $scope.siteErrors = false; $scope.opErrors = false; $scope.hwmErrors = false;
-                 if (theForm.$valid) {                    
+                var theForm = $scope.qhwmForm.quickHWM; $scope.siteErrors = false; $scope.opErrors = false; $scope.hwmErrors = false;
+                if (theForm.$valid) {
                     //site POST
-                    $http.defaults.headers.common['Authorization'] = 'Basic ' + $cookies.get('STNCreds');
-                    $http.defaults.headers.common['Accept'] = 'application/json';
-                    
+                    $http.defaults.headers.common.Authorization = 'Basic ' + $cookies.get('STNCreds');
+                    $http.defaults.headers.common.Accept = 'application/json';
+
                     var createdSiteID = 0;
                     if ($scope.aSite.LONGITUDE_DD > 0)
                         $scope.aSite.LONGITUDE_DD = $scope.aSite.LONGITUDE_DD * (-1);
@@ -278,12 +278,12 @@
                             //HWM stuff POST
                             var createdHWM = {};
                             //if they entered a survey date or elevation, then set survey member as the flag member (flagging and surveying at same time
-                            if ($scope.aHWM.SURVEY_DATE != undefined)
+                            if ($scope.aHWM.SURVEY_DATE !== undefined)
                                 $scope.aHWM.SURVEY_TEAM_ID = $scope.aHWM.FLAG_TEAM_ID;
 
-                            if ($scope.aHWM.ELEV_FT != undefined) {
+                            if ($scope.aHWM.ELEV_FT !== undefined) {
                                 //make sure they added the survey date if they added an elevation
-                                if ($scope.aHWM.SURVEY_DATE == undefined)
+                                if ($scope.aHWM.SURVEY_DATE === undefined)
                                     $scope.aHWM.SURVEY_DATE = makeAdate("");
 
                                 $scope.aHWM.SURVEY_TEAM_ID = $scope.aHWM.FLAG_TEAM_ID;
@@ -297,12 +297,12 @@
                         });//end OP.save()
                     });//end SITE.save()
 
-                 } else {
-                     $(".page-loading").addClass("hidden");
+                } else {
+                    $(".page-loading").addClass("hidden");
                     $scope.status.siteOpen = true;
                     $scope.status.opOpen = true;
                     $scope.status.hwmOpen = true;
-                    
+
                     angular.element("[name='" + theForm.$name + "']").find('.ng-invalid:visible:first').focus();
 
                     if (theForm.SITE_DESCRIPTION.$invalid || theForm.LATITUDE_DD.$invalid || theForm.LONGITUDE_DD.$invalid || theForm.HDATUM_ID.$invalid || theForm.HCOLLECT_METHOD_ID.$invalid || theForm.WATERBODY.$invalid || theForm.STATE.$invalidv || theForm.COUNTY.$invalid) {
@@ -312,11 +312,11 @@
                         $scope.opErrors = true;
                     }
                     if (theForm.HWM_TYPE_ID.$invalid || theForm.HWM_ENVIRONMENT.$invalid || theForm.HWM_QUALITY_ID.$invalid || theForm.fd.$invalid) {
-                        $scope.hwmErrors = true; 
+                        $scope.hwmErrors = true;
                     }
-                    toastr.error("Quick HWM not created.")
+                    toastr.error("Quick HWM not created.");
                 }
-            }
+            };
 
 
         }//end else (logged in)

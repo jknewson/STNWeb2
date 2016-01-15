@@ -7,7 +7,7 @@
    //#region File Controller
     STNControllers.controller('fileUploadCtrl', ['$scope', '$location', '$cookies', 'Upload', 'multipartForm', 'fileTypeList', 'agencyList', fileUploadCtrl]);
     function fileUploadCtrl($scope, $location, $cookies, Upload, multipartForm, fileTypeList, agencyList) {
-        if ($cookies.get('STNCreds') == undefined || $cookies.get('STNCreds') == "") {
+        if ($cookies.get('STNCreds') === undefined || $cookies.get('STNCreds') === "") {
             $scope.auth = false;
             $location.path('/login');
         } else {
@@ -48,7 +48,7 @@
 
             // photo file caption
             $scope.ShowCaption = function () {
-                if ($scope.toggleCaptionPreview == true) {
+                if ($scope.toggleCaptionPreview === true) {
                     $scope.toggleCaptionPreview = false;
                     $scope.photoCaption = "";
                 } else {
@@ -74,9 +74,9 @@
                             PROCESSOR_ID: $scope.loggedInMember.ID,
                             FILE_DATE: $scope.aFile.FILE_DATE,
                             DESCRIPTION: $scope.aFile.DESCRIPTION,
-                            HWM_ID: $scope.aFile.HWM_ID != undefined ? $scope.aFile.HWM_ID : 0,
+                            HWM_ID: $scope.aFile.HWM_ID !== undefined ? $scope.aFile.HWM_ID : 0,
                             SITE_ID: $scope.aFile.SITE_ID,
-                            INSTRUMENT_ID: $scope.aFile.INSTRUMENT_ID != undefined ? $scope.aFile.INSTRUMENT_ID : 0
+                            INSTRUMENT_ID: $scope.aFile.INSTRUMENT_ID !== undefined ? $scope.aFile.INSTRUMENT_ID : 0
                         },
                         File: $scope.aFile.File
                     };

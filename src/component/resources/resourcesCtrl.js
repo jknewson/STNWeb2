@@ -14,7 +14,7 @@
         OP_TYPE, SENSOR_BRAND, DEPLOYMENT_TYPE, SENSOR_TYPE, NETWORK_TYPE, STATUS_TYPE, VERTICAL_COLL_METHOD, VERTICAL_DATUM, allStates, allAgencies, allContactTypes, allDeployPriorities, allEventStats, allEventTypes, allFileTypes,
         allHorCollMethods, allHorDatums, allHouseTypes, allHWMqualities, allHWMtypes, allInstCollectConditions, allMarkers, allNetworkNames, allObjPtQualities, allObjPtTypes,
         allSensorBrands, allDeploymentTypes, allStatusTypes, allSensorTypes, allNetworkTypes, allVerticalCollMethods, allVerticalDatums) {
-        if ($cookies.get('STNCreds') == undefined || $cookies.get('STNCreds') == "") {
+        if ($cookies.get('STNCreds') === undefined || $cookies.get('STNCreds') === "") {
             $scope.auth = false;
             $location.path('/login');
         } else {
@@ -64,8 +64,8 @@
 
             $scope.AddAgency = function (valid) {
                 if (valid) {
-                    $http.defaults.headers.common['Authorization'] = 'Basic ' + $cookies.get('STNCreds');
-                    $http.defaults.headers.common['Accept'] = 'application/json';
+                    $http.defaults.headers.common.Authorization = 'Basic ' + $cookies.get('STNCreds');
+                    $http.defaults.headers.common.Accept = 'application/json';
                     AGENCY.save($scope.newAg, function success(response) {
                         $scope.agencyList.push(response);
                         $scope.newAg = {};
@@ -79,8 +79,8 @@
             };
             $scope.saveAgency = function (data, id) {
                 var retur = false;
-                $http.defaults.headers.common['Authorization'] = 'Basic ' + $cookies.get('STNCreds');
-                $http.defaults.headers.common['Accept'] = 'application/json';
+                $http.defaults.headers.common.Authorization = 'Basic ' + $cookies.get('STNCreds');
+                $http.defaults.headers.common.Accept = 'application/json';
                 AGENCY.update({ id: id }, data, function success(response) {
                     retur = response;
                     toastr.success("Agency Updated");
@@ -109,7 +109,7 @@
                     //yes, remove this keyword
                     var index = $scope.agencyList.indexOf(ag);
                     //DELETE it
-                    $http.defaults.headers.common['Authorization'] = 'Basic ' + $cookies.get('STNCreds');
+                    $http.defaults.headers.common.Authorization = 'Basic ' + $cookies.get('STNCreds');
                     AGENCY.delete({ id: ag.AGENCY_ID }, ag, function success(response) {
                         $scope.agencyList.splice(index, 1);
                         toastr.success("Agency Removed");
@@ -150,8 +150,8 @@
 
             $scope.AddContactType = function (valid) {
                 if (valid) {
-                    $http.defaults.headers.common['Authorization'] = 'Basic ' + $cookies.get('STNCreds');
-                    $http.defaults.headers.common['Accept'] = 'application/json';
+                    $http.defaults.headers.common.Authorization = 'Basic ' + $cookies.get('STNCreds');
+                    $http.defaults.headers.common.Accept = 'application/json';
                     CONTACT_TYPE.save($scope.newCT, function success(response) {
                         $scope.contactTypeList.push(response);
                         $scope.newCT = {};
@@ -166,8 +166,8 @@
 
             $scope.saveContactType = function (data, id) {
                 var retur = false;
-                $http.defaults.headers.common['Authorization'] = 'Basic ' + $cookies.get('STNCreds');
-                $http.defaults.headers.common['Accept'] = 'application/json';
+                $http.defaults.headers.common.Authorization = 'Basic ' + $cookies.get('STNCreds');
+                $http.defaults.headers.common.Accept = 'application/json';
                 CONTACT_TYPE.update({ id: id }, data, function success(response) {
                     retur = response;
                     toastr.success("Contact Type Updated");
@@ -197,7 +197,7 @@
                     //yes, remove this keyword
                     var index = $scope.contactTypeList.indexOf(ct);
                     //DELETE it
-                    $http.defaults.headers.common['Authorization'] = 'Basic ' + $cookies.get('STNCreds');
+                    $http.defaults.headers.common.Authorization = 'Basic ' + $cookies.get('STNCreds');
                     CONTACT_TYPE.delete({ id: ct.CONTACT_TYPE_ID }, ct, function success(response) {
                         $scope.contactTypeList.splice(index, 1);
                         toastr.success("Contact Type Removed");
@@ -229,8 +229,8 @@
             };
             $scope.AddDepPriority = function (valid) {
                 if (valid) {
-                    $http.defaults.headers.common['Authorization'] = 'Basic ' + $cookies.get('STNCreds');
-                    $http.defaults.headers.common['Accept'] = 'application/json';
+                    $http.defaults.headers.common.Authorization = 'Basic ' + $cookies.get('STNCreds');
+                    $http.defaults.headers.common.Accept = 'application/json';
                     DEPLOYMENT_PRIORITY.save($scope.newDP, function success(response) {
                         $scope.deployPriorityList.push(response);
                         $scope.newDP = {};
@@ -244,8 +244,8 @@
             };
             $scope.saveDepPriority = function (data, id) {
                 var retur = false;
-                $http.defaults.headers.common['Authorization'] = 'Basic ' + $cookies.get('STNCreds');
-                $http.defaults.headers.common['Accept'] = 'application/json';
+                $http.defaults.headers.common.Authorization = 'Basic ' + $cookies.get('STNCreds');
+                $http.defaults.headers.common.Accept = 'application/json';
                 DEPLOYMENT_PRIORITY.update({ id: id }, data, function success(response) {
                     retur = response;
                     toastr.success("Deployment Priority Updated");
@@ -271,7 +271,7 @@
                 });
                 modalInstance.result.then(function (keyToRemove) {
                     var index = $scope.deployPriorityList.indexOf(dp);
-                    $http.defaults.headers.common['Authorization'] = 'Basic ' + $cookies.get('STNCreds');
+                    $http.defaults.headers.common.Authorization = 'Basic ' + $cookies.get('STNCreds');
                     DEPLOYMENT_PRIORITY.delete({ id: dp.PRIORITY_ID }, dp, function success(response) {
                         $scope.deployPriorityList.splice(index, 1);
                         toastr.success("Deployment Priority Removed");
@@ -303,8 +303,8 @@
             };
             $scope.AddEventStat = function (valid) {
                 if (valid) {
-                    $http.defaults.headers.common['Authorization'] = 'Basic ' + $cookies.get('STNCreds');
-                    $http.defaults.headers.common['Accept'] = 'application/json';
+                    $http.defaults.headers.common.Authorization = 'Basic ' + $cookies.get('STNCreds');
+                    $http.defaults.headers.common.Accept = 'application/json';
                     EVENT_STATUS.save($scope.newES, function success(response) {
                         $scope.eventStatList.push(response);
                         $scope.newES = {};
@@ -318,8 +318,8 @@
             };
             $scope.saveEventStat = function (data, id) {
                 var retur = false;
-                $http.defaults.headers.common['Authorization'] = 'Basic ' + $cookies.get('STNCreds');
-                $http.defaults.headers.common['Accept'] = 'application/json';
+                $http.defaults.headers.common.Authorization = 'Basic ' + $cookies.get('STNCreds');
+                $http.defaults.headers.common.Accept = 'application/json';
                 EVENT_STATUS.update({ id: id }, data, function success(response) {
                     retur = response;
                     toastr.success("Event Status Updated");
@@ -345,7 +345,7 @@
                 });
                 modalInstance.result.then(function (keyToRemove) {
                     var index = $scope.eventStatList.indexOf(es);
-                    $http.defaults.headers.common['Authorization'] = 'Basic ' + $cookies.get('STNCreds');
+                    $http.defaults.headers.common.Authorization = 'Basic ' + $cookies.get('STNCreds');
                     EVENT_STATUS.delete({ id: es.EVENT_STATUS_ID }, es, function success(response) {
                         $scope.eventStatList.splice(index, 1);
                         toastr.success("Event Status Removed");
@@ -378,8 +378,8 @@
 
             $scope.AddEventType = function (valid) {
                 if (valid) {
-                    $http.defaults.headers.common['Authorization'] = 'Basic ' + $cookies.get('STNCreds');
-                    $http.defaults.headers.common['Accept'] = 'application/json';
+                    $http.defaults.headers.common.Authorization = 'Basic ' + $cookies.get('STNCreds');
+                    $http.defaults.headers.common.Accept = 'application/json';
                     EVENT_TYPE.save($scope.newET, function success(response) {
                         $scope.eventTypeList.push(response);
                         $scope.newET = {};
@@ -394,8 +394,8 @@
 
             $scope.saveEventType = function (data, id) {
                 var retur = false;
-                $http.defaults.headers.common['Authorization'] = 'Basic ' + $cookies.get('STNCreds');
-                $http.defaults.headers.common['Accept'] = 'application/json';
+                $http.defaults.headers.common.Authorization = 'Basic ' + $cookies.get('STNCreds');
+                $http.defaults.headers.common.Accept = 'application/json';
                 EVENT_TYPE.update({ id: id }, data, function success(response) {
                     retur = response;
                     toastr.success("Event Type Updated");
@@ -425,7 +425,7 @@
                     //yes, remove this keyword
                     var index = $scope.eventTypeList.indexOf(et);
                     //DELETE it
-                    $http.defaults.headers.common['Authorization'] = 'Basic ' + $cookies.get('STNCreds');
+                    $http.defaults.headers.common.Authorization = 'Basic ' + $cookies.get('STNCreds');
                     EVENT_TYPE.delete({ id: et.EVENT_TYPE_ID }, et, function success(response) {
                         $scope.eventTypeList.splice(index, 1);
                         toastr.success("Event Type Removed");
@@ -457,8 +457,8 @@
             };
             $scope.AddFileType = function (valid) {
                 if (valid) {
-                    $http.defaults.headers.common['Authorization'] = 'Basic ' + $cookies.get('STNCreds');
-                    $http.defaults.headers.common['Accept'] = 'application/json';
+                    $http.defaults.headers.common.Authorization = 'Basic ' + $cookies.get('STNCreds');
+                    $http.defaults.headers.common.Accept = 'application/json';
                     FILE_TYPE.save($scope.newFT, function success(response) {
                         $scope.fileTypeList.push(response);
                         $scope.newFT = {};
@@ -472,8 +472,8 @@
             };
             $scope.saveFileType = function (data, id) {
                 var retur = false;
-                $http.defaults.headers.common['Authorization'] = 'Basic ' + $cookies.get('STNCreds');
-                $http.defaults.headers.common['Accept'] = 'application/json';
+                $http.defaults.headers.common.Authorization = 'Basic ' + $cookies.get('STNCreds');
+                $http.defaults.headers.common.Accept = 'application/json';
                 FILE_TYPE.update({ id: id }, data, function success(response) {
                     retur = response;
                     toastr.success("File Type Updated");
@@ -499,7 +499,7 @@
                 });
                 modalInstance.result.then(function (keyToRemove) {
                     var index = $scope.fileTypeList.indexOf(ft);
-                    $http.defaults.headers.common['Authorization'] = 'Basic ' + $cookies.get('STNCreds');
+                    $http.defaults.headers.common.Authorization = 'Basic ' + $cookies.get('STNCreds');
                     FILE_TYPE.delete({ id: ft.FILETYPE_ID }, ft, function success(response) {
                         $scope.fileTypeList.splice(index, 1);
                         toastr.success("File Type Removed");
@@ -531,8 +531,8 @@
             };
             $scope.AddHorCollMethod = function (valid) {
                 if (valid) {
-                    $http.defaults.headers.common['Authorization'] = 'Basic ' + $cookies.get('STNCreds');
-                    $http.defaults.headers.common['Accept'] = 'application/json';
+                    $http.defaults.headers.common.Authorization = 'Basic ' + $cookies.get('STNCreds');
+                    $http.defaults.headers.common.Accept = 'application/json';
                     HORIZONTAL_COLL_METHODS.save($scope.newHCM, function success(response) {
                         $scope.horColMethList.push(response);
                         $scope.newHCM = {};
@@ -546,8 +546,8 @@
             };
             $scope.saveHorCollMethod = function (data, id) {
                 var retur = false;
-                $http.defaults.headers.common['Authorization'] = 'Basic ' + $cookies.get('STNCreds');
-                $http.defaults.headers.common['Accept'] = 'application/json';
+                $http.defaults.headers.common.Authorization = 'Basic ' + $cookies.get('STNCreds');
+                $http.defaults.headers.common.Accept = 'application/json';
                 HORIZONTAL_COLL_METHODS.update({ id: id }, data, function success(response) {
                     retur = response;
                     toastr.success("Horizontal Collection Method Updated");
@@ -573,7 +573,7 @@
                 });
                 modalInstance.result.then(function (keyToRemove) {
                     var index = $scope.horColMethList.indexOf(hcm);
-                    $http.defaults.headers.common['Authorization'] = 'Basic ' + $cookies.get('STNCreds');
+                    $http.defaults.headers.common.Authorization = 'Basic ' + $cookies.get('STNCreds');
                     HORIZONTAL_COLL_METHODS.delete({ id: hcm.HCOLLECT_METHOD_ID }, hcm, function success(response) {
                         $scope.horColMethList.splice(index, 1);
                         toastr.success("Horizontal Collection Method Removed");
@@ -606,8 +606,8 @@
 
             $scope.AddHorDatum = function (valid) {
                 if (valid) {
-                    $http.defaults.headers.common['Authorization'] = 'Basic ' + $cookies.get('STNCreds');
-                    $http.defaults.headers.common['Accept'] = 'application/json';
+                    $http.defaults.headers.common.Authorization = 'Basic ' + $cookies.get('STNCreds');
+                    $http.defaults.headers.common.Accept = 'application/json';
                     HORIZONTAL_DATUM.save($scope.newHD, function success(response) {
                         $scope.horDatList.push(response);
                         $scope.newHD = {};
@@ -622,8 +622,8 @@
 
             $scope.saveHorDatum = function (data, id) {
                 var retur = false;
-                $http.defaults.headers.common['Authorization'] = 'Basic ' + $cookies.get('STNCreds');
-                $http.defaults.headers.common['Accept'] = 'application/json';
+                $http.defaults.headers.common.Authorization = 'Basic ' + $cookies.get('STNCreds');
+                $http.defaults.headers.common.Accept = 'application/json';
                 HORIZONTAL_DATUM.update({ id: id }, data, function success(response) {
                     retur = response;
                     toastr.success("Horizontal Datum Updated");
@@ -653,7 +653,7 @@
                     //yes, remove this keyword
                     var index = $scope.horDatList.indexOf(hd);
                     //DELETE it
-                    $http.defaults.headers.common['Authorization'] = 'Basic ' + $cookies.get('STNCreds');
+                    $http.defaults.headers.common.Authorization = 'Basic ' + $cookies.get('STNCreds');
                     HORIZONTAL_DATUM.delete({ id: hd.DATUM_ID }, hd, function success(response) {
                         $scope.horDatList.splice(index, 1);
                         toastr.success("Horizontal Datum Removed");
@@ -685,8 +685,8 @@
             };
             $scope.AddHouseType = function (valid) {
                 if (valid) {
-                    $http.defaults.headers.common['Authorization'] = 'Basic ' + $cookies.get('STNCreds');
-                    $http.defaults.headers.common['Accept'] = 'application/json';
+                    $http.defaults.headers.common.Authorization = 'Basic ' + $cookies.get('STNCreds');
+                    $http.defaults.headers.common.Accept = 'application/json';
                     HOUSING_TYPE.save($scope.newHT, function success(response) {
                         $scope.houseTypeList.push(response);
                         $scope.newHT = {};
@@ -700,8 +700,8 @@
             };
             $scope.saveHouseType = function (data, id) {
                 var retur = false;
-                $http.defaults.headers.common['Authorization'] = 'Basic ' + $cookies.get('STNCreds');
-                $http.defaults.headers.common['Accept'] = 'application/json';
+                $http.defaults.headers.common.Authorization = 'Basic ' + $cookies.get('STNCreds');
+                $http.defaults.headers.common.Accept = 'application/json';
                 HOUSING_TYPE.update({ id: id }, data, function success(response) {
                     retur = response;
                     toastr.success("Housing Type Updated");
@@ -727,7 +727,7 @@
                 });
                 modalInstance.result.then(function (keyToRemove) {
                     var index = $scope.houseTypeList.indexOf(ht);
-                    $http.defaults.headers.common['Authorization'] = 'Basic ' + $cookies.get('STNCreds');
+                    $http.defaults.headers.common.Authorization = 'Basic ' + $cookies.get('STNCreds');
                     HOUSING_TYPE.delete({ id: ht.HOUSING_TYPE_ID }, ht, function success(response) {
                         $scope.houseTypeList.splice(index, 1);
                         toastr.success("Housing Type Removed");
@@ -759,8 +759,8 @@
             };
             $scope.AddHwmQuality = function (valid) {
                 if (valid) {
-                    $http.defaults.headers.common['Authorization'] = 'Basic ' + $cookies.get('STNCreds');
-                    $http.defaults.headers.common['Accept'] = 'application/json';
+                    $http.defaults.headers.common.Authorization = 'Basic ' + $cookies.get('STNCreds');
+                    $http.defaults.headers.common.Accept = 'application/json';
                     HWM_QUALITY.save($scope.newHWMQ, function success(response) {
                         $scope.hwmQualList.push(response);
                         $scope.newHWMQ = {};
@@ -774,8 +774,8 @@
             };
             $scope.saveHwmQuality = function (data, id) {
                 var retur = false;
-                $http.defaults.headers.common['Authorization'] = 'Basic ' + $cookies.get('STNCreds');
-                $http.defaults.headers.common['Accept'] = 'application/json';
+                $http.defaults.headers.common.Authorization = 'Basic ' + $cookies.get('STNCreds');
+                $http.defaults.headers.common.Accept = 'application/json';
                 HWM_QUALITY.update({ id: id }, data, function success(response) {
                     retur = response;
                     toastr.success("HWM Quality Updated");
@@ -801,7 +801,7 @@
                 });
                 modalInstance.result.then(function (keyToRemove) {
                     var index = $scope.hwmQualList.indexOf(hwmq);
-                    $http.defaults.headers.common['Authorization'] = 'Basic ' + $cookies.get('STNCreds');
+                    $http.defaults.headers.common.Authorization = 'Basic ' + $cookies.get('STNCreds');
                     HWM_QUALITY.delete({ id: hwmq.HWM_QUALITY_ID }, hwmq, function success(response) {
                         $scope.hwmQualList.splice(index, 1);
                         toastr.success("HWM Quality Removed");
@@ -834,8 +834,8 @@
 
             $scope.AddHwmType = function (valid) {
                 if (valid) {
-                    $http.defaults.headers.common['Authorization'] = 'Basic ' + $cookies.get('STNCreds');
-                    $http.defaults.headers.common['Accept'] = 'application/json';
+                    $http.defaults.headers.common.Authorization = 'Basic ' + $cookies.get('STNCreds');
+                    $http.defaults.headers.common.Accept = 'application/json';
                     HWM_TYPE.save($scope.newHWMT, function success(response) {
                         $scope.hwmTypeList.push(response);
                         $scope.newHWMT = {};
@@ -850,8 +850,8 @@
 
             $scope.saveHwmType = function (data, id) {
                 var retur = false;
-                $http.defaults.headers.common['Authorization'] = 'Basic ' + $cookies.get('STNCreds');
-                $http.defaults.headers.common['Accept'] = 'application/json';
+                $http.defaults.headers.common.Authorization = 'Basic ' + $cookies.get('STNCreds');
+                $http.defaults.headers.common.Accept = 'application/json';
                 HWM_TYPE.update({ id: id }, data, function success(response) {
                     retur = response;
                     toastr.success("HWM Type Updated");
@@ -881,7 +881,7 @@
                     //yes, remove this keyword
                     var index = $scope.hwmTypeList.indexOf(hwmt);
                     //DELETE it
-                    $http.defaults.headers.common['Authorization'] = 'Basic ' + $cookies.get('STNCreds');
+                    $http.defaults.headers.common.Authorization = 'Basic ' + $cookies.get('STNCreds');
                     HWM_TYPE.delete({ id: hwmt.HWM_TYPE_ID }, hwmt, function success(response) {
                         $scope.hwmTypeList.splice(index, 1);
                         toastr.success("HWM Type Removed");
@@ -913,8 +913,8 @@
             };
             $scope.AddInstColCond = function (valid) {
                 if (valid) {
-                    $http.defaults.headers.common['Authorization'] = 'Basic ' + $cookies.get('STNCreds');
-                    $http.defaults.headers.common['Accept'] = 'application/json';
+                    $http.defaults.headers.common.Authorization = 'Basic ' + $cookies.get('STNCreds');
+                    $http.defaults.headers.common.Accept = 'application/json';
                     INST_COLL_CONDITION.save($scope.newICC, function success(response) {
                         $scope.instColCondList.push(response);
                         $scope.newICC = {};
@@ -928,8 +928,8 @@
             };
             $scope.saveInstColCond = function (data, id) {
                 var retur = false;
-                $http.defaults.headers.common['Authorization'] = 'Basic ' + $cookies.get('STNCreds');
-                $http.defaults.headers.common['Accept'] = 'application/json';
+                $http.defaults.headers.common.Authorization = 'Basic ' + $cookies.get('STNCreds');
+                $http.defaults.headers.common.Accept = 'application/json';
                 INST_COLL_CONDITION.update({ id: id }, data, function success(response) {
                     retur = response;
                     toastr.success("Instrument Collection Condition Updated");
@@ -955,7 +955,7 @@
                 });
                 modalInstance.result.then(function (keyToRemove) {
                     var index = $scope.instColCondList.indexOf(icc);
-                    $http.defaults.headers.common['Authorization'] = 'Basic ' + $cookies.get('STNCreds');
+                    $http.defaults.headers.common.Authorization = 'Basic ' + $cookies.get('STNCreds');
                     INST_COLL_CONDITION.delete({ id: icc.ID }, icc, function success(response) {
                         $scope.instColCondList.splice(index, 1);
                         toastr.success("Instrument Collection Condition Removed");
@@ -987,8 +987,8 @@
             };
             $scope.AddMarker = function (valid) {
                 if (valid) {
-                    $http.defaults.headers.common['Authorization'] = 'Basic ' + $cookies.get('STNCreds');
-                    $http.defaults.headers.common['Accept'] = 'application/json';
+                    $http.defaults.headers.common.Authorization = 'Basic ' + $cookies.get('STNCreds');
+                    $http.defaults.headers.common.Accept = 'application/json';
                     MARKER.save($scope.newM, function success(response) {
                         $scope.markList.push(response);
                         $scope.newM = {};
@@ -1002,8 +1002,8 @@
             };
             $scope.saveMarker = function (data, id) {
                 var retur = false;
-                $http.defaults.headers.common['Authorization'] = 'Basic ' + $cookies.get('STNCreds');
-                $http.defaults.headers.common['Accept'] = 'application/json';
+                $http.defaults.headers.common.Authorization = 'Basic ' + $cookies.get('STNCreds');
+                $http.defaults.headers.common.Accept = 'application/json';
                 MARKER.update({ id: id }, data, function success(response) {
                     retur = response;
                     toastr.success("Marker Updated");
@@ -1029,7 +1029,7 @@
                 });
                 modalInstance.result.then(function (keyToRemove) {
                     var index = $scope.markList.indexOf(m);
-                    $http.defaults.headers.common['Authorization'] = 'Basic ' + $cookies.get('STNCreds');
+                    $http.defaults.headers.common.Authorization = 'Basic ' + $cookies.get('STNCreds');
                     MARKER.delete({ id: m.MARKER_ID }, m, function success(response) {
                         $scope.markList.splice(index, 1);
                         toastr.success("Marker Removed");
@@ -1061,8 +1061,8 @@
             };
             $scope.AddNetworkName = function (valid) {
                 if (valid) {
-                    $http.defaults.headers.common['Authorization'] = 'Basic ' + $cookies.get('STNCreds');
-                    $http.defaults.headers.common['Accept'] = 'application/json';
+                    $http.defaults.headers.common.Authorization = 'Basic ' + $cookies.get('STNCreds');
+                    $http.defaults.headers.common.Accept = 'application/json';
                     NETWORK_NAME.save($scope.newNN, function success(response) {
                         $scope.netNameList.push(response);
                         $scope.newNN = {};
@@ -1076,8 +1076,8 @@
             };
             $scope.saveNetworkName = function (data, id) {
                 var retur = false;
-                $http.defaults.headers.common['Authorization'] = 'Basic ' + $cookies.get('STNCreds');
-                $http.defaults.headers.common['Accept'] = 'application/json';
+                $http.defaults.headers.common.Authorization = 'Basic ' + $cookies.get('STNCreds');
+                $http.defaults.headers.common.Accept = 'application/json';
                 NETWORK_NAME.update({ id: id }, data, function success(response) {
                     retur = response;
                     toastr.success("Network Name Updated");
@@ -1103,7 +1103,7 @@
                 });
                 modalInstance.result.then(function (keyToRemove) {
                     var index = $scope.netNameList.indexOf(nn);
-                    $http.defaults.headers.common['Authorization'] = 'Basic ' + $cookies.get('STNCreds');
+                    $http.defaults.headers.common.Authorization = 'Basic ' + $cookies.get('STNCreds');
                     NETWORK_NAME.delete({ id: nn.NETWORK_NAME_ID }, nn, function success(response) {
                         $scope.netNameList.splice(index, 1);
                         toastr.success("Network Name Removed");
@@ -1136,8 +1136,8 @@
 
             $scope.AddOPQuality = function (valid) {
                 if (valid) {
-                    $http.defaults.headers.common['Authorization'] = 'Basic ' + $cookies.get('STNCreds');
-                    $http.defaults.headers.common['Accept'] = 'application/json';
+                    $http.defaults.headers.common.Authorization = 'Basic ' + $cookies.get('STNCreds');
+                    $http.defaults.headers.common.Accept = 'application/json';
                     OP_QUALITY.save($scope.newOPQ, function success(response) {
                         $scope.opQualList.push(response);
                         $scope.newOPQ = {};
@@ -1152,8 +1152,8 @@
 
             $scope.saveOPQuality = function (data, id) {
                 var retur = false;
-                $http.defaults.headers.common['Authorization'] = 'Basic ' + $cookies.get('STNCreds');
-                $http.defaults.headers.common['Accept'] = 'application/json';
+                $http.defaults.headers.common.Authorization = 'Basic ' + $cookies.get('STNCreds');
+                $http.defaults.headers.common.Accept = 'application/json';
                 OP_QUALITY.update({ id: id }, data, function success(response) {
                     retur = response;
                     toastr.success("Objective Point Quality Updated");
@@ -1183,7 +1183,7 @@
                     //yes, remove this keyword
                     var index = $scope.opQualList.indexOf(opq);
                     //DELETE it
-                    $http.defaults.headers.common['Authorization'] = 'Basic ' + $cookies.get('STNCreds');
+                    $http.defaults.headers.common.Authorization = 'Basic ' + $cookies.get('STNCreds');
                     OP_QUALITY.delete({ id: opq.OP_QUALITY_ID }, opq, function success(response) {
                         $scope.opQualList.splice(index, 1);
                         toastr.success("Objective Point Quality Removed");
@@ -1215,8 +1215,8 @@
             };
             $scope.AddOPType = function (valid) {
                 if (valid) {
-                    $http.defaults.headers.common['Authorization'] = 'Basic ' + $cookies.get('STNCreds');
-                    $http.defaults.headers.common['Accept'] = 'application/json';
+                    $http.defaults.headers.common.Authorization = 'Basic ' + $cookies.get('STNCreds');
+                    $http.defaults.headers.common.Accept = 'application/json';
                     OP_TYPE.save($scope.newOPT, function success(response) {
                         $scope.opTypeList.push(response);
                         $scope.newOPT = {};
@@ -1230,8 +1230,8 @@
             };
             $scope.saveOPType = function (data, id) {
                 var retur = false;
-                $http.defaults.headers.common['Authorization'] = 'Basic ' + $cookies.get('STNCreds');
-                $http.defaults.headers.common['Accept'] = 'application/json';
+                $http.defaults.headers.common.Authorization = 'Basic ' + $cookies.get('STNCreds');
+                $http.defaults.headers.common.Accept = 'application/json';
                 OP_TYPE.update({ id: id }, data, function success(response) {
                     retur = response;
                     toastr.success("Objective Point Type Updated");
@@ -1257,7 +1257,7 @@
                 });
                 modalInstance.result.then(function (keyToRemove) {
                     var index = $scope.opTypeList.indexOf(opt);
-                    $http.defaults.headers.common['Authorization'] = 'Basic ' + $cookies.get('STNCreds');
+                    $http.defaults.headers.common.Authorization = 'Basic ' + $cookies.get('STNCreds');
                     OP_TYPE.delete({ id: opt.OBJECTIVE_POINT_TYPE_ID }, opt, function success(response) {
                         $scope.opTypeList.splice(index, 1);
                         toastr.success("Objective Point Type Removed");
@@ -1289,8 +1289,8 @@
             };
             $scope.AddSensorBrand = function (valid) {
                 if (valid) {
-                    $http.defaults.headers.common['Authorization'] = 'Basic ' + $cookies.get('STNCreds');
-                    $http.defaults.headers.common['Accept'] = 'application/json';
+                    $http.defaults.headers.common.Authorization = 'Basic ' + $cookies.get('STNCreds');
+                    $http.defaults.headers.common.Accept = 'application/json';
                     SENSOR_BRAND.save($scope.newSB, function success(response) {
                         $scope.sensBrandList.push(response);
                         $scope.newSB = {};
@@ -1304,8 +1304,8 @@
             };
             $scope.saveSensorBrand = function (data, id) {
                 var retur = false;
-                $http.defaults.headers.common['Authorization'] = 'Basic ' + $cookies.get('STNCreds');
-                $http.defaults.headers.common['Accept'] = 'application/json';
+                $http.defaults.headers.common.Authorization = 'Basic ' + $cookies.get('STNCreds');
+                $http.defaults.headers.common.Accept = 'application/json';
                 SENSOR_BRAND.update({ id: id }, data, function success(response) {
                     retur = response;
                     toastr.success("Sensor Brand Updated");
@@ -1331,7 +1331,7 @@
                 });
                 modalInstance.result.then(function (keyToRemove) {
                     var index = $scope.sensBrandList.indexOf(sb);
-                    $http.defaults.headers.common['Authorization'] = 'Basic ' + $cookies.get('STNCreds');
+                    $http.defaults.headers.common.Authorization = 'Basic ' + $cookies.get('STNCreds');
                     SENSOR_BRAND.delete({ id: sb.SENSOR_BRAND_ID }, sb, function success(response) {
                         $scope.sensBrandList.splice(index, 1);
                         toastr.success("Sensor Brand Removed");
@@ -1364,8 +1364,8 @@
 
             $scope.AddDepType = function (valid) {
                 if (valid) {
-                    $http.defaults.headers.common['Authorization'] = 'Basic ' + $cookies.get('STNCreds');
-                    $http.defaults.headers.common['Accept'] = 'application/json';
+                    $http.defaults.headers.common.Authorization = 'Basic ' + $cookies.get('STNCreds');
+                    $http.defaults.headers.common.Accept = 'application/json';
                     DEPLOYMENT_TYPE.save($scope.newDT, function success(response) {
                         $scope.depTypeList.push(response);
                         $scope.newDT = {};
@@ -1380,8 +1380,8 @@
 
             $scope.saveDepType = function (data, id) {
                 var retur = false;
-                $http.defaults.headers.common['Authorization'] = 'Basic ' + $cookies.get('STNCreds');
-                $http.defaults.headers.common['Accept'] = 'application/json';
+                $http.defaults.headers.common.Authorization = 'Basic ' + $cookies.get('STNCreds');
+                $http.defaults.headers.common.Accept = 'application/json';
                 DEPLOYMENT_TYPE.update({ id: id }, data, function success(response) {
                     retur = response;
                     toastr.success("Deployment Type Updated");
@@ -1411,7 +1411,7 @@
                     //yes, remove this keyword
                     var index = $scope.depTypeList.indexOf(dt);
                     //DELETE it
-                    $http.defaults.headers.common['Authorization'] = 'Basic ' + $cookies.get('STNCreds');
+                    $http.defaults.headers.common.Authorization = 'Basic ' + $cookies.get('STNCreds');
                     DEPLOYMENT_TYPE.delete({ id: dt.DEPLOYMENT_TYPE_ID }, dt, function success(response) {
                         $scope.depTypeList.splice(index, 1);
                         toastr.success("Deployment Type Removed");
@@ -1443,8 +1443,8 @@
             };
             $scope.AddStatusType = function (valid) {
                 if (valid) {
-                    $http.defaults.headers.common['Authorization'] = 'Basic ' + $cookies.get('STNCreds');
-                    $http.defaults.headers.common['Accept'] = 'application/json';
+                    $http.defaults.headers.common.Authorization = 'Basic ' + $cookies.get('STNCreds');
+                    $http.defaults.headers.common.Accept = 'application/json';
                     STATUS_TYPE.save($scope.newStatT, function success(response) {
                         $scope.statTypeList.push(response);
                         $scope.newStatTT = {};
@@ -1458,8 +1458,8 @@
             };
             $scope.saveStatusType = function (data, id) {
                 var retur = false;
-                $http.defaults.headers.common['Authorization'] = 'Basic ' + $cookies.get('STNCreds');
-                $http.defaults.headers.common['Accept'] = 'application/json';
+                $http.defaults.headers.common.Authorization = 'Basic ' + $cookies.get('STNCreds');
+                $http.defaults.headers.common.Accept = 'application/json';
                 STATUS_TYPE.update({ id: id }, data, function success(response) {
                     retur = response;
                     toastr.success("Status Type Updated");
@@ -1485,7 +1485,7 @@
                 });
                 modalInstance.result.then(function (keyToRemove) {
                     var index = $scope.statTypeList.indexOf(statT);
-                    $http.defaults.headers.common['Authorization'] = 'Basic ' + $cookies.get('STNCreds');
+                    $http.defaults.headers.common.Authorization = 'Basic ' + $cookies.get('STNCreds');
                     STATUS_TYPE.delete({ id: statT.STATUS_TYPE_ID }, statT, function success(response) {
                         $scope.statTypeList.splice(index, 1);
                         toastr.success("Status Type Removed");
@@ -1577,7 +1577,7 @@
             //new sensor type being added, they checked to relate a deployment type. store for use during save
             $scope.addDepTypeToNewSenT = function (dt) {
                 var test;
-                if (dt.selected == true) {
+                if (dt.selected === true) {
                     //dont add it more than once
                     if ($scope.newDepTypeRelating.length > 0) {
                         for (var d = 0; d < $scope.newDepTypeRelating.length; d++) {
@@ -1591,7 +1591,7 @@
                         }
                     }
 
-                    if ($scope.newDepTypeRelating.length == 0)
+                    if ($scope.newDepTypeRelating.length === 0)
                         $scope.newDepTypeRelating.push(dt);
 
                 }
@@ -1600,8 +1600,8 @@
                 if (valid) {
                     var newSensor = {};
                     var relatedDeps = [];
-                    $http.defaults.headers.common['Authorization'] = 'Basic ' + $cookies.get('STNCreds');
-                    $http.defaults.headers.common['Accept'] = 'application/json';
+                    $http.defaults.headers.common.Authorization = 'Basic ' + $cookies.get('STNCreds');
+                    $http.defaults.headers.common.Accept = 'application/json';
                     SENSOR_TYPE.save($scope.newSenT, function success(response) {
                         newSensor = response;
                         $scope.newSenT = {};
@@ -1629,8 +1629,8 @@
             };
             $scope.saveSensorType = function (data, id) {
                 var retur = false;
-                $http.defaults.headers.common['Authorization'] = 'Basic ' + $cookies.get('STNCreds');
-                $http.defaults.headers.common['Accept'] = 'application/json';
+                $http.defaults.headers.common.Authorization = 'Basic ' + $cookies.get('STNCreds');
+                $http.defaults.headers.common.Accept = 'application/json';
                 //pull out just the sensor and then the deployment type to post separately
                 var ST = { SENSOR_TYPE_ID: data.SENSOR_TYPE_ID, SENSOR: data.SENSOR };
                 var DTs = [];
@@ -1685,7 +1685,7 @@
                 modalInstance.result.then(function (keyToRemove) {
                     var index = $scope.formattedSensTypeList.indexOf(senT);
                     var ST = { SENSOR_TYPE_ID: senT.SENSOR_TYPE_ID, SENSOR: senT.SENSOR };
-                    $http.defaults.headers.common['Authorization'] = 'Basic ' + $cookies.get('STNCreds');
+                    $http.defaults.headers.common.Authorization = 'Basic ' + $cookies.get('STNCreds');
 
                     //need to delete the relationship before I can delete the sensor type                    
                     angular.forEach($scope.depTypeList, function (s) {
@@ -1732,8 +1732,8 @@
 
             $scope.AddNetType = function (valid) {
                 if (valid) {
-                    $http.defaults.headers.common['Authorization'] = 'Basic ' + $cookies.get('STNCreds');
-                    $http.defaults.headers.common['Accept'] = 'application/json';
+                    $http.defaults.headers.common.Authorization = 'Basic ' + $cookies.get('STNCreds');
+                    $http.defaults.headers.common.Accept = 'application/json';
                     NETWORK_TYPE.save($scope.newNT, function success(response) {
                         $scope.netTypeList.push(response);
                         $scope.newNT = {};
@@ -1748,8 +1748,8 @@
 
             $scope.saveNetType = function (data, id) {
                 var retur = false;
-                $http.defaults.headers.common['Authorization'] = 'Basic ' + $cookies.get('STNCreds');
-                $http.defaults.headers.common['Accept'] = 'application/json';
+                $http.defaults.headers.common.Authorization = 'Basic ' + $cookies.get('STNCreds');
+                $http.defaults.headers.common.Accept = 'application/json';
                 NETWORK_TYPE.update({ id: id }, data, function success(response) {
                     retur = response;
                     toastr.success("Network Type Updated");
@@ -1779,7 +1779,7 @@
                     //yes, remove this keyword
                     var index = $scope.netTypeList.indexOf(nt);
                     //DELETE it
-                    $http.defaults.headers.common['Authorization'] = 'Basic ' + $cookies.get('STNCreds');
+                    $http.defaults.headers.common.Authorization = 'Basic ' + $cookies.get('STNCreds');
                     NETWORK_TYPE.delete({ id: nt.NETWORK_TYPE_ID }, nt, function success(response) {
                         $scope.netTypeList.splice(index, 1);
                         toastr.success("Network Type Removed");
@@ -1811,8 +1811,8 @@
             };
             $scope.AddVertColMeth = function (valid) {
                 if (valid) {
-                    $http.defaults.headers.common['Authorization'] = 'Basic ' + $cookies.get('STNCreds');
-                    $http.defaults.headers.common['Accept'] = 'application/json';
+                    $http.defaults.headers.common.Authorization = 'Basic ' + $cookies.get('STNCreds');
+                    $http.defaults.headers.common.Accept = 'application/json';
                     VERTICAL_COLL_METHOD.save($scope.newVCM, function success(response) {
                         $scope.vertColMethList.push(response);
                         $scope.newVCM = {};
@@ -1826,8 +1826,8 @@
             };
             $scope.saveVertColMeth = function (data, id) {
                 var retur = false;
-                $http.defaults.headers.common['Authorization'] = 'Basic ' + $cookies.get('STNCreds');
-                $http.defaults.headers.common['Accept'] = 'application/json';
+                $http.defaults.headers.common.Authorization = 'Basic ' + $cookies.get('STNCreds');
+                $http.defaults.headers.common.Accept = 'application/json';
                 VERTICAL_COLL_METHOD.update({ id: id }, data, function success(response) {
                     retur = response;
                     toastr.success("Vertical Collection Method Updated");
@@ -1853,7 +1853,7 @@
                 });
                 modalInstance.result.then(function (keyToRemove) {
                     var index = $scope.vertColMethList.indexOf(vcm);
-                    $http.defaults.headers.common['Authorization'] = 'Basic ' + $cookies.get('STNCreds');
+                    $http.defaults.headers.common.Authorization = 'Basic ' + $cookies.get('STNCreds');
                     VERTICAL_COLL_METHOD.delete({ id: vcm.VCOLLECT_METHOD_ID }, vcm, function success(response) {
                         $scope.vertColMethList.splice(index, 1);
                         toastr.success("Vertical Collection Method Removed");
@@ -1885,8 +1885,8 @@
             };
             $scope.AddVertDatum = function (valid) {
                 if (valid) {
-                    $http.defaults.headers.common['Authorization'] = 'Basic ' + $cookies.get('STNCreds');
-                    $http.defaults.headers.common['Accept'] = 'application/json';
+                    $http.defaults.headers.common.Authorization = 'Basic ' + $cookies.get('STNCreds');
+                    $http.defaults.headers.common.Accept = 'application/json';
                     VERTICAL_DATUM.save($scope.newVD, function success(response) {
                         $scope.vertDatList.push(response);
                         $scope.newVD = {};
@@ -1900,8 +1900,8 @@
             };
             $scope.saveVertDatum = function (data, id) {
                 var retur = false;
-                $http.defaults.headers.common['Authorization'] = 'Basic ' + $cookies.get('STNCreds');
-                $http.defaults.headers.common['Accept'] = 'application/json';
+                $http.defaults.headers.common.Authorization = 'Basic ' + $cookies.get('STNCreds');
+                $http.defaults.headers.common.Accept = 'application/json';
                 VERTICAL_DATUM.update({ id: id }, data, function success(response) {
                     retur = response;
                     toastr.success("Vertical Datum Updated");
@@ -1927,7 +1927,7 @@
                 });
                 modalInstance.result.then(function (keyToRemove) {
                     var index = $scope.vertDatList.indexOf(vd);
-                    $http.defaults.headers.common['Authorization'] = 'Basic ' + $cookies.get('STNCreds');
+                    $http.defaults.headers.common.Authorization = 'Basic ' + $cookies.get('STNCreds');
                     VERTICAL_DATUM.delete({ id: vd.DATUM_ID }, vd, function success(response) {
                         $scope.vertDatList.splice(index, 1);
                         toastr.success("Vertical Datum Removed");

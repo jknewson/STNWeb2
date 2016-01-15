@@ -6,7 +6,7 @@
     //#region event Controller (abstract)
     SettingsControllers.controller('eventCtrl', ['$scope', '$rootScope', '$cookies', '$location', '$http', '$filter', 'MEMBER', 'allEvents', 'allEventTypes', 'allEventStats', eventCtrl]);
     function eventCtrl($scope, $rootScope, $cookies, $location, $http, $filter, MEMBER, allEvents, allEventTypes, allEventStats) {
-        if ($cookies.get('STNCreds') == undefined || $cookies.get('STNCreds') == "") {
+        if ($cookies.get('STNCreds') === undefined || $cookies.get('STNCreds') === "") {
             $scope.auth = false;
             $location.path('/login');
         } else {
@@ -34,8 +34,8 @@
 
             $scope.eventTypeList = allEventTypes;
             $scope.eventStatList = allEventStats;
-            $http.defaults.headers.common['Authorization'] = 'Basic ' + $cookies.get('STNCreds');
-            $http.defaults.headers.common['Accept'] = 'application/json';
+            $http.defaults.headers.common.Authorization = 'Basic ' + $cookies.get('STNCreds');
+            $http.defaults.headers.common.Accept = 'application/json';
             MEMBER.getRoleMembers({ roleId: 1 }).$promise.then(function (response) {
                 $scope.eventCoordList = response;
                 $scope.eventList = [];
@@ -48,7 +48,7 @@
                     var coord = $scope.eventCoordList.filter(function (c) { return c.MEMBER_ID == allEvents[x].EVENT_COORDINATOR; })[0];
                     E.StartDate = allEvents[x].EVENT_START_DATE;
                     E.EndDate = allEvents[x].EVENT_END_DATE;
-                    E.Coord = coord != undefined ? coord.FNAME + " " + coord.LNAME : "";
+                    E.Coord = coord !== undefined ? coord.FNAME + " " + coord.LNAME : "";
 
                     $scope.eventList.push(E);
                 }

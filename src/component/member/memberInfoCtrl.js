@@ -6,7 +6,7 @@
     //#region memberInfo Controller
     SettingsControllers.controller('memberInfoCtrl', ['$scope', '$cookies', '$location', '$http', '$uibModal', '$stateParams', '$filter', 'MEMBER', 'thisMember', memberInfoCtrl]);
     function memberInfoCtrl($scope, $cookies, $location, $http, $uibModal, $stateParams, $filter, MEMBER, thisMember) {
-        if ($cookies.get('STNCreds') == undefined || $cookies.get('STNCreds') == "") {
+        if ($cookies.get('STNCreds') === undefined || $cookies.get('STNCreds') === "") {
             $scope.auth = false;
             $location.path('/login');
         } else {
@@ -35,7 +35,7 @@
                     //yes, remove this keyword
                     var test;
                     //DELETE it
-                    $http.defaults.headers.common['Authorization'] = 'Basic ' + $cookies.get('STNCreds');
+                    $http.defaults.headers.common.Authorization = 'Basic ' + $cookies.get('STNCreds');
 
                     MEMBER.deleteMember({ id: nameToRemove.MEMBER_ID }, function success(response) {
                         var delMem = {};
@@ -64,7 +64,7 @@
             $scope.newPass = "";
 
             //is this creating new member or editing existing?
-            if (thisMember != undefined) {
+            if (thisMember !== undefined) {
 
                 //check to see if the acct User is the same as the user they are looking at
                 $scope.matchingUsers = $stateParams.id == $scope.loggedInUser.ID ? true : false;
@@ -74,30 +74,50 @@
                 $scope.changePass = false;
 
                 //change to the user made, put it .. fired on each blur after change made to field
-                $scope.SaveOnBlur = function () {
-                    if ($scope.aMember) {
-                        //ensure they don't delete required field values
-                        if ($scope.aMember.FNAME != null) {
-                            $http.defaults.headers.common['Authorization'] = 'Basic ' + $cookies.get('STNCreds');
-                            $http.defaults.headers.common['Accept'] = 'application/json';
-                            MEMBER.update({ id: $scope.aMember.MEMBER_ID }, $scope.aMember, function success(response) {
-                                toastr.success("Member Updated");
-                            }, function error(errorResponse) {
-                                toastr.error("Error: " + errorResponse.statusText);
-                            });
-                        }
+                $scope.SaveOnBlur = function (v) {
+                    if (v) {
+                        //ensure they don't delete required field values                        
+                        $http.defaults.headers.common.Authorization = 'Basic ' + $cookies.get('STNCreds');
+                        $http.defaults.headers.common.Accept = 'application/json';
+                        MEMBER.update({ id: $scope.aMember.MEMBER_ID }, $scope.aMember, function success(response) {
+                            toastr.success("Member Updated");
+                        }, function error(errorResponse) {
+                            toastr.error("Error: " + errorResponse.statusText);
+                        });                        
+                    } else {
+                        var errorModal = $uibModal.open({
+                            template: '<div class="modal-header"><h3 class="modal-title">Error</h3></div>' +
+                                '<div class="modal-body"><p>Please populate all required fields.</p></div>' +
+                                '<div class="modal-footer"><button class="btn btn-primary" ng-enter="ok()" ng-click="ok()">OK</button></div>',
+                            controller: function ($scope, $uibModalInstance) {
+                                $scope.ok = function () {
+                                    $uibModalInstance.close();
+                                };
+                            },
+                            size: 'sm'
+                        });                        
                     }
                 };//end SaveOnBlur
 
                 //password update section
                 $scope.changeMyPassBtn = function (evt) {
-                    $scope.changePass == false ? $scope.changePass = true : $scope.changePass = false;
+                    $scope.changePass === false ? $scope.changePass = true : $scope.changePass = false;
                 };
 
                 $scope.ChangePassword = function () {
                     //change User's password
-                    if ($scope.pass.newP == "" || $scope.pass.confirmP == "") {
-                        alert("You must first enter a new password");
+                    if ($scope.pass.newP === "" || $scope.pass.confirmP === "") {
+                        var errorModal = $uibModal.open({
+                            template: '<div class="modal-header"><h3 class="modal-title">Error</h3></div>' +
+                                '<div class="modal-body"><p>You must first enter a new password.</p></div>' +
+                                '<div class="modal-footer"><button class="btn btn-primary" ng-enter="ok()" ng-click="ok()">OK</button></div>',
+                            controller: function ($scope, $uibModalInstance) {
+                                $scope.ok = function () {
+                                    $uibModalInstance.close();
+                                };
+                            },
+                            size: 'sm'
+                        });                        
                     } else {
                         MEMBER.changePW({ username: $scope.aMember.USERNAME, newPass: $scope.pass.newP },
                             function success(response) {
@@ -149,8 +169,8 @@
                 //this is a new member being created
                 $scope.save = function (valid) {
                     if (valid) {
-                        $http.defaults.headers.common['Authorization'] = 'Basic ' + $cookies.get('STNCreds');
-                        $http.defaults.headers.common['Accept'] = 'application/json';
+                        $http.defaults.headers.common.Authorization = 'Basic ' + $cookies.get('STNCreds');
+                        $http.defaults.headers.common.Accept = 'application/json';
 
                         MEMBER.addMember({ pass: $scope.pass.confirmP }, $scope.aMember, function success(response) {
                             toastr.success("Member Created");

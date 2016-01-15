@@ -6,7 +6,7 @@
  //#region HWM
     STNControllers.controller('hwmCtrl', ['$scope', '$cookies', '$location', '$state', '$http', '$uibModal', '$filter', '$timeout', 'thisSite', 'thisSiteHWMs', 'allHWMTypes', 'allHWMQualities', 'allHorDatums', 'allMarkers', 'allHorCollMethods', 'allVertDatums', 'allVertColMethods', 'allEvents', 'MEMBER', hwmCtrl]);
     function hwmCtrl($scope, $cookies, $location, $state, $http, $uibModal, $filter, $timeout, thisSite, thisSiteHWMs, allHWMTypes, allHWMQualities, allHorDatums, allMarkers, allHorCollMethods, allVertDatums, allVertColMethods, allEvents, MEMBER) {
-        if ($cookies.get('STNCreds') == undefined || $cookies.get('STNCreds') == "") {
+        if ($cookies.get('STNCreds') === undefined || $cookies.get('STNCreds') === "") {
             $scope.auth = false;
             $location.path('/login');
             } else {
@@ -15,9 +15,9 @@
             $scope.SiteHWMs = thisSiteHWMs;
             // watch for the session event to change and update
             $scope.$watch(function () { return $cookies.get('SessionEventName'); }, function (newValue) {
-                $scope.sessionEventName = newValue != undefined ? newValue : "All Events";
+                $scope.sessionEventName = newValue !== undefined ? newValue : "All Events";
                 $scope.sessionEventExists = $scope.sessionEventName != "All Events" ? true : false;
-                if (newValue != undefined) {
+                if (newValue !== undefined) {
                     $scope.SiteHWMs = thisSiteHWMs.filter(function (h) { return h.EVENT_ID == $cookies.get('SessionEventID'); });
                     $scope.hwmCount = { total: $scope.SiteHWMs.length };
                 } else {
@@ -42,14 +42,14 @@
                                 return passAllLists;
                             },
                             thisHWM: function () {
-                                return HWMclicked != 0 ? HWMclicked: "empty";
+                                return HWMclicked !== 0 ? HWMclicked: "empty";
                             },
                             hwmSite: function () {
                                 return thisSite;
                             },
                             allMembers: function () {
-                                $http.defaults.headers.common['Authorization'] = 'Basic ' + $cookies.get('STNCreds');
-                                $http.defaults.headers.common['Accept'] = 'application/json';
+                                $http.defaults.headers.common.Authorization = 'Basic ' + $cookies.get('STNCreds');
+                                $http.defaults.headers.common.Accept = 'application/json';
                                 return MEMBER.getAll().$promise;
                             }
                        }

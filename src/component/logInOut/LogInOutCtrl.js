@@ -33,13 +33,13 @@
                 "password": $scope.password
             };
             var up = $scope.username + ":" + $scope.password;
-            $http.defaults.headers.common['Authorization'] = 'Basic ' + btoa(up);
-            $http.defaults.headers.common['Accept'] = 'application/json';
+            $http.defaults.headers.common.Authorization = 'Basic ' + btoa(up);
+            $http.defaults.headers.common.Accept = 'application/json';
 
             Login.login({}, postData,
                 function success(response) {
                     var user = response;
-                    if (user != undefined) {
+                    if (user !== undefined) {
                         //set user cookies (cred, username, name, role
                         var usersNAME = user.FNAME + " " + user.LNAME;
                         var enc = btoa($scope.username.concat(":", $scope.password));
@@ -85,7 +85,7 @@
                         controller: function ($scope, $uibModalInstance) {
                             $scope.ok = function () {
                                 $uibModalInstance.close();
-                            }
+                            };
                             $scope.status = errorResponse.status;
                             $scope.statusText = errorResponse.statusText;
                         },

@@ -7,7 +7,7 @@
     //#region settings (abstract)
     SettingsControllers.controller('settingsCtrl', ['$scope', '$rootScope', '$cookies', '$location', '$state', settingsCtrl]);
     function settingsCtrl($scope, $rootScope, $cookies, $location, $state) {
-        if ($cookies.get('STNCreds') == undefined || $cookies.get('STNCreds') == "") {
+        if ($cookies.get('STNCreds') === undefined || $cookies.get('STNCreds') === "") {
             $scope.auth = false;
             $location.path('/login');
         } else {
