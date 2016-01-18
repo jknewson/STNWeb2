@@ -18,7 +18,7 @@ var paths = {
     images: 'src/images/**/*',
     fonts: 'src/fonts/**/*',
     index: 'src/index.html',
-    partials: ['src/**/*.html', '!src/index.html'],
+    partials: ['src/component/**/*.html', '!src/index.html'],
     distDev: 'dist.dev',
     distProd: 'dist.prod',
     distScriptsProd: 'dist.prod/scripts'
@@ -61,8 +61,8 @@ pipes.builtAppScriptsProd = function() {
     return es.merge(scriptedPartials, validatedAppScripts)
         .pipe(pipes.orderedAppScripts())
         .pipe(plugins.sourcemaps.init())
-            .pipe(plugins.concat('app.min.js'))
-            .pipe(plugins.uglify())
+        .pipe(plugins.concat('app.min.js'))
+        .pipe(plugins.uglify())
         .pipe(plugins.sourcemaps.write())
         .pipe(gulp.dest(paths.distScriptsProd));
 };
@@ -94,7 +94,7 @@ pipes.validatedPartials = function() {
 
 pipes.builtPartialsDev = function() {
     return pipes.validatedPartials()
-        .pipe(gulp.dest(paths.distDev));
+        .pipe(gulp.dest(paths.distDev + '/component'));
 };
 
 ///put app name below on moduleName var
@@ -278,11 +278,11 @@ gulp.task('watch-dev', ['build-app-dev'], function() {
     //        console.log('[nodemon] restarted dev server');
     //    });
 
-     connect.server({
-         root: 'dist.dev',
-         port: 9000,
-         livereload: true
-     });
+    connect.server({
+        root: 'dist.dev',
+        port: 9000,
+        livereload: true
+    });
 
     open("http://localhost:9000");
 
@@ -293,24 +293,28 @@ gulp.task('watch-dev', ['build-app-dev'], function() {
     gulp.watch(paths.index, function() {
         return pipes.builtIndexDev()
             //.pipe(plugins.livereload());
+            .pipe(connect.reload());
     });
 
     // watch app scripts
     gulp.watch(paths.scripts, function() {
         return pipes.builtAppScriptsDev()
             //.pipe(plugins.livereload());
+            .pipe(connect.reload());
     });
 
     // watch html partials
     gulp.watch(paths.partials, function() {
         return pipes.builtPartialsDev()
             //.pipe(plugins.livereload());
+            .pipe(connect.reload());
     });
 
     // watch styles
     gulp.watch(paths.styles, function() {
         return pipes.builtStylesDev()
             //.pipe(plugins.livereload());
+            .pipe(connect.reload());
     });
 
 });
@@ -339,25 +343,29 @@ gulp.task('watch-prod', ['build-app-prod'], function() {
     // watch index
     gulp.watch(paths.index, function() {
         return pipes.builtIndexProd()
-            .pipe(plugins.livereload());
+            //.pipe(plugins.livereload());
+            .pipe(connect.reload());
     });
 
     // watch app scripts
     gulp.watch(paths.scripts, function() {
         return pipes.builtAppScriptsProd()
-            .pipe(plugins.livereload());
+            //.pipe(plugins.livereload());
+            .pipe(connect.reload());
     });
 
     // watch hhtml partials
     gulp.watch(paths.partials, function() {
         return pipes.builtAppScriptsProd()
-            .pipe(plugins.livereload());
+            //.pipe(plugins.livereload());
+            .pipe(connect.reload());
     });
 
     // watch styles
     gulp.watch(paths.styles, function() {
         return pipes.builtStylesProd()
-            .pipe(plugins.livereload());
+            //.pipe(plugins.livereload());
+            .pipe(connect.reload());
     });
 
 });
