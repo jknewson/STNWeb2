@@ -3,98 +3,9 @@
   <component name="ChangeListManager">
     <list default="true" id="7bbb61f3-c3e9-4f8f-bc19-016119329c6d" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/bower.json" afterPath="$PROJECT_DIR$/bower.json" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/bower_components/angular-ui-bootstrap-datetimepicker/.bower.json" afterPath="$PROJECT_DIR$/bower_components/angular-ui-bootstrap-datetimepicker/.bower.json" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/bower_components/angular-ui-bootstrap-datetimepicker/datetimepicker.js" afterPath="$PROJECT_DIR$/bower_components/angular-ui-bootstrap-datetimepicker/datetimepicker.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/dist.dev/app.js" afterPath="$PROJECT_DIR$/dist.dev/app.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/dist.dev/bower_components/datetimepicker.js" afterPath="$PROJECT_DIR$/dist.dev/bower_components/datetimepicker.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/dist.dev/component/ModalsCtrl.js" afterPath="$PROJECT_DIR$/dist.dev/component/ModalsCtrl.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/dist.dev/component/approval/approval.html" afterPath="$PROJECT_DIR$/dist.dev/component/approval/approval.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/dist.dev/component/event/eventInfo.html" afterPath="$PROJECT_DIR$/dist.dev/component/event/eventInfo.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/dist.dev/component/file/file.html" afterPath="$PROJECT_DIR$/dist.dev/component/file/file.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/dist.dev/component/home/homeBase.html" afterPath="$PROJECT_DIR$/dist.dev/component/home/homeBase.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/dist.dev/component/hwm/quickHWM.html" afterPath="$PROJECT_DIR$/dist.dev/component/hwm/quickHWM.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/dist.dev/component/member/memberInfo.html" afterPath="$PROJECT_DIR$/dist.dev/component/member/memberInfo.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/dist.dev/component/reporting/completedReportView.html" afterPath="$PROJECT_DIR$/dist.dev/component/reporting/completedReportView.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/dist.dev/component/reporting/generateReport.html" afterPath="$PROJECT_DIR$/dist.dev/component/reporting/generateReport.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/dist.dev/component/reporting/reporting.html" afterPath="$PROJECT_DIR$/dist.dev/component/reporting/reporting.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/dist.dev/component/reporting/reportingDashboard.html" afterPath="$PROJECT_DIR$/dist.dev/component/reporting/reportingDashboard.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/dist.dev/component/reporting/submitReport.html" afterPath="$PROJECT_DIR$/dist.dev/component/reporting/submitReport.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/dist.dev/component/resources/agency.html" afterPath="$PROJECT_DIR$/dist.dev/component/resources/agency.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/dist.dev/component/resources/contactType.html" afterPath="$PROJECT_DIR$/dist.dev/component/resources/contactType.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/dist.dev/component/resources/deploymentPriority.html" afterPath="$PROJECT_DIR$/dist.dev/component/resources/deploymentPriority.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/dist.dev/component/resources/deploymentType.html" afterPath="$PROJECT_DIR$/dist.dev/component/resources/deploymentType.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/dist.dev/component/resources/eventStatus.html" afterPath="$PROJECT_DIR$/dist.dev/component/resources/eventStatus.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/dist.dev/component/resources/eventType.html" afterPath="$PROJECT_DIR$/dist.dev/component/resources/eventType.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/dist.dev/component/resources/fileType.html" afterPath="$PROJECT_DIR$/dist.dev/component/resources/fileType.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/dist.dev/component/resources/horizontalCollectionMethod.html" afterPath="$PROJECT_DIR$/dist.dev/component/resources/horizontalCollectionMethod.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/dist.dev/component/resources/horizontalDatum.html" afterPath="$PROJECT_DIR$/dist.dev/component/resources/horizontalDatum.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/dist.dev/component/resources/housingType.html" afterPath="$PROJECT_DIR$/dist.dev/component/resources/housingType.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/dist.dev/component/resources/hwmQuality.html" afterPath="$PROJECT_DIR$/dist.dev/component/resources/hwmQuality.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/dist.dev/component/resources/hwmType.html" afterPath="$PROJECT_DIR$/dist.dev/component/resources/hwmType.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/dist.dev/component/resources/instrumentCollectionCondition.html" afterPath="$PROJECT_DIR$/dist.dev/component/resources/instrumentCollectionCondition.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/dist.dev/component/resources/marker.html" afterPath="$PROJECT_DIR$/dist.dev/component/resources/marker.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/dist.dev/component/resources/networkNames.html" afterPath="$PROJECT_DIR$/dist.dev/component/resources/networkNames.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/dist.dev/component/resources/networkType.html" afterPath="$PROJECT_DIR$/dist.dev/component/resources/networkType.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/dist.dev/component/resources/objectivePointQuality.html" afterPath="$PROJECT_DIR$/dist.dev/component/resources/objectivePointQuality.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/dist.dev/component/resources/objectivePointType.html" afterPath="$PROJECT_DIR$/dist.dev/component/resources/objectivePointType.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/dist.dev/component/resources/sensorBrand.html" afterPath="$PROJECT_DIR$/dist.dev/component/resources/sensorBrand.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/dist.dev/component/resources/sensorType.html" afterPath="$PROJECT_DIR$/dist.dev/component/resources/sensorType.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/dist.dev/component/resources/statusType.html" afterPath="$PROJECT_DIR$/dist.dev/component/resources/statusType.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/dist.dev/component/resources/verticalCollectionMethod.html" afterPath="$PROJECT_DIR$/dist.dev/component/resources/verticalCollectionMethod.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/dist.dev/component/resources/verticalDatum.html" afterPath="$PROJECT_DIR$/dist.dev/component/resources/verticalDatum.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/dist.dev/component/sensor/sensorCtrl.js" afterPath="$PROJECT_DIR$/dist.dev/component/sensor/sensorCtrl.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/dist.dev/component/sensor/sensorList.html" afterPath="$PROJECT_DIR$/dist.dev/component/sensor/sensorList.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/dist.dev/component/sensor/sensorModalCtrl.js" afterPath="$PROJECT_DIR$/dist.dev/component/sensor/sensorModalCtrl.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/dist.dev/component/site/site.html" afterPath="$PROJECT_DIR$/dist.dev/component/site/site.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/dist.dev/component/site/siteInfoView.html" afterPath="$PROJECT_DIR$/dist.dev/component/site/siteInfoView.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/dist.dev/component/siteSearch/siteSearch.html" afterPath="$PROJECT_DIR$/dist.dev/component/siteSearch/siteSearch.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/dist.dev/services/STNResource.js" afterPath="$PROJECT_DIR$/dist.dev/services/STNResource.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/dist.prod/css/bootstrap-table.min.css" afterPath="$PROJECT_DIR$/dist.prod/css/bootstrap-table.min.css" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/dist.prod/index.html" afterPath="$PROJECT_DIR$/dist.prod/index.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/app.js" afterPath="$PROJECT_DIR$/src/app.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/component/ModalsCtrl.js" afterPath="$PROJECT_DIR$/src/component/ModalsCtrl.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/component/approval/approval.html" afterPath="$PROJECT_DIR$/src/component/approval/approval.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/component/event/eventInfo.html" afterPath="$PROJECT_DIR$/src/component/event/eventInfo.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/component/file/file.html" afterPath="$PROJECT_DIR$/src/component/file/file.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/component/home/homeBase.html" afterPath="$PROJECT_DIR$/src/component/home/homeBase.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/component/hwm/quickHWM.html" afterPath="$PROJECT_DIR$/src/component/hwm/quickHWM.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/component/member/memberInfo.html" afterPath="$PROJECT_DIR$/src/component/member/memberInfo.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/component/reporting/completedReportView.html" afterPath="$PROJECT_DIR$/src/component/reporting/completedReportView.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/component/reporting/generateReport.html" afterPath="$PROJECT_DIR$/src/component/reporting/generateReport.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/component/reporting/reporting.html" afterPath="$PROJECT_DIR$/src/component/reporting/reporting.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/component/reporting/reportingDashboard.html" afterPath="$PROJECT_DIR$/src/component/reporting/reportingDashboard.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/component/reporting/submitReport.html" afterPath="$PROJECT_DIR$/src/component/reporting/submitReport.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/component/resources/agency.html" afterPath="$PROJECT_DIR$/src/component/resources/agency.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/component/resources/contactType.html" afterPath="$PROJECT_DIR$/src/component/resources/contactType.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/component/resources/deploymentPriority.html" afterPath="$PROJECT_DIR$/src/component/resources/deploymentPriority.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/component/resources/deploymentType.html" afterPath="$PROJECT_DIR$/src/component/resources/deploymentType.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/component/resources/eventStatus.html" afterPath="$PROJECT_DIR$/src/component/resources/eventStatus.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/component/resources/eventType.html" afterPath="$PROJECT_DIR$/src/component/resources/eventType.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/component/resources/fileType.html" afterPath="$PROJECT_DIR$/src/component/resources/fileType.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/component/resources/horizontalCollectionMethod.html" afterPath="$PROJECT_DIR$/src/component/resources/horizontalCollectionMethod.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/component/resources/horizontalDatum.html" afterPath="$PROJECT_DIR$/src/component/resources/horizontalDatum.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/component/resources/housingType.html" afterPath="$PROJECT_DIR$/src/component/resources/housingType.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/component/resources/hwmQuality.html" afterPath="$PROJECT_DIR$/src/component/resources/hwmQuality.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/component/resources/hwmType.html" afterPath="$PROJECT_DIR$/src/component/resources/hwmType.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/component/resources/instrumentCollectionCondition.html" afterPath="$PROJECT_DIR$/src/component/resources/instrumentCollectionCondition.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/component/resources/marker.html" afterPath="$PROJECT_DIR$/src/component/resources/marker.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/component/resources/networkNames.html" afterPath="$PROJECT_DIR$/src/component/resources/networkNames.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/component/resources/networkType.html" afterPath="$PROJECT_DIR$/src/component/resources/networkType.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/component/resources/objectivePointQuality.html" afterPath="$PROJECT_DIR$/src/component/resources/objectivePointQuality.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/component/resources/objectivePointType.html" afterPath="$PROJECT_DIR$/src/component/resources/objectivePointType.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/component/resources/sensorBrand.html" afterPath="$PROJECT_DIR$/src/component/resources/sensorBrand.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/component/resources/sensorType.html" afterPath="$PROJECT_DIR$/src/component/resources/sensorType.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/component/resources/statusType.html" afterPath="$PROJECT_DIR$/src/component/resources/statusType.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/component/resources/verticalCollectionMethod.html" afterPath="$PROJECT_DIR$/src/component/resources/verticalCollectionMethod.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/component/resources/verticalDatum.html" afterPath="$PROJECT_DIR$/src/component/resources/verticalDatum.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/component/sensor/sensorCtrl.js" afterPath="$PROJECT_DIR$/src/component/sensor/sensorCtrl.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/component/sensor/sensorList.html" afterPath="$PROJECT_DIR$/src/component/sensor/sensorList.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/component/sensor/sensorModalCtrl.js" afterPath="$PROJECT_DIR$/src/component/sensor/sensorModalCtrl.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/component/site/site.html" afterPath="$PROJECT_DIR$/src/component/site/site.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/component/site/siteInfoView.html" afterPath="$PROJECT_DIR$/src/component/site/siteInfoView.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/component/siteSearch/siteSearch.html" afterPath="$PROJECT_DIR$/src/component/siteSearch/siteSearch.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/services/STNResource.js" afterPath="$PROJECT_DIR$/src/services/STNResource.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/gulpfile.js" afterPath="$PROJECT_DIR$/gulpfile.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/package.json" afterPath="$PROJECT_DIR$/package.json" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/index.html" afterPath="$PROJECT_DIR$/src/index.html" />
     </list>
     <ignored path="STNWeb2.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -115,47 +26,34 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="gulpfile.js" pinned="false" current-in-tab="false">
+      <file leaf-file-name="gulpfile.js" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/gulpfile.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-22.51724">
-              <caret line="307" column="7" selection-start-line="307" selection-start-column="7" selection-end-line="307" selection-end-column="7" />
+            <state vertical-scroll-proportion="0.5672823">
+              <caret line="228" column="14" selection-start-line="228" selection-start-column="8" selection-end-line="228" selection-end-column="14" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="file.html" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/component/file/file.html">
+      <file leaf-file-name="app.js" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/app.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-22.384615">
-              <caret line="87" column="18" selection-start-line="87" selection-start-column="18" selection-end-line="87" selection-end-column="18" />
-              <folding />
+            <state vertical-scroll-proportion="-8.793103">
+              <caret line="15" column="37" selection-start-line="15" selection-start-column="37" selection-end-line="15" selection-end-column="37" />
+              <folding>
+                <marker date="1452808130489" expanded="true" signature="35050:35062" placeholder="..." />
+              </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="bower.json" pinned="false" current-in-tab="true">
+      <file leaf-file-name="bower.json" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/bower.json">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.64423823">
-              <caret line="49" column="31" selection-start-line="49" selection-start-column="31" selection-end-line="49" selection-end-column="31" />
+            <state vertical-scroll-proportion="-30.73077">
+              <caret line="47" column="36" selection-start-line="47" selection-start-column="36" selection-end-line="47" selection-end-column="36" />
               <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="package.json" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/package.json">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-41.846153">
-              <caret line="64" column="0" selection-start-line="64" selection-start-column="0" selection-end-line="64" selection-end-column="0" />
-              <folding>
-                <marker date="1452797083268" expanded="true" signature="168:270" placeholder="{&quot;postinstall&quot;: &quot;bower install&quot;...}" />
-                <marker date="1452797083268" expanded="true" signature="288:369" placeholder="{&quot;type&quot;: &quot;git&quot;...}" />
-                <marker date="1452797083268" expanded="true" signature="444:505" placeholder="{&quot;url&quot;: &quot;https://github.com/USGS-WiM/STNWeb2/issues&quot;...}" />
-                <marker date="1452797083268" expanded="true" signature="588:1749" placeholder="{&quot;body-parser&quot;: &quot;^1.14.2&quot;...}" />
-              </folding>
             </state>
           </provider>
         </entry>
@@ -163,8 +61,8 @@
       <file leaf-file-name="index.html" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/index.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-11.769231">
-              <caret line="18" column="22" selection-start-line="18" selection-start-column="22" selection-end-line="18" selection-end-column="22" />
+            <state vertical-scroll-proportion="-7.418182">
+              <caret line="24" column="19" selection-start-line="24" selection-start-column="19" selection-end-line="24" selection-end-column="19" />
               <folding />
             </state>
           </provider>
@@ -191,10 +89,10 @@
         <option value="$PROJECT_DIR$/dist.dev/index.html" />
         <option value="$PROJECT_DIR$/server.js" />
         <option value="$PROJECT_DIR$/package.json" />
-        <option value="$PROJECT_DIR$/src/index.html" />
-        <option value="$PROJECT_DIR$/gulpfile.js" />
-        <option value="$PROJECT_DIR$/bower.json" />
         <option value="$PROJECT_DIR$/src/component/member/memberInfo.html" />
+        <option value="$PROJECT_DIR$/bower.json" />
+        <option value="$PROJECT_DIR$/gulpfile.js" />
+        <option value="$PROJECT_DIR$/src/index.html" />
       </list>
     </option>
   </component>
@@ -277,7 +175,7 @@
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="HbShouldOpenHtmlAsHb" value="" />
     <property name="js-jscs-nodeInterpreter" value="C:\Program Files\nodejs\node.exe" />
-    <property name="SearchEverywhereHistoryKey" value="inputmask&#9;null&#9;null" />
+    <property name="SearchEverywhereHistoryKey" value="angular.module&#9;null&#9;null&#10;inputmask&#9;null&#9;null" />
   </component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
@@ -352,12 +250,12 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="1912" y="-8" width="2576" height="1456" extended-state="6" />
-    <editor active="true" />
+    <editor active="false" />
     <layout>
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.11484375" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.153125" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32962137" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.39495173" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
@@ -371,6 +269,24 @@
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
     </layout>
+    <layout-to-restore>
+      <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
+      <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
+      <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
+      <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
+      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.153125" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.083890125" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+    </layout-to-restore>
   </component>
   <component name="Vcs.Log.UiProperties">
     <option name="RECENTLY_FILTERED_USER_GROUPS">
@@ -419,16 +335,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/app.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding>
-            <marker date="1452808130489" expanded="true" signature="35050:35062" placeholder="..." />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/component/event/eventCtrl.js">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.4624592">
@@ -450,19 +356,6 @@
         <state vertical-scroll-proportion="0.2964367">
           <caret line="23" column="0" selection-start-line="23" selection-start-column="0" selection-end-line="23" selection-end-column="0" />
           <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/package.json">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-41.846153">
-          <caret line="64" column="0" selection-start-line="64" selection-start-column="0" selection-end-line="64" selection-end-column="0" />
-          <folding>
-            <marker date="1452797083268" expanded="true" signature="168:270" placeholder="{&quot;postinstall&quot;: &quot;bower install&quot;...}" />
-            <marker date="1452797083268" expanded="true" signature="288:369" placeholder="{&quot;type&quot;: &quot;git&quot;...}" />
-            <marker date="1452797083268" expanded="true" signature="444:505" placeholder="{&quot;url&quot;: &quot;https://github.com/USGS-WiM/STNWeb2/issues&quot;...}" />
-            <marker date="1452797083268" expanded="true" signature="588:1749" placeholder="{&quot;body-parser&quot;: &quot;^1.14.2&quot;...}" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -492,30 +385,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/index.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-11.769231">
-          <caret line="18" column="22" selection-start-line="18" selection-start-column="22" selection-end-line="18" selection-end-column="22" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/gulpfile.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-22.51724">
-          <caret line="307" column="7" selection-start-line="307" selection-start-column="7" selection-end-line="307" selection-end-column="7" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/component/file/file.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-22.384615">
-          <caret line="87" column="18" selection-start-line="87" selection-start-column="18" selection-end-line="87" selection-end-column="18" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/component/member/memberInfo.html">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.52855545">
@@ -524,10 +393,58 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/component/file/file.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.17627119">
+          <caret line="17" column="26" selection-start-line="17" selection-start-column="26" selection-end-line="17" selection-end-column="26" />
+          <folding>
+            <element signature="n#style#0;n#input#0;n#div#0;n#div#0;n#div#1;n#fieldset#0;n#form#0;n#!!top" expanded="false" />
+            <element signature="n#style#0;n#input#0;n#div#1;n#div#0;n#div#1;n#fieldset#0;n#form#0;n#!!top" expanded="false" />
+            <element signature="n#style#0;n#div#0;n#div#0;n#div#8;n#fieldset#0;n#form#0;n#!!top" expanded="false" />
+            <element signature="n#style#0;n#div#0;n#div#0;n#div#9;n#fieldset#0;n#form#0;n#!!top" expanded="false" />
+            <element signature="n#style#0;n#div#0;n#div#0;n#div#10;n#fieldset#0;n#form#0;n#!!top" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/app.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-8.793103">
+          <caret line="15" column="37" selection-start-line="15" selection-start-column="37" selection-end-line="15" selection-end-column="37" />
+          <folding>
+            <marker date="1452808130489" expanded="true" signature="35050:35062" placeholder="..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/package.json">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.806713">
+          <caret line="41" column="34" selection-start-line="41" selection-start-column="34" selection-end-line="41" selection-end-column="34" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/bower.json">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.64423823">
-          <caret line="49" column="31" selection-start-line="49" selection-start-column="31" selection-end-line="49" selection-end-column="31" />
+        <state vertical-scroll-proportion="-30.73077">
+          <caret line="47" column="36" selection-start-line="47" selection-start-column="36" selection-end-line="47" selection-end-column="36" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/index.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-7.418182">
+          <caret line="24" column="19" selection-start-line="24" selection-start-column="19" selection-end-line="24" selection-end-column="19" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/gulpfile.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.5672823">
+          <caret line="228" column="14" selection-start-line="228" selection-start-column="8" selection-end-line="228" selection-end-column="14" />
           <folding />
         </state>
       </provider>
