@@ -94,7 +94,7 @@ pipes.validatedPartials = function() {
 
 pipes.builtPartialsDev = function() {
     return pipes.validatedPartials()
-        .pipe(gulp.dest(paths.distDev));
+        .pipe(gulp.dest(paths.distDev + '/component'));
 };
 
 ///put app name below on moduleName var

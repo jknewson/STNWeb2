@@ -5,6 +5,7 @@
 * Licensed under the MIT license (http://www.opensource.org/licenses/mit-license.php)
 * Version: 3.2.4-14
 */
+/* jshint ignore:start */
 !function ($) {
     function Inputmask(alias, options) {
         return this instanceof Inputmask ? ("object" == typeof alias ? options = alias : (options = options || {},
@@ -2615,3 +2616,4 @@
         }
     }), Inputmask;
 }(jQuery, Inputmask);
+/* jshint ignore:end */
