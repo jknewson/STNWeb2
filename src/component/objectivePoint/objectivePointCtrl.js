@@ -6,7 +6,7 @@
     //#region OBJECTIVE_POINT
     STNControllers.controller('objectivePointCtrl', ['$scope', '$cookies', '$location', '$state', '$http', '$uibModal', '$filter', '$timeout', 'OBJECTIVE_POINT', 'thisSite', 'thisSiteOPs', 'allOPTypes', 'allHorDatums', 'allHorCollMethods', 'allVertDatums', 'allVertColMethods', 'allOPQualities', objectivePointCtrl]);
     function objectivePointCtrl($scope, $cookies, $location, $state, $http, $uibModal, $filter, $timeout, OBJECTIVE_POINT, thisSite, thisSiteOPs, allOPTypes, allHorDatums, allHorCollMethods, allVertDatums, allVertColMethods, allOPQualities) {
-        if ($cookies.get('STNCreds') == undefined || $cookies.get('STNCreds') == "") {
+        if ($cookies.get('STNCreds') === undefined || $cookies.get('STNCreds') === "") {
             $scope.auth = false;
             $location.path('/login');
         } else {
@@ -30,10 +30,10 @@
                             return passAllLists;
                         },
                         thisOP: function () {
-                            return OPclicked != 0 ? OPclicked: "empty";
+                            return OPclicked !== 0 ? OPclicked: "empty";
                         },
                         thisOPControls: function () {
-                            if (OPclicked != 0) {
+                            if (OPclicked !== 0) {
                                 return OBJECTIVE_POINT.getOPControls({id: OPclicked.OBJECTIVE_POINT_ID}).$promise;
                             }
                         },

@@ -6,14 +6,14 @@
     STNControllers.controller('submitReportCtrl', ['$scope', '$http', '$cookies', '$uibModal', '$state', 'CONTACT', 'REPORT', submitReportCtrl]);
     function submitReportCtrl($scope, $http, $cookies, $uibModal, $state, CONTACT, REPORT) {
         //#make sure this clears except for if they care needing to complete a report
-        if ($scope.$parent.needToComplete != true) {
+        if ($scope.$parent.needToComplete !== true) {
             $scope.$parent.newReport = {};
         }
 
         //reset it here so form will clear when they leave and come back.
         $scope.$parent.needToComplete = false;
 
-        if ($scope.newReport.REPORTING_METRICS_ID == undefined)
+        if ($scope.newReport.REPORTING_METRICS_ID === undefined)
             $scope.disabled = true;
 
         //get this event name from the eventid
@@ -26,8 +26,8 @@
 
         //#region GET Report Contacts
         var getReportContacts = function (reportID) {
-            $http.defaults.headers.common['Authorization'] = 'Basic ' + $cookies.get('STNCreds');
-            $http.defaults.headers.common['Accept'] = 'application/json';
+            $http.defaults.headers.common.Authorization = 'Basic ' + $cookies.get('STNCreds');
+            $http.defaults.headers.common.Accept = 'application/json';
             CONTACT.getContactModel({ ContactModelByReport: reportID }, function success(response) {
                 $scope.DeployStaff = response.filter(function (d) { return d.TYPE == "Deployed Staff"; })[0];
                 $scope.GenStaff = response.filter(function (d) { return d.TYPE == "General"; })[0];
@@ -46,28 +46,28 @@
             }, function error(errorResponse1) {
                 alert("Error: " + errorResponse1.statusText);
             }).$promise;
-            if ($scope.GenStaff.LNAME != undefined) {
+            if ($scope.GenStaff.LNAME !== undefined) {
                 CONTACT.addReportContact({ contactTypeId: 2, reportId: reportID }, $scope.GenStaff, function success(response2) {
                     toastr.success("General Staff Updated");
                 }, function error(errorResponse2) {
                     alert("Error: " + errorResponse2.statusText);
                 }).$promise;
             }
-            if ($scope.InlandStaff.LNAME != undefined) {
+            if ($scope.InlandStaff.LNAME !== undefined) {
                 CONTACT.addReportContact({ contactTypeId: 3, reportId: reportID }, $scope.InlandStaff, function success(response3) {
                     toastr.success("Inland Staff Updated");
                 }, function error(errorResponse3) {
                     alert("Error: " + errorResponse3.statusText);
                 }).$promise;
             }
-            if ($scope.CoastStaff.LNAME != undefined) {
+            if ($scope.CoastStaff.LNAME !== undefined) {
                 CONTACT.addReportContact({ contactTypeId: 4, reportId: reportID }, $scope.CoastStaff, function success(response4) {
                     toastr.success("Coastal Staff Updated");
                 }, function error(errorResponse4) {
                     alert("Error: " + errorResponse4.statusText);
                 }).$promise;
             }
-            if ($scope.WaterStaff.LNAME != undefined) {
+            if ($scope.WaterStaff.LNAME !== undefined) {
                 CONTACT.addReportContact({ contactTypeId: 5, reportId: reportID }, $scope.WaterStaff, function success(response5) {
                     toastr.success("Water Staff Updated");
                 }, function error(errorResponse5) {
@@ -92,9 +92,9 @@
         //Post/Put the Report and Report Contacts. Called twice (from within Modal (incomplete) and outside (complete))
         var PostPutReportAndReportContacts = function () {
             //POST or PUT
-            $http.defaults.headers.common['Authorization'] = 'Basic ' + $cookies.get('STNCreds');
-            $http.defaults.headers.common['Accept'] = 'application/json';
-            if ($scope.newReport.REPORTING_METRICS_ID != undefined) {
+            $http.defaults.headers.common.Authorization = 'Basic ' + $cookies.get('STNCreds');
+            $http.defaults.headers.common.Accept = 'application/json';
+            if ($scope.newReport.REPORTING_METRICS_ID !== undefined) {
                 //PUT
                 REPORT.update({ id: $scope.newReport.REPORTING_METRICS_ID }, $scope.newReport, function success(response) {
                     toastr.success("Report Updated");
@@ -136,7 +136,7 @@
 
         //get values for Personnel Yesterdays, and Contacts (if report was done yesterday), and all counts for instruments & hwms
         $scope.populateYestTots = function () {
-            if ($scope.newReport.REPORT_DATE != undefined && $scope.newReport.STATE != undefined && $scope.newReport.EVENT_ID != undefined) {
+            if ($scope.newReport.REPORT_DATE !== undefined && $scope.newReport.STATE !== undefined && $scope.newReport.EVENT_ID !== undefined) {
                 var myDate = new Date($scope.newReport.REPORT_DATE);
                 var theState = $scope.newReport.STATE;
                 var eID = $scope.newReport.EVENT_ID;
@@ -153,9 +153,9 @@
                     return (r.EVENT_ID == $scope.newReport.EVENT_ID && r.STATE == $scope.newReport.STATE) &&
                         (new Date(repDate).getTime()) == (previousDay.getTime());
                 })[0];
-                $http.defaults.headers.common['Authorization'] = 'Basic ' + $cookies.get('STNCreds');
-                $http.defaults.headers.common['Accept'] = 'application/json';
-                if (yesterdayRpt != undefined && yesterdayRpt.length > 0) {
+                $http.defaults.headers.common.Authorization = 'Basic ' + $cookies.get('STNCreds');
+                $http.defaults.headers.common.Accept = 'application/json';
+                if (yesterdayRpt !== undefined && yesterdayRpt.length > 0) {
                     // PERSONNEL populating
                     $scope.newReport.SW_YEST_FIELDPERS = yesterdayRpt.SW_TOD_FIELDPERS;
                     $scope.newReport.WQ_YEST_FIELDPERS = yesterdayRpt.WQ_TOD_FIELDPERS;
@@ -202,12 +202,12 @@
 
         //save this report and it's contacts
         $scope.saveReport = function (valid) {
-            if (valid == false) {
+            if (valid === false) {
                 alert("All fields are required");
                 angular.element("[name='" + $scope.fullReportForm.submit.$name + "']").find('.ng-invalid:visible:first').focus();
             } else {
                 //see if they checked the box to complete
-                if ($scope.newReport.COMPLETE == undefined || $scope.newReport.COMPLETE == 0) {
+                if ($scope.newReport.COMPLETE === undefined || $scope.newReport.COMPLETE === 0) {
                     //modal confirming they want to save this without marking it complete
                     var modalInstance = $uibModal.open({
                         templateUrl: 'saveReportModal.html',

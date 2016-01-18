@@ -25,8 +25,8 @@
                         return r;
                     },
                     submitPerson: function () {
-                        $http.defaults.headers.common['Authorization'] = 'Basic ' + $cookies.get('STNCreds');
-                        $http.defaults.headers.common['Accept'] = 'application/json';
+                        $http.defaults.headers.common.Authorization = 'Basic ' + $cookies.get('STNCreds');
+                        $http.defaults.headers.common.Accept = 'application/json';
                         var member = {};
                         MEMBER.query({ id: r.MEMBER_ID }, function success(response) {
                             member.mem = response;
@@ -37,8 +37,8 @@
                         return member;
                     },
                     contacts: function () {
-                        $http.defaults.headers.common['Authorization'] = 'Basic ' + $cookies.get('STNCreds');
-                        $http.defaults.headers.common['Accept'] = 'application/json';
+                        $http.defaults.headers.common.Authorization = 'Basic ' + $cookies.get('STNCreds');
+                        $http.defaults.headers.common.Accept = 'application/json';
                         return CONTACT.getContactModel({ ContactModelByReport: r.REPORTING_METRICS_ID }).$promise;
                     }
                 }
@@ -75,7 +75,7 @@
 
         //give me the reports done on this date
         $scope.getReportsByDate = function () {
-            if ($scope.THIS_DATE.date != undefined) {
+            if ($scope.THIS_DATE.date !== undefined) {
                 var formatDate = new Date($scope.THIS_DATE.date).setHours(0, 0, 0, 0);
                 var thisDateReports = $scope.reportsToDate.filter(function (tdate) {
                     var reportDate = new Date(tdate.REPORT_DATE).setHours(0, 0, 0, 0);
@@ -94,8 +94,8 @@
             $scope.$parent.newReport = rep;
             $scope.$parent.disabled = false;
             $scope.$parent.needToComplete = true;
-            $http.defaults.headers.common['Authorization'] = 'Basic ' + $cookies.get('STNCreds');
-            $http.defaults.headers.common['Accept'] = 'application/json';
+            $http.defaults.headers.common.Authorization = 'Basic ' + $cookies.get('STNCreds');
+            $http.defaults.headers.common.Accept = 'application/json';
             CONTACT.getContactModel({ ContactModelByReport: rep.REPORTING_METRICS_ID }, function success(response) {
                 $scope.$parent.DeployStaff = response.filter(function (d) { return d.TYPE == "Deployed Staff"; })[0];
                 $scope.$parent.GenStaff = response.filter(function (d) { return d.TYPE == "General"; })[0];

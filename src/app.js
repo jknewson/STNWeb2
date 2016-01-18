@@ -262,8 +262,8 @@
                         thisMember: function (m, $stateParams, $http, $cookies) {
                             var memberId = $stateParams.id;
                             if (memberId > 0) {
-                                $http.defaults.headers.common['Authorization'] = 'Basic ' + $cookies.get('STNCreds');
-                                $http.defaults.headers.common['Accept'] = 'application/json';
+                                $http.defaults.headers.common.Authorization = 'Basic ' + $cookies.get('STNCreds');
+                                $http.defaults.headers.common.Accept = 'application/json';
                                 return m.query(
                                     { id: memberId }).$promise;
                             }
@@ -762,11 +762,11 @@
                     views: {
                         'siteNo': {
                             controller: function ($scope, $cookies, thisSite) {
-                                if (thisSite != undefined)
+                                if (thisSite !== undefined)
                                     $scope.SiteNo = thisSite.SITE_NO;
                                 // watch for the session event to change and update
                                 $scope.$watch(function () { return $cookies.get('SessionEventName'); }, function (newValue) {
-                                    $scope.sessionEvent = $cookies.get('SessionEventName') != null ? $cookies.get('SessionEventName') : "All Events";
+                                    $scope.sessionEvent = $cookies.get('SessionEventName') !== null && $cookies.get('SessionEventName') !== undefined ? $cookies.get('SessionEventName') : "All Events";
                                 });
                             },
                             template: '<div><h2 style="margin-top:0">Site {{SiteNo}} - For {{sessionEvent}}</h2></div><hr />' 

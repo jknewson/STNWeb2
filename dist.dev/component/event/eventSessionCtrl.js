@@ -1,0 +1,38 @@
+(function () {
+    /* controllers.js, 'leaflet-directive''ui.unique','ngTagsInput',*/
+    'use strict';
+
+    var STNControllers = angular.module('STNControllers');
+
+//#region EventSession
+    STNControllers.controller('eventSessionCtrl', ['$scope', '$rootScope', '$cookies', '$uibModal', '$location', '$state', 'EVENT', 'EVENT_TYPE', 'STATE', eventSessionCtrl]);
+    function eventSessionCtrl($scope, $rootScope, $cookies, $uibModal, $location, $state, EVENT, EVENT_TYPE, STATE) {
+        $scope.openEventModal = function () {
+            $(".page-loading").removeClass("hidden");
+            //modal
+            var modalInstance = $uibModal.open({
+                templateUrl: 'ChooseEvent.html',
+                controller: 'eventSessionModalCtrl',
+                size: 'md',
+                backdrop: 'static',
+                windowClass: 'rep-dialog',
+                resolve: {
+                    allEvents: function () {
+                        return EVENT.getAll().$promise;
+                    },
+                    allEventTypes: function () {
+                        return EVENT_TYPE.getAll().$promise;
+                    },
+                    allStates: function () {
+                        return STATE.getAll().$promise;
+                    }
+                }
+            });
+            modalInstance.result.then(function (r) {
+                //nothing to do here
+            });
+        };
+
+    }
+    //#endregion EventSession
+})();

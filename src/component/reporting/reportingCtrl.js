@@ -6,7 +6,7 @@
 //#region Reporting Controller
     STNControllers.controller('reportingCtrl', ['$scope', '$rootScope', '$cookies', '$location', '$http', '$uibModal', 'incompleteReports', 'allEvents', 'allStates', 'allReports', 'allEventTypes', 'allEventStatus', 'allAgencies', 'REPORT', 'MEMBER', reportingCtrl]);
     function reportingCtrl($scope, $rootScope, $cookies, $location, $http, $uibModal, incompleteReports, allEvents, allStates, allReports, allEventTypes, allEventStatus, allAgencies, REPORT, MEMBER) {
-        if ($cookies.get('STNCreds') == undefined || $cookies.get('STNCreds') == "") {
+        if ($cookies.get('STNCreds') === undefined || $cookies.get('STNCreds') === "") {
             $scope.auth = false;
             $location.path('/login');
         } else {
@@ -18,9 +18,9 @@
                 var formIsPopulated = false;
                 switch (fromState.url) {
                     case '/SubmitReport':
-                        if ($scope.fullReportForm.submit != undefined) {
+                        if ($scope.fullReportForm.submit !== undefined) {
                             formIsPopulated = $scope.fullReportForm.submit.$dirty;
-                            formIsPopulated = $scope.fullReportForm.submit.EVENT_ID.$viewValue != undefined ? true : formIsPopulated;
+                            formIsPopulated = $scope.fullReportForm.submit.EVENT_ID.$viewValue !== undefined ? true : formIsPopulated;
                         }
                         break;
                 }
@@ -69,13 +69,13 @@
             $scope.WaterStaff = {};
             $scope.disabled = true;
             $scope.needToComplete = false;
-            $scope.memberIncompletes = incompleteReports.filter(function (ir) { return ir.COMPLETE == 0; });
+            $scope.memberIncompletes = incompleteReports.filter(function (ir) { return ir.COMPLETE === 0; });
             $scope.events = allEvents;
             $scope.states = allStates;
             $scope.reports = allReports;
             
-            $http.defaults.headers.common['Authorization'] = 'Basic ' + $cookies.get('STNCreds');
-            $http.defaults.headers.common['Accept'] = 'application/json';
+            $http.defaults.headers.common.Authorization = 'Basic ' + $cookies.get('STNCreds');
+            $http.defaults.headers.common.Accept = 'application/json';
             MEMBER.query({ id: $cookies.get('mID') }, function success(response) {
                 $scope.MemberLoggedIn = response;
                 var memberAgency = allAgencies.filter(function (a) { return a.AGENCY_ID == $scope.MemberLoggedIn.AGENCY_ID; })[0];
@@ -112,7 +112,7 @@
             $scope.MetricDisplayModel = []; //hold all reportModels for 'Display Metrics Summary'
             //clicked Display Metrics Summary, show content in new tab
             $scope.displayMetricSum = function (valid) {
-                if (valid == true) {
+                if (valid) {
                     //#region scopes needed for this action
                     $scope.MetricDisplayModel = [];
                     $scope.GenRepEventModel = {};
@@ -134,9 +134,7 @@
                     $scope.totalRow.hwmFlag = 0; $scope.totalRow.hwmCol = 0;
                     //#endregion scopes needed for this action
 
-                    //get metrics summary to show in new tab
-                    $scope.Statemodel.value; //contains the states chosen
-                    $scope.EventName;//event chosen
+                    //get metrics summary to show in new tab                    
                     var abbrevs = [];
                     angular.forEach($scope.Statemodel.value, function (state) {
                         abbrevs.push(state.STATE_ABBREV);
@@ -243,7 +241,7 @@
 
             //clicked Display Contacts Summary, show content in new tab
             $scope.displayContactsSum = function (valid) {
-                if (valid == true) {
+                if (valid) {
                     //get metrics summary to show in new tab
                     //contains the states chosen     $scope.Statemodel.value; 
                     //event chosen    $scope.EventName[0];
@@ -255,8 +253,8 @@
                     var thisDate = $scope.formatDate($scope.genSummary.SUM_DATE);
                     $scope.reportModel = [];
                     //all filtered reports 
-                    $http.defaults.headers.common['Authorization'] = 'Basic ' + $cookies.get('STNCreds');
-                    $http.defaults.headers.common['Accept'] = 'application/json';
+                    $http.defaults.headers.common.Authorization = 'Basic ' + $cookies.get('STNCreds');
+                    $http.defaults.headers.common.Accept = 'application/json';
                     REPORT.getReportwithContacts({
                         Event: $scope.EventName.EVENT_ID, States: abbrevString, Date: thisDate
                     }).$promise.then(function (result) {
@@ -321,7 +319,7 @@
 
             //clicked generate csv
             $scope.getCSVfile = function (valid) {
-                if (valid == true) {
+                if (valid) {
                     //get reports and give a csv file back
                     $http.defaults.headers.common.Accept = 'text/csv';
                   

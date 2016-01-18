@@ -10,114 +10,114 @@
             <label class="col-md-3 control-label req" for="FNAME">First Name:</label>
             <div class="col-md-3">
                 <input class="form-control" id="FNAME" name="FNAME" ng-model="aMember.FNAME"
-                       type="text" placeholder="First Name" ng-model-options="{ updateOn: 'blur' }" ng-change="SaveOnBlur()"
+                       type="text" placeholder="First Name" ng-model-options="{ updateOn: 'blur' }" ng-change="SaveOnBlur(accountForm.$valid)"
                        required />
             </div>
         </div>
 
-        <!-- Last Name -->
+        <!-- Last Name 
         <div class="form-group required" ng-class="{'has-error':accountForm.LNAME.$invalid && accountForm.LNAME.$dirty}">
             <label class="col-md-3 control-label req" for="LNAME">Last Name:</label>
             <div class="col-md-3">
                 <input class="form-control" id="LNAME" name="LNAME" ng-model="aMember.LNAME"
-                       type="text" placeholder="Last Name" ng-model-options="{ updateOn: 'blur' }" ng-change="SaveOnBlur()"
+                       type="text" placeholder="Last Name" ng-model-options="{ updateOn: 'blur' }" ng-change="SaveOnBlur(accountForm.$valid)"
                        required />
             </div>
-        </div>
+        </div>-->
 
-        <!-- Username-->
+        <!-- Username
         <div class="form-group required">
             <label class="col-md-3 control-label req" for="USERNAME">Username:</label>
             <div class="col-md-3">
                 <input ng-show="aMember.MEMBER_ID == undefined" class="form-control" id="USERNAME" name="USERNAME" ng-model="aMember.USERNAME"
-                       type="text" placeholder="User Name" ng-model-options="{ updateOn: 'blur' }" ng-change="SaveOnBlur()"
+                       type="text" placeholder="User Name" ng-model-options="{ updateOn: 'blur' }" ng-change="SaveOnBlur(accountForm.$valid)"
                        required />
                 <span ng-show="aMember.MEMBER_ID != undefined">{{aMember.USERNAME}}</span>
             </div>
 
-        </div>
+        </div>-->
 
-        <!-- Agency -->
+        <!-- Agency 
         <div class="form-group required">
             <label class="col-md-3 control-label req" for="AGENCY_ID">Agency:</label>
             <div class="col-md-3">
                 <select class=" form-control" id="AGENCY" name="AGENCY_ID" ng-model="aMember.AGENCY_ID"
-                        ng-options="r.AGENCY_ID as r.AGENCY_NAME for r in agencyList | orderBy: 'AGENCY_NAME'" ng-model-options="{ updateOn: 'blur' }" ng-change="SaveOnBlur()"
+                        ng-options="r.AGENCY_ID as r.AGENCY_NAME for r in agencyList | orderBy: 'AGENCY_NAME'" ng-model-options="{ updateOn: 'blur' }" ng-change="SaveOnBlur(accountForm.$valid)"
                         required>
                     <option value="">Select Agency</option>
                 </select>
             </div>
         </div>
-
-        <!-- Role-->
+-->
+        <!-- Role
         <div class="form-group required">
             <label class="col-md-3 control-label req" for="ROLE">Role:</label>
             <div class="col-md-3">
                 <select ng-show="aMember.MEMBER_ID == undefined" class=" form-control" id="ROLE" name="ROLE_ID" ng-model="aMember.ROLE_ID"
-                        ng-options="r.ROLE_ID as r.ROLE_NAME for r in roleList | orderBy: 'ROLE_NAME'" ng-model-options="{ updateOn: 'blur' }" ng-change="SaveOnBlur()"
+                        ng-options="r.ROLE_ID as r.ROLE_NAME for r in roleList | orderBy: 'ROLE_NAME'" ng-model-options="{ updateOn: 'blur' }" ng-change="SaveOnBlur(accountForm.$valid)"
                         required>
                     <option value="">Select Role</option>
                 </select>
                 <span ng-show="aMember.MEMBER_ID != undefined">{{aMember.Role}}</span>
             </div>
         </div>
-
-        <!-- Phone -->
+-->
+        <!-- Phone 
         <div class="form-group required">
             <label class="col-md-3 control-label req" for="PHONE">Phone:</label>
             <div class="col-md-6">
                 <input class="form-control" id="PHONE" name="PHONE"
                        type="text" my-input-mask="{mask: '(999) 999-9999[ x99999]', greedy:false}"
-                       ng-model="aMember.PHONE" ng-model-options="{ updateOn: 'blur' }" ng-change="SaveOnBlur()" required />
+                       ng-model="aMember.PHONE" ng-model-options="{ updateOn: 'blur' }" ng-change="SaveOnBlur(accountForm.$valid)" required />
             </div>&nbsp;
             <button type="button" class="borderLess" tooltip-placement="right" uib-tooltip="Enter the member's phone number. To add an extension, immediately following the phone number type 'x' and then the extension number.">
                 <span class="glyphicon glyphicon-question-sign"></span>
             </button>
-        </div>
+        </div>-->
 
-        <!-- Email -->
+        <!-- Email 
         <div class="form-group required">
             <label class="col-md-3 control-label req" for="EMAIL">Email:</label>
             <div class="col-md-6">
                 <input class="form-control" id="EMAIL" name="EMAIL" type="email" placeholder="" ng-model="aMember.EMAIL"
-                       ng-model-options="{ updateOn: 'blur' }" ng-change="SaveOnBlur()" required />
+                       ng-model-options="{ updateOn: 'blur' }" ng-change="SaveOnBlur(accountForm.$valid)" required />
             </div>&nbsp;
             <button type="button" class="borderLess" tooltip-placement="right" uib-tooltip="Enter the member's email address.">
                 <span class="glyphicon glyphicon-question-sign"></span>
             </button>
-        </div>
+        </div>-->
 
-        <!-- RSS Feed -->
+        <!-- RSS Feed
         <div class="form-group">
             <label class="col-md-3 control-label" for="RSSFEED">RSS Feed:</label>
             <div class="col-md-6">
                 <input class="form-control" id="RSSFEED" name="RSSFEED" type="text" placeholder="" ng-model="aMember.RSSFEED"
-                       ng-model-options="{ updateOn: 'blur' }" ng-change="SaveOnBlur()" />
-            </div>
-        </div>
+                       ng-model-options="{ updateOn: 'blur' }" ng-change="SaveOnBlur(accountForm.$valid)" />
+            </div> 
+        </div>-->
 
-        <!-- Emergency Contact Name -->
+        <!-- Emergency Contact Name
         <div class="form-group">
             <label class="col-md-3 control-label" for="EMERGENCY_CONTACT_NAME">Emergency Contact Name:</label>
             <div class="col-md-6">
                 <input class="form-control" id="EMERGENCY_CONTACT_NAME" name="EMERGENCY_CONTACT_NAME" type="text" placeholder="" ng-model="aMember.EMERGENCY_CONTACT_NAME"
-                       ng-model-options="{ updateOn: 'blur' }" ng-change="SaveOnBlur()" />
+                       ng-model-options="{ updateOn: 'blur' }" ng-change="SaveOnBlur(accountForm.$valid)" />
             </div>
-        </div>
+        </div> -->
 
-        <!-- Emergency Contact phone -->
+        <!-- Emergency Contact phone
         <div class="form-group">
             <label class="col-md-3 control-label" for="EMERGENCY_CONTACT_PHONE">Emergency Contact Phone:</label>
             <div class="col-md-6">
                 <input class="form-control" id="EMERGENCY_CONTACT_PHONE" name="EMERGENCY_CONTACT_PHONE"
                        type="text" my-input-mask="{mask: '(999) 999-9999[ x99999]', greedy:false}"
-                       ng-model="aMember.EMERGENCY_CONTACT_PHONE" ng-model-options="{ updateOn: 'blur' }" ng-change="SaveOnBlur()" />
+                       ng-model="aMember.EMERGENCY_CONTACT_PHONE" ng-model-options="{ updateOn: 'blur' }" ng-change="SaveOnBlur(accountForm.$valid)" />
             </div>&nbsp;
             <button type="button" class="borderLess" tooltip-placement="right" uib-tooltip="Enter the emergency contact's phone number. To add an extension, immediately following the phone number type 'x' and then the extension number.">
                 <span class="glyphicon glyphicon-question-sign"></span>
             </button>
         </div>
-
+ -->
         <!-- start existing password change section -->
         <div class="form-group" ng-hide="aMember.MEMBER_ID == undefined">
             <label class=" col-md-3 control-label" for="Password">

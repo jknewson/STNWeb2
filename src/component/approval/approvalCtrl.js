@@ -6,7 +6,7 @@
  //#region Approval Controller
     STNControllers.controller('approvalCtrl', ['$scope', '$cookies', '$rootScope', '$location', '$http', 'stateList', 'instrumentList',  'allSensorTypes', 'HWM', 'DATA_FILE', 'INSTRUMENT', 'MEMBER', 'SITE', approvalCtrl]);
     function approvalCtrl($scope, $cookies, $rootScope, $location, $http, stateList, instrumentList, allSensorTypes, HWM, DATA_FILE, INSTRUMENT, MEMBER, SITE) {
-        if ($cookies.get('STNCreds') == undefined || $cookies.get('STNCreds') == "") {
+        if ($cookies.get('STNCreds') === undefined || $cookies.get('STNCreds') === "") {
             $scope.auth = false;
             $location.path('/login');
         } else {
@@ -14,13 +14,13 @@
             $rootScope.thisPage = "Approval";
             $rootScope.activeMenu = "approval";
 
-            // watch for the session event to change and update
+            // watch for the session event to change and update  
             $scope.$watch(function () { return $cookies.get('SessionEventName'); }, function (newValue) {
-                $scope.sessionEvent = $cookies.get('SessionEventName') != null ? $cookies.get('SessionEventName') : "All Events";
+                $scope.sessionEvent = $cookies.get('SessionEventName') !== null && $cookies.get('SessionEventName') !== undefined ? $cookies.get('SessionEventName') : "All Events";
             });
             
-            $http.defaults.headers.common['Authorization'] = 'Basic ' + $cookies.get('STNCreds');
-            $http.defaults.headers.common['Accept'] = 'application/json';
+            $http.defaults.headers.common.Authorization = 'Basic ' + $cookies.get('STNCreds');
+            $http.defaults.headers.common.Accept = 'application/json';
             MEMBER.getAll(function success(response) {
                 $scope.allMembers = response;
             }).$promise;
@@ -37,15 +37,15 @@
             $scope.search = function () {
                 //clear contents in case they are searching multiple times
                 $scope.unApprovedHWMs = []; $scope.showHWMbox = false;
-                $scope.unApprovedDFs = []; $scope.showDFbox = false;
-                var evID = $cookies.get('SessionEventID') != null ? $cookies.get('SessionEventID') : 0;
+                $scope.unApprovedDFs = []; $scope.showDFbox = false; 
+                var evID = $cookies.get('SessionEventID') !== null && $cookies.get('SessionEventID') !== undefined ? $cookies.get('SessionEventID') : 0;
                 //var evID = this.ChosenEvent.id != undefined ? this.ChosenEvent.id : 0;
-                var sID = this.ChosenState.id != undefined ? this.ChosenState.id : 0;
-                var mID = this.ChosenMember.id != undefined ? this.ChosenMember.id : 0;
+                var sID = $scope.ChosenState.id !== undefined ? $scope.ChosenState.id : 0;
+                var mID = $scope.ChosenMember.id !== undefined ? $scope.ChosenMember.id : 0;
 
                 //go get the HWMs and DataFiles that need to be approved
-                $http.defaults.headers.common['Authorization'] = 'Basic ' + $cookies.get('STNCreds');
-                $http.defaults.headers.common['Accept'] = 'application/json';
+                $http.defaults.headers.common.Authorization = 'Basic ' + $cookies.get('STNCreds');
+                $http.defaults.headers.common.Accept = 'application/json';
                 HWM.getUnapprovedHWMs({ IsApproved: 'false', Event: evID, TeamMember: mID, State: sID }, function success(response) {
                     $scope.unApprovedHWMs = response.HWMs;
                     $scope.showHWMbox = true;

@@ -12,7 +12,7 @@
         $scope.AllCountyList = allDropDownParts[3];
         $scope.stateCountyList = [];
         $scope.allHousingTypeList = allDropDownParts[4];
-        $scope.DepPriorityList = allDropDownParts[5]
+        $scope.DepPriorityList = allDropDownParts[5];
         $scope.NetNameList = allDropDownParts[6];
         $scope.NetTypeList = allDropDownParts[7];
         $scope.ProposedSens = allDropDownParts[8];
@@ -46,7 +46,7 @@
                 azi = 1.0 * deg + 1.0 * min / 60.0 + 1.0 * sec / 3600.0;
                 return (azi).toFixed(5);
             }
-        }
+        };
 
         //lat modal 
         var openLatModal = function (w) {
@@ -121,13 +121,13 @@
             var s = ((minfloat - m) * 60).toFixed(3);
 
             return ("" + d + ":" + m + ":" + s);
-        }
+        };
 
         //they changed radio button for dms dec deg
         $scope.latLongChange = function () {
             if ($scope.aSite.decDegORdms == "dd") {
                 //they clicked Dec Deg..
-                if ($scope.DMS.LADeg != undefined) {
+                if ($scope.DMS.LADeg !== undefined) {
                     //convert what's here for each lat and long
                     $scope.aSite.LATITUDE_DD = azimuth($scope.DMS.LADeg, $scope.DMS.LAMin, $scope.DMS.LASec);
                     $scope.aSite.LONGITUDE_DD = azimuth($scope.DMS.LODeg, $scope.DMS.LOMin, $scope.DMS.LOSec);
@@ -135,7 +135,7 @@
                 }
             } else {
                 //they clicked dms (convert lat/long to dms)
-                if ($scope.aSite.LATITUDE_DD != undefined) {
+                if ($scope.aSite.LATITUDE_DD !== undefined) {
                     var latDMS = (deg_to_dms($scope.aSite.LATITUDE_DD)).toString();
                     var ladDMSarray = latDMS.split(':');
                     $scope.DMS.LADeg = ladDMSarray[0];
@@ -147,10 +147,9 @@
                     $scope.DMS.LODeg = longDMSarray[0] * -1;
                     $scope.DMS.LOMin = longDMSarray[1];
                     $scope.DMS.LOSec = longDMSarray[2];
-                    var test;
                 }
             }
-        }
+        };
 
         //networkType check event --trigger dirty
         $scope.netTypeChg = function () {
@@ -160,7 +159,7 @@
         //networkName check event.. if "Not Defined" chosen, disable the other 2 checkboxes
         $scope.whichOne = function (n) {
             $scope.netNameDirty = true;
-            if (n.NAME == "Not Defined" && n.selected == true) {
+            if (n.NAME == "Not Defined" && n.selected === true) {
                 //they checked "not defined"
                 for (var nn = 0; nn < $scope.NetNameList.length; nn++) {
                     //unselect all but not defined
@@ -171,7 +170,7 @@
                 $scope.checked = "Not Defined";
             }
             //they they unchecked not define, unmatch vars so the other become enabled
-            if (n.NAME == "Not Defined" && n.selected == false)
+            if (n.NAME == "Not Defined" && n.selected === false)
                 $scope.checked = "";
         };
 
@@ -191,23 +190,23 @@
 
         //site PUT
         $scope.save = function (valid) {
-            if (valid == true) {
+            if (valid) {
                 $(".page-loading").removeClass("hidden");
                 //update the site
-                $http.defaults.headers.common['Authorization'] = 'Basic ' + $cookies.get('STNCreds');
-                $http.defaults.headers.common['Accept'] = 'application/json';
+                $http.defaults.headers.common.Authorization = 'Basic ' + $cookies.get('STNCreds');
+                $http.defaults.headers.common.Accept = 'application/json';
                 //did they add or edit the landowner
                 //TODO :: check if the landowner fields are $dirty first..
                 
-                if ($scope.addLandowner == true) {
+                if ($scope.addLandowner === true) {
                     //there's a landowner.. edit or add?
-                    if ($scope.aSite.LANDOWNERCONTACT_ID != null) {
+                    if ($scope.aSite.LANDOWNERCONTACT_ID !== null && $scope.aSite.LANDOWNERCONTACT_ID !== undefined) {
                         //did they change anything to warrent a put
                         LANDOWNER_CONTACT.update({ id: $scope.aSite.LANDOWNERCONTACT_ID }, $scope.landowner).$promise.then(function () {
                             putSiteAndParts();
                         });
-                    } else if ($scope.landowner.FNAME != undefined || $scope.landowner.LNAME != undefined || $scope.landowner.TITLE != undefined ||
-                            $scope.landowner.ADDRESS != undefined || $scope.landowner.CITY != undefined || $scope.landowner.PRIMARYPHONE != undefined) {
+                    } else if ($scope.landowner.FNAME !== undefined || $scope.landowner.LNAME !== undefined || $scope.landowner.TITLE !== undefined ||
+                            $scope.landowner.ADDRESS !== undefined || $scope.landowner.CITY !== undefined || $scope.landowner.PRIMARYPHONE !== undefined) {
                         //they added something.. POST (rather than just clicking button and not)
                         LANDOWNER_CONTACT.save($scope.landowner, function success(response) {
                             $scope.aSite.LANDOWNERCONTACT_ID = response.LANDOWNERCONTACTID;
@@ -230,9 +229,9 @@
                 });
 
                 //Remove NetNames
-                if ($scope.netNameDirty == true) {
+                if ($scope.netNameDirty === true) {
                     angular.forEach($scope.NetNameList, function (nnL) {
-                        if (nnL.selected == false) {
+                        if (nnL.selected === false) {
                             //delete it
                             $http.defaults.headers.common['X-HTTP-Method-Override'] = 'DELETE';
                             var NNtoDelete = { NETWORK_NAME_ID: nnL.NETWORK_NAME_ID, NAME: nnL.NAME };
@@ -244,9 +243,9 @@
                 }//end netName dirty
 
                 //Remove NetTypes
-                if ($scope.netTypeDirty == true) {
+                if ($scope.netTypeDirty === true) {
                     angular.forEach($scope.NetTypeList, function (ntL) {
-                        if (ntL.selected == false) {
+                        if (ntL.selected === false) {
                             //delete it if they are removing it
                             $http.defaults.headers.common['X-HTTP-Method-Override'] = 'DELETE';
                             var NTtoDelete = { NETWORK_TYPE_ID: ntL.NETWORK_TYPE_ID, NETWORK_TYPE_NAME: ntL.NETWORK_TYPE_NAME };
@@ -255,13 +254,13 @@
                             delete $http.defaults.headers.common['X-HTTP-Method-Override'];
                         }                        
                     });
-                };//end netType dirty
+                }//end netType dirty
 
                 //Add siteHousings
-                if ($scope.houseDirty == true) {
+                if ($scope.houseDirty === true) {
                     angular.forEach($scope.siteHouseTypesTable, function (ht) {
                         var addHtProm;
-                        if (ht.SITE_HOUSING_ID != undefined) {
+                        if (ht.SITE_HOUSING_ID !== undefined) {
                             //PUT it
                             addHtProm = SITE_HOUSING.update({ id: ht.SITE_HOUSING_ID }, ht).$promise;
                         } else {
@@ -274,7 +273,7 @@
 
                 //Add NetNames
                 angular.forEach($scope.NetNameList, function (AnnL) {
-                    if (AnnL.selected == true) {
+                    if (AnnL.selected === true) {
                         $scope.siteNetworkNames.push(AnnL.NAME);
                         //post it (if it's there already, it won't do anything)
                         var NNtoAdd = { NETWORK_NAME_ID: AnnL.NETWORK_NAME_ID, NAME: AnnL.NAME };
@@ -284,7 +283,7 @@
                 });
                 //Add NetTypes
                 angular.forEach($scope.NetTypeList, function (AnTL) {
-                    if (AnTL.selected == true) {
+                    if (AnTL.selected === true) {
                         $scope.siteNetworkTypes.push(AnTL.NETWORK_TYPE_NAME);
                       //  post it (if it's there already, it won't do anything)
                         var NTtoAdd = { NETWORK_TYPE_ID: AnTL.NETWORK_TYPE_ID, NETWORK_TYPE_NAME: AnTL.NETWORK_TYPE_NAME };
@@ -297,7 +296,7 @@
                 $q.all(RemovePromises).then(function () {
               //      $scope.originalSiteHousings = []; //clear this out after deleting all of them;
                     $q.all(AddPromises).then(function () {
-                        var sendBack = [$scope.aSite, $scope.siteNetworkNames, $scope.siteNetworkTypes]
+                        var sendBack = [$scope.aSite, $scope.siteNetworkNames, $scope.siteNetworkTypes];
                         $uibModalInstance.close(sendBack);
                         $(".page-loading").addClass("hidden");
                         toastr.success("Site updated");
@@ -316,15 +315,15 @@
 
         //create this site clicked
         $scope.create = function (valid) {
-            if (valid == true) {
+            if (valid === true) {
                 $(".page-loading").removeClass("hidden");
                 //POST landowner, if they added one
-                $http.defaults.headers.common['Authorization'] = 'Basic ' + $cookies.get('STNCreds');
-                $http.defaults.headers.common['Accept'] = 'application/json';
+                $http.defaults.headers.common.Authorization = 'Basic ' + $cookies.get('STNCreds');
+                $http.defaults.headers.common.Accept = 'application/json';
                 delete $scope.aSite.Creator;
-                if ($scope.addLandowner == true) {
-                    if ($scope.landowner.FNAME != undefined || $scope.landowner.LNAME != undefined || $scope.landowner.TITLE != undefined ||
-                                   $scope.landowner.ADDRESS != undefined || $scope.landowner.CITY != undefined || $scope.landowner.PRIMARYPHONE != undefined) {
+                if ($scope.addLandowner === true) {
+                    if ($scope.landowner.FNAME !== undefined || $scope.landowner.LNAME !== undefined || $scope.landowner.TITLE !== undefined ||
+                                   $scope.landowner.ADDRESS !== undefined || $scope.landowner.CITY !== undefined || $scope.landowner.PRIMARYPHONE !== undefined) {
                         LANDOWNER_CONTACT.save($scope.landowner, function success(response) {
                             $scope.aSite.LANDOWNERCONTACT_ID = response.LANDOWNERCONTACTID;
                             //now post the site
@@ -358,7 +357,7 @@
                 });
                 //site_NetworkNames
                 angular.forEach($scope.NetNameList, function (nName) {
-                    if (nName.selected == true) {
+                    if (nName.selected === true) {
                         var siteNetName = { NETWORK_NAME_ID: nName.NETWORK_NAME_ID, NAME: nName.NAME };
                 //        var nNPromise = SITE.postSiteNetworkName({ id: createdSiteID }, siteNetName).$promise;
                 //        postPromises.push(nNPromise);
@@ -366,15 +365,15 @@
                 });
                 //site_NetworkTypes
                 angular.forEach($scope.NetTypeList, function (nType) {
-                    if (nType.selected == true) {
+                    if (nType.selected === true) {
                         var siteNetType = { NETWORK_TYPE_ID: nType.NETWORK_TYPE_ID, NETWORK_TYPE_NAME: nType.NETWORK_TYPE_NAME };
                 //        var nTPromise = SITE.postSiteNetworkType({ id: createdSiteID }, siteNetType).$promise;
                  //       postPromises.push(nTPromise);
                     }
                 });
-                if ($scope.disableSensorParts == false) {
+                if ($scope.disableSensorParts === false) {
                     for (var ps = 0; ps < $scope.ProposedSens.length; ps++) {
-                        if ($scope.ProposedSens[ps].selected == true) {
+                        if ($scope.ProposedSens[ps].selected === true) {
                             //POST it
                             var sensorTypeID = $scope.SensorDeployment.filter(function (sd) { return sd.DEPLOYMENT_TYPE_ID == $scope.ProposedSens[ps].DEPLOYMENT_TYPE_ID; })[0].SENSOR_TYPE_ID;
                             var inst = { DEPLOYMENT_TYPE_ID: $scope.ProposedSens[ps].DEPLOYMENT_TYPE_ID, SITE_ID: createdSiteID, SENSOR_TYPE_ID: sensorTypeID };
@@ -385,7 +384,7 @@
                             postPromises.push(instrPromise);
                         }
                     }
-                };
+                }
 
                 $q.all(postPromises).then(function (response) {
                     $uibModalInstance.dismiss('cancel');
@@ -398,7 +397,7 @@
             });
         };
         
-        if (thisSiteStuff != undefined) {
+        if (thisSiteStuff !== undefined) {
             //#region existing site 
             //$scope.aSite[0], $scope.originalSiteHousings[1], $scope.siteHouseTypesTable[2], thisSiteNetworkNames[3], siteNetworkTypes[4], $scope.landowner[5]
             $scope.aSite = angular.copy(thisSiteStuff[0]);            
@@ -422,7 +421,7 @@
                 $scope.showSiteHouseTable = true;
                 $scope.siteHouseTypesTable = thisSiteStuff[2]; //for table to show all info on house type
                 $scope.landowner = thisSiteStuff[5];
-                $scope.addLandowner = $scope.landowner.FNAME != undefined || $scope.landowner.LNAME != undefined || $scope.landowner.ADDRESS != undefined || $scope.landowner.PRIMARYPHONE != undefined ? true : false;
+                $scope.addLandowner = $scope.landowner.FNAME !== undefined || $scope.landowner.LNAME !== undefined || $scope.landowner.ADDRESS !== undefined || $scope.landowner.PRIMARYPHONE !== undefined ? true : false;
 
                 //go through allHousingTypeList and add selected Property.
                 for (var i = 0; i < $scope.allHousingTypeList.length; i++) {
@@ -436,7 +435,7 @@
                             $scope.allHousingTypeList[i].selected = false;
                         }
                     }
-                    if ($scope.originalSiteHousings.length == 0)
+                    if ($scope.originalSiteHousings.length === 0)
                         $scope.allHousingTypeList[i].selected = false;
                 }
 
@@ -453,11 +452,11 @@
                         } else {
                             $scope.NetNameList[a].selected = false;
                         }
-                        if (thisSiteStuff[3].length == 0)
+                        if (thisSiteStuff[3].length === 0)
                             $scope.NetNameList[a].selected = false;
                     }
                 }
-                if ($scope.NetNameList[0].selected == true) {
+                if ($scope.NetNameList[0].selected === true) {
                     //make these match so rest get disabled
                     $scope.checked = "Not Defined";
                 }
@@ -473,7 +472,7 @@
                         } else {
                             $scope.NetTypeList[ni].selected = false;
                         }
-                        if (thisSiteStuff[4].length == 0)
+                        if (thisSiteStuff[4].length === 0)
                             $scope.NetTypeList[ni].selected = false;
                     }
                 }
@@ -483,8 +482,8 @@
         else {
             //#region this is a NEW SITE CREATE (site == undefined)
             //get logged in member to make them creator
-            $http.defaults.headers.common['Authorization'] = 'Basic ' + $cookies.get('STNCreds');
-            $http.defaults.headers.common['Accept'] = 'application/json';
+            $http.defaults.headers.common.Authorization = 'Basic ' + $cookies.get('STNCreds');
+            $http.defaults.headers.common.Accept = 'application/json';
             MEMBER.query({ id: $cookies.get('mID') }, function success(response) {
                 $scope.aSite.Creator = response.FNAME + " " + response.LNAME;
                 $scope.aSite.MEMBER_ID = response.MEMBER_ID;
@@ -513,19 +512,19 @@
             //add/remove house type and inputs to table row -- foreach on post or put will handle the rest
            
             //new site being created
-            if (ht.selected == true) {
+            if (ht.selected === true) {
                 var houseT = { TYPE_NAME: ht.TYPE_NAME, HOUSING_TYPE_ID: ht.HOUSING_TYPE_ID, LENGTH: ht.LENGTH, MATERIAL: ht.MATERIAL, NOTES: ht.NOTES, AMOUNT: 1 };
                 $scope.siteHouseTypesTable.push(houseT);
                 $scope.showSiteHouseTable = true;
             }
-            if (ht.selected == false) {
-                if ($scope.aSite.SITE_ID != undefined) {
+            if (ht.selected === false) {
+                if ($scope.aSite.SITE_ID !== undefined) {
                     var sH_ID = $scope.siteHouseTypesTable.filter(function (h) { return h.TYPE_NAME == ht.TYPE_NAME; })[0].SITE_HOUSING_ID;
                     $scope.siteHousesToRemove.push(sH_ID); //edit page, add SITE_HOUSING_ID to remove list for PUT
                 }
                 var i = $scope.siteHouseTypesTable.indexOf($scope.siteHouseTypesTable.filter(function (h) { return h.TYPE_NAME == ht.TYPE_NAME; })[0]);
                 $scope.siteHouseTypesTable.splice(i, 1);
-                if ($scope.siteHouseTypesTable.length == 0) {
+                if ($scope.siteHouseTypesTable.length === 0) {
                     $scope.showSiteHouseTable = false;
                 }
             }
@@ -547,11 +546,11 @@
                         });
                     });
 
-                    $scope.aSite.ADDRESS = components.street_number != undefined ? components.street_number + " " + components.route : components.route;
+                    $scope.aSite.ADDRESS = components.street_number !== undefined ? components.street_number + " " + components.route : components.route;
                     $scope.aSite.CITY = components.locality;
 
                     var thisState = $scope.StateList.filter(function (s) { return s.STATE_NAME == components.administrative_area_level_1; })[0];
-                    if (thisState != undefined) {
+                    if (thisState !== undefined) {
                         $scope.aSite.STATE = thisState.STATE_ABBREV;
                         $scope.stateCountyList = $scope.AllCountyList.filter(function (c) { return c.STATE_ID == thisState.STATE_ID; });
                         $scope.aSite.COUNTY = components.administrative_area_level_2;
@@ -570,7 +569,7 @@
                                 controller: function ($scope, $uibModalInstance) {
                                     $scope.ok = function () {
                                         $uibModalInstance.close();
-                                    }
+                                    };
                                     $scope.num = closeSites.length;
                                     $scope.siteListNear = closeSites;
                                 },

@@ -6,7 +6,7 @@
     //#region Site Search Controller
     STNControllers.controller('siteSearchCtrl', ['$scope', '$cookies', '$rootScope', '$location', 'stateList', 'sensorTypes', 'networkNames', 'SITE', siteSearchCtrl]);
     function siteSearchCtrl($scope, $cookies, $rootScope, $location, stateList, sensorTypes, networkNames, SITE) {
-        if ($cookies.get('STNCreds') == undefined || $cookies.get('STNCreds') == "") {
+        if ($cookies.get('STNCreds') === undefined || $cookies.get('STNCreds') === "") {
             $scope.auth = false;
             $location.path('/login');
         } else {
@@ -15,7 +15,7 @@
             //$scope.events = eventList;
             // watch for the session event to change and update
             $scope.$watch(function () { return $cookies.get('SessionEventName'); }, function (newValue) {
-                $scope.sessionEvent = $cookies.get('SessionEventName') != null ? $cookies.get('SessionEventName') : "All Events";
+                $scope.sessionEvent = $cookies.get('SessionEventName') !== null && $cookies.get('SessionEventName') !== undefined ? $cookies.get('SessionEventName') : "All Events";
             });
             $scope.states = stateList;
             $scope.senTypes = sensorTypes;
@@ -54,7 +54,7 @@
                 var stateString = $scope.chosenStates.join();
                 $scope.siteResponse = false;
                 $scope.siteList = [];
-                var evID = $cookies.get('SessionEventID') != null ? $cookies.get('SessionEventID') : 0;
+                var evID = $cookies.get('SessionEventID') !== null && $cookies.get('SessionEventID') !== undefined ? $cookies.get('SessionEventID') : 0;
                 SITE.getAll({
                     Event: evID,
                     State: stateString,
@@ -77,10 +77,10 @@
 
             //add each state to an array to be joined in the GET
             $scope.stateClick = function (data) {
-                if (data.selected == true) {
+                if (data.selected === true) {
                     $scope.chosenStates.push(data.STATE_ABBREV);
                 }
-                if (data.selected == false) {
+                if (data.selected === false) {
                     var ind = $scope.chosenStates.indexOf(data.STATE_ABBREV);
                     if (ind >= 0) {
                         $scope.chosenStates.splice(ind, 1);

@@ -6,7 +6,7 @@
     //#region Home Controller 
     STNControllers.controller('homeCtrl', ['$scope', '$rootScope', '$location', '$cookies', '$http', homeCtrl]);
     function homeCtrl($scope, $rootScope, $location, $cookies, $http) {
-        if ($cookies.get('STNCreds') == undefined || $cookies.get('STNCreds') == "") {
+        if ($cookies.get('STNCreds') === undefined || $cookies.get('STNCreds') === "") {
             $scope.auth = false;
             $location.path('/login');
         } else {
