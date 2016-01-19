@@ -74,6 +74,7 @@
             };
         }
     }
+    approvalCtrl.$inject = ['$scope', '$cookies', '$rootScope', '$location', '$http', 'stateList', 'instrumentList', 'allSensorTypes', 'HWM', 'DATA_FILE', 'INSTRUMENT', 'MEMBER', 'SITE'];
     //#endregion Approval Controller
 
 })();
