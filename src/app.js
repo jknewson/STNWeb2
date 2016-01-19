@@ -5,7 +5,7 @@
             'angular.filter', 'xeditable', 'checklist-model', 'ngFileUpload', 'STNResource', 'ui.bootstrap.datetimepicker',
             'STNControllers', 'LogInOutController', 'ModalControllers', 'SettingsControllers']);
     
-    app.run(function ($rootScope, $uibModalStack) {
+    app.run(['$rootScope', '$uibModalStack', function ($rootScope, $uibModalStack) {
         $rootScope.$on('$stateChangeStart', function (event, toState, toParams, fromState, fromParams) {
             $("#ui-view").html("");
             $(".page-loading").removeClass("hidden");
@@ -26,7 +26,7 @@
             alert("Error occurred: Status" + error.status + ", " + error.statusText + ". The following request was unsuccessful: " + error.config.url + " Please refresh and try again.");
         });
         
-    });
+    }]);
     //app.config(function that defines the config code. 'ui.select', 'ngSanitize','$locationProvider', $locationProvider
     app.config(['$stateProvider', '$urlRouterProvider', 
         function ($stateProvider, $urlRouterProvider ){
@@ -48,27 +48,7 @@
                 .state("home", {
                     url: "/Home",
                     templateUrl: "component/home/homeBase.html",
-                    controller: "homeCtrl"//,
-                    //resolve: {
-                    //    e: 'EVENT',
-                    //    eventList: function (e) {
-                    //        return e.getAll().$promise;
-                    //    },
-                    //    a: 'AGENCY',
-                    //    agencyList: function (a) {
-                    //        return a.getAll().$promise;
-                    //    },
-                    //    r: 'ROLE',
-                    //    roleList: function (r) {
-                    //        return r.getAll().$promise;
-                    //    },
-                    //    allEventTypes: function (et) {
-                    //        return et.getAll().$promise;
-                    //    }, st: 'STATE',
-                    //    allStates: function (st) {
-                    //        return st.getAll().$promise;
-                    //    }
-                    //}
+                    controller: "homeCtrl"
                 })
                 //#endregion entry point once logged in
 
@@ -104,10 +84,6 @@
                     templateUrl: "component/approval/approval.html",
                     controller: "approvalCtrl",
                     resolve: {
-                        //e: 'EVENT',
-                        //eventList: function (e) {
-                        //    return e.getAll().$promise;
-                        //},
                         s: 'STATE',
                         stateList: function (s) {
                             return s.getAll().$promise;
@@ -130,10 +106,6 @@
                     templateUrl: "component/siteSearch/siteSearch.html",
                     controller: "siteSearchCtrl",
                     resolve: {
-                        //e: 'EVENT',
-                        //eventList: function (e) {
-                        //    return e.getAll().$promise;
-                        //},
                         s: 'STATE',
                         stateList: function (s) {
                             return s.getAll().$promise;

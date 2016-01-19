@@ -4,11 +4,11 @@
 
     var STNControllers = angular.module('STNControllers');
     //#region HELP Controller
-    STNControllers.controller('helpCtrl', ['$scope', helpCtrl]);
-    function helpCtrl($scope) {
-        $scope.helpInfo = {};
-        $scope.helpInfo.fact = "Some really interesting help will be here.";
-    }
+    STNControllers.controller('helpCtrl', ['$scope', 
+        function helpCtrl($scope) {
+            $scope.helpInfo = {};
+            $scope.helpInfo.fact = "Some really interesting help will be here.";
+        }]);
     //#endregion HELP Controller
 
 })();
