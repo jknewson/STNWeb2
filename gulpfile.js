@@ -54,11 +54,12 @@ pipes.builtAppScriptsDev = function() {
         .pipe(gulp.dest(paths.dev));
 };
 
+///comments in function are artifacts of old partial scripting using the ng-html2js plugin, now stripped out
 pipes.builtAppScriptsProd = function() {
-    var scriptedPartials = pipes.scriptedPartials();
-    var validatedAppScripts = pipes.validatedAppScripts();
-
-    return es.merge(scriptedPartials, validatedAppScripts)
+    //var scriptedPartials = pipes.scriptedPartials();
+    //var validatedAppScripts = pipes.validatedAppScripts();
+    //return es.merge(scriptedPartials, validatedAppScripts)
+    return pipes.validatedAppScripts()
         .pipe(pipes.orderedAppScripts())
         .pipe(plugins.sourcemaps.init())
         .pipe(plugins.concat('app.min.js'))
@@ -80,12 +81,6 @@ pipes.builtVendorScriptsProd = function() {
         .pipe(gulp.dest(paths.distScriptsProd));
 };
 
-//pipes.validatedDevServerScripts = function() {
-//    return gulp.src(paths.scriptsDevServer)
-//        .pipe(plugins.jshint())
-//        .pipe(plugins.jshint.reporter('jshint-stylish'));
-//};
-
 pipes.validatedPartials = function() {
     return gulp.src(paths.partials)
         .pipe(plugins.htmlhint({'doctype-first': false}))
@@ -97,23 +92,31 @@ pipes.builtPartialsDev = function() {
         .pipe(gulp.dest(paths.dev + '/component'));
 };
 
-///put app name below on moduleName var
-pipes.scriptedPartials = function() {
+///adding as new task, to abandon the conversion to scripts
+pipes.builtPartialsProd = function() {
     return pipes.validatedPartials()
-        .pipe(plugins.htmlhint.failReporter())
-        .pipe(plugins.htmlmin({collapseWhitespace: true, removeComments: true}))
-        .pipe(plugins.ngHtml2js({
-            moduleName: "app"
-        }));
+        .pipe(gulp.dest(paths.dist + '/component'));
 };
+///////////////////////////////////////////////
 
-///////////////////needs changing. not using sass
+///stripped this out for needless complication. may revisit.
+//pipes.scriptedPartials = function() {
+//    return pipes.validatedPartials()
+//        .pipe(plugins.htmlhint.failReporter())
+//        .pipe(plugins.htmlmin({collapseWhitespace: true, removeComments: true}))
+//        .pipe(plugins.ngHtml2js({
+//            moduleName: "app",
+//            declareModule: false
+//        }));
+//};
+
+///stripped out sass compiler - sass not in use
 pipes.builtStylesDev = function() {
     return gulp.src(paths.styles)
         //.pipe(plugins.sass())
         .pipe(gulp.dest(paths.dev));
 };
-
+///took out sourcemapping stuff, and updated css minification to use cssnano
 pipes.builtStylesProd = function() {
     return gulp.src(paths.styles)
         // .pipe(plugins.sourcemaps.init())
@@ -191,7 +194,7 @@ pipes.builtAppDev = function() {
 };
 
 pipes.builtAppProd = function() {
-    return es.merge(pipes.builtIndexProd(), pipes.processedImagesProd(), pipes.processedIconsProd());
+    return es.merge(pipes.builtIndexProd(), pipes.builtPartialsProd(), pipes.processedImagesProd(), pipes.processedIconsProd());
 };
 
 // == TASKS ========
@@ -224,7 +227,10 @@ gulp.task('validate-index', pipes.validatedIndex);
 gulp.task('build-partials-dev', pipes.builtPartialsDev);
 
 // converts partials to javascript using html2js
-gulp.task('convert-partials-to-js', pipes.scriptedPartials);
+//gulp.task('convert-partials-to-js', pipes.scriptedPartials);
+
+// moves html partials into production environment (replaces convert-partials-to-js)
+gulp.task('build-partials-prod', pipes.builtPartialsProd);
 
 // runs jshint on the dev server scripts
 //gulp.task('validate-devserver-scripts', pipes.validatedDevServerScripts);
@@ -271,23 +277,12 @@ gulp.task('clean-build-app-prod', ['clean-prod'], pipes.builtAppProd);
 // clean, build, and watch live changes to the dev environment
 gulp.task('watch-dev', ['build-app-dev'], function() {
 
-    // start nodemon to auto-reload the dev server
-    //plugins.nodemon({ script: 'server.js', ext: 'js', watch: ['devServer/'], env: {NODE_ENV : 'development'} })
-    //    .on('change', ['validate-devserver-scripts'])
-    //    .on('restart', function () {
-    //        console.log('[nodemon] restarted dev server');
-    //    });
-
     connect.server({
         root: 'dev',
         port: 9000,
         livereload: true
     });
-
     open("http://localhost:9000");
-
-    // start live-reload server
-    //plugins.livereload.listen({ start: true });
 
     // watch index
     gulp.watch(paths.index, function() {
@@ -322,22 +317,11 @@ gulp.task('watch-dev', ['build-app-dev'], function() {
 // clean, build, and watch live changes to the prod environment
 gulp.task('watch-prod', ['build-app-prod'], function() {
 
-    // start nodemon to auto-reload the dev server
-    //plugins.nodemon({ script: 'server.js', ext: 'js', watch: ['devServer/'], env: {NODE_ENV : 'production'} })
-    //    .on('change', ['validate-devserver-scripts'])
-    //    .on('restart', function () {
-    //        console.log('[nodemon] restarted dev server');
-    //    });
-
-    // start live-reload server
-    //plugins.livereload.listen({start: true});
-
     connect.server({
         root: 'dist',
         port: 9001,
         livereload: true
     });
-
     open("http://localhost:9001");
 
     // watch index
