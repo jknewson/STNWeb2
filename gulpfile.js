@@ -19,9 +19,9 @@ var paths = {
     fonts: 'src/fonts/**/*',
     index: 'src/index.html',
     partials: ['src/component/**/*.html', '!src/index.html'],
-    distDev: 'dist.dev',
-    distProd: 'dist.prod',
-    distScriptsProd: 'dist.prod/scripts'
+    dev: 'dev',
+    dist: 'dist',
+    distScriptsProd: 'dist/scripts'
     //scriptsDevServer: 'devServer/**/*.js'
 };
 
@@ -51,7 +51,7 @@ pipes.validatedAppScripts = function() {
 
 pipes.builtAppScriptsDev = function() {
     return pipes.validatedAppScripts()
-        .pipe(gulp.dest(paths.distDev));
+        .pipe(gulp.dest(paths.dev));
 };
 
 pipes.builtAppScriptsProd = function() {
@@ -69,7 +69,7 @@ pipes.builtAppScriptsProd = function() {
 
 pipes.builtVendorScriptsDev = function() {
     return gulp.src(bowerFiles())
-        .pipe(gulp.dest('dist.dev/bower_components'));
+        .pipe(gulp.dest('dev/bower_components'));
 };
 
 pipes.builtVendorScriptsProd = function() {
@@ -94,7 +94,7 @@ pipes.validatedPartials = function() {
 
 pipes.builtPartialsDev = function() {
     return pipes.validatedPartials()
-        .pipe(gulp.dest(paths.distDev + '/component'));
+        .pipe(gulp.dest(paths.dev + '/component'));
 };
 
 ///put app name below on moduleName var
@@ -111,7 +111,7 @@ pipes.scriptedPartials = function() {
 pipes.builtStylesDev = function() {
     return gulp.src(paths.styles)
         //.pipe(plugins.sass())
-        .pipe(gulp.dest(paths.distDev));
+        .pipe(gulp.dest(paths.dev));
 };
 
 pipes.builtStylesProd = function() {
@@ -123,28 +123,28 @@ pipes.builtStylesProd = function() {
         .pipe(plugins.cssnano())
         .pipe(plugins.sourcemaps.write())
         .pipe(pipes.minifiedFileName())
-        .pipe(gulp.dest(paths.distProd));
+        .pipe(gulp.dest(paths.dist));
 };
 ///////////////////////////////////////////////
 
 pipes.processedImagesDev = function() {
     return gulp.src(paths.images)
-        .pipe(gulp.dest(paths.distDev + '/images/'));
+        .pipe(gulp.dest(paths.dev + '/images/'));
 };
 
 pipes.processedImagesProd = function() {
     return gulp.src(paths.images)
-        .pipe(gulp.dest(paths.distProd + '/images/'));
+        .pipe(gulp.dest(paths.dist + '/images/'));
 };
 
 pipes.processedIconsDev = function() {
     return gulp.src(paths.fonts)
-        .pipe(gulp.dest(paths.distDev + '/fonts'))
+        .pipe(gulp.dest(paths.dev + '/fonts'))
 }
 
 pipes.processedIconsProd = function() {
     return gulp.src(paths.fonts)
-        .pipe(gulp.dest(paths.distProd + '/fonts'))
+        .pipe(gulp.dest(paths.dist + '/fonts'))
 }
 
 pipes.validatedIndex = function() {
@@ -164,11 +164,11 @@ pipes.builtIndexDev = function() {
     var appStyles = pipes.builtStylesDev();
 
     return pipes.validatedIndex()
-        .pipe(gulp.dest(paths.distDev)) // write first to get relative path for inject
+        .pipe(gulp.dest(paths.dev)) // write first to get relative path for inject
         .pipe(plugins.inject(orderedVendorScripts, {relative: true, name: 'bower'}))
         .pipe(plugins.inject(orderedAppScripts, {relative: true}))
         .pipe(plugins.inject(appStyles, {relative: true}))
-        .pipe(gulp.dest(paths.distDev));
+        .pipe(gulp.dest(paths.dev));
 };
 
 pipes.builtIndexProd = function() {
@@ -178,12 +178,12 @@ pipes.builtIndexProd = function() {
     var appStyles = pipes.builtStylesProd();
 
     return pipes.validatedIndex()
-        .pipe(gulp.dest(paths.distProd)) // write first to get relative path for inject
+        .pipe(gulp.dest(paths.dist)) // write first to get relative path for inject
         .pipe(plugins.inject(vendorScripts, {relative: true, name: 'bower'}))
         .pipe(plugins.inject(appScripts, {relative: true}))
         .pipe(plugins.inject(appStyles, {relative: true}))
         .pipe(plugins.htmlmin({collapseWhitespace: true, removeComments: true}))
-        .pipe(gulp.dest(paths.distProd));
+        .pipe(gulp.dest(paths.dist));
 };
 
 pipes.builtAppDev = function() {
@@ -199,7 +199,7 @@ pipes.builtAppProd = function() {
 // removes all compiled dev files
 gulp.task('clean-dev', function() {
     var deferred = Q.defer();
-    del(paths.distDev, function() {
+    del(paths.dev, function() {
         deferred.resolve();
     });
     return deferred.promise;
@@ -208,7 +208,7 @@ gulp.task('clean-dev', function() {
 // removes all compiled production files
 gulp.task('clean-prod', function() {
     var deferred = Q.defer();
-    del(paths.distProd, function() {
+    del(paths.dist, function() {
         deferred.resolve();
     });
     return deferred.promise;
@@ -279,7 +279,7 @@ gulp.task('watch-dev', ['build-app-dev'], function() {
     //    });
 
     connect.server({
-        root: 'dist.dev',
+        root: 'dev',
         port: 9000,
         livereload: true
     });
@@ -333,7 +333,7 @@ gulp.task('watch-prod', ['build-app-prod'], function() {
     //plugins.livereload.listen({start: true});
 
     connect.server({
-        root: 'dist.prod',
+        root: 'dist',
         port: 9001,
         livereload: true
     });
