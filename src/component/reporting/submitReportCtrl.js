@@ -1,10 +1,9 @@
 ﻿(function () {
-    /* controllers.js, 'leaflet-directive''ui.unique','ngTagsInput',*/
     'use strict';
 
     var STNControllers = angular.module('STNControllers');
     STNControllers.controller('submitReportCtrl', ['$scope', '$http', '$cookies', '$uibModal', '$state', 'CONTACT', 'REPORT', 
-        function submitReportCtrl($scope, $http, $cookies, $uibModal, $state, CONTACT, REPORT) {
+        function ($scope, $http, $cookies, $uibModal, $state, CONTACT, REPORT) {
             //#make sure this clears except for if they care needing to complete a report
             if ($scope.$parent.needToComplete !== true) {
                 $scope.$parent.newReport = {};
@@ -239,5 +238,4 @@
                 }).$promise;
             };
         }]);
-    //#endregion Reporting Controller
 })();

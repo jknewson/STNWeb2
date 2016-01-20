@@ -4,9 +4,8 @@
 
     var STNControllers = angular.module('STNControllers');
 
-   //#region File Controller
     STNControllers.controller('fileUploadCtrl', ['$scope', '$location', '$cookies', 'Upload', 'multipartForm', 'fileTypeList', 'agencyList',
-        function fileUploadCtrl($scope, $location, $cookies, Upload, multipartForm, fileTypeList, agencyList) {
+        function ($scope, $location, $cookies, Upload, multipartForm, fileTypeList, agencyList) {
             if ($cookies.get('STNCreds') === undefined || $cookies.get('STNCreds') === "") {
                 $scope.auth = false;
                 $location.path('/login');
@@ -88,5 +87,5 @@
                 };
             }
         }]);
-    //#endregion File Controller
+
 })();

@@ -3,12 +3,11 @@
     'use strict';
 
     var STNControllers = angular.module('STNControllers');
-    //#region HELP Controller
+
     STNControllers.controller('helpCtrl', ['$scope', 
-        function helpCtrl($scope) {
+        function ($scope) {
             $scope.helpInfo = {};
             $scope.helpInfo.fact = "Some really interesting help will be here.";
         }]);
-    //#endregion HELP Controller
 
 })();

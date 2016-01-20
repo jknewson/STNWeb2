@@ -4,9 +4,8 @@
 
     var STNControllers = angular.module('STNControllers');
 
-//#region EventSession
     STNControllers.controller('eventSessionCtrl', ['$scope', '$rootScope', '$cookies', '$uibModal', '$location', '$state', 'EVENT', 'EVENT_TYPE', 'STATE',
-        function eventSessionCtrl($scope, $rootScope, $cookies, $uibModal, $location, $state, EVENT, EVENT_TYPE, STATE) {
+        function ($scope, $rootScope, $cookies, $uibModal, $location, $state, EVENT, EVENT_TYPE, STATE) {
             $scope.openEventModal = function () {
                 $(".page-loading").removeClass("hidden");
                 //modal
@@ -34,5 +33,4 @@
             };
 
         }]);
-    //#endregion EventSession
 })();

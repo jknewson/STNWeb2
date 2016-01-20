@@ -1,10 +1,9 @@
 ﻿(function () {
-    /* controllers.js, 'leaflet-directive''ui.unique','ngTagsInput',*/
     'use strict';
 
     var ModalControllers = angular.module('ModalControllers');
     ModalControllers.controller('reportModalCtrl', ['$scope', '$uibModalInstance', 'report', 'submitPerson', 'contacts', 
-        function reportModalCtrl($scope, $uibModalInstance, report, submitPerson, contacts) {
+        function ($scope, $uibModalInstance, report, submitPerson, contacts) {
             $scope.ReportView = {};
             $scope.ReportView.Report = report;
             $scope.ReportView.submitter = submitPerson;

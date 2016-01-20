@@ -1,10 +1,9 @@
 ﻿(function () {
-    /* controllers.js, 'leaflet-directive''ui.unique','ngTagsInput',*/
     'use strict';
 
     var STNControllers = angular.module('STNControllers');
     STNControllers.controller('reportingDashCtrl', ['$scope', '$cookies', '$filter', '$uibModal', '$state', '$http', 'CONTACT', 'MEMBER', 'allReportsAgain', 
-        function reportingDashCtrl($scope, $cookies, $filter, $uibModal, $state, $http, CONTACT, MEMBER, allReportsAgain) {
+        function ($scope, $cookies, $filter, $uibModal, $state, $http, CONTACT, MEMBER, allReportsAgain) {
             $scope.reportsToDate = allReportsAgain;
             $scope.todayRpts = []; $scope.yesterdayRpts = []; $scope.pickDateRpts = []; $scope.pickAdateReports = false;
             $scope.today = new Date();

@@ -4,7 +4,7 @@
     var LogInOutController = angular.module('LogInOutController', []);
 
     LogInOutController.controller('loginCtrl', ['$scope', '$state', '$location', '$uibModal', '$http', '$cookies', '$rootScope', 'Login', 
-        function loginCtrl($scope, $state, $location, $uibModal, $http, $cookies, $rootScope, Login) {
+        function ($scope, $state, $location, $uibModal, $http, $cookies, $rootScope, Login) {
             //login //
             //#region CAP lock Check
             $('[type=password]').keypress(function (e) {
@@ -26,6 +26,7 @@
                 });
             });
             //#endregion CAP lock Check
+
             $scope.submit = function () {
                 //$scope.sub = true;
                 var postData = {
@@ -98,9 +99,10 @@
                 );
             };
         }]);
+
     //logOut
     LogInOutController.controller('logoutCtrl', ['$scope', '$rootScope', '$cookies', '$location', 
-        function logoutCtrl($scope, $rootScope, $cookies, $location) {
+        function ($scope, $rootScope, $cookies, $location) {
             $scope.logout = function () {
                 $cookies.remove('STNCreds');
                 $cookies.remove('STNUsername');

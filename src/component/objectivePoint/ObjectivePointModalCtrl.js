@@ -1,10 +1,9 @@
 ﻿(function () {
-    /* controllers.js, 'leaflet-directive''ui.unique','ngTagsInput',*/
     'use strict';
 
     var ModalControllers = angular.module('ModalControllers');
     ModalControllers.controller('OPmodalCtrl', ['$scope', '$cookies', '$http', '$uibModalInstance', '$uibModal', 'allDropdowns', 'thisOP', 'thisOPControls', 'opSite', 'OBJECTIVE_POINT', 'OP_CONTROL_IDENTIFIER', 
-        function OPmodalCtrl($scope, $cookies, $http, $uibModalInstance, $uibModal, allDropdowns, thisOP, thisOPControls, opSite, OBJECTIVE_POINT, OP_CONTROL_IDENTIFIER) {
+        function ($scope, $cookies, $http, $uibModalInstance, $uibModal, allDropdowns, thisOP, thisOPControls, opSite, OBJECTIVE_POINT, OP_CONTROL_IDENTIFIER) {
             //defaults for radio buttons
             //dropdowns
             $scope.OPTypeList = allDropdowns[0];

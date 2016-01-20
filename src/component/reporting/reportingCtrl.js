@@ -1,10 +1,10 @@
 ﻿(function () {
-    /* controllers.js, 'leaflet-directive''ui.unique','ngTagsInput',*/
     'use strict';
 
     var STNControllers = angular.module('STNControllers');
 //#region Reporting Controller
-    STNControllers.controller('reportingCtrl', ['$scope', '$rootScope', '$cookies', '$location', '$http', '$uibModal', 'incompleteReports', 'allEvents', 'allStates', 'allReports', 'allEventTypes', 'allEventStatus', 'allAgencies', 'REPORT', 'MEMBER', function($scope, $rootScope, $cookies, $location, $http, $uibModal, incompleteReports, allEvents, allStates, allReports, allEventTypes, allEventStatus, allAgencies, REPORT, MEMBER) {
+    STNControllers.controller('reportingCtrl', ['$scope', '$rootScope', '$cookies', '$location', '$http', '$uibModal', 'incompleteReports', 'allEvents', 'allStates', 'allReports', 'allEventTypes', 'allEventStatus', 'allAgencies', 'REPORT', 'MEMBER',
+        function ($scope, $rootScope, $cookies, $location, $http, $uibModal, incompleteReports, allEvents, allStates, allReports, allEventTypes, allEventStatus, allAgencies, REPORT, MEMBER) {
             if ($cookies.get('STNCreds') === undefined || $cookies.get('STNCreds') === "") {
                 $scope.auth = false;
                 $location.path('/login');

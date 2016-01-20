@@ -3,10 +3,8 @@
 
     var SettingsControllers = angular.module('SettingsControllers');
 
-    //#region Members inside Settings Tab
-    //#region member Controller (abstract)
     SettingsControllers.controller('memberCtrl', ['$scope', '$rootScope', '$cookies', '$location', '$http', '$filter', 'MEMBER', 'allRoles', 'allAgencies', 
-        function memberCtrl($scope, $rootScope, $cookies, $location, $http, $filter, MEMBER, allRoles, allAgencies) {
+        function ($scope, $rootScope, $cookies, $location, $http, $filter, MEMBER, allRoles, allAgencies) {
             if ($cookies.get('STNCreds') === undefined || $cookies.get('STNCreds') === "") {
                 $scope.auth = false;
                 $location.path('/login');
@@ -56,5 +54,4 @@
                 });
             }
         }]);
-    //#endregion  member Controller (abstract)
 }());
