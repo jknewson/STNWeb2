@@ -2,173 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="7bbb61f3-c3e9-4f8f-bc19-016119329c6d" name="Default" comment="">
-      <change type="DELETED" beforePath="$PROJECT_DIR$/dist.dev/app.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/dist.dev/bower_components/FontAwesome.otf" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/dist.dev/bower_components/angular-animate.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/dist.dev/bower_components/angular-cookies.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/dist.dev/bower_components/angular-filter.min.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/dist.dev/bower_components/angular-input-modified.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/dist.dev/bower_components/angular-resource.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/dist.dev/bower_components/angular-route.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/dist.dev/bower_components/angular-ui-router.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/dist.dev/bower_components/angular.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/dist.dev/bower_components/bootstrap.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/dist.dev/bower_components/bootstrap.less" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/dist.dev/bower_components/checklist-model.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/dist.dev/bower_components/datetimepicker.css" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/dist.dev/bower_components/datetimepicker.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/dist.dev/bower_components/event.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/dist.dev/bower_components/font-awesome.css" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/dist.dev/bower_components/fontawesome-webfont.eot" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/dist.dev/bower_components/fontawesome-webfont.svg" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/dist.dev/bower_components/fontawesome-webfont.ttf" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/dist.dev/bower_components/fontawesome-webfont.woff" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/dist.dev/bower_components/fontawesome-webfont.woff2" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/dist.dev/bower_components/indeterminate.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/dist.dev/bower_components/index.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/dist.dev/bower_components/isteven-multi-select.css" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/dist.dev/bower_components/isteven-multi-select.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/dist.dev/bower_components/jquery.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/dist.dev/bower_components/ladda-angular.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/dist.dev/bower_components/ladda.min.css" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/dist.dev/bower_components/ladda.min.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/dist.dev/bower_components/lato.css" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/dist.dev/bower_components/mask.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/dist.dev/bower_components/mobile-angular-ui-base.css" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/dist.dev/bower_components/mobile-angular-ui-desktop.css" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/dist.dev/bower_components/mobile-angular-ui-hover.css" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/dist.dev/bower_components/mobile-angular-ui.gestures.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/dist.dev/bower_components/mobile-angular-ui.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/dist.dev/bower_components/ng-file-upload.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/dist.dev/bower_components/scrollpoint.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/dist.dev/bower_components/spin.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/dist.dev/bower_components/toaster.css" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/dist.dev/bower_components/toaster.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/dist.dev/bower_components/toastr.css" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/dist.dev/bower_components/toastr.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/dist.dev/bower_components/ui-bootstrap-tpls.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/dist.dev/bower_components/ui-scroll.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/dist.dev/bower_components/uploader.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/dist.dev/bower_components/validate.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/dist.dev/bower_components/xeditable.css" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/dist.dev/bower_components/xeditable.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/dist.dev/component/ModalsCtrl.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/dist.dev/component/STNCtrl.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/dist.dev/component/approval/approval.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/dist.dev/component/approval/approvalCtrl.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/dist.dev/component/event/eventCtrl.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/dist.dev/component/event/eventHolderView.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/dist.dev/component/event/eventInfo.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/dist.dev/component/event/eventInfoCtrl.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/dist.dev/component/event/eventSessionCtrl.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/dist.dev/component/event/eventSessionModalCtrl.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/dist.dev/component/event/eventsList.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/dist.dev/component/file/file.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/dist.dev/component/file/fileCtrl.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/dist.dev/component/file/fileList.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/dist.dev/component/file/fileUploadCtrl.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/dist.dev/component/help/helpCtrl.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/dist.dev/component/home/homeBase.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/dist.dev/component/home/homeCtrl.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/dist.dev/component/hwm/hwmCtrl.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/dist.dev/component/hwm/hwmList.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/dist.dev/component/hwm/hwmModalCtrl.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/dist.dev/component/hwm/quickHWM.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/dist.dev/component/hwm/quickHWMCtrl.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/dist.dev/component/jquery.inputmask.bundle.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/dist.dev/component/logInOut/logInOutCtrl.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/dist.dev/component/logInOut/login.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/dist.dev/component/main/mainCtrl.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/dist.dev/component/main/mainView.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/dist.dev/component/map/map.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/dist.dev/component/map/mapCtrl.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/dist.dev/component/member/memberCtrl.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/dist.dev/component/member/memberHolderView.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/dist.dev/component/member/memberInfo.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/dist.dev/component/member/memberInfoCtrl.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/dist.dev/component/member/membersList.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/dist.dev/component/objectivePoint/objectivePointCtrl.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/dist.dev/component/objectivePoint/objectivePointList.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/dist.dev/component/objectivePoint/objectivePointModalCtrl.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/dist.dev/component/peak/peakCtrl.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/dist.dev/component/peak/peakList.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/dist.dev/component/reporting/Reporting(partials).html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/dist.dev/component/reporting/completedReportView.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/dist.dev/component/reporting/confirmReportModalCtrl.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/dist.dev/component/reporting/generateReport.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/dist.dev/component/reporting/projectAlertModalCtrl.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/dist.dev/component/reporting/reportModalCtrl.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/dist.dev/component/reporting/reporting.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/dist.dev/component/reporting/reportingCtrl.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/dist.dev/component/reporting/reportingDashboard.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/dist.dev/component/reporting/reportingDashboardCtrl.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/dist.dev/component/reporting/submitReport.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/dist.dev/component/reporting/submitReportCtrl.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/dist.dev/component/resources/agency.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/dist.dev/component/resources/contactType.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/dist.dev/component/resources/deploymentPriority.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/dist.dev/component/resources/deploymentType.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/dist.dev/component/resources/eventStatus.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/dist.dev/component/resources/eventType.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/dist.dev/component/resources/fileType.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/dist.dev/component/resources/horizontalCollectionMethod.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/dist.dev/component/resources/horizontalDatum.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/dist.dev/component/resources/housingType.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/dist.dev/component/resources/hwmQuality.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/dist.dev/component/resources/hwmType.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/dist.dev/component/resources/instrumentCollectionCondition.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/dist.dev/component/resources/marker.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/dist.dev/component/resources/networkNames.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/dist.dev/component/resources/networkType.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/dist.dev/component/resources/objectivePointQuality.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/dist.dev/component/resources/objectivePointType.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/dist.dev/component/resources/resourcesCtrl.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/dist.dev/component/resources/resourcesHolderView.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/dist.dev/component/resources/resourcesList.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/dist.dev/component/resources/sensorBrand.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/dist.dev/component/resources/sensorType.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/dist.dev/component/resources/statusType.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/dist.dev/component/resources/verticalCollectionMethod.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/dist.dev/component/resources/verticalDatum.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/dist.dev/component/sensor/sensorCtrl.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/dist.dev/component/sensor/sensorList.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/dist.dev/component/sensor/sensorModalCtrl.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/dist.dev/component/settings/settings.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/dist.dev/component/settings/settingsCtrl.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/dist.dev/component/site/site.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/dist.dev/component/site/siteCtrl.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/dist.dev/component/site/siteInfoView.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/dist.dev/component/site/siteModalCtrl.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/dist.dev/component/siteSearch/siteSearch.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/dist.dev/component/siteSearch/siteSearchCtrl.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/dist.dev/css/app.css" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/dist.dev/css/bootstrap-multiselect.css" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/dist.dev/css/bootstrap-table.css" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/dist.dev/css/bootstrap-theme.css" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/dist.dev/css/bootstrap-theme.min.css" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/dist.dev/css/bootstrap.css" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/dist.dev/css/bootstrap.min.css" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/dist.dev/css/bootstrap_3.1.1.css" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/dist.dev/css/isteven-multi-select.css" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/dist.dev/css/ng-tags-input.min.css" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/dist.dev/css/select.css" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/dist.dev/css/toastr.css" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/dist.dev/css/xeditable.css" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/dist.dev/fonts/glyphicons-halflings-regular.eot" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/dist.dev/fonts/glyphicons-halflings-regular.svg" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/dist.dev/fonts/glyphicons-halflings-regular.ttf" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/dist.dev/fonts/glyphicons-halflings-regular.woff" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/dist.dev/fonts/glyphicons-halflings-regular.woff2" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/dist.dev/images/Events1.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/dist.dev/images/Members1.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/dist.dev/images/Tables1.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/dist.dev/images/loading1.gif" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/dist.dev/index.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/dist.dev/services/STNResource.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/dist.dev/services/businessServices.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/dist.dev/shared/directives/STNDirectives.js" afterPath="" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/gulpfile.js" afterPath="$PROJECT_DIR$/gulpfile.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/component/reporting/reportingCtrl.js" afterPath="$PROJECT_DIR$/src/component/reporting/reportingCtrl.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/component/settings/settingsCtrl.js" afterPath="$PROJECT_DIR$/src/component/settings/settingsCtrl.js" />
     </list>
     <ignored path="STNWeb2.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -192,51 +28,91 @@
       <file leaf-file-name="gulpfile.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/gulpfile.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-14.827586">
-              <caret line="95" column="23" selection-start-line="95" selection-start-column="11" selection-end-line="95" selection-end-column="23" />
+            <state vertical-scroll-proportion="-24.344828">
+              <caret line="85" column="2" selection-start-line="85" selection-start-column="2" selection-end-line="85" selection-end-column="2" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="approvalCtrl.js" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/dev/component/approval/approvalCtrl.js">
+      <file leaf-file-name="reportingCtrl.js" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/component/reporting/reportingCtrl.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.09224806">
-              <caret line="7" column="29" selection-start-line="7" selection-start-column="17" selection-end-line="7" selection-end-column="29" />
+            <state vertical-scroll-proportion="-4.6896553">
+              <caret line="8" column="36" selection-start-line="8" selection-start-column="36" selection-end-line="8" selection-end-column="36" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="mapCtrl.js" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/dev/component/map/mapCtrl.js">
+      <file leaf-file-name="eventCtrl.js" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/component/event/eventCtrl.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-2.3448277">
-              <caret line="4" column="43" selection-start-line="4" selection-start-column="42" selection-end-line="4" selection-end-column="43" />
+            <state vertical-scroll-proportion="0.0">
+              <caret line="55" column="13" selection-start-line="55" selection-start-column="13" selection-end-line="55" selection-end-column="13" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
       <file leaf-file-name="homeCtrl.js" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/dev/component/home/homeCtrl.js">
+        <entry file="file://$PROJECT_DIR$/src/component/home/homeCtrl.js">
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.0">
-              <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+              <caret line="19" column="5" selection-start-line="19" selection-start-column="5" selection-end-line="19" selection-end-column="5" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="settingsCtrl.js" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/component/settings/settingsCtrl.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.1656333">
+              <caret line="11" column="20" selection-start-line="11" selection-start-column="20" selection-end-line="11" selection-end-column="20" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
       <file leaf-file-name="app.js" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/dev/app.js">
+        <entry file="file://$PROJECT_DIR$/src/app.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-9.551724">
-              <caret line="49" column="31" selection-start-line="49" selection-start-column="20" selection-end-line="49" selection-end-column="31" />
+            <state vertical-scroll-proportion="0.0">
+              <caret line="839" column="0" selection-start-line="839" selection-start-column="0" selection-end-line="839" selection-end-column="0" />
               <folding>
-                <marker date="1453241415688" expanded="true" signature="33887:33899" placeholder="..." />
+                <marker date="1453223741318" expanded="true" signature="33887:33899" placeholder="..." />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="mapCtrl.js" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/component/map/mapCtrl.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0">
+              <caret line="14" column="63" selection-start-line="14" selection-start-column="63" selection-end-line="14" selection-end-column="63" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="approvalCtrl.js" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/component/approval/approvalCtrl.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0">
+              <caret line="78" column="0" selection-start-line="78" selection-start-column="0" selection-end-line="78" selection-end-column="0" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="siteCtrl.js" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/component/site/siteCtrl.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0">
+              <caret line="123" column="25" selection-start-line="123" selection-start-column="25" selection-end-line="123" selection-end-column="25" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -271,6 +147,8 @@
         <option value="$PROJECT_DIR$/src/index.html" />
         <option value="$PROJECT_DIR$/dev/index.html" />
         <option value="$PROJECT_DIR$/src/component/map/mapCtrl.js" />
+        <option value="$PROJECT_DIR$/src/component/settings/settingsCtrl.js" />
+        <option value="$PROJECT_DIR$/src/component/reporting/reportingCtrl.js" />
         <option value="$PROJECT_DIR$/gulpfile.js" />
       </list>
     </option>
@@ -326,70 +204,6 @@
             </PATH_ELEMENT>
             <PATH_ELEMENT>
               <option name="myItemId" value="STNWeb2" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="STNWeb2" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="STNWeb2" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="dist" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="STNWeb2" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="STNWeb2" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="dist" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="component" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="STNWeb2" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="STNWeb2" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="dev" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="STNWeb2" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="STNWeb2" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="dev" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="component" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -478,12 +292,13 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="1912" y="-8" width="2576" height="1456" extended-state="7" />
-    <editor active="true" />
+    <frame x="1912" y="-8" width="2576" height="1456" extended-state="6" />
+    <editor active="false" />
     <layout>
-      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.11289062" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.16679688" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.1410542" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
@@ -495,7 +310,6 @@
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
-      <window_info id="Find" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.25976768" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
     </layout>
     <layout-to-restore>
@@ -610,6 +424,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.66594124">
           <caret line="36" column="26" selection-start-line="36" selection-start-column="26" selection-end-line="36" selection-end-column="26" />
+          <folding />
         </state>
       </provider>
     </entry>
@@ -653,6 +468,13 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.17627119">
           <caret line="17" column="26" selection-start-line="17" selection-start-column="26" selection-end-line="17" selection-end-column="26" />
+          <folding>
+            <element signature="n#style#0;n#input#0;n#div#0;n#div#0;n#div#1;n#fieldset#0;n#form#0;n#!!top" expanded="false" />
+            <element signature="n#style#0;n#input#0;n#div#1;n#div#0;n#div#1;n#fieldset#0;n#form#0;n#!!top" expanded="false" />
+            <element signature="n#style#0;n#div#0;n#div#0;n#div#8;n#fieldset#0;n#form#0;n#!!top" expanded="false" />
+            <element signature="n#style#0;n#div#0;n#div#0;n#div#9;n#fieldset#0;n#form#0;n#!!top" expanded="false" />
+            <element signature="n#style#0;n#div#0;n#div#0;n#div#10;n#fieldset#0;n#form#0;n#!!top" expanded="false" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -706,16 +528,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/app.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="17" column="13" selection-start-line="17" selection-start-column="13" selection-end-line="17" selection-end-column="13" />
-          <folding>
-            <marker date="1453223741318" expanded="true" signature="33887:33899" placeholder="..." />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/component/sensor/sensorModalCtrl.js">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.6844396">
@@ -723,26 +535,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/component/approval/approvalCtrl.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.83897156">
-          <caret line="78" column="0" selection-start-line="78" selection-start-column="0" selection-end-line="78" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/component/ModalsCtrl.js">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="1.2782946">
           <caret line="97" column="9" selection-start-line="97" selection-start-column="9" selection-end-line="97" selection-end-column="9" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/component/event/eventCtrl.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.70887035">
-          <caret line="55" column="9" selection-start-line="55" selection-start-column="9" selection-end-line="55" selection-end-column="9" />
           <folding />
         </state>
       </provider>
@@ -763,14 +559,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/component/map/mapCtrl.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="14" column="63" selection-start-line="14" selection-start-column="63" selection-end-line="14" selection-end-column="63" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/index.html">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.23962411">
@@ -779,52 +567,76 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/dev/app.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-9.551724">
-          <caret line="49" column="31" selection-start-line="49" selection-start-column="20" selection-end-line="49" selection-end-column="31" />
-          <folding>
-            <marker date="1453241415688" expanded="true" signature="33887:33899" placeholder="..." />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/dev/component/map/mapCtrl.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-2.3448277">
-          <caret line="4" column="43" selection-start-line="4" selection-start-column="42" selection-end-line="4" selection-end-column="43" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/dev/component/home/homeCtrl.js">
+    <entry file="file://$PROJECT_DIR$/src/component/home/homeCtrl.js">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <caret line="19" column="5" selection-start-line="19" selection-start-column="5" selection-end-line="19" selection-end-column="5" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/dev/component/approval/approval.html">
+    <entry file="file://$PROJECT_DIR$/src/component/map/mapCtrl.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.05379747">
-          <caret line="4" column="68" selection-start-line="4" selection-start-column="66" selection-end-line="4" selection-end-column="68" />
+        <state vertical-scroll-proportion="0.0">
+          <caret line="14" column="63" selection-start-line="14" selection-start-column="63" selection-end-line="14" selection-end-column="63" />
           <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/component/approval/approvalCtrl.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="78" column="0" selection-start-line="78" selection-start-column="0" selection-end-line="78" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/component/event/eventCtrl.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="55" column="13" selection-start-line="55" selection-start-column="13" selection-end-line="55" selection-end-column="13" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/component/site/siteCtrl.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="123" column="25" selection-start-line="123" selection-start-column="25" selection-end-line="123" selection-end-column="25" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/app.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="839" column="0" selection-start-line="839" selection-start-column="0" selection-end-line="839" selection-end-column="0" />
+          <folding>
+            <marker date="1453223741318" expanded="true" signature="33887:33899" placeholder="..." />
+          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/gulpfile.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-14.827586">
-          <caret line="95" column="23" selection-start-line="95" selection-start-column="11" selection-end-line="95" selection-end-column="23" />
+        <state vertical-scroll-proportion="-24.344828">
+          <caret line="85" column="2" selection-start-line="85" selection-start-column="2" selection-end-line="85" selection-end-column="2" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/dev/component/approval/approvalCtrl.js">
+    <entry file="file://$PROJECT_DIR$/src/component/reporting/reportingCtrl.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.09224806">
-          <caret line="7" column="29" selection-start-line="7" selection-start-column="17" selection-end-line="7" selection-end-column="29" />
+        <state vertical-scroll-proportion="-4.6896553">
+          <caret line="8" column="36" selection-start-line="8" selection-start-column="36" selection-end-line="8" selection-end-column="36" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/component/settings/settingsCtrl.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.1656333">
+          <caret line="11" column="20" selection-start-line="11" selection-start-column="20" selection-end-line="11" selection-end-column="20" />
           <folding />
         </state>
       </provider>
