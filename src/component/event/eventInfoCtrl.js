@@ -2,9 +2,9 @@
     'use strict';
 
     var SettingsControllers = angular.module('SettingsControllers');
-    //#region eventInfo Controller
+    
     SettingsControllers.controller('eventInfoCtrl', ['$scope', '$cookies', '$location', '$http', '$uibModal', '$filter', 'EVENT', 'thisEvent',
-        function eventInfoCtrl($scope, $cookies, $location, $http, $uibModal, $filter, EVENT, thisEvent) {
+        function ($scope, $cookies, $location, $http, $uibModal, $filter, EVENT, thisEvent) {
             if ($cookies.get('STNCreds') === undefined || $cookies.get('STNCreds') === "") {
                 $scope.auth = false;
                 $location.path('/login');
@@ -163,7 +163,5 @@
                 };//end $scope.save()
             }//end else (checkCreds())
         }]);
-    //#endregion eventInfo Controller
-    //#endregion events inside Settings Tab
-
+    
 }());

@@ -3,9 +3,9 @@
     'use strict';
 
     var STNControllers = angular.module('STNControllers');
- //#region Map Controller
+
     STNControllers.controller('mapCtrl', ['$scope', '$rootScope', '$cookies', '$location', 
-        function mapCtrl($scope, $rootScope, $cookies, $location) {        
+        function ($scope, $rootScope, $cookies, $location) {        
             if ($cookies.get('STNCreds') === undefined || $cookies.get('STNCreds') === "") {
                 $scope.auth = false;
                 $location.path('/login');
@@ -16,5 +16,4 @@
            
             }
         }]);
-    //#endregion Map Controller
 })();

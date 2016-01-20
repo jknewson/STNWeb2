@@ -1,12 +1,11 @@
 ﻿(function () {
-    /* controllers.js, 'leaflet-directive''ui.unique','ngTagsInput',*/
     'use strict';
 
     var ModalControllers = angular.module('ModalControllers');
 
     //deploy new or proposed sensor, edit deployed modal
     ModalControllers.controller('sensorModalCtrl', ['$scope', '$timeout', '$cookies', '$http', '$uibModalInstance', '$uibModal', 'allDropdowns', 'allDepTypes', 'thisSensor', 'SensorSite', 'siteOPs', 'allMembers', 'INSTRUMENT', 'INSTRUMENT_STATUS',
-        function sensorModalCtrl($scope, $timeout, $cookies, $http, $uibModalInstance, $uibModal, allDropdowns, allDepTypes, thisSensor, SensorSite, siteOPs, allMembers, INSTRUMENT, INSTRUMENT_STATUS) {
+        function ($scope, $timeout, $cookies, $http, $uibModalInstance, $uibModal, allDropdowns, allDepTypes, thisSensor, SensorSite, siteOPs, allMembers, INSTRUMENT, INSTRUMENT_STATUS) {
            $(".page-loading").addClass("hidden"); //loading...
            //dropdowns [0]allSensorTypes, [1]allSensorBrands, [2]allHousingTypes, [3]allSensDeps, [4]allEvents
            //TODO :: Can they edit a deployed sensor without an event being chosen???       
@@ -355,7 +354,7 @@
 
     // Retrieve a Sensor modal
     ModalControllers.controller('sensorRetrievalModalCtrl', ['$scope', '$timeout', '$cookies', '$http', '$uibModalInstance', '$uibModal', 'thisSensor', 'SensorSite', 'siteOPs', 'allEventList', 'allMembers', 'allStatusTypes', 'allInstCollCond', 'INSTRUMENT', 'INSTRUMENT_STATUS', 
-        function sensorRetrievalModalCtrl($scope, $timeout, $cookies, $http, $uibModalInstance, $uibModal, thisSensor, SensorSite, siteOPs, allEventList, allMembers, allStatusTypes, allInstCollCond, INSTRUMENT, INSTRUMENT_STATUS) {
+        function ($scope, $timeout, $cookies, $http, $uibModalInstance, $uibModal, thisSensor, SensorSite, siteOPs, allEventList, allMembers, allStatusTypes, allInstCollCond, INSTRUMENT, INSTRUMENT_STATUS) {
             $(".page-loading").addClass("hidden"); //loading...
             $scope.aSensor = thisSensor.Instrument;
             $scope.EventName = allEventList.filter(function (r) {return r.EVENT_ID == $scope.aSensor.EVENT_ID;})[0].EVENT_NAME;
@@ -400,12 +399,11 @@
                     });
                 }//end if valid
             };//end retrieveS
-
         }]);//end sensorRetrievalModalCtrl
 
     // view/edit retrieved sensor (deployed included here) modal
     ModalControllers.controller('fullSensorModalCtrl', ['$scope', '$filter', '$timeout', '$cookies', '$http', '$uibModalInstance', '$uibModal', 'allDepDropdowns', 'allStatusTypes', 'allInstCollCond', 'allEvents', 'allDepTypes', 'thisSensor', 'SensorSite', 'siteOPs', 'allMembers', 'INSTRUMENT', 'INSTRUMENT_STATUS', 
-        function fullSensorModalCtrl($scope, $filter, $timeout, $cookies, $http, $uibModalInstance, $uibModal, allDepDropdowns, allStatusTypes, allInstCollCond, allEvents, allDepTypes, thisSensor, SensorSite, siteOPs, allMembers, INSTRUMENT, INSTRUMENT_STATUS) {
+        function ($scope, $filter, $timeout, $cookies, $http, $uibModalInstance, $uibModal, allDepDropdowns, allStatusTypes, allInstCollCond, allEvents, allDepTypes, thisSensor, SensorSite, siteOPs, allMembers, INSTRUMENT, INSTRUMENT_STATUS) {
             $(".page-loading").addClass("hidden"); //loading...
             /*allSensorTypes, allSensorBrands, allHousingTypes, allSensDeps*/
             $scope.sensorTypeList = allDepDropdowns[0];
@@ -422,11 +420,11 @@
             
             $scope.sensor = thisSensor.Instrument;
             //deploy part
-            $scope.DeployedSensorStat = thisSensor.InstrumentStats.filter(function (inst) { return inst.Status === "Deployed"; });
+            $scope.DeployedSensorStat = thisSensor.InstrumentStats.filter(function (inst) { return inst.Status === "Deployed"; })[0];
             $scope.DeployedSensorStat.TIME_STAMP = new Date($scope.DeployedSensorStat.TIME_STAMP); //this keeps it as utc in display
             $scope.Deployer = allMembers.filter(function (m) { return m.MEMBER_ID === $scope.DeployedSensorStat.MEMBER_ID; })[0];
             //retrieve part
-            $scope.RetrievedSensorStat = thisSensor.InstrumentStats.filter(function (inst) { return inst.Status === "Retrieved"; });
+            $scope.RetrievedSensorStat = thisSensor.InstrumentStats.filter(function (inst) { return inst.Status === "Retrieved"; })[0];
             $scope.RetrievedSensorStat.TIME_STAMP = new Date($scope.RetrievedSensorStat.TIME_STAMP); //this keeps it as utc in display
             $scope.Retriever = allMembers.filter(function (m) { return m.MEMBER_ID === $scope.RetrievedSensorStat.MEMBER_ID; })[0];
             $scope.EventName = allEvents.filter(function (e) { return e.EVENT_ID === $scope.sensor.EVENT_ID; })[0].EVENT_NAME;

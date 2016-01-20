@@ -4,8 +4,7 @@
 
     var ModalControllers = angular.module('ModalControllers');
     ModalControllers.controller('hwmModalCtrl', ['$scope', '$cookies', '$http', '$uibModalInstance', '$uibModal', 'allDropdowns', 'thisHWM', 'hwmSite', 'allMembers', 'HWM', 
-        function hwmModalCtrl($scope, $cookies, $http, $uibModalInstance, $uibModal, allDropdowns, thisHWM, hwmSite, allMembers, HWM) {
-            //TODO:: check to see if they chose an event.. if not, they need to before creating a hwm
+        function ($scope, $cookies, $http, $uibModalInstance, $uibModal, allDropdowns, thisHWM, hwmSite, allMembers, HWM) {            
             //dropdowns
             $scope.hwmTypeList = allDropdowns[0];
             $scope.hwmQualList = allDropdowns[1];

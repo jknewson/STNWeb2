@@ -1,10 +1,11 @@
 ﻿(function () {
-    "use strict"; 
+    "use strict";
+
     var ModalControllers = angular.module('ModalControllers');
 
     //popup confirm box
     ModalControllers.controller('ConfirmModalCtrl', ['$scope', '$uibModalInstance', 'nameToRemove', 'what', 
-        function ConfirmModalCtrl($scope, $uibModalInstance, nameToRemove, what) {
+        function ($scope, $uibModalInstance, nameToRemove, what) {
             //#region switch (long)
             switch (what) {
                 case "Member":

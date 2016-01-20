@@ -1538,187 +1538,189 @@
 
     <div class="modal-body">
         <label>Deployed Sensor Information</label>
-        <form editable-form name="editableDEPLOYEDform" onaftersave="saveDeployed()">
-            <!-- Event: -->
-            <div class="form-group">
-                <div class="col-md-3 col-md-offset-1">Event:</div>
-                <div class="col-md-6">{{EventName}}</div>
-            </div>
-
-            <!-- Sensor Type*: -->
-            <div class="form-group required">
-                <div class="col-md-3 col-md-offset-1 req">Sensor Type:</div>
-                <div class="col-md-6">
-                    <span ng-if="view.val == 'detail'">{{sensor.Sensor_Type}}</span>
-                    <select ng-if="view.val == 'edit'" class="form-control" name="SENSOR_TYPE_ID" ng-model="sensor.SENSOR_TYPE_ID"
-                            ng-options="s.SENSOR_TYPE_ID as s.SENSOR for s in sensorTypeList" ng-change="getDepTypes()" required>
-                        <option value=""></option>
-                    </select>
-                </div>
-            </div>
-
-            <!-- Sensor Brand*: -->
-            <div class="form-group required">
-                <div class="col-md-3 col-md-offset-1 req">Sensor Brand:</div>
-                <div class="col-md-6">
-                    <span ng-if="view.val == 'detail'">{{sensor.Sensor_Brand}}</span>
-                    <select ng-if="view.val == 'edit'" class="form-control" name="SENSOR_BRAND_ID" ng-model="sensor.SENSOR_BRAND_ID"
-                            ng-options="sb.SENSOR_BRAND_ID as sb.BRAND_NAME for sb in sensorBrandList" required>
-                        <option value=""></option>
-                    </select>
-                </div>
-            </div>
-
-            <!-- Serial Number*: -->
-            <div class="form-group required">
-                <div class="col-md-3 col-md-offset-1 req">Serial Number:</div>
-                <div class="col-md-6">
-                    <span ng-if="view.val =='detail'">{{sensor.SERIAL_NUMBER}}</span>
-                    <input ng-if="view.val =='edit'" class="form-control" name="SERIAL_NUMBER" ng-model="sensor.SERIAL_NUMBER" type="text" required />
-                </div>
-            </div>
-
-            <!-- Housing Serial Number: -->
-            <div class="form-group">
-                <div class="col-md-3 col-md-offset-1">Housing Serial Number:</div>
-                <div class="col-md-6">
-                    <span ng-if="view.val == 'detail'">{{sensor.HOUSING_SERIAL_NUMBER}}</span>
-                    <input ng-if="view.val == 'edit'" class="form-control" name="HOUSING_SERIAL_NUMBER" ng-model="sensor.HOUSING_SERIAL_NUMBER" type="text" />
-                </div>
-            </div>
-
-            <!-- Housing Types: -->
-            <div class="form-group">
-                <div class="col-md-3 col-md-offset-1">Housing Types:</div>
-                <div class="col-md-6">
-                    <span ng-if="view.val == 'detail'">{{sensor.Housing_Type}}</span>
-                    <select ng-if="view.val == 'edit'" class="form-control" id="HOUSING_TYPE_ID" name="HOUSING_TYPE_ID" ng-model="sensor.HOUSING_TYPE_ID"
-                            ng-options="ht.HOUSING_TYPE_ID as ht.TYPE_NAME for ht in houseTypeList">
-                        <option value=""></option>
-                    </select>
-                </div>
-            </div>
-
-            <!-- Vented (only if Sensor Type is Pressure Transducer)-->
-            <div ng-show="sensor.SENSOR_TYPE_ID == 1">
+        <form name="editableDEPLOYEDform">
+            <fieldset>
+                <!-- Event: -->
                 <div class="form-group">
-                    <div class="col-md-3 col-md-offset-1">Vented:</div>
+                    <div class="col-md-3 col-md-offset-1">Event:</div>
+                    <div class="col-md-6">{{EventName}}</div>
+                </div>
+
+                <!-- Sensor Type*: -->
+                <div class="form-group required">
+                    <div class="col-md-3 col-md-offset-1 req">Sensor Type:</div>
                     <div class="col-md-6">
-                        <span ng-if="view.val == 'detail'">{{sensor.VENTED}}</span>
-                        <span ng-if="view.val == 'edit'">
-                            <label class="radio-inline">
-                                <input type="radio" name="VENTED" ng-model="sensor.VENTED" value="Yes" />Yes
-                            </label>
-                            <label class="radio-inline">
-                                <input type="radio" name="VENTED" ng-model="sensor.VENTED" value="No" />No
-                            </label>
+                        <span ng-show="view.val == 'detail'">{{sensor.Sensor_Type}}</span>
+                        <select ng-show="view.val == 'edit'" class="form-control" name="SENSOR_TYPE_ID" ng-model="sensor.SENSOR_TYPE_ID"
+                                ng-options="s.SENSOR_TYPE_ID as s.SENSOR for s in sensorTypeList" ng-change="getDepTypes()" required>
+                            <option value=""></option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Sensor Brand*: -->
+                <div class="form-group required">
+                    <div class="col-md-3 col-md-offset-1 req">Sensor Brand:</div>
+                    <div class="col-md-6">
+                        <span ng-show="view.val == 'detail'">{{sensor.Sensor_Brand}}</span>
+                        <select ng-show="view.val == 'edit'" class="form-control" name="SENSOR_BRAND_ID" ng-model="sensor.SENSOR_BRAND_ID"
+                                ng-options="sb.SENSOR_BRAND_ID as sb.BRAND_NAME for sb in sensorBrandList" required>
+                            <option value=""></option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Serial Number*: -->
+                <div class="form-group required">
+                    <div class="col-md-3 col-md-offset-1 req">Serial Number:</div>
+                    <div class="col-md-6">
+                        <span ng-show="view.val =='detail'">{{sensor.SERIAL_NUMBER}}</span>
+                        <input ng-show="view.val =='edit'" class="form-control" name="SERIAL_NUMBER" ng-model="sensor.SERIAL_NUMBER" type="text" required />
+                    </div>
+                </div>
+
+                <!-- Housing Serial Number: -->
+                <div class="form-group">
+                    <div class="col-md-3 col-md-offset-1">Housing Serial Number:</div>
+                    <div class="col-md-6">
+                        <span ng-show="view.val == 'detail'">{{sensor.HOUSING_SERIAL_NUMBER}}</span>
+                        <input ng-show="view.val == 'edit'" class="form-control" name="HOUSING_SERIAL_NUMBER" ng-model="sensor.HOUSING_SERIAL_NUMBER" type="text" />
+                    </div>
+                </div>
+
+                <!-- Housing Types: -->
+                <div class="form-group">
+                    <div class="col-md-3 col-md-offset-1">Housing Types:</div>
+                    <div class="col-md-6">
+                        <span ng-show="view.val == 'detail'">{{sensor.Housing_Type}}</span>
+                        <select ng-show="view.val == 'edit'" class="form-control" id="HOUSING_TYPE_ID" name="HOUSING_TYPE_ID" ng-model="sensor.HOUSING_TYPE_ID"
+                                ng-options="ht.HOUSING_TYPE_ID as ht.TYPE_NAME for ht in houseTypeList">
+                            <option value=""></option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Vented (only if Sensor Type is Pressure Transducer)-->
+                <div ng-show="sensor.SENSOR_TYPE_ID == 1">
+                    <div class="form-group">
+                        <div class="col-md-3 col-md-offset-1">Vented:</div>
+                        <div class="col-md-6">
+                            <span ng-show="view.val == 'detail'">{{sensor.VENTED}}</span>
+                            <span ng-show="view.val == 'edit'">
+                                <label class="radio-inline">
+                                    <input type="radio" name="VENTED" ng-model="sensor.VENTED" value="Yes" />Yes
+                                </label>
+                                <label class="radio-inline">
+                                    <input type="radio" name="VENTED" ng-model="sensor.VENTED" value="No" />No
+                                </label>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Deployment Type: -->
+                <div class="form-group">
+                    <div class="col-md-3 col-md-offset-1">Deployment Type:</div>
+                    <div class="col-md-6">
+                        <span ng-show="view.val == 'detail'">{{sensor.Deployment_Type}}</span>
+                        <select ng-show="view.val == 'edit'" class="form-control" id="DEPLOYMENT_TYPE_ID" name="DEPLOYMENT_TYPE_ID" ng-model="sensor.DEPLOYMENT_TYPE_ID"
+                                ng-options="dt.DEPLOYMENT_TYPE_ID as dt.METHOD for dt in filteredDeploymentTypes">
+                            <option value=""></option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Location Description: -->
+                <div class="form-group">
+                    <div class="col-md-3 col-md-offset-1">Location Description:</div>
+                    <div class="col-md-6">
+                        <span ng-show="view.val == 'detail'">{{sensor.LOCATION_DESCRIPTION}}</span>
+                        <textarea ng-show="view.val == 'edit'" class="form-control" id="LOCATION_DESCRIPTION" name="LOCATION_DESCRIPTION" type=" text" rows="3" ng-model="sensor.LOCATION_DESCRIPTION" />
+                    </div>
+                </div>
+
+                <!-- Interval: -->
+                <div class="form-group">
+                    <div class="col-md-3 col-md-offset-1">Interval:</div>
+                    <div class="col-md-6">
+                        <span ng-show="view.val == 'detail'">{{sensor.INTERVAL}} seconds</span>
+                        <input ng-show="view.val == 'edit'" class="form-control" ng-keypress="isNum($event)" name="INTERVAL" ng-model="sensor.INTERVAL" type="text" />
+                    </div>
+                </div>
+                <div class="form-group" ng-show="view.val == 'edit'">
+                    <label class="col-md-3 control-label"></label>
+                    <div class="col-md-6">
+                        <label class="radio-inline">
+                            <input type="radio" name="intervalType" ng-model="IntervalType.type" value="Minutes" />Minutes
+                        </label>
+                        <label class="radio-inline">
+                            <input type="radio" name="intervalType" ng-model="IntervalType.type" value="Seconds" />Seconds
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Deploy Date*: -->
+                <div class="form-group required">
+                    <div class="col-md-3 col-md-offset-1">Deploy Date:</div>
+                    <div class="col-md-6">
+                        <span ng-show="view.val == 'detail'">{{DeployedSensorStat.TIME_STAMP | date: 'MM/dd/yyyy hh:mm a'}}</span>
+                        <datetimepicker ng-show="view.val == 'edit'" hour-step="1" minute-step="1" ng-model="DeployedSensorStat.TIME_STAMP" show-meridian="true"
+                                        date-format="MM/dd/yyyy" readonly-date="false" readonly-time="false" date-options="dateOptions"
+                                        hidden-time="false" hidden-date="false" show-spinners="true" required>
+                        </datetimepicker>
+                    </div>
+                </div>
+
+                <!-- Deploy timezone*:-->
+                <div class="form-group required">
+                    <div class="col-md-3 col-md-offset-1 req">Time Zone:</div>
+                    <div class="col-md-6">
+                        <span ng-show="view.val == 'detail'">{{DeployedSensorStat.TIME_ZONE}}</span>
+                        <select ng-show="view.val == 'edit'" class="form-control" name="TIME_ZONE" ng-model="DeployedSensorStat.TIME_ZONE"
+                                ng-options="vcm for vcm in timeZoneList" required>
+                            <option value=""></option>
+                        </select>
+                    </div>
+                    <button ng-show="view.val == 'edit'" type="button" class="borderLess" tooltip-placement="right" uib-tooltip="Date/Time will be stored in UTC.">
+                        <span class="glyphicon glyphicon-question-sign"></span>
+                    </button>
+                </div>
+
+                <!-- Note: -->
+                <div class="form-group">
+                    <div class="col-md-3 col-md-offset-1">Note:</div>
+                    <div class="col-md-6">
+                        <span ng-show="view.val == 'detail'">{{DeployedSensorStat.NOTES}}</span>
+                        <textarea ng-show="view == 'edit'" class="form-control" name="NOTES" type=" text" rows="3" ng-model="DeployedSensorStat.NOTES" elastic />
+                    </div>
+                </div>
+
+                <!-- Deploy Member: -->
+                <div class="form-group">
+                    <div class="col-md-3 col-md-offset-1">Deploy Member:</div>
+                    <div class="col-md-6">{{Deployer.FNAME}} {{Deployer.LNAME}}</div>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-md-12">
+                        <span>
+                            <button ng-show="view.val == 'detail'" type="button" class="btn btn-primary" ng-click="view.val = 'edit'">
+                                <span>Edit</span>
+                            </button>
+                        </span>
+                        <span>
+                            <button ng-show="view.val == 'edit'" class="btn btn-primary" ng-click="saveDeloyed()">
+                                <span>Save</span>
+                            </button>
+                        </span>
+                        <span>
+                            <button ng-show="view.val == 'edit'" type="button" class=" btn btn-primary" ng-click="view.val ='detail'">
+                                <span>Cancel</span>
+                            </button>
                         </span>
                     </div>
                 </div>
-            </div>
-
-            <!-- Deployment Type: -->
-            <div class="form-group">
-                <div class="col-md-3 col-md-offset-1">Deployment Type:</div>
-                <div class="col-md-6">
-                    <span ng-if="view.val == 'detail'">{{sensor.Deployment_Type}}</span>
-                    <select ng-if="view.val == 'edit'" class="form-control" id="DEPLOYMENT_TYPE_ID" name="DEPLOYMENT_TYPE_ID" ng-model="sensor.DEPLOYMENT_TYPE_ID"
-                            ng-options="dt.DEPLOYMENT_TYPE_ID as dt.METHOD for dt in filteredDeploymentTypes">
-                        <option value=""></option>
-                    </select>
-                </div>
-            </div>
-
-            <!-- Location Description: -->
-            <div class="form-group">
-                <div class="col-md-3 col-md-offset-1">Location Description:</div>
-                <div class="col-md-6">
-                    <span ng-if="view.val == 'detail'">{{sensor.LOCATION_DESCRIPTION}}</span>
-                    <textarea ng-if="view.val == 'edit'" class="form-control" id="LOCATION_DESCRIPTION" name="LOCATION_DESCRIPTION" type=" text" rows="3" ng-model="sensor.LOCATION_DESCRIPTION" />
-                </div>
-            </div>
-
-            <!-- Interval: -->
-            <div class="form-group">
-                <div class="col-md-3 col-md-offset-1">Interval:</div>
-                <div class="col-md-6">
-                    <span ng-if="view.val == 'detail'">{{sensor.INTERVAL}} seconds</span>
-                    <input ng-if="view.val == 'edit'" class="form-control" ng-keypress="isNum($event)" name="INTERVAL" ng-model="sensor.INTERVAL" type="text" />
-                </div>
-            </div>
-            <div class="form-group" ng-if="view.val == 'edit'">
-                <label class="col-md-3 control-label"></label>
-                <div class="col-md-6">
-                    <label class="radio-inline">
-                        <input type="radio" name="intervalType" ng-model="IntervalType.type" value="Minutes" />Minutes
-                    </label>
-                    <label class="radio-inline">
-                        <input type="radio" name="intervalType" ng-model="IntervalType.type" value="Seconds" />Seconds
-                    </label>
-                </div>
-            </div>
-
-            <!-- Deploy Date*: -->
-            <div class="form-group required">
-                <div class="col-md-3 col-md-offset-1">Deploy Date:</div>
-                <div class="col-md-6">
-                    <span ng-if="view.val == 'detail'">{{DeployedSensorStat.TIME_STAMP | date: 'MM/dd/yyyy hh:mm a'}}</span>
-                    <datetimepicker ng-if="view.val == 'edit'" hour-step="1" minute-step="1" ng-model="DeployedSensorStat.TIME_STAMP" show-meridian="true"
-                                    date-format="MM/dd/yyyy" readonly-date="false" readonly-time="false" date-options="dateOptions"
-                                    hidden-time="false" hidden-date="false" show-spinners="true" required>
-                    </datetimepicker>
-                </div>
-            </div>
-
-            <!-- Deploy timezone*:-->
-            <div class="form-group required">
-                <div class="col-md-3 col-md-offset-1 req">Time Zone:</div>
-                <div class="col-md-6">
-                    <span ng-if="view.val == 'detail'">{{DeployedSensorStat.TIME_ZONE}}</span>
-                    <select ng-if="view.val == 'edit'" class="form-control" name="TIME_ZONE" ng-model="DeployedSensorStat.TIME_ZONE"
-                            ng-options="vcm for vcm in timeZoneList" required>
-                        <option value=""></option>
-                    </select>
-                </div>
-                <button ng-if="view.val = 'edit'" type="button" class="borderLess" tooltip-placement="right" uib-tooltip="Date/Time will be stored in UTC.">
-                    <span class="glyphicon glyphicon-question-sign"></span>
-                </button>
-            </div>
-
-            <!-- Note: -->
-            <div class="form-group">
-                <div class="col-md-3 col-md-offset-1">Note:</div>
-                <div class="col-md-6">
-                    <span ng-if="view.val == 'detail'">{{DeployedSensorStat.NOTES}}</span>
-                    <textarea ng-if="view.val == 'edit'" class="form-control" name="NOTES" type=" text" rows="3" ng-model="DeployedSensorStat.NOTES" elastic />
-                </div>
-            </div>
-
-            <!-- Deploy Member: -->
-            <div class="form-group">
-                <div class="col-md-3 col-md-offset-1">Deploy Member:</div>
-                <div class="col-md-6">{{Deployer.FNAME}} {{Deployer.LNAME}}</div>
-            </div>
-
-            <div class="form-group">
-                <div class="col-md-12">
-                    <span>
-                        <button ng-if="view.val == 'detail'" class="btn btn-primary" ng-click="view.val ='edit'">
-                            <span>Edit</span>
-                        </button>
-                    </span>
-                    <span>
-                        <button ng-if="view.val == 'edit'" class="btn btn-primary" ng-click="saveDeloyed()">
-                            <span>Save</span>
-                        </button>
-                    </span>
-                    <span>
-                        <button ng-show="view.val == 'edit'" class=" btn btn-primary" ng-click="view='detail'">
-                            <span>Cancel</span>
-                        </button>
-                    </span>
-                </div>
-            </div>
+            </fieldset>
         </form>
         <!-- Event:
         <div class="form-group">
