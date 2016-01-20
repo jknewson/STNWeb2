@@ -5,8 +5,7 @@
 
     //#region Settings Controller
     //#region settings (abstract)
-    SettingsControllers.controller('settingsCtrl', ['$scope', '$rootScope', '$cookies', '$location', '$state', 
-        function settingsCtrl($scope, $rootScope, $cookies, $location, $state) {
+    SettingsControllers.controller('settingsCtrl', ['$scope', '$rootScope', '$cookies', '$location', '$state', function($scope, $rootScope, $cookies, $location, $state) {
             if ($cookies.get('STNCreds') === undefined || $cookies.get('STNCreds') === "") {
                 $scope.auth = false;
                 $location.path('/login');
@@ -18,7 +17,7 @@
                     $state.go(view);
                 };
             }
-        }]);
+    }]);
     //#endregion settings (abstract)
 
 }());
