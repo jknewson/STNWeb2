@@ -58,8 +58,8 @@
             <div ng-if="s.InstrumentStats[0].STATUS_TYPE_ID == 1">
                 <ul>
                     <li style="list-style:none;padding-bottom: 15px;">
-                        <span class="col-sm-9 borderLess">
-                            <a class="btn borderLess" ng-click="showSensorModal(s)">{{s.Instrument.Deployment_Type}} Sensor</a>
+                        <span class="col-sm-9 borderLess" style="padding:0">
+                            <a class="btn borderLess" style="padding:0" ng-click="showSensorModal(s)">{{s.Instrument.Deployment_Type}} Sensor</a>
                         </span>
                         <div ng-show="sessionEventExists" class="pull-right">
                             <button type="button" class="btn btn-primary" style="padding:0" ng-click="showRetrieveModal(s)" tooltip-placement="right" uib-tooltip="Retrieve this sensor">
@@ -78,8 +78,8 @@
             <div ng-if="s.InstrumentStats[0].STATUS_TYPE_ID == 2">
                 <ul>
                     <li style="list-style:none;padding-bottom: 15px;">
-                        <span class="col-sm-9 borderLess">
-                            <a class="btn borderLess" ng-click="showFullSensorModal(s)">{{s.Instrument.Deployment_Type}} Sensor</a>
+                        <span class="col-sm-9 borderLess" style="padding:0">
+                            <a class="btn borderLess" style="padding:0" ng-click="showFullSensorModal(s)">{{s.Instrument.Deployment_Type}} Sensor</a>
                         </span>                       
                     </li>
                 </ul>

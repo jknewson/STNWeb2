@@ -100,10 +100,7 @@
                         size: 'lg',
                         backdrop: 'static',
                         windowClass: 'rep-dialog',
-                        resolve: {
-                            desiredAction: function () {
-                                return actionDesired;
-                            },
+                        resolve: {                           
                             thisSensor: function () {
                                 return sensorClicked !== 0 ? sensorClicked : "empty";
                             },
@@ -245,6 +242,7 @@
                     });
                     modalInstance.result.then(function (createdSensor) {
                         //update the list
+                        $scope.SiteSensors[indexClicked] = createdSensor[0];
                     });
 
                 };
