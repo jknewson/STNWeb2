@@ -6,10 +6,12 @@ form .ng-pristine.ng-invalid-required
 {
     box-shadow: none;
 }
+.topPad {
+    padding-top: 49px;
+}
 .borderLess {
     background: none;
     border: none;
-    padding: 0;
 }
 .wizard a {
     background: #efefef;
