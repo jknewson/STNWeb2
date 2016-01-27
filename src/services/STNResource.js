@@ -168,22 +168,38 @@
             });
     }]);
     //#endregion of EVENT
+
+    //#region FILE
+    STNResource.factory('FILE', ['$resource', function ($resource) {
+        return $resource(rootURL + '/Files/:id.json',
+            {}, {
+                query: {},
+                getAll: { method: 'GET', isArray: true },
+                getFileItem: { method: 'GET', isArray: false, url: rootURL + '/Files/:id/Item' },
+                update: { method: 'PUT', cache: false, isArray: false },
+                uploadFile: { method: 'POST', url: rootURL + '/Files/bytes', headers: { 'Content-Type': undefined }, transformRequest: angular.identity, cache: false, isArray: false },
+                save: { method: 'POST', cache: false, isArray: false },
+                delete: { method: 'DELETE', cache: false, isArray: false }
+            });
+    }]);
+    //#endregion of FILE
     
     //service for packaging a multipart file to post
-    STNResource.service('multipartForm', ['$http', function ($http) {        
-        this.post = function (data) {
-            var uploadUrl = rootURL + '/Files/bytes';
-            var fd = new FormData();
-            fd.append("FileEntity", JSON.stringify(data.FileEntity));
-            fd.append("File", data.File);
-            //for (var key in data)
-            //    fd.append(key, data[key]);
-            $http.post(uploadUrl, fd, {
-                transformRequest: angular.identity,
-                headers: { 'Content-Type': undefined }
-            });
-        };
-    }]);
+    //STNResource.service('multipartForm', ['$http', function ($http) {
+    //    return this.post = function (data) {
+    //        var uploadUrl = rootURL + '/Files/bytes';
+    //        var fd = new FormData();
+    //        fd.append("FileEntity", JSON.stringify(data.FileEntity));
+    //        fd.append("File", data.File);
+    //        $http.post(uploadUrl, fd, {
+    //            transformRequest: angular.identity,
+    //            headers: { 'Content-Type': undefined }
+    //        }).success(function (data, status) {
+    //            return data;
+    //        });
+    //    };
+        
+    //}]);
 
     //#region HORIZONTAL_COLL_METHODS
     STNResource.factory('HORIZONTAL_COLL_METHODS', ['$resource', function ($resource) {
@@ -575,6 +591,19 @@
     }]);
     //#endregion of STATUS_TYPE
   
+    //#region SOURCE
+    STNResource.factory('SOURCE', ['$resource', function ($resource) {
+        return $resource(rootURL + '/Sources/:id.json',
+            {}, {
+                query: {},
+                getAll: { method: 'GET', isArray: true },
+                update: { method: 'PUT', cache: false, isArray: false },
+                save: { method: 'POST', cache: false, isArray: false },
+                delete: { method: 'DELETE', cache: false, isArray: false }
+            });
+    }]);
+    //#endregion of SOURCE
+
     //#region VERTICAL_COLL_METHOD
     STNResource.factory('VERTICAL_COLL_METHOD', ['$resource', function ($resource) {
         return $resource(rootURL + '/VerticalMethods/:id.json',

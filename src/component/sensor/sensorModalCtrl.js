@@ -14,6 +14,9 @@
            $scope.houseTypeList = allDropdowns[2];
            $scope.sensorDeployList = allDropdowns[3];
            $scope.eventList = allDropdowns[4];
+           $scope.OPsForTapeDown = siteOPs;
+           $scope.OPMeasure = {}; //holder if they add tapedown values
+           $scope.tapeDownTable = []; //holder of tapedown OP_MEASUREMENTS
            $scope.depTypeList = allDepTypes; //get fresh version so not messed up with the Temperature twice
            $scope.filteredDeploymentTypes = [];
            $scope.timeZoneList = ['UTC', 'PST', 'MST', 'CST', 'EST'];
@@ -27,6 +30,25 @@
                startingDay: 1,
                showWeeks: false
            };
+
+            //#region tape down section 
+           $scope.addTapedown = false; //toggle tapedown section
+           $scope.showTapedownPart = function () {
+               if ($scope.addTapedown === true) {
+                   //they are closing it. clear inputs and close
+                   $scope.addTapedown = false;
+               } else {
+                   //they are opening to add tape down information
+                   $scope.addTapedown = true;
+               }
+           };
+           $scope.OPchosen = function () {
+               //they picked an OP to use for tapedown
+               var opName = $scope.OPsForTapeDown.filter(function (o) { return o.OBJECTIVE_TYPE_ID === $scope.OPMeasure.OBJECTIVE_TYPE_ID; })[0].NAME;
+               $scope.OPMeasure.OP_NAME = opName;
+               $scope.tapeDownTable.push($scope.OPMeasure);
+           };
+            //#endregion tape down section 
 
            //get timezone and timestamp for their timezone for showing.. post/put will convert it to utc
            var getTimeZoneStamp = function (dsent) {
@@ -437,6 +459,7 @@
             $scope.houseTypeList = allDepDropdowns[2];
             $scope.sensorDeployList = allDepDropdowns[3];
             $scope.collectCondList = allInstCollCond;
+            $scope.OPsForTapeDown = siteOPs;
             $scope.depTypeList = allDepTypes; //get fresh version so not messed up with the Temperature twice
             $scope.filteredDeploymentTypes = []; //will be populated based on the sensor type chosen
             $scope.timeZoneList = ['UTC', 'PST', 'MST', 'CST', 'EST'];
@@ -471,6 +494,16 @@
                 }
                 sendThis = [d, zone];
                 return sendThis;
+            };
+            $scope.addTapedown = false; //toggle tapedown section
+            $scope.showTapedownPart = function () {
+                if ($scope.addTapedown === true) {
+                    //they are closing it. clear inputs and close
+                    $scope.addTapedown = false;
+                } else {
+                    //they are opening to add tape down information
+                    $scope.addTapedown = true;
+                }
             };
 
             $scope.thisSensorSite = SensorSite; $scope.userRole = $cookies.get('usersRole');
@@ -509,35 +542,6 @@
                 }
             };
 
-            //get timezone and timestamp for their timezone for showing.. post/put will convert it to utc
-            var getTimeZoneStamp = function (dsent) {
-                var sendThis = [];
-                var d;
-
-                if (dsent !== undefined) d = new Date(dsent);
-                else d = new Date();
-
-                var offset = (d.toString()).substring(35);
-                var zone = "";
-                switch (offset.substr(0, 3)) {
-                    case "Cen":
-                        zone = 'CST';
-                        break;
-                    case "Eas":
-                        zone = 'EST';
-                        break;
-                    case "Mou":
-                        zone = 'MST';
-                        break;
-                    case "Pac":
-                        zone = 'PST';
-                        break;
-                }
-                sendThis = [d, zone];
-                return sendThis;
-
-            };
-
             //get deployment types for sensor type chosen
             $scope.getDepTypes = function (sensType) {
                 $scope.filteredDeploymentTypes = [];
@@ -572,29 +576,30 @@
 
             //is it UTC or local time..make sure it stays UTC
             var dealWithTimeStampb4Send = function (w) {
-                //deployed or retrieved??                
+                //deployed or retrieved??      
+                var utcDateTime; var i;
                 if (w === 'deployed') {
                     //check and see if they are not using UTC
                     if ($scope.depStuffCopy[1].TIME_ZONE != "UTC") {
                         //convert it
-                        var utcDateTime = new Date($scope.depStuffCopy[1].TIME_STAMP).toUTCString();
+                        utcDateTime = new Date($scope.depStuffCopy[1].TIME_STAMP).toUTCString();
                         $scope.depStuffCopy[1].TIME_STAMP = utcDateTime;
                         $scope.depStuffCopy[1].TIME_ZONE = 'UTC';
                     } else {
                         //make sure 'GMT' is tacked on so it doesn't try to add hrs to make the already utc a utc in db
-                        var i = $scope.depStuffCopy[1].TIME_STAMP.toString().indexOf('GMT') + 3;
+                        i = $scope.depStuffCopy[1].TIME_STAMP.toString().indexOf('GMT') + 3;
                         $scope.depStuffCopy[1].TIME_STAMP = $scope.depStuffCopy[1].TIME_STAMP.toString().substring(0, i);
                     }
                 } else {
                     //check and see if they are not using UTC
                     if ($scope.retStuffCopy[1].TIME_ZONE != "UTC") {
                         //convert it
-                        var utcDateTime = new Date($scope.retStuffCopy[1].TIME_STAMP).toUTCString();
+                        utcDateTime = new Date($scope.retStuffCopy[1].TIME_STAMP).toUTCString();
                         $scope.retStuffCopy[1].TIME_STAMP = utcDateTime;
                         $scope.retStuffCopy[1].TIME_ZONE = 'UTC';
                     } else {
                         //make sure 'GMT' is tacked on so it doesn't try to add hrs to make the already utc a utc in db
-                        var i = $scope.retStuffCopy[1].TIME_STAMP.toString().indexOf('GMT') + 3;
+                        i = $scope.retStuffCopy[1].TIME_STAMP.toString().indexOf('GMT') + 3;
                         $scope.retStuffCopy[1].TIME_STAMP = $scope.retStuffCopy[1].TIME_STAMP.toString().substring(0, i);
                     }
                 }
@@ -647,7 +652,7 @@
             $scope.cancelDepEdit = function () {
                 $scope.view.DEPval = 'detail';
                 $scope.depStuffCopy = [];
-            }
+            };
             //#endregion deploy edit
 
             //#region Retrieve edit
@@ -688,9 +693,9 @@
 
             //never mind, don't want to edit retrieved sensor
             $scope.cancelRetEdit = function () {
-            $scope.view.RETval = 'detail';
-            $scope.retStuffCopy = [];
-        }
+                $scope.view.RETval = 'detail';
+                $scope.retStuffCopy = [];
+            };
             //#endregion Retrieve edit
 
             //delete aSensor and sensor statuses
