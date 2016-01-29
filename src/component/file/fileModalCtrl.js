@@ -2,14 +2,15 @@
     'use strict';
 
     var ModalControllers = angular.module('ModalControllers');//
-    ModalControllers.controller('siteFileModalCtrl', ['$scope', '$cookies', '$http', '$uibModalInstance', '$uibModal', 'fileTypeList', 'thisFile', 'allMembers', 'fileSource', 'agencyList', 'fileSite', 'FILE', 'SOURCE',
-        function ($scope, $cookies, $http, $uibModalInstance, $uibModal, fileTypeList, thisFile, allMembers, fileSource, agencyList, fileSite, FILE, SOURCE) {
+    ModalControllers.controller('siteFileModalCtrl', ['$scope', '$cookies', '$http', '$uibModalInstance', '$uibModal', 'fileTypeList', 'thisFile', 'allMembers', 'fileSource', 'dataFile', 'agencyList', 'fileSite', 'FILE', 'SOURCE', 'DATA_FILE',
+        function ($scope, $cookies, $http, $uibModalInstance, $uibModal, fileTypeList, thisFile, allMembers, fileSource, dataFile, agencyList, fileSite, FILE, SOURCE, DATA_FILE) {
             //dropdowns
             $scope.fileTypes = fileTypeList;
             $scope.agencies = agencyList;
             $scope.theSite = fileSite;
             $scope.aFile = {}; //holder for file
-            $scope.aSource = {}; //create = loggedin user, edit = member.MEMBER_ID
+            $scope.aSource = {}; //holder for file source
+            $scope.datafile = {}; //holder for file datafile
             // is interval is number
             $scope.isNum = function (evt) {
                 var theEvent = evt || window.event;
@@ -42,6 +43,15 @@
                     $scope.aSource = fileSource;
                     $scope.aSource.FULLNAME = $scope.aSource.SOURCE_NAME;
                     $scope.aSource.SOURCE_DATE = new Date($scope.aSource.SOURCE_DATE); //date for validity of form on put
+                }
+                if (dataFile !== undefined) {
+                    $scope.datafile = dataFile;
+                    $scope.datafile.COLLECT_DATE = new Date($scope.datafile.COLLECT_DATE); //date for validity of form on put
+                    $scope.datafile.GOOD_START = new Date($scope.datafile.GOOD_START); //date for validity of form on put
+                    $scope.datafile.GOOD_END = new Date($scope.datafile.GOOD_END); //date for validity of form on put
+                    $scope.timeZoneList = ['UTC', 'PST', 'MST', 'CST', 'EST'];
+                    var aProcessor = $scope.datafile.PROCESSOR_ID !== null ? allMembers.filter(function (amem) { return amem.MEMBER_ID == $scope.datafile.PROCESSOR_ID; })[0] : {};
+                    $scope.processor = aProcessor.FNAME !== undefined ? aProcessor.FNAME + ' ' + aProcessor.LNAME : '';
                 }
             } else {
                 //create file
@@ -84,6 +94,21 @@
                         //now POST it (fileparts)
                         FILE.uploadFile(fd).$promise.then(function (fresponse) {
                             toastr.success("File Uploaded");
+                            var whatKindaFile = '';
+                            if (fresponse.HWM_ID > 0 && fresponse.HWM_ID !== null) {
+                                whatKindaFile = "HWM File";
+                            }
+                            if (fresponse.DATA_FILE_ID > 0 && fresponse.DATA_FILE_ID !== null) {
+                                whatKindaFile = "DataFile File";
+                            }
+                            if (fresponse.INSTRUMENT_ID > 0 && fresponse.INSTRUMENT_ID !== null) {
+                                whatKindaFile = "Sensor File";
+                            }
+                            if (fresponse.OBJECTIVE_POINT_ID > 0 && fresponse.OBJECTIVE_POINT_ID !== null) {
+                                whatKindaFile = "Objective Point File";
+                            }
+                            if (whatKindaFile === '') whatKindaFile = "Site File";
+                            fresponse.fileBelongsTo = whatKindaFile;
                             var state = 'created';
                             //send the file back to be added to the scope list
                             var sendBack = [fresponse, state];
@@ -97,21 +122,53 @@
             $scope.save = function (valid) {
                 if (valid) {
                     //only photo or other file type (no data file here)
-                    //put source, put file
-                    $scope.aSource.SOURCE_NAME = $scope.aSource.FULLNAME;
+                    //put source or datafile, put file
+                    var whatkind = $scope.aFile.fileBelongsTo;
                     $http.defaults.headers.common.Authorization = 'Basic ' + $cookies.get('STNCreds');
                     $http.defaults.headers.common.Accept = 'application/json';
-                    SOURCE.update({ id: $scope.aSource.SOURCE_ID }, $scope.aSource).$promise.then(function () {
-                        FILE.update({ id: $scope.aFile.FILE_ID }, $scope.aFile).$promise.then(function (fileResponse) {
-                            toastr.success("File Updated");
-                            var state = 'updated';
-                            //send the file back to be added to the scope list
-                            var sendBack = [fileResponse, state];
-                            $uibModalInstance.close(sendBack);
-                        })
-                    })
-                }
-            }
+                    if ($scope.aSource.SOURCE_ID !== undefined) {
+                        $scope.aSource.SOURCE_NAME = $scope.aSource.FULLNAME;
+                        SOURCE.update({ id: $scope.aSource.SOURCE_ID }, $scope.aSource).$promise.then(function () {
+                            FILE.update({ id: $scope.aFile.FILE_ID }, $scope.aFile).$promise.then(function (fileResponse) {
+                                toastr.success("File Updated");
+                                var state = 'updated';
+                                fileResponse.fileBelongsTo = whatkind;
+                                //send the file back to be added to the scope list
+                                var sendBack = [fileResponse, state];
+                                $uibModalInstance.close(sendBack);
+                            });
+                        });
+                    } else {
+                        //data file
+                        //check timezone and make sure date stays utc
+                        if ($scope.datafile.TIME_ZONE != "UTC") {
+                            //convert it
+                            var utcStartDateTime = new Date($scope.datafile.GOOD_START).toUTCString();
+                            var utcEndDateTime = new Date($scope.datafile.GOOD_END).toUTCString();
+                            $scope.datafile.GOOD_START = utcStartDateTime;
+                            $scope.datafile.GOOD_END = utcEndDateTime;
+                            $scope.datafile.TIME_ZONE = 'UTC';
+                        } else {
+                            //make sure 'GMT' is tacked on so it doesn't try to add hrs to make the already utc a utc in db
+                            var si = $scope.datafile.GOOD_START.toString().indexOf('GMT') + 3;
+                            var ei = $scope.datafile.GOOD_END.toString().indexOf('GMT') + 3;
+                            $scope.datafile.GOOD_START = $scope.datafile.GOOD_START.toString().substring(0, si);
+                            $scope.datafile.GOOD_END = $scope.datafile.GOOD_END.toString().substring(0, ei);
+                        }
+
+                        DATA_FILE.update({ id: $scope.datafile.DATA_FILE_ID }, $scope.datafile).$promise.then(function () {
+                            FILE.update({ id: $scope.aFile.FILE_ID }, $scope.aFile).$promise.then(function (fileResponse) {
+                                toastr.success("File Updated");
+                                var state = 'updated';
+                                fileResponse.fileBelongsTo = whatkind;
+                                //send the file back to be added to the scope list
+                                var sendBack = [fileResponse, state];
+                                $uibModalInstance.close(sendBack);
+                            });
+                        });
+                    } //end else (datafile)
+                }//end valid
+            };//end save()
 
             //delete this file
             $scope.deleteFile = function () {
@@ -139,7 +196,7 @@
                         toastr.error("Error: " + errorResponse.statusText);
                     });
                 });//end DeleteModal.result.then
-            }//end delete()
+            };//end delete()
 
         }]);//end fileModalCtrl
 

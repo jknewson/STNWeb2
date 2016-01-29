@@ -521,7 +521,6 @@
     <form class="form-horizontal" name="OPForm">
         <fieldset>
             <div class="modal-body">
-
                 <!-- Type: -->
                 <div class="form-group required" ng-class="{'has-error':OPForm.OP_TYPE_ID.$invalid && OPForm.OP_TYPE_ID.$dirty}">
                     <label class="col-md-3 control-label req" for="OP_TYPE_ID">Type:</label>
@@ -777,30 +776,248 @@
                     </div>
                 </div>
 
-                <div ng-if="OPFiles">
-                    <h3>Objective Point Files</h3>
-                    <!--<div style="height:140px;display:inline">
-                        <carousel interval="myInterval" no-wrap="noWrapSlides">
-                            <slide ng-repeat="slide in slides" active="slide.active">
-                                <img ng-src="{{slide.image}}" style="margin:auto;">
+                <div class="col-md-12">
+                    <div class="col-md-4"><h3>Objective Point Files</h3></div>
+                    <div class="col-md-6" ng-if="!showFileForm" style="margin-top:14px">
+                        <button type="button" class="borderLess" ng-click="showFile(0)" tooltip-placement="right" tooltip-append-to-body="true" uib-tooltip="Upload a new File to this OP">
+                            <span class="glyphicon glyphicon-plus"></span>
+                        </button>                        
+                    </div>
+                    <br clear="all" />
+                    <!-- list of existing files for this op -->
+                    <div class="col-md-6" ng-if="OPFiles.length > 0">
+                        <span ng-repeat="f in OPFiles">
+                            <ul style="padding-left: 0">
+                                <li style="list-style:none;padding-bottom: 15px;">
+                                    <span class="col-sm-9 borderLess" style="padding:0">
+                                        <a class="btn borderLess" style="padding:0" title="{{f.FILE_DATE | date: 'MM/dd/yyyy'}} ({{f.PATH || f.FILE_URL || f.FILE_ID}})" ng-click="showFile(f)">{{f.FILE_DATE | date: 'MM/dd/yyyy'}} ({{f.PATH || f.FILE_URL || f.FILE_ID}})</a>
+                                    </span>
+                                </li>
+                            </ul>
+                        </span>
+                    </div>
+                    <!-- carousel of photo files -->
+                    <div class="col-md-6" ng-if="opImageFiles.length > 0" style="height:140px;">
+                        <uib-carousel interval="4000">
+                            <uib-slide ng-repeat="f in opImageFiles">
+                                <img ng-click="showImageModal(f.FILE_ID)" ng-src="https://stntest.wim.usgs.gov/STNServices/Files/{{f.FILE_ID}}/Item" />
                                 <div class="carousel-caption">
-                                    <h4>Slide {{$index}}</h4>
-                                    <p>{{slide.text}}</p>
+                                    <p>{{f.PATH || f.FILE_URL || f.FILE_ID}}</p>
                                 </div>
-                            </slide>
-                        </carousel>
-                    </div>-->
-                    <!--<div ng-repeat="opf in OPFiles">
-                        <div ng-if="opf.FILETYPE_ID == 1">
-                            <h3>Photo Files</h3>
+                            </uib-slide>
+                        </uib-carousel>
+                    </div>
+                    <br clear="all" />
 
-                        </div>
-                    </div>-->
+                    <div ng-if="showFileForm">
+                        <form class="form-horizontal" name="OPFILEForm">
+                            <fieldset>
+                                <!--Upload Single Image with validations*-->
+                                <div ng-if="aFile.FILE_ID === undefined" class="form-group required" style="margin:0;padding:0">
+                                    <label class="col-md-3 control-label" for="FILE">Upload File:</label>
+                                    <div class="col-md-9">
+                                        <input type="file" max="500000" file-model="aFile.File" />
+                                        <img ngf-thumbnail="aFile.File" style="height:60px" class="thumbnail">
+                                    </div>
+                                </div>
+                                <!-- File Type* -->
+                                <div class="form-group required" ng-class="{'has-error':OPFILEForm.FILETYPE_ID.$invalid && OPFILEForm.FILETYPE_ID.$dirty}" style="margin:0;padding:0">
+                                    <label class="col-md-3 control-label req" for="FILETYPE_ID">File Type:</label>
+                                    <div class="col-md-6">
+                                        <select class="form-control" name="FILETYPE_ID" ng-model="aFile.FILETYPE_ID"
+                                                ng-options="ft.FILETYPE_ID as ft.FILETYPE for ft in fileTypes" required>
+                                            <option value=""></option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <br clear="all" />
+
+                                <!-- photo file upload fileType==1-->  <!-- all other file upload fileType > 2-->    <!--data file upload fileType==2 -->
+                                <!--File URL (Photo, data, other)-->
+                                <div ng-if="aFile.FILETYPE_ID > 0" class="form-group" style="margin:0;padding:0">
+                                    <label class="col-md-3 control-label" for="FILE_URL">File URL:</label>
+                                    <div class="col-md-6">
+                                        <input class="form-control" name="FILE_URL" ng-model="aFile.FILE_URL" type="text" />
+                                    </div>
+                                </div>
+
+                                <!--Data Processed by (Data)-->
+                                <div ng-if="aFile.FILETYPE_ID === 2" class="form-group" style="margin:0;padding:0">
+                                    <label class="col-md-3 control-label" for="PROCESSOR_ID">Data Process By:</label>
+                                    <div class="col-md-6">
+                                        {{processor}}
+                                    </div>
+                                </div>
+
+                                <!-- Date Collected/Processed* (data) -->
+                                <div ng-if="aFile.FILETYPE_ID === 2" class="form-group required" ng-class="{'has-error':OPFILEForm.COLLECT_DATE.$invalid && OPFILEForm.COLLECT_DATE.$dirty}" style="margin:0;padding:0">
+                                    <label class="col-md-3 control-label req" for="COLLECT_DATE">Date Collected/Processed:</label>
+                                    <div class="col-md-6">
+                                        <datetimepicker ng-model="datafile.COLLECT_DATE" show-meridian="false" date-format="MM/dd/yyyy" readonly-date="false" date-options="dateOptions"
+                                                        hidden-time="true" hidden-date="false" show-spinners="false" date-opened="datepickrs.dfcd" date-ng-click="open($event, 'dfcd')" required>
+                                        </datetimepicker>
+                                    </div>
+                                </div>
+
+                                <!--Source Name (photo)-->
+                                <div class="form-group required" ng-if="aFile.FILETYPE_ID === 1" ng-class="{'has-error':OPFILEForm.FULLNAME.$invalid && OPFILEForm.FULLNAME.$dirty}" style="margin:0;padding:0">
+                                    <label class="col-md-3 control-label req" for="SOURCE_ID">Source Photographer:</label>
+                                    <div class="col-md-6">
+                                        <input class="form-control" name="FULLNAME" ng-model="aSource.FULLNAME" type="text" required />
+                                    </div>
+                                </div>
+
+                                <!--Source Name (all other)-->
+                                <div class="form-group required" ng-if="aFile.FILETYPE_ID  > 2" ng-class="{'has-error':OPFILEForm.FULLNAME.$invalid && OPFILEForm.FULLNAME.$dirty}" style="margin:0;padding:0">
+                                    <label class="col-md-3 control-label req" for="SOURCE_ID">Source Name:</label>
+                                    <div class="col-md-6">
+                                        <input class="form-control" name="FULLNAME" ng-model="aSource.FULLNAME" type="text" required />
+                                    </div>
+                                </div>
+
+                                <!--Source Agency* (photo, allOther)-->
+                                <div ng-if="aFile.FILETYPE_ID === 1 || aFile.FILETYPE_ID > 2" class="form-group required" ng-class="{'has-error':OPFILEForm.AGENCY_ID.$invalid && OPFILEForm.AGENCY_ID.$dirty}" style="margin:0;padding:0">
+                                    <label class="col-md-3 control-label req" for="FILETYPE_ID">Source Agency:</label>
+                                    <div class="col-md-6">
+                                        <select class="form-control" name="AGENCY_ID" ng-model="aSource.AGENCY_ID"
+                                                ng-options="a.AGENCY_ID as a.AGENCY_NAME for a in agencies" required>
+                                            <option value=""></option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <!-- Date Taken* (photo, allother) -->
+                                <div ng-if="aFile.FILETYPE_ID === 1 || aFile.FILETYPE_ID  > 2" class="form-group required" ng-class="{'has-error':OPFILEForm.SOURCE_DATE.$invalid && OPFILEForm.SOURCE_DATE.$dirty}" style="margin:0;padding:0">
+                                    <label class="col-md-3 control-label req" for="SOURCE_DATE">Date Taken:</label>
+                                    <div class="col-md-6">
+                                        <datetimepicker ng-model="aSource.SOURCE_DATE" show-meridian="false" date-format="MM/dd/yyyy" readonly-date="false" date-options="dateOptions"
+                                                        hidden-time="true" hidden-date="false" show-spinners="false" date-opened="datepickrs.sd" date-ng-click="open($event, 'sd')" required>
+                                        </datetimepicker>
+                                    </div>
+                                </div>
+
+                                <!-- Date Uploaded* (photo, data, allother) -->
+                                <div ng-if="aFile.FILETYPE_ID > 0" class="form-group required" ng-class="{'has-error':OPFILEForm.FILE_DATE.$invalid && OPFILEForm.FILE_DATE.$dirty}" style="margin:0;padding:0">
+                                    <label class="col-md-3 control-label req" for="FILE_DATE">Date Uploaded:</label>
+                                    <div class="col-md-6">
+                                        <datetimepicker ng-model="aFile.FILE_DATE" show-meridian="false" date-format="MM/dd/yyyy" readonly-date="false" date-options="dateOptions"
+                                                        hidden-time="true" hidden-date="false" show-spinners="false" date-opened="datepickrs.fd" date-ng-click="open($event, 'fd')" required>
+                                        </datetimepicker>
+                                    </div>
+                                </div>
+
+                                <!--Description*(photo, data, allother)-->
+                                <div ng-if="aFile.FILETYPE_ID > 0" class="form-group required" ng-class="{'has-error':OPFILEForm.DESCRIPTION.$invalid && OPFILEForm.DESCRIPTION.$dirty}" style="margin:0;padding:0">
+                                    <label class="col-md-3 control-label req" for="DESCRIPTION">Description:</label>
+                                    <div class="col-md-6">
+                                        <textarea class="form-control" id="DESCRIPTION" type="text" rows="3" placeholder="Description" ng-model="aFile.DESCRIPTION" required />
+                                    </div>
+                                </div>
+
+                                <!-- Good Data Start Time* (data) -->
+                                <div ng-if="aFile.FILETYPE_ID === 2" class="form-group required" ng-class="{'has-error':OPFILEForm.GOOD_START.$invalid && OPFILEForm.GOOD_START.$dirty}" style="margin:0;padding:0">
+                                    <label class="col-md-3 control-label req" for="GOOD_START">Good Data Start Time:</label>
+                                    <div class="col-md-6">
+                                        <datetimepicker ng-model="datafile.GOOD_START" show-meridian="true" date-format="MM/dd/yyyy" readonly-date="false" date-options="dateOptions"
+                                                        hidden-time="false" hidden-date="false" show-spinners="true" date-opened="datepickrs.dfgs" date-ng-click="open($event, 'dfgs')" required>
+                                        </datetimepicker>
+                                    </div>
+                                </div>
+
+                                <!-- Good Data End Time* (data) -->
+                                <div ng-if="aFile.FILETYPE_ID === 2" class="form-group required" ng-class="{'has-error':OPFILEForm.GOOD_END.$invalid && OPFILEForm.GOOD_END.$dirty}" style="margin:0;padding:0">
+                                    <label class="col-md-3 control-label req" for="GOOD_END">Good Data End Time:</label>
+                                    <div class="col-md-6">
+                                        <datetimepicker ng-model="datafile.GOOD_END" show-meridian="true" date-format="MM/dd/yyyy" readonly-date="false" date-options="dateOptions"
+                                                        hidden-time="false" hidden-date="false" show-spinners="true" date-opened="datepickrs.dfge" date-ng-click="open($event, 'dfge')" required>
+                                        </datetimepicker>
+                                    </div>
+                                </div>
+
+                                <!-- Timezone*:-->
+                                <div ng-if="aFile.FILETYPE_ID === 2" class="form-group required" style="margin:0;padding:0">
+                                    <label class="col-md-3 control-label req">Time Zone:</label>
+                                    <div class="col-md-6">
+                                        <select class="form-control" name="TIME_ZONE" ng-model="datafile.TIME_ZONE" ng-options="vcm for vcm in timeZoneList" required>
+                                            <option value=""></option>
+                                        </select>
+                                    </div>
+                                    <button type="button" class="borderLess pull-left" tooltip-placement="right" tooltip-append-to-body="true" uib-tooltip="Date/Time will be stored in UTC.">
+                                        <span class="glyphicon glyphicon-question-sign"></span>
+                                    </button>
+                                </div>
+
+                                <div ng-if="aFile.FILETYPE_ID === 2" class="form-group" style="margin:0;padding:0">
+                                    <label class="col-md-3 control-label">Elevation:</label>
+                                    <div class="col-md-6">
+                                        <label class="radio-inline">
+                                            <input type="radio" name="ELEVATION_STATUS" ng-model="datafile.ELEVATION_STATUS" value="Final" />Final
+                                        </label>
+                                        <label class="radio-inline">
+                                            <input type="radio" name="ELEVATION_STATUS" ng-model="datafile.ELEVATION_STATUS" value="Arbitrary" />Arbitrary
+                                        </label>
+                                    </div>
+                                </div>
+
+                                <!-- This is where Other ends, rest is for Photo -->
+                                <!--Photo Direction (photo)-->
+                                <div ng-if="aFile.FILETYPE_ID === 1" class="form-group" style="margin:0;padding:0;padding-top:5px;">
+                                    <label class="col-md-3 control-label" for="PHOTO_DIRECTION">Photo Direction:</label>
+                                    <div class="col-md-6">
+                                        <input class="form-control" id="PHOTO_DIRECTION" name="PHOTO_DIRECTION" ng-model="aFile.PHOTO_DIRECTION" type="text" />
+                                    </div>
+                                </div>
+
+                                <!-- Photo Latitude (photo)-->
+                                <div ng-if="aFile.FILETYPE_ID === 1" class="form-group" style="margin:0;padding:0">
+                                    <label class="col-md-3 control-label" for="LATITUDE_DD">Photo Latitude <br /> (if different):</label>
+                                    <div class="col-md-6">
+                                        <input class="form-control" ng-keypress="isNum($event)" name="LATITUDE_DD" id="LATITUDE_DD" ng-model="aFile.LATITUDE_DD"
+                                               type="text" />
+                                    </div>
+                                </div>
+
+                                <!--Photo Longitude (photo)-->
+                                <div ng-if="aFile.FILETYPE_ID === 1" class="form-group" style="margin:0;padding:0">
+                                    <label class="col-md-3 control-label" for="LONGITUDE_DD">Photo Longitude <br /> (if different):</label>
+                                    <div class="col-md-6">
+                                        <input class="form-control" ng-keypress="isNum($event)" id="LONGITUDE_DD" name="LONGITUDE_DD" ng-model="aFile.LONGITUDE_DD"
+                                               type="text" />
+                                    </div>
+                                </div>
+
+                                <div ng-if="aFile.FILETYPE_ID === 1" class="form-group" style="margin:0;padding:0">
+                                    <label class="col-md-3 control-label" for="Caption">Preview Caption:</button></label>
+                                    <div class="col-md-6">
+                                        <span>
+                                            Photo of {{aFile.DESCRIPTION || ' (Description HERE) '}} at {{thisOPsite.SITE_DESCRIPTION}}, {{thisOPsite.COUNTY}}, {{thisOPsite.STATE}}, {{aSource.SOURCE_DATE | date: 'MM/dd/yyyy' || ' Date taken HERE '}}. Photograph by {{aSource.FULLNAME || ' Source Name HERE ' }}, {{(agencies | filter :{AGENCY_ID: aSource.AGENCY_ID})[0].AGENCY_NAME || ' Agency HERE '}}.
+                                        </span>
+                                    </div>
+                                </div>
+
+                                <div ng-if="aFile.FILE_ID !== undefined" class="form-group" style="margin:0;padding:0">
+                                    <label class="col-md-3 control-label">Associated File:</label>
+                                    <div class="col-md-6">
+                                        <a target="_blank" class="btn btn-primary" ng-href="https://stntest.wim.usgs.gov/STNServices/Files/{{aFile.FILE_ID}}/Item">Download File</a>
+                                        <img ng-if="aFile.FILETYPE_ID === 1" style="height:80px;" ng-src="https://stntest.wim.usgs.gov/STNServices/Files/{{aFile.FILE_ID}}/Item" />
+                                    </div>
+                                </div>
+
+
+
+                                <button class="btn btn-primary" ng-if="aFile.FILE_ID != undefined" ng-click="saveFile(OPFILEForm.$valid)">Save File</button>
+                                <button class="btn btn-danger" ng-if="aFile.FILE_ID != undefined" ng-click="deleteFile()">Delete File</button>
+                                <button class="btn btn-primary" ng-if="aFile.FILE_ID == undefined" ng-click="createFile(OPFILEForm.$valid)">Create File</button>
+                                <button class="btn btn-warning" type="button" ng-click="cancelFile()">Cancel File</button>
+                            </fieldset>
+                        </form>
+                    </div>
                 </div>
-
+                <br clear="all" />
                 <div class="modal-footer">
                     <div class="form-group">
-                        <div class="col-md-4 col-md-offset-2">
+                        <div class="col-md-12">
                             <span>
                                 <button ng-show="OP.OBJECTIVE_POINT_ID == undefined" class="btn btn-primary" ng-click="create(OPForm.$valid)">
                                     <span>Create</span>
@@ -824,12 +1041,12 @@
 
 
                         <!--<button class="btn btn-primary" ng-if="OP.OBJECTIVE_POINT_ID != undefined" ng-click="save()">Save</button>
-                        <button class="btn btn-danger" ng-if="OP.OBJECTIVE_POINT_ID != undefined" ng-click="deleteOP()">Delete</button>
-                        <button class="btn btn-primary" ng-if="OP.OBJECTIVE_POINT_ID == undefined" ng-click="create()">Create</button>
-                        <button class="btn btn-warning" ng-click="cancel()">Cancel</button>-->
+                    <button class="btn btn-danger" ng-if="OP.OBJECTIVE_POINT_ID != undefined" ng-click="deleteOP()">Delete</button>
+                    <button class="btn btn-primary" ng-if="OP.OBJECTIVE_POINT_ID == undefined" ng-click="create()">Create</button>
+                    <button class="btn btn-warning" ng-click="cancel()">Cancel</button>-->
                     </div>
         </fieldset>
-    </form>
+        </form>
 </script>
 
 <!-- MODAL for HWM-->
@@ -1947,6 +2164,23 @@
                     </div>
                 </div>
 
+                <!--Data Processed by (Data)-->
+                <div ng-if="aFile.FILETYPE_ID === 2" class="form-group">
+                    <label class="col-md-3 control-label" for="PROCESSOR_ID">Data Process By:</label>
+                    <div class="col-md-6">{{processor}}
+                    </div>
+                </div>
+
+                <!-- Date Collected/Processed* (data) -->
+                <div ng-if="aFile.FILETYPE_ID === 2" class="form-group required" ng-class="{'has-error':FILEForm.COLLECT_DATE.$invalid && FILEForm.COLLECT_DATE.$dirty}">
+                    <label class="col-md-3 control-label req" for="COLLECT_DATE">Date Collected/Processed:</label>
+                    <div class="col-md-6">
+                        <datetimepicker ng-model="datafile.COLLECT_DATE" show-meridian="false" date-format="MM/dd/yyyy" readonly-date="false" date-options="dateOptions"
+                                        hidden-time="true" hidden-date="false" show-spinners="false" date-opened="datepickrs.dfcd" date-ng-click="open($event, 'dfcd')" required>
+                        </datetimepicker>
+                    </div>
+                </div>
+
                 <!--Source Name (all other)-->
                 <div class="form-group required" ng-if="aFile.FILETYPE_ID === 1" ng-class="{'has-error':FILEForm.FULLNAME.$invalid && FILEForm.FULLNAME.$dirty}">
                     <label class="col-md-3 control-label req" for="SOURCE_ID">Source Photographer:</label>
@@ -1998,6 +2232,51 @@
                     <label class="col-md-3 control-label req" for="DESCRIPTION">Description:</label>
                     <div class="col-md-6">
                         <textarea class="form-control" id="DESCRIPTION" type="text" rows="3" placeholder="Description" ng-model="aFile.DESCRIPTION" required />
+                    </div>
+                </div>
+
+                <!-- Good Data Start Time* (data) -->
+                <div ng-if="aFile.FILETYPE_ID === 2" class="form-group required" ng-class="{'has-error':FILEForm.GOOD_START.$invalid && FILEForm.GOOD_START.$dirty}">
+                    <label class="col-md-3 control-label req" for="GOOD_START">Good Data Start Time:</label>
+                    <div class="col-md-6">
+                        <datetimepicker ng-model="datafile.GOOD_START" show-meridian="true" date-format="MM/dd/yyyy" readonly-date="false" date-options="dateOptions"
+                                        hidden-time="false" hidden-date="false" show-spinners="true" date-opened="datepickrs.dfgs" date-ng-click="open($event, 'dfgs')" required>
+                        </datetimepicker>
+                    </div>
+                </div>
+
+                <!-- Good Data End Time* (data) -->
+                <div ng-if="aFile.FILETYPE_ID === 2" class="form-group required" ng-class="{'has-error':FILEForm.GOOD_END.$invalid && FILEForm.GOOD_END.$dirty}">
+                    <label class="col-md-3 control-label req" for="GOOD_END">Good Data End Time:</label>
+                    <div class="col-md-6">
+                        <datetimepicker ng-model="datafile.GOOD_END" show-meridian="true" date-format="MM/dd/yyyy" readonly-date="false" date-options="dateOptions"
+                                        hidden-time="false" hidden-date="false" show-spinners="true" date-opened="datepickrs.dfge" date-ng-click="open($event, 'dfge')" required>
+                        </datetimepicker>
+                    </div>
+                </div>
+
+                <!-- Timezone*:-->
+                <div ng-if="aFile.FILETYPE_ID === 2" class="form-group required">
+                    <label class="col-md-3 control-label req">Time Zone:</label>
+                    <div class="col-md-6">
+                        <select class="form-control" name="TIME_ZONE" ng-model="datafile.TIME_ZONE" ng-options="vcm for vcm in timeZoneList" required>
+                            <option value=""></option>
+                        </select>
+                    </div>
+                    <button type="button" class="borderLess pull-left" tooltip-placement="right" tooltip-append-to-body="true" uib-tooltip="Date/Time will be stored in UTC.">
+                        <span class="glyphicon glyphicon-question-sign"></span>
+                    </button>
+                </div>
+
+                <div ng-if="aFile.FILETYPE_ID === 2" class="form-group">
+                    <label class="col-md-3 control-label">Elevation:</label>
+                    <div class="col-md-6">
+                        <label class="radio-inline">
+                            <input type="radio" name="ELEVATION_STATUS" ng-model="datafile.ELEVATION_STATUS" value="Final" />Final
+                        </label>
+                        <label class="radio-inline">
+                            <input type="radio" name="ELEVATION_STATUS" ng-model="datafile.ELEVATION_STATUS" value="Arbitrary" />Arbitrary
+                        </label>
                     </div>
                 </div>
 
@@ -2056,63 +2335,17 @@
         </fieldset>
     </form>
 </script>
-<!--Data Processed by (Data)
-                <div ng-if="aFile.FILETYPE_ID === 2" class="form-group">
-                    <label class="col-md-3 control-label" for="SOURCE_ID">Data Process By:</label>
-                    <div class="col-md-6">
-                        <span></span>
-                    </div>
-                </div>-->
-<!-- Data Collected* (data)
-                <div ng-if="aFile.FILETYPE_ID === 2" class="form-group required" ng-class="{'has-error':FILEForm.FILE_DATE.$invalid && FILEForm.FILE_DATE.$dirty}">
-                    <label class="col-md-3 control-label req" for="FILE_DATE">Data&nbsp;&nbsp;&nbsp; <br /> Collected/Processed:</label>
-                    <div class="col-md-6 input-group">
-                        <input class="form-control" name="dc" ng-disabled="undetermined"
-                               type="text" uib-datepicker-popup="MMM dd, yyyy" is-open="datepickrs.dc"
-                               ng-model="aFile.FILE_DATE" />
-                        <span class="input-group-btn">
-                            <button class="btn btn-default" ng-click="open($event, 'dc')">
-                                <i class="glyphicon glyphicon-calendar" />
-                            </button>
-                        </span>
-                    </div>
-                </div> -->
-<!-- Good Data Start Time* ( data)
-               <div ng-if="aFile.FILETYPE_ID === 2" class="form-group required" ng-class="{'has-error':FILEForm.GOOD_START.$invalid && FILEForm.GOOD_START.$dirty}">
-                   <label class="col-md-3 control-label req" for="GOOD_START">Good Data Start Time:</label>
-                   <div class="col-md-6">
-                       <datetimepicker hour-step="1" minute-step="1" ng-model="dFile.GOOD_START" show-meridian="true"
-                                       date-format="MM/dd/yyyy" readonly-date="false" readonly-time="false" date-options="dateOptions"
-                                       hidden-time="false" hidden-date="false" show-spinners="true" required>
-                       </datetimepicker>
-                   </div>
-               </div>-->
-<!-- Good Data End Time* ( data)
-<div ng-if="aFile.FILETYPE_ID === 2" class="form-group required" ng-class="{'has-error':FILEForm.GOOD_END.$invalid && FILEForm.GOOD_END.$dirty}">
-    <label class="col-md-3 control-label req" for="GOOD_END">Good Data End Time:</label>
-    <div class="col-md-6">
-        <datetimepicker hour-step="1" minute-step="1" ng-model="dFile.GOOD_END" show-meridian="true"
-                        date-format="MM/dd/yyyy" readonly-date="false" readonly-time="false" date-options="dateOptions"
-                        hidden-time="false" hidden-date="false" show-spinners="true" required>
-        </datetimepicker>
-    </div>
-</div>-->
-<!-- Time Zone* ( data)
-<div ng-if="aFile.FILETYPE_ID === 2" class="form-group required">
-    <label class="col-md-3 control-label req" for="TIME_ZONE">Time Zone:</label>
-    <div class="col-md-6">
-        <select class="form-control" name="TIME_ZONE" ng-model="dFile.TIME_ZONE" ng-options="z.name for z in timezones" required></select>
-    </div>
-</div>-->
-<!-- Elevation ( data)
-<div ng-if="aFile.FILETYPE_ID === 2" class="form-group">
-    <label class="col-md-3 control-label" for="ELEVATION_STATUS">Elevation Status:</label>
-    <div class="col-md-6">
-        <label class="radio-inline">
-            <input type="radio" name="ELEVATION_STATUS" ng-model="dFile.ELEVATION_STATUS" value="Final" />Final
-        </label>
-        <label class="radio-inline">
-            <input type="radio" name="ELEVATION_STATUS" ng-model="dFile.ELEVATION_STATUS" value="Arbitrary" />Arbitrary
-        </label>
-    </div>
-</div> -->
+
+<style type="text/css">
+    .carousel-indicators {
+        bottom: 0;
+    }
+
+    .carousel-caption {
+        padding: 0;
+    }
+
+    .active {
+        background: none;
+    }
+</style>
