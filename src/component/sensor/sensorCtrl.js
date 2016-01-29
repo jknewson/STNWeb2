@@ -78,6 +78,7 @@
                                     $timeout(function () {
                                         // anything you want can go here and will safely be run on the next digest.
                                         $scope.showProposed = false;
+                                        toastr.success("Proposed sensor created");
                                         $scope.SiteSensors.push(instToPushToList);
                                         $scope.sensorCount = { total: $scope.SiteSensors.length };
                                     });

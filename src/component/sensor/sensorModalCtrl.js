@@ -212,6 +212,9 @@
                            //create instrumentstatus too need: STATUS_TYPE_ID and INSTRUMENT_ID
                            createdSensor = response;
                            createdSensor.Deployment_Type = $scope.aSensor.Deployment_Type;
+                           createdSensor.Housing_Type = response.HOUSING_TYPE_ID > 0 ? $scope.houseTypeList.filter(function (h) { return h.HOUSING_TYPE_ID == response.HOUSING_TYPE_ID; })[0].TYPE_NAME: '';
+                           createdSensor.Sensor_Brand = $scope.sensorBrandList.filter(function (s) { return s.SENSOR_BRAND_ID == response.SENSOR_BRAND_ID; })[0].BRAND_NAME;
+                           createdSensor.Sensor_Type = $scope.sensorTypeList.filter(function (t) { return t.SENSOR_TYPE_ID == response.SENSOR_TYPE_ID; })[0].SENSOR;
                            $scope.aSensStatus.INSTRUMENT_ID = response.INSTRUMENT_ID;
                            INSTRUMENT_STATUS.save($scope.aSensStatus).$promise.then(function (statResponse) {
                                //build the createdSensor to send back and add to the list page
@@ -239,7 +242,11 @@
                            //create instrumentstatus too need: STATUS_TYPE_ID and INSTRUMENT_ID
                            createdSensor = response;
                            createdSensor.Deployment_Type = response.DEPLOYMENT_TYPE_ID !== null  ? $scope.depTypeList.filter(function (d) { return d.DEPLOYMENT_TYPE_ID == response.DEPLOYMENT_TYPE_ID; })[0].METHOD : "";
+                           createdSensor.Housing_Type = response.HOUSING_TYPE_ID > 0 ? $scope.houseTypeList.filter(function (h) { return h.HOUSING_TYPE_ID == response.HOUSING_TYPE_ID;})[0].TYPE_NAME: '';
+                           createdSensor.Sensor_Brand = $scope.sensorBrandList.filter(function (s) { return s.SENSOR_BRAND_ID == response.SENSOR_BRAND_ID;})[0].BRAND_NAME;
+                           createdSensor.Sensor_Type = $scope.sensorTypeList.filter(function (t) { return t.SENSOR_TYPE_ID == response.SENSOR_TYPE_ID; })[0].SENSOR;
                            $scope.aSensStatus.INSTRUMENT_ID = response.INSTRUMENT_ID;
+
                            INSTRUMENT_STATUS.save($scope.aSensStatus).$promise.then(function (statResponse) {
                                //build the createdSensor to send back and add to the list page
                                depSenStat = statResponse;
@@ -305,7 +312,7 @@
                //are we deploying a proposed sensor or editing a deployed sensor??
                if (thisSensor.InstrumentStats[0].Status == "Proposed") {
                    //deploying proposed
-                   $scope.previousStateStatus = angular.copy(thisSensor.InstrumentStats[0]); //hold the previous one in case they are changing states (proposed to deployed)
+                   $scope.previousStateStatus = angular.copy(thisSensor.InstrumentStats[0]); //hold the proposed state (proposed to deployed)
                    $scope.whichButton = 'deployP';
                    $scope.aSensor.INTERVAL = $scope.aSensor.INTERVAL === 0 ? '' : $scope.aSensor.INTERVAL; //clear out the '0' value here               
                    $scope.aSensStatus.Status = "Deployed";

@@ -136,7 +136,7 @@
                         allAgencies: function (ag) {
                             return ag.getAll().$promise;
                         },
-                        incompleteReports: function (r, $cookies) {
+                        memberReports: function (r, $cookies) {
                             var mID = $cookies.get('mID');
                             return r.getMemberReports({ memberId: mID }).$promise;
                         }

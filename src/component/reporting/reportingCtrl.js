@@ -3,8 +3,8 @@
 
     var STNControllers = angular.module('STNControllers');
 //#region Reporting Controller
-    STNControllers.controller('reportingCtrl', ['$scope', '$rootScope', '$cookies', '$location', '$http', '$uibModal', 'incompleteReports', 'allEvents', 'allStates', 'allReports', 'allEventTypes', 'allEventStatus', 'allAgencies', 'REPORT', 'MEMBER',
-        function ($scope, $rootScope, $cookies, $location, $http, $uibModal, incompleteReports, allEvents, allStates, allReports, allEventTypes, allEventStatus, allAgencies, REPORT, MEMBER) {
+    STNControllers.controller('reportingCtrl', ['$scope', '$rootScope', '$cookies', '$location', '$http', '$uibModal', 'memberReports', 'allEvents', 'allStates', 'allReports', 'allEventTypes', 'allEventStatus', 'allAgencies', 'REPORT', 'MEMBER',
+        function ($scope, $rootScope, $cookies, $location, $http, $uibModal, memberReports, allEvents, allStates, allReports, allEventTypes, allEventStatus, allAgencies, REPORT, MEMBER) {
             if ($cookies.get('STNCreds') === undefined || $cookies.get('STNCreds') === "") {
                 $scope.auth = false;
                 $location.path('/login');
@@ -41,13 +41,14 @@
 
                 //#region Datepicker
                 $scope.datepickrs = {};
+               
                 $scope.open = function ($event, which) {
                     $event.preventDefault();
                     $event.stopPropagation();
 
                     $scope.datepickrs[which] = true;
                 };
-                //#endregion Datepicker
+                //#endregion
 
                 //format the date mm/dd/yyyy
                 $scope.formatDate = function (d) {
@@ -68,7 +69,7 @@
                 $scope.WaterStaff = {};
                 $scope.disabled = true;
                 $scope.needToComplete = false;
-                $scope.memberIncompletes = incompleteReports.filter(function (ir) { return ir.COMPLETE === 0; });
+                $scope.memberIncompletes = memberReports.filter(function (ir) { return ir.COMPLETE === 0; });
                 $scope.events = allEvents;
                 $scope.states = allStates;
                 $scope.reports = allReports;
