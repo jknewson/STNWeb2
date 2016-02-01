@@ -3,7 +3,7 @@
 
     var STNControllers = angular.module('STNControllers'); 
     STNControllers.controller('mainCtrl', ['$scope', '$rootScope', '$cookies', '$uibModal', '$location', '$state', 
-        function mainCtrl($scope, $rootScope, $cookies, $uibModal, $location, $state) {
+        function ($scope, $rootScope, $cookies, $uibModal, $location, $state) {
             $rootScope.isAuth = {};        
             $rootScope.activeMenu = 'home'; //scope var for setting active class
             if ($cookies.get('STNCreds') === undefined || $cookies.get('STNCreds') === "") {
@@ -29,5 +29,4 @@
                 };
             }
         }]);
-    //#endregion MAIN Controller
 })();

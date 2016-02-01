@@ -3,13 +3,12 @@
 
     var SettingsControllers = angular.module('SettingsControllers');
 
-    //#region resource Controller (abstract)
     SettingsControllers.controller('resourcesCtrl', ['$scope', '$rootScope', '$cookies', '$location', '$state', '$http', '$filter', '$uibModal', 'AGENCY', 'CONTACT_TYPE', 'DEPLOYMENT_PRIORITY', 'EVENT_STATUS',
         'EVENT_TYPE', 'FILE_TYPE', 'HORIZONTAL_COLL_METHODS', 'HORIZONTAL_DATUM', 'HOUSING_TYPE', 'HWM_QUALITY', 'HWM_TYPE', 'INST_COLL_CONDITION', 'MARKER', 'NETWORK_NAME', 'OP_QUALITY',
         'OP_TYPE', 'SENSOR_BRAND', 'DEPLOYMENT_TYPE', 'SENSOR_TYPE', 'NETWORK_TYPE', 'STATUS_TYPE', 'VERTICAL_COLL_METHOD', 'VERTICAL_DATUM', 'allStates', 'allAgencies', 'allContactTypes', 'allDeployPriorities', 'allEventStats', 'allEventTypes',
         'allFileTypes', 'allHorCollMethods', 'allHorDatums', 'allHouseTypes', 'allHWMqualities', 'allHWMtypes', 'allInstCollectConditions', 'allMarkers', 'allNetworkNames', 'allObjPtQualities',
         'allObjPtTypes', 'allSensorBrands', 'allDeploymentTypes', 'allStatusTypes', 'allSensorTypes', 'allNetworkTypes', 'allVerticalCollMethods', 'allVerticalDatums', 
-        function resourcesCtrl($scope, $rootScope, $cookies, $location, $state, $http, $filter, $uibModal, AGENCY, CONTACT_TYPE, DEPLOYMENT_PRIORITY, EVENT_STATUS, EVENT_TYPE, FILE_TYPE, 
+        function ($scope, $rootScope, $cookies, $location, $state, $http, $filter, $uibModal, AGENCY, CONTACT_TYPE, DEPLOYMENT_PRIORITY, EVENT_STATUS, EVENT_TYPE, FILE_TYPE, 
             HORIZONTAL_COLL_METHODS, HORIZONTAL_DATUM, HOUSING_TYPE, HWM_QUALITY, HWM_TYPE, INST_COLL_CONDITION, MARKER, NETWORK_NAME, OP_QUALITY, OP_TYPE, SENSOR_BRAND, DEPLOYMENT_TYPE, 
             SENSOR_TYPE, NETWORK_TYPE, STATUS_TYPE, VERTICAL_COLL_METHOD, VERTICAL_DATUM, allStates, allAgencies, allContactTypes, allDeployPriorities, allEventStats, allEventTypes, allFileTypes,
             allHorCollMethods, allHorDatums, allHouseTypes, allHWMqualities, allHWMtypes, allInstCollectConditions, allMarkers, allNetworkNames, allObjPtQualities, allObjPtTypes,
@@ -1942,6 +1941,5 @@
                 //#endregion ALL LOOKUPS (add/update/delete)
             }
         }]);
-    //#endregion  resources Controller (abstract)
-    //#endregion Settings Controller
+
 }());

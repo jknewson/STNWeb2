@@ -1,10 +1,9 @@
 (function () {
-    /* controllers.js, 'leaflet-directive''ui.unique','ngTagsInput',*/
     'use strict';
 
     var STNControllers = angular.module('STNControllers');
     STNControllers.controller('reportingDashCtrl', ['$scope', '$cookies', '$filter', '$uibModal', '$state', '$http', 'CONTACT', 'MEMBER', 'allReportsAgain', 
-        function reportingDashCtrl($scope, $cookies, $filter, $uibModal, $state, $http, CONTACT, MEMBER, allReportsAgain) {
+        function ($scope, $cookies, $filter, $uibModal, $state, $http, CONTACT, MEMBER, allReportsAgain) {
             $scope.reportsToDate = allReportsAgain;
             $scope.todayRpts = []; $scope.yesterdayRpts = []; $scope.pickDateRpts = []; $scope.pickAdateReports = false;
             $scope.today = new Date();
@@ -92,6 +91,7 @@
             //complete the report button clicked -- send back to submit with report populated
             $scope.CompleteThisReport = function (rep) {
                 $scope.$parent.newReport = rep;
+                $scope.$parent.newReport.REPORT_DATE = new Date(rep.REPORT_DATE); //keeps it valid
                 $scope.$parent.disabled = false;
                 $scope.$parent.needToComplete = true;
                 $http.defaults.headers.common.Authorization = 'Basic ' + $cookies.get('STNCreds');

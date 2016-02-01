@@ -1,11 +1,10 @@
 (function () {
-    /* controllers.js, 'leaflet-directive''ui.unique','ngTagsInput',*/
     'use strict';
 
     var ModalControllers = angular.module('ModalControllers');
 //popup confirm box
     ModalControllers.controller('confirmReportModalCtrl', ['$scope', '$uibModalInstance', 
-        function confirmReportModalCtrl($scope, $uibModalInstance) {
+        function ($scope, $uibModalInstance) {
 
             $scope.ok = function () {
                 $uibModalInstance.close();

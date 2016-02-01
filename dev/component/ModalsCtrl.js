@@ -1,10 +1,11 @@
 (function () {
-    "use strict"; 
+    "use strict";
+
     var ModalControllers = angular.module('ModalControllers');
 
     //popup confirm box
     ModalControllers.controller('ConfirmModalCtrl', ['$scope', '$uibModalInstance', 'nameToRemove', 'what', 
-        function ConfirmModalCtrl($scope, $uibModalInstance, nameToRemove, what) {
+        function ($scope, $uibModalInstance, nameToRemove, what) {
             //#region switch (long)
             switch (what) {
                 case "Member":
@@ -95,6 +96,11 @@
                 case "Sensor":
                     $scope.nameToRmv = nameToRemove.Deployment_Type;
                     break;
+                case "File":
+                    var f = nameToRemove.PATH !== undefined || nameToRemove.PATH !== null ? nameToRemove.PATH : nameToRemove.FILE_URL;
+                    f = f !== null || f !== undefined ? f : nameToRemove.FILE_ID;
+
+                    $scope.nameToRmv = f;
             }
             //#endregion
 

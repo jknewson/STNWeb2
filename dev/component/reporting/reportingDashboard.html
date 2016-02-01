@@ -5,10 +5,11 @@
         border-bottom: 1px solid #ddd;
         padding: 10px;
     }
-    .tab-content > .active {
-        background: white none repeat scroll 0 0 !important;
-        color: black !important;
-    }    
+
+        .tab-content > .active {
+            background: white none repeat scroll 0 0 !important;
+            color: black !important;
+        }
 </style>
 <uib-tabset id="bypassme">
     <uib-tab heading="Today">
@@ -52,8 +53,10 @@
     <uib-tab heading="Pick a Date">
         <div>
             <label class="col-md-1 pull-left">Date:</label>
-            <div class="col-md-4 input-group pull-left" style="padding-left:15px;padding-right:15px;"><!--  -->
-                <input type="text" datepicker-append-to-body="true" class="form-control" id="THIS_DATE" name="td" uib-datepicker-popup="MMMM dd, yyyy"
+            <div class="col-md-4 input-group pull-left" style="padding-left:15px;padding-right:15px;">
+                <!--  -->
+
+                <input type="text" datepicker-append-to-body="true" class="form-control" id="THIS_DATE" name="td" show-weeks="false" uib-datepicker-popup="MMMM dd, yyyy"
                        is-open="datepickrs.td" ng-model="THIS_DATE.date" />
                 <span class="input-group-btn">
                     <button class="btn btn-default" ng-click="open($event, 'td')">
@@ -62,7 +65,8 @@
                 </span>
             </div>
             <button style="margin-left:10px;" class="btn btn-primary" ng-click="getReportsByDate()">Get Reports</button>
-            <div ng-if="pickAdateReports">
+            <br clear="all" />
+            <div style="margin-top:10px;" ng-if="pickAdateReports">
                 <div ng-show="pickDateRpts != undefined">
                     <ul ng-repeat="(key, value) in pickDateRpts | groupBy: 'EVENT_NAME'">
                         <label>{{key}}</label>
