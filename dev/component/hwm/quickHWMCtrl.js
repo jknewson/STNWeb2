@@ -3,11 +3,11 @@
     'use strict';
 
     var STNControllers = angular.module('STNControllers');
-    //#region QuickHWM
+
     STNControllers.controller('quickHWMCtrl', ['$scope', '$rootScope', '$cookies', '$location', '$state', '$http', '$uibModal', '$filter',
         'allHorDatums', 'allHorCollMethods', 'allStates', 'allCounties', 'allOPTypes', 'allVertDatums', 'allVertColMethods', 
         'allOPQualities', 'allHWMTypes', 'allHWMQualities', 'allMarkers', 'SITE', 'OBJECTIVE_POINT', 'HWM', 
-        function quickHWMCtrl($scope, $rootScope, $cookies, $location, $state, $http, $uibModal, $filter, allHorDatums, allHorCollMethods, allStates,
+        function ($scope, $rootScope, $cookies, $location, $state, $http, $uibModal, $filter, allHorDatums, allHorCollMethods, allStates,
         allCounties, allOPTypes, allVertDatums, allVertColMethods, allOPQualities, allHWMTypes, allHWMQualities, allMarkers, SITE, OBJECTIVE_POINT, HWM) {
             if ($cookies.get('STNCreds') === undefined || $cookies.get('STNCreds') === "") {
                 $scope.auth = false;
@@ -321,5 +321,5 @@
 
             }//end else (logged in)
         }]);
-    //#endregion QuickHWM
+  
 })();

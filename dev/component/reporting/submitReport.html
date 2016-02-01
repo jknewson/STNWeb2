@@ -53,7 +53,7 @@
                 </div>
             </div>
             <div ng-hide="isCompleted" style="border-left: solid thin black;padding-left:3em" class="container container-fluid col-md-5 pull-right">
-                <label>Incomplete Reports.</label>
+                <label>Incomplete Reports</label>
                 <ul ng-show="memberIncompletes.length > 0">
                     <li ng-repeat="ir in memberIncompletes | orderBy: '-REPORT_DATE'">
                         <a sref="#" style="cursor:pointer" ng-click="getIncompleteReport($this)">{{ir.REPORT_DATE | date: MM/dd/yyyy}}</a>

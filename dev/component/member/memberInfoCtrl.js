@@ -3,15 +3,13 @@
 
     var SettingsControllers = angular.module('SettingsControllers');
 
-    //#region memberInfo Controller
     SettingsControllers.controller('memberInfoCtrl', ['$scope', '$cookies', '$location', '$http', '$uibModal', '$stateParams', '$filter', 'MEMBER', 'thisMember', 
-        function memberInfoCtrl($scope, $cookies, $location, $http, $uibModal, $stateParams, $filter, MEMBER, thisMember) {
+        function ($scope, $cookies, $location, $http, $uibModal, $stateParams, $filter, MEMBER, thisMember) {
             if ($cookies.get('STNCreds') === undefined || $cookies.get('STNCreds') === "") {
                 $scope.auth = false;
                 $location.path('/login');
             } else {
                 //all things both new and existing member page will need
-
                 $scope.aMember = {}; //holder for member (either coming in for edit, or being created for post
                 $scope.matchingUsers = true;
 
@@ -158,7 +156,7 @@
                                 }
                             );
                         }
-                    };
+                    }; //end ChangePassword()
 
                     $scope.DontChangePass = function () {
                         //nevermind,  clear input
@@ -188,10 +186,8 @@
                             });
 
                         }
-                    };
+                    }; // end save()
                 }
             }
         }]);
-    //#endregion memberInfo Controller
-    //#endregion Members inside Settings Tab
 }());

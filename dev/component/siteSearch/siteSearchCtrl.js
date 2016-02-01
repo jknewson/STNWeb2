@@ -1,11 +1,10 @@
 (function () {
-    /* controllers.js, 'leaflet-directive''ui.unique','ngTagsInput',*/
     'use strict';
 
     var STNControllers = angular.module('STNControllers');
-    //#region Site Search Controller
+
     STNControllers.controller('siteSearchCtrl', ['$scope', '$cookies', '$rootScope', '$location', 'stateList', 'sensorTypes', 'networkNames', 'SITE', 
-        function siteSearchCtrl($scope, $cookies, $rootScope, $location, stateList, sensorTypes, networkNames, SITE) {
+        function ($scope, $cookies, $rootScope, $location, stateList, sensorTypes, networkNames, SITE) {
             if ($cookies.get('STNCreds') === undefined || $cookies.get('STNCreds') === "") {
                 $scope.auth = false;
                 $location.path('/login');
@@ -105,5 +104,4 @@
                 };
             }
         }]);
-    //#endregion Site Search Controller
 })();

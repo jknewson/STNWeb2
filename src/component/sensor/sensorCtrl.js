@@ -25,6 +25,7 @@
                 $scope.sensDepTypes = allSensDeps;
                 $scope.showProposed = false; //they want to add a proposed sensor, open options
                 $scope.SiteSensors = thisSiteSensors;
+
                 //show/hide proposed sensors to add
                 $scope.showHideProposed = function () {
                     $scope.showProposed = !$scope.showProposed;
@@ -42,7 +43,7 @@
                                     DEPLOYMENT_TYPE_ID: $scope.deployTypeList[dt].DEPLOYMENT_TYPE_ID,
                                     SITE_ID: thisSite.SITE_ID,
                                     SENSOR_TYPE_ID: $scope.deployTypeList[dt].METHOD == "Temperature (Pressure Transducer)" ? 1 : 2,
-                                    EVENT_ID: $cookies.get('SessionEventID') !== undefined ? $cookies.get('SessionEventID') : null,
+                                    //EVENT_ID: $cookies.get('SessionEventID') !== undefined ? $cookies.get('SessionEventID') : null,
                                     Deployment_Type: $scope.deployTypeList[dt].METHOD
                                 };
                             } else {
@@ -51,7 +52,7 @@
                                     DEPLOYMENT_TYPE_ID: $scope.deployTypeList[dt].DEPLOYMENT_TYPE_ID,
                                     SITE_ID: thisSite.SITE_ID,
                                     SENSOR_TYPE_ID: $scope.sensDepTypes.filter(function (sdt) { return sdt.DEPLOYMENT_TYPE_ID == $scope.deployTypeList[dt].DEPLOYMENT_TYPE_ID; })[0].SENSOR_TYPE_ID,
-                                    EVENT_ID: $cookies.get('SessionEventID') !== undefined ? $cookies.get('SessionEventID') : null,
+                                    //EVENT_ID: $cookies.get('SessionEventID') !== undefined ? $cookies.get('SessionEventID') : null,
                                     Deployment_Type: $scope.deployTypeList[dt].METHOD
                                 };
                             }
@@ -92,7 +93,7 @@
                 //want to retrieve this deployed sensor
                 $scope.showRetrieveModal = function (sensorClicked) {
                     //need statusTypes, CollectConditions               
-                    var indexClicked = $scope.SiteSensors.indexOf(sensorClicked);
+                    var indexClicked = $scope.SiteSensors.indexOf(sensorClicked); var allindex = thisSiteSensors.indexOf(sensorClicked);
                     $(".page-loading").removeClass("hidden"); //loading...
 
                     var modalInstance = $uibModal.open({
@@ -129,7 +130,7 @@
                     });
                     modalInstance.result.then(function (retrievedSensor) {
                         if (retrievedSensor[1] == 'retrieved') {
-                            $scope.SiteSensors[indexClicked] = retrievedSensor[0];
+                            $scope.SiteSensors[indexClicked] = retrievedSensor[0]; thisSiteSensors[allindex] = retrievedSensor[0];
                         }
                         if (retrievedSensor[1] == 'deletedR') {
                             var indexClicked1 = $scope.SiteSensors.indexOf(sensorClicked);
@@ -175,18 +176,18 @@
                         }
                     });
                     modalInstance.result.then(function (createdSensor) {
-                        var i = $scope.SiteSensors.indexOf(sensorClicked);
+                        var i = $scope.SiteSensors.indexOf(sensorClicked); var si = thisSiteSensors.indexOf(sensorClicked);
                         //'deployP' -> createdSensor[1] will be: 'proposedDeployed' deploy new -> createdSensor[1] will be: 'newDeployed';
                         if (createdSensor[1] == 'proposedDeployed') {
-                            $scope.SiteSensors[i] = createdSensor[0];
+                            $scope.SiteSensors[i] = createdSensor[0]; thisSiteSensors[si] = createdSensor[0];
                         }
                         if (createdSensor[1] == 'newDeployed') {
-                            $scope.SiteSensors.push(createdSensor[0]); thisSiteSensors.push(createdSensor[0]);
+                            $scope.SiteSensors.push(createdSensor[0]); 
                             $scope.sensorCount.total = $scope.SiteSensors.length;
                         }
                         if (createdSensor[1] == 'edit') {
                             //this is from edit -- refresh page?
-                            $scope.SiteSensors[i] = createdSensor[0];
+                            $scope.SiteSensors[i] = createdSensor[0]; thisSiteSensors[si] = createdSensor[0];
                         }
                         if (createdSensor[1] == 'deleted') {
                             $scope.SiteSensors.splice(i, 1);

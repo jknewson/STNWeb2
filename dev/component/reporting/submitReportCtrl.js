@@ -1,13 +1,12 @@
 (function () {
-    /* controllers.js, 'leaflet-directive''ui.unique','ngTagsInput',*/
     'use strict';
 
     var STNControllers = angular.module('STNControllers');
     STNControllers.controller('submitReportCtrl', ['$scope', '$http', '$cookies', '$uibModal', '$state', 'CONTACT', 'REPORT', 
-        function submitReportCtrl($scope, $http, $cookies, $uibModal, $state, CONTACT, REPORT) {
+        function ($scope, $http, $cookies, $uibModal, $state, CONTACT, REPORT) {
             //#make sure this clears except for if they care needing to complete a report
             if ($scope.$parent.needToComplete !== true) {
-                $scope.$parent.newReport = {};
+                $scope.$parent.newReport = {REPORT_DATE: new Date()};
             }
 
             //reset it here so form will clear when they leave and come back.
@@ -46,28 +45,28 @@
                 }, function error(errorResponse1) {
                     alert("Error: " + errorResponse1.statusText);
                 }).$promise;
-                if ($scope.GenStaff.LNAME !== undefined) {
+                if ($scope.GenStaff !== undefined && $scope.GenStaff.LNAME !== undefined) {
                     CONTACT.addReportContact({ contactTypeId: 2, reportId: reportID }, $scope.GenStaff, function success(response2) {
                         toastr.success("General Staff Updated");
                     }, function error(errorResponse2) {
                         alert("Error: " + errorResponse2.statusText);
                     }).$promise;
                 }
-                if ($scope.InlandStaff.LNAME !== undefined) {
+                if ($scope.InlandStaff !== undefined && $scope.InlandStaff.LNAME !== undefined) {
                     CONTACT.addReportContact({ contactTypeId: 3, reportId: reportID }, $scope.InlandStaff, function success(response3) {
                         toastr.success("Inland Staff Updated");
                     }, function error(errorResponse3) {
                         alert("Error: " + errorResponse3.statusText);
                     }).$promise;
                 }
-                if ($scope.CoastStaff.LNAME !== undefined) {
+                if ($scope.CoastStaff !== undefined && $scope.CoastStaff.LNAME !== undefined) {
                     CONTACT.addReportContact({ contactTypeId: 4, reportId: reportID }, $scope.CoastStaff, function success(response4) {
                         toastr.success("Coastal Staff Updated");
                     }, function error(errorResponse4) {
                         alert("Error: " + errorResponse4.statusText);
                     }).$promise;
                 }
-                if ($scope.WaterStaff.LNAME !== undefined) {
+                if ($scope.WaterStaff !== undefined && $scope.WaterStaff.LNAME !== undefined) {
                     CONTACT.addReportContact({ contactTypeId: 5, reportId: reportID }, $scope.WaterStaff, function success(response5) {
                         toastr.success("Water Staff Updated");
                     }, function error(errorResponse5) {
@@ -92,9 +91,15 @@
             //Post/Put the Report and Report Contacts. Called twice (from within Modal (incomplete) and outside (complete))
             var PostPutReportAndReportContacts = function () {
                 //POST or PUT
+                // just the date, no time
+                var dateNoTime = new Date($scope.newReport.REPORT_DATE);
+                $scope.newReport.REPORT_DATE = new Date(dateNoTime.setHours(0, 0, 0, 0));
+                //make sure 'GMT' is tacked on so it doesn't try to add hrs to make the already utc a utc in db
+                var i = $scope.newReport.REPORT_DATE.toString().indexOf('GMT') + 3;
+                $scope.newReport.REPORT_DATE = $scope.newReport.REPORT_DATE.toString().substring(0, i);
                 $http.defaults.headers.common.Authorization = 'Basic ' + $cookies.get('STNCreds');
                 $http.defaults.headers.common.Accept = 'application/json';
-                if ($scope.newReport.REPORTING_METRICS_ID !== undefined) {
+                if ($scope.newReport.REPORTING_METRICS_ID !== undefined) {                    
                     //PUT
                     REPORT.update({ id: $scope.newReport.REPORTING_METRICS_ID }, $scope.newReport, function success(response) {
                         toastr.success("Report Updated");
@@ -239,5 +244,4 @@
                 }).$promise;
             };
         }]);
-    //#endregion Reporting Controller
 })();

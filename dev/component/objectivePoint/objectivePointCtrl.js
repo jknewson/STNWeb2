@@ -3,9 +3,9 @@
     'use strict';
 
     var STNControllers = angular.module('STNControllers');
-    //#region OBJECTIVE_POINT
-    STNControllers.controller('objectivePointCtrl', ['$scope', '$cookies', '$location', '$state', '$http', '$uibModal', '$filter', '$timeout', 'OBJECTIVE_POINT', 'thisSite', 'thisSiteOPs', 'allOPTypes', 'allHorDatums', 'allHorCollMethods', 'allVertDatums', 'allVertColMethods', 'allOPQualities', 
-        function objectivePointCtrl($scope, $cookies, $location, $state, $http, $uibModal, $filter, $timeout, OBJECTIVE_POINT, thisSite, thisSiteOPs, allOPTypes, allHorDatums, allHorCollMethods, allVertDatums, allVertColMethods, allOPQualities) {
+
+    STNControllers.controller('objectivePointCtrl', ['$scope', '$cookies', '$location', '$state', '$http', '$uibModal', '$filter', '$timeout', 'OBJECTIVE_POINT', 'MEMBER', 'thisSite', 'thisSiteOPs', 'allOPTypes', 'allHorDatums', 'allHorCollMethods', 'allVertDatums', 'allVertColMethods', 'allOPQualities', 'allFileTypes', 'allAgencies',
+        function ($scope, $cookies, $location, $state, $http, $uibModal, $filter, $timeout, OBJECTIVE_POINT, MEMBER, thisSite, thisSiteOPs, allOPTypes, allHorDatums, allHorCollMethods, allVertDatums, allVertColMethods, allOPQualities, allFileTypes, allAgencies) {
             if ($cookies.get('STNCreds') === undefined || $cookies.get('STNCreds') === "") {
                 $scope.auth = false;
                 $location.path('/login');
@@ -15,7 +15,11 @@
                 $scope.SiteObjectivePoints = thisSiteOPs;
 
                 $scope.showOPModal = function (OPclicked) {
-                    var passAllLists =[allOPTypes, allHorDatums, allHorCollMethods, allVertDatums, allVertColMethods, allOPQualities];
+                    $scope.opFileTypes = allFileTypes.filter(function (oft) {
+                        return oft.FILETYPE === 'Photo' || oft.FILETYPE === 'Field Sheets' || oft.FILETYPE === 'Level Notes' ||
+                            oft.FILETYPE === 'Other' || oft.FILETYPE === 'NGS Datasheet' || oft.FILETYPE === 'Sketch';
+                    });
+                    var passAllLists = [allOPTypes, allHorDatums, allHorCollMethods, allVertDatums, allVertColMethods, allOPQualities, $scope.opFileTypes];
                     var indexClicked = $scope.SiteObjectivePoints.indexOf(OPclicked);
 
                     //modal
@@ -39,7 +43,20 @@
                             },
                             opSite: function () {
                                 return thisSite;
-                            }
+                            },
+                            opFiles: function () {
+                                if (OPclicked !== 0) {
+                                    return OBJECTIVE_POINT.getOPFiles({ id: OPclicked.OBJECTIVE_POINT_ID }).$promise;
+                                }
+                            },
+                            agencyList: function () {
+                                return allAgencies;
+                            },
+                            allMembers: function () {
+                                $http.defaults.headers.common.Authorization = 'Basic ' + $cookies.get('STNCreds');
+                                $http.defaults.headers.common.Accept = 'application/json';
+                                return MEMBER.getAll().$promise;
+                            },
                         }
                     });
                     modalInstance.result.then(function (createdOP) {
@@ -62,5 +79,4 @@
                 };
             }
         }]);
-    //#endregion OBJECTIVE_POINT
 })();
