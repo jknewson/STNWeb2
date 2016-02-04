@@ -2,59 +2,48 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="7bbb61f3-c3e9-4f8f-bc19-016119329c6d" name="Default" comment="">
-      <change type="DELETED" beforePath="$PROJECT_DIR$/dev/css/bootstrap-table.css" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/dev/css/isteven-multi-select.css" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/dev/css/toastr.css" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/dev/css/xeditable.css" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/css/bootstrap-table.css" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/css/bootstrap-theme.css" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/css/bootstrap-theme.css.map" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/css/bootstrap-theme.min.css" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/css/bootstrap.css" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/css/bootstrap.css.map" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/css/bootstrap.min.css" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/css/bootstrap_3.1.1.css" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/css/isteven-multi-select.css" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/css/toastr.css" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/css/xeditable.css" afterPath="" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/bower.json" afterPath="$PROJECT_DIR$/bower.json" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/bower_components/bootstrap/bower.json" afterPath="$PROJECT_DIR$/bower_components/bootstrap/bower.json" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/dev/component/file/fileModalCtrl.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/component/file/fileModalCtrl.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/STNWeb2.csproj" afterPath="$PROJECT_DIR$/STNWeb2.csproj" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/dev/app.js" afterPath="$PROJECT_DIR$/dev/app.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/dev/bower_components/angular-ui-router.js" afterPath="$PROJECT_DIR$/dev/bower_components/angular-ui-router.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/dev/bower_components/jquery.js" afterPath="$PROJECT_DIR$/dev/bower_components/jquery.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/dev/bower_components/ng-file-upload.js" afterPath="$PROJECT_DIR$/dev/bower_components/ng-file-upload.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/dev/bower_components/validate.js" afterPath="$PROJECT_DIR$/dev/bower_components/validate.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/dev/component/ModalsCtrl.js" afterPath="$PROJECT_DIR$/dev/component/ModalsCtrl.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/dev/component/approval/approvalCtrl.js" afterPath="$PROJECT_DIR$/dev/component/approval/approvalCtrl.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/dev/component/event/eventCtrl.js" afterPath="$PROJECT_DIR$/dev/component/event/eventCtrl.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/dev/component/event/eventInfoCtrl.js" afterPath="$PROJECT_DIR$/dev/component/event/eventInfoCtrl.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/dev/component/event/eventSessionCtrl.js" afterPath="$PROJECT_DIR$/dev/component/event/eventSessionCtrl.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/dev/component/event/eventSessionModalCtrl.js" afterPath="$PROJECT_DIR$/dev/component/event/eventSessionModalCtrl.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/dev/component/file/file.html" afterPath="$PROJECT_DIR$/dev/component/file/file.html" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/dev/component/file/fileCtrl.js" afterPath="$PROJECT_DIR$/dev/component/file/fileCtrl.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/dev/component/file/fileList.html" afterPath="$PROJECT_DIR$/dev/component/file/fileList.html" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/dev/component/file/fileUploadCtrl.js" afterPath="$PROJECT_DIR$/dev/component/file/fileUploadCtrl.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/dev/component/help/helpCtrl.js" afterPath="$PROJECT_DIR$/dev/component/help/helpCtrl.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/dev/component/home/homeCtrl.js" afterPath="$PROJECT_DIR$/dev/component/home/homeCtrl.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/dev/component/hwm/hwmCtrl.js" afterPath="$PROJECT_DIR$/dev/component/hwm/hwmCtrl.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/dev/component/hwm/hwmList.html" afterPath="$PROJECT_DIR$/dev/component/hwm/hwmList.html" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/dev/component/hwm/hwmModalCtrl.js" afterPath="$PROJECT_DIR$/dev/component/hwm/hwmModalCtrl.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/dev/component/hwm/quickHWMCtrl.js" afterPath="$PROJECT_DIR$/dev/component/hwm/quickHWMCtrl.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/dev/component/logInOut/logInOutCtrl.js" afterPath="$PROJECT_DIR$/dev/component/logInOut/logInOutCtrl.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/dev/component/main/mainCtrl.js" afterPath="$PROJECT_DIR$/dev/component/main/mainCtrl.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/dev/component/map/map.html" afterPath="$PROJECT_DIR$/dev/component/map/map.html" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/dev/component/map/mapCtrl.js" afterPath="$PROJECT_DIR$/dev/component/map/mapCtrl.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/dev/component/member/memberCtrl.js" afterPath="$PROJECT_DIR$/dev/component/member/memberCtrl.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/dev/component/member/memberInfo.html" afterPath="$PROJECT_DIR$/dev/component/member/memberInfo.html" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/dev/component/member/memberInfoCtrl.js" afterPath="$PROJECT_DIR$/dev/component/member/memberInfoCtrl.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/dev/component/objectivePoint/objectivePointCtrl.js" afterPath="$PROJECT_DIR$/dev/component/objectivePoint/objectivePointCtrl.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/dev/component/objectivePoint/objectivePointList.html" afterPath="$PROJECT_DIR$/dev/component/objectivePoint/objectivePointList.html" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/dev/component/objectivePoint/objectivePointModalCtrl.js" afterPath="$PROJECT_DIR$/dev/component/objectivePoint/objectivePointModalCtrl.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/dev/component/peak/peakCtrl.js" afterPath="$PROJECT_DIR$/dev/component/peak/peakCtrl.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/dev/component/reporting/confirmReportModalCtrl.js" afterPath="$PROJECT_DIR$/dev/component/reporting/confirmReportModalCtrl.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/dev/component/reporting/generateReport.html" afterPath="$PROJECT_DIR$/dev/component/reporting/generateReport.html" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/dev/component/reporting/projectAlertModalCtrl.js" afterPath="$PROJECT_DIR$/dev/component/reporting/projectAlertModalCtrl.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/dev/component/reporting/reportModalCtrl.js" afterPath="$PROJECT_DIR$/dev/component/reporting/reportModalCtrl.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/dev/component/reporting/reportingCtrl.js" afterPath="$PROJECT_DIR$/dev/component/reporting/reportingCtrl.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/dev/component/reporting/reportingDashboard.html" afterPath="$PROJECT_DIR$/dev/component/reporting/reportingDashboard.html" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/dev/component/reporting/reportingDashboardCtrl.js" afterPath="$PROJECT_DIR$/dev/component/reporting/reportingDashboardCtrl.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/dev/component/reporting/submitReport.html" afterPath="$PROJECT_DIR$/dev/component/reporting/submitReport.html" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/dev/component/reporting/submitReportCtrl.js" afterPath="$PROJECT_DIR$/dev/component/reporting/submitReportCtrl.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/dev/component/resources/resourcesCtrl.js" afterPath="$PROJECT_DIR$/dev/component/resources/resourcesCtrl.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/dev/component/sensor/sensorCtrl.js" afterPath="$PROJECT_DIR$/dev/component/sensor/sensorCtrl.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/dev/component/sensor/sensorList.html" afterPath="$PROJECT_DIR$/dev/component/sensor/sensorList.html" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/dev/component/sensor/sensorModalCtrl.js" afterPath="$PROJECT_DIR$/dev/component/sensor/sensorModalCtrl.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/dev/component/settings/settingsCtrl.js" afterPath="$PROJECT_DIR$/dev/component/settings/settingsCtrl.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/dev/component/site/site.html" afterPath="$PROJECT_DIR$/dev/component/site/site.html" />
@@ -63,17 +52,44 @@
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/dev/component/siteSearch/siteSearchCtrl.js" afterPath="$PROJECT_DIR$/dev/component/siteSearch/siteSearchCtrl.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/dev/css/app.css" afterPath="$PROJECT_DIR$/dev/css/app.css" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/dev/index.html" afterPath="$PROJECT_DIR$/dev/index.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/dev/services/STNResource.js" afterPath="$PROJECT_DIR$/dev/services/STNResource.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/dist/component/file/file.html" afterPath="$PROJECT_DIR$/dist/component/file/file.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/dist/component/file/fileList.html" afterPath="$PROJECT_DIR$/dist/component/file/fileList.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/dist/component/hwm/hwmList.html" afterPath="$PROJECT_DIR$/dist/component/hwm/hwmList.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/dist/component/member/memberInfo.html" afterPath="$PROJECT_DIR$/dist/component/member/memberInfo.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/dist/component/objectivePoint/objectivePointList.html" afterPath="$PROJECT_DIR$/dist/component/objectivePoint/objectivePointList.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/dist/component/reporting/generateReport.html" afterPath="$PROJECT_DIR$/dist/component/reporting/generateReport.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/dist/component/reporting/reportingDashboard.html" afterPath="$PROJECT_DIR$/dist/component/reporting/reportingDashboard.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/dist/component/reporting/submitReport.html" afterPath="$PROJECT_DIR$/dist/component/reporting/submitReport.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/dist/component/sensor/sensorList.html" afterPath="$PROJECT_DIR$/dist/component/sensor/sensorList.html" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/dist/component/site/site.html" afterPath="$PROJECT_DIR$/dist/component/site/site.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/dist/css/app.min.css" afterPath="$PROJECT_DIR$/dist/css/app.min.css" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/dist/index.html" afterPath="$PROJECT_DIR$/dist/index.html" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/dist/scripts/app.min.js" afterPath="$PROJECT_DIR$/dist/scripts/app.min.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/dist/scripts/vendor.min.js" afterPath="$PROJECT_DIR$/dist/scripts/vendor.min.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/gulpfile.js" afterPath="$PROJECT_DIR$/gulpfile.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/package.json" afterPath="$PROJECT_DIR$/package.json" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/app.js" afterPath="$PROJECT_DIR$/src/app.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/component/map/map.html" afterPath="$PROJECT_DIR$/src/component/map/map.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/component/map/mapCtrl.js" afterPath="$PROJECT_DIR$/src/component/map/mapCtrl.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/component/ModalsCtrl.js" afterPath="$PROJECT_DIR$/src/component/ModalsCtrl.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/component/file/file.html" afterPath="$PROJECT_DIR$/src/component/file/file.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/component/file/fileCtrl.js" afterPath="$PROJECT_DIR$/src/component/file/fileCtrl.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/component/file/fileList.html" afterPath="$PROJECT_DIR$/src/component/file/fileList.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/component/hwm/hwmList.html" afterPath="$PROJECT_DIR$/src/component/hwm/hwmList.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/component/member/memberInfo.html" afterPath="$PROJECT_DIR$/src/component/member/memberInfo.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/component/objectivePoint/ObjectivePointModalCtrl.js" afterPath="$PROJECT_DIR$/src/component/objectivePoint/ObjectivePointModalCtrl.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/component/objectivePoint/objectivePointCtrl.js" afterPath="$PROJECT_DIR$/src/component/objectivePoint/objectivePointCtrl.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/component/objectivePoint/objectivePointList.html" afterPath="$PROJECT_DIR$/src/component/objectivePoint/objectivePointList.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/component/reporting/generateReport.html" afterPath="$PROJECT_DIR$/src/component/reporting/generateReport.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/component/reporting/reportModalCtrl.js" afterPath="$PROJECT_DIR$/src/component/reporting/reportModalCtrl.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/component/reporting/reportingCtrl.js" afterPath="$PROJECT_DIR$/src/component/reporting/reportingCtrl.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/component/reporting/reportingDashboard.html" afterPath="$PROJECT_DIR$/src/component/reporting/reportingDashboard.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/component/reporting/reportingDashboardCtrl.js" afterPath="$PROJECT_DIR$/src/component/reporting/reportingDashboardCtrl.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/component/reporting/submitReport.html" afterPath="$PROJECT_DIR$/src/component/reporting/submitReport.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/component/reporting/submitReportCtrl.js" afterPath="$PROJECT_DIR$/src/component/reporting/submitReportCtrl.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/component/sensor/sensorCtrl.js" afterPath="$PROJECT_DIR$/src/component/sensor/sensorCtrl.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/component/sensor/sensorList.html" afterPath="$PROJECT_DIR$/src/component/sensor/sensorList.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/component/sensor/sensorModalCtrl.js" afterPath="$PROJECT_DIR$/src/component/sensor/sensorModalCtrl.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/component/site/site.html" afterPath="$PROJECT_DIR$/src/component/site/site.html" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/css/app.css" afterPath="$PROJECT_DIR$/src/css/app.css" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/index.html" afterPath="$PROJECT_DIR$/src/index.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/services/STNResource.js" afterPath="$PROJECT_DIR$/src/services/STNResource.js" />
     </list>
     <ignored path="STNWeb2.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -93,38 +109,7 @@
     <favorites_list name="STNWeb2" />
   </component>
   <component name="FileEditorManager">
-    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="gulpfile.js" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/gulpfile.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-18.758621">
-              <caret line="224" column="37" selection-start-line="224" selection-start-column="37" selection-end-line="224" selection-end-column="37" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="map.html" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/component/map/map.html">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-3.2692308">
-              <caret line="5" column="6" selection-start-line="5" selection-start-column="6" selection-end-line="5" selection-end-column="6" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="mapCtrl.js" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/src/component/map/mapCtrl.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.63468915">
-              <caret line="57" column="50" selection-start-line="57" selection-start-column="50" selection-end-line="57" selection-end-column="50" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-    </leaf>
+    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300" />
   </component>
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
@@ -319,9 +304,9 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="3200" y="0" width="1280" height="1440" extended-state="0" />
-    <editor active="true" />
+    <editor active="false" />
     <layout>
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.2658228" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.2658228" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
@@ -624,18 +609,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding>
-            <element signature="n#style#0;n#div#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="false" />
-            <element signature="n#style#0;n#div#0;n#div#1;n#div#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="false" />
-            <element signature="n#style#0;n#div#1;n#div#1;n#div#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="false" />
-            <element signature="n#style#0;n#a#0;n#li#0;n#ul#0;n#div#0;n#div#2;n#div#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="false" />
-            <element signature="n#style#0;n#a#0;n#li#1;n#ul#0;n#div#0;n#div#2;n#div#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="false" />
-            <element signature="n#style#0;n#a#0;n#li#2;n#ul#0;n#div#0;n#div#2;n#div#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="false" />
-            <element signature="n#style#0;n#a#0;n#li#3;n#ul#0;n#div#0;n#div#2;n#div#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="false" />
-            <element signature="n#style#0;n#a#0;n#li#4;n#ul#0;n#div#0;n#div#2;n#div#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="false" />
-            <element signature="n#style#0;n#a#0;n#li#5;n#ul#0;n#div#0;n#div#2;n#div#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="false" />
-            <element signature="n#style#0;n#div#0;n#div#0;n#div#2;n#div#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="false" />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
@@ -680,26 +654,26 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/gulpfile.js">
+    <entry file="file://$PROJECT_DIR$/src/component/map/mapCtrl.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-18.758621">
-          <caret line="224" column="37" selection-start-line="224" selection-start-column="37" selection-end-line="224" selection-end-column="37" />
+        <state vertical-scroll-proportion="0.1389102">
+          <caret line="19" column="37" selection-start-line="19" selection-start-column="37" selection-end-line="19" selection-end-column="37" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/component/map/map.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-3.2692308">
+        <state vertical-scroll-proportion="0.06656226">
           <caret line="5" column="6" selection-start-line="5" selection-start-column="6" selection-end-line="5" selection-end-column="6" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/component/map/mapCtrl.js">
+    <entry file="file://$PROJECT_DIR$/gulpfile.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.63468915">
-          <caret line="57" column="50" selection-start-line="57" selection-start-column="50" selection-end-line="57" selection-end-column="50" />
+        <state vertical-scroll-proportion="0.42700157">
+          <caret line="224" column="37" selection-start-line="224" selection-start-column="37" selection-end-line="224" selection-end-column="37" />
           <folding />
         </state>
       </provider>

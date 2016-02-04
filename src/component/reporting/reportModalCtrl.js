@@ -7,11 +7,11 @@
             $scope.ReportView = {};
             $scope.ReportView.Report = report;
             $scope.ReportView.submitter = submitPerson;
-            $scope.ReportView.deployStaff = contacts.filter(function (d) { return d.TYPE == "Deployed Staff"; });
-            $scope.ReportView.generalStaff = contacts.filter(function (d) { return d.TYPE == "General"; });
-            $scope.ReportView.inlandStaff = contacts.filter(function (d) { return d.TYPE == "Inland Flood"; });
-            $scope.ReportView.coastStaff = contacts.filter(function (d) { return d.TYPE == "Coastal Flood"; });
-            $scope.ReportView.waterStaff = contacts.filter(function (d) { return d.TYPE == "Water Quality"; });
+            $scope.ReportView.deployStaff = contacts.filter(function (d) { return d.TYPE == "Deployed Staff"; })[0];
+            $scope.ReportView.generalStaff = contacts.filter(function (d) { return d.TYPE == "General"; })[0];
+            $scope.ReportView.inlandStaff = contacts.filter(function (d) { return d.TYPE == "Inland Flood"; })[0];
+            $scope.ReportView.coastStaff = contacts.filter(function (d) { return d.TYPE == "Coastal Flood"; })[0];
+            $scope.ReportView.waterStaff = contacts.filter(function (d) { return d.TYPE == "Water Quality"; })[0];
 
             $scope.ok = function () {
                 $uibModalInstance.dismiss('cancel');

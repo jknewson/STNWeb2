@@ -521,7 +521,6 @@
     <form class="form-horizontal" name="OPForm">
         <fieldset>
             <div class="modal-body">
-
                 <!-- Type: -->
                 <div class="form-group required" ng-class="{'has-error':OPForm.OP_TYPE_ID.$invalid && OPForm.OP_TYPE_ID.$dirty}">
                     <label class="col-md-3 control-label req" for="OP_TYPE_ID">Type:</label>
@@ -777,30 +776,248 @@
                     </div>
                 </div>
 
-                <div ng-if="OPFiles">
-                    <h3>Objective Point Files</h3>
-                    <!--<div style="height:140px;display:inline">
-                        <carousel interval="myInterval" no-wrap="noWrapSlides">
-                            <slide ng-repeat="slide in slides" active="slide.active">
-                                <img ng-src="{{slide.image}}" style="margin:auto;">
+                <div class="col-md-12">
+                    <div class="col-md-4"><h3>Objective Point Files</h3></div>
+                    <div class="col-md-6" ng-if="!showFileForm" style="margin-top:14px">
+                        <button type="button" class="borderLess" ng-click="showFile(0)" tooltip-placement="right" tooltip-append-to-body="true" uib-tooltip="Upload a new File to this OP">
+                            <span class="glyphicon glyphicon-plus"></span>
+                        </button>                        
+                    </div>
+                    <br clear="all" />
+                    <!-- list of existing files for this op -->
+                    <div class="col-md-6" ng-if="OPFiles.length > 0">
+                        <span ng-repeat="f in OPFiles">
+                            <ul style="padding-left: 0">
+                                <li style="list-style:none;padding-bottom: 15px;">
+                                    <span class="col-sm-9 borderLess" style="padding:0">
+                                        <a class="btn borderLess" style="padding:0" title="{{f.FILE_DATE | date: 'MM/dd/yyyy'}} ({{f.PATH || f.FILE_URL || f.FILE_ID}})" ng-click="showFile(f)">{{f.FILE_DATE | date: 'MM/dd/yyyy'}} ({{f.PATH || f.FILE_URL || f.FILE_ID}})</a>
+                                    </span>
+                                </li>
+                            </ul>
+                        </span>
+                    </div>
+                    <!-- carousel of photo files -->
+                    <div class="col-md-6" ng-if="opImageFiles.length > 0" style="height:140px;">
+                        <uib-carousel interval="4000">
+                            <uib-slide ng-repeat="f in opImageFiles">
+                                <img ng-click="showImageModal(f.FILE_ID)" ng-src="https://stntest.wim.usgs.gov/STNServices/Files/{{f.FILE_ID}}/Item" />
                                 <div class="carousel-caption">
-                                    <h4>Slide {{$index}}</h4>
-                                    <p>{{slide.text}}</p>
+                                    <p>{{f.PATH || f.FILE_URL || f.FILE_ID}}</p>
                                 </div>
-                            </slide>
-                        </carousel>
-                    </div>-->
-                    <!--<div ng-repeat="opf in OPFiles">
-                        <div ng-if="opf.FILETYPE_ID == 1">
-                            <h3>Photo Files</h3>
+                            </uib-slide>
+                        </uib-carousel>
+                    </div>
+                    <br clear="all" />
 
-                        </div>
-                    </div>-->
+                    <div ng-if="showFileForm">
+                        <form class="form-horizontal" name="OPFILEForm">
+                            <fieldset>
+                                <!--Upload Single Image with validations*-->
+                                <div ng-if="aFile.FILE_ID === undefined" class="form-group required" style="margin:0;padding:0">
+                                    <label class="col-md-3 control-label" for="FILE">Upload File:</label>
+                                    <div class="col-md-9">
+                                        <input type="file" max="500000" file-model="aFile.File" />
+                                        <img ngf-thumbnail="aFile.File" style="height:60px" class="thumbnail">
+                                    </div>
+                                </div>
+                                <!-- File Type* -->
+                                <div class="form-group required" ng-class="{'has-error':OPFILEForm.FILETYPE_ID.$invalid && OPFILEForm.FILETYPE_ID.$dirty}" style="margin:0;padding:0">
+                                    <label class="col-md-3 control-label req" for="FILETYPE_ID">File Type:</label>
+                                    <div class="col-md-6">
+                                        <select class="form-control" name="FILETYPE_ID" ng-model="aFile.FILETYPE_ID"
+                                                ng-options="ft.FILETYPE_ID as ft.FILETYPE for ft in fileTypes" required>
+                                            <option value=""></option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <br clear="all" />
+
+                                <!-- photo file upload fileType==1-->  <!-- all other file upload fileType > 2-->    <!--data file upload fileType==2 -->
+                                <!--File URL (Photo, data, other)-->
+                                <div ng-if="aFile.FILETYPE_ID > 0" class="form-group" style="margin:0;padding:0">
+                                    <label class="col-md-3 control-label" for="FILE_URL">File URL:</label>
+                                    <div class="col-md-6">
+                                        <input class="form-control" name="FILE_URL" ng-model="aFile.FILE_URL" type="text" />
+                                    </div>
+                                </div>
+
+                                <!--Data Processed by (Data)-->
+                                <div ng-if="aFile.FILETYPE_ID === 2" class="form-group" style="margin:0;padding:0">
+                                    <label class="col-md-3 control-label" for="PROCESSOR_ID">Data Process By:</label>
+                                    <div class="col-md-6">
+                                        {{processor}}
+                                    </div>
+                                </div>
+
+                                <!-- Date Collected/Processed* (data) -->
+                                <div ng-if="aFile.FILETYPE_ID === 2" class="form-group required" ng-class="{'has-error':OPFILEForm.COLLECT_DATE.$invalid && OPFILEForm.COLLECT_DATE.$dirty}" style="margin:0;padding:0">
+                                    <label class="col-md-3 control-label req" for="COLLECT_DATE">Date Collected/Processed:</label>
+                                    <div class="col-md-6">
+                                        <datetimepicker ng-model="datafile.COLLECT_DATE" show-meridian="false" date-format="MM/dd/yyyy" readonly-date="false" date-options="dateOptions"
+                                                        hidden-time="true" hidden-date="false" show-spinners="false" date-opened="datepickrs.dfcd" date-ng-click="open($event, 'dfcd')" required>
+                                        </datetimepicker>
+                                    </div>
+                                </div>
+
+                                <!--Source Name (photo)-->
+                                <div class="form-group required" ng-if="aFile.FILETYPE_ID === 1" ng-class="{'has-error':OPFILEForm.FULLNAME.$invalid && OPFILEForm.FULLNAME.$dirty}" style="margin:0;padding:0">
+                                    <label class="col-md-3 control-label req" for="SOURCE_ID">Source Photographer:</label>
+                                    <div class="col-md-6">
+                                        <input class="form-control" name="FULLNAME" ng-model="aSource.FULLNAME" type="text" required />
+                                    </div>
+                                </div>
+
+                                <!--Source Name (all other)-->
+                                <div class="form-group required" ng-if="aFile.FILETYPE_ID  > 2" ng-class="{'has-error':OPFILEForm.FULLNAME.$invalid && OPFILEForm.FULLNAME.$dirty}" style="margin:0;padding:0">
+                                    <label class="col-md-3 control-label req" for="SOURCE_ID">Source Name:</label>
+                                    <div class="col-md-6">
+                                        <input class="form-control" name="FULLNAME" ng-model="aSource.FULLNAME" type="text" required />
+                                    </div>
+                                </div>
+
+                                <!--Source Agency* (photo, allOther)-->
+                                <div ng-if="aFile.FILETYPE_ID === 1 || aFile.FILETYPE_ID > 2" class="form-group required" ng-class="{'has-error':OPFILEForm.AGENCY_ID.$invalid && OPFILEForm.AGENCY_ID.$dirty}" style="margin:0;padding:0">
+                                    <label class="col-md-3 control-label req" for="FILETYPE_ID">Source Agency:</label>
+                                    <div class="col-md-6">
+                                        <select class="form-control" name="AGENCY_ID" ng-model="aSource.AGENCY_ID"
+                                                ng-options="a.AGENCY_ID as a.AGENCY_NAME for a in agencies" required>
+                                            <option value=""></option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <!-- Date Taken* (photo, allother) -->
+                                <div ng-if="aFile.FILETYPE_ID === 1 || aFile.FILETYPE_ID  > 2" class="form-group required" ng-class="{'has-error':OPFILEForm.SOURCE_DATE.$invalid && OPFILEForm.SOURCE_DATE.$dirty}" style="margin:0;padding:0">
+                                    <label class="col-md-3 control-label req" for="SOURCE_DATE">Date Taken:</label>
+                                    <div class="col-md-6">
+                                        <datetimepicker ng-model="aSource.SOURCE_DATE" show-meridian="false" date-format="MM/dd/yyyy" readonly-date="false" date-options="dateOptions"
+                                                        hidden-time="true" hidden-date="false" show-spinners="false" date-opened="datepickrs.sd" date-ng-click="open($event, 'sd')" required>
+                                        </datetimepicker>
+                                    </div>
+                                </div>
+
+                                <!-- Date Uploaded* (photo, data, allother) -->
+                                <div ng-if="aFile.FILETYPE_ID > 0" class="form-group required" ng-class="{'has-error':OPFILEForm.FILE_DATE.$invalid && OPFILEForm.FILE_DATE.$dirty}" style="margin:0;padding:0">
+                                    <label class="col-md-3 control-label req" for="FILE_DATE">Date Uploaded:</label>
+                                    <div class="col-md-6">
+                                        <datetimepicker ng-model="aFile.FILE_DATE" show-meridian="false" date-format="MM/dd/yyyy" readonly-date="false" date-options="dateOptions"
+                                                        hidden-time="true" hidden-date="false" show-spinners="false" date-opened="datepickrs.fd" date-ng-click="open($event, 'fd')" required>
+                                        </datetimepicker>
+                                    </div>
+                                </div>
+
+                                <!--Description*(photo, data, allother)-->
+                                <div ng-if="aFile.FILETYPE_ID > 0" class="form-group required" ng-class="{'has-error':OPFILEForm.DESCRIPTION.$invalid && OPFILEForm.DESCRIPTION.$dirty}" style="margin:0;padding:0">
+                                    <label class="col-md-3 control-label req" for="DESCRIPTION">Description:</label>
+                                    <div class="col-md-6">
+                                        <textarea class="form-control" id="DESCRIPTION" type="text" rows="3" placeholder="Description" ng-model="aFile.DESCRIPTION" required />
+                                    </div>
+                                </div>
+
+                                <!-- Good Data Start Time* (data) -->
+                                <div ng-if="aFile.FILETYPE_ID === 2" class="form-group required" ng-class="{'has-error':OPFILEForm.GOOD_START.$invalid && OPFILEForm.GOOD_START.$dirty}" style="margin:0;padding:0">
+                                    <label class="col-md-3 control-label req" for="GOOD_START">Good Data Start Time:</label>
+                                    <div class="col-md-6">
+                                        <datetimepicker ng-model="datafile.GOOD_START" show-meridian="true" date-format="MM/dd/yyyy" readonly-date="false" date-options="dateOptions"
+                                                        hidden-time="false" hidden-date="false" show-spinners="true" date-opened="datepickrs.dfgs" date-ng-click="open($event, 'dfgs')" required>
+                                        </datetimepicker>
+                                    </div>
+                                </div>
+
+                                <!-- Good Data End Time* (data) -->
+                                <div ng-if="aFile.FILETYPE_ID === 2" class="form-group required" ng-class="{'has-error':OPFILEForm.GOOD_END.$invalid && OPFILEForm.GOOD_END.$dirty}" style="margin:0;padding:0">
+                                    <label class="col-md-3 control-label req" for="GOOD_END">Good Data End Time:</label>
+                                    <div class="col-md-6">
+                                        <datetimepicker ng-model="datafile.GOOD_END" show-meridian="true" date-format="MM/dd/yyyy" readonly-date="false" date-options="dateOptions"
+                                                        hidden-time="false" hidden-date="false" show-spinners="true" date-opened="datepickrs.dfge" date-ng-click="open($event, 'dfge')" required>
+                                        </datetimepicker>
+                                    </div>
+                                </div>
+
+                                <!-- Timezone*:-->
+                                <div ng-if="aFile.FILETYPE_ID === 2" class="form-group required" style="margin:0;padding:0">
+                                    <label class="col-md-3 control-label req">Time Zone:</label>
+                                    <div class="col-md-6">
+                                        <select class="form-control" name="TIME_ZONE" ng-model="datafile.TIME_ZONE" ng-options="vcm for vcm in timeZoneList" required>
+                                            <option value=""></option>
+                                        </select>
+                                    </div>
+                                    <button type="button" class="borderLess pull-left" tooltip-placement="right" tooltip-append-to-body="true" uib-tooltip="Date/Time will be stored in UTC.">
+                                        <span class="glyphicon glyphicon-question-sign"></span>
+                                    </button>
+                                </div>
+
+                                <div ng-if="aFile.FILETYPE_ID === 2" class="form-group" style="margin:0;padding:0">
+                                    <label class="col-md-3 control-label">Elevation:</label>
+                                    <div class="col-md-6">
+                                        <label class="radio-inline">
+                                            <input type="radio" name="ELEVATION_STATUS" ng-model="datafile.ELEVATION_STATUS" value="Final" />Final
+                                        </label>
+                                        <label class="radio-inline">
+                                            <input type="radio" name="ELEVATION_STATUS" ng-model="datafile.ELEVATION_STATUS" value="Arbitrary" />Arbitrary
+                                        </label>
+                                    </div>
+                                </div>
+
+                                <!-- This is where Other ends, rest is for Photo -->
+                                <!--Photo Direction (photo)-->
+                                <div ng-if="aFile.FILETYPE_ID === 1" class="form-group" style="margin:0;padding:0;padding-top:5px;">
+                                    <label class="col-md-3 control-label" for="PHOTO_DIRECTION">Photo Direction:</label>
+                                    <div class="col-md-6">
+                                        <input class="form-control" id="PHOTO_DIRECTION" name="PHOTO_DIRECTION" ng-model="aFile.PHOTO_DIRECTION" type="text" />
+                                    </div>
+                                </div>
+
+                                <!-- Photo Latitude (photo)-->
+                                <div ng-if="aFile.FILETYPE_ID === 1" class="form-group" style="margin:0;padding:0">
+                                    <label class="col-md-3 control-label" for="LATITUDE_DD">Photo Latitude <br /> (if different):</label>
+                                    <div class="col-md-6">
+                                        <input class="form-control" ng-keypress="isNum($event)" name="LATITUDE_DD" id="LATITUDE_DD" ng-model="aFile.LATITUDE_DD"
+                                               type="text" />
+                                    </div>
+                                </div>
+
+                                <!--Photo Longitude (photo)-->
+                                <div ng-if="aFile.FILETYPE_ID === 1" class="form-group" style="margin:0;padding:0">
+                                    <label class="col-md-3 control-label" for="LONGITUDE_DD">Photo Longitude <br /> (if different):</label>
+                                    <div class="col-md-6">
+                                        <input class="form-control" ng-keypress="isNum($event)" id="LONGITUDE_DD" name="LONGITUDE_DD" ng-model="aFile.LONGITUDE_DD"
+                                               type="text" />
+                                    </div>
+                                </div>
+
+                                <div ng-if="aFile.FILETYPE_ID === 1" class="form-group" style="margin:0;padding:0">
+                                    <label class="col-md-3 control-label" for="Caption">Preview Caption:</button></label>
+                                    <div class="col-md-6">
+                                        <span>
+                                            Photo of {{aFile.DESCRIPTION || ' (Description HERE) '}} at {{thisOPsite.SITE_DESCRIPTION}}, {{thisOPsite.COUNTY}}, {{thisOPsite.STATE}}, {{aSource.SOURCE_DATE | date: 'MM/dd/yyyy' || ' Date taken HERE '}}. Photograph by {{aSource.FULLNAME || ' Source Name HERE ' }}, {{(agencies | filter :{AGENCY_ID: aSource.AGENCY_ID})[0].AGENCY_NAME || ' Agency HERE '}}.
+                                        </span>
+                                    </div>
+                                </div>
+
+                                <div ng-if="aFile.FILE_ID !== undefined" class="form-group" style="margin:0;padding:0">
+                                    <label class="col-md-3 control-label">Associated File:</label>
+                                    <div class="col-md-6">
+                                        <a target="_blank" class="btn btn-primary" ng-href="https://stntest.wim.usgs.gov/STNServices/Files/{{aFile.FILE_ID}}/Item">Download File</a>
+                                        <img ng-if="aFile.FILETYPE_ID === 1" style="height:80px;" ng-src="https://stntest.wim.usgs.gov/STNServices/Files/{{aFile.FILE_ID}}/Item" />
+                                    </div>
+                                </div>
+
+
+
+                                <button class="btn btn-primary" ng-if="aFile.FILE_ID != undefined" ng-click="saveFile(OPFILEForm.$valid)">Save File</button>
+                                <button class="btn btn-danger" ng-if="aFile.FILE_ID != undefined" ng-click="deleteFile()">Delete File</button>
+                                <button class="btn btn-primary" ng-if="aFile.FILE_ID == undefined" ng-click="createFile(OPFILEForm.$valid)">Create File</button>
+                                <button class="btn btn-warning" type="button" ng-click="cancelFile()">Cancel File</button>
+                            </fieldset>
+                        </form>
+                    </div>
                 </div>
-
+                <br clear="all" />
                 <div class="modal-footer">
                     <div class="form-group">
-                        <div class="col-md-4 col-md-offset-2">
+                        <div class="col-md-12">
                             <span>
                                 <button ng-show="OP.OBJECTIVE_POINT_ID == undefined" class="btn btn-primary" ng-click="create(OPForm.$valid)">
                                     <span>Create</span>
@@ -824,12 +1041,12 @@
 
 
                         <!--<button class="btn btn-primary" ng-if="OP.OBJECTIVE_POINT_ID != undefined" ng-click="save()">Save</button>
-                        <button class="btn btn-danger" ng-if="OP.OBJECTIVE_POINT_ID != undefined" ng-click="deleteOP()">Delete</button>
-                        <button class="btn btn-primary" ng-if="OP.OBJECTIVE_POINT_ID == undefined" ng-click="create()">Create</button>
-                        <button class="btn btn-warning" ng-click="cancel()">Cancel</button>-->
+                    <button class="btn btn-danger" ng-if="OP.OBJECTIVE_POINT_ID != undefined" ng-click="deleteOP()">Delete</button>
+                    <button class="btn btn-primary" ng-if="OP.OBJECTIVE_POINT_ID == undefined" ng-click="create()">Create</button>
+                    <button class="btn btn-warning" ng-click="cancel()">Cancel</button>-->
                     </div>
         </fieldset>
-    </form>
+        </form>
 </script>
 
 <!-- MODAL for HWM-->
@@ -1231,6 +1448,69 @@
                     </div>
                 </div>
 
+                <!-- -------------------------- TAPEDOWN SECTION --------------------------------  -->
+                <!--Add Tapedown button-->
+                <div class="form-group">
+                    <label class="col-md-3 control-label" for="TAPEDOWNBTN">Tape Down Information:</label>
+                    <div class="col-md-6">
+                        <button type="button" ng-click="showTapedownPart()" class="btn btn-primary">Show/Hide Tape Down Information</button>
+                    </div>
+                </div>
+
+                <!--start Landowner contact area -->
+                <div ng-if="addTapedown">
+                    <hr />
+                    <div class="form-group">
+                        <label class="col-md-3 control-label" for="TAPEDOWN">Site Objective Point(s):</label>
+                        <div class="col-md-6">
+                            <select class="form-control" id="OP" name="OP_LIST" ng-model="OPMeasure.OBJECTIVE_POINT_ID" ng-change="OPchosen()"
+                                    ng-options="o.OBJECTIVE_POINT_ID as o.NAME for o in OPsForTapeDown">
+                                <option value=""></option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <br clear="all" />
+                    <div ng-show="tapeDownTable.length > 0">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th class="col-sm-3">OP</th>
+                                    <th class="col-sm-3">Type</th>
+                                    <th class="col-sm-2">From OP</th>
+                                    <th class="col-sm-2">Hanging Length</th>
+                                    <th class="col-sm-1">Water Surface</th>
+                                    <th class="col-sm-1">Ground Surface</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="t in tapeDownTable">
+                                    <td>{{t.OP_NAME}}<input type="hidden" ng-model="t.OBJECTIVE_TYPE_ID" /><input type="hidden" ng-model="t.OP_MEASUREMENTS_ID" /></td>
+                                    <td>
+                                        <label class="radio-inline">
+                                            <input type="radio" name="TYPE" ng-model="t.TYPE" value="Foreshot" />Foreshot
+                                        </label>
+                                        <label style="margin-left:0" class="radio-inline">
+                                            <input type="radio" name="TYPE" ng-model="t.TYPE" value="Elevation" />Elevation
+                                        </label>
+                                    </td>
+                                    <td><input style ="width: 90%" ng-keypress="isNum($event)" ng-model="t.FROM_RP" /></td>
+                                    <td><input style="width: 90%" ng-keypress="isNum($event)" ng-model="t.HANGING_LENGTH" /></td>
+                                    <td><input style="width: 90%" ng-keypress="isNum($event)" ng-model="t.WATER_SURFACE" /></td>
+                                    <td><input style="width: 90%" ng-keypress="isNum($event)" ng-model="t.GROUND_SURFACE" /></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+
+                    <hr />
+                </div>
+
+                <!-- -------------------------- TAPEDOWN SECTION --------------------------------  -->
+
+
+
                 <!-- Vented (only if Sensor Type is Pressure Transducer)-->
                 <div ng-show="aSensor.SENSOR_TYPE_ID == 1">
                     <div class="form-group">
@@ -1304,10 +1584,9 @@
                             <option value=""></option>
                         </select>
                     </div>
-                    <button type="button" class="borderLess" tooltip-placement="right" uib-tooltip="Date/Time will be stored in UTC.">
+                    <button type="button" class="borderLess" tooltip-placement="right" tooltip-append-to-body="true" uib-tooltip="Date/Time will be stored in UTC.">
                         <span class="glyphicon glyphicon-question-sign"></span>
                     </button>
-
                 </div>
 
                 <!-- Note: -->
@@ -1363,7 +1642,6 @@
 <script type="text/ng-template" id="SensorRetrievalModal.html">
     <div class="modal-header">
         <h3 class="modal-title">Retrieve Sensor<button class="close" type="button" ng-click="cancel()" aria-hidden="true" style="color:gray;">&times;</button></h3>
-
     </div>
 
     <form class="form-horizontal" name="SensorFormR">
@@ -1372,77 +1650,73 @@
                 <label>Deployed Sensor Information</label>
 
                 <!-- Event: -->
-                <div class="form-group">
+                <div>
                     <div class="col-md-3 col-md-offset-1">Event:</div>
                     <div class="col-md-6">{{EventName}}</div>
                 </div>
                 <!-- Sensor Type: -->
-                <div class="form-group">
+                <div>
                     <div class="col-md-3 col-md-offset-1">Sensor Type:</div>
-                    <div class="col-md-6">{{aSensor.Sensor_Type}}</div>
+                    <div class="col-md-6">{{aSensor.Sensor_Type || '---'}}</div>
                 </div>
                 <!-- Sensor Brand: -->
-                <div class="form-group">
+                <div>
                     <div class="col-md-3 col-md-offset-1">Sensor Brand:</div>
-                    <div class="col-md-6">{{aSensor.Sensor_Brand}}</div>
+                    <div class="col-md-6">{{aSensor.Sensor_Brand || '---'}}</div>
                 </div>
                 <!-- Serial Number: -->
-                <div class="form-group">
+                <div>
                     <div class="col-md-3 col-md-offset-1">Serial Number:</div>
-                    <div class="col-md-6">{{aSensor.SERIAL_NUMBER}}</div>
+                    <div class="col-md-6">{{aSensor.SERIAL_NUMBER || '---'}}</div>
                 </div>
                 <!-- Housing Serial Number: -->
-                <div class="form-group">
+                <div>
                     <div class="col-md-3 col-md-offset-1">Housing Serial Number:</div>
-                    <div class="col-md-6">{{aSensor.HOUSING_SERIAL_NUMBER}}</div>
+                    <div class="col-md-6">{{aSensor.HOUSING_SERIAL_NUMBER || '---'}}</div>
                 </div>
                 <!-- Housing Types: -->
-                <div class="form-group">
+                <div>
                     <div class="col-md-3 col-md-offset-1">Housing Types:</div>
-                    <div class="col-md-6">{{aSensor.Housing_Type}}</div>
+                    <div class="col-md-6">{{aSensor.Housing_Type || '---'}}</div>
                 </div>
                 <!-- Vented (only if Sensor Type is Pressure Transducer)-->
                 <div ng-show="aSensor.SENSOR_TYPE_ID == 1">
-                    <div class="form-group">
+                    <div>
                         <div class="col-md-3 col-md-offset-1">Vented:</div>
-                        <div class="col-md-6">{{aSensor.VENTED}}</div>
+                        <div class="col-md-6">{{aSensor.VENTED ||  '---'}}</div>
                     </div>
                 </div>
                 <!-- Deployment Type: -->
-                <div class="form-group">
+                <div>
                     <div class="col-md-3 col-md-offset-1">Deployment Type:</div>
-                    <div class="col-md-6">{{aSensor.Deployment_Type}}</div>
+                    <div class="col-md-6">{{aSensor.Deployment_Type || '---'}}</div>
                 </div>
                 <!-- Location Description: -->
-                <div class="form-group">
+                <div>
                     <div class="col-md-3 col-md-offset-1">Location Description:</div>
-                    <div class="col-md-6">
-                        <textarea class="form-control" readonly="readonly" name="LOCATION_DESCRIPTION" type=" text" rows="2" ng-model="aSensor.LOCATION_DESCRIPTION" elastic />
-                    </div>
+                    <div class="col-md-6">{{aSensor.LOCATION_DESCRIPTION || '---'}}</div>
                 </div>
                 <!-- Interval: -->
-                <div class="form-group">
+                <div>
                     <div class="col-md-3 col-md-offset-1">Interval:</div>
-                    <div class="col-md-6">{{aSensor.INTERVAL}} seconds</div>
+                    <div class="col-md-6">{{aSensor.INTERVAL || '---'}} seconds</div>
                 </div>
                 <!-- Deploy Date: -->
-                <div class="form-group">
+                <div>
                     <div class="col-md-3 col-md-offset-1">Deploy Date and Time:</div>
                     <div class="col-md-6">{{depSensStatus.TIME_STAMP | date: 'MM/dd/yyyy hh:mm a' }} {{depSensStatus.TIME_ZONE}}</div>
                 </div>
                 <!-- Note: -->
-                <div class="form-group">
+                <div>
                     <div class="col-md-3 col-md-offset-1">Note:</div>
-                    <div class="col-md-6">
-                        <textarea class="form-control" readonly="readonly" name="NOTES" type=" text" rows="2" ng-model="depSensStatus.NOTES" elastic />
-                    </div>
+                    <div class="col-md-6">{{depSensStatus.NOTES || '---'}}</div>
                 </div>
                 <!-- Deploy Member: -->
-                <div class="form-group">
+                <div>
                     <div class="col-md-3 col-md-offset-1">Deploy Member:</div>
                     <div class="col-md-6">{{Deployer.FNAME}} {{Deployer.LNAME}}</div>
                 </div>
-
+                <br clear="all"/>
                 <hr />
                 <label>Retrieval Information</label>
                 <!-- Status Type:* -->
@@ -1471,7 +1745,7 @@
                 <div class="form-group">
                     <label class="col-md-3 control-label" for="NOTES">Note:</label>
                     <div class="col-md-6">
-                        <textarea class="form-control" name="NOTES" type=" text" rows="3" ng-model="aRetrieval.NOTES" elastic />
+                        <textarea class="form-control" name="NOTES" type="text" rows="3" ng-model="aRetrieval.NOTES" elastic />
                     </div>
                 </div>
 
@@ -1496,7 +1770,7 @@
                             <option value=""></option>
                         </select>
                     </div>
-                    <button type="button" class="borderLess" tooltip-placement="right" uib-tooltip="Date/Time will be stored in UTC.">
+                    <button type="button" class="borderLess" tooltip-placement="right" tooltip-append-to-body="true" uib-tooltip="Date/Time will be stored in UTC.">
                         <span class="glyphicon glyphicon-question-sign"></span>
                     </button>
                 </div>
@@ -1533,350 +1807,545 @@
     <div class="modal-header">
         <h3 class="modal-title">Full Sensor<button class="close" type="button" ng-click="cancel()" aria-hidden="true" style="color:gray;">&times;</button></h3>
     </div>
-
-    <!--Deployed Sensor Part-->
-
     <div class="modal-body">
-        <label>Deployed Sensor Information</label>
-        <form name="editableDEPLOYEDform">
-            <fieldset>
-                <!-- Event: -->
-                <div class="form-group">
-                    <div class="col-md-3 col-md-offset-1">Event:</div>
-                    <div class="col-md-6">{{EventName}}</div>
-                </div>
-
-                <!-- Sensor Type*: -->
-                <div class="form-group required">
-                    <div class="col-md-3 col-md-offset-1 req">Sensor Type:</div>
-                    <div class="col-md-6">
-                        <span ng-show="view.val == 'detail'">{{sensor.Sensor_Type}}</span>
-                        <select ng-show="view.val == 'edit'" class="form-control" name="SENSOR_TYPE_ID" ng-model="sensor.SENSOR_TYPE_ID"
-                                ng-options="s.SENSOR_TYPE_ID as s.SENSOR for s in sensorTypeList" ng-change="getDepTypes()" required>
-                            <option value=""></option>
-                        </select>
-                    </div>
-                </div>
-
-                <!-- Sensor Brand*: -->
-                <div class="form-group required">
-                    <div class="col-md-3 col-md-offset-1 req">Sensor Brand:</div>
-                    <div class="col-md-6">
-                        <span ng-show="view.val == 'detail'">{{sensor.Sensor_Brand}}</span>
-                        <select ng-show="view.val == 'edit'" class="form-control" name="SENSOR_BRAND_ID" ng-model="sensor.SENSOR_BRAND_ID"
-                                ng-options="sb.SENSOR_BRAND_ID as sb.BRAND_NAME for sb in sensorBrandList" required>
-                            <option value=""></option>
-                        </select>
-                    </div>
-                </div>
-
-                <!-- Serial Number*: -->
-                <div class="form-group required">
-                    <div class="col-md-3 col-md-offset-1 req">Serial Number:</div>
-                    <div class="col-md-6">
-                        <span ng-show="view.val =='detail'">{{sensor.SERIAL_NUMBER}}</span>
-                        <input ng-show="view.val =='edit'" class="form-control" name="SERIAL_NUMBER" ng-model="sensor.SERIAL_NUMBER" type="text" required />
-                    </div>
-                </div>
-
-                <!-- Housing Serial Number: -->
-                <div class="form-group">
-                    <div class="col-md-3 col-md-offset-1">Housing Serial Number:</div>
-                    <div class="col-md-6">
-                        <span ng-show="view.val == 'detail'">{{sensor.HOUSING_SERIAL_NUMBER}}</span>
-                        <input ng-show="view.val == 'edit'" class="form-control" name="HOUSING_SERIAL_NUMBER" ng-model="sensor.HOUSING_SERIAL_NUMBER" type="text" />
-                    </div>
-                </div>
-
-                <!-- Housing Types: -->
-                <div class="form-group">
-                    <div class="col-md-3 col-md-offset-1">Housing Types:</div>
-                    <div class="col-md-6">
-                        <span ng-show="view.val == 'detail'">{{sensor.Housing_Type}}</span>
-                        <select ng-show="view.val == 'edit'" class="form-control" id="HOUSING_TYPE_ID" name="HOUSING_TYPE_ID" ng-model="sensor.HOUSING_TYPE_ID"
-                                ng-options="ht.HOUSING_TYPE_ID as ht.TYPE_NAME for ht in houseTypeList">
-                            <option value=""></option>
-                        </select>
-                    </div>
-                </div>
-
-                <!-- Vented (only if Sensor Type is Pressure Transducer)-->
-                <div ng-show="sensor.SENSOR_TYPE_ID == 1">
-                    <div class="form-group">
-                        <div class="col-md-3 col-md-offset-1">Vented:</div>
-                        <div class="col-md-6">
-                            <span ng-show="view.val == 'detail'">{{sensor.VENTED}}</span>
-                            <span ng-show="view.val == 'edit'">
-                                <label class="radio-inline">
-                                    <input type="radio" name="VENTED" ng-model="sensor.VENTED" value="Yes" />Yes
-                                </label>
-                                <label class="radio-inline">
-                                    <input type="radio" name="VENTED" ng-model="sensor.VENTED" value="No" />No
-                                </label>
-                            </span>
+        <!--Deployed Sensor Part-->
+        <uib-accordion close-others="false">
+            <uib-accordion-group is-open="s.depOpen">
+                <uib-accordion-heading>
+                    <i style="margin-right:10px" class="pull-left glyphicon" ng-class="{'glyphicon-chevron-down': s.depOpen, 'glyphicon-chevron-right': !s.depOpen}"></i>
+                    <span>Deployed Sensor Information</span>
+                </uib-accordion-heading>
+                <form name="editableDeployedForm">
+                    <fieldset>
+                        <!-- Event: -->
+                        <div class="form-group">
+                            <label class="col-md-3 col-md-offset-1 control-label">Event:</label>
+                            <div class="col-md-6">{{EventName}}</div>
                         </div>
+
+                        <!-- Sensor Type*: -->
+                        <div class="form-group required">
+                            <label class="col-md-3 col-md-offset-1 req control-label">Sensor Type:</label>
+                            <div class="col-md-6">
+                                <span ng-show="view.DEPval == 'detail'">{{sensor.Sensor_Type || '---'}}</span>
+                                <select ng-show="view.DEPval == 'edit'" class="form-control" name="SENSOR_TYPE_ID" ng-model="depStuffCopy[0].SENSOR_TYPE_ID"
+                                        ng-options="s.SENSOR_TYPE_ID as s.SENSOR for s in sensorTypeList" ng-change="getDepTypes(depStuffCopy[0])" required>
+                                    <option value=""></option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <!-- Sensor Brand*: -->
+                        <div class="form-group required">
+                            <label class="col-md-3 col-md-offset-1 req control-label">Sensor Brand:</label>
+                            <div class="col-md-6">
+                                <span ng-show="view.DEPval == 'detail'">{{sensor.Sensor_Brand || '---'}}</span>
+                                <select ng-show="view.DEPval == 'edit'" class="form-control" name="SENSOR_BRAND_ID" ng-model="depStuffCopy[0].SENSOR_BRAND_ID"
+                                        ng-options="sb.SENSOR_BRAND_ID as sb.BRAND_NAME for sb in sensorBrandList" required>
+                                    <option value=""></option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <!-- Serial Number*: -->
+                        <div class="form-group required">
+                            <label class="col-md-3 col-md-offset-1 req control-label">Serial Number:</label>
+                            <div class="col-md-6">
+                                <span ng-show="view.DEPval =='detail'">{{sensor.SERIAL_NUMBER || '---'}}</span>
+                                <input ng-show="view.DEPval =='edit'" class="form-control" name="SERIAL_NUMBER" ng-model="depStuffCopy[0].SERIAL_NUMBER" type="text" required />
+                            </div>
+                        </div>
+
+                        <!-- Housing Serial Number: -->
+                        <div class="form-group">
+                            <label class="col-md-3 col-md-offset-1 control-label">Housing Serial Number:</label>
+                            <div class="col-md-6">
+                                <span ng-show="view.DEPval == 'detail'">{{sensor.HOUSING_SERIAL_NUMBER || '---'}}</span>
+                                <input ng-show="view.DEPval == 'edit'" class="form-control" name="HOUSING_SERIAL_NUMBER" ng-model="depStuffCopy[0].HOUSING_SERIAL_NUMBER" type="text" />
+                            </div>
+                        </div>
+
+                        <!-- Housing Types: -->
+                        <div class="form-group">
+                            <label class="col-md-3 col-md-offset-1 control-label">Housing Types:</label>
+                            <div class="col-md-6">
+                                <span ng-show="view.DEPval == 'detail'">{{sensor.Housing_Type || '---'}}</span>
+                                <select ng-show="view.DEPval == 'edit'" class="form-control" id="HOUSING_TYPE_ID" name="HOUSING_TYPE_ID" ng-model="depStuffCopy[0].HOUSING_TYPE_ID"
+                                        ng-options="ht.HOUSING_TYPE_ID as ht.TYPE_NAME for ht in houseTypeList">
+                                    <option value=""></option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <!-- Vented (only if Sensor Type is Pressure Transducer)-->
+                        <div ng-show="sensor.SENSOR_TYPE_ID == 1 || depStuffCopy[0].SENSOR_TYPE_ID == 1">
+                            <div class="form-group">
+                                <label class="col-md-3 col-md-offset-1 control-label">Vented:</label>
+                                <div class="col-md-6">
+                                    <span ng-show="view.DEPval == 'detail'">{{sensor.VENTED || '---'}}</span>
+                                    <span ng-show="view.DEPval == 'edit'">
+                                        <label class="radio-inline">
+                                            <input type="radio" name="VENTED" ng-model="depStuffCopy[0].VENTED" value="Yes" />Yes
+                                        </label>
+                                        <label class="radio-inline">
+                                            <input type="radio" name="VENTED" ng-model="depStuffCopy[0].VENTED" value="No" />No
+                                        </label>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Deployment Type: -->
+                        <div class="form-group">
+                            <label class="col-md-3 col-md-offset-1 control-label">Deployment Type:</label>
+                            <div class="col-md-6">
+                                <span ng-show="view.DEPval == 'detail'">{{sensor.Deployment_Type || '---'}}</span>
+                                <select ng-show="view.DEPval == 'edit'" class="form-control" id="DEPLOYMENT_TYPE_ID" name="DEPLOYMENT_TYPE_ID" ng-model="depStuffCopy[0].DEPLOYMENT_TYPE_ID"
+                                        ng-options="dt.DEPLOYMENT_TYPE_ID as dt.METHOD for dt in filteredDeploymentTypes">
+                                    <option value=""></option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <!-- Location Description: -->
+                        <div class="form-group">
+                            <label class="col-md-3 col-md-offset-1 control-label">Location Description:</label>
+                            <div class="col-md-6">
+                                <span ng-show="view.DEPval == 'detail'">{{sensor.LOCATION_DESCRIPTION || '---'}}</span>
+                                <textarea ng-show="view.DEPval == 'edit'" class="form-control" id="LOCATION_DESCRIPTION" name="LOCATION_DESCRIPTION" type=" text" rows="3" ng-model="depStuffCopy[0].LOCATION_DESCRIPTION" />
+                            </div>
+                        </div>
+
+                        <!-- Interval: -->
+                        <div class="form-group">
+                            <label class="col-md-3 col-md-offset-1 control-label">Interval:</label>
+                            <div class="col-md-6">
+                                <span ng-show="view.DEPval == 'detail'">{{sensor.INTERVAL || '---'}} <span ng-if='sensor.INTERVAL'>seconds</span></span>
+                                <input ng-show="view.DEPval == 'edit'" class="form-control" ng-keypress="isNum($event)" name="INTERVAL" ng-model="depStuffCopy[0].INTERVAL" type="text" />
+                            </div>
+                        </div>
+                        <div class="form-group" ng-show="view.DEPval == 'edit'">
+                            <label class="col-md-3 control-label"></label>
+                            <div class="col-md-6 col-md-offset-1">
+                                <label class="radio-inline">
+                                    <input type="radio" name="intervalType" ng-model="IntervalType.type" value="Minutes" />Minutes
+                                </label>
+                                <label class="radio-inline">
+                                    <input type="radio" name="intervalType" ng-model="IntervalType.type" value="Seconds" />Seconds
+                                </label>
+                            </div>
+                        </div>
+
+                        <!-- Deploy Date*: -->
+                        <div class="form-group required">
+                            <label class="col-md-3 col-md-offset-1 control-label" ng-class="{topPad: view.DEPval == 'edit'}">Deploy Date:</label>
+                            <div class="col-md-6">
+                                <span ng-show="view.DEPval == 'detail'">{{DeployedSensorStat.TIME_STAMP | date: 'MM/dd/yyyy hh:mm a'}}</span>
+                                <datetimepicker ng-show="view.DEPval == 'edit'" hour-step="1" minute-step="1" ng-model="depStuffCopy[1].TIME_STAMP" show-meridian="true"
+                                                date-format="MM/dd/yyyy" readonly-date="false" readonly-time="false" date-options="dateOptions"
+                                                hidden-time="false" hidden-date="false" show-spinners="true" required>
+                                </datetimepicker>
+                            </div>
+                        </div>
+
+                        <!-- Deploy timezone*:-->
+                        <div class="form-group required">
+                            <label class="col-md-3 col-md-offset-1 req control-label">Time Zone:</label>
+                            <div class="col-md-6">
+                                <span ng-show="view.DEPval == 'detail'">{{DeployedSensorStat.TIME_ZONE}}</span>
+
+                                <select ng-show="view.DEPval == 'edit'" class="form-control" name="TIME_ZONE" ng-model="depStuffCopy[1].TIME_ZONE"
+                                        ng-options="vcm for vcm in timeZoneList" required>
+                                    <option value=""></option>
+                                </select>
+                            </div>
+                            <button ng-show="view.DEPval == 'edit'" type="button" class="borderLess pull-left" tooltip-placement="right" tooltip-append-to-body="true" uib-tooltip="Date/Time will be stored in UTC.">
+                                <span class="glyphicon glyphicon-question-sign"></span>
+                            </button>
+                        </div>
+
+                        <!-- Note: -->
+                        <div class="form-group">
+                            <label class="col-md-3 col-md-offset-1 control-label">Note:</label>
+                            <div class="col-md-6">
+                                <span ng-show="view.DEPval == 'detail'">{{DeployedSensorStat.NOTES || '---'}}</span>
+                                <textarea ng-show="view.DEPval == 'edit'" class="form-control" name="NOTES" type="text" rows="3" ng-model="depStuffCopy[1].NOTES" />
+                            </div>
+                        </div>
+
+                        <!-- Deploy Member: -->
+                        <div class="form-group">
+                            <label class="col-md-3 col-md-offset-1 control-label">Deploy Member:</label>
+                            <div class="col-md-6">{{Deployer.FNAME}} {{Deployer.LNAME}}</div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="col-md-12">
+                                <span>
+                                    <button ng-show="view.DEPval == 'detail'" ng-disabled="view.RETval == 'edit'" type="button" class="btn btn-primary" ng-click="wannaEditDep()">
+                                        <span>Edit Deployed Sensor</span>
+                                    </button>
+                                </span>
+                                <span>
+                                    <button ng-show="view.DEPval == 'edit'" class="btn btn-primary" ng-click="saveDeployed(editableDeployedForm.$valid)">
+                                        <span>Save</span>
+                                    </button>
+                                </span>
+                                <span>
+                                    <button ng-show="view.DEPval == 'edit'" type="button" class=" btn btn-primary" ng-click="cancelDepEdit()">
+                                        <span>Cancel</span>
+                                    </button>
+                                </span>
+                            </div>
+                        </div>
+                    </fieldset>
+                </form>
+            </uib-accordion-group>
+
+            <uib-accordion-group is-open="s.retOpen">
+                <uib-accordion-heading>
+                    <i style="margin-right:10px" class="pull-left glyphicon" ng-class="{'glyphicon-chevron-down': s.retOpen, 'glyphicon-chevron-right': !s.retOpen}"></i>
+                    <span>Retrieved Sensor Information</span>
+                </uib-accordion-heading>
+                <form name="editableRetrievedForm">
+                    <fieldset>
+                        <!-- Status Type:* -->
+                        <div class="form-group required">
+                            <label class="col-md-3 col-md-offset-1 control-label req">Status:</label>
+                            <div class="col-md-6">
+                                <span ng-show="view.RETval == 'detail'">{{RetrievedSensorStat.Status || '---'}}</span>
+                                <select ng-show="view.RETval == 'edit'" class="form-control" name="STATUS_TYPE_ID" ng-model="retStuffCopy[1].STATUS_TYPE_ID"
+                                        ng-options="s.STATUS_TYPE_ID as s.STATUS for s in statusTypeList" required>
+                                    <option value=""></option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <!-- Collection Condition:* -->
+                        <div class="form-group required">
+                            <label class="col-md-3 col-md-offset-1 control-label req" for="INST_COLLECTION_ID">Collection Conditions:</label>
+                            <div class="col-md-6">
+                                <span ng-show="view.RETval == 'detail'">{{sensor.Inst_Collection || '---'}}</span>
+                                <select ng-show="view.RETval == 'edit'" class="form-control" name="INST_COLLECTION_ID" ng-model="retStuffCopy[0].INST_COLLECTION_ID"
+                                        ng-options="ins.ID as ins.CONDITION for ins in collectCondList" required>
+                                    <option value=""></option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <!-- Note: -->
+                        <div class="form-group">
+                            <label class="col-md-3 col-md-offset-1 control-label" for="NOTES">Note:</label>
+                            <div class="col-md-6">
+                                <span ng-show="view.RETval == 'detail'">{{RetrievedSensorStat.NOTES || '---'}}</span>
+                                <textarea ng-show="view.RETval == 'edit'" class="form-control" name="NOTES" type="text" rows="3" ng-model="retStuffCopy[1].NOTES" />
+                            </div>
+                        </div>
+
+
+                        <!-- Retrieve Time: * -->
+                        <div class="form-group required">
+                            <label class="col-md-3 col-md-offset-1 control-label" ng-class="{topPad: view.RETval == 'edit'}">Retrieve Date:</label>
+                            <div class="col-md-6">
+                                <span ng-show="view.RETval == 'detail'">{{RetrievedSensorStat.TIME_STAMP | date: 'MM/dd/yyyy hh:mm a'}}</span>
+                                <datetimepicker ng-show="view.RETval == 'edit'" hour-step="1" minute-step="1" ng-model="retStuffCopy[1].TIME_STAMP" show-meridian="true"
+                                                date-format="MM/dd/yyyy" readonly-date="false" readonly-time="false" date-options="dateOptions"
+                                                hidden-time="false" hidden-date="false" show-spinners="true" required>
+                                </datetimepicker>
+                            </div>
+                        </div>
+
+                        <!-- Timezone*:-->
+                        <div class="form-group required">
+                            <label class="col-md-3 col-md-offset-1 req control-label">Time Zone:</label>
+                            <div class="col-md-6">
+                                <span ng-show="view.RETval == 'detail'">{{RetrievedSensorStat.TIME_ZONE}}</span>
+
+                                <select ng-show="view.RETval == 'edit'" class="form-control" name="TIME_ZONE" ng-model="retStuffCopy[1].TIME_ZONE"
+                                        ng-options="vcm for vcm in timeZoneList" required>
+                                    <option value=""></option>
+                                </select>
+                            </div>
+                            <button ng-show="view.RETval == 'edit'" type="button" class="borderLess pull-left" tooltip-placement="right" tooltip-append-to-body="true" uib-tooltip="Date/Time will be stored in UTC.">
+                                <span class="glyphicon glyphicon-question-sign"></span>
+                            </button>
+                        </div>
+
+                        <!-- Retrieve Member: -->
+                        <div class="form-group required">
+                            <label class="col-md-3 col-md-offset-1 control-label">Retrieve Member:</label>
+                            <div class="col-md-6">{{Retriever.FNAME}} {{Retriever.LNAME}}</div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="col-md-12">
+                                <span>
+                                    <button ng-show="view.RETval == 'detail'" ng-disabled="view.DEPval == 'edit'" type="button" class="btn btn-primary" ng-click="wannaEditRet()">
+                                        <span>Edit Retrieved Sensor</span>
+                                    </button>
+                                </span>
+                                <span>
+                                    <button ng-show="view.RETval == 'edit'" class="btn btn-primary" ng-click="saveRetrieved(editableRetrievedForm.$valid)">
+                                        <span>Save</span>
+                                    </button>
+                                </span>
+                                <span>
+                                    <button ng-show="view.RETval == 'edit'" type="button" class=" btn btn-primary" ng-click="cancelRetEdit()">
+                                        <span>Cancel</span>
+                                    </button>
+                                </span>
+                            </div>
+                        </div>
+                    </fieldset>
+                </form>
+            </uib-accordion-group>
+        </uib-accordion>
+    </div>
+    <div class="modal-footer">
+        <div class="form-group">
+            <div class="col-md-12">
+                <span>
+                    <button class="btn btn-danger" ng-click="deleteS()">
+                        <span>Delete Sensor</span>
+                    </button>
+                </span>
+                <span>
+                    <button type="button" class="btn btn-warning" ng-click="cancel()">
+                        <span>Close</span>
+                    </button>
+                </span>
+            </div>
+        </div>
+    </div>
+</script>
+
+<!-- MODAL for FILE-->
+<script type="text/ng-template" id="FILEmodal.html">
+    <div class="modal-header">
+        <h3 class="modal-title">File</h3>
+    </div>
+
+    <form class="form-horizontal" name="FILEForm">
+        <fieldset>
+            <div class="modal-body">
+                <!--Upload Single Image with validations*-->
+                <div ng-if="aFile.FILE_ID === undefined" class="form-group required">
+                    <label class="col-md-3 control-label" for="FILE">Upload File:</label>
+                    <div class="col-md-9">
+                        <input type="file" max="500000" file-model="aFile.File" />
+                        <!--<input type="file" ngf-select ng-model="aFile.File" name="file" ngf-max-size="500MB" ngf-min-height="100" ngf-resize="{width: 100, height: 100}" required />
+                    <button class="button" ngf-select="uploadFiles($files)" multiple>Select Files</button>-->
+                        <img ngf-thumbnail="aFile.File" style="height:60px" class="thumbnail">
                     </div>
                 </div>
 
-                <!-- Deployment Type: -->
-                <div class="form-group">
-                    <div class="col-md-3 col-md-offset-1">Deployment Type:</div>
+                <!--Multiple files
+            <div class="button" ngf-select ng-model="files" ngf-multiple="true">Select</div>
+                 Drop files: <div ngf-drop ng-model="files" class="drop-box">Drop</div>-->
+                <!--File Type*-->
+                <div class="form-group required" ng-class="{'has-error':FILEForm.FILETYPE_ID.$invalid && FILEForm.FILETYPE_ID.$dirty}">
+                    <label class="col-md-3 control-label req" for="FILETYPE_ID">File Type:</label>
                     <div class="col-md-6">
-                        <span ng-show="view.val == 'detail'">{{sensor.Deployment_Type}}</span>
-                        <select ng-show="view.val == 'edit'" class="form-control" id="DEPLOYMENT_TYPE_ID" name="DEPLOYMENT_TYPE_ID" ng-model="sensor.DEPLOYMENT_TYPE_ID"
-                                ng-options="dt.DEPLOYMENT_TYPE_ID as dt.METHOD for dt in filteredDeploymentTypes">
+                        <select class="form-control" name="FILETYPE_ID" ng-model="aFile.FILETYPE_ID"
+                                ng-options="ft.FILETYPE_ID as ft.FILETYPE for ft in fileTypes" required>
                             <option value=""></option>
                         </select>
                     </div>
                 </div>
 
-                <!-- Location Description: -->
-                <div class="form-group">
-                    <div class="col-md-3 col-md-offset-1">Location Description:</div>
+                <br clear="all" />
+
+                <!-- photo file upload fileType==1-->  <!-- all other file upload fileType > 2-->    <!--data file upload fileType==2 (NOT DEALT WITH IN THIS MODAL -- only in Sensor Modals) -->
+                <!--File URL (Photo, data, other)-->
+                <div ng-if="aFile.FILETYPE_ID > 0" class="form-group">
+                    <label class="col-md-3 control-label" for="FILE_URL">File URL:</label>
                     <div class="col-md-6">
-                        <span ng-show="view.val == 'detail'">{{sensor.LOCATION_DESCRIPTION}}</span>
-                        <textarea ng-show="view.val == 'edit'" class="form-control" id="LOCATION_DESCRIPTION" name="LOCATION_DESCRIPTION" type=" text" rows="3" ng-model="sensor.LOCATION_DESCRIPTION" />
+                        <input class="form-control" name="FILE_URL" ng-model="aFile.FILE_URL" type="text" />
                     </div>
                 </div>
 
-                <!-- Interval: -->
-                <div class="form-group">
-                    <div class="col-md-3 col-md-offset-1">Interval:</div>
-                    <div class="col-md-6">
-                        <span ng-show="view.val == 'detail'">{{sensor.INTERVAL}} seconds</span>
-                        <input ng-show="view.val == 'edit'" class="form-control" ng-keypress="isNum($event)" name="INTERVAL" ng-model="sensor.INTERVAL" type="text" />
-                    </div>
-                </div>
-                <div class="form-group" ng-show="view.val == 'edit'">
-                    <label class="col-md-3 control-label"></label>
-                    <div class="col-md-6">
-                        <label class="radio-inline">
-                            <input type="radio" name="intervalType" ng-model="IntervalType.type" value="Minutes" />Minutes
-                        </label>
-                        <label class="radio-inline">
-                            <input type="radio" name="intervalType" ng-model="IntervalType.type" value="Seconds" />Seconds
-                        </label>
+                <!--Data Processed by (Data)-->
+                <div ng-if="aFile.FILETYPE_ID === 2" class="form-group">
+                    <label class="col-md-3 control-label" for="PROCESSOR_ID">Data Process By:</label>
+                    <div class="col-md-6">{{processor}}
                     </div>
                 </div>
 
-                <!-- Deploy Date*: -->
-                <div class="form-group required">
-                    <div class="col-md-3 col-md-offset-1">Deploy Date:</div>
+                <!-- Date Collected/Processed* (data) -->
+                <div ng-if="aFile.FILETYPE_ID === 2" class="form-group required" ng-class="{'has-error':FILEForm.COLLECT_DATE.$invalid && FILEForm.COLLECT_DATE.$dirty}">
+                    <label class="col-md-3 control-label req" for="COLLECT_DATE">Date Collected/Processed:</label>
                     <div class="col-md-6">
-                        <span ng-show="view.val == 'detail'">{{DeployedSensorStat.TIME_STAMP | date: 'MM/dd/yyyy hh:mm a'}}</span>
-                        <datetimepicker ng-show="view.val == 'edit'" hour-step="1" minute-step="1" ng-model="DeployedSensorStat.TIME_STAMP" show-meridian="true"
-                                        date-format="MM/dd/yyyy" readonly-date="false" readonly-time="false" date-options="dateOptions"
-                                        hidden-time="false" hidden-date="false" show-spinners="true" required>
+                        <datetimepicker ng-model="datafile.COLLECT_DATE" show-meridian="false" date-format="MM/dd/yyyy" readonly-date="false" date-options="dateOptions"
+                                        hidden-time="true" hidden-date="false" show-spinners="false" date-opened="datepickrs.dfcd" date-ng-click="open($event, 'dfcd')" required>
                         </datetimepicker>
                     </div>
                 </div>
 
-                <!-- Deploy timezone*:-->
-                <div class="form-group required">
-                    <div class="col-md-3 col-md-offset-1 req">Time Zone:</div>
+                <!--Source Name (all other)-->
+                <div class="form-group required" ng-if="aFile.FILETYPE_ID === 1" ng-class="{'has-error':FILEForm.FULLNAME.$invalid && FILEForm.FULLNAME.$dirty}">
+                    <label class="col-md-3 control-label req" for="SOURCE_ID">Source Photographer:</label>
                     <div class="col-md-6">
-                        <span ng-show="view.val == 'detail'">{{DeployedSensorStat.TIME_ZONE}}</span>
-                        <select ng-show="view.val == 'edit'" class="form-control" name="TIME_ZONE" ng-model="DeployedSensorStat.TIME_ZONE"
-                                ng-options="vcm for vcm in timeZoneList" required>
+                        <input class="form-control" name="FULLNAME" ng-model="aSource.FULLNAME" type="text" required />
+                    </div>
+                </div>
+
+                <div class="form-group required" ng-if="aFile.FILETYPE_ID  > 2" ng-class="{'has-error':FILEForm.FULLNAME.$invalid && FILEForm.FULLNAME.$dirty}">
+                    <label class="col-md-3 control-label req" for="SOURCE_ID">Source Name:</label>
+                    <div class="col-md-6">
+                        <input class="form-control" name="FULLNAME" ng-model="aSource.FULLNAME" type="text" required />
+                    </div>
+                </div>
+
+                <!--Source Agency* (photo, allOther)-->
+                <div ng-if="aFile.FILETYPE_ID === 1 || aFile.FILETYPE_ID > 2" class="form-group required" ng-class="{'has-error':FILEForm.AGENCY_ID.$invalid && FILEForm.AGENCY_ID.$dirty}">
+                    <label class="col-md-3 control-label req" for="FILETYPE_ID">Source Agency:</label>
+                    <div class="col-md-6">
+                        <select class="form-control" name="AGENCY_ID" ng-model="aSource.AGENCY_ID"
+                                ng-options="a.AGENCY_ID as a.AGENCY_NAME for a in agencies" required>
                             <option value=""></option>
                         </select>
                     </div>
-                    <button ng-show="view.val == 'edit'" type="button" class="borderLess" tooltip-placement="right" uib-tooltip="Date/Time will be stored in UTC.">
+                </div>
+
+                <!-- Date Taken* (photo, allother) -->
+                <div ng-if="aFile.FILETYPE_ID === 1 || aFile.FILETYPE_ID  > 2" class="form-group required" ng-class="{'has-error':FILEForm.SOURCE_DATE.$invalid && FILEForm.SOURCE_DATE.$dirty}">
+                    <label class="col-md-3 control-label req" for="SOURCE_DATE">Date Taken:</label>
+                    <div class="col-md-6">
+                        <datetimepicker ng-model="aSource.SOURCE_DATE" show-meridian="false" date-format="MM/dd/yyyy" readonly-date="false" date-options="dateOptions"
+                                        hidden-time="true" hidden-date="false" show-spinners="false" date-opened="datepickrs.sd" date-ng-click="open($event, 'sd')" required>
+                        </datetimepicker>
+                    </div>
+                </div>
+
+                <!-- Date Uploaded* (photo, data, allother) -->
+                <div ng-if="aFile.FILETYPE_ID > 0" class="form-group required" ng-class="{'has-error':FILEForm.FILE_DATE.$invalid && FILEForm.FILE_DATE.$dirty}">
+                    <label class="col-md-3 control-label req" for="FILE_DATE">Date Uploaded:</label>
+                    <div class="col-md-6">
+                        <datetimepicker ng-model="aFile.FILE_DATE" show-meridian="false" date-format="MM/dd/yyyy" readonly-date="false" date-options="dateOptions"
+                                        hidden-time="true" hidden-date="false" show-spinners="false" date-opened="datepickrs.fd" date-ng-click="open($event, 'fd')" required>
+                        </datetimepicker>
+                    </div>
+                </div>
+
+                <!--Description*(photo, data, allother)-->
+                <div ng-if="aFile.FILETYPE_ID > 0" class="form-group required" ng-class="{'has-error':FILEForm.DESCRIPTION.$invalid && FILEForm.DESCRIPTION.$dirty}">
+                    <label class="col-md-3 control-label req" for="DESCRIPTION">Description:</label>
+                    <div class="col-md-6">
+                        <textarea class="form-control" id="DESCRIPTION" type="text" rows="3" placeholder="Description" ng-model="aFile.DESCRIPTION" required />
+                    </div>
+                </div>
+
+                <!-- Good Data Start Time* (data) -->
+                <div ng-if="aFile.FILETYPE_ID === 2" class="form-group required" ng-class="{'has-error':FILEForm.GOOD_START.$invalid && FILEForm.GOOD_START.$dirty}">
+                    <label class="col-md-3 control-label req" for="GOOD_START">Good Data Start Time:</label>
+                    <div class="col-md-6">
+                        <datetimepicker ng-model="datafile.GOOD_START" show-meridian="true" date-format="MM/dd/yyyy" readonly-date="false" date-options="dateOptions"
+                                        hidden-time="false" hidden-date="false" show-spinners="true" date-opened="datepickrs.dfgs" date-ng-click="open($event, 'dfgs')" required>
+                        </datetimepicker>
+                    </div>
+                </div>
+
+                <!-- Good Data End Time* (data) -->
+                <div ng-if="aFile.FILETYPE_ID === 2" class="form-group required" ng-class="{'has-error':FILEForm.GOOD_END.$invalid && FILEForm.GOOD_END.$dirty}">
+                    <label class="col-md-3 control-label req" for="GOOD_END">Good Data End Time:</label>
+                    <div class="col-md-6">
+                        <datetimepicker ng-model="datafile.GOOD_END" show-meridian="true" date-format="MM/dd/yyyy" readonly-date="false" date-options="dateOptions"
+                                        hidden-time="false" hidden-date="false" show-spinners="true" date-opened="datepickrs.dfge" date-ng-click="open($event, 'dfge')" required>
+                        </datetimepicker>
+                    </div>
+                </div>
+
+                <!-- Timezone*:-->
+                <div ng-if="aFile.FILETYPE_ID === 2" class="form-group required">
+                    <label class="col-md-3 control-label req">Time Zone:</label>
+                    <div class="col-md-6">
+                        <select class="form-control" name="TIME_ZONE" ng-model="datafile.TIME_ZONE" ng-options="vcm for vcm in timeZoneList" required>
+                            <option value=""></option>
+                        </select>
+                    </div>
+                    <button type="button" class="borderLess pull-left" tooltip-placement="right" tooltip-append-to-body="true" uib-tooltip="Date/Time will be stored in UTC.">
                         <span class="glyphicon glyphicon-question-sign"></span>
                     </button>
                 </div>
 
-                <!-- Note: -->
-                <div class="form-group">
-                    <div class="col-md-3 col-md-offset-1">Note:</div>
+                <div ng-if="aFile.FILETYPE_ID === 2" class="form-group">
+                    <label class="col-md-3 control-label">Elevation:</label>
                     <div class="col-md-6">
-                        <span ng-show="view.val == 'detail'">{{DeployedSensorStat.NOTES}}</span>
-                        <textarea ng-show="view == 'edit'" class="form-control" name="NOTES" type=" text" rows="3" ng-model="DeployedSensorStat.NOTES" elastic />
+                        <label class="radio-inline">
+                            <input type="radio" name="ELEVATION_STATUS" ng-model="datafile.ELEVATION_STATUS" value="Final" />Final
+                        </label>
+                        <label class="radio-inline">
+                            <input type="radio" name="ELEVATION_STATUS" ng-model="datafile.ELEVATION_STATUS" value="Arbitrary" />Arbitrary
+                        </label>
                     </div>
                 </div>
 
-                <!-- Deploy Member: -->
-                <div class="form-group">
-                    <div class="col-md-3 col-md-offset-1">Deploy Member:</div>
-                    <div class="col-md-6">{{Deployer.FNAME}} {{Deployer.LNAME}}</div>
+                <!-- This is where Other ends, rest is for Photo -->
+                <!--Photo Direction (photo)-->
+                <div ng-if="aFile.FILETYPE_ID === 1" class="form-group">
+                    <label class="col-md-3 control-label" for="PHOTO_DIRECTION">Photo Direction:</label>
+                    <div class="col-md-6">
+                        <input class="form-control" id="PHOTO_DIRECTION" name="PHOTO_DIRECTION" ng-model="aFile.PHOTO_DIRECTION" type="text" />
+                    </div>
                 </div>
 
-                <div class="form-group">
-                    <div class="col-md-12">
+                <!-- Photo Latitude (photo)-->
+                <div ng-if="aFile.FILETYPE_ID === 1" class="form-group">
+                    <label class="col-md-3 control-label" for="LATITUDE_DD">Photo Latitude <br /> (if different):</label>
+                    <div class="col-md-6">
+                        <input class="form-control" ng-keypress="isNum($event)" name="LATITUDE_DD" id="LATITUDE_DD" ng-model="aFile.LATITUDE_DD"
+                               type="text" />
+                    </div>
+                </div>
+
+                <!--Photo Longitude (photo)-->
+                <div ng-if="aFile.FILETYPE_ID === 1" class="form-group">
+                    <label class="col-md-3 control-label" for="LONGITUDE_DD">Photo Longitude <br /> (if different):</label>
+                    <div class="col-md-6">
+                        <input class="form-control" ng-keypress="isNum($event)" id="LONGITUDE_DD" name="LONGITUDE_DD" ng-model="aFile.LONGITUDE_DD"
+                               type="text" />
+                    </div>
+                </div>
+
+                <div ng-if="aFile.FILETYPE_ID === 1" class="form-group">
+                    <label class="col-md-3 control-label" for="Caption">Preview Caption:</button></label>
+                    <div class="col-md-6">
                         <span>
-                            <button ng-show="view.val == 'detail'" type="button" class="btn btn-primary" ng-click="view.val = 'edit'">
-                                <span>Edit</span>
-                            </button>
-                        </span>
-                        <span>
-                            <button ng-show="view.val == 'edit'" class="btn btn-primary" ng-click="saveDeloyed()">
-                                <span>Save</span>
-                            </button>
-                        </span>
-                        <span>
-                            <button ng-show="view.val == 'edit'" type="button" class=" btn btn-primary" ng-click="view.val ='detail'">
-                                <span>Cancel</span>
-                            </button>
+                            Photo of {{aFile.DESCRIPTION || ' (Description HERE) '}} at {{theSite.SITE_DESCRIPTION}}, {{theSite.COUNTY}}, {{theSite.STATE}}, {{aSource.SOURCE_DATE | date: 'MM/dd/yyyy' || ' Date taken HERE '}}. Photograph by {{aSource.FULLNAME || ' Source Name HERE ' }}, {{(agencies | filter :{AGENCY_ID: aSource.AGENCY_ID})[0].AGENCY_NAME || ' Agency HERE '}}.
                         </span>
                     </div>
                 </div>
-            </fieldset>
-        </form>
-        <!-- Event:
-        <div class="form-group">
-            <label class="col-md-3 control-label" for="EVENT_ID">Event:</label>
-            <div class="col-md-6">
-                <div class="col-md-8">{{EventName}}</div>
-            </div>
-        </div>
 
-        <!-- Sensor Type:*
-        <div class="form-group required" ng-class="{'has-error':SensorForm.SENSOR_TYPE_ID.$invalid && SensorForm.SENSOR_TYPE_ID.$dirty}">
-            <label class="col-md-3 control-label req" for="SENSOR_TYPE_ID">Sensor Type:</label>
-            <div class="col-md-6">
-                <select class="form-control" id="SENSOR_TYPE_ID" name="SENSOR_TYPE_ID" ng-model="aSensor.SENSOR_TYPE_ID"
-                        ng-options="s.SENSOR_TYPE_ID as s.SENSOR for s in sensorTypeList" ng-change="getDepTypes()" required>
-                    <option value=""></option>
-                </select>
-            </div>
-        </div>
-
-        <!-- Sensor Brand:*
-        <div class="form-group required" ng-class="{'has-error':SensorForm.SENSOR_BRAND_ID.$invalid && SensorForm.SENSOR_BRAND_ID.$dirty}">
-            <label class="col-md-3 control-label req" for="SENSOR_BRAND_ID">Sensor Brand:</label>
-            <div class="col-md-6">
-                <select class="form-control" id="SENSOR_BRAND_ID" name="SENSOR_BRAND_ID" ng-model="aSensor.SENSOR_BRAND_ID"
-                        ng-options="sb.SENSOR_BRAND_ID as sb.BRAND_NAME for sb in sensorBrandList" required>
-                    <option value=""></option>
-                </select>
-            </div>
-        </div>
-
-        <!-- Serial Number:*
-        <div class="form-group required" ng-class="{'has-error':SensorForm.SERIAL_NUMBER.$invalid && SensorForm.SERIAL_NUMBER.$dirty}">
-            <label class="col-md-3 control-label req" for="SERIAL_NUMBER">Serial Number:</label>
-            <div class="col-md-6">
-                <input class="form-control" name="SERIAL_NUMBER" ng-model="aSensor.SERIAL_NUMBER" type="text" required />
-            </div>
-        </div>
-
-        <!-- Housing Serial Number:
-        <div class="form-group">
-            <label class="col-md-3 control-label" for="HOUSING_SERIAL_NUMBER">Housing Serial Number:</label>
-            <div class="col-md-6">
-                <input class="form-control" name="HOUSING_SERIAL_NUMBER" ng-model="aSensor.HOUSING_SERIAL_NUMBER" type="text" />
-            </div>
-        </div>
-
-        <!-- Housing Types:
-        <div class="form-group">
-            <label class="col-md-3 control-label" for="HOUSING_TYPE_ID">Housing Types:</label>
-            <div class="col-md-6">
-                <select class="form-control" id="HOUSING_TYPE_ID" name="HOUSING_TYPE_ID" ng-model="aSensor.HOUSING_TYPE_ID"
-                        ng-options="ht.HOUSING_TYPE_ID as ht.TYPE_NAME for ht in houseTypeList">
-                    <option value=""></option>
-                </select>
-            </div>
-        </div>
-
-        <!-- Vented (only if Sensor Type is Pressure Transducer)
-        <div ng-show="aSensor.SENSOR_TYPE_ID == 1">
-            <div class="form-group">
-                <label class="col-md-3 control-label">Vented:</label>
-                <div class="col-md-6">
-                    <label class="radio-inline">
-                        <input type="radio" name="VENTED" ng-model="aSensor.VENTED" value="Yes" />Yes
-                    </label>
-                    <label class="radio-inline">
-                        <input type="radio" name="VENTED" ng-model="aSensor.VENTED" value="No" />No
-                    </label>
+                <div ng-if="aFile.FILE_ID !== undefined" class="form-group">
+                    <label class="col-md-3 control-label">Associated File:</label>
+                    <div class="col-md-6">
+                        <a target="_blank" class="btn btn-primary" ng-href="https://stntest.wim.usgs.gov/STNServices/Files/{{aFile.FILE_ID}}/Item">Download File</a>
+                        <img ng-if="aFile.FILETYPE_ID === 1" style="height:80px;" ng-src="https://stntest.wim.usgs.gov/STNServices/Files/{{aFile.FILE_ID}}/Item" />
+                    </div>
                 </div>
             </div>
-        </div>
-
-        <!-- Deployment Type:
-        <div class="form-group">
-            <label class="col-md-3 control-label req" for="DEPLOYMENT_TYPE_ID">Deployment Type:</label>
-            <div class="col-md-6">
-                <select class="form-control" id="DEPLOYMENT_TYPE_ID" name="DEPLOYMENT_TYPE_ID" ng-model="aSensor.DEPLOYMENT_TYPE_ID"
-                        ng-options="dt.DEPLOYMENT_TYPE_ID as dt.METHOD for dt in filteredDeploymentTypes">
-                    <option value=""></option>
-                </select>
             </div>
-        </div>
 
-        <!-- Location Description:
-        <div class="form-group" ng-class="{'has-error':SensorForm.LOCATION_DESCRIPTION.$invalid && SensorForm.LOCATION_DESCRIPTION.$dirty}">
-            <label class="col-md-3 control-label" for="LOCATION_DESCRIPTION">Location Description:</label>
-            <div class="col-md-6">
-                <textarea class="form-control" id="LOCATION_DESCRIPTION" name="LOCATION_DESCRIPTION" type=" text" rows="3" ng-model="aSensor.LOCATION_DESCRIPTION" />
+            <div class="modal-footer">
+                <button class="btn btn-primary" ng-if="aFile.FILE_ID != undefined" ng-click="save(FILEForm.$valid)">Save</button>
+                <button class="btn btn-danger" ng-if="aFile.FILE_ID != undefined" ng-click="deleteFile()">Delete</button>
+                <button class="btn btn-primary" ng-if="aFile.FILE_ID == undefined" ng-click="create(FILEForm.$valid)">Create</button>
+                <button class="btn btn-warning" type="button" ng-click="cancel()">Cancel</button>
             </div>
-        </div>
-
-        <!-- Interval:
-        <div class="form-group" style="margin-bottom:0">
-            <label class="col-md-3 control-label" for="INTERVAL">Interval:</label>
-            <div class="col-md-6">
-                <input class="form-control" ng-keypress="isNum($event)" name="INTERVAL" ng-model="aSensor.INTERVAL" type="text" />
-            </div>
-        </div>
-        <div class="form-group">
-            <label class="col-md-3 control-label"></label>
-            <div class="col-md-6">
-                <label class="radio-inline">
-                    <input type="radio" name="intervalType" ng-model="IntervalType.type" value="Minutes" />Minutes
-                </label>
-                <label class="radio-inline">
-                    <input type="radio" name="intervalType" ng-model="IntervalType.type" value="Seconds" />Seconds
-                </label>
-            </div>
-        </div>
-
-        <!-- Deploy Time: *
-        <div class="form-group required" ng-class="{'has-error':SensorForm.TIME_STAMP.$invalid && SensorForm.TIME_STAMP.$dirty}">
-            <label class="col-md-3 control-label req" style="margin-top:3%" for="TIME_STAMP">Deploy Time:</label>
-            <div class="col-md-6">
-                <datetimepicker hour-step="1" minute-step="1" ng-model="aSensStatus.TIME_STAMP" show-meridian="true"
-                                date-format="MM/dd/yyyy" readonly-date="false" readonly-time="false" date-options="dateOptions"
-                                hidden-time="false" hidden-date="false" show-spinners="true">
-                </datetimepicker>
-            </div>
-        </div>
-
-        <!-- Time Zone:*
-        <div class="form-group required">
-            <label class="col-md-3 control-label" for="TIME_ZONE">Time Zone:</label>
-            <div class="col-md-6">
-                <select class="form-control" name="TIME_ZONE" ng-model="aSensStatus.TIME_ZONE"
-                        ng-options="vcm for vcm in timeZoneList">
-                    <option value=""></option>
-                </select>
-            </div>
-            <button type="button" class="borderLess" tooltip-placement="right" uib-tooltip="Date/Time will be stored in UTC.">
-                <span class="glyphicon glyphicon-question-sign"></span>
-            </button>
-
-        </div>
-
-        <!-- Note:
-        <div class="form-group">
-            <label class="col-md-3 control-label" for="NOTES">Note:</label>
-            <div class="col-md-6">
-                <textarea class="form-control" name="NOTES" type=" text" rows="3" ng-model="aSensStatus.NOTES" elastic />
-            </div>
-        </div>
-
-        <!-- Collection Member:
-        <div class="form-group">
-            <label class="col-md-3 control-label">Deploy Member:</label>
-            <div class="col-md-6">
-                <input type="hidden" name="MEMBER_ID" ng-model="aSensStatus.MEMBER_ID" />
-                <span>{{Deployer.FNAME}} {{Deployer.LNAME}}</span>
-            </div>
-        </div>
-
-        <!-- End Deployed Sensor Part-->
-        <!--Retrieved Sensor Part-->
-        <!-- End Retrieved Sensor Part-->
-    </div>
+        </fieldset>
+    </form>
 </script>
+
+<style type="text/css">
+    .carousel-indicators {
+        bottom: 0;
+    }
+
+    .carousel-caption {
+        padding: 0;
+    }
+
+    .active {
+        background: none;
+    }
+</style>

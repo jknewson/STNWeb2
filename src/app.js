@@ -60,24 +60,6 @@
                 })
                 //#endregion
 
-                 //#region file page
-                .state("fileUpload", {
-                    url: "/File",
-                    templateUrl: "component/file/file.html",
-                    controller: "fileUploadCtrl",
-                    resolve: {
-                        ft: 'FILE_TYPE',
-                        fileTypeList: function (ft) {
-                            return ft.getAll().$promise;
-                        },
-                        a: 'AGENCY',
-                        agencyList: function (a) {
-                            return a.getAll().$promise;
-                        }
-                    }
-                })
-                //#endregion
-
                 //#region approval page
                 .state("approval", {
                     url: "/Approval",
@@ -154,7 +136,7 @@
                         allAgencies: function (ag) {
                             return ag.getAll().$promise;
                         },
-                        incompleteReports: function (r, $cookies) {
+                        memberReports: function (r, $cookies) {
                             var mID = $cookies.get('mID');
                             return r.getMemberReports({ memberId: mID }).$promise;
                         }
@@ -612,8 +594,10 @@
                                 return s.getSiteSensors({ id: $stateParams.id }).$promise;
                             }
                         },
-                        thisSiteHWMs: function (s, $stateParams) {
+                        thisSiteHWMs: function (s, $stateParams, $http, $cookies) {
                             if ($stateParams.id > 0) {
+                                $http.defaults.headers.common.Authorization = 'Basic ' + $cookies.get('STNCreds');
+                                $http.defaults.headers.common.Accept = 'application/json';
                                 return s.getSiteHWMs({ id: $stateParams.id }).$promise;
                             }
                         },
@@ -712,17 +696,17 @@
                         m: 'MARKER',
                         allMarkers: function (m){
                             return m.getAll().$promise;
-                        }//, 
+                        }, 
                         //#endregion hwm stuff
                         //#region file
-                        /*   ft: 'FILE_TYPE',
-                           allFileTypes: function(ft){
-                               return ft.getAll().$promise;
-                           },
-                           a: 'AGENCY',
-                           allAgencies: function(a){
-                               return a.getAll().$promise;
-                           }*/
+                        ft: 'FILE_TYPE',
+                        allFileTypes: function(ft){
+                            return ft.getAll().$promise;
+                        },
+                        a: 'AGENCY',
+                        allAgencies: function(a){
+                            return a.getAll().$promise;
+                        }
                         //#endregion file
                     }
                 })
