@@ -14,6 +14,7 @@ var open = require('open');
 var paths = {
     scripts: 'src/**/*.js',
     styles: 'src/**/*.css',
+    //vendorStyles: '../bower_components/**/**/**/*.css',
     less:'src/less',
     images: 'src/images/**/*',
     fonts: 'src/fonts/**/*',
@@ -30,8 +31,12 @@ var paths = {
 var pipes = {};
 
 pipes.orderedVendorScripts = function() {
-    return plugins.order(['jquery.js', 'angular.js']);
+    return plugins.order(['jquery.js', 'angular.js', 'leaflet-src.js', 'esri-leaflet.js', 'angular-leaflet-directive.js']);
 };
+
+//pipes.orderedAppStyles = function(){
+//    return plugins.order(['select.css, app.css']);
+//};
 
 pipes.orderedAppScripts = function() {
     return plugins.angularFilesort();
@@ -68,10 +73,24 @@ pipes.builtAppScriptsProd = function() {
         .pipe(gulp.dest(paths.distScriptsProd));
 };
 
+//this actually takes everything listed in the "main" object in the package's bower.json file. not just scripts.
 pipes.builtVendorScriptsDev = function() {
     return gulp.src(bowerFiles())
         .pipe(gulp.dest('dev/bower_components'));
 };
+
+pipes.builtVendorImagesDev = function() {
+    //in parens below is filter statement for bowerFiles retrieval
+    return gulp.src(bowerFiles(['images/**', '**/images/**']))
+        .pipe(gulp.dest('dev/bower_components/images'));
+};
+
+pipes.builtVendorImagesProd = function() {
+    //in parens below is filter statement for bowerFiles retrieval
+    return gulp.src(bowerFiles(['images/**', '**/images/**']))
+        .pipe(gulp.dest(paths.dist + '/images/'));
+};
+
 
 pipes.builtVendorScriptsProd = function() {
     return gulp.src(bowerFiles('**/*.js'))
@@ -120,6 +139,15 @@ pipes.builtStylesDev = function() {
         //.pipe(plugins.sass())
         .pipe(gulp.dest(paths.dev));
 };
+
+//pipes.builtVendorStylesDev = function (){
+//        return gulp.src(bowerFiles())
+//        //return gulp.src(paths.vendorStyles)
+//            .pipe(gulp.dest('dev/bower_components'));
+//
+//};
+
+
 ///took out sourcemapping stuff, and updated css minification to use cssnano
 pipes.builtStylesProd = function() {
     return gulp.src(paths.styles)
@@ -168,12 +196,16 @@ pipes.builtIndexDev = function() {
     var orderedAppScripts = pipes.builtAppScriptsDev()
         .pipe(pipes.orderedAppScripts());
 
+    //var orderedAppStyles = pipes.orderedAppStyles();
+
+
     var appStyles = pipes.builtStylesDev();
 
     return pipes.validatedIndex()
         .pipe(gulp.dest(paths.dev)) // write first to get relative path for inject
         .pipe(plugins.inject(orderedVendorScripts, {relative: true, name: 'bower'}))
         .pipe(plugins.inject(orderedAppScripts, {relative: true}))
+        //.pipe(plugins.inject(orderedAppStyles, {relative:true}))
         .pipe(plugins.inject(appStyles, {relative: true}))
         .pipe(gulp.dest(paths.dev));
 };
@@ -194,11 +226,11 @@ pipes.builtIndexProd = function() {
 };
 
 pipes.builtAppDev = function() {
-    return es.merge(pipes.builtIndexDev(), pipes.builtPartialsDev(), pipes.processedImagesDev(), pipes.processedIconsDev());
+    return es.merge(pipes.builtIndexDev(), pipes.builtPartialsDev(), pipes.processedImagesDev(), pipes.processedIconsDev(), pipes.builtVendorImagesDev());
 };
 
 pipes.builtAppProd = function() {
-    return es.merge(pipes.builtIndexProd(), pipes.builtPartialsProd(), pipes.processedImagesProd(), pipes.processedIconsProd());
+    return es.merge(pipes.builtIndexProd(), pipes.builtPartialsProd(), pipes.processedImagesProd(), pipes.processedIconsProd(), pipes.builtVendorImagesProd());
 };
 
 // == TASKS ========
@@ -220,6 +252,16 @@ gulp.task('clean-prod', function() {
     });
     return deferred.promise;
 });
+
+
+gulp.task('images', function () {
+    return gulp.src([
+            'src/images/**/*',
+            'src/lib/images/*'])
+        .pipe(gulp.dest('build/images'))
+        .pipe(plugins.size());
+});
+
 
 // checks html source files for syntax errors
 gulp.task('validate-partials', pipes.validatedPartials);
@@ -256,6 +298,9 @@ gulp.task('build-styles-prod', pipes.builtStylesProd);
 
 // moves vendor scripts into the dev environment
 gulp.task('build-vendor-scripts-dev', pipes.builtVendorScriptsDev);
+
+//moves vendor images into the dev environment
+gulp.task('build-vendor-images-dev', pipes.builtVendorImagesDev);
 
 // concatenates, uglifies, and moves vendor scripts into the prod environment
 gulp.task('build-vendor-scripts-prod', pipes.builtVendorScriptsProd);
