@@ -2,8 +2,8 @@
     'use strict';
 
     var ModalControllers = angular.module('ModalControllers');
-    ModalControllers.controller('OPmodalCtrl', ['$scope', '$cookies', '$http', '$uibModalInstance', '$uibModal', 'allDropdowns', 'thisOP', 'thisOPControls', 'opSite', 'opFiles', 'agencyList', 'allMembers', 'OBJECTIVE_POINT', 'OP_CONTROL_IDENTIFIER', 'SOURCE', 'DATA_FILE',
-        function ($scope, $cookies, $http, $uibModalInstance, $uibModal, allDropdowns, thisOP, thisOPControls, opSite, opFiles, agencyList, allMembers, OBJECTIVE_POINT, OP_CONTROL_IDENTIFIER, SOURCE, DATA_FILE) {
+    ModalControllers.controller('OPmodalCtrl', ['$scope', '$cookies', '$http', '$uibModalInstance', '$uibModal', 'allDropdowns', 'thisOP', 'thisOPControls', 'opSite', 'opFiles', 'agencyList', 'allMembers', 'OBJECTIVE_POINT', 'OP_CONTROL_IDENTIFIER', 'SOURCE', 'FILE',
+        function ($scope, $cookies, $http, $uibModalInstance, $uibModal, allDropdowns, thisOP, thisOPControls, opSite, opFiles, agencyList, allMembers, OBJECTIVE_POINT, OP_CONTROL_IDENTIFIER, SOURCE, FILE) {
             //defaults for radio buttons
             //dropdowns
             $scope.OPTypeList = allDropdowns[0];
@@ -52,7 +52,7 @@
                 $scope.existFileIndex = -1; $scope.existIMGFileIndex = -1;
                 $scope.aFile = {}; //holder for file
                 $scope.aSource = {}; //holder for file source
-                $scope.datafile = {}; //holder for file datafile
+           //OP will not have datafile     $scope.datafile = {}; //holder for file datafile
                 if (file !== 0) {
                     //edit op file
                     $scope.existFileIndex = $scope.OPFiles.indexOf(file);
@@ -66,17 +66,17 @@
                             $scope.aSource.SOURCE_DATE = new Date($scope.aSource.SOURCE_DATE); //date for validity of form on put
                         });
                     }//end if source
-                    if (file.DATA_FILE_ID !== null) {
-                        DATA_FILE.query({ id: file.DATA_FILE_ID }).$promise.then(function (df) {
-                            $scope.datafile = df;
-                            $scope.datafile.COLLECT_DATE = new Date($scope.datafile.COLLECT_DATE); //date for validity of form on put
-                            $scope.datafile.GOOD_START = new Date($scope.datafile.GOOD_START); //date for validity of form on put
-                            $scope.datafile.GOOD_END = new Date($scope.datafile.GOOD_END); //date for validity of form on put
-                            $scope.timeZoneList = ['UTC', 'PST', 'MST', 'CST', 'EST'];
-                            var aProcessor = $scope.datafile.PROCESSOR_ID !== null ? allMembers.filter(function (amem) { return amem.MEMBER_ID == $scope.datafile.PROCESSOR_ID; })[0] : {};
-                            $scope.processor = aProcessor.FNAME !== undefined ? aProcessor.FNAME + ' ' + aProcessor.LNAME : '';
-                        });
-                    } //end if datafile
+                    //if (file.DATA_FILE_ID !== null) {
+                    //    DATA_FILE.query({ id: file.DATA_FILE_ID }).$promise.then(function (df) {
+                    //        $scope.datafile = df;
+                    //        $scope.datafile.COLLECT_DATE = new Date($scope.datafile.COLLECT_DATE); //date for validity of form on put
+                    //        $scope.datafile.GOOD_START = new Date($scope.datafile.GOOD_START); //date for validity of form on put
+                    //        $scope.datafile.GOOD_END = new Date($scope.datafile.GOOD_END); //date for validity of form on put
+                    //        $scope.timeZoneList = ['UTC', 'PST', 'MST', 'CST', 'EST'];
+                    //        var aProcessor = $scope.datafile.PROCESSOR_ID !== null ? allMembers.filter(function (amem) { return amem.MEMBER_ID == $scope.datafile.PROCESSOR_ID; })[0] : {};
+                    //        $scope.processor = aProcessor.FNAME !== undefined ? aProcessor.FNAME + ' ' + aProcessor.LNAME : '';
+                    //    });
+                    //} //end if datafile
 
                 }//end existing file
                 else {
@@ -91,7 +91,7 @@
             $scope.createFile = function (valid) {
                 if (valid) {
                     /*aFile.FILETYPE_ID, (pdo)aFile.FILE_URL, (pdo)aFile.FILE_DATE, (pdo)aFile.DESCRIPTION, (p)aFile.PHOTO_DIRECTION, (p)aFile.LATITUDE_DD, (p)aFile.LONGITUDE_DD,
-                     * (d)datafile.PROCESSOR_ID, (d)datafile.COLLECT_DATE, (d)datafile.GOOD_START, (d)datafile.GOOD_END, (d)datafile.TIME_ZONE, (d)datafile.ELEVATION_STATUS
+                     * OP WILL NOT HAVE DATAFILE:: (d)datafile.PROCESSOR_ID, (d)datafile.COLLECT_DATE, (d)datafile.GOOD_START, (d)datafile.GOOD_END, (d)datafile.TIME_ZONE, (d)datafile.ELEVATION_STATUS
                      * (po)aSource.FULLNAME, (po)aSource.AGENCY_ID, (po)aSource.SOURCE_DATE,  */
                     $http.defaults.headers.common.Authorization = 'Basic ' + $cookies.get('STNCreds');
                     $http.defaults.headers.common.Accept = 'application/json';
@@ -124,58 +124,59 @@
                             FILE.uploadFile(fd).$promise.then(function (fresponse) {
                                 toastr.success("File Uploaded");
                                 $scope.OPFiles.push(fresponse);
+                                
                                 if (fresponse.FILETYPE_ID === 1) $scope.opImageFiles.push(fresponse);
                                 $scope.showFileForm = false;
                             });
                         });//end source.save()
                     }//end if source
-                    if ($scope.datafile.GOOD_START !== null) {
-                        //determine timezone
-                        if ($scope.datafile.TIME_ZONE != "UTC") {
-                            //convert it
-                            var utcStartDateTime = new Date($scope.datafile.GOOD_START).toUTCString();
-                            var utcEndDateTime = new Date($scope.datafile.GOOD_END).toUTCString();
-                            $scope.datafile.GOOD_START = utcStartDateTime;
-                            $scope.datafile.GOOD_END = utcEndDateTime;
-                            $scope.datafile.TIME_ZONE = 'UTC';
-                        } else {
-                            //make sure 'GMT' is tacked on so it doesn't try to add hrs to make the already utc a utc in db
-                            var si = $scope.datafile.GOOD_START.toString().indexOf('GMT') + 3;
-                            var ei = $scope.datafile.GOOD_END.toString().indexOf('GMT') + 3;
-                            $scope.datafile.GOOD_START = $scope.datafile.GOOD_START.toString().substring(0, si);
-                            $scope.datafile.GOOD_END = $scope.datafile.GOOD_END.toString().substring(0, ei);
-                        }
-                        $scope.datafile.PROCESSOR_ID = $cookies.get('mID');
-                        DATA_FILE.save($scope.datafile).$promise.then(function (dfResonse) {
-                            //then POST fileParts (Services populate PATH)
-                            var fileParts = {
-                                FileEntity: {
-                                    FILETYPE_ID: $scope.aFile.FILETYPE_ID,
-                                    FILE_URL: $scope.aFile.FILE_URL,
-                                    FILE_DATE: $scope.aFile.FILE_DATE,
-                                    DESCRIPTION: $scope.aFile.DESCRIPTION,
-                                    SITE_ID: $scope.thisOPsite.SITE_ID,
-                                    DATA_FILE_ID: dfResonse.DATA_FILE_ID,
-                                    PHOTO_DIRECTION: $scope.aFile.PHOTO_DIRECTION,
-                                    LATITUDE_DD: $scope.aFile.LATITUDE_DD,
-                                    LONGITUDE_DD: $scope.aFile.LONGITUDE_DD,
-                                    OBJECTIVE_POINT_ID: $scope.OP.OBJECTIVE_POINT_ID
-                                },
-                                File: $scope.aFile.File
-                            };
-                            //need to put the fileParts into correct format for post
-                            var fd = new FormData();
-                            fd.append("FileEntity", JSON.stringify(fileParts.FileEntity));
-                            fd.append("File", fileParts.File);
-                            //now POST it (fileparts)
-                            FILE.uploadFile(fd).$promise.then(function (fresponse) {
-                                toastr.success("File Uploaded");
-                                $scope.OPFiles.push(fresponse);
-                                if (fresponse.FILETYPE_ID === 1) $scope.opImageFiles.push(fresponse);
-                                $scope.showFileForm = false;
-                            });
-                        });
-                    }
+                    //if ($scope.datafile.GOOD_START !== null) {
+                    //    //determine timezone
+                    //    if ($scope.datafile.TIME_ZONE != "UTC") {
+                    //        //convert it
+                    //        var utcStartDateTime = new Date($scope.datafile.GOOD_START).toUTCString();
+                    //        var utcEndDateTime = new Date($scope.datafile.GOOD_END).toUTCString();
+                    //        $scope.datafile.GOOD_START = utcStartDateTime;
+                    //        $scope.datafile.GOOD_END = utcEndDateTime;
+                    //        $scope.datafile.TIME_ZONE = 'UTC';
+                    //    } else {
+                    //        //make sure 'GMT' is tacked on so it doesn't try to add hrs to make the already utc a utc in db
+                    //        var si = $scope.datafile.GOOD_START.toString().indexOf('GMT') + 3;
+                    //        var ei = $scope.datafile.GOOD_END.toString().indexOf('GMT') + 3;
+                    //        $scope.datafile.GOOD_START = $scope.datafile.GOOD_START.toString().substring(0, si);
+                    //        $scope.datafile.GOOD_END = $scope.datafile.GOOD_END.toString().substring(0, ei);
+                    //    }
+                    //    $scope.datafile.PROCESSOR_ID = $cookies.get('mID');
+                    //    DATA_FILE.save($scope.datafile).$promise.then(function (dfResonse) {
+                    //        //then POST fileParts (Services populate PATH)
+                    //        var fileParts = {
+                    //            FileEntity: {
+                    //                FILETYPE_ID: $scope.aFile.FILETYPE_ID,
+                    //                FILE_URL: $scope.aFile.FILE_URL,
+                    //                FILE_DATE: $scope.aFile.FILE_DATE,
+                    //                DESCRIPTION: $scope.aFile.DESCRIPTION,
+                    //                SITE_ID: $scope.thisOPsite.SITE_ID,
+                    //                DATA_FILE_ID: dfResonse.DATA_FILE_ID,
+                    //                PHOTO_DIRECTION: $scope.aFile.PHOTO_DIRECTION,
+                    //                LATITUDE_DD: $scope.aFile.LATITUDE_DD,
+                    //                LONGITUDE_DD: $scope.aFile.LONGITUDE_DD,
+                    //                OBJECTIVE_POINT_ID: $scope.OP.OBJECTIVE_POINT_ID
+                    //            },
+                    //            File: $scope.aFile.File
+                    //        };
+                    //        //need to put the fileParts into correct format for post
+                    //        var fd = new FormData();
+                    //        fd.append("FileEntity", JSON.stringify(fileParts.FileEntity));
+                    //        fd.append("File", fileParts.File);
+                    //        //now POST it (fileparts)
+                    //        FILE.uploadFile(fd).$promise.then(function (fresponse) {
+                    //            toastr.success("File Uploaded");
+                    //            $scope.OPFiles.push(fresponse);
+                    //            if (fresponse.FILETYPE_ID === 1) $scope.opImageFiles.push(fresponse);
+                    //            $scope.showFileForm = false;
+                    //        });
+                    //    });
+                    //}
                 }//end valid
             };//end create()
 
@@ -196,32 +197,33 @@
                                 $scope.showFileForm = false;
                             });
                         });
-                    } else {
-                        //data file
-                        //check timezone and make sure date stays utc
-                        if ($scope.datafile.TIME_ZONE != "UTC") {
-                            //convert it
-                            var utcStartDateTime = new Date($scope.datafile.GOOD_START).toUTCString();
-                            var utcEndDateTime = new Date($scope.datafile.GOOD_END).toUTCString();
-                            $scope.datafile.GOOD_START = utcStartDateTime;
-                            $scope.datafile.GOOD_END = utcEndDateTime;
-                            $scope.datafile.TIME_ZONE = 'UTC';
-                        } else {
-                            //make sure 'GMT' is tacked on so it doesn't try to add hrs to make the already utc a utc in db
-                            var si = $scope.datafile.GOOD_START.toString().indexOf('GMT') + 3;
-                            var ei = $scope.datafile.GOOD_END.toString().indexOf('GMT') + 3;
-                            $scope.datafile.GOOD_START = $scope.datafile.GOOD_START.toString().substring(0, si);
-                            $scope.datafile.GOOD_END = $scope.datafile.GOOD_END.toString().substring(0, ei);
-                        }
+                    }
+                    //else {
+                    //    //data file
+                    //    //check timezone and make sure date stays utc
+                    //    if ($scope.datafile.TIME_ZONE != "UTC") {
+                    //        //convert it
+                    //        var utcStartDateTime = new Date($scope.datafile.GOOD_START).toUTCString();
+                    //        var utcEndDateTime = new Date($scope.datafile.GOOD_END).toUTCString();
+                    //        $scope.datafile.GOOD_START = utcStartDateTime;
+                    //        $scope.datafile.GOOD_END = utcEndDateTime;
+                    //        $scope.datafile.TIME_ZONE = 'UTC';
+                    //    } else {
+                    //        //make sure 'GMT' is tacked on so it doesn't try to add hrs to make the already utc a utc in db
+                    //        var si = $scope.datafile.GOOD_START.toString().indexOf('GMT') + 3;
+                    //        var ei = $scope.datafile.GOOD_END.toString().indexOf('GMT') + 3;
+                    //        $scope.datafile.GOOD_START = $scope.datafile.GOOD_START.toString().substring(0, si);
+                    //        $scope.datafile.GOOD_END = $scope.datafile.GOOD_END.toString().substring(0, ei);
+                    //    }
 
-                        DATA_FILE.update({ id: $scope.datafile.DATA_FILE_ID }, $scope.datafile).$promise.then(function () {
-                            FILE.update({ id: $scope.aFile.FILE_ID }, $scope.aFile).$promise.then(function (fileResponse) {
-                                toastr.success("File Updated");
-                                $scope.OPFiles[$scope.existFileIndex] = fileResponse;
-                                $scope.showFileForm = false;
-                            });
-                        });
-                    } //end else (datafile)                    
+                    //    DATA_FILE.update({ id: $scope.datafile.DATA_FILE_ID }, $scope.datafile).$promise.then(function () {
+                    //        FILE.update({ id: $scope.aFile.FILE_ID }, $scope.aFile).$promise.then(function (fileResponse) {
+                    //            toastr.success("File Updated");
+                    //            $scope.OPFiles[$scope.existFileIndex] = fileResponse;
+                    //            $scope.showFileForm = false;
+                    //        });
+                    //    });
+                    //} //end else (datafile)                    
                 }//end valid
             };//end save()
 
@@ -257,7 +259,7 @@
             $scope.cancelFile = function () {
                 $scope.aFile = {};
                 $scope.aSource = {};
-                $scope.datafile = {};
+              //  $scope.datafile = {};
                 $scope.showFileForm = false;
             };
             //#endregion FILE STUFF
@@ -432,7 +434,8 @@
 
             //cancel modal
             $scope.cancel = function () {
-                $uibModalInstance.dismiss('cancel');
+                $uibModalInstance.close();
+             //   $uibModalInstance.dismiss('cancel');
             };
 
             //fix default radios and lat/long

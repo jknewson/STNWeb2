@@ -10,6 +10,9 @@
             $scope.today.setHours(0, 0, 0, 0);
             $scope.yesterday = new Date($scope.today);
             $scope.yesterday.setDate($scope.today.getDate() - 1);
+            $scope.today = $scope.today.toISOString().substr(0, 10);
+            $scope.yesterday = $scope.yesterday.toISOString().substr(0,10);
+
             $scope.THIS_DATE = {};
             //View Report button clicked, get stuff and make a pdf 
             $scope.ViewReport = function (r) {
@@ -49,7 +52,7 @@
             };//end ViewReport click
 
             //function call to add EVENT_NAME to list of reports
-            function formatReport(repList) {
+            var formatReport = function(repList) {
                 var returnList = [];
                 for (var i = 0; i < repList.length; i++) {
                     var rep = repList[i];
@@ -61,14 +64,18 @@
             }
 
             var todayReports = $scope.reportsToDate.filter(function (todayrep) {
-                var reportDate = new Date(todayrep.REPORT_DATE).setHours(0, 0, 0, 0);
-                return new Date(reportDate).getTime() == $scope.today.getTime();
+                //var reportDate = new Date(todayrep.REPORT_DATE).setHours(0, 0, 0, 0);
+                //return new Date(reportDate).getTime() == $scope.today.getTime();
+                var reportDate = todayrep.REPORT_DATE.toString().substring(0, 10);
+                return reportDate == $scope.today;
             });
             $scope.todayRpts = formatReport(todayReports);
 
             var yesterdayReports = $scope.reportsToDate.filter(function (yestrep) {
-                var reportDate = new Date(yestrep.REPORT_DATE).setHours(0, 0, 0, 0);
-                return new Date(reportDate).getTime() == $scope.yesterday.getTime();
+                //var reportDate = new Date(yestrep.REPORT_DATE).setHours(0, 0, 0, 0);
+                //return new Date(reportDate).getTime() == $scope.yesterday.getTime();
+                var reportDate = yestrep.REPORT_DATE.toString().substring(0, 10);
+                return reportDate == $scope.yesterday;
             });
             $scope.yesterdayRpts = formatReport(yesterdayReports);
 

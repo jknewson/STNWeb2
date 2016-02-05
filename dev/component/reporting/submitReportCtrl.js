@@ -93,10 +93,8 @@
                 //POST or PUT
                 // just the date, no time
                 var dateNoTime = new Date($scope.newReport.REPORT_DATE);
-                $scope.newReport.REPORT_DATE = new Date(dateNoTime.setHours(0, 0, 0, 0));
+                $scope.newReport.REPORT_DATE = new Date($scope.newReport.REPORT_DATE);
                 //make sure 'GMT' is tacked on so it doesn't try to add hrs to make the already utc a utc in db
-                var i = $scope.newReport.REPORT_DATE.toString().indexOf('GMT') + 3;
-                $scope.newReport.REPORT_DATE = $scope.newReport.REPORT_DATE.toString().substring(0, i);
                 $http.defaults.headers.common.Authorization = 'Basic ' + $cookies.get('STNCreds');
                 $http.defaults.headers.common.Accept = 'application/json';
                 if ($scope.newReport.REPORTING_METRICS_ID !== undefined) {                    
@@ -125,6 +123,8 @@
                         if ($scope.newReport.COMPLETE == 1) {
                             removeIncomplete(); $scope.isCompleted = true;
                             $scope.newReport.EVENT_NAME = $scope.getEventName($scope.newReport.EVENT_ID);
+                        } else {
+                            $scope.memberIncompletes.push(response);
                         }
                         //then POST the ReportContacts
                         $scope.newReport.REPORTING_METRICS_ID = response.REPORTING_METRICS_ID;
