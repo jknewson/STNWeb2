@@ -2,94 +2,14 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="7bbb61f3-c3e9-4f8f-bc19-016119329c6d" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/dev/component/file/fileModalCtrl.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/component/file/fileModalCtrl.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/STNWeb2.csproj" afterPath="$PROJECT_DIR$/STNWeb2.csproj" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/dev/app.js" afterPath="$PROJECT_DIR$/dev/app.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/dev/component/ModalsCtrl.js" afterPath="$PROJECT_DIR$/dev/component/ModalsCtrl.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/dev/component/approval/approvalCtrl.js" afterPath="$PROJECT_DIR$/dev/component/approval/approvalCtrl.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/dev/component/event/eventCtrl.js" afterPath="$PROJECT_DIR$/dev/component/event/eventCtrl.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/dev/component/event/eventInfoCtrl.js" afterPath="$PROJECT_DIR$/dev/component/event/eventInfoCtrl.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/dev/component/event/eventSessionCtrl.js" afterPath="$PROJECT_DIR$/dev/component/event/eventSessionCtrl.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/dev/component/event/eventSessionModalCtrl.js" afterPath="$PROJECT_DIR$/dev/component/event/eventSessionModalCtrl.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/dev/component/file/file.html" afterPath="$PROJECT_DIR$/dev/component/file/file.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/dev/component/file/fileCtrl.js" afterPath="$PROJECT_DIR$/dev/component/file/fileCtrl.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/dev/component/file/fileList.html" afterPath="$PROJECT_DIR$/dev/component/file/fileList.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/dev/component/file/fileUploadCtrl.js" afterPath="$PROJECT_DIR$/dev/component/file/fileUploadCtrl.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/dev/component/help/helpCtrl.js" afterPath="$PROJECT_DIR$/dev/component/help/helpCtrl.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/dev/component/home/homeCtrl.js" afterPath="$PROJECT_DIR$/dev/component/home/homeCtrl.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/dev/component/hwm/hwmCtrl.js" afterPath="$PROJECT_DIR$/dev/component/hwm/hwmCtrl.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/dev/component/hwm/hwmList.html" afterPath="$PROJECT_DIR$/dev/component/hwm/hwmList.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/dev/component/hwm/hwmModalCtrl.js" afterPath="$PROJECT_DIR$/dev/component/hwm/hwmModalCtrl.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/dev/component/hwm/quickHWMCtrl.js" afterPath="$PROJECT_DIR$/dev/component/hwm/quickHWMCtrl.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/dev/component/logInOut/logInOutCtrl.js" afterPath="$PROJECT_DIR$/dev/component/logInOut/logInOutCtrl.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/dev/component/main/mainCtrl.js" afterPath="$PROJECT_DIR$/dev/component/main/mainCtrl.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/dev/component/map/mapCtrl.js" afterPath="$PROJECT_DIR$/dev/component/map/mapCtrl.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/dev/component/member/memberCtrl.js" afterPath="$PROJECT_DIR$/dev/component/member/memberCtrl.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/dev/component/member/memberInfo.html" afterPath="$PROJECT_DIR$/dev/component/member/memberInfo.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/dev/component/member/memberInfoCtrl.js" afterPath="$PROJECT_DIR$/dev/component/member/memberInfoCtrl.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/dev/component/objectivePoint/objectivePointCtrl.js" afterPath="$PROJECT_DIR$/dev/component/objectivePoint/objectivePointCtrl.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/dev/component/objectivePoint/objectivePointList.html" afterPath="$PROJECT_DIR$/dev/component/objectivePoint/objectivePointList.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/dev/component/objectivePoint/objectivePointModalCtrl.js" afterPath="$PROJECT_DIR$/dev/component/objectivePoint/objectivePointModalCtrl.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/dev/component/peak/peakCtrl.js" afterPath="$PROJECT_DIR$/dev/component/peak/peakCtrl.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/dev/component/reporting/confirmReportModalCtrl.js" afterPath="$PROJECT_DIR$/dev/component/reporting/confirmReportModalCtrl.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/dev/component/reporting/generateReport.html" afterPath="$PROJECT_DIR$/dev/component/reporting/generateReport.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/dev/component/reporting/projectAlertModalCtrl.js" afterPath="$PROJECT_DIR$/dev/component/reporting/projectAlertModalCtrl.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/dev/component/reporting/reportModalCtrl.js" afterPath="$PROJECT_DIR$/dev/component/reporting/reportModalCtrl.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/dev/component/reporting/reportingCtrl.js" afterPath="$PROJECT_DIR$/dev/component/reporting/reportingCtrl.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/dev/component/reporting/reportingDashboard.html" afterPath="$PROJECT_DIR$/dev/component/reporting/reportingDashboard.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/dev/component/reporting/reportingDashboardCtrl.js" afterPath="$PROJECT_DIR$/dev/component/reporting/reportingDashboardCtrl.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/dev/component/reporting/submitReport.html" afterPath="$PROJECT_DIR$/dev/component/reporting/submitReport.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/dev/component/reporting/submitReportCtrl.js" afterPath="$PROJECT_DIR$/dev/component/reporting/submitReportCtrl.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/dev/component/resources/resourcesCtrl.js" afterPath="$PROJECT_DIR$/dev/component/resources/resourcesCtrl.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/dev/component/sensor/sensorCtrl.js" afterPath="$PROJECT_DIR$/dev/component/sensor/sensorCtrl.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/dev/component/sensor/sensorList.html" afterPath="$PROJECT_DIR$/dev/component/sensor/sensorList.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/dev/component/sensor/sensorModalCtrl.js" afterPath="$PROJECT_DIR$/dev/component/sensor/sensorModalCtrl.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/dev/component/settings/settingsCtrl.js" afterPath="$PROJECT_DIR$/dev/component/settings/settingsCtrl.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/dev/component/site/site.html" afterPath="$PROJECT_DIR$/dev/component/site/site.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/dev/component/site/siteCtrl.js" afterPath="$PROJECT_DIR$/dev/component/site/siteCtrl.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/dev/component/site/siteModalCtrl.js" afterPath="$PROJECT_DIR$/dev/component/site/siteModalCtrl.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/dev/component/siteSearch/siteSearchCtrl.js" afterPath="$PROJECT_DIR$/dev/component/siteSearch/siteSearchCtrl.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/dev/css/app.css" afterPath="$PROJECT_DIR$/dev/css/app.css" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/dev/index.html" afterPath="$PROJECT_DIR$/dev/index.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/dev/services/STNResource.js" afterPath="$PROJECT_DIR$/dev/services/STNResource.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/dist/component/file/file.html" afterPath="$PROJECT_DIR$/dist/component/file/file.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/dist/component/file/fileList.html" afterPath="$PROJECT_DIR$/dist/component/file/fileList.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/dist/component/hwm/hwmList.html" afterPath="$PROJECT_DIR$/dist/component/hwm/hwmList.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/dist/component/member/memberInfo.html" afterPath="$PROJECT_DIR$/dist/component/member/memberInfo.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/dist/component/objectivePoint/objectivePointList.html" afterPath="$PROJECT_DIR$/dist/component/objectivePoint/objectivePointList.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/dist/component/reporting/generateReport.html" afterPath="$PROJECT_DIR$/dist/component/reporting/generateReport.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/dist/component/reporting/reportingDashboard.html" afterPath="$PROJECT_DIR$/dist/component/reporting/reportingDashboard.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/dist/component/reporting/submitReport.html" afterPath="$PROJECT_DIR$/dist/component/reporting/submitReport.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/dist/component/sensor/sensorList.html" afterPath="$PROJECT_DIR$/dist/component/sensor/sensorList.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/dist/component/site/site.html" afterPath="$PROJECT_DIR$/dist/component/site/site.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/dist/css/app.min.css" afterPath="$PROJECT_DIR$/dist/css/app.min.css" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/dist/index.html" afterPath="$PROJECT_DIR$/dist/index.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/dist/scripts/app.min.js" afterPath="$PROJECT_DIR$/dist/scripts/app.min.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/app.js" afterPath="$PROJECT_DIR$/src/app.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/component/ModalsCtrl.js" afterPath="$PROJECT_DIR$/src/component/ModalsCtrl.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/component/file/file.html" afterPath="$PROJECT_DIR$/src/component/file/file.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/component/file/fileCtrl.js" afterPath="$PROJECT_DIR$/src/component/file/fileCtrl.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/component/file/fileList.html" afterPath="$PROJECT_DIR$/src/component/file/fileList.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/component/hwm/hwmList.html" afterPath="$PROJECT_DIR$/src/component/hwm/hwmList.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/component/member/memberInfo.html" afterPath="$PROJECT_DIR$/src/component/member/memberInfo.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/component/objectivePoint/ObjectivePointModalCtrl.js" afterPath="$PROJECT_DIR$/src/component/objectivePoint/ObjectivePointModalCtrl.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/component/objectivePoint/objectivePointCtrl.js" afterPath="$PROJECT_DIR$/src/component/objectivePoint/objectivePointCtrl.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/component/objectivePoint/objectivePointList.html" afterPath="$PROJECT_DIR$/src/component/objectivePoint/objectivePointList.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/component/reporting/generateReport.html" afterPath="$PROJECT_DIR$/src/component/reporting/generateReport.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/component/reporting/reportModalCtrl.js" afterPath="$PROJECT_DIR$/src/component/reporting/reportModalCtrl.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/component/reporting/reportingCtrl.js" afterPath="$PROJECT_DIR$/src/component/reporting/reportingCtrl.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/component/reporting/reportingDashboard.html" afterPath="$PROJECT_DIR$/src/component/reporting/reportingDashboard.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/component/reporting/reportingDashboardCtrl.js" afterPath="$PROJECT_DIR$/src/component/reporting/reportingDashboardCtrl.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/component/reporting/submitReport.html" afterPath="$PROJECT_DIR$/src/component/reporting/submitReport.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/component/reporting/submitReportCtrl.js" afterPath="$PROJECT_DIR$/src/component/reporting/submitReportCtrl.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/component/sensor/sensorCtrl.js" afterPath="$PROJECT_DIR$/src/component/sensor/sensorCtrl.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/component/sensor/sensorList.html" afterPath="$PROJECT_DIR$/src/component/sensor/sensorList.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/component/sensor/sensorModalCtrl.js" afterPath="$PROJECT_DIR$/src/component/sensor/sensorModalCtrl.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/component/site/site.html" afterPath="$PROJECT_DIR$/src/component/site/site.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/component/map/map.html" afterPath="$PROJECT_DIR$/src/component/map/map.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/component/map/mapCtrl.js" afterPath="$PROJECT_DIR$/src/component/map/mapCtrl.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/css/app.css" afterPath="$PROJECT_DIR$/src/css/app.css" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/index.html" afterPath="$PROJECT_DIR$/src/index.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/services/STNResource.js" afterPath="$PROJECT_DIR$/src/services/STNResource.js" />
     </list>
     <ignored path="STNWeb2.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -109,7 +29,78 @@
     <favorites_list name="STNWeb2" />
   </component>
   <component name="FileEditorManager">
-    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300" />
+    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
+      <file leaf-file-name="mapCtrl.js" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/component/map/mapCtrl.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.66324437">
+              <caret line="38" column="0" selection-start-line="38" selection-start-column="0" selection-end-line="38" selection-end-column="0" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="STNResource.js" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/services/STNResource.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="-13.793103">
+              <caret line="524" column="53" selection-start-line="524" selection-start-column="53" selection-end-line="524" selection-end-column="53" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="app.css" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/css/app.css">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="-31.884615">
+              <caret line="300" column="0" selection-start-line="300" selection-start-column="0" selection-end-line="300" selection-end-column="0" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="siteSearch.html" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/component/siteSearch/siteSearch.html">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="-5.5636363">
+              <caret line="89" column="75" selection-start-line="89" selection-start-column="64" selection-end-line="89" selection-end-column="75" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="siteSearchCtrl.js" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/component/siteSearch/siteSearchCtrl.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="-17.0">
+              <caret line="29" column="18" selection-start-line="29" selection-start-column="18" selection-end-line="29" selection-end-column="18" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="siteInfoView.html" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/component/site/siteInfoView.html">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="-0.3090909">
+              <caret line="1" column="33" selection-start-line="1" selection-start-column="29" selection-end-line="1" selection-end-column="33" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="map.html" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/component/map/map.html">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="-3.9230769">
+              <caret line="6" column="0" selection-start-line="6" selection-start-column="0" selection-end-line="6" selection-end-column="0" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+    </leaf>
   </component>
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
@@ -139,13 +130,13 @@
         <option value="$PROJECT_DIR$/src/index.html" />
         <option value="$PROJECT_DIR$/bower.json" />
         <option value="$PROJECT_DIR$/src/app.js" />
-        <option value="$PROJECT_DIR$/src/css/app.css" />
         <option value="$PROJECT_DIR$/bower_components/bootstrap/bower.json" />
         <option value="$PROJECT_DIR$/dev/component/map/map.html" />
         <option value="$PROJECT_DIR$/dev/component/map/mapCtrl.js" />
         <option value="$PROJECT_DIR$/dev/index.html" />
         <option value="$PROJECT_DIR$/gulpfile.js" />
         <option value="$PROJECT_DIR$/src/component/map/map.html" />
+        <option value="$PROJECT_DIR$/src/css/app.css" />
         <option value="$PROJECT_DIR$/src/component/map/mapCtrl.js" />
       </list>
     </option>
@@ -214,7 +205,105 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="dist" />
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="STNWeb2" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="STNWeb2" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="shared" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="directives" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="STNWeb2" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="STNWeb2" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="services" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="STNWeb2" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="STNWeb2" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="css" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="STNWeb2" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="STNWeb2" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="component" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="STNWeb2" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="STNWeb2" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="component" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="siteSearch" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -224,7 +313,7 @@
     </panes>
   </component>
   <component name="PropertiesComponent">
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/../WLERA" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../STNDataPortal" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="HbShouldOpenHtmlAsHb" value="" />
     <property name="js-jscs-nodeInterpreter" value="C:\Program Files\nodejs\node.exe" />
@@ -304,11 +393,12 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="3200" y="0" width="1280" height="1440" extended-state="0" />
-    <editor active="false" />
+    <editor active="true" />
     <layout>
-      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.2658228" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.1795886" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.24718256" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
@@ -320,7 +410,6 @@
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.24721603" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
     </layout>
   </component>
@@ -340,20 +429,6 @@
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/src/shared/directives/STNDirectives.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.3328279">
-          <caret line="185" column="29" selection-start-line="185" selection-start-column="29" selection-end-line="185" selection-end-column="29" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/node_modules/gulp/node_modules/vinyl-fs/lib/dest/index.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/component/member/memberInfo.html">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.52855545">
@@ -449,6 +524,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.30932525">
           <caret line="24" column="83" selection-start-line="24" selection-start-column="83" selection-end-line="24" selection-end-column="83" />
+          <folding />
         </state>
       </provider>
     </entry>
@@ -456,6 +532,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.012888552">
           <caret line="8" column="36" selection-start-line="8" selection-start-column="36" selection-end-line="8" selection-end-column="36" />
+          <folding />
         </state>
       </provider>
     </entry>
@@ -463,27 +540,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/app.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-2.3448277">
-          <caret line="4" column="143" selection-start-line="4" selection-start-column="143" selection-end-line="4" selection-end-column="143" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/css/app.css">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.95913464">
-          <caret line="297" column="1" selection-start-line="297" selection-start-column="1" selection-end-line="297" selection-end-column="1" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/component/site/siteCtrl.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.96075356">
-          <caret line="72" column="65" selection-start-line="72" selection-start-column="58" selection-end-line="72" selection-end-column="65" />
         </state>
       </provider>
     </entry>
@@ -574,6 +630,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.17306186">
           <caret line="13" column="11" selection-start-line="13" selection-start-column="11" selection-end-line="13" selection-end-column="11" />
+          <folding />
         </state>
       </provider>
     </entry>
@@ -601,14 +658,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.15974942">
           <caret line="12" column="22" selection-start-line="12" selection-start-column="22" selection-end-line="12" selection-end-column="22" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/dist/index.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding />
         </state>
       </provider>
@@ -654,26 +703,108 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/component/map/mapCtrl.js">
+    <entry file="file://$PROJECT_DIR$/gulpfile.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.1389102">
-          <caret line="19" column="37" selection-start-line="19" selection-start-column="37" selection-end-line="19" selection-end-column="37" />
+        <state vertical-scroll-proportion="0.42700157">
+          <caret line="224" column="37" selection-start-line="224" selection-start-column="37" selection-end-line="224" selection-end-column="37" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/shared/directives/STNDirectives.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="3.228953">
+          <caret line="185" column="19" selection-start-line="185" selection-start-column="19" selection-end-line="185" selection-end-column="19" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/component/site/siteCtrl.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="1.85291">
+          <caret line="115" column="33" selection-start-line="115" selection-start-column="29" selection-end-line="115" selection-end-column="33" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/dist/index.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-0.0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/component/site/site.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.33297062">
+          <caret line="118" column="116" selection-start-line="118" selection-start-column="111" selection-end-line="118" selection-end-column="116" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/app.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.44126984">
+          <caret line="88" column="47" selection-start-line="88" selection-start-column="33" selection-end-line="88" selection-end-column="47" />
+          <folding>
+            <marker date="1454624512628" expanded="true" signature="33430:33442" placeholder="..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/services/STNResource.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-13.793103">
+          <caret line="524" column="53" selection-start-line="524" selection-start-column="53" selection-end-line="524" selection-end-column="53" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/component/map/map.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.06656226">
-          <caret line="5" column="6" selection-start-line="5" selection-start-column="6" selection-end-line="5" selection-end-column="6" />
+        <state vertical-scroll-proportion="-3.9230769">
+          <caret line="6" column="0" selection-start-line="6" selection-start-column="0" selection-end-line="6" selection-end-column="0" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/gulpfile.js">
+    <entry file="file://$PROJECT_DIR$/src/component/site/siteInfoView.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.42700157">
-          <caret line="224" column="37" selection-start-line="224" selection-start-column="37" selection-end-line="224" selection-end-column="37" />
+        <state vertical-scroll-proportion="-0.3090909">
+          <caret line="1" column="33" selection-start-line="1" selection-start-column="29" selection-end-line="1" selection-end-column="33" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/component/siteSearch/siteSearchCtrl.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-17.0">
+          <caret line="29" column="18" selection-start-line="29" selection-start-column="18" selection-end-line="29" selection-end-column="18" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/component/siteSearch/siteSearch.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-5.5636363">
+          <caret line="89" column="75" selection-start-line="89" selection-start-column="64" selection-end-line="89" selection-end-column="75" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/css/app.css">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-31.884615">
+          <caret line="300" column="0" selection-start-line="300" selection-start-column="0" selection-end-line="300" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/component/map/mapCtrl.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.66324437">
+          <caret line="38" column="0" selection-start-line="38" selection-start-column="0" selection-end-line="38" selection-end-column="0" />
           <folding />
         </state>
       </provider>

@@ -7,11 +7,13 @@
     <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
 
     <!-- bower:css -->
+    <link rel="stylesheet" href="bower_components/bootstrap-table.css">
     <link rel="stylesheet" href="bower_components/datetimepicker.css">
     <link rel="stylesheet" href="bower_components/font-awesome.css">
     <link rel="stylesheet" href="bower_components/isteven-multi-select.css">
     <link rel="stylesheet" href="bower_components/ladda.min.css">
     <link rel="stylesheet" href="bower_components/lato.css">
+    <link rel="stylesheet" href="bower_components/leaflet.css">
     <link rel="stylesheet" href="bower_components/mobile-angular-ui-base.css">
     <link rel="stylesheet" href="bower_components/mobile-angular-ui-desktop.css">
     <link rel="stylesheet" href="bower_components/mobile-angular-ui-hover.css">
@@ -22,21 +24,20 @@
     <!-- inject:css -->
     <link rel="stylesheet" href="css/app.css">
     <link rel="stylesheet" href="css/bootstrap-multiselect.css">
-    <link rel="stylesheet" href="css/bootstrap-table.css">
     <link rel="stylesheet" href="css/bootstrap-theme.css">
     <link rel="stylesheet" href="css/bootstrap-theme.min.css">
     <link rel="stylesheet" href="css/bootstrap.css">
     <link rel="stylesheet" href="css/bootstrap.min.css">
     <link rel="stylesheet" href="css/bootstrap_3.1.1.css">
-    <link rel="stylesheet" href="css/isteven-multi-select.css">
     <link rel="stylesheet" href="css/ng-tags-input.min.css">
     <link rel="stylesheet" href="css/select.css">
-    <link rel="stylesheet" href="css/toastr.css">
-    <link rel="stylesheet" href="css/xeditable.css">
     <!-- endinject -->
     <!-- bower:js -->
     <script src="bower_components/jquery.js"></script>
     <script src="bower_components/angular.js"></script>
+    <script src="bower_components/leaflet-src.js"></script>
+    <script src="bower_components/esri-leaflet.js"></script>
+    <script src="bower_components/angular-leaflet-directive.js"></script>
     <script src="bower_components/angular-animate.js"></script>
     <script src="bower_components/angular-cookies.js"></script>
     <script src="bower_components/angular-filter.min.js"></script>
@@ -44,6 +45,7 @@
     <script src="bower_components/angular-resource.js"></script>
     <script src="bower_components/angular-route.js"></script>
     <script src="bower_components/angular-ui-router.js"></script>
+    <script src="bower_components/bootstrap-table.js"></script>
     <script src="bower_components/bootstrap.js"></script>
     <script src="bower_components/checklist-model.js"></script>
     <script src="bower_components/datetimepicker.js"></script>
@@ -74,31 +76,31 @@
     <script src="component/site/siteModalCtrl.js"></script>
     <script src="component/site/siteCtrl.js"></script>
     <script src="component/settings/settingsCtrl.js"></script>
-    <script src="component/resources/resourcesCtrl.js"></script>
     <script src="component/sensor/sensorModalCtrl.js"></script>
     <script src="component/sensor/sensorCtrl.js"></script>
+    <script src="component/home/homeCtrl.js"></script>
+    <script src="component/resources/resourcesCtrl.js"></script>
     <script src="component/reporting/submitReportCtrl.js"></script>
     <script src="component/reporting/reportModalCtrl.js"></script>
     <script src="component/reporting/reportingDashboardCtrl.js"></script>
     <script src="component/reporting/reportingCtrl.js"></script>
     <script src="component/reporting/projectAlertModalCtrl.js"></script>
     <script src="component/reporting/confirmReportModalCtrl.js"></script>
-    <script src="component/peak/peakCtrl.js"></script>
-    <script src="component/objectivePoint/objectivePointModalCtrl.js"></script>
+    <script src="component/objectivePoint/ObjectivePointModalCtrl.js"></script>
     <script src="component/objectivePoint/objectivePointCtrl.js"></script>
+    <script src="component/peak/peakCtrl.js"></script>
+    <script src="component/map/mapCtrl.js"></script>
     <script src="component/member/memberInfoCtrl.js"></script>
     <script src="component/member/memberCtrl.js"></script>
-    <script src="component/map/mapCtrl.js"></script>
     <script src="component/main/mainCtrl.js"></script>
+    <script src="component/logInOut/LogInOutCtrl.js"></script>
     <script src="component/hwm/quickHWMCtrl.js"></script>
     <script src="component/hwm/hwmModalCtrl.js"></script>
     <script src="component/hwm/hwmCtrl.js"></script>
-    <script src="component/logInOut/logInOutCtrl.js"></script>
-    <script src="component/home/homeCtrl.js"></script>
-    <script src="component/help/helpCtrl.js"></script>
     <script src="component/file/fileUploadCtrl.js"></script>
     <script src="component/file/fileModalCtrl.js"></script>
     <script src="component/file/fileCtrl.js"></script>
+    <script src="component/help/helpCtrl.js"></script>
     <script src="component/event/eventSessionModalCtrl.js"></script>
     <script src="component/event/eventSessionCtrl.js"></script>
     <script src="component/event/eventInfoCtrl.js"></script>
@@ -114,7 +116,7 @@
     <!--<script src="app.js"></script>-->
 </head>
 
-<body ng-app="app">
+<body ng-app="app" ng-strict-di>
     <!--HEADER START navCtrl-->
     <div ng-controller="mainCtrl" class="navbar navbar-default">
         <div class="container-fluid" style="background-color:gray;">
