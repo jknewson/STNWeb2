@@ -801,7 +801,8 @@
 
         <div ng-hide="isCompleted">
             <input type="checkbox" name="COMPLETE" ng-model="newReport.COMPLETE" ng-true-value="'1'" ng-false-value="'0'" />
-            <span>Check if this Report is Complete. (If left unchecked, you may come back later to finish it)</span>
+            <span>Check if this Report is Complete. Incompleted reports will not be compiled for Generate Report tab.<br/>
+                (If left unchecked, you may come back later to finish it)</span>
         </div>
         <div ng-hide="isCompleted" class="form-group">
             <div class="col-md-4 col-md-offset-2">

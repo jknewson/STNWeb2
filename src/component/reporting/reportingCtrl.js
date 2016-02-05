@@ -230,6 +230,9 @@
                                     $scope.ok = function () {
                                         $uibModalInstance.dismiss('cancel');
                                     };
+                                    $scope.print = function () {
+                                        window.print();
+                                    };
                                 }
                             });
                             modalInstance.result.then(function () {
@@ -307,6 +310,9 @@
                                         $scope.ok = function () {
                                             $uibModalInstance.dismiss('cancel');
                                         };
+                                        $scope.print = function () {
+                                            window.print();
+                                        }
                                     }
                                 });
                                 modalInstance.result.then(function () {

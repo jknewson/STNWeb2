@@ -11,6 +11,10 @@
                 $location.path('/login');
             } else {                
                 //global vars
+                // watch for new files (OP, HWM, Sensor file added or edited) and update  
+                //$scope.$watch(function () { return $cookies.get('SiteFiles'); }, function (newValue) {
+                //    $scope.sessionEvent = $cookies.get('SessionEventName') !== null && $cookies.get('SessionEventName') !== undefined ? $cookies.get('SessionEventName') : "All Events";
+                //});
                 $scope.fileCount = { total: thisSiteFiles.length };
                 $scope.siteHWMs = thisSiteHWMs;
                 $scope.siteSensors = thisSiteSensors;
