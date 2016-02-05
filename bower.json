@@ -35,10 +35,14 @@
     "toastr": "~2.1.2",
     "ladda-angular": "~1.0.1",
     "angular-ui-bootstrap-datetimepicker": "~0.14.4",
-    "bootstrap": "~3.3.6",
+    "bootstrap": "^3.3.6",
     "jquery": "~2.2.0",
     "angular-ui-validate": "~1.2.2",
-    "ng-file-upload": "~11.1.1"
+    "ng-file-upload": "~11.1.1",
+    "leaflet": "^0.7.7",
+    "angular-leaflet-directive": "^0.10.0",
+    "bootstrap-table": "^1.10.0",
+    "esri-leaflet": "^1.0.2"
   },
   "devDependencies": {
     "angular-mocks": "^1.2.23",

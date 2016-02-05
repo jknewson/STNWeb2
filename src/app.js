@@ -2,7 +2,7 @@
     "use strict"; 
     var app = angular.module('app',
         ['ngResource', 'ui.router', 'ngCookies', 'ui.mask', 'ui.bootstrap', 'isteven-multi-select', 'ngInputModified', 'ui.validate',
-            'angular.filter', 'xeditable', 'checklist-model', 'ngFileUpload', 'STNResource', 'ui.bootstrap.datetimepicker',
+            'angular.filter', 'xeditable', 'checklist-model', 'ngFileUpload', 'STNResource', 'ui.bootstrap.datetimepicker','leaflet-directive',
             'STNControllers', 'LogInOutController', 'ModalControllers', 'SettingsControllers']);
     
     app.run(['$rootScope', '$uibModalStack', function ($rootScope, $uibModalStack) {
@@ -56,7 +56,7 @@
                 .state("map", {
                     url: "/Map",
                     templateUrl: "component/map/map.html",
-                    controller: "mapCtrl"
+                    controller: "MapController"
                 })
                 //#endregion
 
