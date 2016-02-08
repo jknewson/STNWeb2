@@ -9,7 +9,6 @@
                 $scope.auth = false;
                 $location.path('/login');
             } else {
-                //TODO: Who can do REPORTING????????
                 $rootScope.thisPage = "Reporting";
                 $rootScope.activeMenu = "report"; 
                 //#region changing tabs handler /////////////////////
