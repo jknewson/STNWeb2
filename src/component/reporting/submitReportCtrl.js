@@ -4,9 +4,13 @@
     var STNControllers = angular.module('STNControllers');
     STNControllers.controller('submitReportCtrl', ['$scope', '$http', '$cookies', '$uibModal', '$state', 'CONTACT', 'REPORT', 
         function ($scope, $http, $cookies, $uibModal, $state, CONTACT, REPORT) {
-            //#make sure this clears except for if they care needing to complete a report
+            //#make sure this clears except for if they are needing to complete a report
             if ($scope.$parent.needToComplete !== true) {
                 $scope.$parent.newReport = {REPORT_DATE: new Date()};
+            }
+            else {
+                //keeps it valid and tells it it's utc so it will convert proper local
+                $scope.newReport.REPORT_DATE = new Date($scope.newReport.REPORT_DATE + "Z");
             }
 
             //reset it here so form will clear when they leave and come back.
@@ -91,10 +95,6 @@
             //Post/Put the Report and Report Contacts. Called twice (from within Modal (incomplete) and outside (complete))
             var PostPutReportAndReportContacts = function () {
                 //POST or PUT
-                // just the date, no time
-                var dateNoTime = new Date($scope.newReport.REPORT_DATE);
-                $scope.newReport.REPORT_DATE = new Date($scope.newReport.REPORT_DATE);
-                //make sure 'GMT' is tacked on so it doesn't try to add hrs to make the already utc a utc in db
                 $http.defaults.headers.common.Authorization = 'Basic ' + $cookies.get('STNCreds');
                 $http.defaults.headers.common.Accept = 'application/json';
                 if ($scope.newReport.REPORTING_METRICS_ID !== undefined) {                    

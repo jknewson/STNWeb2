@@ -125,7 +125,7 @@
         };
     }]);
 
-    STNControllers.directive('sameAs', function ($parse) {
+    STNControllers.directive('sameAs', ['$parse', function ($parse) {
         return {
             require: 'ngModel',
             restrict: 'A',
@@ -140,7 +140,7 @@
                 });
             }
         };
-    });
+    }]);
 
     //make textarea height equal to content inside it (no scrollbars) http://stackoverflow.com/questions/17772260/textarea-auto-height
     STNControllers.directive('elastic', ['$timeout', function ($timeout) {

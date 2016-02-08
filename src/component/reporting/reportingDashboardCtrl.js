@@ -64,16 +64,12 @@
             }
 
             var todayReports = $scope.reportsToDate.filter(function (todayrep) {
-                //var reportDate = new Date(todayrep.REPORT_DATE).setHours(0, 0, 0, 0);
-                //return new Date(reportDate).getTime() == $scope.today.getTime();
                 var reportDate = todayrep.REPORT_DATE.toString().substring(0, 10);
                 return reportDate == $scope.today;
             });
             $scope.todayRpts = formatReport(todayReports);
 
             var yesterdayReports = $scope.reportsToDate.filter(function (yestrep) {
-                //var reportDate = new Date(yestrep.REPORT_DATE).setHours(0, 0, 0, 0);
-                //return new Date(reportDate).getTime() == $scope.yesterday.getTime();
                 var reportDate = yestrep.REPORT_DATE.toString().substring(0, 10);
                 return reportDate == $scope.yesterday;
             });
@@ -82,10 +78,12 @@
             //give me the reports done on this date
             $scope.getReportsByDate = function () {
                 if ($scope.THIS_DATE.date !== undefined) {
-                    var formatDate = new Date($scope.THIS_DATE.date).setHours(0, 0, 0, 0);
+                    var formatDate = new Date($scope.THIS_DATE.date);//
+                    formatDate.setHours(0, 0, 0, 0);
+                    formatDate = formatDate.toISOString().substr(0, 10);
                     var thisDateReports = $scope.reportsToDate.filter(function (tdate) {
-                        var reportDate = new Date(tdate.REPORT_DATE).setHours(0, 0, 0, 0);
-                        return new Date(reportDate).getTime() == new Date(formatDate).getTime();
+                        var reportDate = tdate.REPORT_DATE.toString().substring(0, 10);
+                        return reportDate == formatDate;
                     });
                     $scope.pickDateRpts = formatReport(thisDateReports);
                     $scope.pickAdateReports = true;
@@ -98,7 +96,7 @@
             //complete the report button clicked -- send back to submit with report populated
             $scope.CompleteThisReport = function (rep) {
                 $scope.$parent.newReport = rep;
-                $scope.$parent.newReport.REPORT_DATE = new Date(rep.REPORT_DATE); //keeps it valid
+               // $scope.$parent.newReport.REPORT_DATE = new Date(rep.REPORT_DATE); //keeps it valid
                 $scope.$parent.disabled = false;
                 $scope.$parent.needToComplete = true;
                 $http.defaults.headers.common.Authorization = 'Basic ' + $cookies.get('STNCreds');
