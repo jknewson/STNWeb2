@@ -558,9 +558,9 @@
                     url: "/Site/:id",
                     abstract: true,
                     templateUrl: "component/site/site.html",
-                    controller: function ($scope, $stateParams) {
+                    controller: ['$scope', '$stateParams', function ($scope, $stateParams) {
                         $scope.siteID = $stateParams.id;
-                    },
+                    }],
                     resolve: {
                         //#region site stuff
                         s: 'SITE',
@@ -717,14 +717,14 @@
                     url: "/SiteDashboard",
                     views: {
                         'siteNo': {
-                            controller: function ($scope, $cookies, thisSite) {
+                            controller: ['$scope', '$cookies', 'thisSite', function ($scope, $cookies, thisSite) {
                                 if (thisSite !== undefined)
                                     $scope.SiteNo = thisSite.SITE_NO;
                                 // watch for the session event to change and update
                                 $scope.$watch(function () { return $cookies.get('SessionEventName'); }, function (newValue) {
                                     $scope.sessionEvent = $cookies.get('SessionEventName') !== null && $cookies.get('SessionEventName') !== undefined ? $cookies.get('SessionEventName') : "All Events";
                                 });
-                            },
+                            }],
                             template: '<div><h2 style="margin-top:0">Site {{SiteNo}} - For {{sessionEvent}}</h2></div><hr />' 
                         },
                         'aSite': {

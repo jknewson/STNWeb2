@@ -52,7 +52,7 @@
             };//end ViewReport click
 
             //function call to add EVENT_NAME to list of reports
-            var formatReport = function(repList) {
+            var formatReport = function (repList) {
                 var returnList = [];
                 for (var i = 0; i < repList.length; i++) {
                     var rep = repList[i];
@@ -61,7 +61,7 @@
                     returnList.push(rep);
                 }
                 return returnList;
-            }
+            };
 
             var todayReports = $scope.reportsToDate.filter(function (todayrep) {
                 var reportDate = todayrep.REPORT_DATE.toString().substring(0, 10);
@@ -102,11 +102,15 @@
                 $http.defaults.headers.common.Authorization = 'Basic ' + $cookies.get('STNCreds');
                 $http.defaults.headers.common.Accept = 'application/json';
                 CONTACT.getContactModel({ ContactModelByReport: rep.REPORTING_METRICS_ID }, function success(response) {
-                    $scope.$parent.DeployStaff = response.filter(function (d) { return d.TYPE == "Deployed Staff"; })[0];
-                    $scope.$parent.GenStaff = response.filter(function (d) { return d.TYPE == "General"; })[0];
-                    $scope.$parent.InlandStaff = response.filter(function (d) { return d.TYPE == "Inland Flood"; })[0];
-                    $scope.$parent.CoastStaff = response.filter(function (d) { return d.TYPE == "Coastal Flood"; })[0];
-                    $scope.$parent.WaterStaff = response.filter(function (d) { return d.TYPE == "Water Quality"; })[0];
+                    if (response.length >= 1) {
+                        $scope.$parent.DeployStaff = response.filter(function (d) { return d.TYPE == "Deployed Staff"; })[0];
+                        $scope.$parent.GenStaff = response.filter(function (d) { return d.TYPE == "General"; })[0];
+                        $scope.$parent.InlandStaff = response.filter(function (d) { return d.TYPE == "Inland Flood"; })[0];
+                        $scope.$parent.CoastStaff = response.filter(function (d) { return d.TYPE == "Coastal Flood"; })[0];
+                        $scope.$parent.WaterStaff = response.filter(function (d) { return d.TYPE == "Water Quality"; })[0];
+                    } else {
+                        $scope.$parent.DeployStaff = {}; $scope.$parent.GenStaff = {}; $scope.$parent.InlandStaff = {}; $scope.$parent.CoastStaff = {}; $scope.$parent.WaterStaff = {};
+                    }
                 }).$promise.then(function () {
                     $state.go('reporting.submitReport');
                 });

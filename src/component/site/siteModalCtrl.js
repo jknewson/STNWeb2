@@ -56,11 +56,11 @@
                     template: '<div class="modal-header"><h3 class="modal-title">Error</h3></div>' +
                         '<div class="modal-body"><p>The Latitude must be between 0 and 73.0</p></div>' +
                         '<div class="modal-footer"><button class="btn btn-primary" ng-enter="ok()" ng-click="ok()">OK</button></div>',
-                    controller: function ($scope, $uibModalInstance) {
+                    controller: ['$scope', '$uibModalInstance', function ($scope, $uibModalInstance) {
                         $scope.ok = function () {
                             $uibModalInstance.close();
                         };
-                    },
+                    }],
                     size: 'sm'
                 });
                 latModal.result.then(function (fieldFocus) {
@@ -75,11 +75,11 @@
                     template: '<div class="modal-header"><h3 class="modal-title">Error</h3></div>' +
                         '<div class="modal-body"><p>The Longitude must be between -175.0 and -60.0</p></div>' +
                         '<div class="modal-footer"><button class="btn btn-primary" ng-enter="ok()" ng-click="ok()">OK</button></div>',
-                    controller: function ($scope, $uibModalInstance) {
+                    controller: ['$scope', '$uibModalInstance', function ($scope, $uibModalInstance) {
                         $scope.ok = function () {
                             $uibModalInstance.close();
                         };
-                    },
+                    }],
                     size: 'sm'
                 });
                 longModal.result.then(function (fieldFocus) {
@@ -568,13 +568,13 @@
                                                '<p ng-if="num > 0"><span>To use one of these sites instead, click on the site name.</span>' +
                                                '<ul><li ng-repeat="s in siteListNear" style="list-style:none"><a ui-sref="site.dashboard({id: s.SITE_ID})" ng-click="$close()">{{s.SITE_NO}}</a></li></ul></p></div>' +
                                                '<div class="modal-footer"><button class="btn btn-primary" ng-click="ok()">OK</button></div>',
-                                    controller: function ($scope, $uibModalInstance) {
+                                    controller: ['$scope', '$uibModalInstance', function ($scope, $uibModalInstance) {
                                         $scope.ok = function () {
                                             $uibModalInstance.close();
                                         };
                                         $scope.num = closeSites.length;
                                         $scope.siteListNear = closeSites;
-                                    },
+                                    }],
                                     size: 'sm'
                                 });
                                 modalInstance.result.then(function () {
