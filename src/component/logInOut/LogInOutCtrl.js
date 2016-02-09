@@ -83,13 +83,13 @@
                             template: '<div class="modal-header"><h3 class="modal-title">Error</h3></div>' +
                                        '<div class="modal-body"><p>Something went wrong.</p><p>Error: {{status}} - {{statusText}}</p></div>' +
                                        '<div class="modal-footer"><button class="btn btn-primary" ng-click="ok()">OK</button></div>',
-                            controller: function ($scope, $uibModalInstance) {
+                            controller: ['$scope', '$uibModalInstance', function ($scope, $uibModalInstance) {
                                 $scope.ok = function () {
                                     $uibModalInstance.close();
                                 };
                                 $scope.status = errorResponse.status;
                                 $scope.statusText = errorResponse.statusText;
-                            },
+                            }],
                             size: 'sm'
                         });
                         modalInstance.result.then(function (fieldFocus) {

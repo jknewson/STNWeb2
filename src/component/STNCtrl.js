@@ -10,7 +10,7 @@
 
     //#region $ccokies variables
     /*
-    * STNCreds, STNUsername, usersName, mID, usersRole, SessionEventID, SessionEventName, SessionTeaID, SessionTeamName
+    * STNCreds, STNUsername, usersName, mID, usersRole, SessionEventID, SessionEventName,  SiteFiles (need to update when OP, HWM, Sensor add/edit/delete Files )
     */
     //#endregion $cookies variables
 
