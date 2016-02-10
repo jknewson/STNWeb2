@@ -553,6 +553,20 @@
     }]);
     //#endregion of SITE
 
+    //#region Site_Files
+    STNResource.factory('Site_Files', function () {
+        var allSiteFiles = [];
+        return {
+            getAllSiteFiles: function () {
+                return allSiteFiles;
+            },
+            setAllSiteFiles: function (sf) {
+                allSiteFiles = sf;
+            }
+        };
+    });
+    //#endregion of Site_Files
+
     //#region STATE
     STNResource.factory('STATE', ['$resource', function ($resource) {
         return $resource(rootURL + '/States/:id.json',

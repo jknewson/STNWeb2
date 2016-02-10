@@ -44,11 +44,11 @@
                             opSite: function () {
                                 return thisSite;
                             },
-                            opFiles: function () {
-                                if (OPclicked !== 0) {
-                                    return OBJECTIVE_POINT.getOPFiles({ id: OPclicked.OBJECTIVE_POINT_ID }).$promise;
-                                }
-                            },
+                            //opFiles: function () {
+                            //    if (OPclicked !== 0) {
+                            //        return OBJECTIVE_POINT.getOPFiles({ id: OPclicked.OBJECTIVE_POINT_ID }).$promise;
+                            //    }
+                            //},
                             agencyList: function () {
                                 return allAgencies;
                             },
@@ -61,19 +61,21 @@
                     });
                     modalInstance.result.then(function (createdOP) {
                         //is there a new op or just closed modal
-                        if (createdOP[1] == 'created') {
-                            $scope.SiteObjectivePoints.push(createdOP[0]);
-                            $scope.opCount.total = $scope.SiteObjectivePoints.length;
-                        }
-                        if (createdOP[1] == 'updated') {
-                            //this is from edit -- refresh page?
-                            var indexClicked = $scope.SiteObjectivePoints.indexOf(OPclicked);
-                            $scope.SiteObjectivePoints[indexClicked] = createdOP[0];
-                        }
-                        if (createdOP[1] == 'deleted') {
-                            var indexClicked1 = $scope.SiteObjectivePoints.indexOf(OPclicked);
-                            $scope.SiteObjectivePoints.splice(indexClicked1, 1);
-                            $scope.opCount.total = $scope.SiteObjectivePoints.length;
+                        if (createdOP !== undefined) {
+                            if (createdOP[1] == 'created') {
+                                $scope.SiteObjectivePoints.push(createdOP[0]);
+                                $scope.opCount.total = $scope.SiteObjectivePoints.length;
+                            }
+                            if (createdOP[1] == 'updated') {
+                                //this is from edit -- refresh page?
+                                var indexClicked = $scope.SiteObjectivePoints.indexOf(OPclicked);
+                                $scope.SiteObjectivePoints[indexClicked] = createdOP[0];
+                            }
+                            if (createdOP[1] == 'deleted') {
+                                var indexClicked1 = $scope.SiteObjectivePoints.indexOf(OPclicked);
+                                $scope.SiteObjectivePoints.splice(indexClicked1, 1);
+                                $scope.opCount.total = $scope.SiteObjectivePoints.length;
+                            }
                         }
                     });
                 };

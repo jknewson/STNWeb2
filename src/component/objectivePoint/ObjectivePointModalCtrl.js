@@ -2,8 +2,8 @@
     'use strict';
 
     var ModalControllers = angular.module('ModalControllers');
-    ModalControllers.controller('OPmodalCtrl', ['$scope', '$cookies', '$http', '$uibModalInstance', '$uibModal', 'allDropdowns', 'thisOP', 'thisOPControls', 'opSite', 'opFiles', 'agencyList', 'allMembers', 'OBJECTIVE_POINT', 'OP_CONTROL_IDENTIFIER', 'SOURCE', 'FILE',
-        function ($scope, $cookies, $http, $uibModalInstance, $uibModal, allDropdowns, thisOP, thisOPControls, opSite, opFiles, agencyList, allMembers, OBJECTIVE_POINT, OP_CONTROL_IDENTIFIER, SOURCE, FILE) {
+    ModalControllers.controller('OPmodalCtrl', ['$scope', '$cookies', '$http', '$uibModalInstance', '$uibModal', 'Site_Files', 'allDropdowns', 'thisOP', 'thisOPControls', 'opSite', 'agencyList', 'allMembers', 'OBJECTIVE_POINT', 'OP_CONTROL_IDENTIFIER', 'SOURCE', 'FILE',
+        function ($scope, $cookies, $http, $uibModalInstance, $uibModal, Site_Files, allDropdowns, thisOP, thisOPControls, opSite, agencyList, allMembers, OBJECTIVE_POINT, OP_CONTROL_IDENTIFIER, SOURCE, FILE) {
             //defaults for radio buttons
             //dropdowns
             $scope.OPTypeList = allDropdowns[0];
@@ -19,8 +19,9 @@
             $scope.addedIdentifiers = []; //holder for added Identifiers
             $scope.showControlIDinput = false; //initially hide the area containing added control Identifiers
             $scope.DMS = {}; //object for Deg Min Sec values
-            $scope.OPFiles = opFiles; //holder for op files added
-            $scope.opImageFiles = opFiles.filter(function (opf) { return opf.FILETYPE_ID === 1; }); //image files for carousel
+            $scope.allSFiles = Site_Files.getAllSiteFiles();
+            $scope.OPFiles = $scope.allSFiles.filter(function (sf) { return sf.OBJECTIVE_POINT_ID == thisOP.OBJECTIVE_POINT_ID; });// opFiles; //holder for op files added
+            $scope.opImageFiles = $scope.OPFiles.filter(function (opf) { return opf.FILETYPE_ID === 1; }); //image files for carousel
             $scope.showFileForm = false; //hidden form to add file to op
             //make uncertainty cleared and disabled when 'unquantified' is checked
             $scope.UnquantChecked = function () {
@@ -49,13 +50,13 @@
             $scope.showFile = function (file) {
                 $scope.fileTypes = $scope.fileTypeList;
                 $scope.agencies = agencyList;
-                $scope.existFileIndex = -1; $scope.existIMGFileIndex = -1;
+                $scope.existFileIndex = -1; $scope.existIMGFileIndex = -1; $scope.allSFileIndex = -1; //indexes for splice/change
                 $scope.aFile = {}; //holder for file
                 $scope.aSource = {}; //holder for file source
-           //OP will not have datafile     $scope.datafile = {}; //holder for file datafile
+                //OP will not have datafile     $scope.datafile = {}; //holder for file datafile
                 if (file !== 0) {
                     //edit op file
-                    $scope.existFileIndex = $scope.OPFiles.indexOf(file);
+                    $scope.existFileIndex = $scope.OPFiles.indexOf(file); $scope.allSFileIndex = $scope.allSFiles.indexOf(file);
                     $scope.existIMGFileIndex = $scope.opImageFiles.length > 0 ? $scope.opImageFiles.indexOf(file) : -1;
                     $scope.aFile = angular.copy(file);
                     $scope.aFile.FILE_DATE = new Date($scope.aFile.FILE_DATE); //date for validity of form on PUT
@@ -66,18 +67,6 @@
                             $scope.aSource.SOURCE_DATE = new Date($scope.aSource.SOURCE_DATE); //date for validity of form on put
                         });
                     }//end if source
-                    //if (file.DATA_FILE_ID !== null) {
-                    //    DATA_FILE.query({ id: file.DATA_FILE_ID }).$promise.then(function (df) {
-                    //        $scope.datafile = df;
-                    //        $scope.datafile.COLLECT_DATE = new Date($scope.datafile.COLLECT_DATE); //date for validity of form on put
-                    //        $scope.datafile.GOOD_START = new Date($scope.datafile.GOOD_START); //date for validity of form on put
-                    //        $scope.datafile.GOOD_END = new Date($scope.datafile.GOOD_END); //date for validity of form on put
-                    //        $scope.timeZoneList = ['UTC', 'PST', 'MST', 'CST', 'EST'];
-                    //        var aProcessor = $scope.datafile.PROCESSOR_ID !== null ? allMembers.filter(function (amem) { return amem.MEMBER_ID == $scope.datafile.PROCESSOR_ID; })[0] : {};
-                    //        $scope.processor = aProcessor.FNAME !== undefined ? aProcessor.FNAME + ' ' + aProcessor.LNAME : '';
-                    //    });
-                    //} //end if datafile
-
                 }//end existing file
                 else {
                     $scope.aFile.FILE_DATE = new Date();
@@ -123,13 +112,16 @@
                             //now POST it (fileparts)
                             FILE.uploadFile(fd).$promise.then(function (fresponse) {
                                 toastr.success("File Uploaded");
+                                fresponse.fileBelongsTo = "Objective Point File";
                                 $scope.OPFiles.push(fresponse);
-                                
+                                $scope.allSFiles.push(fresponse);
+                                Site_Files.setAllSiteFiles($scope.allSFiles); //updates the file list on the sitedashboard
                                 if (fresponse.FILETYPE_ID === 1) $scope.opImageFiles.push(fresponse);
                                 $scope.showFileForm = false;
                             });
                         });//end source.save()
                     }//end if source
+                    //#region dataFile for sensor addFile
                     //if ($scope.datafile.GOOD_START !== null) {
                     //    //determine timezone
                     //    if ($scope.datafile.TIME_ZONE != "UTC") {
@@ -177,6 +169,7 @@
                     //        });
                     //    });
                     //}
+                    //#endregion dataFile for sensor addFile
                 }//end valid
             };//end create()
 
@@ -193,11 +186,15 @@
                         SOURCE.update({ id: $scope.aSource.SOURCE_ID }, $scope.aSource).$promise.then(function () {
                             FILE.update({ id: $scope.aFile.FILE_ID }, $scope.aFile).$promise.then(function (fileResponse) {
                                 toastr.success("File Updated");
+                                fileResponse.fileBelongsTo = "Objective Point File";
                                 $scope.OPFiles[$scope.existFileIndex] = fileResponse;
+                                $scope.allSFiles[$scope.allSFileIndex] = fileResponse;
+                                Site_Files.setAllSiteFiles($scope.allSFiles); //updates the file list on the sitedashboard
                                 $scope.showFileForm = false;
                             });
                         });
                     }
+                    //#region data file for sensor add file
                     //else {
                     //    //data file
                     //    //check timezone and make sure date stays utc
@@ -223,7 +220,8 @@
                     //            $scope.showFileForm = false;
                     //        });
                     //    });
-                    //} //end else (datafile)                    
+                    //} //end else (datafile)     
+                    //#endregion data file for sensor add file
                 }//end valid
             };//end save()
 
@@ -247,8 +245,10 @@
                     $http.defaults.headers.common.Authorization = 'Basic ' + $cookies.get('STNCreds');
                     FILE.delete({ id: fileToRemove.FILE_ID }).$promise.then(function () {
                         toastr.success("File Removed");
-                        $scope.OPFiles.spice($scope.existFileIndex, 1);
+                        $scope.OPFiles.splice($scope.existFileIndex, 1);
+                        $scope.allSFiles.splice($scope.allSFileIndex, 1);
                         $scope.opImageFiles.splice($scope.existIMGFileIndex, 1);
+                        Site_Files.setAllSiteFiles($scope.allSFiles); //updates the file list on the sitedashboard
                         $scope.showFileForm = false;
                     }, function error(errorResponse) {
                         toastr.error("Error: " + errorResponse.statusText);
@@ -294,11 +294,11 @@
                     $scope.showControlIDinput = true;
                 }
                 //see if there's any OPFiles
-                OBJECTIVE_POINT.getOPFiles({ id: $scope.OP.OBJECTIVE_POINT_ID }, function success(response) {
-                    $scope.OPFiles = response;
-                }, function error(errorResponse) {
-                    toastr.error("Error getting OP files: " + errorResponse.statusText);
-                });
+                //OBJECTIVE_POINT.getOPFiles({ id: $scope.OP.OBJECTIVE_POINT_ID }, function success(response) {
+                //    $scope.OPFiles = response;
+                //}, function error(errorResponse) {
+                //    toastr.error("Error getting OP files: " + errorResponse.statusText);
+                //});
 
                 //#endregion 
             } else {
