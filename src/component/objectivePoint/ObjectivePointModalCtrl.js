@@ -20,7 +20,7 @@
             $scope.showControlIDinput = false; //initially hide the area containing added control Identifiers
             $scope.DMS = {}; //object for Deg Min Sec values
             $scope.allSFiles = Site_Files.getAllSiteFiles();
-            $scope.OPFiles = $scope.allSFiles.filter(function (sf) { return sf.OBJECTIVE_POINT_ID == thisOP.OBJECTIVE_POINT_ID; });// opFiles; //holder for op files added
+            $scope.OPFiles = thisOP !== "empty" ? $scope.allSFiles.filter(function (sf) { return sf.OBJECTIVE_POINT_ID == thisOP.OBJECTIVE_POINT_ID; }) : [];// opFiles; //holder for op files added
             $scope.opImageFiles = $scope.OPFiles.filter(function (opf) { return opf.FILETYPE_ID === 1; }); //image files for carousel
             $scope.showFileForm = false; //hidden form to add file to op
             //make uncertainty cleared and disabled when 'unquantified' is checked
@@ -409,14 +409,13 @@
             //just need an OBJECTIVE_POINT object to post/put
             var trimOP = function (op) {
                 var OBJ_PT = {
-                    OBJECTIVE_POINT_ID: op.OBJECTIVE_POINT_ID !== undefined ? op.OBJECTIVE_POINT_ID : 0,
                     NAME: op.NAME,
                     DESCRIPTION: op.DESCRIPTION,
                     ELEV_FT: op.ELEV_FT !== undefined ? op.ELEV_FT : null,
                     DATE_ESTABLISHED: op.DATE_ESTABLISHED,
                     OP_IS_DESTROYED: op.OP_IS_DESTROYED !== undefined ? op.OP_IS_DESTROYED : 0,
                     OP_NOTES: op.OP_NOTES !== undefined ? op.OP_NOTES : null,
-                    SITE_ID: op.SITE_ID,
+                    SITE_ID: $scope.thisOPsite.SITE_ID,
                     VDATUM_ID: op.VDATUM_ID !== undefined ? op.VDATUM_ID : 0,
                     LATITUDE_DD: op.LATITUDE_DD,
                     LONGITUDE_DD: op.LONGITUDE_DD,
@@ -425,7 +424,7 @@
                     VCOLLECT_METHOD_ID: op.VCOLLECT_METHOD_ID !== undefined ? op.VCOLLECT_METHOD_ID : 0,
                     OP_TYPE_ID: op.OP_TYPE_ID,
                     DATE_RECOVERED: op.DATE_RECOVERED !== undefined ? op.DATE_RECOVERED : null,
-                    UNCERTAINTY: op.UNCERTAINTY !== undefined ? op.UNCERTAINTY : null,
+                    UNCERTAINTY: op.UNCERTAINTY !== undefined && op.UNCERTAINTY !== "" ? op.UNCERTAINTY : null,
                     UNQUANTIFIED: op.UNQUANTIFIED !== undefined ? op.UNQUANTIFIED : null,
                     OP_QUALITY_ID: op.OP_QUALITY_ID !== undefined ? op.OP_QUALITY_ID : null,
                 };
@@ -468,7 +467,7 @@
                     var createdOP = {};
                     //post
                     formatDefaults($scope.OP); //$scope.OP.FTorMETER, FTorCM, decDegORdms                               
-                    var OPtoPOST = trimOP($scope.OP); //make it an OBJECTIVE_POINT for saving
+                    var OPtoPOST = trimOP($scope.OP); //make it an OBJECTIVE_POINT for saving                    
 
                     OBJECTIVE_POINT.save(OPtoPOST, function success(response) {
                         toastr.success("Objective Point created");
@@ -527,6 +526,7 @@
                     //look at OP.FTorMETER ("ft"), OP.FTorCM ("ft"), and OP.decDegORdms ("dd"), make sure site_ID is on there and send it to trim before PUT                
                     formatDefaults($scope.OP); //$scope.OP.FTorMETER, FTorCM, decDegORdms
                     var OPtoPOST = trimOP($scope.OP);
+                    OPtoPOST.OBJECTIVE_POINT_ID = $scope.OP.OBJECTIVE_POINT_ID;                    
                     //$http.defaults.headers.common['X-HTTP-Method-Override'] = 'PUT';
                     OBJECTIVE_POINT.update({ id: OPtoPOST.OBJECTIVE_POINT_ID }, OPtoPOST, function success(response) {
                         toastr.success("Objective Point updated");

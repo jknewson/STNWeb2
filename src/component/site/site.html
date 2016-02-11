@@ -523,7 +523,7 @@
             <div class="modal-body">
                 <!-- Type: -->
                 <div class="form-group required" ng-class="{'has-error':OPForm.OP_TYPE_ID.$invalid && OPForm.OP_TYPE_ID.$dirty}">
-                    <label class="col-md-3 control-label req" for="OP_TYPE_ID">Type:</label>
+                    <label class="col-md-4 control-label req" for="OP_TYPE_ID">Type:</label>
                     <div class="col-md-6">
                         <select class="form-control" name="OP_TYPE_ID" ng-model="OP.OP_TYPE_ID"
                                 ng-options="opt.OBJECTIVE_POINT_TYPE_ID as opt.OP_TYPE for opt in OPTypeList" required>
@@ -534,7 +534,7 @@
 
                 <!-- Name: -->
                 <div class="form-group required" ng-class="{'has-error':OPForm.NAME.$invalid && OPForm.NAME.$dirty}">
-                    <label class="col-md-3 control-label req" for="NAME">Name:</label>
+                    <label class="col-md-4 control-label req" for="NAME">Name:</label>
                     <div class="col-md-6">
                         <input class="form-control" name="NAME" ng-model="OP.NAME" type="text" required />
                     </div>
@@ -542,7 +542,7 @@
 
                 <!-- Description: -->
                 <div class="form-group required" ng-class="{'has-error':OPForm.DESCRIPTION.$invalid && OPForm.DESCRIPTION.$dirty}">
-                    <label class="col-md-3 control-label req" for="DESCRIPTION">Description:</label>
+                    <label class="col-md-4 control-label req" for="DESCRIPTION">Description:</label>
                     <div class="col-md-6">
                         <textarea class="form-control" name="DESCRIPTION" type=" text" rows="3" ng-model="OP.DESCRIPTION" required />
                     </div>
@@ -550,7 +550,7 @@
 
                 <!-- Control Identifier add button -->
                 <div class="form-group">
-                    <label class="col-md-3 control-label" for="CONTROL">Control Identifier:</label>
+                    <label class="col-md-4 control-label" for="CONTROL">Control Identifier:</label>
                     <div class="col-md-6">
                         <button type="button" class="btn btn-default" ng-click="addNewIdentifier()">Add New Identifier</button>
                     </div>
@@ -558,7 +558,7 @@
 
                 <!-- Control Identifier input: -->
                 <div class="form-group" ng-show="showControlIDinput">
-                    <label class="col-md-3 control-label"></label>
+                    <label class="col-md-4 control-label"></label>
                     <div class="col-md-6">
                         <div ng-repeat="id in addedIdentifiers">
                             <div class="col-md-12" style="margin-bottom:5px">
@@ -583,8 +583,8 @@
                 </div>
 
                 <!-- dec deg or dms: -->
-                <div class="form-group">
-                    <label class="col-md-3 control-label"></label>
+                <div class="form-group" style="margin-bottom: 0;padding-bottom: 0">
+                    <label class="col-md-4 control-label"></label>
                     <div class="col-md-6">
                         <label class="radio-inline">
                             <input type="radio" name="decDegORdms" ng-change="latLongChange()" ng-model="OP.decDegORdms" value="dd" /> Dec Deg
@@ -597,7 +597,7 @@
 
                 <!-- Latitude: -->
                 <div class="form-group">
-                    <label class="col-md-3 control-label" for="LATITUDE_DD">Latitude:</label>
+                    <label class="col-md-4 control-label" for="LATITUDE_DD">Latitude:</label>
                     <div class="col-md-6" ng-if="OP.decDegORdms == 'dd'">
                         <input class="form-control" ng-keypress="isNum($event)" name="LATITUDE_DD" id="LATITUDE_DD" ng-model="OP.LATITUDE_DD" type="text" />
                     </div>
@@ -617,7 +617,7 @@
 
                 <!-- Longitude: -->
                 <div class="form-group">
-                    <label class="col-md-3 control-label" for="LONGITUDE_DD">Longitude:</label>
+                    <label class="col-md-4 control-label" for="LONGITUDE_DD">Longitude:</label>
                     <div class="col-md-6" ng-if="OP.decDegORdms == 'dd'">
                         <input class="form-control" ng-keypress="isNum($event)" id="longitude_dd" name="LONGITUDE_DD" ng-model="OP.LONGITUDE_DD" type="text" />
                     </div>
@@ -637,7 +637,7 @@
 
                 <!-- Horizontal Datum: -->
                 <div class="form-group">
-                    <label class="col-md-3 control-label" for="HDATUM_ID">Horizontal Datum:</label>
+                    <label class="col-md-4 control-label" for="HDATUM_ID">Horizontal Datum:</label>
                     <div class="col-md-6">
                         <select class="form-control" name="HDATUM_ID" ng-model="OP.HDATUM_ID"
                                 ng-options="hd.DATUM_ID as hd.DATUM_NAME for hd in HDList">
@@ -648,7 +648,7 @@
 
                 <!-- Horizontal Collection Method: -->
                 <div class="form-group">
-                    <label class="col-md-3 control-label" for="HCOLLECT_METHOD_ID">Horizontal Collection Method:</label>
+                    <label class="col-md-4 control-label" for="HCOLLECT_METHOD_ID">Horizontal Collection Method:</label>
                     <div class="col-md-6">
                         <select class="form-control" name="HCOLLECT_METHOD_ID" ng-model="OP.HCOLLECT_METHOD_ID"
                                 ng-options="hcm.HCOLLECT_METHOD_ID as hcm.HCOLLECT_METHOD for hcm in HCollectMethodList">
@@ -658,8 +658,8 @@
                 </div>
 
                 <!-- Ft or Meter radios: -->
-                <div class="form-group">
-                    <label class="col-md-3 control-label"></label>
+                <div class="form-group" style="margin-bottom: 0;padding-bottom: 0">
+                    <label class="col-md-4 control-label"></label>
                     <div class="col-md-6">
                         <label class="radio-inline">
                             <input type="radio" name="FTorMETER" ng-model="OP.FTorMETER" value="ft" /> ft
@@ -672,7 +672,7 @@
 
                 <!-- Elevation: -->
                 <div class="form-group">
-                    <label class="col-md-3 control-label" for="ELEV_FT">Elevation:</label>
+                    <label class="col-md-4 control-label" for="ELEV_FT">Elevation:</label>
                     <div class="col-md-6">
                         <input class="form-control" ng-keypress="isNum($event)" name="ELEV_FT" ng-model="OP.ELEV_FT" type="text" />
                     </div>
@@ -680,7 +680,7 @@
 
                 <!-- Vertical Datum: -->
                 <div class="form-group">
-                    <label class="col-md-3 control-label" for="VDATUM_ID">Vertical Datum:</label>
+                    <label class="col-md-4 control-label" for="VDATUM_ID">Vertical Datum:</label>
                     <div class="col-md-6">
                         <select class="form-control" name="VDATUM_ID" ng-model="OP.VDATUM_ID"
                                 ng-options="vd.DATUM_ID as vd.DATUM_ABBREVIATION for vd in VDatumList">
@@ -691,7 +691,7 @@
 
                 <!-- Vertical Collection Method: -->
                 <div class="form-group">
-                    <label class="col-md-3 control-label" for="VCOLLECT_METHOD_ID">Vertical Collection Method:</label>
+                    <label class="col-md-4 control-label" for="VCOLLECT_METHOD_ID">Vertical Collection Method:</label>
                     <div class="col-md-6">
                         <select class="form-control" name="VCOLLECT_METHOD_ID" ng-model="OP.VCOLLECT_METHOD_ID"
                                 ng-options="vcm.VCOLLECT_METHOD_ID as vcm.VCOLLECT_METHOD for vcm in VCollectMethodList">
@@ -701,8 +701,8 @@
                 </div>
 
                 <!-- Ft or CM radios: -->
-                <div class="form-group">
-                    <label class="col-md-3 control-label"></label>
+                <div class="form-group" style="margin-bottom: 0;padding-bottom: 0">
+                    <label class="col-md-4 control-label"></label>
                     <div class="col-md-6">
                         <label class="radio-inline">
                             <input type="radio" name="FTorCM" ng-model="OP.FTorCM" value="ft" /> +/- ft
@@ -715,7 +715,7 @@
 
                 <!-- Uncertainty: -->
                 <div class="form-group">
-                    <label class="col-md-3 control-label" for="UNCERTAINTY">Uncertainty:</label>
+                    <label class="col-md-4 control-label" for="UNCERTAINTY">Uncertainty:</label>
                     <div class="col-md-6">
                         <div class="col-md-12" style="margin-bottom:5px;padding-left:0">
                             <div class="col-md-3" style="padding-left: 0;"><input class="form-control" ng-disabled="OP.UNQUANTIFIED==1" ng-keypress="isNum($event)" ng-model="OP.UNCERTAINTY" type="text" /></div>
@@ -731,7 +731,7 @@
 
                 <!-- Quality: -->
                 <div class="form-group">
-                    <label class="col-md-3 control-label" for="OP_QUALITY_ID">Quality:</label>
+                    <label class="col-md-4 control-label" for="OP_QUALITY_ID">Quality:</label>
                     <div class="col-md-6">
                         <select class="form-control" name="OP_QUALITY_ID" ng-model="OP.OP_QUALITY_ID"
                                 ng-options="opq.OP_QUALITY_ID as opq.QUALITY for opq in OPQualityList">
@@ -742,7 +742,7 @@
 
                 <!-- Objective Point Notes: -->
                 <div class="form-group">
-                    <label class="col-md-3 control-label" for="OP_NOTES">Objective Point Notes:</label>
+                    <label class="col-md-4 control-label" for="OP_NOTES">Objective Point Notes:</label>
                     <div class="col-md-6">
                         <textarea class="form-control" type="text" rows="3" ng-model="OP.OP_NOTES" />
                     </div>
@@ -750,7 +750,7 @@
 
                 <!-- Date Established: -->
                 <div class="form-group required" ng-class="{'has-error':OPForm.DATE_ESTABLISHED.$invalid && OPForm.DATE_ESTABLISHED.$dirty}">
-                    <label class="col-md-3 control-label req" for="DATE_ESTABLISHED">Date Established:</label>
+                    <label class="col-md-4 control-label req" for="DATE_ESTABLISHED">Date Established:</label>
                     <div class="col-md-6 input-group" style="padding-right:14px;padding-left:14px">
                         <input class="form-control" name="de" type="text" uib-datepicker-popup="MMM dd, yyyy"
                                is-open="datepickrs.de" ng-model="OP.DATE_ESTABLISHED" required />
@@ -764,7 +764,7 @@
 
                 <!-- Date Recovered: -->
                 <div class="form-group">
-                    <label class="col-md-3 control-label" for="DATE_RECOVERED">Date Recovered:</label>
+                    <label class="col-md-4 control-label" for="DATE_RECOVERED">Date Recovered:</label>
                     <div class="col-md-6 input-group" style="padding-right:14px;padding-left:14px">
                         <input class="form-control" name="dr" type="text" uib-datepicker-popup="MMM dd, yyyy"
                                is-open="datepickrs.dr" ng-model="OP.DATE_RECOVERED" />
@@ -779,7 +779,7 @@
     </form>
 
     <!-- OBJECTIVE POINT FILES SECTION -->
-    <div class="col-md-12">
+    <div ng-if="OP.OBJECTIVE_POINT_ID !== undefinfed" class="col-md-12">
         <div class="col-md-4"><h3>Objective Point Files</h3></div>
         <div class="col-md-6" ng-if="!showFileForm" style="margin-top:14px">
             <button type="button" class="borderLess" ng-click="showFile(0)" tooltip-placement="right" uib-tooltip="Upload a new File to this OP">
@@ -813,6 +813,7 @@
         <br clear="all" />
 
         <div ng-if="showFileForm">
+            <hr />
             <form class="form-horizontal" name="OPFILEForm">
                 <fieldset>
                     <!--Upload Single Image with validations*-->
@@ -1006,7 +1007,7 @@
                             <img ng-if="aFile.FILETYPE_ID === 1" style="height:80px;" ng-src="https://stntest.wim.usgs.gov/STNServices/Files/{{aFile.FILE_ID}}/Item" />
                         </div>
                     </div>
-                    <button class="btn btn-primary" ng-if="aFile.FILE_ID != undefined" ng-click="saveFile(OPFILEForm.$valid)">Save File</button>
+                    <button class="btn btn-primary"  ng-if="aFile.FILE_ID != undefined" ng-click="saveFile(OPFILEForm.$valid)">Save File</button>
                     <button class="btn btn-danger" ng-if="aFile.FILE_ID != undefined" ng-click="deleteFile()">Delete File</button>
                     <button class="btn btn-primary" ng-if="aFile.FILE_ID == undefined" ng-click="createFile(OPFILEForm.$valid)">Create File</button>
                     <button class="btn btn-warning" type="button" ng-click="cancelFile()">Cancel File</button>
@@ -1024,17 +1025,17 @@
                         <span>Create</span>
                     </button>
                     <span>
-                        <button ng-show="OP.OBJECTIVE_POINT_ID != undefined" class="btn btn-primary" ng-click="save(OPForm.$valid)">
+                        <button ng-show="OP.OBJECTIVE_POINT_ID != undefined" ng-disabled="showFileForm" class="btn btn-primary" ng-click="save(OPForm.$valid)">
                             <span>Save</span>
                         </button>
                     </span>
                     <span>
-                        <button ng-show="OP.OBJECTIVE_POINT_ID != undefined" class="btn btn-danger" ng-click="deleteOP(OPForm.$valid)">
+                        <button ng-show="OP.OBJECTIVE_POINT_ID != undefined" ng-disabled="showFileForm" class="btn btn-danger" ng-click="deleteOP(OPForm.$valid)">
                             <span>Delete</span>
                         </button>
                     </span>
                     <span>
-                        <button type="button" class="btn btn-warning" ng-click="cancel()">
+                        <button type="button" class="btn btn-warning" ng-disabled="showFileForm" ng-click="cancel()">
                             <span>Cancel/Close</span>
                         </button>
                     </span>

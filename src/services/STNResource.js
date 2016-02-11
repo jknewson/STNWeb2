@@ -168,23 +168,6 @@
             });
     }]);
     //#endregion of FILE
-    
-    //service for packaging a multipart file to post
-    //STNResource.service('multipartForm', ['$http', function ($http) {
-    //    return this.post = function (data) {
-    //        var uploadUrl = rootURL + '/Files/bytes';
-    //        var fd = new FormData();
-    //        fd.append("FileEntity", JSON.stringify(data.FileEntity));
-    //        fd.append("File", data.File);
-    //        $http.post(uploadUrl, fd, {
-    //            transformRequest: angular.identity,
-    //            headers: { 'Content-Type': undefined }
-    //        }).success(function (data, status) {
-    //            return data;
-    //        });
-    //    };
-        
-    //}]);
 
     //#region HORIZONTAL_COLL_METHODS
     STNResource.factory('HORIZONTAL_COLL_METHODS', ['$resource', function ($resource) {
