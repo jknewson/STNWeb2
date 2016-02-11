@@ -40,7 +40,7 @@
                     $scope.sessionEventExists = $scope.sessionEventName != "All Events" ? true : false;
                     if (newValue !== undefined) {
                         //keep all siteFiles, filter HWM, Instrument (DF files use Instrument event)
-                        $scope.SiteFiles = Site_Files.getAllSiteFiles().filter(function (h) { return h.fileBelongsTo == 'Site File'; }); // thisSiteFiles.filter(function (h) { return h.fileBelongsTo == 'Site File'; }); //keep all site files
+                        $scope.SiteFiles = Site_Files.getAllSiteFiles().filter(function (h) { return h.fileBelongsTo == 'Site File' || h.fileBelongsTo == 'Objective Point File'; });  //keep all site and op files
                         var hwmFiles = Site_Files.getAllSiteFiles().filter(function (sfiles) { return sfiles.fileBelongsTo == 'HWM File'; }); // thisSiteFiles.filter(function (sfiles) { return sfiles.fileBelongsTo == 'HWM File';});
                         var sensFiles = Site_Files.getAllSiteFiles().filter(function (sfi) { return sfi.INSTRUMENT_ID > 0 && sfi.INSTRUMENT_ID !== null; });// thisSiteFiles.filter(function (sfi) { return sfi.INSTRUMENT_ID > 0 && sfi.INSTRUMENT_ID !== null; });
                         //only show files for this event (go through hwm files and match eventid
