@@ -21,9 +21,9 @@
 
             <div class="form-group col-md-12 required">
                 <label class="col-md-12 control-label req" for="SUM_DATE">Date:</label>
-                <div class="col-md-4 input-group" style="padding-left:15px;padding-right:15px;">
-                    <input datepicker-append-to-body="true" class="form-control" id="SUM_DATE" name="sd" type="text" uib-datepicker-popup="MMMM dd, yyyy"
-                           is-open="datepickrs.sd" ng-model="genSummary.SUM_DATE" required />
+                <div class="col-md-3 input-group" style="padding-left:15px;padding-right:15px;">
+                    <input datepicker-append-to-body="true" class="form-control" id="SUM_DATE" readonly="readonly" show-weeks="false" name="sd" type="text" uib-datepicker-popup="MMM dd, yyyy"
+                           is-open="datepickrs.sd" ng-model="genSummary.SUM_DATE" style="background-color: white;cursor:auto" required />
                     <span class="input-group-btn">
                         <button class="btn btn-default" ng-click="open($event, 'sd')">
                             <i class="glyphicon glyphicon-calendar" />

@@ -118,7 +118,8 @@
                 <div class="form-group">
                     <label class="col-md-5 control-label">Events created on or after:</label>
                     <div class="col-md-6 input-group" style="padding-right:14px;padding-left:14px">
-                        <input class="form-control" name="ed" type="text" uib-datepicker-popup="MMM dd, yyyy" is-open="datepickrs.ed" ng-model="event.DATE" placeholder="No filter" />
+                        <input class="form-control" name="ed" type="text" uib-datepicker-popup="MMM dd, yyyy" is-open="datepickrs.ed"
+                               show-weeks="false" readonly="readonly" style="background-color: white;cursor:auto" ng-model="event.DATE" placeholder="No filter" />
                         <span class="input-group-btn">
                             <button class="btn btn-default" ng-click="open($event, 'ed')">
                                 <i class="glyphicon glyphicon-calendar" />

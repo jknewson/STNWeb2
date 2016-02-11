@@ -8,11 +8,11 @@
 
                     <div class="form-group col-md-12 required">
                         <label class="col-md-12 control-label req" for="REPORT_DATE">Date being reported:</label>
-                        <div ng-if="!isCompleted" class="col-md-6 input-group" style="padding-left:15px;padding-right:15px;">
-                            <input datepicker-append-to-body="true" class="form-control" id="REPORT_DATE" name="rd" type="text" uib-datepicker-popup="MMMM dd, yyyy"
-                                   is-open="datepickrs.rd" ng-model="newReport.REPORT_DATE" required />
+                        <div ng-if="!isCompleted" class="col-md-5 input-group" style="padding-left:15px;padding-right:15px;">
+                            <input readonly="readonly" datepicker-append-to-body="true" class="form-control" show-weeks="false" id="REPORT_DATE" name="rd" type="text" uib-datepicker-popup="MMMM dd, yyyy"
+                                   is-open="datepickrs.rd" style="background-color: white;cursor:auto" ng-model="newReport.REPORT_DATE" required />
                             <span class="input-group-btn">
-                                <button class="btn btn-default" ng-click="open($event, 'rd')">
+                                <button type="button" class="btn btn-default" ng-click="open($event, 'rd')">
                                     <i class="glyphicon glyphicon-calendar" />
                                 </button>
                             </span>
