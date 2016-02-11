@@ -17,23 +17,7 @@
                 delete: { method: 'DELETE', cache: false, isArray: false }
             });
     }]);
-    //#endregion of AGENCY
-
-    //#region COLLECT_TEAMS
-    STNResource.factory('COLLECT_TEAM', ['$resource', function ($resource) {
-        return $resource(rootURL + '/CollectionTeams/:id.json',
-            {}, {
-                query: {},                 
-                getAll: { method: 'GET', isArray: true },
-                getEventTeams: { method: 'GET', isArray: true, url: rootURL + '/Events/:Eventid/Teams.json' },
-                getTeamMembers: {method: 'GET', isArray: true, url: rootURL + '/CollectionTeams/:id/Members.json'},
-                update: { method: 'PUT', cache: false, isArray: false },
-                save: { method: 'POST', cache: false, isArray: false },
-                addMember: {method: 'POST', isArray: true, cache:false, url: rootURL + '/CollectionTeams/:id/AddMember.json'},
-                delete: { method: 'DELETE', cache: false, isArray: false }
-            });
-    }]);
-    //#endregion of COLLECT_TEAM
+    //#endregion of AGENCY    
 
     //#region CONTACT_TYPE
     STNResource.factory('CONTACT_TYPE', ['$resource', function ($resource) {

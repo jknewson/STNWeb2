@@ -380,7 +380,7 @@
                                 var sensorTypeID = $scope.SensorDeployment.filter(function (sd) { return sd.DEPLOYMENT_TYPE_ID == $scope.ProposedSens[ps].DEPLOYMENT_TYPE_ID; })[0].SENSOR_TYPE_ID;
                                 var inst = { DEPLOYMENT_TYPE_ID: $scope.ProposedSens[ps].DEPLOYMENT_TYPE_ID, SITE_ID: createdSiteID, SENSOR_TYPE_ID: sensorTypeID };
                                 var instrPromise = INSTRUMENT.save(inst).$promise.then(function (insResponse) {
-                                    var instStat = { INSTRUMENT_ID: insResponse.INSTRUMENT_ID, STATUS_TYPE_ID: 4, COLLECTION_TEAM_ID: $scope.aSite.MEMBER_ID, TIME_STAMP: new Date(), TIME_ZONE: 'UTC' };
+                                    var instStat = { INSTRUMENT_ID: insResponse.INSTRUMENT_ID, STATUS_TYPE_ID: 4, MEMBER_ID: $scope.aSite.MEMBER_ID, TIME_STAMP: new Date(), TIME_ZONE: 'UTC' };
                                     INSTRUMENT_STATUS.save(instStat).$promise;
                                 }).$promise;
                                 postPromises.push(instrPromise);
