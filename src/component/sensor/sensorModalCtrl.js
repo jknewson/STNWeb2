@@ -320,7 +320,7 @@
                    var timeParts = getTimeZoneStamp();
                    $scope.aSensStatus.TIME_STAMP = timeParts[0];
                    $scope.aSensStatus.TIME_ZONE = timeParts[1]; //will be converted to utc on post/put
-                   $scope.aSensStatus.MEMBER_ID = $cookies.get('mID'); // member logged in is deploying it (replaces COLLECT_TEAM_ID)
+                   $scope.aSensStatus.MEMBER_ID = $cookies.get('mID'); // member logged in is deploying it
                    $scope.EventName = $cookies.get('SessionEventName');
                    $scope.Deployer = $scope.LoggedInMember;
                } else {
@@ -332,7 +332,7 @@
                    //date formatting. this keeps it in utc for display
                    var editDeptimeParts = getTimeZoneStamp($scope.aSensStatus.TIME_STAMP);
                    $scope.aSensStatus.TIME_STAMP = editDeptimeParts[0];   
-                   //get collection member's name (memberID is replacing collect_Team_id)
+                   //get collection member's name 
                    $scope.Deployer = $scope.aSensStatus.MEMBER_ID !== null || $scope.aSensStatus.MEMBER_ID !== undefined ? allMembers.filter(function (m) { return m.MEMBER_ID == $scope.aSensStatus.MEMBER_ID; })[0] : {};
                }
                //#endregion existing Sensor
@@ -344,7 +344,7 @@
                var DeptimeParts = getTimeZoneStamp();
                $scope.aSensStatus.TIME_STAMP = DeptimeParts[0];
                $scope.aSensStatus.TIME_ZONE = DeptimeParts[1]; //will be converted to utc on post/put          
-               $scope.aSensStatus.MEMBER_ID = $cookies.get('mID'); // member logged in is deploying it (replaces COLLECT_TEAM_ID)
+               $scope.aSensStatus.MEMBER_ID = $cookies.get('mID'); // member logged in is deploying it
                $scope.EventName = $cookies.get('SessionEventName');
                $scope.Deployer = $scope.LoggedInMember;           
                //#endregion new Sensor
