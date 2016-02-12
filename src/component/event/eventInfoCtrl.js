@@ -12,10 +12,7 @@
                 //all things both new and existing events page will need
 
                 //#region Datepicker
-                $scope.datepickrs = {
-                    //projStDate: false,
-                    //projEndDate: false
-                };
+                $scope.datepickrs = {};
                 $scope.open = function ($event, which) {
                     $event.preventDefault();
                     $event.stopPropagation();

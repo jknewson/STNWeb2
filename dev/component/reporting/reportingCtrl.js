@@ -9,7 +9,6 @@
                 $scope.auth = false;
                 $location.path('/login');
             } else {
-                //TODO: Who can do REPORTING????????
                 $rootScope.thisPage = "Reporting";
                 $rootScope.activeMenu = "report"; 
                 //#region changing tabs handler /////////////////////
@@ -223,7 +222,7 @@
                                         return $scope.totalRow;
                                     }
                                 },
-                                    controller: function ($scope, $uibModalInstance, thisReport, thisEvent, theTotalRow) {
+                                controller: ['$scope', '$uibModalInstance', 'thisReport', 'thisEvent', 'theTotalRow',  function ($scope, $uibModalInstance, thisReport, thisEvent, theTotalRow) {
                                     $scope.Report = thisReport;
                                     $scope.Event = thisEvent;
                                     $scope.totals = theTotalRow;
@@ -233,7 +232,7 @@
                                     $scope.print = function () {
                                         window.print();
                                     };
-                                }
+                                }]
                             });
                             modalInstance.result.then(function () {
                                 //nothing                            
@@ -304,7 +303,7 @@
                                             return $scope.GenRepEventModel;
                                         }
                                     },
-                                        controller: function ($scope, $http, $uibModalInstance, theseReports, thisEvent) {
+                                    controller: ['$scope', '$http', '$uibModalInstance', 'theseReports', 'thisEvent', function ($scope, $http, $uibModalInstance, theseReports, thisEvent) {
                                         $scope.Reports = theseReports;
                                         $scope.Event = thisEvent;
                                         $scope.ok = function () {
@@ -312,8 +311,8 @@
                                         };
                                         $scope.print = function () {
                                             window.print();
-                                        }
-                                    }
+                                        };
+                                    }]
                                 });
                                 modalInstance.result.then(function () {
                                     //nothing
