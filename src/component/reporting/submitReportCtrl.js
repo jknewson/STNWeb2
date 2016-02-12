@@ -238,11 +238,15 @@
                 }
             };
 
+            $scope.populateDeployer = function () {
+                $scope.DeployStaff = $scope.MemberLoggedIn;
+            }
             //incomplete report was clicked, go get it and the contacts for it
             $scope.getIncompleteReport = function () {
                 var reportId = this.ir.REPORTING_METRICS_ID;
                 REPORT.query({ id: reportId }, function success(response) {
                     $scope.newReport = response;
+                    $scope.newReport.REPORT_DATE = new Date($scope.newReport.REPORT_DATE);
                     $scope.fullReportForm.submit.$setDirty();
                     //get contacts 
                     getReportContacts(reportId);
