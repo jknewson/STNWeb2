@@ -71,7 +71,11 @@
                             $rootScope.isAuth.val = true;
                             $rootScope.usersName = usersNAME;
                             $rootScope.userID = user.MEMBER_ID;
-                            $state.go('home');
+                            if ($rootScope.returnToState !== undefined) {
+                                $state.go($rootScope.returnToState, {id: $rootScope.returnToStateParams});
+                            } else {
+                                $state.go('home');
+                            }
                         }
                         else {
                             $scope.error = "Login Failed";
