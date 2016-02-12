@@ -3,8 +3,8 @@
     'use strict';
 
     var ModalControllers = angular.module('ModalControllers');
-    ModalControllers.controller('hwmModalCtrl', ['$scope', '$cookies', '$http', '$uibModalInstance', '$uibModal', 'allDropdowns', 'thisHWM', 'hwmSite', 'allMembers', 'HWM', 
-        function ($scope, $cookies, $http, $uibModalInstance, $uibModal, allDropdowns, thisHWM, hwmSite, allMembers, HWM) {            
+    ModalControllers.controller('hwmModalCtrl', ['$scope', '$cookies', '$http', '$uibModalInstance', '$uibModal', 'allDropdowns', 'Site_Files', 'thisHWM', 'agencyList', 'hwmSite', 'allMembers', 'HWM', 'SOURCE', 'FILE',
+        function ($scope, $cookies, $http, $uibModalInstance, $uibModal, allDropdowns, Site_Files, thisHWM, agencyList, hwmSite, allMembers, HWM, SOURCE, FILE) {
             //dropdowns
             $scope.hwmTypeList = allDropdowns[0];
             $scope.hwmQualList = allDropdowns[1];
@@ -14,6 +14,11 @@
             $scope.vCollMList = allDropdowns[5];
             $scope.markerList = allDropdowns[6];
             $scope.eventList = allDropdowns[7];
+            $scope.fileTypeList = allDropdowns[8]; //used if creating/editing HWM file
+            $scope.allSFiles = Site_Files.getAllSiteFiles();
+            $scope.HWMFiles = thisHWM !== "empty" ? $scope.allSFiles.filter(function (sf) { return sf.HWM_ID == thisHWM.HWM_ID; }) : [];// holder for hwm files added
+            $scope.hwmImageFiles = $scope.HWMFiles.filter(function (hf) { return hf.FILETYPE_ID === 1; }); //image files for carousel
+            $scope.showFileForm = false; //hidden form to add file to hwm
             $scope.userRole = $cookies.get('usersRole');
             $scope.FlagMember = ""; //just for show on page
             $scope.SurveyMember = ""; //just for show on page
@@ -187,7 +192,7 @@
 
                 //delete aHWM
                 $scope.deleteHWM = function () {
-                    //TODO:: Delete the files for this OP too or reassign to the Site?? Services or client handling?
+                    //TODO:: Delete the files for this hwm too or reassign to the Site?? Services or client handling?
                     var DeleteModalInstance = $uibModal.open({
                         templateUrl: 'removemodal.html',
                         controller: 'ConfirmModalCtrl',
@@ -266,5 +271,166 @@
             }
             //radio button defaults
             $scope.aHWM.decDegORdms = 'dd';
+
+
+            //#region FILE STUFF
+            //show a modal with the larger image as a preview on the photo file for this hwm
+            $scope.showImageModal = function (image) {
+                var imageModal = $uibModal.open({
+                    template: '<div class="modal-header"><h3 class="modal-title">Image File Preview</h3></div>' +
+                        '<div class="modal-body"><img ng-src="https://stntest.wim.usgs.gov/STNServices2/Files/{{imageId}}/Item" /></div>' +
+                        '<div class="modal-footer"><button class="btn btn-primary" ng-enter="ok()" ng-click="ok()">OK</button></div>',
+                    controller: ['$scope', '$uibModalInstance', function ($scope, $uibModalInstance) {
+                        $scope.ok = function () {
+                            $uibModalInstance.close();
+                        };
+                        $scope.imageId = image;
+                    }],
+                    size: 'md'
+                });
+            };
+
+            //want to add or edit file
+            $scope.showFile = function (file) {
+                $scope.fileTypes = $scope.fileTypeList;
+                $scope.agencies = agencyList;
+                $scope.existFileIndex = -1; $scope.existIMGFileIndex = -1; $scope.allSFileIndex = -1; //indexes for splice/change
+                $scope.aFile = {}; //holder for file
+                $scope.aSource = {}; //holder for file source
+                //HWM will not have datafile 
+                if (file !== 0) {
+                    //edit hwm file
+                    $scope.existFileIndex = $scope.HWMFiles.indexOf(file);
+                    $scope.allSFileIndex = $scope.allSFiles.indexOf(file);
+                    $scope.existIMGFileIndex = $scope.hwmImageFiles.length > 0 ? $scope.hwmImageFiles.indexOf(file) : -1;
+                    $scope.aFile = angular.copy(file);
+                    $scope.aFile.FILE_DATE = new Date($scope.aFile.FILE_DATE); //date for validity of form on PUT
+                    if (file.SOURCE_ID !== null) {
+                        SOURCE.query({ id: file.SOURCE_ID }).$promise.then(function (s) {
+                            $scope.aSource = s;
+                            $scope.aSource.FULLNAME = $scope.aSource.SOURCE_NAME;
+                            $scope.aSource.SOURCE_DATE = new Date($scope.aSource.SOURCE_DATE); //date for validity of form on put
+                        });
+                    }//end if source
+                }//end existing file
+                else {
+                    $scope.aFile.FILE_DATE = new Date();
+                    $scope.aSource = allMembers.filter(function (m) { return m.MEMBER_ID == $cookies.get('mID'); })[0];
+                    $scope.aSource.FULLNAME = $scope.aSource.FNAME + " " + $scope.aSource.LNAME;
+                    $scope.aSource.SOURCE_DATE = new Date();
+                } //end new file
+                $scope.showFileForm = true;
+            };
+            //create this new file
+            $scope.createFile = function (valid) {
+                if (valid) {
+                    /*aFile.FILETYPE_ID, (pdo)aFile.FILE_URL, (pdo)aFile.FILE_DATE, (pdo)aFile.DESCRIPTION, (p)aFile.PHOTO_DIRECTION, (p)aFile.LATITUDE_DD, (p)aFile.LONGITUDE_DD,
+                     * HWM WILL NOT HAVE DATAFILE:: (d)datafile.PROCESSOR_ID, (d)datafile.COLLECT_DATE, (d)datafile.GOOD_START, (d)datafile.GOOD_END, (d)datafile.TIME_ZONE, (d)datafile.ELEVATION_STATUS
+                     * (po)aSource.FULLNAME, (po)aSource.AGENCY_ID, (po)aSource.SOURCE_DATE,  */
+                    $http.defaults.headers.common.Authorization = 'Basic ' + $cookies.get('STNCreds');
+                    $http.defaults.headers.common.Accept = 'application/json';
+                    //post source first to get SOURCE_ID
+                    if ($scope.aSource.AGENCY_ID !== null) {
+                        var theSource = { SOURCE_NAME: $scope.aSource.FULLNAME, AGENCY_ID: $scope.aSource.AGENCY_ID, SOURCE_DATE: $scope.aSource.SOURCE_DATE };
+                        //now POST SOURCE, 
+                        SOURCE.save(theSource).$promise.then(function (response) {
+                            //then POST fileParts (Services populate PATH)
+                            var fileParts = {
+                                FileEntity: {
+                                    FILETYPE_ID: $scope.aFile.FILETYPE_ID,
+                                    FILE_URL: $scope.aFile.FILE_URL,
+                                    FILE_DATE: $scope.aFile.FILE_DATE,
+                                    DESCRIPTION: $scope.aFile.DESCRIPTION,
+                                    SITE_ID: $scope.thisHWMsite.SITE_ID,
+                                    SOURCE_ID: response.SOURCE_ID,
+                                    PHOTO_DIRECTION: $scope.aFile.PHOTO_DIRECTION,
+                                    LATITUDE_DD: $scope.aFile.LATITUDE_DD,
+                                    LONGITUDE_DD: $scope.aFile.LONGITUDE_DD,
+                                    HWM_ID: $scope.aHWM.HWM_ID
+                                },
+                                File: $scope.aFile.File
+                            };
+                            //need to put the fileParts into correct format for post
+                            var fd = new FormData();
+                            fd.append("FileEntity", JSON.stringify(fileParts.FileEntity));
+                            fd.append("File", fileParts.File);
+                            //now POST it (fileparts)
+                            FILE.uploadFile(fd).$promise.then(function (fresponse) {
+                                toastr.success("File Uploaded");
+                                fresponse.fileBelongsTo = "HWM File";
+                                $scope.HWMFiles.push(fresponse);
+                                $scope.allSFiles.push(fresponse);
+                                Site_Files.setAllSiteFiles($scope.allSFiles); //updates the file list on the sitedashboard
+                                if (fresponse.FILETYPE_ID === 1) $scope.hwmImageFiles.push(fresponse);
+                                $scope.showFileForm = false;
+                            });
+                        });//end source.save()
+                    }//end if source                   
+                }//end valid
+            };//end create()
+
+            //update this file
+            $scope.saveFile = function (valid) {
+                if (valid) {
+                    //only photo or other file type (no data file here)
+                    //put source or datafile, put file
+                    var whatkind = $scope.aFile.fileBelongsTo;
+                    $http.defaults.headers.common.Authorization = 'Basic ' + $cookies.get('STNCreds');
+                    $http.defaults.headers.common.Accept = 'application/json';
+                    if ($scope.aSource.SOURCE_ID !== undefined) {
+                        $scope.aSource.SOURCE_NAME = $scope.aSource.FULLNAME;
+                        SOURCE.update({ id: $scope.aSource.SOURCE_ID }, $scope.aSource).$promise.then(function () {
+                            FILE.update({ id: $scope.aFile.FILE_ID }, $scope.aFile).$promise.then(function (fileResponse) {
+                                toastr.success("File Updated");
+                                fileResponse.fileBelongsTo = "HWM File";
+                                $scope.HWMFiles[$scope.existFileIndex] = fileResponse;
+                                $scope.allSFiles[$scope.allSFileIndex] = fileResponse;
+                                Site_Files.setAllSiteFiles($scope.allSFiles); //updates the file list on the sitedashboard
+                                $scope.showFileForm = false;
+                            });
+                        });
+                    }
+                }//end valid
+            };//end save()
+
+            //delete this file
+            $scope.deleteFile = function () {
+                var DeleteModalInstance = $uibModal.open({
+                    templateUrl: 'removemodal.html',
+                    controller: 'ConfirmModalCtrl',
+                    size: 'sm',
+                    resolve: {
+                        nameToRemove: function () {
+                            return $scope.aFile;
+                        },
+                        what: function () {
+                            return "File";
+                        }
+                    }
+                });
+
+                DeleteModalInstance.result.then(function (fileToRemove) {
+                    $http.defaults.headers.common.Authorization = 'Basic ' + $cookies.get('STNCreds');
+                    FILE.delete({ id: fileToRemove.FILE_ID }).$promise.then(function () {
+                        toastr.success("File Removed");
+                        $scope.HWMFiles.splice($scope.existFileIndex, 1);
+                        $scope.allSFiles.splice($scope.allSFileIndex, 1);
+                        $scope.hwmImageFiles.splice($scope.existIMGFileIndex, 1);
+                        Site_Files.setAllSiteFiles($scope.allSFiles); //updates the file list on the sitedashboard
+                        $scope.showFileForm = false;
+                    }, function error(errorResponse) {
+                        toastr.error("Error: " + errorResponse.statusText);
+                    });
+                });//end DeleteModal.result.then
+            };//end delete()
+
+            $scope.cancelFile = function () {
+                $scope.aFile = {};
+                $scope.aSource = {};
+                //  $scope.datafile = {};
+                $scope.showFileForm = false;
+            };
+            //#endregion FILE STUFF
+
         }]); //end HWM
 })();

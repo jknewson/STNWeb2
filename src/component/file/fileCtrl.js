@@ -66,7 +66,7 @@
                 $scope.showImageModal = function (image) {
                     var imageModal = $uibModal.open({
                         template: '<div class="modal-header"><h3 class="modal-title">Image File Preview</h3></div>' +
-                            '<div class="modal-body"><img ng-src="https://stntest.wim.usgs.gov/STNServices/Files/{{imageId}}/Item" /></div>' +
+                            '<div class="modal-body"><img ng-src="https://stntest.wim.usgs.gov/STNServices2/Files/{{imageId}}/Item" /></div>' +
                             '<div class="modal-footer"><button class="btn btn-primary" ng-enter="ok()" ng-click="ok()">OK</button></div>',
                         controller: ['$scope', '$uibModalInstance', function ($scope, $uibModalInstance) {
                             $scope.ok = function () {

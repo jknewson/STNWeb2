@@ -12,10 +12,7 @@
                 //all things both new and existing events page will need
 
                 //#region Datepicker
-                $scope.datepickrs = {
-                    //projStDate: false,
-                    //projEndDate: false
-                };
+                $scope.datepickrs = {};
                 $scope.open = function ($event, which) {
                     $event.preventDefault();
                     $event.stopPropagation();
@@ -126,11 +123,11 @@
                             template: '<div class="modal-header"><h3 class="modal-title">Error</h3></div>' +
                                 '<div class="modal-body"><p>Please populate all required fields.</p></div>' +
                                 '<div class="modal-footer"><button class="btn btn-primary" ng-enter="ok()" ng-click="ok()">OK</button></div>',
-                            controller: function ($scope, $uibModalInstance) {
+                            controller: ['$scope', '$uibModalInstance', function ($scope, $uibModalInstance) {
                                 $scope.ok = function () {
                                     $uibModalInstance.close();
                                 };
-                            },
+                            }],
                             size: 'sm'
                         });
                         //errorModal.result.then(function () {

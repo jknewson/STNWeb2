@@ -17,23 +17,7 @@
                 delete: { method: 'DELETE', cache: false, isArray: false }
             });
     }]);
-    //#endregion of AGENCY
-
-    //#region COLLECT_TEAMS
-    STNResource.factory('COLLECT_TEAM', ['$resource', function ($resource) {
-        return $resource(rootURL + '/CollectionTeams/:id.json',
-            {}, {
-                query: {},                 
-                getAll: { method: 'GET', isArray: true },
-                getEventTeams: { method: 'GET', isArray: true, url: rootURL + '/Events/:Eventid/Teams.json' },
-                getTeamMembers: {method: 'GET', isArray: true, url: rootURL + '/CollectionTeams/:id/Members.json'},
-                update: { method: 'PUT', cache: false, isArray: false },
-                save: { method: 'POST', cache: false, isArray: false },
-                addMember: {method: 'POST', isArray: true, cache:false, url: rootURL + '/CollectionTeams/:id/AddMember.json'},
-                delete: { method: 'DELETE', cache: false, isArray: false }
-            });
-    }]);
-    //#endregion of COLLECT_TEAM
+    //#endregion of AGENCY    
 
     //#region CONTACT_TYPE
     STNResource.factory('CONTACT_TYPE', ['$resource', function ($resource) {
@@ -184,23 +168,6 @@
             });
     }]);
     //#endregion of FILE
-    
-    //service for packaging a multipart file to post
-    //STNResource.service('multipartForm', ['$http', function ($http) {
-    //    return this.post = function (data) {
-    //        var uploadUrl = rootURL + '/Files/bytes';
-    //        var fd = new FormData();
-    //        fd.append("FileEntity", JSON.stringify(data.FileEntity));
-    //        fd.append("File", data.File);
-    //        $http.post(uploadUrl, fd, {
-    //            transformRequest: angular.identity,
-    //            headers: { 'Content-Type': undefined }
-    //        }).success(function (data, status) {
-    //            return data;
-    //        });
-    //    };
-        
-    //}]);
 
     //#region HORIZONTAL_COLL_METHODS
     STNResource.factory('HORIZONTAL_COLL_METHODS', ['$resource', function ($resource) {
@@ -552,6 +519,20 @@
             });
     }]);
     //#endregion of SITE
+
+    //#region Site_Files
+    STNResource.factory('Site_Files', function () {
+        var allSiteFiles = [];
+        return {
+            getAllSiteFiles: function () {
+                return allSiteFiles;
+            },
+            setAllSiteFiles: function (sf) {
+                allSiteFiles = sf;
+            }
+        };
+    });
+    //#endregion of Site_Files
 
     //#region STATE
     STNResource.factory('STATE', ['$resource', function ($resource) {

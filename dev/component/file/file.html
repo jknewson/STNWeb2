@@ -93,9 +93,9 @@
             <label class="col-md-2 control-label req" for="FILE_DATE">Date Taken:</label>
             <div class="col-md-6">
                 <div style="width:52%" class="input-group">
-                    <input class="form-control" id="Photo_FILE_DATE" name="fd" ng-disabled="undetermined"
-                           type="text" uib-datepicker-popup="MMM dd, yyyy" is-open="datepickrs.fd"
-                           ng-model="aFile.FILE_DATE" />
+                    <input readonly="readonly" class="form-control" id="Photo_FILE_DATE" name="fd" ng-disabled="undetermined"
+                           type="text" uib-datepicker-popup="MMM dd, yyyy" is-open="datepickrs.fd" style="background-color: white;cursor:auto"
+                           show-weeks="false" ng-model="aFile.FILE_DATE" />
                     <span class="input-group-btn">
                         <button class="btn btn-default" ng-click="open($event, 'fd')">
                             <i class="glyphicon glyphicon-calendar" />
@@ -109,9 +109,9 @@
             <label class="col-md-2 control-label req" for="FILE_DATE">Data&nbsp;&nbsp;&nbsp; <br /> Collected/Processed:</label>
             <div class="col-md-6">
                 <div style="width:52%" class="input-group">
-                    <input class="form-control" id="Data_FILE_DATE" name="dc" ng-disabled="undetermined"
-                           type="text" uib-datepicker-popup="MMM dd, yyyy" is-open="datepickrs.dc"
-                           ng-model="aFile.FILE_DATE" />
+                    <input readonly="readonly" class="form-control" id="Data_FILE_DATE" name="dc" ng-disabled="undetermined"
+                           type="text" uib-datepicker-popup="MMM dd, yyyy" is-open="datepickrs.dc" style="background-color: white;cursor:auto"
+                           show-weeks="false" ng-model="aFile.FILE_DATE" />
                     <span class="input-group-btn">
                         <button class="btn btn-default" ng-click="open($event, 'dc')">
                             <i class="glyphicon glyphicon-calendar" />
@@ -127,8 +127,8 @@
             <div class="col-md-6">
                 <div style="width:52%" class="input-group">
                     <input class="form-control" id="DATE_VALIDATED" name="dv" ng-disabled="undetermined"
-                           type="text" uib-datepicker-popup="MMM dd, yyyy" is-open="datepickrs.dv"
-                           ng-model="aFile.DATE_VALIDATED" />
+                           type="text" uib-datepicker-popup="MMM dd, yyyy" is-open="datepickrs.dv" style="background-color: white;cursor:auto"
+                           show-weeks="false" readonly="readonly" ng-model="aFile.DATE_VALIDATED" />
                     <span class="input-group-btn">
                         <button class="btn btn-default" ng-click="open($event, 'dv')">
                             <i class="glyphicon glyphicon-calendar" />

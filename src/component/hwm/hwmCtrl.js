@@ -27,12 +27,12 @@
                 });
 
                 $scope.showHWMModal = function (HWMclicked) {
-                    $scope.hwmFileTypes = allFileTypes.filter(function (hft) {
+                    var hwmFileTypes = allFileTypes.filter(function (hft) {
                         //Photo (1), Historic (3), Field Sheets (4), Level Notes (5), Other (7), Link (8), Sketch (10)
                         return hft.FILETYPE === 'Photo' || hft.FILETYPE === 'Historic Citation' || hft.FILETYPE === 'Field Sheets' || hft.FILETYPE === 'Level Notes' ||
                             hft.FILETYPE === 'Other' || hft.FILETYPE === 'Link' || hft.FILETYPE === 'Sketch';
-                    })
-                    var passAllLists = [allHWMTypes, allHWMQualities, allHorDatums, allHorCollMethods, allVertDatums, allVertColMethods, allMarkers, allEvents, $scope.hwmFileTypes];
+                    });
+                    var passAllLists = [allHWMTypes, allHWMQualities, allHorDatums, allHorCollMethods, allVertDatums, allVertColMethods, allMarkers, allEvents, hwmFileTypes];
                     var indexClicked = $scope.SiteHWMs.indexOf(HWMclicked);
 
                     //modal

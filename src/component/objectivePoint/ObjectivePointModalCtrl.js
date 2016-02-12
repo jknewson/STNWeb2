@@ -34,7 +34,7 @@
             $scope.showImageModal = function (image) {
                 var imageModal = $uibModal.open({
                     template: '<div class="modal-header"><h3 class="modal-title">Image File Preview</h3></div>' +
-                        '<div class="modal-body"><img ng-src="https://stntest.wim.usgs.gov/STNServices/Files/{{imageId}}/Item" /></div>' +
+                        '<div class="modal-body"><img ng-src="https://stntest.wim.usgs.gov/STNServices2/Files/{{imageId}}/Item" /></div>' +
                         '<div class="modal-footer"><button class="btn btn-primary" ng-enter="ok()" ng-click="ok()">OK</button></div>',
                     controller:['$scope', '$uibModalInstance', function ($scope, $uibModalInstance) {
                         $scope.ok = function () {
@@ -121,55 +121,6 @@
                             });
                         });//end source.save()
                     }//end if source
-                    //#region dataFile for sensor addFile
-                    //if ($scope.datafile.GOOD_START !== null) {
-                    //    //determine timezone
-                    //    if ($scope.datafile.TIME_ZONE != "UTC") {
-                    //        //convert it
-                    //        var utcStartDateTime = new Date($scope.datafile.GOOD_START).toUTCString();
-                    //        var utcEndDateTime = new Date($scope.datafile.GOOD_END).toUTCString();
-                    //        $scope.datafile.GOOD_START = utcStartDateTime;
-                    //        $scope.datafile.GOOD_END = utcEndDateTime;
-                    //        $scope.datafile.TIME_ZONE = 'UTC';
-                    //    } else {
-                    //        //make sure 'GMT' is tacked on so it doesn't try to add hrs to make the already utc a utc in db
-                    //        var si = $scope.datafile.GOOD_START.toString().indexOf('GMT') + 3;
-                    //        var ei = $scope.datafile.GOOD_END.toString().indexOf('GMT') + 3;
-                    //        $scope.datafile.GOOD_START = $scope.datafile.GOOD_START.toString().substring(0, si);
-                    //        $scope.datafile.GOOD_END = $scope.datafile.GOOD_END.toString().substring(0, ei);
-                    //    }
-                    //    $scope.datafile.PROCESSOR_ID = $cookies.get('mID');
-                    //    DATA_FILE.save($scope.datafile).$promise.then(function (dfResonse) {
-                    //        //then POST fileParts (Services populate PATH)
-                    //        var fileParts = {
-                    //            FileEntity: {
-                    //                FILETYPE_ID: $scope.aFile.FILETYPE_ID,
-                    //                FILE_URL: $scope.aFile.FILE_URL,
-                    //                FILE_DATE: $scope.aFile.FILE_DATE,
-                    //                DESCRIPTION: $scope.aFile.DESCRIPTION,
-                    //                SITE_ID: $scope.thisOPsite.SITE_ID,
-                    //                DATA_FILE_ID: dfResonse.DATA_FILE_ID,
-                    //                PHOTO_DIRECTION: $scope.aFile.PHOTO_DIRECTION,
-                    //                LATITUDE_DD: $scope.aFile.LATITUDE_DD,
-                    //                LONGITUDE_DD: $scope.aFile.LONGITUDE_DD,
-                    //                OBJECTIVE_POINT_ID: $scope.OP.OBJECTIVE_POINT_ID
-                    //            },
-                    //            File: $scope.aFile.File
-                    //        };
-                    //        //need to put the fileParts into correct format for post
-                    //        var fd = new FormData();
-                    //        fd.append("FileEntity", JSON.stringify(fileParts.FileEntity));
-                    //        fd.append("File", fileParts.File);
-                    //        //now POST it (fileparts)
-                    //        FILE.uploadFile(fd).$promise.then(function (fresponse) {
-                    //            toastr.success("File Uploaded");
-                    //            $scope.OPFiles.push(fresponse);
-                    //            if (fresponse.FILETYPE_ID === 1) $scope.opImageFiles.push(fresponse);
-                    //            $scope.showFileForm = false;
-                    //        });
-                    //    });
-                    //}
-                    //#endregion dataFile for sensor addFile
                 }//end valid
             };//end create()
 
@@ -292,14 +243,7 @@
                 if (thisOPControls.length > 0) {
                     $scope.addedIdentifiers = thisOPControls;
                     $scope.showControlIDinput = true;
-                }
-                //see if there's any OPFiles
-                //OBJECTIVE_POINT.getOPFiles({ id: $scope.OP.OBJECTIVE_POINT_ID }, function success(response) {
-                //    $scope.OPFiles = response;
-                //}, function error(errorResponse) {
-                //    toastr.error("Error getting OP files: " + errorResponse.statusText);
-                //});
-
+                }               
                 //#endregion 
             } else {
                 //#region new OP 

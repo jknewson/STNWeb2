@@ -13,6 +13,17 @@ form .ng-pristine.ng-invalid-required
     background: none;
     border: none;
 }
+/* carousel settings for label on photo files */
+.carousel-indicators {
+    bottom: 0 !important;
+}
+.carousel-caption {
+    padding: 0 !important;
+}
+.carousel-inner .active {
+    background: none !important;
+}
+
 .wizard a {
     background: #efefef;
     display: inline-block;
@@ -293,4 +304,8 @@ a.disabled {
     #Sec1PDF thead tr, #Sec2PDF thead tr, #Sec3PDF thead tr, #Sec4PDF thead tr, #Sec5PDF thead tr {
         margin-bottom: 5px;
     }
+}
+
+.container {
+    width:100%
 }

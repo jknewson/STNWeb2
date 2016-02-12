@@ -52,7 +52,7 @@
             };//end ViewReport click
 
             //function call to add EVENT_NAME to list of reports
-            var formatReport = function(repList) {
+            var formatReport = function (repList) {
                 var returnList = [];
                 for (var i = 0; i < repList.length; i++) {
                     var rep = repList[i];
@@ -61,19 +61,15 @@
                     returnList.push(rep);
                 }
                 return returnList;
-            }
+            };
 
             var todayReports = $scope.reportsToDate.filter(function (todayrep) {
-                //var reportDate = new Date(todayrep.REPORT_DATE).setHours(0, 0, 0, 0);
-                //return new Date(reportDate).getTime() == $scope.today.getTime();
                 var reportDate = todayrep.REPORT_DATE.toString().substring(0, 10);
                 return reportDate == $scope.today;
             });
             $scope.todayRpts = formatReport(todayReports);
 
             var yesterdayReports = $scope.reportsToDate.filter(function (yestrep) {
-                //var reportDate = new Date(yestrep.REPORT_DATE).setHours(0, 0, 0, 0);
-                //return new Date(reportDate).getTime() == $scope.yesterday.getTime();
                 var reportDate = yestrep.REPORT_DATE.toString().substring(0, 10);
                 return reportDate == $scope.yesterday;
             });
@@ -82,10 +78,12 @@
             //give me the reports done on this date
             $scope.getReportsByDate = function () {
                 if ($scope.THIS_DATE.date !== undefined) {
-                    var formatDate = new Date($scope.THIS_DATE.date).setHours(0, 0, 0, 0);
+                    var formatDate = new Date($scope.THIS_DATE.date);//
+                    formatDate.setHours(0, 0, 0, 0);
+                    formatDate = formatDate.toISOString().substr(0, 10);
                     var thisDateReports = $scope.reportsToDate.filter(function (tdate) {
-                        var reportDate = new Date(tdate.REPORT_DATE).setHours(0, 0, 0, 0);
-                        return new Date(reportDate).getTime() == new Date(formatDate).getTime();
+                        var reportDate = tdate.REPORT_DATE.toString().substring(0, 10);
+                        return reportDate == formatDate;
                     });
                     $scope.pickDateRpts = formatReport(thisDateReports);
                     $scope.pickAdateReports = true;
@@ -98,17 +96,21 @@
             //complete the report button clicked -- send back to submit with report populated
             $scope.CompleteThisReport = function (rep) {
                 $scope.$parent.newReport = rep;
-                $scope.$parent.newReport.REPORT_DATE = new Date(rep.REPORT_DATE); //keeps it valid
+               // $scope.$parent.newReport.REPORT_DATE = new Date(rep.REPORT_DATE); //keeps it valid
                 $scope.$parent.disabled = false;
                 $scope.$parent.needToComplete = true;
                 $http.defaults.headers.common.Authorization = 'Basic ' + $cookies.get('STNCreds');
                 $http.defaults.headers.common.Accept = 'application/json';
                 CONTACT.getContactModel({ ContactModelByReport: rep.REPORTING_METRICS_ID }, function success(response) {
-                    $scope.$parent.DeployStaff = response.filter(function (d) { return d.TYPE == "Deployed Staff"; })[0];
-                    $scope.$parent.GenStaff = response.filter(function (d) { return d.TYPE == "General"; })[0];
-                    $scope.$parent.InlandStaff = response.filter(function (d) { return d.TYPE == "Inland Flood"; })[0];
-                    $scope.$parent.CoastStaff = response.filter(function (d) { return d.TYPE == "Coastal Flood"; })[0];
-                    $scope.$parent.WaterStaff = response.filter(function (d) { return d.TYPE == "Water Quality"; })[0];
+                    if (response.length >= 1) {
+                        $scope.$parent.DeployStaff = response.filter(function (d) { return d.TYPE == "Deployed Staff"; })[0];
+                        $scope.$parent.GenStaff = response.filter(function (d) { return d.TYPE == "General"; })[0];
+                        $scope.$parent.InlandStaff = response.filter(function (d) { return d.TYPE == "Inland Flood"; })[0];
+                        $scope.$parent.CoastStaff = response.filter(function (d) { return d.TYPE == "Coastal Flood"; })[0];
+                        $scope.$parent.WaterStaff = response.filter(function (d) { return d.TYPE == "Water Quality"; })[0];
+                    } else {
+                        $scope.$parent.DeployStaff = {}; $scope.$parent.GenStaff = {}; $scope.$parent.InlandStaff = {}; $scope.$parent.CoastStaff = {}; $scope.$parent.WaterStaff = {};
+                    }
                 }).$promise.then(function () {
                     $state.go('reporting.submitReport');
                 });

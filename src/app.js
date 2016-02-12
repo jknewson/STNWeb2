@@ -9,7 +9,7 @@
         $rootScope.$on('$stateChangeStart', function (event, toState, toParams, fromState, fromParams) {
             if (($cookies.get('STNCreds') === undefined || $cookies.get('STNCreds') === "") && toState.authenticate) {
                 $rootScope.returnToState = toState.name;
-                $rootScope.returnToStateParams = toParams.id
+                $rootScope.returnToStateParams = toParams.id;
                 //$location.path('/login');
                 event.preventDefault();
                 $state.go('entry');

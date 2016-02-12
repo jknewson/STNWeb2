@@ -2,23 +2,31 @@
     "use strict"; 
     var app = angular.module('app',
         ['ngResource', 'ui.router', 'ngCookies', 'ui.mask', 'ui.bootstrap', 'isteven-multi-select', 'ngInputModified', 'ui.validate',
-            'angular.filter', 'xeditable', 'checklist-model', 'ngFileUpload', 'STNResource', 'ui.bootstrap.datetimepicker',
+            'angular.filter', 'xeditable', 'checklist-model', 'ngFileUpload', 'STNResource', 'ui.bootstrap.datetimepicker','leaflet-directive',
             'STNControllers', 'LogInOutController', 'ModalControllers', 'SettingsControllers']);
     
-    app.run(['$rootScope', '$uibModalStack', function ($rootScope, $uibModalStack) {
+    app.run(['$rootScope', '$uibModalStack', '$cookies', '$state', function ($rootScope, $uibModalStack, $cookies, $state) {
         $rootScope.$on('$stateChangeStart', function (event, toState, toParams, fromState, fromParams) {
-            $("#ui-view").html("");
-            $(".page-loading").removeClass("hidden");
-            //close all modals when changing states (site create open, want to use a nearby site or just change the url up top, close the modal too)
-            $uibModalStack.dismissAll();
+            if (($cookies.get('STNCreds') === undefined || $cookies.get('STNCreds') === "") && toState.authenticate) {
+                $rootScope.returnToState = toState.name;
+                $rootScope.returnToStateParams = toParams.id;
+                //$location.path('/login');
+                event.preventDefault();
+                $state.go('entry');
+            } else {
+                $("#ui-view").html("");
+                $(".page-loading").removeClass("hidden");
+                //close all modals when changing states (site create open, want to use a nearby site or just change the url up top, close the modal too)
+                $uibModalStack.dismissAll();
 
-            if (toState.url == "/") {
-                //make username focus
-                $("#userNameFocus").focus();
+                if (toState.url == "/") {
+                    //make username focus
+                    $("#userNameFocus").focus();
+                }
             }
         });
 
-        $rootScope.$on('$stateChangeSuccess', function () {
+        $rootScope.$on('$stateChangeSuccess', function (event, toState, toParams, fromState, fromParams, error) {
             $(".page-loading").addClass("hidden");
         });
         $rootScope.$on('$stateChangeError', function (event, toState, toParams, fromState, fromParams, error) {            
@@ -48,7 +56,8 @@
                 .state("home", {
                     url: "/Home",
                     templateUrl: "component/home/homeBase.html",
-                    controller: "homeCtrl"
+                    controller: "homeCtrl",
+                    authenticate: true
                 })
                 //#endregion entry point once logged in
 
@@ -56,7 +65,8 @@
                 .state("map", {
                     url: "/Map",
                     templateUrl: "component/map/map.html",
-                    controller: "mapCtrl"
+                    controller: "MapController",
+                    authenticate: true
                 })
                 //#endregion
 
@@ -65,6 +75,7 @@
                     url: "/Approval",
                     templateUrl: "component/approval/approval.html",
                     controller: "approvalCtrl",
+                    authenticate: true,
                     resolve: {
                         s: 'STATE',
                         stateList: function (s) {
@@ -87,6 +98,7 @@
                     url: "/SiteSearch",
                     templateUrl: "component/siteSearch/siteSearch.html",
                     controller: "siteSearchCtrl",
+                    authenticate: true,
                     resolve: {
                         s: 'STATE',
                         stateList: function (s) {
@@ -111,6 +123,7 @@
                     abstract: true,
                     templateUrl: "component/reporting/reporting.html",
                     controller: "reportingCtrl",
+                    authenticate: true,
                     resolve: {
                         e: 'EVENT',
                         allEvents: function (e) {
@@ -149,6 +162,7 @@
                     url: "/Dashboard",
                     templateUrl: "component/reporting/reportingDashboard.html",
                     controller: "reportingDashCtrl",
+                    authenticate: true,
                     resolve: {
                         r: 'REPORT',
                         allReportsAgain: function (r) {
@@ -162,13 +176,15 @@
                     url: "/SubmitReport",
                     templateUrl: "component/reporting/submitReport.html",
                     controller: "submitReportCtrl",
+                    authenticate: true,
                 })
                 //#endregion reporting.SubmitReport
 
                 //#region reporting.GenerateReport
                 .state("reporting.generateReport", {
                     url: "/GenerateReport",
-                    templateUrl: "component/reporting/generateReport.html"
+                    templateUrl: "component/reporting/generateReport.html",
+                    authenticate: true,
                 })//#endregion reporting.GenerateReport
                 //#endregion reporting
 
@@ -176,7 +192,8 @@
                 .state("settings", {
                     url: "/Settings",
                     templateUrl: "component/settings/settings.html",
-                    controller: "settingsCtrl"
+                    controller: "settingsCtrl",
+                    authenticate: true
                 })
                 //#endregion settings
 
@@ -187,6 +204,7 @@
                     abstract: true,
                     templateUrl: "component/member/memberHolderView.html",
                     controller: "memberCtrl",
+                    authenticate: true,
                     resolve: {
                         r: 'ROLE',
                         allRoles: function (r) {
@@ -202,7 +220,8 @@
                 //#region members.MembersList
                 .state("members.MembersList", {
                     url: "/MembersList",
-                    templateUrl: "component/member/membersList.html"
+                    templateUrl: "component/member/membersList.html",
+                    authenticate: true,
                 })
                 //#endregion members.MembersList
 
@@ -211,6 +230,7 @@
                     url: "/memberInfo/:id",
                     templateUrl: "component/member/memberInfo.html",
                     controller: "memberInfoCtrl",
+                    authenticate: true,
                     resolve: {
                         m: 'MEMBER',
                         thisMember: function (m, $stateParams, $http, $cookies) {
@@ -233,6 +253,7 @@
                     abstract: true,
                     templateUrl: "component/event/eventHolderView.html",
                     controller: "eventCtrl",
+                    authenticate: true,
                     resolve: {
                         e: 'EVENT',
                         allEvents: function (e) {
@@ -245,6 +266,12 @@
                         es: 'EVENT_STATUS',
                         allEventStats: function (es) {
                             return es.getAll().$promise;
+                        },
+                        m: 'MEMBER',
+                        allCoordMembers: function (m, $http, $cookies) {
+                            $http.defaults.headers.common.Authorization = 'Basic ' + $cookies.get('STNCreds');
+                            $http.defaults.headers.common.Accept = 'application/json';
+                            return m.getRoleMembers({ roleId: 1 }).$promise;
                         }
                     }
                 })//#endregion events
@@ -252,7 +279,8 @@
                 //#region events.EventsList
                 .state("events.EventsList", {
                     url: "/EventsList",
-                    templateUrl: "component/event/eventsList.html"
+                    templateUrl: "component/event/eventsList.html",
+                    authenticate: true
                 })
                 //#endregion events.EventsList
 
@@ -261,6 +289,7 @@
                     url: "/eventInfo/:id",
                     templateUrl: "component/event/eventInfo.html",
                     controller: "eventInfoCtrl",
+                    authenticate: true,
                     resolve: {
                         e: 'EVENT',
                         thisEvent: function (e, $stateParams) {
@@ -281,6 +310,7 @@
                     abstract: true,
                     templateUrl: "component/resources/resourcesHolderView.html",
                     controller: "resourcesCtrl",
+                    authenticate: true,
                     resolve: {
                         state: 'STATE',
                         allStates: function (state) {
@@ -384,7 +414,8 @@
                 //#region resources.ResourcesList
                 .state("resources.ResourcesList", {
                     url: "/ResourcesList",
-                    templateUrl: "component/resources/resourcesList.html"
+                    templateUrl: "component/resources/resourcesList.html",
+                    authenticate: true
                 })
                 //#endregion resources.ResourcesList
 
@@ -392,161 +423,184 @@
                 //#region resources.ResourcesList.agency
                 .state("resources.ResourcesList.agency", {
                     url: "/Agencies",
-                    templateUrl: "component/resources/agency.html"
+                    templateUrl: "component/resources/agency.html",
+                    authenticate: true
                 })
                 //#endregion resources.ResourcesList.agency
 
                 //#region resources.ResourcesList.ContactType
                 .state("resources.ResourcesList.ContactType", {
                     url: "/ContactTypes",
-                    templateUrl: "component/resources/contactType.html"
+                    templateUrl: "component/resources/contactType.html",
+                    authenticate: true
                 })
                 //#endregion resources.ResourcesList.ContactType
 
                 //#region resources.ResourcesList.DepPriority
                 .state("resources.ResourcesList.DepPriority", {
                     url: "/DeploymentPriorities",
-                    templateUrl: "component/resources/deploymentPriority.html"
+                    templateUrl: "component/resources/deploymentPriority.html",
+                    authenticate: true
                 })
                 //#endregion resources.ResourcesList.DepPriority
 
                 //#region resources.ResourcesList.EventStatus
                 .state("resources.ResourcesList.EventStatus", {
                     url: "/EventStatus",
-                    templateUrl: "component/resources/eventStatus.html"
+                    templateUrl: "component/resources/eventStatus.html",
+                    authenticate: true
                 })
                 //#endregion resources.ResourcesList.EventStatus
 
                 //#region resources.ResourcesList.EventType
                 .state("resources.ResourcesList.EventType", {
                     url: "/EventTypes",
-                    templateUrl: "component/resources/eventType.html"
+                    templateUrl: "component/resources/eventType.html",
+                    authenticate: true
                 })
                 //#endregion resources.ResourcesList.EventType
 
                 //#region resources.ResourcesList.FileType
                 .state("resources.ResourcesList.FileType", {
                     url: "/FileTypes",
-                    templateUrl: "component/resources/fileType.html"
+                    templateUrl: "component/resources/fileType.html",
+                    authenticate: true
                 })
                 //#endregion resources.ResourcesList.FileType
 
                 //#region resources.ResourcesList.HorCollMethd
                 .state("resources.ResourcesList.HorCollMethd", {
                     url: "/HorizontalCollMethods",
-                    templateUrl: "component/resources/horizontalCollectionMethod.html"
+                    templateUrl: "component/resources/horizontalCollectionMethod.html",
+                    authenticate: true
                 })
                 //#endregion resources.ResourcesList.HorCollMethd
 
                 //#region resources.ResourcesList.HorDatum
                 .state("resources.ResourcesList.HorDatum", {
                     url: "/HorizontalDatums",
-                    templateUrl: "component/resources/horizontalDatum.html"
+                    templateUrl: "component/resources/horizontalDatum.html",
+                    authenticate: true
                 })
                 //#endregion resources.ResourcesList.HorDatum
 
                 //#region resources.ResourcesList.HousingType
                 .state("resources.ResourcesList.HousingType", {
                     url: "/HousingTypes",
-                    templateUrl: "component/resources/housingType.html"
+                    templateUrl: "component/resources/housingType.html",
+                    authenticate: true
                 })
                 //#endregion resources.ResourcesList.HousingType
 
                 //#region resources.ResourcesList.HWMQual
                 .state("resources.ResourcesList.HWMQual", {
                     url: "/HWMQualities",
-                    templateUrl: "component/resources/hwmQuality.html"
+                    templateUrl: "component/resources/hwmQuality.html",
+                    authenticate: true
                 })
                 //#endregion resources.ResourcesList.HWMQual
 
                 //#region resources.ResourcesList.HWMType
                 .state("resources.ResourcesList.HWMType", {
                     url: "/HWMTypes",
-                    templateUrl: "component/resources/hwmType.html"
+                    templateUrl: "component/resources/hwmType.html",
+                    authenticate: true
                 })
                 //#endregion resources.ResourcesList.HWMType
 
                 //#region resources.ResourcesList.InstrCollCondition
                 .state("resources.ResourcesList.InstrCollCondition", {
                     url: "/InstrCollConditions",
-                    templateUrl: "component/resources/instrumentCollectionCondition.html"
+                    templateUrl: "component/resources/instrumentCollectionCondition.html",
+                    authenticate: true
                 })
                 //#endregion resources.ResourcesList.InstrCollCondition
 
                 //#region resources.ResourcesList.Marker
                 .state("resources.ResourcesList.Marker", {
                     url: "/Markers",
-                    templateUrl: "component/resources/marker.html"
+                    templateUrl: "component/resources/marker.html",
+                    authenticate: true
                 })
                 //#endregion resources.ResourcesList.Marker
 
                 //#region resources.ResourcesList.NetworkNames
                 .state("resources.ResourcesList.NetworkNames", {
                     url: "/NetworkNames",
-                    templateUrl: "component/resources/networkNames.html"
+                    templateUrl: "component/resources/networkNames.html",
+                    authenticate: true
                 })
                 //#endregion resources.ResourcesList.NetworkNames
 
                 //#region resources.ResourcesList.OPquality
                 .state("resources.ResourcesList.OPquality", {
                     url: "/ObjPointQualities",
-                    templateUrl: "component/resources/objectivePointQuality.html"
+                    templateUrl: "component/resources/objectivePointQuality.html",
+                    authenticate: true
                 })
                 //#endregion resources.ResourcesList.OPquality
 
                 //#region resources.ResourcesList.OPType
                 .state("resources.ResourcesList.OPType", {
                     url: "/ObjPointType",
-                    templateUrl: "component/resources/objectivePointType.html"
+                    templateUrl: "component/resources/objectivePointType.html",
+                    authenticate: true
                 })
                 //#endregion resources.ResourcesList.OPType
 
                 //#region resources.ResourcesList.SensorBrand
                 .state("resources.ResourcesList.SensorBrand", {
                     url: "/SensorBrands",
-                    templateUrl: "component/resources/sensorBrand.html"
+                    templateUrl: "component/resources/sensorBrand.html",
+                    authenticate: true
                 })
                 //#endregion resources.ResourcesList.SensorBrand
 
                 //#region resources.ResourcesList.DepType
                 .state("resources.ResourcesList.SenDepType", {
                     url: "/SensorDeploymentTypes",
-                    templateUrl: "component/resources/deploymentType.html"
+                    templateUrl: "component/resources/deploymentType.html",
+                    authenticate: true
                 })
                 //#endregion resources.ResourcesList.DepType
 
                 //#region resources.ResourcesList.StatusType
                 .state("resources.ResourcesList.StatusType", {
                     url: "/StatusTypes",
-                    templateUrl: "component/resources/statusType.html"
+                    templateUrl: "component/resources/statusType.html",
+                    authenticate: true
                 })
                 //#endregion resources.ResourcesList.StatusType
 
                 //#region resources.ResourcesList.SensorType
                 .state("resources.ResourcesList.SensorType", {
                     url: "/SensorTypes",
-                    templateUrl: "component/resources/sensorType.html"
+                    templateUrl: "component/resources/sensorType.html",
+                    authenticate: true
                 })
                 //#endregion resources.ResourcesList.SensorType
 
                 //#region resources.ResourcesList.NetworkType
                 .state("resources.ResourcesList.NetworkType", {
                     url: "/NetworkTypes",
-                    templateUrl: "component/resources/networkType.html"
+                    templateUrl: "component/resources/networkType.html",
+                    authenticate: true
                 })
                 //#endregion resources.ResourcesList.NetworkType
 
                 //#region resources.ResourcesList.VertCollMethod
                 .state("resources.ResourcesList.VertCollMethod", {
                     url: "/VerticalCollMethods",
-                    templateUrl: "component/resources/verticalCollectionMethod.html"
+                    templateUrl: "component/resources/verticalCollectionMethod.html",
+                    authenticate: true
                 })
                 //#endregion resources.ResourcesList.VertCollMethod
 
                 //#region resources.ResourcesList.VertDatum
                 .state("resources.ResourcesList.VertDatum", {
                     url: "/VerticalDatums",
-                    templateUrl: "component/resources/verticalDatum.html"
+                    templateUrl: "component/resources/verticalDatum.html",
+                    authenticate: true
                 })
             //#endregion resources.ResourcesList.VertDatum
 
@@ -558,9 +612,10 @@
                     url: "/Site/:id",
                     abstract: true,
                     templateUrl: "component/site/site.html",
-                    controller: function ($scope, $stateParams) {
+                    authenticate: true,
+                    controller: ['$scope', '$stateParams', function ($scope, $stateParams) {
                         $scope.siteID = $stateParams.id;
-                    },
+                    }],
                     resolve: {
                         //#region site stuff
                         s: 'SITE',
@@ -715,16 +770,17 @@
                 //#region site.info
                 .state("site.dashboard", {
                     url: "/SiteDashboard",
+                    authenticate: true,
                     views: {
                         'siteNo': {
-                            controller: function ($scope, $cookies, thisSite) {
+                            controller: ['$scope', '$cookies', 'thisSite', function ($scope, $cookies, thisSite) {
                                 if (thisSite !== undefined)
                                     $scope.SiteNo = thisSite.SITE_NO;
                                 // watch for the session event to change and update
                                 $scope.$watch(function () { return $cookies.get('SessionEventName'); }, function (newValue) {
                                     $scope.sessionEvent = $cookies.get('SessionEventName') !== null && $cookies.get('SessionEventName') !== undefined ? $cookies.get('SessionEventName') : "All Events";
                                 });
-                            },
+                            }],
                             template: '<div><h2 style="margin-top:0">Site {{SiteNo}} - For {{sessionEvent}}</h2></div><hr />' 
                         },
                         'aSite': {
@@ -760,6 +816,7 @@
                     url: "/QuickHWM",
                     templateUrl: "component/hwm/quickHWM.html",
                     controller: "quickHWMCtrl",
+                    authenticate: true,
                     resolve: {
                         //#region site stuff                        
                         hd: 'HORIZONTAL_DATUM',
