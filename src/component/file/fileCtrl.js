@@ -81,8 +81,6 @@
                 //create/edit a file
                 $scope.showFileModal = function (FileClicked) {                    
                     var SindexClicked = $scope.SiteFiles.indexOf(FileClicked);
-                    var IindexClicked = $scope.ImageFiles.indexOf(FileClicked);
-                    
                     //populate all filetypes that create/edit file needs depending on what the file is attached to
                     $scope.siteFileTypes = allFileTypes.filter(function (ft) {
                         return ft.FILETYPE === 'Photo' || ft.FILETYPE === 'Historic Citation' || ft.FILETYPE === 'Field Sheets' ||

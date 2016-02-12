@@ -44,11 +44,6 @@
                             opSite: function () {
                                 return thisSite;
                             },
-                            //opFiles: function () {
-                            //    if (OPclicked !== 0) {
-                            //        return OBJECTIVE_POINT.getOPFiles({ id: OPclicked.OBJECTIVE_POINT_ID }).$promise;
-                            //    }
-                            //},
                             agencyList: function () {
                                 return allAgencies;
                             },
