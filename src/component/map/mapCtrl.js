@@ -4,8 +4,9 @@
 
     var STNControllers = angular.module('STNControllers');
 
-    STNControllers.controller('MapController', ['$scope', '$http', '$rootScope', '$cookies', '$location', 'SITE',
-        function ($scope, $http, $rootScope, $cookies, $location, SITE) {
+    STNControllers.controller('MapController', ['$scope', '$http', '$rootScope', '$cookies', '$location', 'SITE', "leafletMarkerEvents",
+        'allHorDatums', 'allHorCollMethods', 'allStates', 'allCounties', 'allDeployPriorities', 'allHousingTypes', 'allNetworkNames', 'allNetworkTypes', 'allDeployTypes', 'allSensDeps',
+        function ($scope, $http, $rootScope, $cookies, $location, SITE, leafletMarkerEvents, allHorDatums, allHorCollMethods, allStates, allCounties, allDeployPriorities, allHousingTypes, allNetworkNames, allNetworkTypes, allDeployTypes, allSensDeps) {
             if ($cookies.get('STNCreds') === undefined || $cookies.get('STNCreds') === "") {
                 $scope.auth = false;
                 $location.path('/login');
@@ -22,32 +23,22 @@
                     }
                 };
 
-                //$scope.markers = new Array();
-
                 var onSiteComplete = function(response) {
-                    console.log("onSiteComplete");
                     var sitesArray = response.data.Sites;
                     $scope.sites = response.data;
-
-                    $scope.markers = new Array();
-
+                    $scope.markers = [];
                     for (var i = 0; i < sitesArray.length; i++) {
                         var a = sitesArray[i];
                         $scope.markers.push({
                             lat: a.latitude,
                             lng: a.longitude,
+                            SITE_ID: a.SITE_ID,
                             icon: icons.stn
                         });
                     }
-
-                    console.log("after push loop");
                 };
-
-                //var evName = $cookies.get('SessionEventName') !== null && $cookies.get('SessionEventName') !== undefined ? $cookies.get('SessionEventName') : "All Events"
                 ///need to watch for session event id, do new call to server when that changes
                 $scope.$watch(function () { return $cookies.get('SessionEventID'); }, function (newValue) {
-                    //$scope.sessionEventName = newValue !== undefined ? newValue : "All Events";
-                    //$scope.sessionEventExists = $scope.sessionEventName != "All Events" ? true : false;
                     if (newValue !== undefined) {
                         $scope.sessionEvent = $cookies.get('SessionEventName') !== null && $cookies.get('SessionEventName') !== undefined ? $cookies.get('SessionEventName') : "All Events";
                         var evID = newValue;
@@ -57,10 +48,83 @@
 
                     }
                 });
-
                 var onError = function(reason){
-                    $scope.error = "Could not fetch sites"
+                    $scope.error = "Could not fetch sites";
                 };
+
+                $scope.$on("leafletDirectiveMap.click", function(event, args){
+                    var leafEvent = args.leafletEvent;
+
+                    $scope.markers.push({
+                        lat: leafEvent.latlng.lat,
+                        lng: leafEvent.latlng.lng,
+                        SITE_ID: 'newSite',
+                        icon: icons.stn,
+                        message: "New draggable STN site",
+                        draggable: true,  ///consider whether dragability is worth it
+                        focus: true
+                    });
+
+                    //use new clicked site lat/lng and create new site from that
+                });
+
+
+                ///below applies to dragability - may remove
+                $scope.$on("leafletDirectiveMarker.dragend", function(event, args){
+                    var leafEvent = args.leafletEvent;
+                    var newLocation = args.model;
+
+                    ///take new lat/lng and create new site from that
+
+                });
+
+                ///below applies to dragability - may remove
+                $scope.eventDetected = "No events yet...";
+                var markerEvents = leafletMarkerEvents.getAvailableEvents();
+                for (var k in markerEvents){
+                    var eventName = 'leafletDirectiveMarker.' + markerEvents[k];
+                    $scope.$on(eventName, function(event, args){
+                        $scope.eventDetected = event.name;
+                    });
+                }
+
+
+                //open modal to edit or create a site. unclear if this is needed to be duplicated here, or can be reused from elsewhere
+                $scope.openSiteCreate = function () {
+                    var dropdownParts =[allHorDatums, allHorCollMethods, allStates, allCounties, allHousingTypes, allDeployPriorities,
+                        allNetworkNames, allNetworkTypes, allDeployTypes, allSensDeps];
+                    //modal
+                    var modalInstance = $uibModal.open({
+                        templateUrl: 'SITEmodal.html',
+                        controller: 'siteModalCtrl',
+                        size: 'lg',
+                        backdrop: 'static',
+                        windowClass: 'rep-dialog',
+                        resolve: {
+                            allDropDownParts: function () {
+                                return dropdownParts;
+                            },
+                            thisSiteStuff: function () {
+                                if ($scope.aSite.SITE_ID !== undefined) {
+                                    var origSiteHouses = $scope.originalSiteHousings !== undefined ? $scope.originalSiteHousings : []; //needed for multi select to set prop selected
+                                    var sHouseTypeModel = $scope.thisSiteHouseTypeModel.length > 0 ? $scope.thisSiteHouseTypeModel : [];
+                                    var sNetNames = thisSiteNetworkNames !== undefined ? thisSiteNetworkNames : [];
+                                    var sNetTypes = thisSiteNetworkTypes !== undefined ? thisSiteNetworkTypes : [];
+                                    var lo = $scope.landowner !== undefined ? $scope.landowner : {
+                                    };
+                                    var siteRelatedStuff = [$scope.aSite, origSiteHouses, sHouseTypeModel, sNetNames, sNetTypes, lo];
+                                    return siteRelatedStuff;
+                                }
+                            }
+                        }
+                    });
+                    modalInstance.result.then(function (r) {
+                        $scope.aSite = r[0];
+                        $scope.siteNetworkNames = r[1];
+                        $scope.siteNetworkTypes = r[2];
+                    });
+                };
+
 
                 //get all STN sites
                 //$http.get('https://stn.wim.usgs.gov/STNServices/Sites/points.json')
@@ -75,6 +139,11 @@
                 //    .then(onSiteComplete, onError);
                 //copies scope object/////////////////////////////
                 angular.extend($scope, {
+                    events: {
+                        markers: {
+                            enable: leafletMarkerEvents.getAvailableEvents() //remove this if dragability abandoned
+                        }
+                    },
                     centerUS: {
                         lat: 41.278,
                         lng: -92.336,
@@ -221,11 +290,6 @@
                                 }
                             }
                         }
-
-                        //markers: {
-                        //    stnSites: {}
-                        //}
-
                     }
                 });//end angular.extend statement
                 ///////////////////////////////////////////////////////////////////////////////////////
