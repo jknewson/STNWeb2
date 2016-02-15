@@ -4,37 +4,37 @@
     var STNControllers = angular.module('STNControllers');
     //#region DIRECTIVES
     //print test
-    STNControllers.directive('print', ['$compile', function ($compile) {
-        return {
-            restrict: 'AEC',
-            link: function (scope, el, attrs) {
-                if (attrs.nopopup) {
-                    el.bind('click', function () {
-                        window.print();
-                    });
-                } else {
-                    el.bind('click', function () {
-                        var html = document.getElementById(attrs.print);
-                        var links = document.getElementsByTagName('link');
-                        var stylesheets = "";
-                        for (var i = 0; i < links.length; i++) {
-                            stylesheets = stylesheets + links[i].outerHTML;
-                        }
-                        var printarea = window.open('', '', '');
-                        printarea.document.write('<html><head><title></title>');
-                        printarea.document.write(stylesheets);
-                        printarea.document.write('<style>label {font-weight: 600;} *{font-size: medium;}</style></head><body>');
-                        printarea.document.write('<h2>Short Term Network Modeling</h2>');
-                        printarea.document.write(html.innerHTML);
-                        printarea.document.write('</body></html>');
-                        printarea.print();
-                        printarea.close();
+    //STNControllers.directive('print', ['$compile', function ($compile) {
+    //    return {
+    //        restrict: 'AEC',
+    //        link: function (scope, el, attrs) {
+    //            if (attrs.nopopup) {
+    //                el.bind('click', function () {
+    //                    window.print();
+    //                });
+    //            } else {
+    //                el.bind('click', function () {
+    //                    var html = document.getElementById(attrs.print);
+    //                    var links = document.getElementsByTagName('link');
+    //                    var stylesheets = "";
+    //                    for (var i = 0; i < links.length; i++) {
+    //                        stylesheets = stylesheets + links[i].outerHTML;
+    //                    }
+    //                    var printarea = window.open('', '', '');
+    //                    printarea.document.write('<html><head><title></title>');
+    //                    printarea.document.write(stylesheets);
+    //                    printarea.document.write('<style>label {font-weight: 600;} *{font-size: medium;}</style></head><body>');
+    //                    printarea.document.write('<h2>Short Term Network Modeling</h2>');
+    //                    printarea.document.write(html.innerHTML);
+    //                    printarea.document.write('</body></html>');
+    //                    printarea.print();
+    //                    printarea.close();
 
-                    });
-                }
-            }
-        };
-    }]);
+    //                });
+    //            }
+    //        }
+    //    };
+    //}]);
 
     //This directive allows us to pass a function in on an enter key to do what we want.
     STNControllers.directive('ngEnter', function () {
@@ -125,7 +125,7 @@
         };
     }]);
 
-    STNControllers.directive('sameAs', function ($parse) {
+    STNControllers.directive('sameAs', ['$parse', function ($parse) {
         return {
             require: 'ngModel',
             restrict: 'A',
@@ -140,7 +140,7 @@
                 });
             }
         };
-    });
+    }]);
 
     //make textarea height equal to content inside it (no scrollbars) http://stackoverflow.com/questions/17772260/textarea-auto-height
     STNControllers.directive('elastic', ['$timeout', function ($timeout) {

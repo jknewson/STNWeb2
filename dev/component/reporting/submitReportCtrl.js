@@ -4,10 +4,15 @@
     var STNControllers = angular.module('STNControllers');
     STNControllers.controller('submitReportCtrl', ['$scope', '$http', '$cookies', '$uibModal', '$state', 'CONTACT', 'REPORT', 
         function ($scope, $http, $cookies, $uibModal, $state, CONTACT, REPORT) {
-            //#make sure this clears except for if they care needing to complete a report
+            //#make sure this clears except for if they are needing to complete a report
             if ($scope.$parent.needToComplete !== true) {
                 $scope.$parent.newReport = {REPORT_DATE: new Date()};
             }
+            else {
+                //keeps it valid and tells it it's utc so it will convert proper local
+                $scope.newReport.REPORT_DATE = new Date($scope.newReport.REPORT_DATE);
+            }
+            $scope.status = { openContacts: false }; //if submit form invalid, open contacts to show required field
 
             //reset it here so form will clear when they leave and come back.
             $scope.$parent.needToComplete = false;
@@ -40,33 +45,35 @@
 
             //#region POST Report Contacts
             var postReportContacts = function (reportID) {
-                CONTACT.addReportContact({ contactTypeId: 1, reportId: reportID }, $scope.DeployStaff, function success(response1) {
-                    toastr.success("Deploy Staff Updated");
-                }, function error(errorResponse1) {
-                    alert("Error: " + errorResponse1.statusText);
-                }).$promise;
-                if ($scope.GenStaff !== undefined && $scope.GenStaff.LNAME !== undefined) {
+                if (!angular.equals({}, $scope.DeployStaff) && $scope.DeployStaff !== undefined) {
+                    CONTACT.addReportContact({ contactTypeId: 1, reportId: reportID }, $scope.DeployStaff, function success(response1) {
+                        toastr.success("Deploy Staff Updated");
+                    }, function error(errorResponse1) {
+                        alert("Error: " + errorResponse1.statusText);
+                    }).$promise;
+                }
+                if (!angular.equals({}, $scope.GenStaff) && $scope.GenStaff !== undefined) {
                     CONTACT.addReportContact({ contactTypeId: 2, reportId: reportID }, $scope.GenStaff, function success(response2) {
                         toastr.success("General Staff Updated");
                     }, function error(errorResponse2) {
                         alert("Error: " + errorResponse2.statusText);
                     }).$promise;
                 }
-                if ($scope.InlandStaff !== undefined && $scope.InlandStaff.LNAME !== undefined) {
+                if (!angular.equals({}, $scope.InlandStaff) && $scope.InlandStaff !== undefined) {
                     CONTACT.addReportContact({ contactTypeId: 3, reportId: reportID }, $scope.InlandStaff, function success(response3) {
                         toastr.success("Inland Staff Updated");
                     }, function error(errorResponse3) {
                         alert("Error: " + errorResponse3.statusText);
                     }).$promise;
                 }
-                if ($scope.CoastStaff !== undefined && $scope.CoastStaff.LNAME !== undefined) {
+                if (!angular.equals({}, $scope.CoastStaff) && $scope.CoastStaff !== undefined) {
                     CONTACT.addReportContact({ contactTypeId: 4, reportId: reportID }, $scope.CoastStaff, function success(response4) {
                         toastr.success("Coastal Staff Updated");
                     }, function error(errorResponse4) {
                         alert("Error: " + errorResponse4.statusText);
                     }).$promise;
                 }
-                if ($scope.WaterStaff !== undefined && $scope.WaterStaff.LNAME !== undefined) {
+                if (!angular.equals({}, $scope.WaterStaff) && $scope.WaterStaff !== undefined) {
                     CONTACT.addReportContact({ contactTypeId: 5, reportId: reportID }, $scope.WaterStaff, function success(response5) {
                         toastr.success("Water Staff Updated");
                     }, function error(errorResponse5) {
@@ -91,12 +98,7 @@
             //Post/Put the Report and Report Contacts. Called twice (from within Modal (incomplete) and outside (complete))
             var PostPutReportAndReportContacts = function () {
                 //POST or PUT
-                // just the date, no time
-                var dateNoTime = new Date($scope.newReport.REPORT_DATE);
-                $scope.newReport.REPORT_DATE = new Date(dateNoTime.setHours(0, 0, 0, 0));
-                //make sure 'GMT' is tacked on so it doesn't try to add hrs to make the already utc a utc in db
-                var i = $scope.newReport.REPORT_DATE.toString().indexOf('GMT') + 3;
-                $scope.newReport.REPORT_DATE = $scope.newReport.REPORT_DATE.toString().substring(0, i);
+                $scope.newReport.REPORT_DATE = $scope.newReport.REPORT_DATE.toDateString();
                 $http.defaults.headers.common.Authorization = 'Basic ' + $cookies.get('STNCreds');
                 $http.defaults.headers.common.Accept = 'application/json';
                 if ($scope.newReport.REPORTING_METRICS_ID !== undefined) {                    
@@ -125,6 +127,8 @@
                         if ($scope.newReport.COMPLETE == 1) {
                             removeIncomplete(); $scope.isCompleted = true;
                             $scope.newReport.EVENT_NAME = $scope.getEventName($scope.newReport.EVENT_ID);
+                        } else {
+                            $scope.memberIncompletes.push(response);
                         }
                         //then POST the ReportContacts
                         $scope.newReport.REPORTING_METRICS_ID = response.REPORTING_METRICS_ID;
@@ -207,37 +211,42 @@
 
             //save this report and it's contacts
             $scope.saveReport = function (valid) {
-                if (valid === false) {
-                    alert("All fields are required");
-                    angular.element("[name='" + $scope.fullReportForm.submit.$name + "']").find('.ng-invalid:visible:first').focus();
-                } else {
-                    //see if they checked the box to complete
-                    if ($scope.newReport.COMPLETE === undefined || $scope.newReport.COMPLETE === 0) {
-                        //modal confirming they want to save this without marking it complete
-                        var modalInstance = $uibModal.open({
-                            templateUrl: 'saveReportModal.html',
-                            controller: 'confirmReportModalCtrl',
-                            size: 'sm'
-                        });
-                        modalInstance.result.then(function () {
-                            //yes, post this as incomplete
-                            $scope.newReport.COMPLETE = 0;
-                            $scope.newReport.MEMBER_ID = $scope.MemberLoggedIn.MEMBER_ID;
-                            PostPutReportAndReportContacts();
-                        });//end modalInstance.result.then
-                    } else {
-                        //the report is complete, just post/put it                        
+                if ($scope.newReport.COMPLETE === undefined || $scope.newReport.COMPLETE === 0) {
+                    //don't worry if valid, just postput modal confirming they want to save this without marking it complete
+                    var modalInstance = $uibModal.open({
+                        templateUrl: 'saveReportModal.html',
+                        controller: 'confirmReportModalCtrl',
+                        size: 'sm'
+                    });
+                    modalInstance.result.then(function () {
+                        //yes, post this as incomplete
+                        $scope.newReport.COMPLETE = 0;
                         $scope.newReport.MEMBER_ID = $scope.MemberLoggedIn.MEMBER_ID;
                         PostPutReportAndReportContacts();
+                    });//end modalInstance.result.then
+                } else {
+                    //..COMPLETE is 1 .. check if valid
+                    if (valid) {
+                        //the report is complete and valid, just post/put it                        
+                        $scope.newReport.MEMBER_ID = $scope.MemberLoggedIn.MEMBER_ID;
+                        PostPutReportAndReportContacts();
+                    } else {
+                        //alert("All fields are required");
+                        $scope.status.openContacts = true;
+                        angular.element("[name='" + $scope.fullReportForm.submit.$name + "']").find('.ng-invalid:visible:first').focus();
                     }
-                }//end valid == true
+                }
             };
 
+            $scope.populateDeployer = function () {
+                $scope.DeployStaff = $scope.MemberLoggedIn;
+            };
             //incomplete report was clicked, go get it and the contacts for it
             $scope.getIncompleteReport = function () {
                 var reportId = this.ir.REPORTING_METRICS_ID;
                 REPORT.query({ id: reportId }, function success(response) {
                     $scope.newReport = response;
+                    $scope.newReport.REPORT_DATE = new Date($scope.newReport.REPORT_DATE);
                     $scope.fullReportForm.submit.$setDirty();
                     //get contacts 
                     getReportContacts(reportId);

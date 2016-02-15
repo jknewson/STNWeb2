@@ -10,58 +10,7 @@
                 conditions, and in some cases may fail to load when bandwidth is low.
             </p>
         </div>
-    </div>
-
-    <!--<div class="col-md-5 panel panel-default" style="padding:0;margin:1em;">
-        <div class="panel-heading">
-            <h3 class="panel-title">
-                First choose Event
-            </h3>
-        </div>
-        <div class="panel-body">
-            <div class="form-group">
-                <label class="col-md-3 control-label" for="EVENT">Event:</label>
-                <div class="col-md-9">
-                    <select class="form-control" id="EVENT_ID" name="EVENT_ID" ng-model="ChooseEvent.id"
-                            ng-change="EventChosen()" ng-options="e.EVENT_ID as e.EVENT_NAME for e in allEvents">
-                        <option value="">Choose an Event</option>
-                    </select>
-                </div>
-            </div>
-            <div ng-show="ShowEventCounts">
-                <div>There are: {{totInstrs}} Instruments for this event.</div>
-                <div> -- Deployed Instruments: {{depInstrs}}</div>
-                <div> -- Retrieved Instruments: {{retInstrs}}</div>
-                <div> -- Lost Instruments: {{lostInstrs}}</div>
-                <br />
-                <div>There are: {{totHWMs}} HWMs for this event.</div>
-                <br />
-                <div>There are: {{totPeople}} people in the field for this event.</div>
-            </div>
-        </div>
-    </div>-->
-
-    <!--<div class="col-md-5 panel panel-default pull-right" style="padding:0;margin:1em;">
-        <div class="panel-heading">
-            <h3 class="panel-title">
-                Then choose Collection Team
-            </h3>
-        </div>
-        <div class="panel-body">
-            <div class="form-group">
-                <div ng-show="teamsBack" id="teamHolder">
-                    <ul>
-                        <label><strong>Teams:</strong></label>
-                        <li style="list-style:none;" ng-repeat="t in CollectTeams">
-                            <input type="radio" ng-model="t.selected" ng-click="teamClick(t)" ng-value="{{t.COLLECT_TEAM_ID}}" />
-                            <span><a style="cursor:pointer" ng-click="showTeamMembers(t)">{{t.DESCRIPTION}}</a></span>
-                        </li>
-                    </ul>
-                </div>
-                <button ng-show="ShowEventCounts" class="btn btn-default" ng-click="AddNewTeam()">Add Team</button>
-            </div>
-        </div>
-    </div>-->
+    </div>    
 </div>
 
 <!-- Modal for Team Member Details -->

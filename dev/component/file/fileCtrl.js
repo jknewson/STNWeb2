@@ -4,18 +4,16 @@
 
     var STNControllers = angular.module('STNControllers');
 
-    STNControllers.controller('fileCtrl', ['$scope', '$cookies', '$location', '$state', '$http', '$uibModal', '$filter', '$timeout', 'thisSite', 'thisSiteFiles', 'allFileTypes', 'allAgencies', 'thisSiteSensors', 'thisSiteHWMs', 'FILE', 'DATA_FILE', 'MEMBER', 'SOURCE',
-        function ($scope, $cookies, $location, $state, $http, $uibModal, $filter, $timeout, thisSite, thisSiteFiles, allFileTypes, allAgencies, thisSiteSensors, thisSiteHWMs, FILE, DATA_FILE, MEMBER, SOURCE) {
+    STNControllers.controller('fileCtrl', ['$scope', '$cookies', '$location', '$state', '$http', 'Site_Files', '$uibModal', '$filter', '$timeout', 'thisSite', 'thisSiteFiles', 'allFileTypes', 'allAgencies', 'thisSiteSensors', 'thisSiteHWMs', 'FILE', 'DATA_FILE', 'MEMBER', 'SOURCE',
+        function ($scope, $cookies, $location, $state, $http, Site_Files, $uibModal, $filter, $timeout, thisSite, thisSiteFiles, allFileTypes, allAgencies, thisSiteSensors, thisSiteHWMs, FILE, DATA_FILE, MEMBER, SOURCE) {
             if ($cookies.get('STNCreds') === undefined || $cookies.get('STNCreds') === "") {
                 $scope.auth = false;
                 $location.path('/login');
             } else {                
-                //global vars
-                $scope.fileCount = { total: thisSiteFiles.length };
+                //$scope.fileCount = { total: thisSiteFiles.length };                
                 $scope.siteHWMs = thisSiteHWMs;
                 $scope.siteSensors = thisSiteSensors;
-                //include if HWM, Instrument, Data File or OP File for each
-               
+                //include if HWM, Instrument, Data File or OP File for each               
                 for (var sf = 0; sf < thisSiteFiles.length; sf++) {
                     var whatKindaFile = '';
                     if (thisSiteFiles[sf].HWM_ID > 0 && thisSiteFiles[sf].HWM_ID !== null) {
@@ -33,18 +31,18 @@
                     if (whatKindaFile === '') whatKindaFile = "Site File";
                     thisSiteFiles[sf].fileBelongsTo = whatKindaFile;
                 }
-                $scope.SiteFiles = thisSiteFiles;
-                //just those files that are images for the carousel
-                $scope.ImageFiles = $scope.SiteFiles.filter(function (imF) { return imF.FILETYPE_ID === 1; });
+                Site_Files.setAllSiteFiles(thisSiteFiles);
+                $scope.SiteFiles = Site_Files.getAllSiteFiles();
+                
                 // watch for the session event to change and update SITE FILES DO NOT HAVE AN EVENT
                 $scope.$watch(function () { return $cookies.get('SessionEventName'); }, function (newValue) {
                     $scope.sessionEventName = newValue !== undefined ? newValue : "All Events";
                     $scope.sessionEventExists = $scope.sessionEventName != "All Events" ? true : false;
                     if (newValue !== undefined) {
                         //keep all siteFiles, filter HWM, Instrument (DF files use Instrument event)
-                        $scope.SiteFiles = thisSiteFiles.filter(function (h) { return h.fileBelongsTo == 'Site File'; }); //keep all site files
-                        var hwmFiles = thisSiteFiles.filter(function (sfiles) { return sfiles.fileBelongsTo == 'HWM File';});
-                        var sensFiles = thisSiteFiles.filter(function (sfi) { return sfi.INSTRUMENT_ID > 0 && sfi.INSTRUMENT_ID !== null; });
+                        $scope.SiteFiles = Site_Files.getAllSiteFiles().filter(function (h) { return h.fileBelongsTo == 'Site File' || h.fileBelongsTo == 'Objective Point File'; });  //keep all site and op files
+                        var hwmFiles = Site_Files.getAllSiteFiles().filter(function (sfiles) { return sfiles.fileBelongsTo == 'HWM File'; }); // thisSiteFiles.filter(function (sfiles) { return sfiles.fileBelongsTo == 'HWM File';});
+                        var sensFiles = Site_Files.getAllSiteFiles().filter(function (sfi) { return sfi.INSTRUMENT_ID > 0 && sfi.INSTRUMENT_ID !== null; });// thisSiteFiles.filter(function (sfi) { return sfi.INSTRUMENT_ID > 0 && sfi.INSTRUMENT_ID !== null; });
                         //only show files for this event (go through hwm files and match eventid
                         for (var hf = 0; hf < hwmFiles.length; hf++) {
                             for (var hwm = 0; hwm < $scope.siteHWMs.length; hwm++) {
@@ -58,13 +56,9 @@
                                 if (sensFiles[sf].INSTRUMENT_ID == $scope.siteSensors[inst].Instrument.INSTRUMENT_ID && $scope.siteSensors[inst].Instrument.EVENT_ID == $cookies.get('SessionEventID'))
                                     $scope.SiteFiles.push(sensFiles[sf]);
                             }
-                        }
-                        $scope.ImageFiles = $scope.SiteFiles.filter(function (imF) { return imF.FILETYPE_ID === 1; });
-                        $scope.fileCount = { total: $scope.SiteFiles.length };
+                        }                                       
                     } else {
-                        $scope.SiteFiles = thisSiteFiles;
-                        $scope.ImageFiles = $scope.SiteFiles.filter(function (imF) { return imF.FILETYPE_ID === 1; });
-                        $scope.fileCount = { total: $scope.SiteFiles.length };
+                        $scope.SiteFiles = Site_Files.getAllSiteFiles();
                     }
                 });
 
@@ -72,14 +66,14 @@
                 $scope.showImageModal = function (image) {
                     var imageModal = $uibModal.open({
                         template: '<div class="modal-header"><h3 class="modal-title">Image File Preview</h3></div>' +
-                            '<div class="modal-body"><img ng-src="https://stntest.wim.usgs.gov/STNServices/Files/{{imageId}}/Item" /></div>' +
+                            '<div class="modal-body"><img ng-src="https://stntest.wim.usgs.gov/STNServices2/Files/{{imageId}}/Item" /></div>' +
                             '<div class="modal-footer"><button class="btn btn-primary" ng-enter="ok()" ng-click="ok()">OK</button></div>',
-                        controller: function ($scope, $uibModalInstance) {
+                        controller: ['$scope', '$uibModalInstance', function ($scope, $uibModalInstance) {
                             $scope.ok = function () {
                                 $uibModalInstance.close();
                             };
                             $scope.imageId = image;
-                        },
+                        }],
                         size: 'md'
                     });
                 };
@@ -87,8 +81,6 @@
                 //create/edit a file
                 $scope.showFileModal = function (FileClicked) {                    
                     var SindexClicked = $scope.SiteFiles.indexOf(FileClicked);
-                    var IindexClicked = $scope.ImageFiles.indexOf(FileClicked);
-                    
                     //populate all filetypes that create/edit file needs depending on what the file is attached to
                     $scope.siteFileTypes = allFileTypes.filter(function (ft) {
                         return ft.FILETYPE === 'Photo' || ft.FILETYPE === 'Historic Citation' || ft.FILETYPE === 'Field Sheets' ||
@@ -164,20 +156,19 @@
                         }
                     });
                     modalInstance.result.then(function (createdFile) {
-                        //is there a new op or just closed modal
+                        //is there a new file or just closed modal
                         if (createdFile[1] == 'created') {
                             $scope.SiteFiles.push(createdFile[0]);
-                            $scope.ImageFiles = $scope.SiteFiles.filter(function (imF) { return imF.FILETYPE_ID === 1; });
-                            $scope.fileCount.total = $scope.SiteFiles.length;
+                            Site_Files.setAllSiteFiles($scope.SiteFiles);
                         }
                         if (createdFile[1] == 'updated') {
                             //this is from edit -- refresh page?
                             $scope.SiteFiles[SindexClicked] = createdFile[0];
+                            Site_Files.setAllSiteFiles($scope.SiteFiles);
                         }
                         if (createdFile[1] == 'deleted') {
                             $scope.SiteFiles.splice(SindexClicked, 1); //remove from file List
-                            $scope.ImageFiles.splice(IindexClicked, 1); //remove from image file list (carousel)
-                            $scope.fileCount.total = $scope.SiteFiles.length;
+                            Site_Files.setAllSiteFiles($scope.SiteFiles);
                         }
                     });
                 };

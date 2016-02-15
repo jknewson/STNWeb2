@@ -31,11 +31,11 @@
 
         <div class="form-group">
             <label class="col-md-3 control-label" for="EVENT_START_DATE">Event Start Date:</label>
-            <div class="col-md-6">
+            <div class="col-md-3">
                 <div class="input-group">
-                    <input ng-show="loggedInRole == 'Admin'" class="form-control" id="EVENT_START_DATE" name="sd" ng-disabled="undetermined"
-                           type="text" uib-datepicker-popup="MMMM dd, yyyy" is-open="datepickrs.sd"
-                           ng-model-options="{ updateOn: 'blur' }" ng-change="SaveOnBlur(0)"
+                    <input readonly="readonly" ng-show="loggedInRole == 'Admin'" show-weeks="false" class="form-control" id="EVENT_START_DATE" name="sd" ng-disabled="undetermined"
+                           type="text" uib-datepicker-popup="MMM dd, yyyy" is-open="datepickrs.sd"
+                           ng-model-options="{ updateOn: 'blur' }" ng-change="SaveOnBlur(0)" style="background-color: white;cursor:auto"
                            ng-model="anEvent.EVENT_START_DATE" />
                     <span ng-show="loggedInRole == 'Admin'" class="input-group-btn">
                         <button class="btn btn-default" ng-click="open($event, 'sd')">
@@ -51,11 +51,11 @@
         <!-- Event End Date -->
         <div class="form-group">
             <label class="col-md-3 control-label" for="EVENT_END_DATE">Event End Date:</label>
-            <div class="col-md-6">
+            <div class="col-md-3">
                 <div>
                     <div class="input-group">
-                        <input ng-show="loggedInRole == 'Admin'" class="form-control" id="EVENT_END_DATE" name="ed" ng-disabled="undetermined"
-                               type="text" uib-datepicker-popup="MMMM dd, yyyy" is-open="datepickrs.ed"
+                        <input readonly="readonly" ng-show="loggedInRole == 'Admin'" show-weeks="false" class="form-control" id="EVENT_END_DATE" name="ed" ng-disabled="undetermined"
+                               type="text" uib-datepicker-popup="MMM dd, yyyy" is-open="datepickrs.ed" style="background-color: white;cursor:auto"
                                ng-model-options="{ updateOn: 'blur' }" ng-change="SaveOnBlur(0)"
                                ng-model="anEvent.EVENT_END_DATE" />
                         <span ng-show="loggedInRole == 'Admin'" class="input-group-btn">

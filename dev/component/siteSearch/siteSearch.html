@@ -118,7 +118,7 @@
             </thead>
             <tbody>
                 <tr ng-repeat="s in siteList | orderBy:sortingOrder:reverse">
-                    <td><a ui-sref="site.dashboard({id: s.siteID})">{{s.SITE_NO}}</a></td>
+                    <td><a ui-sref="site.dashboard({id: s.SITE_ID})">{{s.SITE_NO}}</a></td>
                     <td>{{s.Description}}</td>
                     <td>{{s.County}}</td>
                     <td>{{s.State}}</td>

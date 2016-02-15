@@ -10,7 +10,7 @@
 
     //#region $ccokies variables
     /*
-    * STNCreds, STNUsername, usersName, mID, usersRole, SessionEventID, SessionEventName, SessionTeaID, SessionTeamName
+    * STNCreds, STNUsername, usersName, mID, usersRole, SessionEventID, SessionEventName
     */
     //#endregion $cookies variables
 

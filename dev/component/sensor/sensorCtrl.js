@@ -3,8 +3,8 @@
 
     var STNControllers = angular.module('STNControllers');
 
-    STNControllers.controller('sensorCtrl', ['$scope', '$q', '$cookies', '$location', '$state', '$http', '$uibModal', '$filter', '$timeout', 'thisSite', 'thisSiteSensors', 'allSensorBrands', 'allDeployTypes', 'allSensorTypes', 'allSensDeps', 'allHousingTypes', 'allEvents', 'INSTRUMENT', 'INSTRUMENT_STATUS', 'SITE', 'MEMBER', 'DEPLOYMENT_TYPE', 'STATUS_TYPE', 'INST_COLL_CONDITION', 
-        function ($scope, $q, $cookies, $location, $state, $http, $uibModal, $filter, $timeout, thisSite, thisSiteSensors, allSensorBrands, allDeployTypes, allSensorTypes, allSensDeps, allHousingTypes, allEvents, INSTRUMENT, INSTRUMENT_STATUS, SITE, MEMBER, DEPLOYMENT_TYPE, STATUS_TYPE, INST_COLL_CONDITION) {
+    STNControllers.controller('sensorCtrl', ['$scope', '$q', '$cookies', '$location', '$state', '$http', '$uibModal', '$filter', '$timeout', 'thisSite', 'thisSiteSensors', 'allSensorBrands', 'allAgencies', 'allDeployTypes', 'allSensorTypes', 'allSensDeps', 'allHousingTypes', 'allEvents', 'allFileTypes', 'INSTRUMENT', 'INSTRUMENT_STATUS', 'SITE', 'MEMBER', 'DEPLOYMENT_TYPE', 'STATUS_TYPE', 'INST_COLL_CONDITION',
+        function ($scope, $q, $cookies, $location, $state, $http, $uibModal, $filter, $timeout, thisSite, thisSiteSensors, allSensorBrands, allAgencies, allDeployTypes, allSensorTypes, allSensDeps, allHousingTypes, allEvents, allFileTypes, INSTRUMENT, INSTRUMENT_STATUS, SITE, MEMBER, DEPLOYMENT_TYPE, STATUS_TYPE, INST_COLL_CONDITION) {
             if ($cookies.get('STNCreds') === undefined || $cookies.get('STNCreds') === "") {
                 $scope.auth = false;
                 $location.path('/login');
@@ -25,7 +25,12 @@
                 $scope.sensDepTypes = allSensDeps;
                 $scope.showProposed = false; //they want to add a proposed sensor, open options
                 $scope.SiteSensors = thisSiteSensors;
-
+                //to pass to the sensor modals for sensor files
+                var SensFileTypes = allFileTypes.filter(function (sft) {
+                    //Photo (1), Data (2), Historic (3), Field Sheets (4), Level Notes (5), Other (7), Link (8), Sketch (10)
+                    return sft.FILETYPE === 'Photo' || sft.FILETYPE === 'Data' || sft.FILETYPE === 'Historic Citation' || sft.FILETYPE === 'Field Sheets' || sft.FILETYPE === 'Level Notes' ||
+                       sft.FILETYPE === 'Other' || sft.FILETYPE === 'Link' || sft.FILETYPE === 'Sketch';
+                });
                 //show/hide proposed sensors to add
                 $scope.showHideProposed = function () {
                     $scope.showProposed = !$scope.showProposed;
@@ -142,7 +147,7 @@
 
                 //want to deploy a proposed sensor, edit a deployed sensor or create a new deployed sensor
                 $scope.showSensorModal = function (sensorClicked) {
-                    var passAllLists = [allSensorTypes, allSensorBrands, allHousingTypes, allSensDeps, allEvents];
+                    var passAllLists = [allSensorTypes, allSensorBrands, allHousingTypes, allSensDeps, allEvents, SensFileTypes];
                     var indexClicked = $scope.SiteSensors.indexOf(sensorClicked);
                     $(".page-loading").removeClass("hidden"); //loading...
                 
@@ -167,6 +172,9 @@
                             },
                             siteOPs: function () {
                                 return SITE.getSiteOPs({ id: thisSite.SITE_ID }).$promise;
+                            },
+                            agencyList: function () {
+                                return allAgencies;
                             },
                             allMembers: function () {
                                 $http.defaults.headers.common.Authorization = 'Basic ' + $cookies.get('STNCreds');

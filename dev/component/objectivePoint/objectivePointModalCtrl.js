@@ -2,8 +2,8 @@
     'use strict';
 
     var ModalControllers = angular.module('ModalControllers');
-    ModalControllers.controller('OPmodalCtrl', ['$scope', '$cookies', '$http', '$uibModalInstance', '$uibModal', 'allDropdowns', 'thisOP', 'thisOPControls', 'opSite', 'opFiles', 'agencyList', 'allMembers', 'OBJECTIVE_POINT', 'OP_CONTROL_IDENTIFIER', 'SOURCE', 'DATA_FILE',
-        function ($scope, $cookies, $http, $uibModalInstance, $uibModal, allDropdowns, thisOP, thisOPControls, opSite, opFiles, agencyList, allMembers, OBJECTIVE_POINT, OP_CONTROL_IDENTIFIER, SOURCE, DATA_FILE) {
+    ModalControllers.controller('OPmodalCtrl', ['$scope', '$cookies', '$http', '$uibModalInstance', '$uibModal', 'Site_Files', 'allDropdowns', 'thisOP', 'thisOPControls', 'opSite', 'agencyList', 'allMembers', 'OBJECTIVE_POINT', 'OP_CONTROL_IDENTIFIER', 'SOURCE', 'FILE',
+        function ($scope, $cookies, $http, $uibModalInstance, $uibModal, Site_Files, allDropdowns, thisOP, thisOPControls, opSite, agencyList, allMembers, OBJECTIVE_POINT, OP_CONTROL_IDENTIFIER, SOURCE, FILE) {
             //defaults for radio buttons
             //dropdowns
             $scope.OPTypeList = allDropdowns[0];
@@ -19,8 +19,9 @@
             $scope.addedIdentifiers = []; //holder for added Identifiers
             $scope.showControlIDinput = false; //initially hide the area containing added control Identifiers
             $scope.DMS = {}; //object for Deg Min Sec values
-            $scope.OPFiles = opFiles; //holder for op files added
-            $scope.opImageFiles = opFiles.filter(function (opf) { return opf.FILETYPE_ID === 1; }); //image files for carousel
+            $scope.allSFiles = Site_Files.getAllSiteFiles();
+            $scope.OPFiles = thisOP !== "empty" ? $scope.allSFiles.filter(function (sf) { return sf.OBJECTIVE_POINT_ID == thisOP.OBJECTIVE_POINT_ID; }) : [];// opFiles; //holder for op files added
+            $scope.opImageFiles = $scope.OPFiles.filter(function (opf) { return opf.FILETYPE_ID === 1; }); //image files for carousel
             $scope.showFileForm = false; //hidden form to add file to op
             //make uncertainty cleared and disabled when 'unquantified' is checked
             $scope.UnquantChecked = function () {
@@ -33,14 +34,14 @@
             $scope.showImageModal = function (image) {
                 var imageModal = $uibModal.open({
                     template: '<div class="modal-header"><h3 class="modal-title">Image File Preview</h3></div>' +
-                        '<div class="modal-body"><img ng-src="https://stntest.wim.usgs.gov/STNServices/Files/{{imageId}}/Item" /></div>' +
+                        '<div class="modal-body"><img ng-src="https://stntest.wim.usgs.gov/STNServices2/Files/{{imageId}}/Item" /></div>' +
                         '<div class="modal-footer"><button class="btn btn-primary" ng-enter="ok()" ng-click="ok()">OK</button></div>',
-                    controller: function ($scope, $uibModalInstance) {
+                    controller:['$scope', '$uibModalInstance', function ($scope, $uibModalInstance) {
                         $scope.ok = function () {
                             $uibModalInstance.close();
                         };
                         $scope.imageId = image;
-                    },
+                    }],
                     size: 'md'
                 });
             };
@@ -49,13 +50,13 @@
             $scope.showFile = function (file) {
                 $scope.fileTypes = $scope.fileTypeList;
                 $scope.agencies = agencyList;
-                $scope.existFileIndex = -1; $scope.existIMGFileIndex = -1;
+                $scope.existFileIndex = -1; $scope.existIMGFileIndex = -1; $scope.allSFileIndex = -1; //indexes for splice/change
                 $scope.aFile = {}; //holder for file
                 $scope.aSource = {}; //holder for file source
-                $scope.datafile = {}; //holder for file datafile
+                //OP will not have datafile     $scope.datafile = {}; //holder for file datafile
                 if (file !== 0) {
                     //edit op file
-                    $scope.existFileIndex = $scope.OPFiles.indexOf(file);
+                    $scope.existFileIndex = $scope.OPFiles.indexOf(file); $scope.allSFileIndex = $scope.allSFiles.indexOf(file);
                     $scope.existIMGFileIndex = $scope.opImageFiles.length > 0 ? $scope.opImageFiles.indexOf(file) : -1;
                     $scope.aFile = angular.copy(file);
                     $scope.aFile.FILE_DATE = new Date($scope.aFile.FILE_DATE); //date for validity of form on PUT
@@ -66,18 +67,6 @@
                             $scope.aSource.SOURCE_DATE = new Date($scope.aSource.SOURCE_DATE); //date for validity of form on put
                         });
                     }//end if source
-                    if (file.DATA_FILE_ID !== null) {
-                        DATA_FILE.query({ id: file.DATA_FILE_ID }).$promise.then(function (df) {
-                            $scope.datafile = df;
-                            $scope.datafile.COLLECT_DATE = new Date($scope.datafile.COLLECT_DATE); //date for validity of form on put
-                            $scope.datafile.GOOD_START = new Date($scope.datafile.GOOD_START); //date for validity of form on put
-                            $scope.datafile.GOOD_END = new Date($scope.datafile.GOOD_END); //date for validity of form on put
-                            $scope.timeZoneList = ['UTC', 'PST', 'MST', 'CST', 'EST'];
-                            var aProcessor = $scope.datafile.PROCESSOR_ID !== null ? allMembers.filter(function (amem) { return amem.MEMBER_ID == $scope.datafile.PROCESSOR_ID; })[0] : {};
-                            $scope.processor = aProcessor.FNAME !== undefined ? aProcessor.FNAME + ' ' + aProcessor.LNAME : '';
-                        });
-                    } //end if datafile
-
                 }//end existing file
                 else {
                     $scope.aFile.FILE_DATE = new Date();
@@ -91,7 +80,7 @@
             $scope.createFile = function (valid) {
                 if (valid) {
                     /*aFile.FILETYPE_ID, (pdo)aFile.FILE_URL, (pdo)aFile.FILE_DATE, (pdo)aFile.DESCRIPTION, (p)aFile.PHOTO_DIRECTION, (p)aFile.LATITUDE_DD, (p)aFile.LONGITUDE_DD,
-                     * (d)datafile.PROCESSOR_ID, (d)datafile.COLLECT_DATE, (d)datafile.GOOD_START, (d)datafile.GOOD_END, (d)datafile.TIME_ZONE, (d)datafile.ELEVATION_STATUS
+                     * OP WILL NOT HAVE DATAFILE:: (d)datafile.PROCESSOR_ID, (d)datafile.COLLECT_DATE, (d)datafile.GOOD_START, (d)datafile.GOOD_END, (d)datafile.TIME_ZONE, (d)datafile.ELEVATION_STATUS
                      * (po)aSource.FULLNAME, (po)aSource.AGENCY_ID, (po)aSource.SOURCE_DATE,  */
                     $http.defaults.headers.common.Authorization = 'Basic ' + $cookies.get('STNCreds');
                     $http.defaults.headers.common.Accept = 'application/json';
@@ -123,59 +112,15 @@
                             //now POST it (fileparts)
                             FILE.uploadFile(fd).$promise.then(function (fresponse) {
                                 toastr.success("File Uploaded");
+                                fresponse.fileBelongsTo = "Objective Point File";
                                 $scope.OPFiles.push(fresponse);
+                                $scope.allSFiles.push(fresponse);
+                                Site_Files.setAllSiteFiles($scope.allSFiles); //updates the file list on the sitedashboard
                                 if (fresponse.FILETYPE_ID === 1) $scope.opImageFiles.push(fresponse);
                                 $scope.showFileForm = false;
                             });
                         });//end source.save()
                     }//end if source
-                    if ($scope.datafile.GOOD_START !== null) {
-                        //determine timezone
-                        if ($scope.datafile.TIME_ZONE != "UTC") {
-                            //convert it
-                            var utcStartDateTime = new Date($scope.datafile.GOOD_START).toUTCString();
-                            var utcEndDateTime = new Date($scope.datafile.GOOD_END).toUTCString();
-                            $scope.datafile.GOOD_START = utcStartDateTime;
-                            $scope.datafile.GOOD_END = utcEndDateTime;
-                            $scope.datafile.TIME_ZONE = 'UTC';
-                        } else {
-                            //make sure 'GMT' is tacked on so it doesn't try to add hrs to make the already utc a utc in db
-                            var si = $scope.datafile.GOOD_START.toString().indexOf('GMT') + 3;
-                            var ei = $scope.datafile.GOOD_END.toString().indexOf('GMT') + 3;
-                            $scope.datafile.GOOD_START = $scope.datafile.GOOD_START.toString().substring(0, si);
-                            $scope.datafile.GOOD_END = $scope.datafile.GOOD_END.toString().substring(0, ei);
-                        }
-                        $scope.datafile.PROCESSOR_ID = $cookies.get('mID');
-                        DATA_FILE.save($scope.datafile).$promise.then(function (dfResonse) {
-                            //then POST fileParts (Services populate PATH)
-                            var fileParts = {
-                                FileEntity: {
-                                    FILETYPE_ID: $scope.aFile.FILETYPE_ID,
-                                    FILE_URL: $scope.aFile.FILE_URL,
-                                    FILE_DATE: $scope.aFile.FILE_DATE,
-                                    DESCRIPTION: $scope.aFile.DESCRIPTION,
-                                    SITE_ID: $scope.thisOPsite.SITE_ID,
-                                    DATA_FILE_ID: dfResonse.DATA_FILE_ID,
-                                    PHOTO_DIRECTION: $scope.aFile.PHOTO_DIRECTION,
-                                    LATITUDE_DD: $scope.aFile.LATITUDE_DD,
-                                    LONGITUDE_DD: $scope.aFile.LONGITUDE_DD,
-                                    OBJECTIVE_POINT_ID: $scope.OP.OBJECTIVE_POINT_ID
-                                },
-                                File: $scope.aFile.File
-                            };
-                            //need to put the fileParts into correct format for post
-                            var fd = new FormData();
-                            fd.append("FileEntity", JSON.stringify(fileParts.FileEntity));
-                            fd.append("File", fileParts.File);
-                            //now POST it (fileparts)
-                            FILE.uploadFile(fd).$promise.then(function (fresponse) {
-                                toastr.success("File Uploaded");
-                                $scope.OPFiles.push(fresponse);
-                                if (fresponse.FILETYPE_ID === 1) $scope.opImageFiles.push(fresponse);
-                                $scope.showFileForm = false;
-                            });
-                        });
-                    }
                 }//end valid
             };//end create()
 
@@ -192,36 +137,42 @@
                         SOURCE.update({ id: $scope.aSource.SOURCE_ID }, $scope.aSource).$promise.then(function () {
                             FILE.update({ id: $scope.aFile.FILE_ID }, $scope.aFile).$promise.then(function (fileResponse) {
                                 toastr.success("File Updated");
+                                fileResponse.fileBelongsTo = "Objective Point File";
                                 $scope.OPFiles[$scope.existFileIndex] = fileResponse;
+                                $scope.allSFiles[$scope.allSFileIndex] = fileResponse;
+                                Site_Files.setAllSiteFiles($scope.allSFiles); //updates the file list on the sitedashboard
                                 $scope.showFileForm = false;
                             });
                         });
-                    } else {
-                        //data file
-                        //check timezone and make sure date stays utc
-                        if ($scope.datafile.TIME_ZONE != "UTC") {
-                            //convert it
-                            var utcStartDateTime = new Date($scope.datafile.GOOD_START).toUTCString();
-                            var utcEndDateTime = new Date($scope.datafile.GOOD_END).toUTCString();
-                            $scope.datafile.GOOD_START = utcStartDateTime;
-                            $scope.datafile.GOOD_END = utcEndDateTime;
-                            $scope.datafile.TIME_ZONE = 'UTC';
-                        } else {
-                            //make sure 'GMT' is tacked on so it doesn't try to add hrs to make the already utc a utc in db
-                            var si = $scope.datafile.GOOD_START.toString().indexOf('GMT') + 3;
-                            var ei = $scope.datafile.GOOD_END.toString().indexOf('GMT') + 3;
-                            $scope.datafile.GOOD_START = $scope.datafile.GOOD_START.toString().substring(0, si);
-                            $scope.datafile.GOOD_END = $scope.datafile.GOOD_END.toString().substring(0, ei);
-                        }
+                    }
+                    //#region data file for sensor add file
+                    //else {
+                    //    //data file
+                    //    //check timezone and make sure date stays utc
+                    //    if ($scope.datafile.TIME_ZONE != "UTC") {
+                    //        //convert it
+                    //        var utcStartDateTime = new Date($scope.datafile.GOOD_START).toUTCString();
+                    //        var utcEndDateTime = new Date($scope.datafile.GOOD_END).toUTCString();
+                    //        $scope.datafile.GOOD_START = utcStartDateTime;
+                    //        $scope.datafile.GOOD_END = utcEndDateTime;
+                    //        $scope.datafile.TIME_ZONE = 'UTC';
+                    //    } else {
+                    //        //make sure 'GMT' is tacked on so it doesn't try to add hrs to make the already utc a utc in db
+                    //        var si = $scope.datafile.GOOD_START.toString().indexOf('GMT') + 3;
+                    //        var ei = $scope.datafile.GOOD_END.toString().indexOf('GMT') + 3;
+                    //        $scope.datafile.GOOD_START = $scope.datafile.GOOD_START.toString().substring(0, si);
+                    //        $scope.datafile.GOOD_END = $scope.datafile.GOOD_END.toString().substring(0, ei);
+                    //    }
 
-                        DATA_FILE.update({ id: $scope.datafile.DATA_FILE_ID }, $scope.datafile).$promise.then(function () {
-                            FILE.update({ id: $scope.aFile.FILE_ID }, $scope.aFile).$promise.then(function (fileResponse) {
-                                toastr.success("File Updated");
-                                $scope.OPFiles[$scope.existFileIndex] = fileResponse;
-                                $scope.showFileForm = false;
-                            });
-                        });
-                    } //end else (datafile)                    
+                    //    DATA_FILE.update({ id: $scope.datafile.DATA_FILE_ID }, $scope.datafile).$promise.then(function () {
+                    //        FILE.update({ id: $scope.aFile.FILE_ID }, $scope.aFile).$promise.then(function (fileResponse) {
+                    //            toastr.success("File Updated");
+                    //            $scope.OPFiles[$scope.existFileIndex] = fileResponse;
+                    //            $scope.showFileForm = false;
+                    //        });
+                    //    });
+                    //} //end else (datafile)     
+                    //#endregion data file for sensor add file
                 }//end valid
             };//end save()
 
@@ -245,8 +196,10 @@
                     $http.defaults.headers.common.Authorization = 'Basic ' + $cookies.get('STNCreds');
                     FILE.delete({ id: fileToRemove.FILE_ID }).$promise.then(function () {
                         toastr.success("File Removed");
-                        $scope.OPFiles.spice($scope.existFileIndex, 1);
+                        $scope.OPFiles.splice($scope.existFileIndex, 1);
+                        $scope.allSFiles.splice($scope.allSFileIndex, 1);
                         $scope.opImageFiles.splice($scope.existIMGFileIndex, 1);
+                        Site_Files.setAllSiteFiles($scope.allSFiles); //updates the file list on the sitedashboard
                         $scope.showFileForm = false;
                     }, function error(errorResponse) {
                         toastr.error("Error: " + errorResponse.statusText);
@@ -257,7 +210,7 @@
             $scope.cancelFile = function () {
                 $scope.aFile = {};
                 $scope.aSource = {};
-                $scope.datafile = {};
+              //  $scope.datafile = {};
                 $scope.showFileForm = false;
             };
             //#endregion FILE STUFF
@@ -290,14 +243,7 @@
                 if (thisOPControls.length > 0) {
                     $scope.addedIdentifiers = thisOPControls;
                     $scope.showControlIDinput = true;
-                }
-                //see if there's any OPFiles
-                OBJECTIVE_POINT.getOPFiles({ id: $scope.OP.OBJECTIVE_POINT_ID }, function success(response) {
-                    $scope.OPFiles = response;
-                }, function error(errorResponse) {
-                    toastr.error("Error getting OP files: " + errorResponse.statusText);
-                });
-
+                }               
                 //#endregion 
             } else {
                 //#region new OP 
@@ -407,14 +353,13 @@
             //just need an OBJECTIVE_POINT object to post/put
             var trimOP = function (op) {
                 var OBJ_PT = {
-                    OBJECTIVE_POINT_ID: op.OBJECTIVE_POINT_ID !== undefined ? op.OBJECTIVE_POINT_ID : 0,
                     NAME: op.NAME,
                     DESCRIPTION: op.DESCRIPTION,
                     ELEV_FT: op.ELEV_FT !== undefined ? op.ELEV_FT : null,
                     DATE_ESTABLISHED: op.DATE_ESTABLISHED,
                     OP_IS_DESTROYED: op.OP_IS_DESTROYED !== undefined ? op.OP_IS_DESTROYED : 0,
                     OP_NOTES: op.OP_NOTES !== undefined ? op.OP_NOTES : null,
-                    SITE_ID: op.SITE_ID,
+                    SITE_ID: $scope.thisOPsite.SITE_ID,
                     VDATUM_ID: op.VDATUM_ID !== undefined ? op.VDATUM_ID : 0,
                     LATITUDE_DD: op.LATITUDE_DD,
                     LONGITUDE_DD: op.LONGITUDE_DD,
@@ -423,7 +368,7 @@
                     VCOLLECT_METHOD_ID: op.VCOLLECT_METHOD_ID !== undefined ? op.VCOLLECT_METHOD_ID : 0,
                     OP_TYPE_ID: op.OP_TYPE_ID,
                     DATE_RECOVERED: op.DATE_RECOVERED !== undefined ? op.DATE_RECOVERED : null,
-                    UNCERTAINTY: op.UNCERTAINTY !== undefined ? op.UNCERTAINTY : null,
+                    UNCERTAINTY: op.UNCERTAINTY !== undefined && op.UNCERTAINTY !== "" ? op.UNCERTAINTY : null,
                     UNQUANTIFIED: op.UNQUANTIFIED !== undefined ? op.UNQUANTIFIED : null,
                     OP_QUALITY_ID: op.OP_QUALITY_ID !== undefined ? op.OP_QUALITY_ID : null,
                 };
@@ -432,7 +377,8 @@
 
             //cancel modal
             $scope.cancel = function () {
-                $uibModalInstance.dismiss('cancel');
+                $uibModalInstance.close();
+             //   $uibModalInstance.dismiss('cancel');
             };
 
             //fix default radios and lat/long
@@ -465,7 +411,7 @@
                     var createdOP = {};
                     //post
                     formatDefaults($scope.OP); //$scope.OP.FTorMETER, FTorCM, decDegORdms                               
-                    var OPtoPOST = trimOP($scope.OP); //make it an OBJECTIVE_POINT for saving
+                    var OPtoPOST = trimOP($scope.OP); //make it an OBJECTIVE_POINT for saving                    
 
                     OBJECTIVE_POINT.save(OPtoPOST, function success(response) {
                         toastr.success("Objective Point created");
@@ -524,6 +470,7 @@
                     //look at OP.FTorMETER ("ft"), OP.FTorCM ("ft"), and OP.decDegORdms ("dd"), make sure site_ID is on there and send it to trim before PUT                
                     formatDefaults($scope.OP); //$scope.OP.FTorMETER, FTorCM, decDegORdms
                     var OPtoPOST = trimOP($scope.OP);
+                    OPtoPOST.OBJECTIVE_POINT_ID = $scope.OP.OBJECTIVE_POINT_ID;                    
                     //$http.defaults.headers.common['X-HTTP-Method-Override'] = 'PUT';
                     OBJECTIVE_POINT.update({ id: OPtoPOST.OBJECTIVE_POINT_ID }, OPtoPOST, function success(response) {
                         toastr.success("Objective Point updated");

@@ -8,11 +8,11 @@
 
                     <div class="form-group col-md-12 required">
                         <label class="col-md-12 control-label req" for="REPORT_DATE">Date being reported:</label>
-                        <div ng-if="!isCompleted" class="col-md-6 input-group" style="padding-left:15px;padding-right:15px;">
-                            <input datepicker-append-to-body="true" class="form-control" id="REPORT_DATE" name="rd" type="text" uib-datepicker-popup="MMMM dd, yyyy"
-                                   is-open="datepickrs.rd" ng-model="newReport.REPORT_DATE" required />
+                        <div ng-if="!isCompleted" class="col-md-5 input-group" style="padding-left:15px;padding-right:15px;">
+                            <input readonly="readonly" datepicker-append-to-body="true" class="form-control" show-weeks="false" id="REPORT_DATE" name="rd" type="text" uib-datepicker-popup="MMMM dd, yyyy"
+                                   is-open="datepickrs.rd" style="background-color: white;cursor:auto" ng-model="newReport.REPORT_DATE" required />
                             <span class="input-group-btn">
-                                <button class="btn btn-default" ng-click="open($event, 'rd')">
+                                <button type="button" class="btn btn-default" ng-click="open($event, 'rd')">
                                     <i class="glyphicon glyphicon-calendar" />
                                 </button>
                             </span>
@@ -47,7 +47,7 @@
                 <div ng-hide="isCompleted" class="row">
                     <div style="margin:10px;">
                         <button type="button" class="btn btn-primary large" ng-click="populateYestTots(newReport.REPORT_DATE, newReport.EVENT_ID, newReport.STATE_ABBREV)">
-                            Populate Personnel, Instrumentation and Contacts for Yesterday (in the below sections)
+                            Start Report
                         </button>
                     </div>
                 </div>
@@ -80,11 +80,11 @@
                     </td>
                     <td>
                         <input ng-readonly="isCompleted" class="form-control" id="SW_empl" name="newReport.SW_FIELDPERS_NOTACCT"
-                               ng-model="newReport.SW_FIELDPERS_NOTACCT" type="text" numeric-only required />
+                               ng-model="newReport.SW_FIELDPERS_NOTACCT" type="text" numeric-only ng-required="newReport.COMPLETE == 1" />
                     </td>
                     <td>
                         <input ng-readonly="isCompleted" class="form-control" id="WQ_empl" name="newReport.WQ_FIELDPERS_NOTACCT"
-                               ng-model="newReport.WQ_FIELDPERS_NOTACCT" type="text" numeric-only required />
+                               ng-model="newReport.WQ_FIELDPERS_NOTACCT" type="text" numeric-only ng-required="newReport.COMPLETE == 1" />
                     </td>
                 </tr>
                 <tr>
@@ -96,11 +96,11 @@
                     </td>
                     <td>
                         <input ng-readonly="isCompleted" class="form-control" id="pInFieldYestSurf" name="newReport.SW_YEST_FIELDPERS"
-                               ng-model="newReport.SW_YEST_FIELDPERS" type="text" numeric-only required />
+                               ng-model="newReport.SW_YEST_FIELDPERS" type="text" numeric-only ng-required="newReport.COMPLETE == 1" />
                     </td>
                     <td>
                         <input ng-readonly="isCompleted" class="form-control" id="pInFieldYestWQ" name="newReport.WQ_YEST_FIELDPERS"
-                               ng-model="newReport.WQ_YEST_FIELDPERS" type="text" numeric-only required />
+                               ng-model="newReport.WQ_YEST_FIELDPERS" type="text" numeric-only ng-required="newReport.COMPLETE == 1" />
                     </td>
                 </tr>
                 <tr>
@@ -109,11 +109,11 @@
                     </td>
                     <td>
                         <input ng-readonly="isCompleted" class="form-control" id="pInFieldTodaySurf" name="newReport.SW_TOD_FIELDPERS"
-                               ng-model="newReport.SW_TOD_FIELDPERS" type="text" numeric-only required />
+                               ng-model="newReport.SW_TOD_FIELDPERS" type="text" numeric-only ng-required="newReport.COMPLETE == 1" />
                     </td>
                     <td>
                         <input ng-readonly="isCompleted" class="form-control" id="pInFieldTodayWQ" name="newReport.WQ_TOD_FIELDPERS"
-                               ng-model="newReport.WQ_TOD_FIELDPERS" type="text" numeric-only required />
+                               ng-model="newReport.WQ_TOD_FIELDPERS" type="text" numeric-only ng-required="newReport.COMPLETE == 1" />
                     </td>
                 </tr>
                 <tr>
@@ -122,11 +122,11 @@
                     </td>
                     <td>
                         <input ng-readonly="isCompleted" class="form-control" id="pInFieldTomorrowSurf" name="newReport.SW_TMW_FIELDPERS"
-                               ng-model="newReport.SW_TMW_FIELDPERS" type="text" numeric-only required />
+                               ng-model="newReport.SW_TMW_FIELDPERS" type="text" numeric-only ng-required="newReport.COMPLETE == 1" />
                     </td>
                     <td>
                         <input ng-readonly="isCompleted" class="form-control" id="pInFieldTomorrowWQ" name="newReport.WQ_TMW_FIELDPERS"
-                               ng-model="newReport.WQ_TMW_FIELDPERS" type="text" numeric-only required />
+                               ng-model="newReport.WQ_TMW_FIELDPERS" type="text" numeric-only ng-required="newReport.COMPLETE == 1" />
                     </td>
                 </tr>
                 <tr>
@@ -138,11 +138,11 @@
                     </td>
                     <td>
                         <input ng-readonly="isCompleted" class="form-control" id="pInOfficeYestSurf" name="newReport.SW_YEST_OFFICEPERS"
-                               ng-model="newReport.SW_YEST_OFFICEPERS" type="text" numeric-only required />
+                               ng-model="newReport.SW_YEST_OFFICEPERS" type="text" numeric-only ng-required="newReport.COMPLETE == 1" />
                     </td>
                     <td>
                         <input ng-readonly="isCompleted" class="form-control" id="pInOfficeYestWQ" name="newReport.WQ_YEST_OFFICEPERS"
-                               ng-model="newReport.WQ_YEST_OFFICEPERS" type="text" numeric-only required />
+                               ng-model="newReport.WQ_YEST_OFFICEPERS" type="text" numeric-only ng-required="newReport.COMPLETE == 1" />
                     </td>
                 </tr>
                 <tr>
@@ -151,11 +151,11 @@
                     </td>
                     <td>
                         <input ng-readonly="isCompleted" class="form-control" id="pInOfficeTodaySurf" name="newReport.SW_TOD_OFFICEPERS"
-                               ng-model="newReport.SW_TOD_OFFICEPERS" type="text" numeric-only required />
+                               ng-model="newReport.SW_TOD_OFFICEPERS" type="text" numeric-only ng-required="newReport.COMPLETE == 1" />
                     </td>
                     <td>
                         <input ng-readonly="isCompleted" class="form-control" id="pInOfficeTodayWQ" name="newReport.WQ_TOD_OFFICEPERS"
-                               ng-model="newReport.WQ_TOD_OFFICEPERS" type="text" numeric-only required />
+                               ng-model="newReport.WQ_TOD_OFFICEPERS" type="text" numeric-only ng-required="newReport.COMPLETE == 1" />
                     </td>
                 </tr>
                 <tr>
@@ -164,11 +164,11 @@
                     </td>
                     <td>
                         <input ng-readonly="isCompleted" class="form-control" id="pInOfficeTomorrowSurf" name="newReport.SW_TMW_OFFICEPERS"
-                               ng-model="newReport.SW_TMW_OFFICEPERS" type="text" numeric-only required />
+                               ng-model="newReport.SW_TMW_OFFICEPERS" type="text" numeric-only ng-required="newReport.COMPLETE == 1" />
                     </td>
                     <td>
                         <input ng-readonly="isCompleted" class="form-control" id="pInOfficeTomorrowWQ" name="newReport.WQ_TMW_OFFICEPERS"
-                               ng-model="newReport.WQ_TMW_OFFICEPERS" type="text" numeric-only required />
+                               ng-model="newReport.WQ_TMW_OFFICEPERS" type="text" numeric-only ng-required="newReport.COMPLETE == 1" />
 
                     </td>
                 </tr>
@@ -181,11 +181,11 @@
                     </td>
                     <td>
                         <input ng-readonly="isCompleted" class="form-control" id="trNcarsSurf" name="newReport.SW_AUTOS_DEPL"
-                               ng-model="newReport.SW_AUTOS_DEPL" type="text" numeric-only required />
+                               ng-model="newReport.SW_AUTOS_DEPL" type="text" numeric-only ng-required="newReport.COMPLETE == 1" />
                     </td>
                     <td>
                         <input ng-readonly="isCompleted" class="form-control" id="trNcarsWQ" name="newReport.WQ_AUTOS_DEPL"
-                               ng-model="newReport.WQ_AUTOS_DEPL" type="text" numeric-only required />
+                               ng-model="newReport.WQ_AUTOS_DEPL" type="text" numeric-only ng-required="newReport.COMPLETE == 1" />
                     </td>
                 </tr>
                 <tr>
@@ -194,11 +194,11 @@
                     </td>
                     <td>
                         <input ng-readonly="isCompleted" class="form-control" id="boatsSurf" name="newReport.SW_BOATS_DEPL"
-                               ng-model="newReport.SW_BOATS_DEPL" type="text" numeric-only required />
+                               ng-model="newReport.SW_BOATS_DEPL" type="text" numeric-only ng-required="newReport.COMPLETE == 1" />
                     </td>
                     <td>
                         <input ng-readonly="isCompleted" class="form-control" id="boatsWQ" name="newReport.WQ_BOATS_DEPL"
-                               ng-model="newReport.WQ_BOATS_DEPL" type="text" numeric-only required />
+                               ng-model="newReport.WQ_BOATS_DEPL" type="text" numeric-only ng-required="newReport.COMPLETE == 1" />
                     </td>
                 </tr>
                 <tr>
@@ -207,11 +207,11 @@
                     </td>
                     <td>
                         <input ng-readonly="isCompleted" class="form-control" id="otherVehSurf" name="newReport.SW_OTHER_DEPL"
-                               ng-model="newReport.SW_OTHER_DEPL" type="text" numeric-only required />
+                               ng-model="newReport.SW_OTHER_DEPL" type="text" numeric-only ng-required="newReport.COMPLETE == 1" />
                     </td>
                     <td>
                         <input ng-readonly="isCompleted" class="form-control" id="otherVehWQ" name="newReport.WQ_OTHER_DEPL"
-                               ng-model="newReport.WQ_OTHER_DEPL" type="text" numeric-only required />
+                               ng-model="newReport.WQ_OTHER_DEPL" type="text" numeric-only ng-required="newReport.COMPLETE == 1" />
                     </td>
                 </tr>
             </table>
@@ -228,7 +228,7 @@
                     </td>
                     <td colspan="2" class="col-md-3">
                         <input ng-readonly="isCompleted" class="form-control" id="gageVisits" name="newReport.GAGE_VISIT"
-                               ng-model="newReport.GAGE_VISIT" type="text" numeric-only required />
+                               ng-model="newReport.GAGE_VISIT" type="text" numeric-only ng-required="newReport.COMPLETE == 1" />
                     </td>
                 </tr>
                 <tr>
@@ -237,7 +237,7 @@
                     </td>
                     <td colspan="2">
                         <input ng-readonly="isCompleted" class="form-control" id="gagesDown" name="newReport.GAGE_DOWN"
-                               ng-model="newReport.GAGE_DOWN" type="text" numeric-only required />
+                               ng-model="newReport.GAGE_DOWN" type="text" numeric-only ng-required="newReport.COMPLETE == 1" />
                     </td>
                 </tr>
                 <tr>
@@ -249,7 +249,7 @@
                     </td>
                     <td colspan="2">
                         <input ng-readonly="isCompleted" class="form-control" id="dischMeasToDate" name="newReport.TOT_DISCHARGE_MEAS"
-                               ng-model="newReport.TOT_DISCHARGE_MEAS" type="text" numeric-only required />
+                               ng-model="newReport.TOT_DISCHARGE_MEAS" type="text" numeric-only ng-required="newReport.COMPLETE == 1" />
                     </td>
                 </tr>
                 <tr>
@@ -258,7 +258,7 @@
                     </td>
                     <td colspan="2">
                         <input ng-readonly="isCompleted" class="form-control" id="dischMeasPlanned" name="newReport.PLAN_DISCHARGE_MEAS"
-                               ng-model="newReport.PLAN_DISCHARGE_MEAS" type="text" numeric-only required />
+                               ng-model="newReport.PLAN_DISCHARGE_MEAS" type="text" numeric-only ng-required="newReport.COMPLETE == 1" />
                     </td>
                 </tr>
                 <tr>
@@ -270,7 +270,7 @@
                     </td>
                     <td colspan="2">
                         <input ng-readonly="isCompleted" class="form-control" id="chkMeasToDate" name="newReport.TOT_CHECK_MEAS"
-                               ng-model="newReport.TOT_CHECK_MEAS" type="text" numeric-only required />
+                               ng-model="newReport.TOT_CHECK_MEAS" type="text" numeric-only ng-required="newReport.COMPLETE == 1" />
                     </td>
                 </tr>
                 <tr>
@@ -279,7 +279,7 @@
                     </td>
                     <td colspan="2">
                         <input ng-readonly="isCompleted" class="form-control" id="chkMeasPlanned" name="newReport.PLAN_CHECK_MEAS"
-                               ng-model="newReport.PLAN_CHECK_MEAS" type="text" numeric-only required />
+                               ng-model="newReport.PLAN_CHECK_MEAS" type="text" numeric-only ng-required="newReport.COMPLETE == 1" />
                     </td>
                 </tr>
                 <tr>
@@ -288,7 +288,7 @@
                     </td>
                     <td colspan="2">
                         <input ng-readonly="isCompleted" class="form-control" id="indMeasPlan" name="newReport.PLAN_INDIRECT_MEAS"
-                               ng-model="newReport.PLAN_INDIRECT_MEAS" type="text" numeric-only required />
+                               ng-model="newReport.PLAN_INDIRECT_MEAS" type="text" numeric-only ng-required="newReport.COMPLETE == 1" />
                     </td>
                 </tr>
                 <tr>
@@ -297,7 +297,7 @@
                     </td>
                     <td colspan="2">
                         <input ng-readonly="isCompleted" class="form-control" id="rateExt" name="newReport.RATING_EXTENS"
-                               ng-model="newReport.RATING_EXTENS" type="text" numeric-only required />
+                               ng-model="newReport.RATING_EXTENS" type="text" numeric-only ng-required="newReport.COMPLETE == 1" />
                     </td>
                 </tr>
                 <tr>
@@ -306,7 +306,7 @@
                     </td>
                     <td colspan="2">
                         <input ng-readonly="isCompleted" class="form-control" id="peaks" name="newReport.GAGE_PEAK_RECORD"
-                               ng-model="newReport.GAGE_PEAK_RECORD" type="text" numeric-only required />
+                               ng-model="newReport.GAGE_PEAK_RECORD" type="text" numeric-only ng-required="newReport.COMPLETE == 1" />
                     </td>
                 </tr>
                 <tr>
@@ -318,7 +318,7 @@
                     </td>
                     <td colspan="2">
                         <input ng-readonly="isCompleted" class="form-control" id="rdgPlanned" name="newReport.PLAN_RAPDEPL_GAGE"
-                               ng-model="newReport.PLAN_RAPDEPL_GAGE" type="text" numeric-only required />
+                               ng-model="newReport.PLAN_RAPDEPL_GAGE" type="text" numeric-only ng-required="newReport.COMPLETE == 1" />
                     </td>
                 </tr>
                 <tr>
@@ -327,7 +327,7 @@
                     </td>
                     <td colspan="2">
                         <input class="form-control" id="rdgDeployed" name="newReport.DEP_RAPDEPL_GAGE" readonly="readonly"
-                               ng-model="newReport.DEP_RAPDEPL_GAGE" type="text" numeric-only required />
+                               ng-model="newReport.DEP_RAPDEPL_GAGE" type="text" numeric-only ng-required="newReport.COMPLETE == 1" />
                     </td>
                 </tr>
                 <tr>
@@ -336,7 +336,7 @@
                     </td>
                     <td colspan="2">
                         <input class="form-control" id="rdgRecovered" name="newReport.REC_RAPDEPL_GAGE" readonly="readonly"
-                               ng-model="newReport.REC_RAPDEPL_GAGE" type="text" numeric-only required />
+                               ng-model="newReport.REC_RAPDEPL_GAGE" type="text" numeric-only ng-required="newReport.COMPLETE == 1" />
                     </td>
                 </tr>
                 <tr>
@@ -345,7 +345,7 @@
                     </td>
                     <td colspan="2">
                         <input class="form-control" id="rdgLost" name="newReport.LOST_RAPDEPL_GAGE" readonly="readonly"
-                               ng-model="newReport.LOST_RAPDEPL_GAGE" type="text" numeric-only required />
+                               ng-model="newReport.LOST_RAPDEPL_GAGE" type="text" numeric-only ng-required="newReport.COMPLETE == 1" />
                     </td>
                 </tr>
                 <tr>
@@ -357,7 +357,7 @@
                     </td>
                     <td colspan="2">
                         <input ng-readonly="isCompleted" class="form-control" id="wlsPlanned" name="newReport.PLAN_WTRLEV_SENSOR"
-                               ng-model="newReport.PLAN_WTRLEV_SENSOR" type="text" numeric-only required />
+                               ng-model="newReport.PLAN_WTRLEV_SENSOR" type="text" numeric-only ng-required="newReport.COMPLETE == 1" />
                     </td>
                 </tr>
                 <tr>
@@ -366,7 +366,7 @@
                     </td>
                     <td colspan="2">
                         <input class="form-control" id="wlsDeployed" name="newReport.DEP_WTRLEV_SENSOR" readonly="readonly"
-                               ng-model="newReport.DEP_WTRLEV_SENSOR" type="text" numeric-only required />
+                               ng-model="newReport.DEP_WTRLEV_SENSOR" type="text" numeric-only ng-required="newReport.COMPLETE == 1" />
                     </td>
                 </tr>
                 <tr>
@@ -375,7 +375,7 @@
                     </td>
                     <td colspan="2">
                         <input class="form-control" id="wlsRecovered" name="newReport.REC_WTRLEV_SENSOR" readonly="readonly"
-                               ng-model="newReport.REC_WTRLEV_SENSOR" type="text" numeric-only required />
+                               ng-model="newReport.REC_WTRLEV_SENSOR" type="text" numeric-only ng-required="newReport.COMPLETE == 1" />
                     </td>
                 </tr>
                 <tr>
@@ -384,7 +384,7 @@
                     </td>
                     <td colspan="2">
                         <input class="form-control" id="wlsLost" name="newReport.LOST_WTRLEV_SENSOR" readonly="readonly"
-                               ng-model="newReport.LOST_WTRLEV_SENSOR" type="text" numeric-only required />
+                               ng-model="newReport.LOST_WTRLEV_SENSOR" type="text" numeric-only ng-required="newReport.COMPLETE == 1" />
                     </td>
                 </tr>
                 <tr>
@@ -396,7 +396,7 @@
                     </td>
                     <td colspan="2">
                         <input ng-readonly="isCompleted" class="form-control" id="wsPlanned" name="newReport.PLAN_WV_SENS"
-                               ng-model="newReport.PLAN_WV_SENS" type="text" numeric-only required />
+                               ng-model="newReport.PLAN_WV_SENS" type="text" numeric-only ng-required="newReport.COMPLETE == 1" />
                     </td>
                 </tr>
                 <tr>
@@ -405,7 +405,7 @@
                     </td>
                     <td colspan="2">
                         <input class="form-control" id="wsDeployed" name="newReport.DEP_WV_SENS" readonly="readonly"
-                               ng-model="newReport.DEP_WV_SENS" type="text" numeric-only required />
+                               ng-model="newReport.DEP_WV_SENS" type="text" numeric-only ng-required="newReport.COMPLETE == 1" />
                     </td>
                 </tr>
                 <tr>
@@ -414,7 +414,7 @@
                     </td>
                     <td colspan="2">
                         <input class="form-control" id="wsRecovered" name="newReport.REC_WV_SENS" readonly="readonly"
-                               ng-model="newReport.REC_WV_SENS" type="text" numeric-only required />
+                               ng-model="newReport.REC_WV_SENS" type="text" numeric-only ng-required="newReport.COMPLETE == 1" />
                     </td>
                 </tr>
                 <tr>
@@ -423,7 +423,7 @@
                     </td>
                     <td colspan="2">
                         <input class="form-control" id="wsLost" name="newReport.LOST_WV_SENS" readonly="readonly"
-                               ng-model="newReport.LOST_WV_SENS" type="text" numeric-only required />
+                               ng-model="newReport.LOST_WV_SENS" type="text" numeric-only ng-required="newReport.COMPLETE == 1" />
                     </td>
                 </tr>
                 <tr>
@@ -435,7 +435,7 @@
                     </td>
                     <td colspan="2">
                         <input ng-readonly="isCompleted" class="form-control" id="barPlanned" name="newReport.PLAN_BAROMETRIC"
-                               ng-model="newReport.PLAN_BAROMETRIC" type="text" numeric-only required />
+                               ng-model="newReport.PLAN_BAROMETRIC" type="text" numeric-only ng-required="newReport.COMPLETE == 1" />
                     </td>
                 </tr>
                 <tr>
@@ -444,7 +444,7 @@
                     </td>
                     <td colspan="2">
                         <input class="form-control" id="barDeployed" name="newReport.DEP_BAROMETRIC" readonly="readonly"
-                               ng-model="newReport.DEP_BAROMETRIC" type="text" numeric-only required />
+                               ng-model="newReport.DEP_BAROMETRIC" type="text" numeric-only ng-required="newReport.COMPLETE == 1" />
                     </td>
                 </tr>
                 <tr>
@@ -453,7 +453,7 @@
                     </td>
                     <td colspan="2">
                         <input class="form-control" id="barRecovered" name="newReport.REC_BAROMETRIC" readonly="readonly"
-                               ng-model="newReport.REC_BAROMETRIC" type="text" numeric-only required />
+                               ng-model="newReport.REC_BAROMETRIC" type="text" numeric-only ng-required="newReport.COMPLETE == 1" />
                     </td>
                 </tr>
                 <tr>
@@ -462,7 +462,7 @@
                     </td>
                     <td colspan="2">
                         <input class="form-control" id="barLost" name="newReport.LOST_BAROMETRIC" readonly="readonly"
-                               ng-model="newReport.LOST_BAROMETRIC" type="text" numeric-only required />
+                               ng-model="newReport.LOST_BAROMETRIC" type="text" numeric-only ng-required="newReport.COMPLETE == 1" />
                     </td>
                 </tr>
                 <tr>
@@ -474,7 +474,7 @@
                     </td>
                     <td colspan="2">
                         <input ng-readonly="isCompleted" class="form-control" id="msPlanned" name="newReport.PLAN_METEOROLOGICAL"
-                               ng-model="newReport.PLAN_METEOROLOGICAL" type="text" numeric-only required />
+                               ng-model="newReport.PLAN_METEOROLOGICAL" type="text" numeric-only ng-required="newReport.COMPLETE == 1" />
                     </td>
                 </tr>
                 <tr>
@@ -483,7 +483,7 @@
                     </td>
                     <td colspan="2">
                         <input class="form-control" id="msDeployed" name="newReport.DEP_METEOROLOGICAL" readonly="readonly"
-                               ng-model="newReport.DEP_METEOROLOGICAL" type="text" numeric-only required />
+                               ng-model="newReport.DEP_METEOROLOGICAL" type="text" numeric-only ng-required="newreport.complete == 1" />
                     </td>
                 </tr>
                 <tr>
@@ -492,7 +492,7 @@
                     </td>
                     <td colspan="2">
                         <input class="form-control" id="msRecovered" name="newReport.REC_METEOROLOGICAL" readonly="readonly"
-                               ng-model="newReport.REC_METEOROLOGICAL" type="text" numeric-only required />
+                               ng-model="newReport.REC_METEOROLOGICAL" type="text" numeric-only ng-required="newReport.COMPLETE == 1" />
                     </td>
                 </tr>
                 <tr>
@@ -501,7 +501,7 @@
                     </td>
                     <td colspan="2">
                         <input class="form-control" id="msLost" name="newReport.LOST_METEOROLOGICAL" readonly="readonly"
-                               ng-model="newReport.LOST_METEOROLOGICAL" type="text" numeric-only required />
+                               ng-model="newReport.LOST_METEOROLOGICAL" type="text" numeric-only ng-required="newReport.COMPLETE == 1" />
                     </td>
                 </tr>
                 <tr>
@@ -513,7 +513,7 @@
                     </td>
                     <td colspan="2">
                         <input class="form-control" id="hwmFlagged" name="newReport.HWM_FLAGGED" readonly="readonly"
-                               ng-model="newReport.HWM_FLAGGED" type="text" numeric-only required />
+                               ng-model="newReport.HWM_FLAGGED" type="text" numeric-only ng-required="newReport.COMPLETE == 1" />
                     </td>
                 </tr>
                 <tr>
@@ -522,7 +522,7 @@
                     </td>
                     <td colspan="2">
                         <input class="form-control" id="hwmCollected" name="newReport.HWM_COLLECTED" readonly="readonly"
-                               ng-model="newReport.HWM_COLLECTED" type="text" numeric-only required />
+                               ng-model="newReport.HWM_COLLECTED" type="text" numeric-only ng-required="newReport.COMPLETE == 1" />
                     </td>
                 </tr>
 
@@ -532,7 +532,7 @@
                     </td>
                     <td colspan="2">
                         <input ng-readonly="isCompleted" class="form-control" id="qwGageVisit" name="newReport.QW_GAGE_VISIT"
-                               ng-model="newReport.QW_GAGE_VISIT" type="text" numeric-only required />
+                               ng-model="newReport.QW_GAGE_VISIT" type="text" numeric-only ng-required="newReport.COMPLETE == 1" />
                     </td>
                 </tr>
                 <tr>
@@ -541,7 +541,7 @@
                     </td>
                     <td colspan="2">
                         <input ng-readonly="isCompleted" class="form-control" id="contQwGageVisit" name="newReport.QW_CONT_GAGEVISIT"
-                               ng-model="newReport.QW_CONT_GAGEVISIT" type="text" numeric-only required />
+                               ng-model="newReport.QW_CONT_GAGEVISIT" type="text" numeric-only ng-required="newReport.COMPLETE == 1" />
                     </td>
                 </tr>
                 <tr>
@@ -550,7 +550,7 @@
                     </td>
                     <td colspan="2">
                         <input ng-readonly="isCompleted" class="form-control" id="qwGagesDown" name="newReport.QW_GAGE_DOWN"
-                               ng-model="newReport.QW_GAGE_DOWN" type="text" numeric-only required />
+                               ng-model="newReport.QW_GAGE_DOWN" type="text" numeric-only ng-required="newReport.COMPLETE == 1" />
                     </td>
                 </tr>
                 <tr>
@@ -559,7 +559,7 @@
                     </td>
                     <td colspan="2">
                         <input ng-readonly="isCompleted" class="form-control" id="qwSamplesCol" name="newReport.QW_DISCR_SAMPLES"
-                               ng-model="newReport.QW_DISCR_SAMPLES" type="text" numeric-only required />
+                               ng-model="newReport.QW_DISCR_SAMPLES" type="text" numeric-only ng-required="newReport.COMPLETE == 1" />
                     </td>
                 </tr>
                 <tr>
@@ -568,7 +568,7 @@
                     </td>
                     <td colspan="2">
                         <input ng-readonly="isCompleted" class="form-control" id="sedSamplesCol" name="newReport.COLL_SEDSAMPLES"
-                               ng-model="newReport.COLL_SEDSAMPLES" type="text" numeric-only required />
+                               ng-model="newReport.COLL_SEDSAMPLES" type="text" numeric-only ng-required="newReport.COMPLETE == 1" />
                     </td>
                 </tr>
             </table>
@@ -583,7 +583,7 @@
         </uib-accordion-group>
 
         <!-- Section 5: Contacts -->
-        <uib-accordion-group heading="Section 5: Contact Information" is-disabled="disabled">
+        <uib-accordion-group heading="Section 5: Contact Information" is-disabled="disabled" is-open="status.openContacts">
             <div><b>Submitter</b></div>
             <div><span class="col-md-3">Name:</span><span>{{MemberLoggedIn.FNAME}} {{MemberLoggedIn.LNAME}}</span></div>
             <div><span class="col-md-3">Phone</span><span>{{MemberLoggedIn.PHONE}}</span></div>
@@ -594,26 +594,26 @@
             <h3>Event Contacts</h3>
 
             <!-- ------------------------- Deployed--------------------------------- -->
-            <div><b>Deployed Staff (required)</b></div>
+            <div><span style="padding-right:10px"><label>Deployed Staff (required)</label></span><a sref="#" style="cursor:pointer" ng-click="populateDeployer()">Same as submitter</a></div>
             <div class="col-sm-12" style="margin-bottom:15px;">
                 <div class="col-md-3 form-group required">
                     <span class="col-md-12 control-label req" for="FNAME">First Name:</span>
                     <div class="col-md-12">
-                        <input ng-readonly="isCompleted" class="form-control" id="D_FNAME" name="FNAME" type="text" ng-model="DeployStaff.FNAME" required />
+                        <input ng-readonly="isCompleted" class="form-control" id="D_FNAME" name="FNAME" type="text" ng-model="DeployStaff.FNAME" ng-required="newReport.COMPLETE == 1" />
                     </div>
                 </div>
 
                 <div class="col-md-3 form-group required">
                     <span class="col-md-12 control-label req" for="LNAME">Last Name:</span>
                     <div class="col-md-12">
-                        <input ng-readonly="isCompleted" class="form-control" id="D_LNAME" name="LNAME" type="text" ng-model="DeployStaff.LNAME" required />
+                        <input ng-readonly="isCompleted" class="form-control" id="D_LNAME" name="LNAME" type="text" ng-model="DeployStaff.LNAME" ng-required="newReport.COMPLETE == 1" />
                     </div>
                 </div>
 
                 <div class="col-md-4 form-group required">
                     <span class="col-md-12 control-label req" for="EMAIL">Email:</span>
                     <div class="col-md-12">
-                        <input ng-readonly="isCompleted" class="form-control" id="D_EMAIL" name="EMAIL" type="email" ng-model="DeployStaff.EMAIL" required />
+                        <input ng-readonly="isCompleted" class="form-control" id="D_EMAIL" name="EMAIL" type="email" ng-model="DeployStaff.EMAIL" ng-required="newReport.COMPLETE == 1" />
                     </div>
                 </div>
 
@@ -621,7 +621,7 @@
                     <span class="col-md-12 control-label req" for="PHONE">Phone:</span>
                     <div class="col-md-12">
                         <input ng-readonly="isCompleted" class="form-control" id="D_PHONE" name="PHONE"
-                               type="text" my-input-mask="{mask: '(999) 999-9999[ x99999]', greedy:false}" ng-model="DeployStaff.PHONE" required />
+                               type="text" my-input-mask="{mask: '(999) 999-9999[ x99999]', greedy:false}" ng-model="DeployStaff.PHONE" ng-required="newReport.COMPLETE == 1" />
                     </div>
                 </div>
 
@@ -801,7 +801,8 @@
 
         <div ng-hide="isCompleted">
             <input type="checkbox" name="COMPLETE" ng-model="newReport.COMPLETE" ng-true-value="'1'" ng-false-value="'0'" />
-            <span>Check if this Report is Complete. (If left unchecked, you may come back later to finish it)</span>
+            <span>Check if this Report is Complete. Incompleted reports will not be compiled for Generate Report tab.<br/>
+                (If left unchecked, you may come back later to finish it)</span>
         </div>
         <div ng-hide="isCompleted" class="form-group">
             <div class="col-md-4 col-md-offset-2">

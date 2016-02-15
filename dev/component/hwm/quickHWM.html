@@ -385,9 +385,9 @@
                         <!-- Date Established: -->
                         <div class="form-group required" ng-class="{'has-error':qhwmForm.quickHWM.DATE_ESTABLISHED.$invalid && qhwmForm.quickHWM.DATE_ESTABLISHED.$dirty}">
                             <label class="col-md-4 control-label req" for="DATE_ESTABLISHED">Date Established:</label>
-                            <div class="col-md-8 input-group" style="padding-right:14px;padding-left:14px">
-                                <input class="form-control" id="OP_DATE_ESTABLISHED" name="de" type="text" uib-datepicker-popup="MMM dd, yyyy"
-                                       is-open="datepickrs.de" ng-model="aOP.DATE_ESTABLISHED" required />
+                            <div class="col-md-6 input-group" style="padding-right:14px;padding-left:14px">
+                                <input readonly="readonly" class="form-control" id="OP_DATE_ESTABLISHED" name="de" type="text" uib-datepicker-popup="MMM dd, yyyy" datepicker-append-to-body="true"
+                                       show-weeks="false" style="background-color: white;cursor:auto" is-open="datepickrs.de" ng-model="aOP.DATE_ESTABLISHED" required />
                                 <span class="input-group-btn">
                                     <button class="btn btn-default" ng-click="open($event, 'de')">
                                         <i class="glyphicon glyphicon-calendar" />
@@ -511,9 +511,9 @@
                         <!-- Flagged Date: * -->
                         <div class="form-group required" ng-class="{'has-error':qhwmForm.quickHWM.FLAG_DATE.$invalid && qhwmForm.quickHWM.FLAG_DATE.$dirty}">
                             <label class="col-md-4 control-label req" for="FLAG_DATE">Flagged Date:</label>
-                            <div class="col-md-8 input-group" style="padding-right:14px;padding-left:14px">
-                                <input class="form-control" id="FLAG_DATE" name="fd" type="text" uib-datepicker-popup="MMM dd, yyyy"
-                                       is-open="datepickrs.fd" ng-model="aHWM.FLAG_DATE" required />
+                            <div class="col-md-6 input-group" style="padding-right:14px;padding-left:14px">
+                                <input readonly="readonly" class="form-control" id="FLAG_DATE" name="fd" type="text" uib-datepicker-popup="MMM dd, yyyy"
+                                       show-weeks="false" style="background-color: white;cursor:auto" is-open="datepickrs.fd" ng-model="aHWM.FLAG_DATE" required />
                                 <span class="input-group-btn">
                                     <button class="btn btn-default" ng-click="open($event, 'fd')">
                                         <i class="glyphicon glyphicon-calendar" />
@@ -525,9 +525,9 @@
                         <!-- Surveyed Date: -->
                         <div class="form-group">
                             <label class="col-md-4 control-label" for="SURVEY_DATE">Surveyed Date:</label>
-                            <div class="col-md-8 input-group" style="padding-right:14px;padding-left:14px">
-                                <input class="form-control" id="SURVEY_DATE" name="sd" type="text" uib-datepicker-popup="MMM dd, yyyy"
-                                       is-open="datepickrs.sd" ng-model="aHWM.SURVEY_DATE" />
+                            <div class="col-md-6 input-group" style="padding-right:14px;padding-left:14px">
+                                <input readonly="readonly" class="form-control" id="SURVEY_DATE" name="sd" type="text" uib-datepicker-popup="MMM dd, yyyy"
+                                       is-open="datepickrs.sd" show-weeks="false" style="background-color: white;cursor:auto" ng-model="aHWM.SURVEY_DATE" />
                                 <span class="input-group-btn">
                                     <button class="btn btn-default" ng-click="open($event, 'sd')">
                                         <i class="glyphicon glyphicon-calendar" />

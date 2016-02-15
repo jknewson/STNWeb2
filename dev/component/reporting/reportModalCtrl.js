@@ -12,7 +12,9 @@
             $scope.ReportView.inlandStaff = contacts.filter(function (d) { return d.TYPE == "Inland Flood"; })[0];
             $scope.ReportView.coastStaff = contacts.filter(function (d) { return d.TYPE == "Coastal Flood"; })[0];
             $scope.ReportView.waterStaff = contacts.filter(function (d) { return d.TYPE == "Water Quality"; })[0];
-
+            $scope.print = function () {
+                window.print();
+            };
             $scope.ok = function () {
                 $uibModalInstance.dismiss('cancel');
             };

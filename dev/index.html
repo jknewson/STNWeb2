@@ -25,13 +25,17 @@
     <!-- inject:css -->
     <link rel="stylesheet" href="css/app.css">
     <link rel="stylesheet" href="css/bootstrap-multiselect.css">
+    <link rel="stylesheet" href="css/bootstrap-table.css">
     <link rel="stylesheet" href="css/bootstrap-theme.css">
     <link rel="stylesheet" href="css/bootstrap-theme.min.css">
     <link rel="stylesheet" href="css/bootstrap.css">
     <link rel="stylesheet" href="css/bootstrap.min.css">
     <link rel="stylesheet" href="css/bootstrap_3.1.1.css">
+    <link rel="stylesheet" href="css/isteven-multi-select.css">
     <link rel="stylesheet" href="css/ng-tags-input.min.css">
     <link rel="stylesheet" href="css/select.css">
+    <link rel="stylesheet" href="css/toastr.css">
+    <link rel="stylesheet" href="css/xeditable.css">
     <!-- endinject -->
     <!-- bower:js -->
     <script src="bower_components/jquery.js"></script>
@@ -78,6 +82,7 @@
     <script src="component/site/siteModalCtrl.js"></script>
     <script src="component/site/siteCtrl.js"></script>
     <script src="component/settings/settingsCtrl.js"></script>
+    <script src="component/resources/resourcesCtrl.js"></script>
     <script src="component/sensor/sensorModalCtrl.js"></script>
     <script src="component/sensor/sensorCtrl.js"></script>
     <script src="component/resources/resourcesCtrl.js"></script>
@@ -88,17 +93,23 @@
     <script src="component/reporting/projectAlertModalCtrl.js"></script>
     <script src="component/reporting/confirmReportModalCtrl.js"></script>
     <script src="component/peak/peakCtrl.js"></script>
-    <script src="component/objectivePoint/ObjectivePointModalCtrl.js"></script>
+    <script src="component/objectivePoint/objectivePointModalCtrl.js"></script>
     <script src="component/objectivePoint/objectivePointCtrl.js"></script>
     <script src="component/member/memberInfoCtrl.js"></script>
     <script src="component/member/memberCtrl.js"></script>
     <script src="component/map/mapCtrl.js"></script>
+    <script src="component/logInOut/logInOutCtrl.js"></script>
     <script src="component/main/mainCtrl.js"></script>
     <script src="component/logInOut/LogInOutCtrl.js"></script>
     <script src="component/hwm/quickHWMCtrl.js"></script>
     <script src="component/hwm/hwmModalCtrl.js"></script>
     <script src="component/hwm/hwmCtrl.js"></script>
+    <script src="component/logInOut/logInOutCtrl.js"></script>
     <script src="component/home/homeCtrl.js"></script>
+    <script src="component/help/helpCtrl.js"></script>
+    <script src="component/file/fileUploadCtrl.js"></script>
+    <script src="component/file/fileModalCtrl.js"></script>
+    <script src="component/file/fileCtrl.js"></script>
     <script src="component/help/helpCtrl.js"></script>
     <script src="component/event/eventSessionModalCtrl.js"></script>
     <script src="component/event/eventSessionCtrl.js"></script>
@@ -218,7 +229,8 @@
                 <div class="form-group">
                     <label class="col-md-5 control-label">Events created on or after:</label>
                     <div class="col-md-6 input-group" style="padding-right:14px;padding-left:14px">
-                        <input class="form-control" name="ed" type="text" uib-datepicker-popup="MMM dd, yyyy" is-open="datepickrs.ed" ng-model="event.DATE" placeholder="No filter" />
+                        <input class="form-control" name="ed" type="text" uib-datepicker-popup="MMM dd, yyyy" is-open="datepickrs.ed"
+                               show-weeks="false" readonly="readonly" style="background-color: white;cursor:auto" ng-model="event.DATE" placeholder="No filter" />
                         <span class="input-group-btn">
                             <button class="btn btn-default" ng-click="open($event, 'ed')">
                                 <i class="glyphicon glyphicon-calendar" />
