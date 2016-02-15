@@ -309,3 +309,9 @@ a.disabled {
 .container {
     width:100%
 }
+
+.stnSiteIcon {
+    border-radius: 120px;
+    opacity: .75;
+    background-color: #0000FF;
+}

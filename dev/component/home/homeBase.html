@@ -12,3 +12,97 @@
         </div>
     </div>    
 </div>
+
+<!-- Modal for Team Member Details -->
+<script type="text/ng-template" id="TeamMembers.html">
+    <div class="modal-header">
+        <h3 class="modal-title">Team Members</h3>
+    </div>
+    <div class="modal-body">
+        <div ng-repeat="tm in TeamMemberList" class="panel panel-default">
+            <div class="panel-heading">MEMBER: {{tm.FNAME}} {{tm.LNAME}}</div>
+            <div class="panel-body">
+                <div class="col-md-12">
+                    <label class="col-md-5">User Name:</label>
+                    <span class="col-md-6">{{tm.USERNAME}}</span>
+                </div>
+                <div class="col-md-12">
+                    <label class="col-md-5">Agency:</label>
+                    <span class="col-md-7">{{tm.agency}}</span>
+                </div>
+                <div class="col-md-12">
+                    <label class="col-md-5">Role:</label>
+                    <span class="col-md-7">{{tm.role}}</span>
+                </div>
+                <div class="col-md-12">
+                    <label class="col-md-5">Phone:</label>
+                    <span class="col-md-7">{{tm.PHONE}}</span>
+                </div>
+                <div class="col-md-12">
+                    <label class="col-md-5">Email:</label>
+                    <span class="col-md-7">{{tm.EMAIL}}</span>
+                </div>
+                <div class="col-md-12">
+                    <label class="col-md-5">RSS Feed:</label>
+                    <span class="col-md-7">{{tm.RSSFEED}}</span>
+                </div>
+                <div class="col-md-12">
+                    <label class="col-md-5">Emergency Contact Name:</label>
+                    <span class="col-md-7">{{tm.EMERGENCY_CONTACT_NAME}}</span>
+                </div>
+                <div class="col-md-12">
+                    <label class="col-md-5">Emergency Contact Phone:</label>
+                    <span class="col-md-7">{{tm.EMERGENCY_CONTACT_PHONE}}</span>
+                </div>
+            </div>
+        </div>
+        <br clear="all" />
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-primary" ng-click="ok()">OK</button>
+    </div>
+</script>
+
+<!-- Modal for Creating New Team -->
+<script type="text/ng-template" id="NewTeamCreate.html">
+    <div class="modal-header">
+        <h3 class="modal-title">Create New Team</h3>
+    </div>
+
+    <div class="modal-body">
+        <form name="newCollectionTeam">
+            <div class="form-group">
+                <div class="form-group">
+                    <label class="col-md-4 control-label" for="PROJ_OBJECTIVES">Username(s) of the who you are with:</label>
+                    <div class="col-md-6">
+                        <div isteven-multi-select
+                             input-model="members"
+                             default-label="Who are you with?"
+                             output-model="newTeam.MEMBER_WITH"
+                             button-label="USERNAME"
+                             item-label="USERNAME"
+                             max-height="200px"
+                             min-search-length="1"
+                             tick-property="selected"
+                             helper-elements="filter"
+                             search-property="USERNAME">
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <br clear="all" />
+            <div class="form-group">
+                <label class="col-md-4 control-label req" for="TEAM_NAME">Team Name:</label>
+                <div class="col-md-6">
+                    <input class="form-control" ng-model="newTeam.TEAM_NAME" type="text" required />
+                </div>
+            </div>
+        </form><br clear="all" />
+    </div>
+
+    <div class="modal-footer">
+        <button class="btn btn-primary" ng-disabled="newCollectionTeam.$invalid" ng-click="CreateTeam()">Create Team</button>
+        <button class="btn btn-warning" ng-click="cancel()">Cancel</button>
+    </div>
+</script>
