@@ -3,9 +3,9 @@
 
     var STNControllers = angular.module('STNControllers');
 
-    STNControllers.controller('siteCtrl', ['$scope', '$rootScope', '$cookies', '$location', '$http', '$uibModal', '$filter', 'thisSite', 'thisSiteNetworkNames', 'thisSiteNetworkTypes', 'thisSiteHousings',
+    STNControllers.controller('siteCtrl', ['$scope', '$rootScope', '$cookies', '$location', '$http', '$uibModal', '$filter', 'thisSite', 'latlong', 'thisSiteNetworkNames', 'thisSiteNetworkTypes', 'thisSiteHousings',
         'SITE', 'MEMBER', 'allHorDatums', 'allHorCollMethods', 'allStates', 'allCounties', 'allDeployPriorities', 'allHousingTypes', 'allNetworkNames', 'allNetworkTypes', 'allDeployTypes', 'allSensDeps',
-        function ($scope, $rootScope, $cookies, $location, $http, $uibModal, $filter, thisSite, thisSiteNetworkNames, thisSiteNetworkTypes, thisSiteHousings, SITE, MEMBER, allHorDatums,
+        function ($scope, $rootScope, $cookies, $location, $http, $uibModal, $filter, thisSite, latlong, thisSiteNetworkNames, thisSiteNetworkTypes, thisSiteHousings, SITE, MEMBER, allHorDatums,
             allHorCollMethods, allStates, allCounties, allDeployPriorities, allHousingTypes, allNetworkNames, allNetworkTypes, allDeployTypes, allSensDeps) {
             if ($cookies.get('STNCreds') === undefined || $cookies.get('STNCreds') === "") {
                 $scope.auth = false;
@@ -13,6 +13,7 @@
             } else {
                 $rootScope.thisPage = "Site Dashboard";
                 $scope.aSite = {};
+                
                 $scope.status = {
                     mapOpen: false, siteOpen: true, opOpen: false, sensorOpen: false, hwmOpen: false, filesOpen: false, peakOpen: false
                 };
@@ -39,12 +40,16 @@
                                         var sHouseTypeModel = $scope.thisSiteHouseTypeModel.length > 0 ? $scope.thisSiteHouseTypeModel : [];
                                         var sNetNames = thisSiteNetworkNames !== undefined ? thisSiteNetworkNames : [];
                                         var sNetTypes = thisSiteNetworkTypes !== undefined ? thisSiteNetworkTypes : [];
-                                        var lo = $scope.landowner !== undefined ? $scope.landowner : {
-                                    };
+                                        var lo = $scope.landowner !== undefined ? $scope.landowner : { };
                                         var siteRelatedStuff = [$scope.aSite, origSiteHouses, sHouseTypeModel, sNetNames, sNetTypes, lo];
                                     return siteRelatedStuff;
+                                    }
+                                },
+                                latlong: function () {
+                                    if (latlong !== undefined) {
+                                        return latlong;
+                                    }
                                 }
-                            }
                         }
                     });
                     modalInstance.result.then(function (r) {
