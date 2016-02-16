@@ -18,7 +18,7 @@
                     $rootScope.sessionEvent = "Session Event: " + EventName + "."; 
                // $rootScope.sessionTeam = "";
                 $state.go('home');
-
+                
                 $scope.status = {
                     isopen: false
                 };
