@@ -8,6 +8,8 @@
 
 /web.config
 
+.idea
+
 # Build results
 [Dd]ebug/
 [Dd]ebugPublic/
