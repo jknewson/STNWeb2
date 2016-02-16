@@ -3,9 +3,9 @@
 
     var ModalControllers = angular.module('ModalControllers');
 
-    ModalControllers.controller('siteModalCtrl', ['$scope', '$cookies', '$q', '$location', '$state', '$http', '$timeout', '$uibModal', '$uibModalInstance', '$filter', 'allDropDownParts', 'thisSiteStuff', 
+    ModalControllers.controller('siteModalCtrl', ['$scope', '$cookies', '$q', '$location', '$state', '$http', '$timeout', '$uibModal', '$uibModalInstance', '$filter', 'allDropDownParts', 'latlong', 'thisSiteStuff', 
         'SITE', 'SITE_HOUSING', 'MEMBER', 'INSTRUMENT', 'INSTRUMENT_STATUS', 'LANDOWNER_CONTACT', 
-        function ($scope, $cookies, $q, $location, $state, $http, $timeout, $uibModal, $uibModalInstance, $filter, allDropDownParts, thisSiteStuff, SITE, SITE_HOUSING, 
+        function ($scope, $cookies, $q, $location, $state, $http, $timeout, $uibModal, $uibModalInstance, $filter, allDropDownParts, latlong, thisSiteStuff, SITE, SITE_HOUSING, 
             MEMBER, INSTRUMENT, INSTRUMENT_STATUS, LANDOWNER_CONTACT) {
             //dropdowns
             $scope.HorizontalDatumList = allDropDownParts[0];
@@ -19,11 +19,15 @@
             $scope.NetTypeList = allDropDownParts[7];
             $scope.ProposedSens = allDropDownParts[8];
             $scope.SensorDeployment = allDropDownParts[9];
-
+            
             //globals 
             $scope.houseDirty = false; $scope.netNameDirty = false; $scope.netTypeDirty = false;
             $scope.siteHouseTypesTable = [];
             $scope.aSite = {};
+            if (latlong !== undefined) {
+                $scope.aSite.LATITUDE_DD = latlong[0];
+                $scope.aSite.LONGITUDE_DD = latlong[1];
+            }
             $scope.aSite.decDegORdms = 'dd';
             $scope.DMS = {}; //holder of deg min sec values
             $scope.originalSiteHousings = [];

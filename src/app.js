@@ -609,8 +609,13 @@
 
                 //#region site (abstract)
                 .state("site", {
-                    url: "/Site/:id",
+                    url: "/Site/:id",// /:latitude/:longitude",
                     abstract: true,
+                    params: {
+                        id: null,
+                        latitude: {value: null, squash: true},
+                        longitude: {value: null, squash: true}
+                    },
                     templateUrl: "component/site/site.html",
                     authenticate: true,
                     controller: ['$scope', '$stateParams', function ($scope, $stateParams) {
@@ -622,6 +627,12 @@
                         thisSite: function (s, $stateParams) {
                             if ($stateParams.id > 0) {
                                 return s.query({ id: $stateParams.id }).$promise;
+                            }
+                        },
+                        latlong: function ($stateParams) {
+                            if ($stateParams.latitude) {
+                                var latlongarray = [$stateParams.latitude, $stateParams.longitude];
+                                return latlongarray;
                             }
                         },
                         thisSiteNetworkNames: function (s, $stateParams) {
