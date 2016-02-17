@@ -752,8 +752,8 @@
                 <div class="form-group required" ng-class="{'has-error':OPForm.DATE_ESTABLISHED.$invalid && OPForm.DATE_ESTABLISHED.$dirty}">
                     <label class="col-md-4 control-label req" for="DATE_ESTABLISHED">Date Established:</label>
                     <div class="col-md-3 input-group" style="padding-right:14px;padding-left:14px">
-                        <input class="form-control" name="de" type="text" uib-datepicker-popup="MMM dd, yyyy" readonly="readonly" show-weeks="false"
-                               style="background-color: white;cursor:auto" is-open="datepickrs.de" ng-model="OP.DATE_ESTABLISHED" required />
+                        <input class="form-control" name="de" type="text" uib-datepicker-popup="MMM dd, yyyy" disabled="disabled" show-weeks="false"
+                               is-open="datepickrs.de" ng-model="OP.DATE_ESTABLISHED" required />
                         <span class="input-group-btn">
                             <button class="btn btn-default" ng-click="open($event, 'de')">
                                 <i class="glyphicon glyphicon-calendar" />
@@ -766,8 +766,8 @@
                 <div class="form-group">
                     <label class="col-md-4 control-label" for="DATE_RECOVERED">Date Recovered:</label>
                     <div class="col-md-3 input-group" style="padding-right:14px;padding-left:14px">
-                        <input readonly="readonly" show-weeks="false" class="form-control" name="dr" type="text" uib-datepicker-popup="MMM dd, yyyy"
-                               style="background-color: white;cursor:auto" is-open="datepickrs.dr" ng-model="OP.DATE_RECOVERED" />
+                        <input disabled="disabled" show-weeks="false" class="form-control" name="dr" type="text" uib-datepicker-popup="MMM dd, yyyy"
+                               is-open="datepickrs.dr" ng-model="OP.DATE_RECOVERED" />
                         <span class="input-group-btn">
                             <button class="btn btn-default" ng-click="open($event, 'dr')">
                                 <i class="glyphicon glyphicon-calendar" />
@@ -893,8 +893,8 @@
                         <div ng-if="aFile.FILETYPE_ID === 1 || aFile.FILETYPE_ID  > 2" class="form-group required" ng-class="{'has-error':OPFILEForm.SOURCE_DATE.$invalid && OPFILEForm.SOURCE_DATE.$dirty}" style="margin:0;padding:0">
                             <label class="col-md-3 control-label req" for="SOURCE_DATE">Date Taken:</label>
                             <div class="col-md-3 input-group" style="padding-right:14px;padding-left:14px">
-                                <input class="form-control" name="sd" type="text" uib-datepicker-popup="MMM dd, yyyy" readonly="readonly" show-weeks="false"
-                                       style="background-color: white;cursor:auto" is-open="datepickrs.sd" ng-model="aSource.SOURCE_DATE" required />
+                                <input class="form-control" name="sd" type="text" uib-datepicker-popup="MMM dd, yyyy" disabled="disabled" show-weeks="false"
+                                       is-open="datepickrs.sd" ng-model="aSource.SOURCE_DATE" required />
                                 <span class="input-group-btn">
                                     <button class="btn btn-default" ng-click="open($event, 'sd')">
                                         <i class="glyphicon glyphicon-calendar" />
@@ -907,8 +907,8 @@
                         <div ng-if="aFile.FILETYPE_ID > 0" class="form-group required" ng-class="{'has-error':OPFILEForm.FILE_DATE.$invalid && OPFILEForm.FILE_DATE.$dirty}" style="margin:0;padding:0">
                             <label class="col-md-3 control-label req" for="FILE_DATE">Date Uploaded:</label>
                             <div class="col-md-3 input-group" style="padding-right:14px;padding-left:14px">
-                                <input class="form-control" name="fd" type="text" uib-datepicker-popup="MMM dd, yyyy" readonly="readonly" show-weeks="false"
-                                       style="background-color: white;cursor:auto" is-open="datepickrs.fd" ng-model="aFile.FILE_DATE" required />
+                                <input class="form-control" name="fd" type="text" uib-datepicker-popup="MMM dd, yyyy" disabled="disabled" show-weeks="false"
+                                       is-open="datepickrs.fd" ng-model="aFile.FILE_DATE" required />
                                 <span class="input-group-btn">
                                     <button class="btn btn-default" ng-click="open($event, 'fd')">
                                         <i class="glyphicon glyphicon-calendar" />
@@ -1271,8 +1271,8 @@
                 <div class="form-group required" ng-class="{'has-error':HWMForm.FLAG_DATE.$invalid && HWMForm.FLAG_DATE.$dirty}">
                     <label class="col-md-3 control-label req" for="FLAG_DATE">Flagged Date:</label>
                     <div class="col-md-3 input-group" style="padding-right:14px;padding-left:14px">
-                        <input readonly="readonly" show-weeks="false" class="form-control" id="FLAG_DATE" name="fd" type="text" uib-datepicker-popup="MMM dd, yyyy"
-                               style="background-color: white;cursor:auto" is-open="datepickrs.fd" ng-model="aHWM.FLAG_DATE" required />
+                        <input disabled="disabled" show-weeks="false" class="form-control" id="FLAG_DATE" name="fd" type="text" uib-datepicker-popup="MMM dd, yyyy"
+                               is-open="datepickrs.fd" ng-model="aHWM.FLAG_DATE" required />
                         <span class="input-group-btn">
                             <button class="btn btn-default" ng-click="open($event, 'fd')">
                                 <i class="glyphicon glyphicon-calendar" />
@@ -1285,8 +1285,8 @@
                 <div class="form-group" ng-class="{'has-error':HWMForm.SURVEY_DATE.$invalid && HWMForm.SURVEY_DATE.$dirty}">
                     <label class="col-md-3 control-label" for="SURVEY_DATE">Surveyed Date:</label>
                     <div class="col-md-3 input-group" style="padding-right:14px;padding-left:14px">
-                        <input readonly="readonly" show-weeks="false" class="form-control" id="SURVEY_DATE" name="sd" type="text" uib-datepicker-popup="MMM dd, yyyy"
-                               style="background-color: white;cursor:auto" is-open="datepickrs.sd" ng-model="aHWM.SURVEY_DATE" />
+                        <input disabled="disabled" show-weeks="false" class="form-control" id="SURVEY_DATE" name="sd" type="text" uib-datepicker-popup="MMM dd, yyyy"
+                               is-open="datepickrs.sd" ng-model="aHWM.SURVEY_DATE" />
                         <span class="input-group-btn">
                             <button class="btn btn-default" ng-click="open($event, 'sd')">
                                 <i class="glyphicon glyphicon-calendar" />
@@ -1454,8 +1454,8 @@
                         <div ng-if="aFile.FILETYPE_ID === 1 || aFile.FILETYPE_ID  > 2" class="form-group required" ng-class="{'has-error':HWMFILEForm.SOURCE_DATE.$invalid && HWMFILEForm.SOURCE_DATE.$dirty}" style="margin:0;padding:0">
                             <label class="col-md-3 control-label req" for="SOURCE_DATE">Date Taken:</label>
                             <div class="col-md-3 input-group" style="padding-right:14px;padding-left:14px">
-                                <input class="form-control" name="sd" type="text" uib-datepicker-popup="MMM dd, yyyy" readonly="readonly" show-weeks="false"
-                                       style="background-color: white;cursor:auto" is-open="datepickrs.sd" ng-model="aSource.SOURCE_DATE" required />
+                                <input class="form-control" name="sd" type="text" uib-datepicker-popup="MMM dd, yyyy" disabled="disabled" show-weeks="false"
+                                       is-open="datepickrs.sd" ng-model="aSource.SOURCE_DATE" required />
                                 <span class="input-group-btn">
                                     <button class="btn btn-default" ng-click="open($event, 'sd')">
                                         <i class="glyphicon glyphicon-calendar" />
@@ -1468,8 +1468,8 @@
                         <div ng-if="aFile.FILETYPE_ID > 0" class="form-group required" ng-class="{'has-error':HWMFILEForm.FILE_DATE.$invalid && HWMFILEForm.FILE_DATE.$dirty}" style="margin:0;padding:0">
                             <label class="col-md-3 control-label req" for="FILE_DATE">Date Uploaded:</label>
                             <div class="col-md-3 input-group" style="padding-right:14px;padding-left:14px">
-                                <input class="form-control" name="fd" type="text" uib-datepicker-popup="MMM dd, yyyy" readonly="readonly" show-weeks="false"
-                                       style="background-color: white;cursor:auto" is-open="datepickrs.fd" ng-model="aFile.FILE_DATE" required />
+                                <input class="form-control" name="fd" type="text" uib-datepicker-popup="MMM dd, yyyy" disabled="disabled" show-weeks="false"
+                                       is-open="datepickrs.fd" ng-model="aFile.FILE_DATE" required />
                                 <span class="input-group-btn">
                                     <button class="btn btn-default" ng-click="open($event, 'fd')">
                                         <i class="glyphicon glyphicon-calendar" />
@@ -1870,8 +1870,8 @@
                         <div ng-if="aFile.FILETYPE_ID === 2" class="form-group required" ng-class="{'has-error':DepSenFILEForm.COLLECT_DATE.$invalid && DepSenFILEForm.COLLECT_DATE.$dirty}" style="margin:0;padding:0">
                             <label class="col-md-4 control-label req" for="COLLECT_DATE">Date Collected/Processed:</label>
                             <div class="col-md-3 input-group" style="padding-right:14px;padding-left:14px">
-                                <input class="form-control" name="dfcd" type="text" uib-datepicker-popup="MMM dd, yyyy" readonly="readonly" show-weeks="false"
-                                       style="background-color: white;cursor:auto" is-open="datepickrs.dfcd" ng-model="datafile.COLLECT_DATE" required />
+                                <input class="form-control" name="dfcd" type="text" uib-datepicker-popup="MMM dd, yyyy" show-weeks="false"
+                                       disabled="disabled" is-open="datepickrs.dfcd" ng-model="datafile.COLLECT_DATE" required />
                                 <span class="input-group-btn">
                                     <button class="btn btn-default" type="button" ng-click="open($event, 'dfcd')">
                                         <i class="glyphicon glyphicon-calendar" />
@@ -1911,8 +1911,8 @@
                         <div ng-if="aFile.FILETYPE_ID === 1 || aFile.FILETYPE_ID  > 2" class="form-group required" ng-class="{'has-error':DepSenFILEForm.SOURCE_DATE.$invalid && DepSenFILEForm.SOURCE_DATE.$dirty}" style="margin:0;padding:0">
                             <label class="col-md-4 control-label req" for="SOURCE_DATE">Date Taken:</label>
                             <div class="col-md-3 input-group" style="padding-right:14px;padding-left:14px">
-                                <input class="form-control" name="sd" type="text" uib-datepicker-popup="MMM dd, yyyy" readonly="readonly" show-weeks="false"
-                                       style="background-color: white;cursor:auto" is-open="datepickrs.sd" ng-model="aSource.SOURCE_DATE" required />
+                                <input class="form-control" name="sd" type="text" uib-datepicker-popup="MMM dd, yyyy" disabled="disabled" show-weeks="false"
+                                       is-open="datepickrs.sd" ng-model="aSource.SOURCE_DATE" required />
                                 <span class="input-group-btn">
                                     <button class="btn btn-default" type="button" ng-click="open($event, 'sd')">
                                         <i class="glyphicon glyphicon-calendar" />
@@ -1925,8 +1925,8 @@
                         <div ng-if="aFile.FILETYPE_ID > 0" class="form-group required" ng-class="{'has-error':DepSenFILEForm.FILE_DATE.$invalid && DepSenFILEForm.FILE_DATE.$dirty}" style="margin:0;padding:0">
                             <label class="col-md-4 control-label req" for="FILE_DATE">Date Uploaded:</label>
                             <div class="col-md-3 input-group" style="padding-right:14px;padding-left:14px">
-                                <input class="form-control" name="fd" type="text" uib-datepicker-popup="MMM dd, yyyy" readonly="readonly" show-weeks="false"
-                                       style="background-color: white;cursor:auto" is-open="datepickrs.fd" ng-model="aFile.FILE_DATE" required />
+                                <input class="form-control" name="fd" type="text" uib-datepicker-popup="MMM dd, yyyy" disabled="disabled" show-weeks="false"
+                                      is-open="datepickrs.fd" ng-model="aFile.FILE_DATE" required />
                                 <span class="input-group-btn">
                                     <button class="btn btn-default" type="button" ng-click="open($event, 'fd')">
                                         <i class="glyphicon glyphicon-calendar" />
@@ -2603,8 +2603,8 @@
                                 <div ng-if="aFile.FILETYPE_ID === 2" class="form-group required" ng-class="{'has-error':DepSenFILEForm.COLLECT_DATE.$invalid && DepSenFILEForm.COLLECT_DATE.$dirty}" style="margin:0;padding:0">
                                     <label class="col-md-4 control-label req" for="COLLECT_DATE">Date Collected/Processed:</label>
                                     <div class="col-md-3 input-group" style="padding-right:14px;padding-left:14px">
-                                        <input class="form-control" name="dfcd" type="text" uib-datepicker-popup="MMM dd, yyyy" readonly="readonly" show-weeks="false"
-                                               style="background-color: white;cursor:auto" is-open="datepickrs.dfcd" ng-model="datafile.COLLECT_DATE" required />
+                                        <input class="form-control" name="dfcd" type="text" uib-datepicker-popup="MMM dd, yyyy" disabled="disabled" show-weeks="false"
+                                               is-open="datepickrs.dfcd" ng-model="datafile.COLLECT_DATE" required />
                                         <span class="input-group-btn">
                                             <button class="btn btn-default" type="button" ng-click="open($event, 'dfcd')">
                                                 <i class="glyphicon glyphicon-calendar" />
@@ -2644,8 +2644,8 @@
                                 <div ng-if="aFile.FILETYPE_ID === 1 || aFile.FILETYPE_ID  > 2" class="form-group required" ng-class="{'has-error':DepSenFILEForm.SOURCE_DATE.$invalid && DepSenFILEForm.SOURCE_DATE.$dirty}" style="margin:0;padding:0">
                                     <label class="col-md-4 control-label req" for="SOURCE_DATE">Date Taken:</label>
                                     <div class="col-md-3 input-group" style="padding-right:14px;padding-left:14px">
-                                        <input class="form-control" name="sd" type="text" uib-datepicker-popup="MMM dd, yyyy" readonly="readonly" show-weeks="false"
-                                               style="background-color: white;cursor:auto" is-open="datepickrs.sd" ng-model="aSource.SOURCE_DATE" required />
+                                        <input class="form-control" name="sd" type="text" uib-datepicker-popup="MMM dd, yyyy" disabled="disabled" show-weeks="false"
+                                               is-open="datepickrs.sd" ng-model="aSource.SOURCE_DATE" required />
                                         <span class="input-group-btn">
                                             <button class="btn btn-default" type="button" ng-click="open($event, 'sd')">
                                                 <i class="glyphicon glyphicon-calendar" />
@@ -2658,8 +2658,8 @@
                                 <div ng-if="aFile.FILETYPE_ID > 0" class="form-group required" ng-class="{'has-error':DepSenFILEForm.FILE_DATE.$invalid && DepSenFILEForm.FILE_DATE.$dirty}" style="margin:0;padding:0">
                                     <label class="col-md-4 control-label req" for="FILE_DATE">Date Uploaded:</label>
                                     <div class="col-md-3 input-group" style="padding-right:14px;padding-left:14px">
-                                        <input class="form-control" name="fd" type="text" uib-datepicker-popup="MMM dd, yyyy" readonly="readonly" show-weeks="false"
-                                               style="background-color: white;cursor:auto" is-open="datepickrs.fd" ng-model="aFile.FILE_DATE" required />
+                                        <input class="form-control" name="fd" type="text" uib-datepicker-popup="MMM dd, yyyy" disabled="disabled" show-weeks="false"
+                                               is-open="datepickrs.fd" ng-model="aFile.FILE_DATE" required />
                                         <span class="input-group-btn">
                                             <button class="btn btn-default" type="button" ng-click="open($event, 'fd')">
                                                 <i class="glyphicon glyphicon-calendar" />
@@ -2880,8 +2880,8 @@
                 <div ng-if="aFile.FILETYPE_ID === 1 || aFile.FILETYPE_ID  > 2" class="form-group required" ng-class="{'has-error':FILEForm.SOURCE_DATE.$invalid && FILEForm.SOURCE_DATE.$dirty}">
                     <label class="col-md-3 control-label req" for="SOURCE_DATE">Date Taken:</label>
                     <div class="col-md-3 input-group" style="padding-right:14px;padding-left:14px">
-                        <input class="form-control" name="sd" type="text" uib-datepicker-popup="MMM dd, yyyy" readonly="readonly" show-weeks="false"
-                               style="background-color: white;cursor:auto" is-open="datepickrs.sd" ng-model="aSource.SOURCE_DATE" required />
+                        <input class="form-control" name="sd" type="text" uib-datepicker-popup="MMM dd, yyyy" disabled="disabled" show-weeks="false"
+                               is-open="datepickrs.sd" ng-model="aSource.SOURCE_DATE" required />
                         <span class="input-group-btn">
                             <button class="btn btn-default" type="button" ng-click="open($event, 'sd')">
                                 <i class="glyphicon glyphicon-calendar" />
@@ -2894,8 +2894,8 @@
                 <div ng-if="aFile.FILETYPE_ID > 0" class="form-group required" ng-class="{'has-error':FILEForm.FILE_DATE.$invalid && FILEForm.FILE_DATE.$dirty}">
                     <label class="col-md-3 control-label req" for="FILE_DATE">Date Uploaded:</label>
                     <div class="col-md-3 input-group" style="padding-right:14px;padding-left:14px">
-                        <input class="form-control" name="fd" type="text" uib-datepicker-popup="MMM dd, yyyy" readonly="readonly" show-weeks="false"
-                               style="background-color: white;cursor:auto" is-open="datepickrs.fd" ng-model="aFile.FILE_DATE" required />
+                        <input class="form-control" name="fd" type="text" uib-datepicker-popup="MMM dd, yyyy" disabled="disabled" show-weeks="false"
+                               is-open="datepickrs.fd" ng-model="aFile.FILE_DATE" required />
                         <span class="input-group-btn">
                             <button class="btn btn-default" type="button" ng-click="open($event, 'fd')">
                                 <i class="glyphicon glyphicon-calendar" />
