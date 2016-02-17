@@ -609,7 +609,7 @@
 
                 //#region site (abstract)
                 .state("site", {
-                    url: "/Site/:id",// /:latitude/:longitude",
+                    url: "/Site/:id",
                     abstract: true,
                     params: {
                         id: null,

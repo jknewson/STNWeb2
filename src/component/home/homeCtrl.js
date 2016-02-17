@@ -12,9 +12,7 @@
             } else {
                 //good to go
                 $rootScope.thisPage = "Home";
-                //$scope.test = function () {
-                //    $state.go('site.dashboard', { id: 0, latitude: 44.323, longitude: -90.3939 });
-                //}
+               
             }//end good to go
         }]);
 
