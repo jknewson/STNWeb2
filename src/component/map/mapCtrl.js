@@ -5,8 +5,7 @@
     var STNControllers = angular.module('STNControllers');
 
     STNControllers.controller('MapController', ['$scope', '$http', '$rootScope', '$cookies', '$location', 'SITE', "leafletMarkerEvents",
-        'allHorDatums', 'allHorCollMethods', 'allStates', 'allCounties', 'allDeployPriorities', 'allHousingTypes', 'allNetworkNames', 'allNetworkTypes', 'allDeployTypes', 'allSensDeps',
-        function ($scope, $http, $rootScope, $cookies, $location, SITE, leafletMarkerEvents, allHorDatums, allHorCollMethods, allStates, allCounties, allDeployPriorities, allHousingTypes, allNetworkNames, allNetworkTypes, allDeployTypes, allSensDeps) {
+        function ($scope, $http, $rootScope, $cookies, $location, SITE, leafletMarkerEvents) {
             if ($cookies.get('STNCreds') === undefined || $cookies.get('STNCreds') === "") {
                 $scope.auth = false;
                 $location.path('/login');
@@ -68,7 +67,6 @@
                     //use new clicked site lat/lng and create new site from that
                 });
 
-
                 ///below applies to dragability - may remove
                 $scope.$on("leafletDirectiveMarker.dragend", function(event, args){
                     var leafEvent = args.leafletEvent;
@@ -87,45 +85,6 @@
                         $scope.eventDetected = event.name;
                     });
                 }
-
-
-                //open modal to edit or create a site. unclear if this is needed to be duplicated here, or can be reused from elsewhere
-                $scope.openSiteCreate = function () {
-                    var dropdownParts =[allHorDatums, allHorCollMethods, allStates, allCounties, allHousingTypes, allDeployPriorities,
-                        allNetworkNames, allNetworkTypes, allDeployTypes, allSensDeps];
-                    //modal
-                    var modalInstance = $uibModal.open({
-                        templateUrl: 'SITEmodal.html',
-                        controller: 'siteModalCtrl',
-                        size: 'lg',
-                        backdrop: 'static',
-                        windowClass: 'rep-dialog',
-                        resolve: {
-                            allDropDownParts: function () {
-                                return dropdownParts;
-                            },
-                            thisSiteStuff: function () {
-                                if ($scope.aSite.SITE_ID !== undefined) {
-                                    var origSiteHouses = $scope.originalSiteHousings !== undefined ? $scope.originalSiteHousings : []; //needed for multi select to set prop selected
-                                    var sHouseTypeModel = $scope.thisSiteHouseTypeModel.length > 0 ? $scope.thisSiteHouseTypeModel : [];
-                                    var sNetNames = thisSiteNetworkNames !== undefined ? thisSiteNetworkNames : [];
-                                    var sNetTypes = thisSiteNetworkTypes !== undefined ? thisSiteNetworkTypes : [];
-                                    var lo = $scope.landowner !== undefined ? $scope.landowner : {
-                                    };
-                                    var siteRelatedStuff = [$scope.aSite, origSiteHouses, sHouseTypeModel, sNetNames, sNetTypes, lo];
-                                    return siteRelatedStuff;
-                                }
-                            }
-                        }
-                    });
-                    modalInstance.result.then(function (r) {
-                        $scope.aSite = r[0];
-                        $scope.siteNetworkNames = r[1];
-                        $scope.siteNetworkTypes = r[2];
-                    });
-                };
-
-
                 //get all STN sites
                 //$http.get('https://stn.wim.usgs.gov/STNServices/Sites/points.json')
                 //    .then(onSiteComplete, onError);
