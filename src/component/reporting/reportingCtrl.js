@@ -105,7 +105,7 @@
                         names.push(state.STATE_NAME); abbrevs.push(state.STATE_ABBREV);
                     });
 
-                    $scope.StateNames = names.join(', '); $scope.StateAbbrevs = abbrevs.join(',');
+                    $scope.StateNames = names.join(','); $scope.StateAbbrevs = abbrevs.join(',');
                 };
 
                 $scope.MetricDisplayModel = []; //hold all reportModels for 'Display Metrics Summary'
@@ -138,7 +138,7 @@
                         angular.forEach($scope.Statemodel.value, function (state) {
                             abbrevs.push(state.STATE_ABBREV);
                         });
-                        var abbrevString = abbrevs.join(', ');
+                        var abbrevString = abbrevs.join(',');
                         var thisDate = $scope.formatDate($scope.genSummary.SUM_DATE);
                         //need: 
                         //1. all reports
@@ -251,7 +251,7 @@
                         angular.forEach($scope.Statemodel.value, function (state) {
                             abbrevs.push(state.STATE_ABBREV);
                         });
-                        var abbrevString = abbrevs.join(', ');
+                        var abbrevString = abbrevs.join(',');
                         var thisDate = $scope.formatDate($scope.genSummary.SUM_DATE);
                         $scope.reportModel = [];
                         //all filtered reports 

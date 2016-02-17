@@ -10,7 +10,11 @@
             }
             else {
                 //keeps it valid and tells it it's utc so it will convert proper local
-                $scope.newReport.REPORT_DATE = new Date($scope.newReport.REPORT_DATE);
+                var yr = $scope.newReport.REPORT_DATE.substr(0, 4);
+                var mo = $scope.newReport.REPORT_DATE.substr(5, 2);
+                var day = $scope.newReport.REPORT_DATE.substr(8, 2);
+                $scope.newReport.REPORT_DATE = new Date(mo + "/" + day + "/" + yr);
+//                $scope.newReport.REPORT_DATE = new Date($scope.newReport.REPORT_DATE);
             }
             $scope.status = { openContacts: false }; //if submit form invalid, open contacts to show required field
 
@@ -246,7 +250,12 @@
                 var reportId = this.ir.REPORTING_METRICS_ID;
                 REPORT.query({ id: reportId }, function success(response) {
                     $scope.newReport = response;
-                    $scope.newReport.REPORT_DATE = new Date($scope.newReport.REPORT_DATE);
+                    //if Chrome, format date:
+                    var yr = response.REPORT_DATE.substr(0, 4);
+                    var mo = response.REPORT_DATE.substr(5, 2);
+                    var day = response.REPORT_DATE.substr(8, 2);
+                    $scope.newReport.REPORT_DATE = new Date(mo + "/" + day + "/" + yr);
+                    //$scope.newReport.REPORT_DATE = new Date($scope.newReport.REPORT_DATE);
                     $scope.fullReportForm.submit.$setDirty();
                     //get contacts 
                     getReportContacts(reportId);
