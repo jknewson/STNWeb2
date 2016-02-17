@@ -1,7 +1,5 @@
 ﻿(function () {
-    /* controllers.js, 'leaflet-directive''ui.unique','ngTagsInput',*/
     'use strict';
-
     var STNControllers = angular.module('STNControllers');
 
     STNControllers.controller('MapController', ['$scope', '$http', '$rootScope', '$cookies', '$location', 'SITE', "leafletMarkerEvents",
@@ -19,9 +17,15 @@
                         type: 'div',
                         iconSize: [10, 10],
                         className: 'stnSiteIcon'
+                    },
+                    new: {
+                        type: 'div',
+                        iconSize: [10, 10],
+                        className: 'newSiteIcon',
+                        iconAnchor:  [5, 5]
                     }
                 };
-
+                //creates the markers on the map after getting JSON from STN web services call
                 var onSiteComplete = function(response) {
                     var sitesArray = response.data.Sites;
                     $scope.sites = response.data;
@@ -29,6 +33,7 @@
                     for (var i = 0; i < sitesArray.length; i++) {
                         var a = sitesArray[i];
                         $scope.markers.push({
+                            layer:'stnSites',
                             lat: a.latitude,
                             lng: a.longitude,
                             SITE_ID: a.SITE_ID,
@@ -51,40 +56,54 @@
                     $scope.error = "Could not fetch sites";
                 };
 
+                ///get site from click
                 $scope.$on("leafletDirectiveMap.click", function(event, args){
-                    var leafEvent = args.leafletEvent;
-
-                    $scope.markers.push({
-                        lat: leafEvent.latlng.lat,
-                        lng: leafEvent.latlng.lng,
-                        SITE_ID: 'newSite',
-                        icon: icons.stn,
-                        message: "New draggable STN site",
-                        draggable: true,  ///consider whether dragability is worth it
-                        focus: true
-                    });
-
+                    if ($scope.createSiteModeActive == true) {
+                        var leafEvent = args.leafletEvent;
+                        $scope.userCreatedSite = {
+                            latitude: leafEvent.latlng.lat,
+                            longitude: leafEvent.latlng.lng
+                        };
+                        //returns the created site object, but not that useful
+                        //var createdSite = $scope.markers.filter(function (obj) {
+                        //        return obj.SITE_ID === 'newSite';
+                        //})[0];
+                        //returns created site index so it can be removed to make way for its replacement
+                        var createdSiteIndex = $scope.markers.map(function(obj) {
+                            return obj.SITE_ID;
+                        }).indexOf('newSite');
+                        //splice created site from the markers array if it exists
+                        if (createdSiteIndex > -1) {
+                            $scope.markers.splice(createdSiteIndex, 1);
+                        }
+                        $scope.markers.push({
+                            layer: 'newSite',
+                            lat: $scope.userCreatedSite.latitude,
+                            lng: $scope.userCreatedSite.longitude,
+                            SITE_ID: 'newSite',
+                            icon: icons.new,
+                            message: "New draggable STN site",
+                            draggable: true,
+                            focus: true
+                        });
+                    }
                     //use new clicked site lat/lng and create new site from that
                 });
 
-                ///below applies to dragability - may remove
+                ///update newSite lat/lng after dragend
                 $scope.$on("leafletDirectiveMarker.dragend", function(event, args){
-                    var leafEvent = args.leafletEvent;
-                    var newLocation = args.model;
-
-                    ///take new lat/lng and create new site from that
-
+                    var dragendLocation = args.model;
+                    $scope.userCreatedSite = {
+                        latitude: dragendLocation.lat,
+                        longitude: dragendLocation.lng
+                    };
                 });
 
-                ///below applies to dragability - may remove
-                $scope.eventDetected = "No events yet...";
-                var markerEvents = leafletMarkerEvents.getAvailableEvents();
-                for (var k in markerEvents){
-                    var eventName = 'leafletDirectiveMarker.' + markerEvents[k];
-                    $scope.$on(eventName, function(event, args){
-                        $scope.eventDetected = event.name;
-                    });
-                }
+                $scope.$watch('createSiteModeActive', function(){
+                    $scope.createSiteButtonText = $scope.createSiteModeActive ? 'Cancel Create New Site' : 'Create New Site on Map';
+                    $scope.mapStyle = $scope.createSiteModeActive ? {"cursor":"crosshair"} : {"cursor":"grab"};
+                });
+
                 //get all STN sites
                 //$http.get('https://stn.wim.usgs.gov/STNServices/Sites/points.json')
                 //    .then(onSiteComplete, onError);
@@ -109,6 +128,8 @@
                         zoom: 4
                     },
                     markers: {},
+                    createSiteModeActive: false,
+                    userCreatedSite: {},
                     layers: {
                         baselayers: {
                             gray: {
@@ -166,8 +187,17 @@
                                 visible: false
                             }
                         },
-                        markers : {},
                         overlays : {
+                            stnSites: {
+                                type: 'group',
+                                name:'stnSites',
+                                visible: true
+                            },
+                            newSite : {
+                                type: 'group',
+                                name: 'newSite',
+                                visible:true
+                            },
                             nwis : {
                                 name: "USGS real-time streamgages",
                                 type: "agsDynamic",
