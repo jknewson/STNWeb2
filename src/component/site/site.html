@@ -1634,7 +1634,7 @@
                     </div>
                 </div>
 
-                <!-- -------------------------- TAPEDOWN SECTION --------------------------------  -->
+                <!-- -------------------------- START TAPEDOWN SECTION --------------------------------  -->
                 <!--Add Tapedown button-->
                 <div class="form-group">
                     <label class="col-md-3 control-label" for="TAPEDOWNBTN">Tape Down Information:</label>
@@ -1643,7 +1643,7 @@
                     </div>
                 </div>
 
-                <!--start Landowner contact area -->
+                <!--start add tapedown area -->
                 <div ng-if="addTapedown">
                     <hr />
                     <div class="form-group">
@@ -1693,7 +1693,8 @@
                     <hr />
                 </div>
 
-                <!-- -------------------------- TAPEDOWN SECTION --------------------------------  -->
+                <!-- -------------------------- END TAPEDOWN SECTION --------------------------------  -->
+
                 <!-- Vented (only if Sensor Type is Pressure Transducer)-->
                 <div ng-show="aSensor.SENSOR_TYPE_ID == 1">
                     <div class="form-group">
@@ -1767,7 +1768,7 @@
                             <option value=""></option>
                         </select>
                     </div>
-                    <button type="button" class="borderLess" tooltip-placement="right" tooltip-append-to-body="true" uib-tooltip="Date/Time will be stored in UTC.">
+                    <button type="button" class="borderLess" tooltip-placement="right"  uib-tooltip="Date/Time will be stored in UTC.">
                         <span class="glyphicon glyphicon-question-sign"></span>
                     </button>
                 </div>
@@ -1792,7 +1793,7 @@
         </form>
 
         <!-- Deployed Sensor FILES SECTION -->
-        <div ng-if="aSensor.INSTRUMENT_ID !== undefinfed" class="col-md-12">
+        <div ng-if="aSensor.INSTRUMENT_ID !== undefined && aSensStatus.Status != 'Proposed'" class="col-md-12">
             <div class="col-md-5"><h3>Deployed Instrument Files</h3></div>
             <div class="col-md-6" ng-if="!showFileForm" style="margin-top:14px">
                 <button type="button" class="borderLess" ng-click="showFile(0)" tooltip-placement="right" uib-tooltip="Upload a new File to this Sensor">
@@ -1926,7 +1927,7 @@
                             <label class="col-md-4 control-label req" for="FILE_DATE">Date Uploaded:</label>
                             <div class="col-md-3 input-group" style="padding-right:14px;padding-left:14px">
                                 <input class="form-control" name="fd" type="text" uib-datepicker-popup="MMM dd, yyyy" disabled="disabled" show-weeks="false"
-                                      is-open="datepickrs.fd" ng-model="aFile.FILE_DATE" required />
+                                       is-open="datepickrs.fd" ng-model="aFile.FILE_DATE" required />
                                 <span class="input-group-btn">
                                     <button class="btn btn-default" type="button" ng-click="open($event, 'fd')">
                                         <i class="glyphicon glyphicon-calendar" />
@@ -2116,7 +2117,7 @@
                 <!-- Interval: -->
                 <div>
                     <div class="col-md-3 col-md-offset-1">Interval:</div>
-                    <div class="col-md-6">{{aSensor.INTERVAL || '---'}} seconds</div>
+                    <div class="col-md-6">{{aSensor.INTERVAL || '---'}} <span ng-show='aSensor.INTERVAL'>seconds</span></div>
                 </div>
                 <!-- Deploy Date: -->
                 <div>

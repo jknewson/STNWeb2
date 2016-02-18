@@ -34,7 +34,17 @@
                 $scope.datepickrs[which] = true;
             };
             //#endregion
-
+            //formatting date and time properly for chrome and ff
+            var getDateTimeParts = function (d) {
+                var y = d.substr(0, 4);
+                var m = d.substr(5, 2) - 1; //subtract 1 for index value (January is 0)
+                var da = d.substr(8, 2);
+                var h = d.substr(11, 2);
+                var mi = d.substr(14, 2);
+                var sec = d.substr(17, 2);
+                var theDate = new Date(y, m, da, h, mi, sec);
+                return theDate;
+            }
             if (thisFile !== undefined) {
                 //edit file
                 $scope.aFile = thisFile;
@@ -47,8 +57,8 @@
                 if (dataFile !== undefined) {
                     $scope.datafile = dataFile;
                     $scope.datafile.COLLECT_DATE = new Date($scope.datafile.COLLECT_DATE); //date for validity of form on put
-                    $scope.datafile.GOOD_START = new Date($scope.datafile.GOOD_START); //date for validity of form on put
-                    $scope.datafile.GOOD_END = new Date($scope.datafile.GOOD_END); //date for validity of form on put
+                    $scope.datafile.GOOD_START = getDateTimeParts($scope.datafile.GOOD_START); //date for validity of form on put
+                    $scope.datafile.GOOD_END = getDateTimeParts($scope.datafile.GOOD_END); //date for validity of form on put
                     $scope.timeZoneList = ['UTC', 'PST', 'MST', 'CST', 'EST'];
                     var aProcessor = $scope.datafile.PROCESSOR_ID !== null ? allMembers.filter(function (amem) { return amem.MEMBER_ID == $scope.datafile.PROCESSOR_ID; })[0] : {};
                     $scope.processor = aProcessor.FNAME !== undefined ? aProcessor.FNAME + ' ' + aProcessor.LNAME : '';
