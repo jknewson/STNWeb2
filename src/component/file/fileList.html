@@ -13,21 +13,68 @@
             </div>
         </div>
 
-        <!-- ------ only photo files here -------- -->
-        <label class="col-md-9">-- Photo Files --</label>
+        <!-- ------ Site files here -------- -->
+        <label class="col-md-9">-- Site Files --</label>
         <br clear="all" />
 
         <div ng-repeat="f in SiteFiles">
-            <div ng-if="f.FILETYPE_ID == 1">
+            <div ng-if="f.fileBelongsTo == 'Site File'">
                 <ul style="padding-left: 0">
                     <li style="list-style:none;padding-bottom: 15px;">
                         <span class="col-sm-9 borderLess" style="padding:0">
-                            -{{(f.fileBelongsTo)}}-<br /><a class="btn borderLess" style="padding:0" title="{{f.FILE_DATE | date: 'MM/dd/yyyy'}} ({{f.PATH || f.FILE_URL || f.FILE_ID}})" ng-click="showFileModal(f)">{{f.FILE_DATE | date: 'MM/dd/yyyy'}} ({{f.PATH || f.FILE_URL || f.FILE_ID}})</a>
+                            <a class="btn borderLess" style="padding:0" title="{{f.FILE_DATE | date: 'MM/dd/yyyy'}} ({{f.PATH || f.FILE_URL || f.FILE_ID}})" ng-click="showFileModal(f)">{{f.FILE_DATE | date: 'MM/dd/yyyy'}} ({{f.PATH || f.FILE_URL || f.FILE_ID}})</a>
                         </span>
                     </li>
                 </ul>
             </div>
         </div>
+
+        <!-- ------ Objective Point Files here ------ -->
+        <label class="col-md-9">-- Objective Point Files --</label>
+        <br clear="all" />
+        <div ng-repeat="f in SiteFiles">
+            <div ng-if="f.fileBelongsTo == 'Objective Point File'">
+                <ul style="padding-left: 0">
+                    <li style="list-style:none;padding-bottom: 15px;">
+                        <span class="col-sm-9 borderLess" style="padding:0">
+                            <a class="btn borderLess" style="padding:0" title="{{f.FILE_DATE | date: 'MM/dd/yyyy'}} ({{f.PATH || f.FILE_URL || f.FILE_ID}})" ng-click="showFileModal(f)">{{f.FILE_DATE | date: 'MM/dd/yyyy'}} ({{f.PATH || f.FILE_URL || f.FILE_ID}})</a>
+                        </span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- ------ Sensor Files here ------ -->
+        <label class="col-md-9">-- Sensor Files --</label>
+        <br clear="all" />
+        <div ng-repeat="f in SiteFiles">
+            <div ng-if="f.fileBelongsTo == 'Sensor File' || f.fileBelongsTo == 'DataFile File'">
+                <ul style="padding-left: 0">
+                    <li style="list-style:none;padding-bottom: 15px;">
+                        <span class="col-sm-9 borderLess" style="padding:0">
+                            <a class="btn borderLess" style="padding:0" title="{{f.FILE_DATE | date: 'MM/dd/yyyy'}} ({{f.PATH || f.FILE_URL || f.FILE_ID}})" ng-click="showFileModal(f)">{{f.FILE_DATE | date: 'MM/dd/yyyy'}} ({{f.PATH || f.FILE_URL || f.FILE_ID}})</a>
+                        </span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- ------ HWM Files here ------ -->
+        <label class="col-md-9">-- HWM Files --</label>
+        <br clear="all" />
+        <div ng-repeat="f in SiteFiles">
+            <div ng-if="f.fileBelongsTo == 'HWM File'">
+                <ul style="padding-left: 0">
+                    <li style="list-style:none;padding-bottom: 15px;">
+                        <span class="col-sm-9 borderLess" style="padding:0">
+                            <a class="btn borderLess" style="padding:0" title="{{f.FILE_DATE | date: 'MM/dd/yyyy'}} ({{f.PATH || f.FILE_URL || f.FILE_ID}})" ng-click="showFileModal(f)">{{f.FILE_DATE | date: 'MM/dd/yyyy'}} ({{f.PATH || f.FILE_URL || f.FILE_ID}})</a>
+                        </span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Photo Carousel -->
         <br clear="all" />
         <div ng-if="SiteFiles.length > 0" style="height:140px;">
             <uib-carousel interval="4000">
@@ -41,35 +88,9 @@
         </div>
         <br />
 
-        <!-- ------ only Data Files here ------ -->
-        <label class="col-md-9">-- Data Files --</label>
-        <br clear="all" />
-        <div ng-repeat="f in SiteFiles">
-            <div ng-if="f.FILETYPE_ID == 2">
-                <ul style="padding-left: 0">
-                    <li style="list-style:none;padding-bottom: 15px;">
-                        <span class="col-sm-9 borderLess" style="padding:0">
-                            -{{(f.fileBelongsTo)}}-<br /><a class="btn borderLess" style="padding:0" title="{{f.FILE_DATE | date: 'MM/dd/yyyy'}} ({{f.PATH || f.FILE_URL || f.FILE_ID}})" ng-click="showFileModal(f)">{{f.FILE_DATE | date: 'MM/dd/yyyy'}} ({{f.PATH || f.FILE_URL || f.FILE_ID}})</a>
-                        </span>
-                    </li>
-                </ul>
-            </div>
-        </div>
 
-        <!-- ------ all other Files here ------ -->
-        <label class="col-md-9">-- All Other Files --</label>
-        <br clear="all" />
-        <div ng-repeat="f in SiteFiles">
-            <div ng-if="f.FILETYPE_ID > 2">
-                <ul style="padding-left: 0">
-                    <li style="list-style:none;padding-bottom: 15px;">
-                        <span class="col-sm-9 borderLess" style="padding:0">
-                            -{{(f.fileBelongsTo)}}-<br /><a class="btn borderLess" style="padding:0" title="{{f.FILE_DATE | date: 'MM/dd/yyyy'}} ({{f.PATH || f.FILE_URL || f.FILE_ID}})" ng-click="showFileModal(f)">{{f.FILE_DATE | date: 'MM/dd/yyyy'}} ({{f.PATH || f.FILE_URL || f.FILE_ID}})</a>
-                        </span>
-                    </li>
-                </ul>
-            </div>
-        </div>
+
+
 
     </uib-accordion-group>
 </uib-accordion>

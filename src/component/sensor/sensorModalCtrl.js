@@ -31,7 +31,20 @@
            $scope.adminChanged = {}; //will hold EVENT_ID if admin changes it. apply when PUTting
            $scope.IntervalType = {}; //holder for minute/second radio buttons
            $scope.whichButton = ""; //holder for save/deploy button at end .. 'deploy' if proposed->deployed, and for deploying new or save if editing existing
-           //new datetimepicker https://github.com/zhaber/angular-js-bootstrap-datetimepicker
+
+           //formatting date and time properly for chrome and ff
+           var getDateTimeParts = function (d) {
+               var y = d.substr(0, 4);
+               var m = d.substr(5, 2) - 1; //subtract 1 for index value (January is 0)
+               var da = d.substr(8, 2);
+               var h = d.substr(11, 2);
+               var mi = d.substr(14, 2);
+               var sec = d.substr(17, 2);
+               var theDate = new Date(y, m, da, h, mi, sec);
+               return theDate;
+           }
+
+            //new datetimepicker https://github.com/zhaber/angular-js-bootstrap-datetimepicker
            $scope.dateOptions = {
                startingDay: 1,
                showWeeks: false
@@ -90,8 +103,8 @@
                            $scope.datafile = df;
                            $scope.processor = allMembers.filter(function (m) { return m.MEMBER_ID == $scope.datafile.PROCESSOR_ID; })[0];                          
                            $scope.datafile.COLLECT_DATE = new Date($scope.datafile.COLLECT_DATE);
-                           $scope.datafile.GOOD_START = new Date($scope.datafile.GOOD_START);
-                           $scope.datafile.GOOD_END = new Date($scope.datafile.GOOD_END);//date for validity of form on put
+                           $scope.datafile.GOOD_START = getDateTimeParts($scope.datafile.GOOD_START);
+                           $scope.datafile.GOOD_END = getDateTimeParts($scope.datafile.GOOD_END);
                        });
                    }
                }//end existing file
@@ -422,9 +435,7 @@
                    if ($scope.IntervalType.type == "Minutes")
                        $scope.aSensor.INTERVAL = $scope.aSensor.INTERVAL * 60;
                    dealWithTimeStampb4Send(); //UTC or local?
-                   $scope.aSensStatus.TIME_STAMP = new Date($scope.aSensStatus.TIME_STAMP);//datetime is annoying
-                   //if they changed Deployment_Type, Housing_Type, Sensor_Brand, or Sensor_Type -- update those fields for passing the model back
-
+                  
                    //also need: SITE_ID, EVENT_ID, INST_COLLECTION_ID (only for retrieval)
                    $http.defaults.headers.common.Authorization = 'Basic ' + $cookies.get('STNCreds');
                    $http.defaults.headers.common.Accept = 'application/json';
@@ -438,8 +449,6 @@
                        INSTRUMENT_STATUS.update({ id: $scope.aSensStatus.INSTRUMENT_STATUS_ID }, $scope.aSensStatus).$promise.then(function (statResponse) {
                            updatedSenStat = statResponse;
                            updatedSenStat.Status = 'Deployed';
-                           var eDstatdate = getTimeZoneStamp(updatedSenStat.TIME_STAMP.slice(0, -1)); //remove 'z' on end
-                           updatedSenStat.TIME_STAMP = eDstatdate[0]; //this keeps it as utc in display
                            var sensorObjectToSendBack = {
                                Instrument: updatedSensor,
                                InstrumentStats: [updatedSenStat]
@@ -488,8 +497,6 @@
                                depSenStat = statResponse;
                                //add Status
                                depSenStat.Status = 'Deployed';
-                               var d = getTimeZoneStamp(depSenStat.TIME_STAMP.slice(0, -1)); //remove 'z' on end
-                               depSenStat.TIME_STAMP = d[0]; //this keeps it as utc in display
                                var sensorObjectToSendBack = {
                                    Instrument: createdSensor,
                                    InstrumentStats: [depSenStat, $scope.previousStateStatus]
@@ -518,8 +525,6 @@
                                //build the createdSensor to send back and add to the list page
                                depSenStat = statResponse;
                                depSenStat.Status = 'Deployed';
-                               var ud = getTimeZoneStamp(depSenStat.TIME_STAMP.slice(0, -1)); //remove 'z' on end
-                               depSenStat.TIME_STAMP = ud[0]; //this keeps it as utc in display
                                var sensorObjectToSendBack = {
                                    Instrument: createdSensor,
                                    InstrumentStats: [depSenStat]
@@ -581,8 +586,8 @@
                    //deploying proposed
                    $scope.previousStateStatus = angular.copy(thisSensor.InstrumentStats[0]); //hold the proposed state (proposed to deployed)
                    $scope.whichButton = 'deployP';
-                   $scope.aSensor.INTERVAL = $scope.aSensor.INTERVAL === 0 ? '' : $scope.aSensor.INTERVAL; //clear out the '0' value here               
-                   $scope.aSensStatus.Status = "Deployed";
+                   $scope.aSensor.INTERVAL = $scope.aSensor.INTERVAL === 0 ? null : $scope.aSensor.INTERVAL; //clear out the '0' value here               
+                   //$scope.aSensStatus.Status = "Deployed";
                    //displaying date / time it user's timezone
                    var timeParts = getTimeZoneStamp();
                    $scope.aSensStatus.TIME_STAMP = timeParts[0];
@@ -593,12 +598,11 @@
                } else {
                    //editing deployed
                    $scope.whichButton = 'edit';
-                   $scope.aSensor.INTERVAL = $scope.aSensor.INTERVAL === 0 ? '' : $scope.aSensor.INTERVAL; //clear out the '0' value here   
+                   $scope.aSensor.INTERVAL = $scope.aSensor.INTERVAL === 0 ? null : $scope.aSensor.INTERVAL; //clear out the '0' value here   
                    //get this deployed sensor's event name
                    $scope.EventName = $scope.eventList.filter(function (e) { return e.EVENT_ID == $scope.aSensor.EVENT_ID; })[0].EVENT_NAME;
                    //date formatting. this keeps it in utc for display
-                   var editDeptimeParts = getTimeZoneStamp($scope.aSensStatus.TIME_STAMP);
-                   $scope.aSensStatus.TIME_STAMP = editDeptimeParts[0];   
+                   $scope.aSensStatus.TIME_STAMP = getDateTimeParts($scope.aSensStatus.TIME_STAMP);
                    //get collection member's name 
                    $scope.Deployer = $scope.aSensStatus.MEMBER_ID !== null || $scope.aSensStatus.MEMBER_ID !== undefined ? allMembers.filter(function (m) { return m.MEMBER_ID == $scope.aSensStatus.MEMBER_ID; })[0] : {};
                }
@@ -624,7 +628,15 @@
             $(".page-loading").addClass("hidden"); //loading...
             $scope.aSensor = thisSensor.Instrument;
             $scope.EventName = allEventList.filter(function (r) {return r.EVENT_ID == $scope.aSensor.EVENT_ID;})[0].EVENT_NAME;
-            $scope.depSensStatus = thisSensor.InstrumentStats[0];
+            $scope.depSensStatus = angular.copy(thisSensor.InstrumentStats[0]);
+            var y = $scope.depSensStatus.TIME_STAMP.substr(0, 4);
+            var m = $scope.depSensStatus.TIME_STAMP.substr(5, 2) - 1; //subtract 1 for index value (January is 0)
+            var d = $scope.depSensStatus.TIME_STAMP.substr(8, 2);
+            var h = $scope.depSensStatus.TIME_STAMP.substr(11, 2);
+            var mi = $scope.depSensStatus.TIME_STAMP.substr(14, 2);
+            var sec = $scope.depSensStatus.TIME_STAMP.substr(17, 2);
+            $scope.depSensStatus.TIME_STAMP = new Date(y, m, d, h, mi, sec);
+
             $scope.Deployer = allMembers.filter(function (m) { return m.MEMBER_ID == $scope.depSensStatus.MEMBER_ID; })[0];
             $scope.whichButton = 'Retrieve';
             $scope.statusTypeList = allStatusTypes.filter(function (s) { return s.STATUS == "Retrieved" || s.STATUS == "Lost";});
@@ -704,11 +716,11 @@
                             //build the createdSensor to send back and add to the list page
                             createRetSens = statResponse;
                             createRetSens.Status = 'Retrieved';
-                            var rud = getTimeZoneStamp(createRetSens.TIME_STAMP.slice(0, -1)); //remove 'z' on end
-                            createRetSens.TIME_STAMP = rud[0]; //this keeps it as utc in display
+                            //var rud = getTimeZoneStamp(createRetSens.TIME_STAMP.slice(0, -1)); //remove 'z' on end
+                            //createRetSens.TIME_STAMP = rud[0]; //this keeps it as utc in display
                             var sensorObjectToSendBack = {
                                 Instrument: updatedSensor,
-                                InstrumentStats: [createRetSens, $scope.depSensStatus]
+                                InstrumentStats: [createRetSens, thisSensor.InstrumentStats[0]]
                             };
                             $timeout(function () {
                                 // anything you want can go here and will safely be run on the next digest.
@@ -786,18 +798,29 @@
                 }
             };
 
+            //formatting date and time properly for chrome and ff
+            var getDateTimeParts = function (d) {
+                var y = d.substr(0, 4);
+                var m = d.substr(5, 2) - 1; //subtract 1 for index value (January is 0)
+                var da = d.substr(8, 2);
+                var h = d.substr(11, 2);
+                var mi = d.substr(14, 2);
+                var sec = d.substr(17, 2);
+                var theDate = new Date(y, m, da, h, mi, sec);
+                return theDate;
+            }
+            
             $scope.thisSensorSite = SensorSite; $scope.userRole = $cookies.get('usersRole');
 
             $scope.sensor = thisSensor.Instrument;
             //deploy part //////////////////
-            $scope.DeployedSensorStat = thisSensor.InstrumentStats.filter(function (inst) { return inst.Status === "Deployed"; })[0];
-            var dstatdate = getTimeZoneStamp($scope.DeployedSensorStat.TIME_STAMP);
-            $scope.DeployedSensorStat.TIME_STAMP = dstatdate[0]; //this keeps it as utc in display
+            $scope.DeployedSensorStat = thisSensor.InstrumentStats.filter(function (inst) { return inst.Status === "Deployed"; })[0];            
+            $scope.DeployedSensorStat.TIME_STAMP = getDateTimeParts($scope.DeployedSensorStat.TIME_STAMP); //this keeps it as utc in display
             $scope.Deployer = allMembers.filter(function (m) { return m.MEMBER_ID === $scope.DeployedSensorStat.MEMBER_ID; })[0];
+
             //retrieve part //////////////////
-            $scope.RetrievedSensorStat = thisSensor.InstrumentStats.filter(function (inst) { return inst.Status === "Retrieved"; })[0];
-            var rstatdate = getTimeZoneStamp($scope.RetrievedSensorStat.TIME_STAMP);
-            $scope.RetrievedSensorStat.TIME_STAMP = rstatdate[0]; //this keeps it as utc in display
+            $scope.RetrievedSensorStat = thisSensor.InstrumentStats.filter(function (inst) { return inst.Status === "Retrieved"; })[0];           
+            $scope.RetrievedSensorStat.TIME_STAMP = getDateTimeParts($scope.RetrievedSensorStat.TIME_STAMP); //this keeps it as utc in display
             $scope.Retriever = allMembers.filter(function (m) { return m.MEMBER_ID === $scope.RetrievedSensorStat.MEMBER_ID; })[0];
             //only need retrieved and lost statuses
             
@@ -862,7 +885,7 @@
                 //$uibModalInstance.dismiss('cancel');
             };
 
-            //is it UTC or local time..make sure it stays UTC
+            //Done during edit PUT to ensure timezone doesn't affect db time value (is it UTC or local time..make sure it stays UTC)
             var dealWithTimeStampb4Send = function (w) {
                 //deployed or retrieved??      
                 var utcDateTime; var i;
@@ -900,6 +923,7 @@
                 $scope.depStuffCopy = [angular.copy($scope.sensor), angular.copy($scope.DeployedSensorStat)];
             };
 
+            
             //save Deployed sensor info
             $scope.saveDeployed = function (valid) {
                 if (valid) {                    
@@ -907,10 +931,7 @@
                     //see if they used Minutes or seconds for interval. need to store in seconds
                     if ($scope.IntervalType.type == "Minutes")
                         $scope.depStuffCopy[0].INTERVAL = $scope.depStuffCopy[0].INTERVAL * 60;
-                    dealWithTimeStampb4Send('deployed'); //UTC or local?
-                    $scope.depStuffCopy[1].TIME_STAMP = new Date($scope.depStuffCopy[1].TIME_STAMP);//datetime is annoying
-                    //if they changed Deployment_Type, Housing_Type, Sensor_Brand, or Sensor_Type -- update those fields for passing the model back
-                    
+                    dealWithTimeStampb4Send('deployed'); //UTC or local?                    
                     $http.defaults.headers.common.Authorization = 'Basic ' + $cookies.get('STNCreds');
                     $http.defaults.headers.common.Accept = 'application/json';
                     INSTRUMENT.update({ id: $scope.depStuffCopy[0].INSTRUMENT_ID }, $scope.depStuffCopy[0]).$promise.then(function (response) {
@@ -925,12 +946,10 @@
                             updatedSenStat.Status = $scope.statusTypeList.filter(function (sta) { return sta.STATUS_TYPE_ID === $scope.depStuffCopy[1].STATUS_TYPE_ID; })[0].STATUS;
                             $scope.sensor = updatedSensor;
                             $scope.DeployedSensorStat = updatedSenStat;
-                            var editedDstatdate = getTimeZoneStamp($scope.DeployedSensorStat.TIME_STAMP.slice(0,-1)); //remove 'z' on end
-                            $scope.DeployedSensorStat.TIME_STAMP = editedDstatdate[0]; //this keeps it as utc in display
+                            $scope.DeployedSensorStat.TIME_STAMP = getDateTimeParts($scope.DeployedSensorStat.TIME_STAMP);//this keeps it as utc in display
                             $scope.depStuffCopy = [];
                             $scope.IntervalType = { type: 'Seconds' };
-                            $scope.view.DEPval = 'detail';
-                    
+                            $scope.view.DEPval = 'detail';                    
                         });
                     });
                 }
@@ -955,7 +974,7 @@
                 if (valid) {
                     var updatedRetSensor = {}; var updatedRetSenStat = {};
                     dealWithTimeStampb4Send('retrieved'); //UTC or local?
-                    $scope.retStuffCopy[1].TIME_STAMP = new Date($scope.retStuffCopy[1].TIME_STAMP);//datetime is annoying
+                   // $scope.retStuffCopy[1].TIME_STAMP = new Date($scope.retStuffCopy[1].TIME_STAMP);//datetime is annoying
                     $http.defaults.headers.common.Authorization = 'Basic ' + $cookies.get('STNCreds');
                     $http.defaults.headers.common.Accept = 'application/json';
                     INSTRUMENT.update({ id: $scope.retStuffCopy[0].INSTRUMENT_ID }, $scope.retStuffCopy[0]).$promise.then(function (response) {
@@ -970,8 +989,14 @@
                             updatedRetSenStat.Status = $scope.statusTypeList.filter(function (sta) { return sta.STATUS_TYPE_ID === $scope.retStuffCopy[1].STATUS_TYPE_ID; })[0].STATUS;
                             $scope.sensor = updatedRetSensor;
                             $scope.RetrievedSensorStat = updatedRetSenStat;
-                            var editedRstatdate = getTimeZoneStamp($scope.RetrievedSensorStat.TIME_STAMP.slice(0, -1)); //remove 'z' on end
-                            $scope.RetrievedSensorStat.TIME_STAMP = editedRstatdate[0]; //this keeps it as utc in display
+                            //var ret_y = $scope.RetrievedSensorStat.TIME_STAMP.substr(0, 4);
+                            //var ret_m = $scope.RetrievedSensorStat.TIME_STAMP.substr(5, 2) - 1; //subtract 1 for index value (January is 0)
+                            //var ret_d = $scope.RetrievedSensorStat.TIME_STAMP.substr(8, 2);
+                            //var ret_h = $scope.RetrievedSensorStat.TIME_STAMP.substr(11, 2);
+                            //var ret_mi = $scope.RetrievedSensorStat.TIME_STAMP.substr(14, 2);
+                            //var ret_sec = $scope.RetrievedSensorStat.TIME_STAMP.substr(17, 2);
+                            //$scope.RetrievedSensorStat.TIME_STAMP = new Date(ret_y, ret_m, ret_d, ret_h, ret_mi, ret_sec);// rstatdate[0]; //this keeps it as utc in display
+                            $scope.RetrievedSensorStat.TIME_STAMP = getDateTimeParts($scope.RetrievedSensorStat.TIME_STAMP);//this keeps it as utc in display
                             $scope.retStuffCopy = [];
                             $scope.view.RETval = 'detail';
                         });
@@ -1065,8 +1090,8 @@
                             $scope.datafile = df;
                             $scope.processor = allMembers.filter(function (m) { return m.MEMBER_ID == $scope.datafile.PROCESSOR_ID; })[0];
                             $scope.datafile.COLLECT_DATE = new Date($scope.datafile.COLLECT_DATE);
-                            $scope.datafile.GOOD_START = new Date($scope.datafile.GOOD_START);
-                            $scope.datafile.GOOD_END = new Date($scope.datafile.GOOD_END);//date for validity of form on put
+                            $scope.datafile.GOOD_START = getDateTimeParts($scope.datafile.GOOD_START);
+                            $scope.datafile.GOOD_END = getDateTimeParts($scope.datafile.GOOD_END);
                         });
                     }
                 }//end existing file
