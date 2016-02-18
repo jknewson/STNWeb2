@@ -315,3 +315,9 @@ a.disabled {
     opacity: .75;
     background-color: #0000FF;
 }
+
+.newSiteIcon {
+    border-radius: 120px;
+    opacity: .75;
+    background-color: #FF0000;
+}

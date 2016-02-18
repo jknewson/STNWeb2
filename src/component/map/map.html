@@ -1,18 +1,19 @@
 ﻿<h3>Map currently displaying sites for <b>{{sessionEvent}}</b></h3>
 
-<ul>
-    <li><strong ng-bind="eventDetected"></strong> event caught in listener.</li>
-</ul>
-
 <div class="panel panel-primary">
     <!--<h3>{{map}}</h3>-->
 
     <div cg-busy="{promise:sitesPromise,message:'Loading Sites...'}">
-        <leaflet lf-center="centerUS" markers="markers" layers="layers" event-broadcast="events" width="100%" height="1000px"></leaflet>
+        <leaflet ng-style="mapStyle" lf-center="centerUS" markers="markers" layers="layers" event-broadcast="events" width="100%" height="1000px"></leaflet>
     </div>
 
-    <h3>{{error}}</h3>
+    <h4>{{error}}</h4>
 
-    Sites JSON: {{sites}}
+    <h3 ng-if="createSiteModeActive">CREATE SITE MODE ACTIVE</h3>
+
+    <button ng-click="createSiteModeActive = !createSiteModeActive">{{createSiteButtonText}}</button>
+    <button ng-if="createSiteModeActive">Create New Site at Dot</button>
+
+    <br>Sites JSON: {{sites}}
 
 </div>
