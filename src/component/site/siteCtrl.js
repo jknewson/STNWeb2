@@ -21,6 +21,7 @@
             
                 //open modal to edit or create a site
                 $scope.openSiteCreate = function () {
+                    $rootScope.stateIsLoading.showLoading = true; // loading..
                     var dropdownParts =[allHorDatums, allHorCollMethods, allStates, allCounties, allHousingTypes, allDeployPriorities,
                         allNetworkNames, allNetworkTypes, allDeployTypes, allSensDeps];
                     //modal
@@ -55,12 +56,17 @@
                     modalInstance.result.then(function (r) {
                         if (r !== 'Deleted') {
                             $scope.aSite = r[0];
+                            $scope.aSite.HorizontalDatum = $scope.aSite.HDATUM_ID > 0 ? allHorDatums.filter(function (hd) { return hd.DATUM_ID == $scope.aSite.HDATUM_ID; })[0].DATUM_NAME : "---";
+                            $scope.aSite.HorizontalCollectMethod = $scope.aSite.HCOLLECT_METHOD_ID !== undefined && $scope.aSite.HCOLLECT_METHOD_ID > 0 ? allHorCollMethods.filter(function (hc) { return hc.HCOLLECT_METHOD_ID == $scope.aSite.HCOLLECT_METHOD_ID; })[0].HCOLLECT_METHOD : "---";
+                            $scope.aSite.PriorityName = $scope.aSite.PRIORITY_ID !== undefined && $scope.aSite.PRIORITY_ID > 0 ? allDeployPriorities.filter(function (dp) { return dp.PRIORITY_ID == $scope.aSite.PRIORITY_ID; })[0].PRIORITY_NAME : "---";
+
                             $scope.siteNetworkNames = r[1];
                             $scope.siteNetworkTypes = r[2];
                         } else {
                             $scope.aSite = {};
                             $state.go('home');
                         }
+                        $rootScope.stateIsLoading.showLoading = false; // loading..
                     });
                 };
 
@@ -144,8 +150,7 @@
                     } else {
                         //site != undefined but the site.SITE_ID is == this site doesn't exist
                         toastr.error("This site does not exist");
-                        $(".page-loading").addClass("hidden");
-                        $location.path('/Home').replace();//.notify(false);
+                        $location.path('/Home').replace();
                         $scope.apply;
                     }
                         //#endregion existingSite

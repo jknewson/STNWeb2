@@ -4,11 +4,9 @@
     var ModalControllers = angular.module('ModalControllers');
 
     //deploy new or proposed sensor, edit deployed modal
-    ModalControllers.controller('sensorModalCtrl', ['$scope', '$timeout', '$cookies', '$http', '$uibModalInstance', '$uibModal', 'allDropdowns', 'agencyList', 'Site_Files', 'allDepTypes', 'thisSensor', 'SensorSite', 'siteOPs', 'allMembers', 'INSTRUMENT', 'INSTRUMENT_STATUS', 'DATA_FILE', 'FILE', 'SOURCE',
-        function ($scope, $timeout, $cookies, $http, $uibModalInstance, $uibModal, allDropdowns, agencyList, Site_Files, allDepTypes, thisSensor, SensorSite, siteOPs, allMembers, INSTRUMENT, INSTRUMENT_STATUS, DATA_FILE, FILE, SOURCE) {
-           $(".page-loading").addClass("hidden"); //loading...
-           //dropdowns [0]allSensorTypes, [1]allSensorBrands, [2]allHousingTypes, [3]allSensDeps, [4]allEvents
-           //TODO :: Can they edit a deployed sensor without an event being chosen???       
+    ModalControllers.controller('sensorModalCtrl', ['$scope', '$rootScope', '$timeout', '$cookies', '$http', '$uibModalInstance', '$uibModal', 'allDropdowns', 'agencyList', 'Site_Files', 'allDepTypes', 'thisSensor', 'SensorSite', 'siteOPs', 'allMembers', 'INSTRUMENT', 'INSTRUMENT_STATUS', 'DATA_FILE', 'FILE', 'SOURCE',
+        function ($scope, $rootScope, $timeout, $cookies, $http, $uibModalInstance, $uibModal, allDropdowns, agencyList, Site_Files, allDepTypes, thisSensor, SensorSite, siteOPs, allMembers, INSTRUMENT, INSTRUMENT_STATUS, DATA_FILE, FILE, SOURCE) {     
+           //dropdowns [0]allSensorTypes, [1]allSensorBrands, [2]allHousingTypes, [3]allSensDeps, [4]allEvents      
            $scope.sensorTypeList = allDropdowns[0];
            $scope.sensorBrandList = allDropdowns[1];
            $scope.houseTypeList = allDropdowns[2];
@@ -42,7 +40,7 @@
                var sec = d.substr(17, 2);
                var theDate = new Date(y, m, da, h, mi, sec);
                return theDate;
-           }
+           };
 
             //new datetimepicker https://github.com/zhaber/angular-js-bootstrap-datetimepicker
            $scope.dateOptions = {
@@ -394,8 +392,7 @@
 
            //cancel
            $scope.cancel = function () {
-               //$scope.adminChanged = {};
-               //$scope.EventName = $scope.eventList.filter(function (e) { return e.EVENT_ID == $scope.aSensor.EVENT_ID; })[0].EVENT_NAME;
+               $rootScope.stateIsLoading.showLoading = false; // loading.. 
                $uibModalInstance.dismiss('cancel');
            };
 
@@ -625,7 +622,6 @@
     // Retrieve a Sensor modal
     ModalControllers.controller('sensorRetrievalModalCtrl', ['$scope', '$timeout', '$cookies', '$http', '$uibModalInstance', '$uibModal', 'thisSensor', 'SensorSite', 'siteOPs', 'allEventList', 'allMembers', 'allStatusTypes', 'allInstCollCond', 'INSTRUMENT', 'INSTRUMENT_STATUS',
         function ($scope, $timeout, $cookies, $http, $uibModalInstance, $uibModal, thisSensor, SensorSite, siteOPs, allEventList, allMembers, allStatusTypes, allInstCollCond, INSTRUMENT, INSTRUMENT_STATUS) {
-            $(".page-loading").addClass("hidden"); //loading...
             $scope.aSensor = thisSensor.Instrument;
             $scope.EventName = allEventList.filter(function (r) {return r.EVENT_ID == $scope.aSensor.EVENT_ID;})[0].EVENT_NAME;
             $scope.depSensStatus = angular.copy(thisSensor.InstrumentStats[0]);
@@ -738,7 +734,6 @@
     // view/edit retrieved sensor (deployed included here) modal
     ModalControllers.controller('fullSensorModalCtrl', ['$scope', '$filter', '$timeout', '$cookies', '$http', '$uibModalInstance', '$uibModal', 'allDepDropdowns', 'agencyList', 'Site_Files', 'allStatusTypes', 'allInstCollCond', 'allEvents', 'allDepTypes', 'thisSensor', 'SensorSite', 'siteOPs', 'allMembers', 'INSTRUMENT', 'INSTRUMENT_STATUS', 'DATA_FILE', 'FILE', 'SOURCE', 
         function ($scope, $filter, $timeout, $cookies, $http, $uibModalInstance, $uibModal, allDepDropdowns, agencyList, Site_Files, allStatusTypes, allInstCollCond, allEvents, allDepTypes, thisSensor, SensorSite, siteOPs, allMembers, INSTRUMENT, INSTRUMENT_STATUS, DATA_FILE, FILE, SOURCE) {
-            $(".page-loading").addClass("hidden"); //loading...
             /*allSensorTypes, allSensorBrands, allHousingTypes, allSensDeps*/
             $scope.sensorTypeList = allDepDropdowns[0];
             $scope.sensorBrandList = allDepDropdowns[1];
@@ -808,18 +803,18 @@
                 var sec = d.substr(17, 2);
                 var theDate = new Date(y, m, da, h, mi, sec);
                 return theDate;
-            }
+            };
             
             $scope.thisSensorSite = SensorSite; $scope.userRole = $cookies.get('usersRole');
 
-            $scope.sensor = thisSensor.Instrument;
+            $scope.sensor = angular.copy(thisSensor.Instrument);
             //deploy part //////////////////
-            $scope.DeployedSensorStat = thisSensor.InstrumentStats.filter(function (inst) { return inst.Status === "Deployed"; })[0];            
+            $scope.DeployedSensorStat = angular.copy(thisSensor.InstrumentStats.filter(function (inst) { return inst.Status === "Deployed"; })[0]);
             $scope.DeployedSensorStat.TIME_STAMP = getDateTimeParts($scope.DeployedSensorStat.TIME_STAMP); //this keeps it as utc in display
             $scope.Deployer = allMembers.filter(function (m) { return m.MEMBER_ID === $scope.DeployedSensorStat.MEMBER_ID; })[0];
 
             //retrieve part //////////////////
-            $scope.RetrievedSensorStat = thisSensor.InstrumentStats.filter(function (inst) { return inst.Status === "Retrieved"; })[0];           
+            $scope.RetrievedSensorStat = angular.copy(thisSensor.InstrumentStats.filter(function (inst) { return inst.Status === "Retrieved"; })[0]);
             $scope.RetrievedSensorStat.TIME_STAMP = getDateTimeParts($scope.RetrievedSensorStat.TIME_STAMP); //this keeps it as utc in display
             $scope.Retriever = allMembers.filter(function (m) { return m.MEMBER_ID === $scope.RetrievedSensorStat.MEMBER_ID; })[0];
             //only need retrieved and lost statuses
@@ -874,15 +869,17 @@
             //cancel
             $scope.cancel = function () {
                 var sensorObjectToSendBack = {
-                    Instrument: $scope.sensor,
-                    InstrumentStats: [$scope.RetrievedSensorStat, $scope.DeployedSensorStat]
+                    Instrument: thisSensor.Instrument,
+                    InstrumentStats: [
+                        thisSensor.InstrumentStats.filter(function (inst) { return inst.Status === "Retrieved"; })[0],
+                        thisSensor.InstrumentStats.filter(function (inst) { return inst.Status === "Deployed"; })[0]
+                    ]
                 };
                 $timeout(function () {
                     // anything you want can go here and will safely be run on the next digest.                   
                     var sendBack = [sensorObjectToSendBack];
                     $uibModalInstance.close(sendBack);
-                });               
-                //$uibModalInstance.dismiss('cancel');
+                });                
             };
 
             //Done during edit PUT to ensure timezone doesn't affect db time value (is it UTC or local time..make sure it stays UTC)

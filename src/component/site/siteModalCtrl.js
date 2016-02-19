@@ -3,9 +3,9 @@
 
     var ModalControllers = angular.module('ModalControllers');
 
-    ModalControllers.controller('siteModalCtrl', ['$scope', '$cookies', '$q', '$location', '$state', '$http', '$timeout', '$uibModal', '$uibModalInstance', '$filter', 'allDropDownParts', 'latlong', 'thisSiteStuff', 
+    ModalControllers.controller('siteModalCtrl', ['$scope', '$rootScope', '$cookies', '$q', '$location', '$state', '$http', '$timeout', '$uibModal', '$uibModalInstance', '$filter', 'allDropDownParts', 'latlong', 'thisSiteStuff', 
         'SITE', 'SITE_HOUSING', 'MEMBER', 'INSTRUMENT', 'INSTRUMENT_STATUS', 'LANDOWNER_CONTACT', 
-        function ($scope, $cookies, $q, $location, $state, $http, $timeout, $uibModal, $uibModalInstance, $filter, allDropDownParts, latlong, thisSiteStuff, SITE, SITE_HOUSING, 
+        function ($scope, $rootScope, $cookies, $q, $location, $state, $http, $timeout, $uibModal, $uibModalInstance, $filter, allDropDownParts, latlong, thisSiteStuff, SITE, SITE_HOUSING, 
             MEMBER, INSTRUMENT, INSTRUMENT_STATUS, LANDOWNER_CONTACT) {
             //dropdowns
             $scope.HorizontalDatumList = allDropDownParts[0];
@@ -199,7 +199,7 @@
             //site PUT
             $scope.save = function (valid) {
                 if (valid) {
-                    $(".page-loading").removeClass("hidden");
+                    $rootScope.stateIsLoading.showLoading = true; // loading..
                     //update the site
                     $http.defaults.headers.common.Authorization = 'Basic ' + $cookies.get('STNCreds');
                     $http.defaults.headers.common.Accept = 'application/json';
@@ -302,11 +302,10 @@
 
                     //ok now run the removes, then the adds and then pass the stuff back out of here.
                     $q.all(RemovePromises).then(function () {
-                  //      $scope.originalSiteHousings = []; //clear this out after deleting all of them;
                         $q.all(AddPromises).then(function () {
                             var sendBack = [$scope.aSite, $scope.siteNetworkNames, $scope.siteNetworkTypes];
                             $uibModalInstance.close(sendBack);
-                            $(".page-loading").addClass("hidden");
+                            $rootScope.stateIsLoading.showLoading = false; // loading..
                             toastr.success("Site updated");
                             $location.path('/Site/' + $scope.aSite.SITE_ID + '/SiteDashboard').replace();//.notify(false);
                             $scope.apply;
@@ -317,6 +316,7 @@
                         console.error(msg);
                     }); //all added
                 }, function error(errorResponse) {
+                    $rootScope.stateIsLoading.showLoading = false; // loading..
                     toastr.error("Error updating Site: " + errorResponse.statusText);
                 });//end SITE.save(...
             }; // end PUTsite()
@@ -324,7 +324,7 @@
             //create this site clicked
             $scope.create = function (valid) {
                 if (valid === true) {
-                    $(".page-loading").removeClass("hidden");
+                    $rootScope.stateIsLoading.showLoading = true; // loading..
                     //POST landowner, if they added one
                     $http.defaults.headers.common.Authorization = 'Basic ' + $cookies.get('STNCreds');
                     $http.defaults.headers.common.Accept = 'application/json';
@@ -337,7 +337,7 @@
                                 //now post the site
                                 postSiteAndParts();
                             }, function error(errorResponse) {
-                                $(".page-loading").addClass("hidden");
+                                $rootScope.stateIsLoading.showLoading = false; // loading.. 
                                 toastr.error("Error posting landowner: " + errorResponse.statusText);
                             });
                         } else {
@@ -367,16 +367,16 @@
                     angular.forEach($scope.NetNameList, function (nName) {
                         if (nName.selected === true) {
                             var siteNetName = { NETWORK_NAME_ID: nName.NETWORK_NAME_ID, NAME: nName.NAME };
-                    //        var nNPromise = SITE.postSiteNetworkName({ id: createdSiteID }, siteNetName).$promise;
-                    //        postPromises.push(nNPromise);
+                            var nNPromise = SITE.postSiteNetworkName({ id: createdSiteID }, siteNetName).$promise;
+                            postPromises.push(nNPromise);
                         }
                     });
                     //site_NetworkTypes
                     angular.forEach($scope.NetTypeList, function (nType) {
                         if (nType.selected === true) {
                             var siteNetType = { NETWORK_TYPE_ID: nType.NETWORK_TYPE_ID, NETWORK_TYPE_NAME: nType.NETWORK_TYPE_NAME };
-                    //        var nTPromise = SITE.postSiteNetworkType({ id: createdSiteID }, siteNetType).$promise;
-                     //       postPromises.push(nTPromise);
+                            var nTPromise = SITE.postSiteNetworkType({ id: createdSiteID }, siteNetType).$promise;
+                            postPromises.push(nTPromise);
                         }
                     });
                     if ($scope.disableSensorParts === false) {
@@ -396,8 +396,8 @@
 
                     $q.all(postPromises).then(function (response) {
                         $uibModalInstance.dismiss('cancel');
-                        $(".page-loading").addClass("hidden");
-                        $location.path('/Site/' + createdSiteID + '/SiteDashboard').replace();//.notify(false);
+                        $rootScope.stateIsLoading.showLoading = false; // loading..
+                        $location.path('/Site/' + createdSiteID + '/SiteDashboard').replace();
                         $scope.apply;
                     });
                 }, function error(errorResponse) {
@@ -408,7 +408,9 @@
             if (thisSiteStuff !== undefined) {
                 //#region existing site 
                 //$scope.aSite[0], $scope.originalSiteHousings[1], $scope.siteHouseTypesTable[2], thisSiteNetworkNames[3], siteNetworkTypes[4], $scope.landowner[5]
-                $scope.aSite = angular.copy(thisSiteStuff[0]);            
+                $scope.aSite = angular.copy(thisSiteStuff[0]);
+                //for some reason there are tons of sites with HCOLLECT_METHOD_ID set to 0 when it's required..make it null so validation picks up on required field
+                if ($scope.aSite.HCOLLECT_METHOD_ID >= 0) $scope.aSite.HCOLLECT_METHOD_ID = null;
                 //if this site is not appropriate for sensor, dim next 2 fields
                 if ($scope.aSite.SENSOR_NOT_APPROPRIATE > 0) {
                     $scope.disableSensorParts = true;
@@ -584,7 +586,7 @@
                                     size: 'sm'
                                 });
                                 modalInstance.result.then(function () {
-                                    $(".page-loading").addClass("hidden");
+                                    $rootScope.stateIsLoading.showLoading = false; // loading..
                                 });
                                 // alert("Number of nearby Sites: " + closeSites.length);
                             }, function error(errorResponse) {
@@ -612,6 +614,7 @@
 
             //cancel modal
             $scope.cancel = function () {
+                $rootScope.stateIsLoading.showLoading = false; // loading..
                 $uibModalInstance.dismiss('cancel');
             };
 

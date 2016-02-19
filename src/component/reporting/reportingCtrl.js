@@ -30,7 +30,8 @@
                             console.log('go to: ' + toState.name);
                         } else {
                             console.log('stay at state: ' + fromState.name);
-                            $(".page-loading").addClass("hidden");
+                            $rootScope.stateIsLoading.showLoading = false;
+                            //$scope.$apply();// loading..//$(".page-loading").addClass("hidden");
                             event.preventDefault();
                             //event.stopPropagation;
                         }

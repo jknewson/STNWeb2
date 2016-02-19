@@ -3,8 +3,8 @@
 
     var STNControllers = angular.module('STNControllers');
 
-    STNControllers.controller('sensorCtrl', ['$scope', '$q', '$cookies', '$location', '$state', '$http', '$uibModal', '$filter', '$timeout', 'thisSite', 'thisSiteSensors', 'allSensorBrands', 'allAgencies', 'allDeployTypes', 'allSensorTypes', 'allSensDeps', 'allHousingTypes', 'allEvents', 'allFileTypes', 'INSTRUMENT', 'INSTRUMENT_STATUS', 'SITE', 'MEMBER', 'DEPLOYMENT_TYPE', 'STATUS_TYPE', 'INST_COLL_CONDITION',
-        function ($scope, $q, $cookies, $location, $state, $http, $uibModal, $filter, $timeout, thisSite, thisSiteSensors, allSensorBrands, allAgencies, allDeployTypes, allSensorTypes, allSensDeps, allHousingTypes, allEvents, allFileTypes, INSTRUMENT, INSTRUMENT_STATUS, SITE, MEMBER, DEPLOYMENT_TYPE, STATUS_TYPE, INST_COLL_CONDITION) {
+    STNControllers.controller('sensorCtrl', ['$scope', '$rootScope', '$q', '$cookies', '$location', '$state', '$http', '$uibModal', '$filter', '$timeout', 'thisSite', 'thisSiteSensors', 'allSensorBrands', 'allAgencies', 'allDeployTypes', 'allSensorTypes', 'allSensDeps', 'allHousingTypes', 'allEvents', 'allFileTypes', 'INSTRUMENT', 'INSTRUMENT_STATUS', 'SITE', 'MEMBER', 'DEPLOYMENT_TYPE', 'STATUS_TYPE', 'INST_COLL_CONDITION',
+        function ($scope, $rootScope, $q, $cookies, $location, $state, $http, $uibModal, $filter, $timeout, thisSite, thisSiteSensors, allSensorBrands, allAgencies, allDeployTypes, allSensorTypes, allSensDeps, allHousingTypes, allEvents, allFileTypes, INSTRUMENT, INSTRUMENT_STATUS, SITE, MEMBER, DEPLOYMENT_TYPE, STATUS_TYPE, INST_COLL_CONDITION) {
             if ($cookies.get('STNCreds') === undefined || $cookies.get('STNCreds') === "") {
                 $scope.auth = false;
                 $location.path('/login');
@@ -99,7 +99,7 @@
                 $scope.showRetrieveModal = function (sensorClicked) {
                     //need statusTypes, CollectConditions               
                     var indexClicked = $scope.SiteSensors.indexOf(sensorClicked); var allindex = thisSiteSensors.indexOf(sensorClicked);
-                    $(".page-loading").removeClass("hidden"); //loading...
+                    $rootScope.stateIsLoading.showLoading = true;// loading..//$(".page-loading").removeClass("hidden"); //loading...
 
                     var modalInstance = $uibModal.open({
                         templateUrl: 'SensorRetrievalModal.html',
@@ -142,6 +142,7 @@
                             $scope.SiteSensors.splice(indexClicked1, 1);
                             $scope.sensorCount.total = $scope.SiteSensors.length;
                         }
+                        $rootScope.stateIsLoading.showLoading = false; // loading..
                     });
                 };//end showRetrieveModal
 
@@ -149,7 +150,7 @@
                 $scope.showSensorModal = function (sensorClicked) {
                     var passAllLists = [allSensorTypes, allSensorBrands, allHousingTypes, allSensDeps, allEvents, SensFileTypes];
                     var indexClicked = $scope.SiteSensors.indexOf(sensorClicked);
-                    $(".page-loading").removeClass("hidden"); //loading...
+                    $rootScope.stateIsLoading.showLoading = true;// loading..// $(".page-loading").removeClass("hidden"); //loading...
                 
                     var modalInstance = $uibModal.open({
                         templateUrl: 'Sensormodal.html',
@@ -201,6 +202,7 @@
                             $scope.SiteSensors.splice(i, 1);
                             $scope.sensorCount.total = $scope.SiteSensors.length;
                         }
+                        $rootScope.stateIsLoading.showLoading = false;// loading..
                     });
                 };
 
@@ -210,7 +212,7 @@
                     var deployedStuff = [allSensorTypes, allSensorBrands, allHousingTypes, allSensDeps, SensFileTypes];
                     var retrievedStuff = [];
                     var indexClicked = $scope.SiteSensors.indexOf(sensorClicked);
-                    $(".page-loading").removeClass("hidden"); //loading...
+                    $rootScope.stateIsLoading.showLoading = true;// loading..// $(".page-loading").removeClass("hidden"); //loading...
 
                     var modalInstance = $uibModal.open({
                         templateUrl: 'fullSensormodal.html',
@@ -256,6 +258,7 @@
                     modalInstance.result.then(function (createdSensor) {
                         //update the list
                         $scope.SiteSensors[indexClicked] = createdSensor[0];
+                        $rootScope.stateIsLoading.showLoading = false;// loading..
                     });
 
                 };

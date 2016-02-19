@@ -143,7 +143,7 @@
                     delete $scope.aSite.ADDRESS; delete $scope.aSite.CITY; delete $scope.aSite.STATE;
                     $scope.stateCountyList = []; delete $scope.aSite.ZIP;
 
-                    $(".page-loading").removeClass("hidden"); //loading...
+                    $rootScope.stateIsLoading.showLoading = true; //loading...
                     var geocoder = new google.maps.Geocoder(); //reverse address lookup
                     var latlng = new google.maps.LatLng($scope.aSite.LATITUDE_DD, $scope.aSite.LONGITUDE_DD);
                     geocoder.geocode({ 'latLng': latlng }, function (results, status) {
@@ -165,17 +165,18 @@
                                 $scope.aSite.STATE = thisState.STATE_ABBREV;
                                 $scope.stateCountyList = $scope.allCountyList.filter(function (c) { return c.STATE_ID == thisState.STATE_ID; });
                                 $scope.aSite.COUNTY = components.administrative_area_level_2;
-                                $scope.aSite.ZIP = components.postal_code;
+                                $scope.aSite.ZIP = components.postal_code;                                
+                                $rootScope.stateIsLoading.showLoading = false;// loading..
                                 $scope.$apply();
-                                $(".page-loading").addClass("hidden");
                             } else {
-                                $(".page-loading").addClass("hidden");
+                                $rootScope.stateIsLoading.showLoading = false;// loading..
                                 toastr.error("The Latitude/Longitude did not return a location within the U.S.");
                             }
                         } else {
-                            $(".page-loading").addClass("hidden");
+                            $rootScope.stateIsLoading.showLoading = false;// loading..
                             toastr.error("There was an error getting address. Please try again.");
                         }
+                       
                     });
                     // 
                 };//end getAddress()
@@ -197,7 +198,7 @@
                 //make uncertainty cleared and disabled when 'unquantified' is checked
                 $scope.UnquantChecked = function () {
                     if ($scope.aOP.UNQUANTIFIED == 1)
-                        $scope.aOP.UNCERTAINTY = "";
+                        $scope.aOP.UNCERTAINTY = null;
                 };//end unquantChecked() for op
 
                 //just need an OBJECTIVE_POINT object to post/put
@@ -242,7 +243,7 @@
 
                 $scope.siteErrors = false; $scope.opErrors = false; $scope.hwmErrors = false; 
                 $scope.create = function () {
-                    $(".page-loading").removeClass("hidden");
+                    $rootScope.stateIsLoading.showLoading = true;// loading..
                     var theForm = $scope.qhwmForm.quickHWM; $scope.siteErrors = false; $scope.opErrors = false; $scope.hwmErrors = false;
                     if (theForm.$valid) {
                         //site POST
@@ -290,7 +291,7 @@
                                 }
                                 HWM.save($scope.aHWM).$promise.then(function (response) {
                                     toastr.success("Quick HWM created");
-                                    $(".page-loading").addClass("hidden");
+                                    $rootScope.stateIsLoading.showLoading = false;// loading..
                                     $location.path('/Site/' + createdSiteID + '/SiteDashboard').replace();//.notify(false);
                                     $scope.apply;
                                 });//end HWM.save()
@@ -298,7 +299,7 @@
                         });//end SITE.save()
 
                     } else {
-                        $(".page-loading").addClass("hidden");
+                        $rootScope.stateIsLoading.showLoading = false;// loading..
                         $scope.status.siteOpen = true;
                         $scope.status.opOpen = true;
                         $scope.status.hwmOpen = true;
