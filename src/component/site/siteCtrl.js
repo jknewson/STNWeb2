@@ -3,9 +3,9 @@
 
     var STNControllers = angular.module('STNControllers');
 
-    STNControllers.controller('siteCtrl', ['$scope', '$rootScope', '$cookies', '$location', '$http', '$uibModal', '$filter', 'thisSite', 'latlong', 'thisSiteNetworkNames', 'thisSiteNetworkTypes', 'thisSiteHousings',
+    STNControllers.controller('siteCtrl', ['$scope', '$state', '$rootScope', '$cookies', '$location', '$http', '$uibModal', '$filter', 'thisSite', 'latlong', 'thisSiteNetworkNames', 'thisSiteNetworkTypes', 'thisSiteHousings',
         'SITE', 'MEMBER', 'allHorDatums', 'allHorCollMethods', 'allStates', 'allCounties', 'allDeployPriorities', 'allHousingTypes', 'allNetworkNames', 'allNetworkTypes', 'allDeployTypes', 'allSensDeps',
-        function ($scope, $rootScope, $cookies, $location, $http, $uibModal, $filter, thisSite, latlong, thisSiteNetworkNames, thisSiteNetworkTypes, thisSiteHousings, SITE, MEMBER, allHorDatums,
+        function ($scope, $state, $rootScope, $cookies, $location, $http, $uibModal, $filter, thisSite, latlong, thisSiteNetworkNames, thisSiteNetworkTypes, thisSiteHousings, SITE, MEMBER, allHorDatums,
             allHorCollMethods, allStates, allCounties, allDeployPriorities, allHousingTypes, allNetworkNames, allNetworkTypes, allDeployTypes, allSensDeps) {
             if ($cookies.get('STNCreds') === undefined || $cookies.get('STNCreds') === "") {
                 $scope.auth = false;
@@ -53,9 +53,14 @@
                         }
                     });
                     modalInstance.result.then(function (r) {
-                        $scope.aSite = r[0];
-                        $scope.siteNetworkNames = r[1];
-                        $scope.siteNetworkTypes = r[2];
+                        if (r !== 'Deleted') {
+                            $scope.aSite = r[0];
+                            $scope.siteNetworkNames = r[1];
+                            $scope.siteNetworkTypes = r[2];
+                        } else {
+                            $scope.aSite = {};
+                            $state.go('home');
+                        }
                     });
                 };
 
