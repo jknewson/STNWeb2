@@ -11,7 +11,6 @@
             var chosenEv = $cookies.get('SessionEventID'); //see if we need to select the session event
             $scope.event = { EventChosen: chosenEv !== undefined ? Number(chosenEv) : "" };
 
-            $(".page-loading").addClass("hidden");
             //filters chosen, only show these events
             $scope.filterEvents = function () {
                 //?Date: null, Type: 0, State: null
@@ -60,7 +59,5 @@
             $scope.close = function () {
                 $uibModalInstance.dismiss('cancel');
             };
-
-            $(".page-loading").addClass("hidden");
         }]);
 })();

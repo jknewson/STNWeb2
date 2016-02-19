@@ -49,7 +49,7 @@
 
                 //filter options chosen, go get these sites to show in a table
                 $scope.searchSites = function () {
-                    $(".page-loading").removeClass("hidden");
+                    $rootScope.stateIsLoading.showLoading = true; // loading..
                     var stateString = $scope.chosenStates.join();
                     $scope.siteResponse = false;
                     $scope.siteList = [];
@@ -67,9 +67,9 @@
                     function success(response) {
                         $scope.siteList = response;
                         $scope.siteResponse = true;
-                        $(".page-loading").addClass("hidden");
+                        $rootScope.stateIsLoading.showLoading = false; // loading..
                     }, function error(errorResponse) {
-                        $(".page-loading").removeClass("hidden");
+                        $rootScope.stateIsLoading.showLoading = false; // loading..
                         alert("Error: " + errorResponse.statusText);
                     });
                 };//end searchSites click action
