@@ -19,7 +19,9 @@
             $scope.NetTypeList = allDropDownParts[7];
             $scope.ProposedSens = allDropDownParts[8];
             $scope.SensorDeployment = allDropDownParts[9];
-            
+            MEMBER.query({ id: $cookies.get('mID') }).$promise.then(function (mResponse) {
+                $scope.loggedInUser = mResponse;
+            });
             //globals 
             $scope.houseDirty = false; $scope.netNameDirty = false; $scope.netTypeDirty = false;
             $scope.siteHouseTypesTable = [];
@@ -612,5 +614,39 @@
             $scope.cancel = function () {
                 $uibModalInstance.dismiss('cancel');
             };
+
+            //delete this Site
+            $scope.deleteSite = function () {
+                var thisSite = $scope.aSite;
+                var dSiteModal = $uibModal.open({
+                    template: '<div class="modal-header"><h3 class="modal-title">Delete Site</h3></div>' +
+                        '<div class="modal-body"><p>Are you sure you want to delete site {{siteNo}}? Doing so will remove all OPs, HWMs, Sensors and Files associated with it.</p></div>' +
+                        '<div class="modal-footer"><button class="btn btn-danger" ng-click="deleteIt()">Delete</button><button class="btn btn-primary" ng-click="ok()">Cancel</button></div>',
+                    controller: ['$scope', '$uibModalInstance', function ($scope, $uibModalInstance) {
+                        $scope.siteNo = thisSite.SITE_NO;
+                        $scope.ok = function () {
+                            $uibModalInstance.dismiss('cancel');
+                        };
+                        $scope.deleteIt = function () {
+                            //delete the site and all things 
+                            $uibModalInstance.close(thisSite);
+                        };
+                    }],
+                    size: 'sm'
+                });
+                dSiteModal.result.then(function (s) {
+                    $http.defaults.headers.common.Authorization = 'Basic ' + $cookies.get('STNCreds');
+                    SITE.delete({ id: s.SITE_ID }).$promise.then(function () {
+                        toastr.success("Site Removed");
+                        var sendBack = "Deleted";
+                        $uibModalInstance.close(sendBack);
+                    }, function error(errorResponse) {
+                        toastr.error("Error: " + errorResponse.statusText);
+                    });
+                }, function () {
+                    //logic for cancel
+                });//end modal
+            };
+
         }]);
 })();

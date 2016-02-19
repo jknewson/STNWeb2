@@ -101,6 +101,7 @@
                     f = f !== null || f !== undefined ? f : nameToRemove.FILE_ID;
 
                     $scope.nameToRmv = f;
+                    break;
             }
             //#endregion
 

@@ -500,6 +500,11 @@
                                 <span>Save</span>
                             </button>
                         </span>
+                        <span ng-if="loggedInUser.ROLE_ID == 1">
+                            <button ng-show="aSite.SITE_ID != undefined" class="btn btn-danger" style="width:80px;margin-right:10px" ng-click="deleteSite()">
+                                <span>Delete</span>
+                            </button>
+                        </span>
                         <span>
                             <button type="button" class="btn btn-default" ng-click="cancel()">
                                 <span>Cancel</span>
