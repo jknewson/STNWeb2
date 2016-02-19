@@ -2,8 +2,8 @@
     'use strict';
     var STNControllers = angular.module('STNControllers');
 
-    STNControllers.controller('MapController', ['$scope', '$http', '$rootScope', '$cookies', '$location', 'SITE', "leafletMarkerEvents",
-        function ($scope, $http, $rootScope, $cookies, $location, SITE, leafletMarkerEvents) {
+    STNControllers.controller('MapController', ['$scope', '$http', '$rootScope', '$cookies', '$location', 'SITE', "leafletMarkerEvents", '$state',
+        function ($scope, $http, $rootScope, $cookies, $location, SITE, leafletMarkerEvents, $state) {
             if ($cookies.get('STNCreds') === undefined || $cookies.get('STNCreds') === "") {
                 $scope.auth = false;
                 $location.path('/login');
@@ -59,6 +59,8 @@
                 ///get site from click
                 $scope.$on("leafletDirectiveMap.click", function(event, args){
                     if ($scope.createSiteModeActive == true) {
+                        //first, remove previously click-created site
+                        removeUserCreatedSite();
                         var leafEvent = args.leafletEvent;
                         $scope.userCreatedSite = {
                             latitude: leafEvent.latlng.lat,
@@ -68,14 +70,7 @@
                         //var createdSite = $scope.markers.filter(function (obj) {
                         //        return obj.SITE_ID === 'newSite';
                         //})[0];
-                        //returns created site index so it can be removed to make way for its replacement
-                        var createdSiteIndex = $scope.markers.map(function(obj) {
-                            return obj.SITE_ID;
-                        }).indexOf('newSite');
-                        //splice created site from the markers array if it exists
-                        if (createdSiteIndex > -1) {
-                            $scope.markers.splice(createdSiteIndex, 1);
-                        }
+
                         $scope.markers.push({
                             layer: 'newSite',
                             lat: $scope.userCreatedSite.latitude,
@@ -84,11 +79,23 @@
                             icon: icons.new,
                             message: "New draggable STN site",
                             draggable: true,
-                            focus: true
+                            focus: false
                         });
                     }
                     //use new clicked site lat/lng and create new site from that
                 });
+
+                var removeUserCreatedSite = function () {
+                    //returns created site index so it can be removed to make way for its replacement
+                    var createdSiteIndex = $scope.markers.map(function(obj) {
+                        return obj.SITE_ID;
+                    }).indexOf('newSite');
+                    //splice created site from the markers array if it exists
+                    if (createdSiteIndex > -1) {
+                        $scope.markers.splice(createdSiteIndex, 1);
+                        $scope.userCreatedSite = {};
+                    }
+                };
 
                 ///update newSite lat/lng after dragend
                 $scope.$on("leafletDirectiveMarker.dragend", function(event, args){
@@ -98,11 +105,16 @@
                         longitude: dragendLocation.lng
                     };
                 });
-
+                ///listens (watches) for change of the createSiteModeActive attribute - cued by click of the Create Site button
                 $scope.$watch('createSiteModeActive', function(){
                     $scope.createSiteButtonText = $scope.createSiteModeActive ? 'Cancel Create New Site' : 'Create New Site on Map';
                     $scope.mapStyle = $scope.createSiteModeActive ? {"cursor":"crosshair"} : {"cursor":"grab"};
+                    if (!$scope.createSiteModeActive) {removeUserCreatedSite();}
                 });
+
+                $scope.createSiteFromMap = function () {
+                    $state.go('site.dashboard', { id: 0, latitude: $scope.userCreatedSite.latitude, longitude: $scope.userCreatedSite.longitude });
+                };
 
                 //get all STN sites
                 //$http.get('https://stn.wim.usgs.gov/STNServices/Sites/points.json')
@@ -127,7 +139,7 @@
                         lng: -92.336,
                         zoom: 4
                     },
-                    markers: {},
+                    markers: [],
                     createSiteModeActive: false,
                     userCreatedSite: {},
                     layers: {
@@ -190,13 +202,16 @@
                         overlays : {
                             stnSites: {
                                 type: 'group',
-                                name:'stnSites',
+                                name:'STN Sites',
                                 visible: true
                             },
                             newSite : {
                                 type: 'group',
                                 name: 'newSite',
-                                visible:true
+                                visible:true,
+                                layerParams: {
+                                    showOnSelector: false
+                                }
                             },
                             nwis : {
                                 name: "USGS real-time streamgages",
