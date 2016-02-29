@@ -214,7 +214,7 @@
             {}, {
                 query: {},
                 getAll: { method: 'GET', isArray: true },
-                getEventHWMs: { method: 'GET', url: rootURL + '/Events/:Eventid/hwms.json' },
+                getFilteredHWMs: { method: 'GET', isArray: true, url: rootURL + '/HWMs/FilteredHWMs.json' }, //Event={eventIds}&EventType={eventTypeIDs}&EventStatus={eventStatusID}&States={states}&County={counties}&HWMType={hwmTypeIDs}&HWMQuality={hwmQualIDs}&HWMEnvironment={hwmEnvironment}&SurveyComplete={surveyComplete}&StillWater={stillWater}
                 getUnapprovedHWMs: {method: 'GET', cache: false},
                 update: { method: 'PUT', cache: false, isArray: false },
                 save: { method: 'POST', cache: false, isArray: false },

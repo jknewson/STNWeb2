@@ -500,7 +500,7 @@
                                 <span>Save</span>
                             </button>
                         </span>
-                        <span ng-if="loggedInUser.ROLE_ID == 1">
+                        <span ng-if="userRole == 'Admin'">
                             <button ng-show="aSite.SITE_ID != undefined" class="btn btn-danger" style="width:80px;margin-right:10px" ng-click="deleteSite()">
                                 <span>Delete</span>
                             </button>
@@ -1699,7 +1699,6 @@
                 </div>
 
                 <!-- -------------------------- END TAPEDOWN SECTION --------------------------------  -->
-
                 <!-- Vented (only if Sensor Type is Pressure Transducer)-->
                 <div ng-show="aSensor.SENSOR_TYPE_ID == 1">
                     <div class="form-group">
@@ -1773,7 +1772,7 @@
                             <option value=""></option>
                         </select>
                     </div>
-                    <button type="button" class="borderLess" tooltip-placement="right"  uib-tooltip="Date/Time will be stored in UTC.">
+                    <button type="button" class="borderLess" tooltip-placement="right" uib-tooltip="Date/Time will be stored in UTC.">
                         <span class="glyphicon glyphicon-question-sign"></span>
                     </button>
                 </div>
@@ -2808,14 +2807,14 @@
                     <div class="col-md-9">
                         <input type="file" max="500000" file-model="aFile.File" />
                         <!--<input type="file" ngf-select ng-model="aFile.File" name="file" ngf-max-size="500MB" ngf-min-height="100" ngf-resize="{width: 100, height: 100}" required />
-                    <button class="button" ngf-select="uploadFiles($files)" multiple>Select Files</button>-->
+                        <button class="button" ngf-select="uploadFiles($files)" multiple>Select Files</button>-->
                         <img ngf-thumbnail="aFile.File" style="height:60px" class="thumbnail">
                     </div>
                 </div>
 
                 <!--Multiple files
-            <div class="button" ngf-select ng-model="files" ngf-multiple="true">Select</div>
-                 Drop files: <div ngf-drop ng-model="files" class="drop-box">Drop</div>-->
+                <div class="button" ngf-select ng-model="files" ngf-multiple="true">Select</div>
+                     Drop files: <div ngf-drop ng-model="files" class="drop-box">Drop</div>-->
                 <!--File Type*-->
                 <div class="form-group required" ng-class="{'has-error':FILEForm.FILETYPE_ID.$invalid && FILEForm.FILETYPE_ID.$dirty}">
                     <label class="col-md-3 control-label req" for="FILETYPE_ID">File Type:</label>
@@ -3006,8 +3005,7 @@
                         <img ng-if="aFile.FILETYPE_ID === 1" style="height:80px;" ng-src="https://stntest.wim.usgs.gov/STNServices2/Files/{{aFile.FILE_ID}}/Item" />
                     </div>
                 </div>
-            </div>
-            </div>
+            </div>           
 
             <div class="modal-footer">
                 <button class="btn btn-primary" ng-if="aFile.FILE_ID != undefined" ng-click="save(FILEForm.$valid)">Save</button>
@@ -3019,16 +3017,105 @@
     </form>
 </script>
 
-<!--<style type="text/css">
-    .carousel-indicators {
-        bottom: 0;
-    }
+<!-- MODAL for PEAK Create/edit-->
+<script type="text/ng-template" id="PEAKmodal.html">
+    <div class="modal-header">
+        <h3 class="modal-title">Peak Summary</h3>
+    </div>
+    <form class="form-horizontal" name="peakForm">
+        <fieldset>
+            <div class="modal-body">
 
-    .carousel-caption {
-        padding: 0;
-    }
+                <!--Peak creator-->
+                <div class="form-group">
+                    <label class="col-md-3 control-label" for="MEMBER_ID">Peak Creator:</label>
+                    <div class="col-md-4">
+                        <span>{{PeakCreator.FNAME}} {{PeakCreator.LNAME}}</span>
+                    </div>
+                </div>
+                <!-- Peak Date/Time: * -->
+                <div class="form-group required" ng-class="{'has-error':peakForm.PEAK_DATE.$invalid && peakForm.PEAK_DATE.$dirty}">
+                    <label class="col-md-3 control-label req" style="margin-top:3%" for="PEAK_DATE">Peak Date &amp; Time:</label>
+                    <div class="col-md-4">
+                        <datetimepicker hour-step="1" minute-step="1" ng-model="aPeak.PEAK_DATE" show-meridian="true"
+                                        date-format="MM/dd/yyyy" readonly-date="false" readonly-time="false" date-options="dateOptions"
+                                        hidden-time="false" hidden-date="false" show-spinners="true" required>
+                        </datetimepicker>
+                    </div>
+                </div>
 
-    .active {
-        background: none;
-    }
-</style>-->
+                <!-- Time Zone:* -->
+                <div class="form-group required">
+                    <label class="col-md-3 control-label" for="TIME_ZONE">Time Zone:</label>
+                    <div class="col-md-4">
+                        <select class="form-control" name="TIME_ZONE" ng-model="aPeak.TIME_ZONE"
+                                ng-options="vcm for vcm in timeZoneList" required>
+                            <option value=""></option>
+                        </select>
+                    </div>
+                    <button type="button" class="borderLess" tooltip-placement="right" uib-tooltip="Date/Time will be stored in UTC.">
+                        <span class="glyphicon glyphicon-question-sign"></span>
+                    </button>
+                </div>
+
+                <!--Date Estimated-->
+                <div class="form-group">
+                    <label class="col-md-3 control-label" for="IS_PEAK_ESTIMATED">Peak Date Estimated:</label>
+                    <div class="col-md-4">
+                        <ul style="padding-left:0">
+                            <li style="list-style:none;">
+                                <input type="checkbox" name="IS_PEAK_ESTIMATED" ng-model="aPeak.IS_PEAK_ESTIMATED" ng-true-value="1" ng-false-value="0" />
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <!--Time Estimated-->
+                <div class="form-group">
+                    <label class="col-md-4 control-label" for="IS_PEAK_TIME_ESTIMATED">Peak Time Estimated:</label>
+                    <div class="col-md-6">
+                        <ul style="padding-left:0">
+                            <li style="list-style:none;">
+                                <input type="checkbox" name="IS_PEAK_TIME_ESTIMATED" ng-model="aPeak.IS_PEAK_TIME_ESTIMATED" ng-true-value="1" ng-false-value="0" />
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <!-- Peak Stage-->
+                <div class="form-group">
+                    <label class="col-md-4 control-label" for="PEAK_STAGE">Peak Stage (elevation ft):</label>
+                    <div class="col-md-6">
+                        <input class="form-control" ng-keypress="isNum($event)" name="PEAK_STAGE" ng-model="aPeak.PEAK_STAGE" type="text" />
+                    </div>
+                </div>
+                <!--Stage Estimated-->
+                <div class="form-group">
+                    <label class="col-md-4 control-label" for="IS_PEAK_STAGE_ESTIMATED">Peak Stage Estimated:</label>
+                    <div class="col-md-6">
+                        <ul style="padding-left:0">
+                            <li style="list-style:none;">
+                                <input type="checkbox" name="IS_PEAK_STAGE_ESTIMATED" ng-model="aPeak.IS_PEAK_STAGE_ESTIMATED" ng-true-value="1" ng-false-value="0" />
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Vertical Datum: -->
+                <div class="form-group">
+                    <label class="col-md-4 control-label" for="VDATUM_ID">Vertical Datum:</label>
+                    <div class="col-md-6">
+                        <select class="form-control" name="VDATUM_ID" ng-model="aPeak.VDATUM_ID"
+                                ng-options="vd.DATUM_ID as vd.DATUM_ABBREVIATION for vd in VDatumsList">
+                            <option value=""></option>
+                        </select>
+                    </div>
+                </div>
+
+            </div><!-- end modal-body-->
+            <div class="modal-footer">
+                <button class="btn btn-primary" ng-if="aPeak.PEAK_SUMMARY_ID != undefined" ng-click="save(peakForm.$valid)">Save</button>
+                <button class="btn btn-primary" ng-if="aPeak.PEAK_SUMMARY_ID == undefined" ng-click="create(peakForm.$valid)">Create</button>
+                <button class="btn btn-warning" type="button" ng-click="cancel()">Cancel</button>
+            </div>
+        </fieldset>
+    </form>
+</script>
