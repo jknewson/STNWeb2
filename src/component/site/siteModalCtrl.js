@@ -19,9 +19,8 @@
             $scope.NetTypeList = allDropDownParts[7];
             $scope.ProposedSens = allDropDownParts[8];
             $scope.SensorDeployment = allDropDownParts[9];
-            MEMBER.query({ id: $cookies.get('mID') }).$promise.then(function (mResponse) {
-                $scope.loggedInUser = mResponse;
-            });
+            $scope.userRole = $cookies.get('usersRole');
+            
             //globals 
             $scope.houseDirty = false; $scope.netNameDirty = false; $scope.netTypeDirty = false;
             $scope.siteHouseTypesTable = [];

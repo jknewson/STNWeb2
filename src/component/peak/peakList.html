@@ -5,16 +5,15 @@
             <span>Peaks</span>
             <span class="badge pull-right">{{peakCount.total}}</span>
         </uib-accordion-heading>
-        <div class="btn-group pull-right">
-            <div class="btn-group">
-                <button style="background:none" ng-click="showOPModal(0)" class="btn"><span class="glyphicon glyphicon-plus"></span></button>
-            </div>
+
+        <div ng-show="sessionEventExists" class="btn-group pull-right">
+            <button type="button" class="borderLess" ng-click="showPeakModal(0)" tooltip-placement="right" tooltip-append-to-body="true" uib-tooltip="Add a Peak Summary">
+                <span class="glyphicon glyphicon-plus"></span>
+            </button>                
         </div>
+        <div ng-show="!sessionEventExists">To create a Peak Summary, first choose a session Event above.</div>
         <ul>
-            <li>test1</li>
-            <li>test2</li>
-            <li>test2</li>
-            <!--<li ng-repeat="op in SiteObjectivePoints"><a class="btn" ng-click="showOPModal(op)">{{op.NAME}}</a></li>-->
+            <li ng-repeat="p in SitePeaks"><a class="btn" ng-click="showPeakModal(p)">{{p.PEAK_DATE | date: "MM/dd/yyyy"}} <span ng-if="p.PEAK_STAGE"> - ({{p.PEAK_STAGE}} ft.)</span></a></li>            
         </ul>
     </uib-accordion-group>
 </uib-accordion>

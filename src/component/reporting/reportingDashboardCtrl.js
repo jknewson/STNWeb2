@@ -78,7 +78,7 @@
             //give me the reports done on this date
             $scope.getReportsByDate = function () {
                 if ($scope.THIS_DATE.date !== undefined) {
-                    var formatDate = new Date($scope.THIS_DATE.date);//
+                    var formatDate = new Date($scope.THIS_DATE.date);
                     formatDate.setHours(0, 0, 0, 0);
                     formatDate = formatDate.toISOString().substr(0, 10);
                     var thisDateReports = $scope.reportsToDate.filter(function (tdate) {

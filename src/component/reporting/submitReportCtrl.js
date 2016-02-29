@@ -150,7 +150,10 @@
             //get values for Personnel Yesterdays, and Contacts (if report was done yesterday), and all counts for instruments & hwms
             $scope.populateYestTots = function () {
                 if ($scope.newReport.REPORT_DATE !== undefined && $scope.newReport.STATE !== undefined && $scope.newReport.EVENT_ID !== undefined) {
-                    var myDate = new Date($scope.newReport.REPORT_DATE);
+                    var formatDate = new Date($scope.newReport.REPORT_DATE);
+                    formatDate.setHours(0, 0, 0, 0);
+                    formatDate = formatDate.toISOString().substr(0, 10);
+                    var myDate = formatDate;
                     var theState = $scope.newReport.STATE;
                     var eID = $scope.newReport.EVENT_ID;
 
@@ -159,16 +162,23 @@
                     $scope.DeployStaff = {}; $scope.GenStaff = {}; $scope.InlandStaff = {};
                     $scope.CoastStaff = {}; $scope.WaterStaff = {};
                     var previousDay = new Date(myDate);
-                    previousDay.setDate(myDate.getDate() - 1);
                     previousDay.setHours(0, 0, 0, 0);
+                    previousDay = previousDay.toISOString().substr(0, 10);
+                    //previousDay.setDate(myDate.getDate() - 1);
+                    //previousDay.setHours(0, 0, 0, 0);
+
+                    //var thisDateReports = $scope.reportsToDate.filter(function (tdate) {
+                    //    var reportDate = tdate.REPORT_DATE.toString().substring(0, 10);
+                    //    return reportDate == formatDate;
+                    //});
+
                     var yesterdayRpt = $scope.reports.filter(function (r) {
-                        var repDate = new Date(r.REPORT_DATE).setHours(0, 0, 0, 0);
-                        return (r.EVENT_ID == $scope.newReport.EVENT_ID && r.STATE == $scope.newReport.STATE) &&
-                            (new Date(repDate).getTime()) == (previousDay.getTime());
+                        var repDate = r.REPORT_DATE.toString().substring(0, 10);
+                        return (r.EVENT_ID == $scope.newReport.EVENT_ID && r.STATE == $scope.newReport.STATE) && (repDate == previousDay);
                     })[0];
                     $http.defaults.headers.common.Authorization = 'Basic ' + $cookies.get('STNCreds');
                     $http.defaults.headers.common.Accept = 'application/json';
-                    if (yesterdayRpt !== undefined && yesterdayRpt.length > 0) {
+                    if (yesterdayRpt !== undefined) {
                         // PERSONNEL populating
                         $scope.newReport.SW_YEST_FIELDPERS = yesterdayRpt.SW_TOD_FIELDPERS;
                         $scope.newReport.WQ_YEST_FIELDPERS = yesterdayRpt.WQ_TOD_FIELDPERS;
@@ -185,7 +195,7 @@
                         $scope.newReport.WQ_YEST_OFFICEPERS = 0;
                     }
                     //now get totals for all sensors and hwms to populate in this newReport
-                    REPORT.getDailyReportTots({ Date: $scope.newReport.REPORT_DATE, Event: $scope.newReport.EVENT_ID, State: $scope.newReport.STATE }, function success(response6) {
+                    REPORT.getDailyReportTots({ Date: myDate, Event: $scope.newReport.EVENT_ID, State: $scope.newReport.STATE }, function success(response6) {
                         //only care about the counts
                         $scope.newReport.DEP_RAPDEPL_GAGE = response6.DEP_RAPDEPL_GAGE;
                         $scope.newReport.REC_RAPDEPL_GAGE = response6.REC_RAPDEPL_GAGE;
