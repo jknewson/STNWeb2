@@ -164,14 +164,7 @@
                     var previousDay = new Date(myDate);
                     previousDay.setHours(0, 0, 0, 0);
                     previousDay = previousDay.toISOString().substr(0, 10);
-                    //previousDay.setDate(myDate.getDate() - 1);
-                    //previousDay.setHours(0, 0, 0, 0);
-
-                    //var thisDateReports = $scope.reportsToDate.filter(function (tdate) {
-                    //    var reportDate = tdate.REPORT_DATE.toString().substring(0, 10);
-                    //    return reportDate == formatDate;
-                    //});
-
+                    
                     var yesterdayRpt = $scope.reports.filter(function (r) {
                         var repDate = r.REPORT_DATE.toString().substring(0, 10);
                         return (r.EVENT_ID == $scope.newReport.EVENT_ID && r.STATE == $scope.newReport.STATE) && (repDate == previousDay);

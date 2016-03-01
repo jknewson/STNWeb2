@@ -31,18 +31,41 @@
                     if (whatKindaFile === '') whatKindaFile = "Site File";
                     thisSiteFiles[sf].fileBelongsTo = whatKindaFile;
                 }
-                Site_Files.setAllSiteFiles(thisSiteFiles);
+                Site_Files.setAllSiteFiles(thisSiteFiles);//, $scope.siteHWMs, $scope.siteSensors);
                 $scope.SiteFiles = Site_Files.getAllSiteFiles();
                 
-                // watch for the session event to change and update SITE FILES DO NOT HAVE AN EVENT
-                $scope.$watch(function () { return $cookies.get('SessionEventName'); }, function (newValue) {
+                //if files are added/edited, deleted from other parts (objective Points, sensors, hwms), make sure if event is chosen to update siteFiles accordingly
+                $scope.$on('siteFilesUpdated', function (event, sitefiles) {                    
+                    if ($cookies.get('SessionEventID') !== undefined) {
+                        $scope.SiteFiles = sitefiles.filter(function (h) { return h.fileBelongsTo == 'Site File' || h.fileBelongsTo == 'Objective Point File'; });  //keep all site and op files
+                        var hwmFiles = sitefiles.filter(function (sfiles) { return sfiles.fileBelongsTo == 'HWM File'; });
+                        var sensFiles = sitefiles.filter(function (sfi) { return sfi.INSTRUMENT_ID > 0 && sfi.INSTRUMENT_ID !== null; });
+                        //only show files for this event (go through hwm files and match eventid
+                        for (var hf = 0; hf < hwmFiles.length; hf++) {
+                            for (var hwm = 0; hwm < $scope.siteHWMs.length; hwm++) {
+                                if (hwmFiles[hf].HWM_ID == $scope.siteHWMs[hwm].HWM_ID && $scope.siteHWMs[hwm].EVENT_ID == $cookies.get('SessionEventID'))
+                                    $scope.SiteFiles.push(hwmFiles[hf]);
+                            }
+                        }
+                        //only show files for this event (go through sensor files and match eventid
+                        for (var sf = 0; sf < sensFiles.length; sf++) {
+                            for (var inst = 0; inst < $scope.siteSensors.length; inst++) {
+                                if (sensFiles[sf].INSTRUMENT_ID == $scope.siteSensors[inst].Instrument.INSTRUMENT_ID && $scope.siteSensors[inst].Instrument.EVENT_ID == $cookies.get('SessionEventID'))
+                                    $scope.SiteFiles.push(sensFiles[sf]);
+                            }
+                        }
+                    }
+                }, true);
+                
+                // watch for the session event to change and update SITE FILES DO NOT HAVE AN EVENT                
+                $scope.$watch(function () { return $cookies.get('SessionEventName') }, function (newValue) {
                     $scope.sessionEventName = newValue !== undefined ? newValue : "All Events";
                     $scope.sessionEventExists = $scope.sessionEventName != "All Events" ? true : false;
                     if (newValue !== undefined) {
-                        //keep all siteFiles, filter HWM, Instrument (DF files use Instrument event)
+                        //keep all site & OP Files, filter HWM, Instrument (DF files use Instrument event)
                         $scope.SiteFiles = Site_Files.getAllSiteFiles().filter(function (h) { return h.fileBelongsTo == 'Site File' || h.fileBelongsTo == 'Objective Point File'; });  //keep all site and op files
-                        var hwmFiles = Site_Files.getAllSiteFiles().filter(function (sfiles) { return sfiles.fileBelongsTo == 'HWM File'; }); // thisSiteFiles.filter(function (sfiles) { return sfiles.fileBelongsTo == 'HWM File';});
-                        var sensFiles = Site_Files.getAllSiteFiles().filter(function (sfi) { return sfi.INSTRUMENT_ID > 0 && sfi.INSTRUMENT_ID !== null; });// thisSiteFiles.filter(function (sfi) { return sfi.INSTRUMENT_ID > 0 && sfi.INSTRUMENT_ID !== null; });
+                        var hwmFiles = Site_Files.getAllSiteFiles().filter(function (sfiles) { return sfiles.fileBelongsTo == 'HWM File'; }); 
+                        var sensFiles = Site_Files.getAllSiteFiles().filter(function (sfi) { return sfi.INSTRUMENT_ID > 0 && sfi.INSTRUMENT_ID !== null; });
                         //only show files for this event (go through hwm files and match eventid
                         for (var hf = 0; hf < hwmFiles.length; hf++) {
                             for (var hwm = 0; hwm < $scope.siteHWMs.length; hwm++) {
@@ -60,7 +83,7 @@
                     } else {
                         $scope.SiteFiles = Site_Files.getAllSiteFiles();
                     }
-                });
+                }, true);
 
                 //show a modal with the larger image as a preview
                 $scope.showImageModal = function (image) {
@@ -159,16 +182,16 @@
                         //is there a new file or just closed modal
                         if (createdFile[1] == 'created') {
                             $scope.SiteFiles.push(createdFile[0]);
-                            Site_Files.setAllSiteFiles($scope.SiteFiles);
+                            Site_Files.setAllSiteFiles($scope.SiteFiles);//, $scope.siteHWMs, $scope.siteSensors);
                         }
                         if (createdFile[1] == 'updated') {
                             //this is from edit -- refresh page?
                             $scope.SiteFiles[SindexClicked] = createdFile[0];
-                            Site_Files.setAllSiteFiles($scope.SiteFiles);
+                            Site_Files.setAllSiteFiles($scope.SiteFiles);//, $scope.siteHWMs, $scope.siteSensors);
                         }
                         if (createdFile[1] == 'deleted') {
                             $scope.SiteFiles.splice(SindexClicked, 1); //remove from file List
-                            Site_Files.setAllSiteFiles($scope.SiteFiles);
+                            Site_Files.setAllSiteFiles($scope.SiteFiles);//, $scope.siteHWMs, $scope.siteSensors);
                         }
                     });
                 };

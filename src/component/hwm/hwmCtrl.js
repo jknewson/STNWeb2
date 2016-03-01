@@ -4,8 +4,8 @@
 
     var STNControllers = angular.module('STNControllers');
 
-    STNControllers.controller('hwmCtrl', ['$scope', '$cookies', '$location', '$state', '$http', '$uibModal', '$filter', '$timeout', 'thisSite', 'thisSiteHWMs', 'allAgencies', 'allHWMTypes', 'allHWMQualities', 'allHorDatums', 'allMarkers', 'allHorCollMethods', 'allVertDatums', 'allVertColMethods', 'allEvents', 'allFileTypes', 'MEMBER', 
-        function ($scope, $cookies, $location, $state, $http, $uibModal, $filter, $timeout, thisSite, thisSiteHWMs, allAgencies, allHWMTypes, allHWMQualities, allHorDatums, allMarkers, allHorCollMethods, allVertDatums, allVertColMethods, allEvents, allFileTypes, MEMBER) {
+    STNControllers.controller('hwmCtrl', ['$scope', '$cookies', '$location', '$state', '$http', '$uibModal', '$filter', '$timeout', 'thisSite', 'thisSiteHWMs', 'thisSiteSensors', 'allAgencies', 'allHWMTypes', 'allHWMQualities', 'allHorDatums', 'allMarkers', 'allHorCollMethods', 'allVertDatums', 'allVertColMethods', 'allEvents', 'allFileTypes', 'MEMBER', 
+        function ($scope, $cookies, $location, $state, $http, $uibModal, $filter, $timeout, thisSite, thisSiteHWMs,thisSiteSensors, allAgencies, allHWMTypes, allHWMQualities, allHorDatums, allMarkers, allHorCollMethods, allVertDatums, allVertColMethods, allEvents, allFileTypes, MEMBER) {
             if ($cookies.get('STNCreds') === undefined || $cookies.get('STNCreds') === "") {
                 $scope.auth = false;
                 $location.path('/login');
@@ -32,7 +32,7 @@
                         return hft.FILETYPE === 'Photo' || hft.FILETYPE === 'Historic Citation' || hft.FILETYPE === 'Field Sheets' || hft.FILETYPE === 'Level Notes' ||
                             hft.FILETYPE === 'Other' || hft.FILETYPE === 'Link' || hft.FILETYPE === 'Sketch';
                     });
-                    var passAllLists = [allHWMTypes, allHWMQualities, allHorDatums, allHorCollMethods, allVertDatums, allVertColMethods, allMarkers, allEvents, hwmFileTypes];
+                    var passAllLists = [allHWMTypes, allHWMQualities, allHorDatums, allHorCollMethods, allVertDatums, allVertColMethods, allMarkers, allEvents, hwmFileTypes, thisSiteHWMs, thisSiteSensors];
                     var indexClicked = $scope.SiteHWMs.indexOf(HWMclicked);
 
                     //modal

@@ -327,7 +327,7 @@
                     //POST landowner, if they added one
                     $http.defaults.headers.common.Authorization = 'Basic ' + $cookies.get('STNCreds');
                     $http.defaults.headers.common.Accept = 'application/json';
-                    delete $scope.aSite.Creator;
+                    delete $scope.aSite.Creator; delete $scope.aSite.decDegORdms;
                     if ($scope.addLandowner === true) {
                         if ($scope.landowner.FNAME !== undefined || $scope.landowner.LNAME !== undefined || $scope.landowner.TITLE !== undefined ||
                                        $scope.landowner.ADDRESS !== undefined || $scope.landowner.CITY !== undefined || $scope.landowner.PRIMARYPHONE !== undefined) {
