@@ -44,7 +44,7 @@
                 var sec = d.substr(17, 2);
                 var theDate = new Date(y, m, da, h, mi, sec);
                 return theDate;
-            }
+            };
             if (thisFile !== undefined) {
                 //edit file
                 $scope.aFile = thisFile;

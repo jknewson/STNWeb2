@@ -31,7 +31,7 @@
             <div ng-if="s.InstrumentStats[0].STATUS_TYPE_ID == 4">
                 <ul>
                     <li style="list-style:none;padding-bottom: 15px;">
-                        <span class="col-sm-10 borderLess">{{s.Instrument.Deployment_Type}} Sensor</span>
+                        <span class="col-sm-10 borderLess">{{s.Instrument.Deployment_Type || s.Instrument.Sensor_Type}} Sensor</span>
                         <div ng-show="sessionEventExists" class="pull-right">
                             <button type="button" class="btn btn-primary" style="padding:0" ng-click="showSensorModal(s)" tooltip-placement="right" tooltip-append-to-body="true" uib-tooltip="Deploy this proposed sensor">
                                 <span>Deploy</span>
@@ -59,7 +59,7 @@
                 <ul>
                     <li style="list-style:none;padding-bottom: 15px;">
                         <span class="col-sm-9 borderLess" style="padding:0">
-                            <a class="btn borderLess" style="padding:0" ng-click="showSensorModal(s)">{{s.Instrument.Deployment_Type}} Sensor</a>
+                            <a class="btn borderLess" style="padding:0" ng-click="showSensorModal(s)">{{s.Instrument.Deployment_Type || s.Instrument.Sensor_Type}} Sensor</a>
                         </span>
                         <div ng-show="sessionEventExists" class="pull-right">
                             <button type="button" class="btn btn-primary" style="padding:0" ng-click="showRetrieveModal(s)" tooltip-placement="right" tooltip-append-to-body="true" uib-tooltip="Retrieve this sensor">
@@ -79,7 +79,7 @@
                 <ul>
                     <li style="list-style:none;padding-bottom: 15px;">
                         <span class="col-sm-9 borderLess" style="padding:0">
-                            <a class="btn borderLess" style="padding:0" ng-click="showFullSensorModal(s)">{{s.Instrument.Deployment_Type}} Sensor</a>
+                            <a class="btn borderLess" style="padding:0" ng-click="showFullSensorModal(s)">{{s.Instrument.Deployment_Type || s.Instrument.Sensor_Type}} Sensor</a>
                         </span>                       
                     </li>
                 </ul>

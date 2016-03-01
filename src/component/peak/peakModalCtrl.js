@@ -11,7 +11,7 @@
             $scope.memberList = allMembers;
             $scope.eventSiteHWMs = allEventHWMs.filter(function (h) { return h.SITE_ID == peakSite.SITE_ID; });
             $scope.eventSiteSensors = allSiteSensors.filter(function (s) { return s.Instrument.EVENT_ID == $cookies.get('SessionEventID'); }); //maybe go from here to get all datafiles for each sensor
-            $scope.siteFilesForSensors = allSiteFiles.filter(function (f) { return f.INSTRUMENT_ID != null && f.INSTRUMENT_ID > 0; });
+            $scope.siteFilesForSensors = allSiteFiles.filter(function (f) { return f.INSTRUMENT_ID !== null && f.INSTRUMENT_ID > 0; });
             $scope.timeZoneList = ['UTC', 'PST', 'MST', 'CST', 'EST'];
             $scope.LoggedInMember = allMembers.filter(function (m) { return m.MEMBER_ID == $cookies.get('mID'); })[0];
 
