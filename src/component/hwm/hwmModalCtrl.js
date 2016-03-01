@@ -13,8 +13,10 @@
             $scope.VDatumsList = allDropdowns[4];
             $scope.vCollMList = allDropdowns[5];
             $scope.markerList = allDropdowns[6];
-            $scope.eventList = allDropdowns[7];
+            $scope.eventList = allDropdowns[7];            
             $scope.fileTypeList = allDropdowns[8]; //used if creating/editing HWM file
+            $scope.siteHWMList = allDropdowns[9];
+            $scope.siteSensorList = allDropdowns[10];
             $scope.allSFiles = Site_Files.getAllSiteFiles();
             $scope.HWMFiles = thisHWM !== "empty" ? $scope.allSFiles.filter(function (sf) { return sf.HWM_ID == thisHWM.HWM_ID; }) : [];// holder for hwm files added
             $scope.hwmImageFiles = $scope.HWMFiles.filter(function (hf) { return hf.FILETYPE_ID === 1; }); //image files for carousel
@@ -50,13 +52,7 @@
                 $scope.datepickrs[which] = true;
             };
 
-            //cancel
-            $scope.cancel = function () {
-                $scope.adminChanged = {};
-                $scope.EventName = $scope.eventList.filter(function (e) { return e.EVENT_ID == $scope.aHWM.EVENT_ID; })[0].EVENT_NAME;
-                $uibModalInstance.dismiss('cancel');
-            };
-
+            
             //convert deg min sec to dec degrees
             var azimuth = function (deg, min, sec) {
                 var azi = 0;
@@ -144,11 +140,12 @@
 
             if (thisHWM != "empty") {
                 //#region existing HWM
-                $scope.aHWM = thisHWM;
+                $scope.aHWM = angular.copy(thisHWM);
+
                 //get this hwm's event name
                 $scope.EventName = $scope.eventList.filter(function (e) { return e.EVENT_ID == $scope.aHWM.EVENT_ID; })[0].EVENT_NAME;
                 //date formatting
-                $scope.aHWM.FLAGGED_DATE = makeAdate($scope.aHWM.FLAGGED_DATE);
+                $scope.aHWM.FLAG_DATE = makeAdate($scope.aHWM.FLAG_DATE);
 
                 //if this is surveyed, date format and get survey member's name
                 if ($scope.aHWM.SURVEY_DATE !== null) {
@@ -158,69 +155,6 @@
 
                 //get flagging member's name
                 $scope.FlagMember = allMembers.filter(function (m) { return m.MEMBER_ID == $scope.aHWM.FLAG_TEAM_ID; })[0];
-
-                //save aHWM
-                $scope.save = function () {
-                    if ($scope.HWMForm.$valid) {
-                        var updatedHWM = {};
-                        if ($scope.adminChanged.EVENT_ID !== undefined) {
-                            //admin changed the event for this hwm..
-                            $scope.aHWM.EVENT_ID = $scope.adminChanged.EVENT_ID;
-                        }
-                        //if they added a survey date, apply survey member as logged in member
-                        if ($scope.aHWM.SURVEY_DATE !== undefined)
-                            $scope.aHWM.SURVEY_TEAM_ID = $cookies.get('mID');
-
-                        if ($scope.aHWM.ELEV_FT !== undefined && $scope.aHWM.ELEV_FT !== null) {
-                            //make sure they added the survey date if they added an elevation
-                            if ($scope.aHWM.SURVEY_DATE === undefined)
-                                $scope.aHWM.SURVEY_DATE = makeAdate("");
-
-                            $scope.aHWM.SURVEY_TEAM_ID = $cookies.get('mID');
-                        }
-
-                        $http.defaults.headers.common.Authorization = 'Basic ' + $cookies.get('STNCreds');
-                        $http.defaults.headers.common.Accept = 'application/json';
-                        HWM.update({ id: $scope.aHWM.HWM_ID }, $scope.aHWM).$promise.then(function (response) {
-                            toastr.success("HWM updated");
-                            updatedHWM = response;
-                            var sendBack = [updatedHWM, 'updated'];
-                            $uibModalInstance.close(sendBack);
-                        });
-                    }
-                };//end save()
-
-                //delete aHWM
-                $scope.deleteHWM = function () {
-                    //TODO:: Delete the files for this hwm too or reassign to the Site?? Services or client handling?
-                    var DeleteModalInstance = $uibModal.open({
-                        templateUrl: 'removemodal.html',
-                        controller: 'ConfirmModalCtrl',
-                        size: 'sm',
-                        resolve: {
-                            nameToRemove: function () {
-                                return $scope.aHWM;
-                            },
-                            what: function () {
-                                return "HWM";
-                            }
-                        }
-                    });
-
-                    DeleteModalInstance.result.then(function (hwmToRemove) {
-                        $http.defaults.headers.common.Authorization = 'Basic ' + $cookies.get('STNCreds');
-                        HWM.delete({ id: hwmToRemove.HWM_ID }, hwmToRemove).$promise.then(function () {
-                            toastr.success("HWM Removed");
-                            var sendBack = ["de", 'deleted'];
-                            $uibModalInstance.close(sendBack);
-                        }, function error(errorResponse) {
-                            toastr.error("Error: " + errorResponse.statusText);
-                        });
-                    }, function () {
-                        //logic for cancel
-                    });//end modal
-                };
-
                 //#endregion existing HWM
             } else {
                 //#region new HWM
@@ -241,37 +175,105 @@
                 };
                 $scope.EventName = $cookies.get('SessionEventName');
                 $scope.FlagMember = $scope.LoggedInMember;
-
-                $scope.create = function () {
-                    if (this.HWMForm.$valid) {
-                        var createdHWM = {};
-                        //if they entered a survey date or elevation, then set survey member as the flag member (flagging and surveying at same time
-                        if ($scope.aHWM.SURVEY_DATE !== undefined && $scope.aHWM.SURVEY_DATE !== null)
-                            $scope.aHWM.SURVEY_TEAM_ID = $scope.FLAG_TEAM_ID;
-
-                        if ($scope.aHWM.ELEV_FT !== undefined && $scope.aHWM.ELEV_FT !== null) {
-                            //make sure they added the survey date if they added an elevation
-                            if ($scope.aHWM.SURVEY_DATE === undefined)
-                                $scope.aHWM.SURVEY_DATE = makeAdate("");
-
-                            $scope.aHWM.SURVEY_TEAM_ID = $scope.FLAG_TEAM_ID;
-                        }
-
-                        $http.defaults.headers.common.Authorization = 'Basic ' + $cookies.get('STNCreds');
-                        $http.defaults.headers.common.Accept = 'application/json';
-                        HWM.save($scope.aHWM).$promise.then(function (response) {
-                            createdHWM = response;
-                            toastr.success("HWM created");
-                            var sendBack = [createdHWM, 'created'];
-                            $uibModalInstance.close(sendBack);
-                        });
-                    }
-                };//end create()
                 //#endregion new HWM
             }
             //radio button defaults
             $scope.aHWM.decDegORdms = 'dd';
 
+            $scope.create = function () {
+                if (this.HWMForm.$valid) {
+                    var createdHWM = {};
+                    //if they entered a survey date or elevation, then set survey member as the flag member (flagging and surveying at same time
+                    if ($scope.aHWM.SURVEY_DATE !== undefined && $scope.aHWM.SURVEY_DATE !== null)
+                        $scope.aHWM.SURVEY_TEAM_ID = $scope.FLAG_TEAM_ID;
+
+                    if ($scope.aHWM.ELEV_FT !== undefined && $scope.aHWM.ELEV_FT !== null) {
+                        //make sure they added the survey date if they added an elevation
+                        if ($scope.aHWM.SURVEY_DATE === undefined)
+                            $scope.aHWM.SURVEY_DATE = makeAdate("");
+
+                        $scope.aHWM.SURVEY_TEAM_ID = $scope.FLAG_TEAM_ID;
+                    }
+
+                    $http.defaults.headers.common.Authorization = 'Basic ' + $cookies.get('STNCreds');
+                    $http.defaults.headers.common.Accept = 'application/json';
+                    HWM.save($scope.aHWM).$promise.then(function (response) {
+                        createdHWM = response;
+                        toastr.success("HWM created");
+                        var sendBack = [createdHWM, 'created'];
+                        $uibModalInstance.close(sendBack);
+                    });
+                }
+            };//end create()
+
+            //save aHWM
+            $scope.save = function () {
+                if ($scope.HWMForm.$valid) {
+                    var updatedHWM = {};
+                    if ($scope.adminChanged.EVENT_ID !== undefined) {
+                        //admin changed the event for this hwm..
+                        $scope.aHWM.EVENT_ID = $scope.adminChanged.EVENT_ID;
+                    }
+                    //if they added a survey date, apply survey member as logged in member
+                    if ($scope.aHWM.SURVEY_DATE !== undefined)
+                        $scope.aHWM.SURVEY_TEAM_ID = $cookies.get('mID');
+
+                    if ($scope.aHWM.ELEV_FT !== undefined && $scope.aHWM.ELEV_FT !== null) {
+                        //make sure they added the survey date if they added an elevation
+                        if ($scope.aHWM.SURVEY_DATE === undefined)
+                            $scope.aHWM.SURVEY_DATE = makeAdate("");
+
+                        $scope.aHWM.SURVEY_TEAM_ID = $cookies.get('mID');
+                    }
+
+                    $http.defaults.headers.common.Authorization = 'Basic ' + $cookies.get('STNCreds');
+                    $http.defaults.headers.common.Accept = 'application/json';
+                    HWM.update({ id: $scope.aHWM.HWM_ID }, $scope.aHWM).$promise.then(function (response) {
+                        toastr.success("HWM updated");
+                        updatedHWM = response;
+                        var sendBack = [updatedHWM, 'updated'];
+                        $uibModalInstance.close(sendBack);
+                    });
+                }
+            };//end save()
+
+            //delete aHWM
+            $scope.deleteHWM = function () {
+                //TODO:: Delete the files for this hwm too or reassign to the Site?? Services or client handling?
+                var DeleteModalInstance = $uibModal.open({
+                    templateUrl: 'removemodal.html',
+                    controller: 'ConfirmModalCtrl',
+                    size: 'sm',
+                    resolve: {
+                        nameToRemove: function () {
+                            return $scope.aHWM;
+                        },
+                        what: function () {
+                            return "HWM";
+                        }
+                    }
+                });
+
+                DeleteModalInstance.result.then(function (hwmToRemove) {
+                    $http.defaults.headers.common.Authorization = 'Basic ' + $cookies.get('STNCreds');
+                    HWM.delete({ id: hwmToRemove.HWM_ID }, hwmToRemove).$promise.then(function () {
+                        toastr.success("HWM Removed");
+                        var sendBack = ["de", 'deleted'];
+                        $uibModalInstance.close(sendBack);
+                    }, function error(errorResponse) {
+                        toastr.error("Error: " + errorResponse.statusText);
+                    });
+                }, function () {
+                    //logic for cancel
+                });//end modal
+            };
+
+            //cancel
+            $scope.cancel = function () {
+                $scope.adminChanged = {};
+                $scope.EventName = $scope.eventList.filter(function (e) { return e.EVENT_ID == $scope.aHWM.EVENT_ID; })[0].EVENT_NAME;
+                $uibModalInstance.dismiss('cancel');
+            };
 
             //#region FILE STUFF
             //show a modal with the larger image as a preview on the photo file for this hwm
@@ -360,7 +362,7 @@
                                 fresponse.fileBelongsTo = "HWM File";
                                 $scope.HWMFiles.push(fresponse);
                                 $scope.allSFiles.push(fresponse);
-                                Site_Files.setAllSiteFiles($scope.allSFiles); //updates the file list on the sitedashboard
+                                Site_Files.setAllSiteFiles($scope.allSFiles);//, $scope.siteHWMList, $scope.siteSensorList); //updates the file list on the sitedashboard
                                 if (fresponse.FILETYPE_ID === 1) $scope.hwmImageFiles.push(fresponse);
                                 $scope.showFileForm = false;
                             });
@@ -385,7 +387,7 @@
                                 fileResponse.fileBelongsTo = "HWM File";
                                 $scope.HWMFiles[$scope.existFileIndex] = fileResponse;
                                 $scope.allSFiles[$scope.allSFileIndex] = fileResponse;
-                                Site_Files.setAllSiteFiles($scope.allSFiles); //updates the file list on the sitedashboard
+                                Site_Files.setAllSiteFiles($scope.allSFiles);//, $scope.siteHWMList, $scope.siteSensorList); //updates the file list on the sitedashboard
                                 $scope.showFileForm = false;
                             });
                         });
@@ -416,7 +418,7 @@
                         $scope.HWMFiles.splice($scope.existFileIndex, 1);
                         $scope.allSFiles.splice($scope.allSFileIndex, 1);
                         $scope.hwmImageFiles.splice($scope.existIMGFileIndex, 1);
-                        Site_Files.setAllSiteFiles($scope.allSFiles); //updates the file list on the sitedashboard
+                        Site_Files.setAllSiteFiles($scope.allSFiles);//, $scope.siteHWMList, $scope.siteSensorList); //updates the file list on the sitedashboard
                         $scope.showFileForm = false;
                     }, function error(errorResponse) {
                         toastr.error("Error: " + errorResponse.statusText);

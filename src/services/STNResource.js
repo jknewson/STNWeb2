@@ -521,17 +521,18 @@
     //#endregion of SITE
 
     //#region Site_Files
-    STNResource.factory('Site_Files', function () {
+    STNResource.factory('Site_Files', ['$cookies', '$rootScope', function ($cookies, $rootScope) {
         var allSiteFiles = [];
         return {
             getAllSiteFiles: function () {
                 return allSiteFiles;
             },
-            setAllSiteFiles: function (sf) {
+            setAllSiteFiles: function (sf){//, hwms, inss) {
                 allSiteFiles = sf;
+                $rootScope.$broadcast('siteFilesUpdated', allSiteFiles);                
             }
         };
-    });
+    }]);
     //#endregion of Site_Files
 
     //#region STATE

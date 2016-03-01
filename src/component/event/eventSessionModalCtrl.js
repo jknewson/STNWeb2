@@ -31,7 +31,7 @@
                 $scope.evID = $scope.event.EventChosen;
                 var eventName = allEvents.filter(function (x) { return x.EVENT_ID == $scope.evID; })[0];
                 $cookies.put('SessionEventID', $scope.evID);
-                $cookies.put('SessionEventName', eventName.EVENT_NAME);
+                $cookies.put('SessionEventName', eventName.EVENT_NAME);               
 
                 $rootScope.sessionEvent = "Session Event: " + eventName.EVENT_NAME + ".";
                 $uibModalInstance.dismiss('cancel');

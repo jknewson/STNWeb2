@@ -780,6 +780,31 @@
                         </span>
                     </div>
                 </div>
+
+                <div class="form-group">
+                    <div class="col-md-12">
+                        <span>
+                            <button ng-show="OP.OBJECTIVE_POINT_ID == undefined" class="btn btn-primary" ng-click="create(OPForm.$valid)">
+                                <span>Create</span>
+                            </button>
+                        </span>
+                        <span>
+                            <button ng-show="OP.OBJECTIVE_POINT_ID != undefined" ng-disabled="showFileForm" class="btn btn-primary" ng-click="save(OPForm.$valid)">
+                                <span>Save</span>
+                            </button>
+                        </span>
+                        <span>
+                            <button ng-show="OP.OBJECTIVE_POINT_ID != undefined" ng-disabled="showFileForm" class="btn btn-danger" ng-click="deleteOP(OPForm.$valid)">
+                                <span>Delete</span>
+                            </button>
+                        </span>
+                        <span>
+                            <button type="button" class="btn btn-warning" ng-disabled="showFileForm" ng-click="cancel()">
+                                <span>Cancel/Close</span>
+                            </button>
+                        </span>
+                    </div>
+                </div>
             </fieldset>
         </form>
 
@@ -1028,30 +1053,7 @@
     </div> <!-- end modal-body -->
     <br clear="all" />
     <div class="modal-footer">
-        <div class="form-group">
-            <div class="col-md-12">
-                <span>
-                    <button ng-show="OP.OBJECTIVE_POINT_ID == undefined" class="btn btn-primary" ng-click="create(OPForm.$valid)">
-                        <span>Create</span>
-                    </button>
-                </span>
-                <span>
-                    <button ng-show="OP.OBJECTIVE_POINT_ID != undefined" ng-disabled="showFileForm" class="btn btn-primary" ng-click="save(OPForm.$valid)">
-                        <span>Save</span>
-                    </button>
-                </span>
-                <span>
-                    <button ng-show="OP.OBJECTIVE_POINT_ID != undefined" ng-disabled="showFileForm" class="btn btn-danger" ng-click="deleteOP(OPForm.$valid)">
-                        <span>Delete</span>
-                    </button>
-                </span>
-                <span>
-                    <button type="button" class="btn btn-warning" ng-disabled="showFileForm" ng-click="cancel()">
-                        <span>Cancel/Close</span>
-                    </button>
-                </span>
-            </div>
-        </div>
+        
     </div> <!-- end modal-footer -->
 </script>
 
@@ -1358,6 +1360,14 @@
                         <span>{{SurveyMember.FNAME}} {{SurveyMember.LNAME}}</span>
                     </div>
                 </div>
+                <div class="form-group">
+                    <div class="col-md-12">
+                        <span><button ng-show="aHWM.HWM_ID == undefined" class="btn btn-primary" ng-click="create(HWMForm.$valid)"><span>Create</span></button></span>
+                        <span><button ng-show="aHWM.HWM_ID != undefined" ng-disabled="showFileForm" class="btn btn-primary" ng-click="save(HWMForm.$valid)"><span>Save</span></button></span>
+                        <span><button ng-show="aHWM.HWM_ID != undefined" ng-disabled="showFileForm" class="btn btn-danger" ng-click="deleteHWM(HWMForm.$valid)"><span>Delete</span></button></span>
+                        <span><button type="button" class="btn btn-warning" ng-disabled="showFileForm" ng-click="cancel()"><span>Cancel/Close</span></button></span>
+                    </div>
+                </div>
             </fieldset>
         </form>
         <!-- HWM FILES SECTION -->
@@ -1546,14 +1556,7 @@
     <br clear="all" />
 
     <div class="modal-footer">
-        <div class="form-group">
-            <div class="col-md-12">
-                <span><button ng-show="aHWM.HWM_ID == undefined" class="btn btn-primary" ng-click="create(HWMForm.$valid)"><span>Create</span></button></span>
-                <span><button ng-show="aHWM.HWM_ID != undefined" ng-disabled="showFileForm" class="btn btn-primary" ng-click="save(HWMForm.$valid)"><span>Save</span></button></span>
-                <span><button ng-show="aHWM.HWM_ID != undefined" ng-disabled="showFileForm" class="btn btn-danger" ng-click="deleteHWM(HWMForm.$valid)"><span>Delete</span></button></span>
-                <span><button type="button" class="btn btn-warning" ng-disabled="showFileForm" ng-click="cancel()"><span>Cancel/Close</span></button></span>
-            </div>
-        </div>
+        
     </div> <!-- end modal-footer -->
 </script>
 
@@ -1562,7 +1565,6 @@
     <div class="modal-header">
         <h3 class="modal-title">Deploy Sensor</h3>
     </div>
-
     <div class="modal-body">
         <form class="form-horizontal" name="SensorForm">
             <fieldset>
@@ -1791,6 +1793,15 @@
                     <div class="col-md-6">
                         <input type="hidden" name="MEMBER_ID" ng-model="aSensStatus.MEMBER_ID" />
                         <span>{{Deployer.FNAME}} {{Deployer.LNAME}}</span>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-md-12">
+                        <span><button ng-if="whichButton == 'deploy' || whichButton == 'deployP'" class="btn btn-primary" ng-click="deploy(SensorForm.$valid)"><span>Deploy</span></button></span>
+                        <span><button ng-show="whichButton == 'edit'" class="btn btn-primary" ng-disabled="showFileForm" ng-click="save(SensorForm.$valid)"><span>Save</span></button></span>
+                        <span><button ng-show="whichButton == 'edit'" class="btn btn-danger" ng-disabled="showFileForm" ng-click="deleteS(SensorForm.$valid)"><span>Delete</span></button></span>
+                        <span><button type="button" class="btn btn-warning" ng-disabled="showFileForm" ng-click="cancel()"><span>Cancel</span></button></span>
                     </div>
                 </div>
             </fieldset>
@@ -2048,14 +2059,7 @@
     <br clear="all" />
 
     <div class="modal-footer">
-        <div class="form-group">
-            <div class="col-md-12">
-                <span><button ng-if="whichButton == 'deploy' || whichButton == 'deployP'" class="btn btn-primary" ng-click="deploy(SensorForm.$valid)"><span>Deploy</span></button></span>
-                <span><button ng-show="whichButton == 'edit'" class="btn btn-primary" ng-disabled="showFileForm" ng-click="save(SensorForm.$valid)"><span>Save</span></button></span>
-                <span><button ng-show="whichButton == 'edit'" class="btn btn-danger" ng-disabled="showFileForm" ng-click="deleteS(SensorForm.$valid)"><span>Delete</span></button></span>
-                <span><button type="button" class="btn btn-warning" ng-disabled="showFileForm" ng-click="cancel()"><span>Cancel</span></button></span>
-            </div>
-        </div>
+        
     </div><!-- end modal-footer -->
 
 </script>
