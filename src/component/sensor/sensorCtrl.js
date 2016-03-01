@@ -37,56 +37,57 @@
                 };
            
                 //add these checked Proposed sensors to this site
-                $scope.AddProposed = function () {
-                    var proposedToAdd = {}; var propStatToAdd = {};
+                $scope.AddProposed = function () {                    
                     var Time_STAMP = new Date();
                     for (var dt = 0; dt < $scope.deployTypeList.length; dt++) {
                         if ($scope.deployTypeList[dt].selected === true) {
+                            var proposedToAdd = {}; var propStatToAdd = {};
                             if ($scope.deployTypeList[dt].METHOD.substring(0, 4) == "Temp") {
                                 //temperature proposed sensor
                                 proposedToAdd = {
                                     DEPLOYMENT_TYPE_ID: $scope.deployTypeList[dt].DEPLOYMENT_TYPE_ID,
                                     SITE_ID: thisSite.SITE_ID,
                                     SENSOR_TYPE_ID: $scope.deployTypeList[dt].METHOD == "Temperature (Pressure Transducer)" ? 1 : 2,
-                                    //EVENT_ID: $cookies.get('SessionEventID') !== undefined ? $cookies.get('SessionEventID') : null,
-                                    Deployment_Type: $scope.deployTypeList[dt].METHOD
                                 };
                             } else {
                                 //any other type
                                 proposedToAdd = {
                                     DEPLOYMENT_TYPE_ID: $scope.deployTypeList[dt].DEPLOYMENT_TYPE_ID,
                                     SITE_ID: thisSite.SITE_ID,
-                                    SENSOR_TYPE_ID: $scope.sensDepTypes.filter(function (sdt) { return sdt.DEPLOYMENT_TYPE_ID == $scope.deployTypeList[dt].DEPLOYMENT_TYPE_ID; })[0].SENSOR_TYPE_ID,
-                                    //EVENT_ID: $cookies.get('SessionEventID') !== undefined ? $cookies.get('SessionEventID') : null,
-                                    Deployment_Type: $scope.deployTypeList[dt].METHOD
+                                    SENSOR_TYPE_ID: $scope.sensDepTypes.filter(function (sdt) { return sdt.DEPLOYMENT_TYPE_ID == $scope.deployTypeList[dt].DEPLOYMENT_TYPE_ID; })[0].SENSOR_TYPE_ID,                                    
                                 };
                             }
                             //now post it (Instrument first, then Instrument Status
                             $http.defaults.headers.common.Authorization = 'Basic ' + $cookies.get('STNCreds');
                             $http.defaults.headers.common.Accept = 'application/json';
 
-
                             INSTRUMENT.save(proposedToAdd).$promise.then(function (response) {
-                                proposedToAdd.INSTRUMENT_ID = response.INSTRUMENT_ID;
-                                var propStatToAdd = { INSTRUMENT_ID: response.INSTRUMENT_ID, STATUS_TYPE_ID: 4, MEMBER_ID: $cookies.get('mID'), TIME_STAMP: Time_STAMP, TIME_ZONE: 'UTC', };
+                                var createdPropSensor = {
+                                    DEPLOYMENT_TYPE_ID: response.DEPLOYMENT_TYPE_ID,
+                                    SITE_ID: response.SITE_ID,
+                                    SENSOR_TYPE_ID: response.SENSOR_TYPE_ID,
+                                    INSTRUMENT_ID: response.INSTRUMENT_ID,
+                                    Deployment_Type: $scope.deployTypeList.filter(function (dtl) { return dtl.DEPLOYMENT_TYPE_ID == response.DEPLOYMENT_TYPE_ID;})[0].METHOD
+                                };
+                                propStatToAdd = { INSTRUMENT_ID: response.INSTRUMENT_ID, STATUS_TYPE_ID: 4, MEMBER_ID: $cookies.get('mID'), TIME_STAMP: Time_STAMP, TIME_ZONE: 'UTC', };
 
                                 INSTRUMENT_STATUS.save(propStatToAdd).$promise.then(function (statResponse) {
-                                    statResponse.Status = 'Proposed';
+                                    propStatToAdd.Status = 'Proposed'; propStatToAdd.INSTRUMENT_STATUS_ID = statResponse.INSTRUMENT_STATUS_ID;
+                                    //statResponse.Status = 'Proposed';
                                     var instToPushToList = {
-                                        Instrument: proposedToAdd,
-                                        InstrumentStats: [statResponse]
+                                        Instrument: createdPropSensor,
+                                        InstrumentStats: [propStatToAdd]
                                     };
+                                    $scope.SiteSensors.push(instToPushToList);
+                                    $scope.sensorCount = { total: $scope.SiteSensors.length };
                                     //clean up ...all unchecked and then hide
                                     for (var dep = 0; dep < $scope.deployTypeList.length; dep++) {
                                         $scope.deployTypeList[dep].selected = false;
                                     }
-
                                     $timeout(function () {
                                         // anything you want can go here and will safely be run on the next digest.
                                         $scope.showProposed = false;
-                                        toastr.success("Proposed sensor created");
-                                        $scope.SiteSensors.push(instToPushToList);
-                                        $scope.sensorCount = { total: $scope.SiteSensors.length };
+                                        toastr.success("Proposed sensor created");                                        
                                     });
 
                                 });//end INSTRUMENT_STATUS.save

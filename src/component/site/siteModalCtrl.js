@@ -396,8 +396,11 @@
                     $q.all(postPromises).then(function (response) {
                         $uibModalInstance.dismiss('cancel');
                         $rootScope.stateIsLoading.showLoading = false; // loading..
-                        $location.path('/Site/' + createdSiteID + '/SiteDashboard').replace();
-                        $scope.apply;
+                        $timeout(function () {
+                            // anything you want can go here and will safely be run on the next digest.                   
+                            $state.go('site.dashboard', { id: createdSiteID });                       
+                        });
+                       
                     });
                 }, function error(errorResponse) {
                     toastr.error("Error creating Site: " + errorResponse.statusText);

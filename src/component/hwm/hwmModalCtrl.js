@@ -14,9 +14,7 @@
             $scope.vCollMList = allDropdowns[5];
             $scope.markerList = allDropdowns[6];
             $scope.eventList = allDropdowns[7];            
-            $scope.fileTypeList = allDropdowns[8]; //used if creating/editing HWM file
-            $scope.siteHWMList = allDropdowns[9];
-            $scope.siteSensorList = allDropdowns[10];
+            $scope.fileTypeList = allDropdowns[8]; //used if creating/editing HWM file           
             $scope.allSFiles = Site_Files.getAllSiteFiles();
             $scope.HWMFiles = thisHWM !== "empty" ? $scope.allSFiles.filter(function (sf) { return sf.HWM_ID == thisHWM.HWM_ID; }) : [];// holder for hwm files added
             $scope.hwmImageFiles = $scope.HWMFiles.filter(function (hf) { return hf.FILETYPE_ID === 1; }); //image files for carousel
@@ -362,7 +360,7 @@
                                 fresponse.fileBelongsTo = "HWM File";
                                 $scope.HWMFiles.push(fresponse);
                                 $scope.allSFiles.push(fresponse);
-                                Site_Files.setAllSiteFiles($scope.allSFiles);//, $scope.siteHWMList, $scope.siteSensorList); //updates the file list on the sitedashboard
+                                Site_Files.setAllSiteFiles($scope.allSFiles); //updates the file list on the sitedashboard
                                 if (fresponse.FILETYPE_ID === 1) $scope.hwmImageFiles.push(fresponse);
                                 $scope.showFileForm = false;
                             });
@@ -387,7 +385,7 @@
                                 fileResponse.fileBelongsTo = "HWM File";
                                 $scope.HWMFiles[$scope.existFileIndex] = fileResponse;
                                 $scope.allSFiles[$scope.allSFileIndex] = fileResponse;
-                                Site_Files.setAllSiteFiles($scope.allSFiles);//, $scope.siteHWMList, $scope.siteSensorList); //updates the file list on the sitedashboard
+                                Site_Files.setAllSiteFiles($scope.allSFiles); //updates the file list on the sitedashboard
                                 $scope.showFileForm = false;
                             });
                         });
@@ -418,7 +416,7 @@
                         $scope.HWMFiles.splice($scope.existFileIndex, 1);
                         $scope.allSFiles.splice($scope.allSFileIndex, 1);
                         $scope.hwmImageFiles.splice($scope.existIMGFileIndex, 1);
-                        Site_Files.setAllSiteFiles($scope.allSFiles);//, $scope.siteHWMList, $scope.siteSensorList); //updates the file list on the sitedashboard
+                        Site_Files.setAllSiteFiles($scope.allSFiles); //updates the file list on the sitedashboard
                         $scope.showFileForm = false;
                     }, function error(errorResponse) {
                         toastr.error("Error: " + errorResponse.statusText);
