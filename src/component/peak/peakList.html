@@ -11,7 +11,7 @@
                 <span class="glyphicon glyphicon-plus"></span>
             </button>                
         </div>
-        <div ng-show="!sessionEventExists">To create a Peak Summary, first choose a session Event above.</div>
+        <div class="col-md-12" ng-show="!sessionEventExists" style="border:solid 1px red">To create a Peak Summary, first choose a session Event above.</div>
         <ul>
             <li ng-repeat="p in SitePeaks"><a class="btn" ng-click="showPeakModal(p)">{{p.PEAK_DATE | date: "MM/dd/yyyy"}} <span ng-if="p.PEAK_STAGE"> - ({{p.PEAK_STAGE}} ft.)</span></a></li>            
         </ul>
