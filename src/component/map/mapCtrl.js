@@ -41,13 +41,25 @@
                         });
                     }
                 };
+
                 ///need to watch for session event id, do new call to server when that changes
                 $scope.$watch(function () { return $cookies.get('SessionEventID'); }, function (newValue) {
                     if (newValue !== undefined) {
                         $scope.sessionEvent = $cookies.get('SessionEventName') !== null && $cookies.get('SessionEventName') !== undefined ? $cookies.get('SessionEventName') : "All Events";
                         var evID = newValue;
-                        $scope.sitesPromise = $http.get('https://stn.wim.usgs.gov/STNServices/Events/' + evID + '/Sites.json')
-                                                .then(onSiteComplete, onError);
+                        //below gets sites using $http.get
+                        $scope.sitesPromise = $http.get('https://stntest.wim.usgs.gov/STNServices2/Events/' + evID + '/Sites.json')
+                                            .then(onSiteComplete, onError);
+                        //below gets sites using the SITE 'factory'
+                        //SITE.getAll({
+                        //    Event: evID
+                        //},
+                        //function success(response) {
+                        //    //do stuff with Sites
+                        //}, function error(errorResponse) {
+                        //        //show error message
+                        //});
+
                     } else {
 
                     }
@@ -131,7 +143,7 @@
                 angular.extend($scope, {
                     events: {
                         markers: {
-                            enable: leafletMarkerEvents.getAvailableEvents() //remove this if dragability abandoned
+                            enable: leafletMarkerEvents.getAvailableEvents()
                         }
                     },
                     centerUS: {
