@@ -3036,25 +3036,43 @@
                 <!--Peak creator-->
                 <div class="form-group">
                     <label class="col-md-3 control-label" for="MEMBER_ID">Peak Creator:</label>
-                    <div class="col-md-4">
+                    <div class="col-md-8">
                         <span>{{PeakCreator.FNAME}} {{PeakCreator.LNAME}}</span>
                     </div>
                 </div>
+
                 <!-- Peak Date/Time: * -->
-                <div class="form-group required" ng-class="{'has-error':peakForm.PEAK_DATE.$invalid && peakForm.PEAK_DATE.$dirty}">
-                    <label class="col-md-3 control-label req" style="margin-top:3%" for="PEAK_DATE">Peak Date &amp; Time:</label>
-                    <div class="col-md-4">
-                        <datetimepicker hour-step="1" minute-step="1" ng-model="aPeak.PEAK_DATE" show-meridian="true"
+                <div class="form-group required" ng-class="{'has-error':peakForm.PEAK_DATE.date.$invalid && peakForm.PEAK_DATE.date.$dirty}">
+                    <label class="col-md-3 control-label req" style="margin-top:3%" for="PEAK_DATE">Peak Date:</label>
+                    <div class="col-md-8">
+                        <datetimepicker hour-step="1" minute-step="1" ng-model="aPeak.PEAK_DATE.date" show-meridian="true"
                                         date-format="MM/dd/yyyy" readonly-date="false" readonly-time="false" date-options="dateOptions"
-                                        hidden-time="false" hidden-date="false" show-spinners="true" required>
+                                        hidden-time="true" hidden-date="false" show-spinners="true" required>
                         </datetimepicker>
+                    </div>
+                    <div class="col-md-1">
+                        <input type="checkbox" name="IS_PEAK_ESTIMATED" ng-model="aPeak.IS_PEAK_ESTIMATED" ng-true-value="1" ng-false-value="0" />
+                    </div>
+                </div>
+
+                <!-- Peak Time: * -->
+                <div class="form-group required" ng-class="{'has-error':peakForm.PEAK_DATE.time.$invalid && peakForm.PEAK_DATE.time.$dirty}">
+                    <label class="col-md-3 control-label req" style="margin-top:3%" for="PEAK_TIME">Peak Time:</label>
+                    <div class="col-md-8">
+                        <datetimepicker hour-step="1" minute-step="1" ng-model="aPeak.PEAK_DATE.time" show-meridian="true"
+                                        date-format="MM/dd/yyyy" readonly-date="false" readonly-time="false" date-options="dateOptions"
+                                        hidden-time="false" hidden-date="true" show-spinners="true" required>
+                        </datetimepicker>
+                    </div>
+                    <div class="col-md-1">
+                        <input type="checkbox" name="IS_PEAK_TIME_ESTIMATED" ng-model="aPeak.IS_PEAK_TIME_ESTIMATED" ng-true-value="1" ng-false-value="0" />
                     </div>
                 </div>
 
                 <!-- Time Zone:* -->
                 <div class="form-group required">
-                    <label class="col-md-3 control-label" for="TIME_ZONE">Time Zone:</label>
-                    <div class="col-md-4">
+                    <label class="col-md-3 control-label" for="TIME_ZONE">Peak Recorded In:</label>
+                    <div class="col-md-8">
                         <select class="form-control" name="TIME_ZONE" ng-model="aPeak.TIME_ZONE"
                                 ng-options="vcm for vcm in timeZoneList" required>
                             <option value=""></option>
@@ -3065,44 +3083,14 @@
                     </button>
                 </div>
 
-                <!--Date Estimated-->
-                <div class="form-group">
-                    <label class="col-md-3 control-label" for="IS_PEAK_ESTIMATED">Peak Date Estimated:</label>
-                    <div class="col-md-4">
-                        <ul style="padding-left:0">
-                            <li style="list-style:none;">
-                                <input type="checkbox" name="IS_PEAK_ESTIMATED" ng-model="aPeak.IS_PEAK_ESTIMATED" ng-true-value="1" ng-false-value="0" />
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-                <!--Time Estimated-->
-                <div class="form-group">
-                    <label class="col-md-4 control-label" for="IS_PEAK_TIME_ESTIMATED">Peak Time Estimated:</label>
-                    <div class="col-md-6">
-                        <ul style="padding-left:0">
-                            <li style="list-style:none;">
-                                <input type="checkbox" name="IS_PEAK_TIME_ESTIMATED" ng-model="aPeak.IS_PEAK_TIME_ESTIMATED" ng-true-value="1" ng-false-value="0" />
-                            </li>
-                        </ul>
-                    </div>
-                </div>
                 <!-- Peak Stage-->
                 <div class="form-group">
-                    <label class="col-md-4 control-label" for="PEAK_STAGE">Peak Stage (elevation ft):</label>
-                    <div class="col-md-6">
+                    <label class="col-md-3 control-label" for="PEAK_STAGE">Peak Stage (elevation ft):</label>
+                    <div class="col-md-8">
                         <input class="form-control" ng-keypress="isNum($event)" name="PEAK_STAGE" ng-model="aPeak.PEAK_STAGE" type="text" />
                     </div>
-                </div>
-                <!--Stage Estimated-->
-                <div class="form-group">
-                    <label class="col-md-4 control-label" for="IS_PEAK_STAGE_ESTIMATED">Peak Stage Estimated:</label>
-                    <div class="col-md-6">
-                        <ul style="padding-left:0">
-                            <li style="list-style:none;">
-                                <input type="checkbox" name="IS_PEAK_STAGE_ESTIMATED" ng-model="aPeak.IS_PEAK_STAGE_ESTIMATED" ng-true-value="1" ng-false-value="0" />
-                            </li>
-                        </ul>
+                    <div class="col-md-1">
+                        <input type="checkbox" name="IS_PEAK_STAGE_ESTIMATED" ng-model="aPeak.IS_PEAK_STAGE_ESTIMATED" ng-true-value="1" ng-false-value="0" />
                     </div>
                 </div>
 
@@ -3114,6 +3102,59 @@
                                 ng-options="vd.DATUM_ID as vd.DATUM_ABBREVIATION for vd in VDatumsList">
                             <option value=""></option>
                         </select>
+                    </div>
+                </div>
+
+                <!-- Height Above Ground (ft)-->
+                <div class="form-group">
+                    <label class="col-md-3 control-label" for="HEIGHT_ABOVE_GND">Height Above Ground <br />(depth of water in ft):</label>
+                    <div class="col-md-8">
+                        <input class="form-control" ng-keypress="isNum($event)" name="HEIGHT_ABOVE_GND" ng-model="aPeak.HEIGHT_ABOVE_GND" type="text" />
+                    </div>
+                    <div class="col-md-1">
+                        <input type="checkbox" name="IS_HAG_ESTIMATED" ng-model="aPeak.IS_HAG_ESTIMATED" ng-true-value="1" ng-false-value="0" />
+                    </div>
+                </div>
+
+                <!-- Peak Discharge-->
+                <div class="form-group">
+                    <label class="col-md-3 control-label" for="PEAK_DISCHARGE">Peak Discharge:</label>
+                    <div class="col-md-8">
+                        <input class="form-control" ng-keypress="isNum($event)" name="PEAK_DISCHARGE" ng-model="aPeak.PEAK_DISCHARGE" type="text" />
+                    </div>
+                    <div class="col-md-1">
+                        <input type="checkbox" name="IS_PEAK_DISCHARGE_ESTIMATED" ng-model="aPeak.IS_PEAK_DISCHARGE_ESTIMATED" ng-true-value="1" ng-false-value="0" />
+                    </div>
+                </div>
+
+                <!--AEP: -->
+                <div class="form-group">
+                    <label class="col-md-3 control-label" for="AEP">AEP:</label>
+                    <div class="col-md-8">
+                        <input class="form-control" ng-keypress="isNum($event)" name="AEP" ng-model="aPeak.AEP" type="text" />
+                    </div>
+                </div>
+
+                <!--AEP Confidence Interval (lower limit): -->
+                <div class="form-group">
+                    <label class="col-md-3 control-label" for="AEP_LOWCI">AEP Confidence Interval (lower limit):</label>
+                    <div class="col-md-8">
+                        <input class="form-control" ng-keypress="isNum($event)" name="AEP_LOWCI" ng-model="aPeak.AEP_LOWCI" type="text" />
+                    </div>
+                </div>
+
+                <!--AEP Confidence Interval (upper limit): -->
+                <div class="form-group">
+                    <label class="col-md-3 control-label" for="AEP_UPPERCI">AEP Confidence Interval (upper limit):</label>
+                    <div class="col-md-8">
+                        <input class="form-control" ng-keypress="isNum($event)" name="AEP_UPPERCI" ng-model="aPeak.AEP_UPPERCI" type="text" />
+                    </div>
+                </div>
+                <!--AEP Confidence Interval (percentage of limits): -->
+                <div class="form-group">
+                    <label class="col-md-3 control-label" for="AEP_RANGE">AEP Confidence Interval (percentage of limits):</label>
+                    <div class="col-md-8">
+                        <input class="form-control" ng-keypress="isNum($event)" name="AEP_RANGE" ng-model="aPeak.AEP_RANGE" type="text" />
                     </div>
                 </div>
 

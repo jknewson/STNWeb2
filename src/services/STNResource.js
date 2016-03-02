@@ -511,7 +511,7 @@
                 getSiteSensors: { method: 'GET', isArray: true, url: rootURL + '/Sites/:id/FullInstrumentList.json' }, //all instruments and their stats together
                 getSiteHWMs: { method: 'GET', isArray: true, url: rootURL + '/Sites/:id/HWMs.json' },
                 getSiteFiles: { method: 'GET', isArray: true, url: rootURL + '/Sites/:id/Files.json' },
-                getSitePeaks: { method: 'GET', isArray: true, url: rootURL + '/Sites/:id/PeakSummaries.json' },
+                getSitePeaks: { method: 'GET', isArray: true, url: rootURL + '/Sites/:id/PeakSummaryView.json' },
                 //just the Site
                 update: { method: 'PUT', cache: false, isArray: false },
                 save: { method: 'POST', cache: false, isArray: false },

@@ -17,17 +17,18 @@
                 $scope.$watch(function () { return $cookies.get('SessionEventName'); }, function (newValue) {
                     $scope.sessionEventName = newValue !== undefined ? newValue : "All Events";
                     $scope.sessionEventExists = $scope.sessionEventName != "All Events" ? true : false;
-                //    if (newValue !== undefined) {
-                //        $scope.SitePeaks = thisSitePeaks.filter(function (p) { return h.EVENT_ID == $cookies.get('SessionEventID'); });
-                //        $scope.hwmCount = { total: $scope.SiteHWMs.length };
-                //    } else {
-                //        $scope.SiteHWMs = thisSiteHWMs;
-                //        $scope.hwmCount = { total: $scope.SiteHWMs.length };
-                //    }
+                    if (newValue !== undefined) {
+                        $scope.SitePeaks = thisSitePeaks.filter(function (p) { return p.EVENT_NAME == $scope.sessionEventName; });
+                        $scope.peakCount = { total: $scope.SitePeaks.length };
+                    } else {
+                        $scope.SitePeaks = thisSitePeaks;
+                        $scope.peakCount = { total: $scope.SitePeaks.length };
+                    }
                 });
+
+                //create/edit a peak 
                 $scope.showPeakModal = function (peakClicked) {                    
                     var indexClicked = $scope.SitePeaks.indexOf(peakClicked);
-
                     //modal
                     var modalInstance = $uibModal.open({
                         templateUrl: 'PEAKmodal.html',
@@ -52,13 +53,13 @@
                             },
                             allEventHWMs: function () {
                                 return HWM.getFilteredHWMs({ Event: $cookies.get('SessionEventID'), EventStatus: 0 }).$promise;
-                            },
-                            allSiteSensors: function () {
-                                return SITE.getSiteSensors({ id: thisSite.SITE_ID }).$promise;
-                            },
-                            allSiteFiles: function () {
-                                return SITE.getSiteFiles({ id: thisSite.SITE_ID }).$promise;
-                            }
+                            }//,
+                            //allSiteSensors: function () {
+                            //    return SITE.getSiteSensors({ id: thisSite.SITE_ID }).$promise;
+                            //},
+                            //allSiteFiles: function () {
+                            //    return SITE.getSiteFiles({ id: thisSite.SITE_ID }).$promise;
+                            //}
                         }
                     });
 

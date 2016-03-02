@@ -882,10 +882,11 @@
                 });
                 //#endregion QuickHWM page
                
-            $locationProvider.html5Mode({
-                enabled: true,
-                requireBase: false
-            });
+            //this causes issues with Status404 Not found on component/main/mainView.html
+            //$locationProvider.html5Mode({
+            //    enabled: true,
+            //    requireBase: false
+            //});
         }
     ]);
 }());

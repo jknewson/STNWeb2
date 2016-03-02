@@ -3,15 +3,15 @@
     'use strict';
 
     var ModalControllers = angular.module('ModalControllers');
-    ModalControllers.controller('peakModalCtrl', ['$scope', '$cookies', '$http', '$uibModalInstance', '$uibModal', 'allVertDatums', 'thisPeak', 'peakSite', 'allMembers', 'allEventHWMs', 'allSiteSensors', 'allSiteFiles',
-        function ($scope, $cookies, $http, $uibModalInstance, $uibModal, allVertDatums, thisPeak, peakSite, allMembers, allEventHWMs, allSiteSensors, allSiteFiles) {
+    ModalControllers.controller('peakModalCtrl', ['$scope', '$cookies', '$http', '$uibModalInstance', '$uibModal', 'allVertDatums', 'thisPeak', 'peakSite', 'allMembers', 'allEventHWMs', 
+        function ($scope, $cookies, $http, $uibModalInstance, $uibModal, allVertDatums, thisPeak, peakSite, allMembers, allEventHWMs) {
             //dropdowns
             $scope.VDatumsList = allVertDatums;
             $scope.thisSite = peakSite;
             $scope.memberList = allMembers;
             $scope.eventSiteHWMs = allEventHWMs.filter(function (h) { return h.SITE_ID == peakSite.SITE_ID; });
-            $scope.eventSiteSensors = allSiteSensors.filter(function (s) { return s.Instrument.EVENT_ID == $cookies.get('SessionEventID'); }); //maybe go from here to get all datafiles for each sensor
-            $scope.siteFilesForSensors = allSiteFiles.filter(function (f) { return f.INSTRUMENT_ID !== null && f.INSTRUMENT_ID > 0; });
+            //$scope.eventSiteSensors = allSiteSensors.filter(function (s) { return s.Instrument.EVENT_ID == $cookies.get('SessionEventID'); }); //maybe go from here to get all datafiles for each sensor
+           // $scope.siteFilesForSensors = allSiteFiles.filter(function (f) { return f.INSTRUMENT_ID !== null && f.INSTRUMENT_ID > 0; });
             $scope.timeZoneList = ['UTC', 'PST', 'MST', 'CST', 'EST'];
             $scope.LoggedInMember = allMembers.filter(function (m) { return m.MEMBER_ID == $cookies.get('mID'); })[0];
 
@@ -96,7 +96,7 @@
             } else {
                 //#region new PEAK
                 var timeParts = getTimeZoneStamp();
-                $scope.aPeak = { PEAK_DATE: timeParts[0], TIME_ZONE: timeParts[1], MEMBER_ID: $cookies.get('mID') };
+                $scope.aPeak = { PEAK_DATE: {date:timeParts[0], time: timeParts[0]}, TIME_ZONE: timeParts[1], MEMBER_ID: $cookies.get('mID') };
                 $scope.PeakCreator = allMembers.filter(function (m) { return m.MEMBER_ID == $cookies.get('mID'); })[0];
                
                 //#endregion new PEAK
