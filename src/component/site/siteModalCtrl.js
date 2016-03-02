@@ -20,15 +20,80 @@
             $scope.ProposedSens = allDropDownParts[8];
             $scope.SensorDeployment = allDropDownParts[9];
             $scope.userRole = $cookies.get('usersRole');
-            
+            //get address parts and existing sites 
+            $scope.getAddress = function () {
+                var geocoder = new google.maps.Geocoder(); //reverse address lookup
+                var latlng = new google.maps.LatLng($scope.aSite.LATITUDE_DD, $scope.aSite.LONGITUDE_DD);
+                geocoder.geocode({ 'latLng': latlng }, function (results, status) {
+                    if (status == google.maps.GeocoderStatus.OK) {
+                        //parse the results out into components ('street_number', 'route', 'locality', 'administrative_area_level_2', 'administrative_area_level_1', 'postal_code'
+                        var address_components = results[0].address_components;
+                        var components = {};
+                        $.each(address_components, function (k, v1) {
+                            $.each(v1.types, function (k2, v2) {
+                                components[v2] = v1.long_name;
+                            });
+                        });
+
+                        $scope.aSite.ADDRESS = components.street_number !== undefined ? components.street_number + " " + components.route : components.route;
+                        $scope.aSite.CITY = components.locality;
+
+                        var thisState = $scope.StateList.filter(function (s) { return s.STATE_NAME == components.administrative_area_level_1; })[0];
+                        if (thisState !== undefined) {
+                            $scope.aSite.STATE = thisState.STATE_ABBREV;
+                            $scope.stateCountyList = $scope.AllCountyList.filter(function (c) { return c.STATE_ID == thisState.STATE_ID; });
+                            $scope.aSite.COUNTY = components.administrative_area_level_2;
+                            $scope.aSite.ZIP = components.postal_code;
+                            //see if there are any sites within a 0.0005 buffer of here for them to use instead
+                            SITE.query({ Latitude: $scope.aSite.LATITUDE_DD, Longitude: $scope.aSite.LONGITUDE_DD, Buffer: 0.0005 }, function success(response) {
+                                var closeSites = response.Sites;
+
+                                //modal for showing # of sites near                  
+                                var modalInstance = $uibModal.open({
+                                    template: '<div class="modal-header"><h3 class="modal-title">Sites nearby</h3></div>' +
+                                               '<div class="modal-body"><p>There are: {{num}} sites nearby.</p>' +
+                                               '<p ng-if="num > 0"><span>To use one of these sites instead, click on the site name.</span>' +
+                                               '<ul><li ng-repeat="s in siteListNear" style="list-style:none"><a ui-sref="site.dashboard({id: s.SITE_ID})" ng-click="$close()">{{s.SITE_NO}}</a></li></ul></p></div>' +
+                                               '<div class="modal-footer"><button class="btn btn-primary" ng-click="ok()">OK</button></div>',
+                                    controller: ['$scope', '$uibModalInstance', function ($scope, $uibModalInstance) {
+                                        $scope.ok = function () {
+                                            $uibModalInstance.close();
+                                        };
+                                        $scope.num = closeSites.length;
+                                        $scope.siteListNear = closeSites;
+                                    }],
+                                    size: 'sm'
+                                });
+                                modalInstance.result.then(function () {
+                                    $rootScope.stateIsLoading.showLoading = false; // loading..
+                                });
+                                // alert("Number of nearby Sites: " + closeSites.length);
+                            }, function error(errorResponse) {
+                                toastr.error("Error: " + errorResponse.statusText);
+                            }).$promise;
+                        } else {
+                            toastr.error("The Latitude/Longitude did not return a location within the U.S.");
+                        }
+                    } else {
+                        toastr.error("There was an error getting address. Please try again.");
+                    }
+                });
+            };
+
             //globals 
             $scope.houseDirty = false; $scope.netNameDirty = false; $scope.netTypeDirty = false;
             $scope.siteHouseTypesTable = [];
             $scope.aSite = {};
+
+            //if latlong, then it's coming from the map tab. populate lat,long,hdatum and do geosearch
             if (latlong !== undefined) {
-                $scope.aSite.LATITUDE_DD = latlong[0];
-                $scope.aSite.LONGITUDE_DD = latlong[1];
+                $scope.aSite.LATITUDE_DD = parseFloat(latlong[0].toFixed(6));
+                $scope.aSite.LONGITUDE_DD = parseFloat(latlong[1].toFixed(6));
+                $scope.aSite.HDATUM_ID = 4;
+                $scope.aSite.HCOLLECT_METHOD_ID = 4;
+                $scope.getAddress(); //get the address using passed in lat/long and check for nearby sites
             }
+
             $scope.aSite.decDegORdms = 'dd';
             $scope.DMS = {}; //holder of deg min sec values
             $scope.originalSiteHousings = [];
@@ -541,66 +606,6 @@
                     }
                 }
             
-            };
-
-            //get address parts and existing sites 
-            $scope.getAddress = function () {
-                var geocoder = new google.maps.Geocoder(); //reverse address lookup
-                var latlng = new google.maps.LatLng($scope.aSite.LATITUDE_DD, $scope.aSite.LONGITUDE_DD);
-                geocoder.geocode({ 'latLng': latlng }, function (results, status) {
-                    if (status == google.maps.GeocoderStatus.OK) {
-                        //parse the results out into components ('street_number', 'route', 'locality', 'administrative_area_level_2', 'administrative_area_level_1', 'postal_code'
-                        var address_components = results[0].address_components;
-                        var components = {};
-                        $.each(address_components, function (k, v1) {
-                            $.each(v1.types, function (k2, v2) {
-                                components[v2] = v1.long_name;
-                            });
-                        });
-
-                        $scope.aSite.ADDRESS = components.street_number !== undefined ? components.street_number + " " + components.route : components.route;
-                        $scope.aSite.CITY = components.locality;
-
-                        var thisState = $scope.StateList.filter(function (s) { return s.STATE_NAME == components.administrative_area_level_1; })[0];
-                        if (thisState !== undefined) {
-                            $scope.aSite.STATE = thisState.STATE_ABBREV;
-                            $scope.stateCountyList = $scope.AllCountyList.filter(function (c) { return c.STATE_ID == thisState.STATE_ID; });
-                            $scope.aSite.COUNTY = components.administrative_area_level_2;
-                            $scope.aSite.ZIP = components.postal_code;
-                            //see if there are any sites within a 0.0005 buffer of here for them to use instead
-                            SITE.query({ Latitude: $scope.aSite.LATITUDE_DD, Longitude: $scope.aSite.LONGITUDE_DD, Buffer: 0.0005 }, function success(response) {
-                                var closeSites = response.Sites;
-
-                                //modal for showing # of sites near                  
-                                var modalInstance = $uibModal.open({
-                                    template: '<div class="modal-header"><h3 class="modal-title">Sites nearby</h3></div>' +
-                                               '<div class="modal-body"><p>There are: {{num}} sites nearby.</p>' +
-                                               '<p ng-if="num > 0"><span>To use one of these sites instead, click on the site name.</span>' +
-                                               '<ul><li ng-repeat="s in siteListNear" style="list-style:none"><a ui-sref="site.dashboard({id: s.SITE_ID})" ng-click="$close()">{{s.SITE_NO}}</a></li></ul></p></div>' +
-                                               '<div class="modal-footer"><button class="btn btn-primary" ng-click="ok()">OK</button></div>',
-                                    controller: ['$scope', '$uibModalInstance', function ($scope, $uibModalInstance) {
-                                        $scope.ok = function () {
-                                            $uibModalInstance.close();
-                                        };
-                                        $scope.num = closeSites.length;
-                                        $scope.siteListNear = closeSites;
-                                    }],
-                                    size: 'sm'
-                                });
-                                modalInstance.result.then(function () {
-                                    $rootScope.stateIsLoading.showLoading = false; // loading..
-                                });
-                                // alert("Number of nearby Sites: " + closeSites.length);
-                            }, function error(errorResponse) {
-                                toastr.error("Error: " + errorResponse.statusText);
-                            }).$promise;
-                        } else {
-                            toastr.error("The Latitude/Longitude did not return a location within the U.S.");
-                        }
-                    } else {
-                        toastr.error("There was an error getting address. Please try again.");
-                    }
-                });
             };
 
             // want to add a landowner contact

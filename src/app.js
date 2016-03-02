@@ -35,8 +35,8 @@
         
     }]);
     //app.config(function that defines the config code. 'ui.select', 'ngSanitize','$locationProvider', $locationProvider
-    app.config(['$stateProvider', '$urlRouterProvider', 
-        function ($stateProvider, $urlRouterProvider ){
+    app.config(['$stateProvider', '$urlRouterProvider', '$locationProvider', 
+        function ($stateProvider, $urlRouterProvider, $locationProvider){
             //if no active state, display state associated with this fragment identifier
             $urlRouterProvider.otherwise("/");
 
@@ -882,9 +882,10 @@
                 });
                 //#endregion QuickHWM page
                
-                
-           // $locationProvider.html5Mode(false).hashPrefix('!');
-            //$locationProvider.html5Mode({ enabled: true, requireBase: false });
+            $locationProvider.html5Mode({
+                enabled: true,
+                requireBase: false
+            });
         }
     ]);
 }());
