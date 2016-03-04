@@ -3,9 +3,9 @@
 
     var ModalControllers = angular.module('ModalControllers');
 
-    ModalControllers.controller('siteModalCtrl', ['$scope', '$rootScope', '$cookies', '$q', '$location', '$state', '$http', '$timeout', '$uibModal', '$uibModalInstance', '$filter', 'allDropDownParts', 'latlong', 'thisSiteStuff', 
+    ModalControllers.controller('siteModalCtrl', ['$scope', '$rootScope', '$cookies', '$q', '$location', '$state', '$http', '$timeout', '$uibModal', '$uibModalInstance', '$filter', 'leafletMarkerEvents', 'allDropDownParts', 'latlong', 'thisSiteStuff', 
         'SITE', 'SITE_HOUSING', 'MEMBER', 'INSTRUMENT', 'INSTRUMENT_STATUS', 'LANDOWNER_CONTACT', 
-        function ($scope, $rootScope, $cookies, $q, $location, $state, $http, $timeout, $uibModal, $uibModalInstance, $filter, allDropDownParts, latlong, thisSiteStuff, SITE, SITE_HOUSING, 
+        function ($scope, $rootScope, $cookies, $q, $location, $state, $http, $timeout, $uibModal, $uibModalInstance, $filter, leafletMarkerEvents, allDropDownParts, latlong, thisSiteStuff, SITE, SITE_HOUSING, 
             MEMBER, INSTRUMENT, INSTRUMENT_STATUS, LANDOWNER_CONTACT) {
             //dropdowns
             $scope.HorizontalDatumList = allDropDownParts[0];
@@ -20,8 +20,47 @@
             $scope.ProposedSens = allDropDownParts[8];
             $scope.SensorDeployment = allDropDownParts[9];
             $scope.userRole = $cookies.get('usersRole');
+            $scope.closeSites = 0;
+            $scope.showMap = false;
+            $scope.siteLat = 0;
+            $scope.siteLong = 0;
+
+            $scope.mapCenter = {
+                lat: $scope.siteLat,
+                lng: $scope.siteLong,
+                zoom: 18
+            };
+            $scope.events = {
+                mapMarkers: {
+                    enable: leafletMarkerEvents.getAvailableEvents()
+                }
+            };
+            $scope.mapMarkers = [];
+            
+            var icons = {
+                stn: {
+                    type: 'div',
+                    iconSize: [10, 10],
+                    className: 'stnSiteIcon'
+                },
+                newSTN: {
+                    type: 'div',
+                    iconSize: [10, 10],
+                    className: 'newSiteIcon',
+                    iconAnchor: [5, 5]
+                }
+            };
+            ///update newSite lat/lng after dragend
+            $scope.$on("leafletDirectiveMarker.dragend", function (event, args) {
+                var dragendLocation = args.model;
+                $scope.aSite.LATITUDE_DD = parseFloat(dragendLocation.lat.toFixed(6)); ;
+                $scope.aSite.LONGITUDE_DD = parseFloat(dragendLocation.lng.toFixed(6));
+            });
+
             //get address parts and existing sites 
             $scope.getAddress = function () {
+                $scope.mapCenter = { lat: parseFloat($scope.aSite.LATITUDE_DD), lng: parseFloat($scope.aSite.LONGITUDE_DD), zoom: 18 };
+                $scope.mapMarkers = [];
                 var geocoder = new google.maps.Geocoder(); //reverse address lookup
                 var latlng = new google.maps.LatLng($scope.aSite.LATITUDE_DD, $scope.aSite.LONGITUDE_DD);
                 geocoder.geocode({ 'latLng': latlng }, function (results, status) {
@@ -46,27 +85,51 @@
                             $scope.aSite.ZIP = components.postal_code;
                             //see if there are any sites within a 0.0005 buffer of here for them to use instead
                             SITE.query({ Latitude: $scope.aSite.LATITUDE_DD, Longitude: $scope.aSite.LONGITUDE_DD, Buffer: 0.0005 }, function success(response) {
-                                var closeSites = response.Sites;
-
+                                $scope.closeSites = response.Sites;
+                                if ($scope.closeSites.length > 0) {
+                                    for (var i = 0; i < $scope.closeSites.length; i++) {
+                                        var a = $scope.closeSites[i];
+                                        $scope.mapMarkers.push({
+                                            lat: a.latitude,
+                                            lng: a.longitude,
+                                            SITE_ID: a.SITE_ID,
+                                            SITE_NO: a.SITE_NO,
+                                            icon: icons.stn,
+                                            message: a.SITE_NO,
+                                            focus: false
+                                        });
+                                    }
+                                }
+                                $scope.mapMarkers.push({
+                                    lat: parseFloat($scope.aSite.LATITUDE_DD),
+                                    lng: parseFloat($scope.aSite.LONGITUDE_DD),                                   
+                                    icon: icons.newSTN,
+                                    message: 'New',
+                                    focus: false,
+                                    draggable: true,
+                                }); 
+                                
+                                $scope.showMap = true;
+                                
                                 //modal for showing # of sites near                  
-                                var modalInstance = $uibModal.open({
-                                    template: '<div class="modal-header"><h3 class="modal-title">Sites nearby</h3></div>' +
-                                               '<div class="modal-body"><p>There are: {{num}} sites nearby.</p>' +
-                                               '<p ng-if="num > 0"><span>To use one of these sites instead, click on the site name.</span>' +
-                                               '<ul><li ng-repeat="s in siteListNear" style="list-style:none"><a ui-sref="site.dashboard({id: s.SITE_ID})" ng-click="$close()">{{s.SITE_NO}}</a></li></ul></p></div>' +
-                                               '<div class="modal-footer"><button class="btn btn-primary" ng-click="ok()">OK</button></div>',
-                                    controller: ['$scope', '$uibModalInstance', function ($scope, $uibModalInstance) {
-                                        $scope.ok = function () {
-                                            $uibModalInstance.close();
-                                        };
-                                        $scope.num = closeSites.length;
-                                        $scope.siteListNear = closeSites;
-                                    }],
-                                    size: 'sm'
-                                });
-                                modalInstance.result.then(function () {
-                                    $rootScope.stateIsLoading.showLoading = false; // loading..
-                                });
+                                //var modalInstance = $uibModal.open({
+                                //    template: '<div class="modal-header"><h3 class="modal-title">Sites nearby</h3></div>' +
+                                //               '<div class="modal-body"><p>There are: {{num}} sites nearby.</p>' +
+                                //               '<p ng-if="num > 0"><span>To use one of these sites instead, click on the site name.</span>' +
+                                //               '<ul><li ng-repeat="s in siteListNear" style="list-style:none"><a ui-sref="site.dashboard({id: s.SITE_ID})" ng-click="$close()">{{s.SITE_NO}}</a></li></ul></p></div>' +
+                                //               '<div class="modal-footer"><button class="btn btn-primary" ng-click="ok()">OK</button></div>',
+                                //    controller: ['$scope', '$uibModalInstance', function ($scope, $uibModalInstance) {
+                                //        $scope.ok = function () {
+                                //            $uibModalInstance.close();
+                                //        };
+                                //        $scope.num = closeSites.length;
+                                //        $scope.siteListNear = closeSites;
+                                //    }],
+                                //    size: 'sm'
+                                //});
+                                //modalInstance.result.then(function () {
+                                //    $rootScope.stateIsLoading.showLoading = false; // loading..
+                                //});
                                 // alert("Number of nearby Sites: " + closeSites.length);
                             }, function error(errorResponse) {
                                 toastr.error("Error: " + errorResponse.statusText);

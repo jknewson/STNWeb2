@@ -3,8 +3,8 @@
 
     var STNControllers = angular.module('STNControllers');
 
-    STNControllers.controller('peakCtrl', ['$scope', '$cookies', '$location', '$state', '$http', '$uibModal', '$filter', '$timeout', 'thisSite', 'thisSitePeaks', 'allVertDatums', 'HWM', 'MEMBER', 'SITE',
-        function ($scope, $cookies, $location, $state, $http, $uibModal, $filter, $timeout, thisSite, thisSitePeaks, allVertDatums, HWM, MEMBER, SITE) {
+    STNControllers.controller('peakCtrl', ['$scope', '$cookies', '$location', '$state', '$http', '$uibModal', '$filter', '$timeout', 'thisSite', 'Site_Files', 'thisSitePeaks', 'allVertDatums', 'allHWMQualities', 'allHWMTypes', 'HWM', 'MEMBER', 'SITE',
+        function ($scope, $cookies, $location, $state, $http, $uibModal, $filter, $timeout, thisSite, Site_Files, thisSitePeaks, allVertDatums, allHWMQualities, allHWMTypes, HWM, MEMBER, SITE) {
             if ($cookies.get('STNCreds') === undefined || $cookies.get('STNCreds') === "") {
                 $scope.auth = false;
                 $location.path('/login');
@@ -53,10 +53,13 @@
                             },
                             allEventHWMs: function () {
                                 return HWM.getFilteredHWMs({ Event: $cookies.get('SessionEventID'), EventStatus: 0 }).$promise;
+                            },
+                            allSiteFiles: function() {
+                                return Site_Files.getAllSiteFiles();
+                            },
+                            allSiteSensors: function () {
+                                return SITE.getSiteSensors({ id: thisSite.SITE_ID }).$promise;
                             }//,
-                            //allSiteSensors: function () {
-                            //    return SITE.getSiteSensors({ id: thisSite.SITE_ID }).$promise;
-                            //},
                             //allSiteFiles: function () {
                             //    return SITE.getSiteFiles({ id: thisSite.SITE_ID }).$promise;
                             //}
