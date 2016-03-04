@@ -34,7 +34,7 @@
 <!-- MODAL for Site Create/edit-->
 <script type="text/ng-template" id="SITEmodal.html">
     <div class="modal-header">
-        <h3 class="modal-title">Site</h3>
+        <h3 class="modal-title">Site<button class="close" type="button" ng-click="cancel()" aria-hidden="true" style="color:gray;">&times;</button></h3>
     </div>
     <form class="form-horizontal" name="siteForm">
         <fieldset>
@@ -120,6 +120,22 @@
                     </div>
                 </div>
 
+                <!-- map showing lat/long location-->
+                <div class="col-md-7 col-md-offset-3" style="height:300px;display:table;" ng-show="showMap">
+                    <div><label>There are: {{closeSites.length}} sites nearby.</label></div>
+                    <p ng-if="closeSites.length > 0">
+                        <span>To use one of these sites (shown as blue dot) instead, click on the site name.</span>
+                        <ul style="max-height:50px;overflow:auto;">
+                            <li ng-repeat="s in closeSites" style="list-style:none">
+                                <a ui-sref="site.dashboard({id: s.SITE_ID})" ng-click="$dismiss()">{{s.SITE_NO}}</a>
+                            </li>
+                        </ul>
+                    </p>
+                    <div class="panel panel-primary" style="height:inherit">
+                        <leaflet lf-center="mapCenter" width="100%" height="100%" markers="mapMarkers"></leaflet>
+                    </div>                   
+                </div>
+                <br clear="all" />
                 <!--Horizontal Datum*-->
                 <div class="form-group required" ng-class="{'has-error':siteForm.HDATUM_ID.$invalid && siteForm.HDATUM_ID.$dirty}">
                     <label class="col-md-4 control-label req" for="HDATUM_ID">Horizontal Datum:</label>
@@ -523,7 +539,7 @@
 <!-- MODAL for Objective Point -->
 <script type="text/ng-template" id="OPmodal.html">
     <div class="modal-header">
-        <h3 class="modal-title">Objective Point</h3>
+        <h3 class="modal-title">Objective Point<button class="close" type="button" ng-click="cancel()" aria-hidden="true" style="color:gray;">&times;</button></h3>
     </div>
 
     <div class="modal-body">
@@ -1063,7 +1079,7 @@
 <!-- MODAL for HWM-->
 <script type="text/ng-template" id="HWMmodal.html">
     <div class="modal-header">
-        <h3 class="modal-title">HWM</h3>
+        <h3 class="modal-title">HWM<button class="close" type="button" ng-click="cancel()" aria-hidden="true" style="color:gray;">&times;</button></h3>
     </div>
 
     <div class="modal-body">
@@ -1566,7 +1582,7 @@
 <!-- MODAL for Proposed and Deployed Sensor-->
 <script type="text/ng-template" id="Sensormodal.html">
     <div class="modal-header">
-        <h3 class="modal-title">Deploy Sensor</h3>
+        <h3 class="modal-title">Deploy Sensor<button class="close" type="button" ng-click="cancel()" aria-hidden="true" style="color:gray;">&times;</button></h3>
     </div>
     <div class="modal-body">
         <form class="form-horizontal" name="SensorForm">
@@ -2802,7 +2818,7 @@
 <!-- MODAL for FILE-->
 <script type="text/ng-template" id="FILEmodal.html">
     <div class="modal-header">
-        <h3 class="modal-title">Site File</h3>
+        <h3 class="modal-title">Site File<button class="close" type="button" ng-click="cancel()" aria-hidden="true" style="color:gray;">&times;</button></h3>
     </div>
 
     <form class="form-horizontal" name="FILEForm">
@@ -3027,136 +3043,275 @@
 <!-- MODAL for PEAK Create/edit-->
 <script type="text/ng-template" id="PEAKmodal.html">
     <div class="modal-header">
-        <h3 class="modal-title">Peak Summary</h3>
+        <h3 class="modal-title">Peak Summary<button class="close" type="button" ng-click="cancel()" aria-hidden="true" style="color:gray;">&times;</button></h3>
     </div>
-    <form class="form-horizontal" name="peakForm">
+    <form class="form-horizontal" name="peakForm" role="form">
         <fieldset>
             <div class="modal-body">
+                <!-- Start SENSORs and HWMs used for Peak -->
+                <label class="col-md-4 control-label" for="AEP_RANGE">Data used for Interpretation:</label>
+                <div class="col-md-12">
+                    <!-- Sensor list -->
+                    <div class="col-md-6 pull-left">
+                        <div ng-repeat="s in eventSiteSensors">
+                            <div>
+                                <input type="checkbox" class="pull-left" ng-model="s.selected" ng-click="addSensor(s)" />
+                                <span style="margin-left:5px;margin-right:5px;">{{s.Instrument.Deployment_Type || s.Instrument.Sensor_Type}} Sensor
+                                    <a class="btn borderLess" style="padding:0" ng-click="showSensorDetails(s)">(Details)</a>
+                                </span>
+                                <a class="borderLess" ng-click="primarySensor(s)">(Set as primary)</a>
+                            </div>
+                        </div>
+                    </div>
 
-                <!--Peak creator-->
-                <div class="form-group">
-                    <label class="col-md-3 control-label" for="MEMBER_ID">Peak Creator:</label>
-                    <div class="col-md-8">
-                        <span>{{PeakCreator.FNAME}} {{PeakCreator.LNAME}}</span>
+                    <!-- HWM list-->
+                    <div class="col-md-6 pull-right">
+                        <div ng-repeat="h in eventSiteHWMs">
+                            <div>
+                                <input type="checkbox" class="pull-left" ng-model="h.selected" ng-click="addHWM(h)" />
+                                <span style="margin-left:5px;margin-right:5px;">
+                                    HWM {{h.HWM_ID}} - {{h.ELEV_FT || '--'}} ft
+                                    <a class="btn borderLess" style="padding:0" ng-click="showHWMDetails(h)">(Details)</a>
+                                </span>
+                                <a class="borderLess" ng-click="primaryHWM(h)">(Set as primary)</a>
+                            </div>
+                        </div>
+                    </div>
+                    <br clear="all" />
+
+                    <!-- hwm box of meta data and files -->
+                    <div style="border:solid 1px black;padding-bottom:10px;" class="container col-md-12" ng-if="hwmDetail">
+                        <!-- only show if they click showHWMDetails() above -->
+                        <label>HWM {{HWMBox.HWM_ID}} Details</label><button class="close" type="button" ng-click="closeDetail()" aria-hidden="true" style="color:gray;">&times;</button>
+                        <ul>
+                            <li style="list-style:none">Location Description: {{HWMBox.HWM_LOCATION_DESCRIPTION || '--'}}</li>
+                            <li style="list-style:none">Bank: {{HWMBox.BANK}}</li>
+                            <li style="list-style:none">Flag Date: {{HWMBox.FLAG_DATE | date:'MM/dd/yyyy'}}</li>
+                            <li style="list-style:none">Elevation: {{HWMBox.ELEV_FT}} ft</li>
+                            <li style="list-style:none">Elevation above ground: {{HWMBox.HEIGHT_ABV_GND}} ft</li>
+                            <li style="list-style:none">Quality: {{HWMBox.HWM_QUALITY}}</li>
+                            <li style="list-style:none">Type: {{HWMBox.HWM_TYPE}}</li>
+                            <li style="list-style:none">Stillwater: {{HWMBox.STILLWATER}}</li>
+                        </ul><br clear="all" />
+                        <div class="col-md-12" ng-if="HWMBox.files.length > 0">
+                            <label>HWM Files</label>
+                            <span ng-repeat="f in HWMBox.files">
+                                <ul style="padding-left: 0">
+                                    <li style="list-style:none;padding-bottom: 15px;">
+                                        <span class="col-sm-9 borderLess" style="padding:0">
+                                            <a class="btn borderLess" style="padding:0" target="_blank" class="btn btn-primary" ng-href="https://stntest.wim.usgs.gov/STNServices2/Files/{{f.FILE_ID}}/Item">
+                                                {{f.FILE_DATE | date: 'MM/dd/yyyy'}} ({{f.PATH || f.FILE_URL || f.FILE_ID}})
+                                            </a>
+                                        </span>
+                                    </li>
+                                </ul>
+                            </span>
+                        </div>
+                        <!-- carousel of photo files -->
+                        <div class="col-md-6" ng-if="HWMBox.files.length > 0" style="height:120px;">
+                            <uib-carousel interval="4000">
+                                <uib-slide ng-repeat="f in HWMBox.files | where:{FILETYPE_ID:1}">
+                                    <img ng-click="showImageModal(f.FILE_ID)" ng-src="https://stntest.wim.usgs.gov/STNServices2/Files/{{f.FILE_ID}}/Item" />
+                                    <div class="carousel-caption">
+                                        <p>{{f.PATH || f.FILE_URL || f.FILE_ID}}</p>
+                                    </div>
+                                </uib-slide>
+                            </uib-carousel>
+                        </div>
+                    </div>
+                    <!-- sensor box of meta data and files -->
+                    <div style="border:solid 1px black;padding-bottom:10px" class="container col-md-12" ng-if="sensorDetail">
+                        <!-- only show if they click showSensorDetails() above -->
+                        <label>{{SensorBox.Instrument.Deployment_Type || SensorBox.Instrument.Sensor_Type}} Sensor Details</label><button class="close" type="button" ng-click="closeDetail()" aria-hidden="true" style="color:gray;">&times;</button>
+                        <ul>
+                            <li style="list-style:none">Sensor Type: {{SensorBox.Instrument.Sensor_Type}}</li>
+                            <li style="list-style:none">Deployment Type: {{SensorBox.Instrument.Deployment_Type || '--'}}</li>
+                            <li style="list-style:none">Retrieved on: {{SensorBox.InstrumentStats[0].TIME_STAMP | date: 'MM/dd/yyyy hh:mm a'}}</li>
+                            <li style="list-style:none">Serial Number: {{SensorBox.Instrument.SERIAL_NUMBER || '--'}}</li>
+                            <li style="list-style:none">Location Description: {{SensorBox.Instrument.LOCATION_DESCRIPTION || '--'}}</li>
+                            <li style="list-style:none">Sensor Brand: {{SensorBox.Instrument.Sensor_Brand || '--'}}</li>
+                        </ul><br clear="all" />
+                        <div class="col-md-12" ng-if="SensorBox.files.length > 0">
+                            <label>Sensor Files</label>
+                            <span ng-repeat="f in SensorBox.files">
+                                <ul style="padding-left: 0">
+                                    <li style="list-style:none;padding-bottom: 15px;">
+                                        <span class="col-sm-9 borderLess" style="padding:0">
+                                            <a class="btn borderLess" style="padding:0" target="_blank" class="btn btn-primary" ng-href="https://stntest.wim.usgs.gov/STNServices2/Files/{{f.FILE_ID}}/Item">
+                                                {{f.FILE_DATE | date: 'MM/dd/yyyy'}} ({{f.PATH || f.FILE_URL || f.FILE_ID}})
+                                            </a>
+                                        </span>
+                                    </li>
+                                </ul>
+                            </span>
+                        </div>
+                        <!-- carousel of photo files-->
+                        <div class="col-md-6" ng-if="SensorBox.files.length > 0" style="height:120px;">
+                            <uib-carousel interval="4000">
+                                <uib-slide ng-repeat="f in SensorBox.files | where:{FILETYPE_ID:1}">
+                                    <img ng-click="showImageModal(f.FILE_ID)" ng-src="https://stntest.wim.usgs.gov/STNServices2/Files/{{f.FILE_ID}}/Item" />
+                                    <div class="carousel-caption">
+                                        <p>{{f.PATH || f.FILE_URL || f.FILE_ID}}</p>
+                                    </div>
+                                </uib-slide>
+                            </uib-carousel>
+                        </div>
                     </div>
                 </div>
+            </div>
+            </div>
+            </div>
+            <!-- End SENSORs and HWMs used for Peak -->
 
-                <!-- Peak Date/Time: * -->
-                <div class="form-group required" ng-class="{'has-error':peakForm.PEAK_DATE.date.$invalid && peakForm.PEAK_DATE.date.$dirty}">
-                    <label class="col-md-3 control-label req" style="margin-top:3%" for="PEAK_DATE">Peak Date:</label>
-                    <div class="col-md-8">
-                        <datetimepicker hour-step="1" minute-step="1" ng-model="aPeak.PEAK_DATE.date" show-meridian="true"
-                                        date-format="MM/dd/yyyy" readonly-date="false" readonly-time="false" date-options="dateOptions"
-                                        hidden-time="true" hidden-date="false" show-spinners="true" required>
-                        </datetimepicker>
-                    </div>
-                    <div class="col-md-1">
+
+            <br clear="all" />
+
+            <!-- Location Description: -->
+            <div class="form-group">
+                <label class="col-md-4 control-label" for="CALC_NOTES">Peak Calculation Notes:</label>
+                <div class="col-md-5">
+                    <textarea class="form-control" name="CALC_NOTES" type=" text" rows="3" placeholder="Please document the reason this Peak was chosen for this event." ng-model="aPeak.CALC_NOTES" />
+                </div>
+            </div>
+            <br clear="all" />
+
+            <!--Peak creator-->
+            <div class="form-group">
+                <label class="col-md-4 control-label" for="MEMBER_ID">Peak Creator:</label>
+                <div class="col-md-5" style="margin-top:13px">
+                    <span>{{PeakCreator.FNAME}} {{PeakCreator.LNAME}}</span>
+                </div>
+            </div>
+
+            <!-- Peak Date: * -->
+            <div class="form-group required" ng-class="{'has-error':peakForm.PEAK_DATE.date.$invalid && peakForm.PEAK_DATE.date.$dirty}">
+                <label class="col-md-4 control-label req" for="PEAK_DATE.date">Peak Date:</label>
+                <div class="col-md-5">
+                    <datetimepicker hour-step="1" minute-step="1" ng-model="aPeak.PEAK_DATE.date" show-meridian="true"
+                                    date-format="MM/dd/yyyy" readonly-date="false" readonly-time="false" date-options="dateOptions"
+                                    hidden-time="true" hidden-date="false" show-spinners="true" required>
+                    </datetimepicker>
+                </div>
+                <div class="col-md-1">
+                    <span tooltip-placement="right" uib-tooltip="Date Estimated?">
                         <input type="checkbox" name="IS_PEAK_ESTIMATED" ng-model="aPeak.IS_PEAK_ESTIMATED" ng-true-value="1" ng-false-value="0" />
-                    </div>
+                    </span>
                 </div>
+            </div>
 
-                <!-- Peak Time: * -->
-                <div class="form-group required" ng-class="{'has-error':peakForm.PEAK_DATE.time.$invalid && peakForm.PEAK_DATE.time.$dirty}">
-                    <label class="col-md-3 control-label req" style="margin-top:3%" for="PEAK_TIME">Peak Time:</label>
-                    <div class="col-md-8">
-                        <datetimepicker hour-step="1" minute-step="1" ng-model="aPeak.PEAK_DATE.time" show-meridian="true"
-                                        date-format="MM/dd/yyyy" readonly-date="false" readonly-time="false" date-options="dateOptions"
-                                        hidden-time="false" hidden-date="true" show-spinners="true" required>
-                        </datetimepicker>
-                    </div>
-                    <div class="col-md-1">
+            <!-- Peak Time: * -->
+            <div class="form-group required" ng-class="{'has-error':peakForm.PEAK_DATE.time.$invalid && peakForm.PEAK_DATE.time.$dirty}">
+                <label class="col-md-4 control-label req" style="margin-top:4%" for="PEAK_TIME.time">Peak Time:</label>
+                <div class="col-md-5">
+                    <datetimepicker hour-step="1" minute-step="1" ng-model="aPeak.PEAK_DATE.time" show-meridian="true"
+                                    date-format="MM/dd/yyyy" readonly-date="false" readonly-time="false" date-options="dateOptions"
+                                    hidden-time="false" hidden-date="true" show-spinners="true" required>
+                    </datetimepicker>
+                </div>
+                <div class="col-md-1" style="margin-top:4%">
+                    <span tooltip-placement="right" uib-tooltip="Time Estimated?">
                         <input type="checkbox" name="IS_PEAK_TIME_ESTIMATED" ng-model="aPeak.IS_PEAK_TIME_ESTIMATED" ng-true-value="1" ng-false-value="0" />
-                    </div>
+                    </span>
                 </div>
+            </div>
 
-                <!-- Time Zone:* -->
-                <div class="form-group required">
-                    <label class="col-md-3 control-label" for="TIME_ZONE">Peak Recorded In:</label>
-                    <div class="col-md-8">
-                        <select class="form-control" name="TIME_ZONE" ng-model="aPeak.TIME_ZONE"
-                                ng-options="vcm for vcm in timeZoneList" required>
-                            <option value=""></option>
-                        </select>
-                    </div>
-                    <button type="button" class="borderLess" tooltip-placement="right" uib-tooltip="Date/Time will be stored in UTC.">
-                        <span class="glyphicon glyphicon-question-sign"></span>
-                    </button>
+            <!-- Time Zone:* -->
+            <div class="form-group required">
+                <label class="col-md-4 control-label" for="TIME_ZONE">Peak Recorded In:</label>
+                <div class="col-md-5">
+                    <select class="form-control" name="TIME_ZONE" ng-model="aPeak.TIME_ZONE"
+                            ng-options="vcm for vcm in timeZoneList" required>
+                        <option value=""></option>
+                    </select>
                 </div>
+                <button type="button" class="borderLess" tooltip-placement="right" uib-tooltip="Date/Time will be stored in UTC.">
+                    <span class="glyphicon glyphicon-question-sign"></span>
+                </button>
+            </div>
 
-                <!-- Peak Stage-->
-                <div class="form-group">
-                    <label class="col-md-3 control-label" for="PEAK_STAGE">Peak Stage (elevation ft):</label>
-                    <div class="col-md-8">
-                        <input class="form-control" ng-keypress="isNum($event)" name="PEAK_STAGE" ng-model="aPeak.PEAK_STAGE" type="text" />
-                    </div>
-                    <div class="col-md-1">
+            <!-- Peak Stage-->
+            <div class="form-group">
+                <label class="col-md-4 control-label" for="PEAK_STAGE">Peak Stage (elevation ft):</label>
+                <div class="col-md-5">
+                    <input class="form-control" ng-keypress="isNum($event)" name="PEAK_STAGE" ng-model="aPeak.PEAK_STAGE" type="text" />
+                </div>
+                <div class="col-md-1">
+                    <span tooltip-placement="right" uib-tooltip="Peak Stage Estimated?">
                         <input type="checkbox" name="IS_PEAK_STAGE_ESTIMATED" ng-model="aPeak.IS_PEAK_STAGE_ESTIMATED" ng-true-value="1" ng-false-value="0" />
-                    </div>
+                    </span>
                 </div>
+            </div>
 
-                <!-- Vertical Datum: -->
-                <div class="form-group">
-                    <label class="col-md-4 control-label" for="VDATUM_ID">Vertical Datum:</label>
-                    <div class="col-md-6">
-                        <select class="form-control" name="VDATUM_ID" ng-model="aPeak.VDATUM_ID"
-                                ng-options="vd.DATUM_ID as vd.DATUM_ABBREVIATION for vd in VDatumsList">
-                            <option value=""></option>
-                        </select>
-                    </div>
+            <!-- Vertical Datum: -->
+            <div class="form-group">
+                <label class="col-md-4 control-label" for="VDATUM_ID">Vertical Datum:</label>
+                <div class="col-md-5">
+                    <select class="form-control" name="VDATUM_ID" ng-model="aPeak.VDATUM_ID"
+                            ng-options="vd.DATUM_ID as vd.DATUM_ABBREVIATION for vd in VDatumsList">
+                        <option value=""></option>
+                    </select>
                 </div>
+            </div>
 
-                <!-- Height Above Ground (ft)-->
-                <div class="form-group">
-                    <label class="col-md-3 control-label" for="HEIGHT_ABOVE_GND">Height Above Ground <br />(depth of water in ft):</label>
-                    <div class="col-md-8">
-                        <input class="form-control" ng-keypress="isNum($event)" name="HEIGHT_ABOVE_GND" ng-model="aPeak.HEIGHT_ABOVE_GND" type="text" />
-                    </div>
-                    <div class="col-md-1">
+            <!-- Height Above Ground (ft)-->
+            <div class="form-group">
+                <label class="col-md-4 control-label" for="HEIGHT_ABOVE_GND">Height Above Ground <br />(depth of water in ft):</label>
+                <div class="col-md-5">
+                    <input class="form-control" ng-keypress="isNum($event)" name="HEIGHT_ABOVE_GND" ng-model="aPeak.HEIGHT_ABOVE_GND" type="text" />
+                </div>
+                <div class="col-md-1">
+                    <span tooltip-placement="right" uib-tooltip="HAG Estimated?">
                         <input type="checkbox" name="IS_HAG_ESTIMATED" ng-model="aPeak.IS_HAG_ESTIMATED" ng-true-value="1" ng-false-value="0" />
-                    </div>
+                    </span>
                 </div>
+            </div>
 
-                <!-- Peak Discharge-->
-                <div class="form-group">
-                    <label class="col-md-3 control-label" for="PEAK_DISCHARGE">Peak Discharge:</label>
-                    <div class="col-md-8">
-                        <input class="form-control" ng-keypress="isNum($event)" name="PEAK_DISCHARGE" ng-model="aPeak.PEAK_DISCHARGE" type="text" />
-                    </div>
-                    <div class="col-md-1">
+            <!-- Peak Discharge-->
+            <div class="form-group">
+                <label class="col-md-4 control-label" for="PEAK_DISCHARGE">Peak Discharge:</label>
+                <div class="col-md-5">
+                    <input class="form-control" ng-keypress="isNum($event)" name="PEAK_DISCHARGE" ng-model="aPeak.PEAK_DISCHARGE" type="text" />
+                </div>
+                <div class="col-md-1">
+                    <span tooltip-placement="right" uib-tooltip="Peak Discharge Estimated?">
                         <input type="checkbox" name="IS_PEAK_DISCHARGE_ESTIMATED" ng-model="aPeak.IS_PEAK_DISCHARGE_ESTIMATED" ng-true-value="1" ng-false-value="0" />
-                    </div>
+                    </span>
                 </div>
+            </div>
 
-                <!--AEP: -->
-                <div class="form-group">
-                    <label class="col-md-3 control-label" for="AEP">AEP:</label>
-                    <div class="col-md-8">
-                        <input class="form-control" ng-keypress="isNum($event)" name="AEP" ng-model="aPeak.AEP" type="text" />
-                    </div>
+            <!--AEP: -->
+            <div class="form-group">
+                <label class="col-md-4 control-label" for="AEP">AEP:</label>
+                <div class="col-md-5">
+                    <input class="form-control" ng-keypress="isNum($event)" name="AEP" ng-model="aPeak.AEP" type="text" />
                 </div>
+            </div>
 
-                <!--AEP Confidence Interval (lower limit): -->
-                <div class="form-group">
-                    <label class="col-md-3 control-label" for="AEP_LOWCI">AEP Confidence Interval (lower limit):</label>
-                    <div class="col-md-8">
-                        <input class="form-control" ng-keypress="isNum($event)" name="AEP_LOWCI" ng-model="aPeak.AEP_LOWCI" type="text" />
-                    </div>
+            <!--AEP Confidence Interval (lower limit): -->
+            <div class="form-group">
+                <label class="col-md-4 control-label" for="AEP_LOWCI">AEP Confidence Interval<br />(lower limit):</label>
+                <div class="col-md-5">
+                    <input class="form-control" ng-keypress="isNum($event)" name="AEP_LOWCI" ng-model="aPeak.AEP_LOWCI" type="text" />
                 </div>
+            </div>
 
-                <!--AEP Confidence Interval (upper limit): -->
-                <div class="form-group">
-                    <label class="col-md-3 control-label" for="AEP_UPPERCI">AEP Confidence Interval (upper limit):</label>
-                    <div class="col-md-8">
-                        <input class="form-control" ng-keypress="isNum($event)" name="AEP_UPPERCI" ng-model="aPeak.AEP_UPPERCI" type="text" />
-                    </div>
+            <!--AEP Confidence Interval (upper limit): -->
+            <div class="form-group">
+                <label class="col-md-4 control-label" for="AEP_UPPERCI">AEP Confidence Interval<br />(upper limit):</label>
+                <div class="col-md-5">
+                    <input class="form-control" ng-keypress="isNum($event)" name="AEP_UPPERCI" ng-model="aPeak.AEP_UPPERCI" type="text" />
                 </div>
-                <!--AEP Confidence Interval (percentage of limits): -->
-                <div class="form-group">
-                    <label class="col-md-3 control-label" for="AEP_RANGE">AEP Confidence Interval (percentage of limits):</label>
-                    <div class="col-md-8">
-                        <input class="form-control" ng-keypress="isNum($event)" name="AEP_RANGE" ng-model="aPeak.AEP_RANGE" type="text" />
-                    </div>
+            </div>
+
+            <!--AEP Confidence Interval (percentage of limits): -->
+            <div class="form-group">
+                <label class="col-md-4 control-label" for="AEP_RANGE">AEP Confidence Interval<br />(percentage of limits):</label>
+                <div class="col-md-5">
+                    <input class="form-control" ng-keypress="isNum($event)" name="AEP_RANGE" ng-model="aPeak.AEP_RANGE" type="text" />
                 </div>
+            </div>
+
+
 
             </div><!-- end modal-body-->
             <div class="modal-footer">
