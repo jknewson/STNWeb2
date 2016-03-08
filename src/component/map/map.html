@@ -1,19 +1,73 @@
-﻿<h3>Map currently displaying sites for <b>{{sessionEvent}}</b></h3>
+﻿
+<div class="jumbotron mapJumbotron">
 
-<div class="panel panel-primary">
-    <!--<h3>{{map}}</h3>-->
+    <div class="container mapContainer">
 
-    <div cg-busy="{promise:sitesPromise,message:'Loading Sites...'}">
-        <leaflet ng-style="mapStyle" lf-center="centerUS" markers="markers" layers="layers" event-broadcast="events" width="100%" height="800px"></leaflet>
+
+        <div class="col-md-2">
+            SITE INFO<br>
+
+            PEAKS<br>
+
+            MAP LEGEND<br>
+
+            SITE FILTERS<br>
+
+            PROPOSE SENSOR<br>
+
+            CREATE SITE<br>
+
+            <div class="panel panel-default wim-sidebar-panel">
+                <div class="panel-heading" id="layersPanelHeader">
+                    <h4 class="panel-title">
+                        <a class="collapsed" data-toggle="collapse"  aria-expanded="true" aria-controls="layersPanel">Map Layers</a>
+                    </h4>
+                </div>
+                <div id="layersPanel" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="layersPanelHeader">
+                </div>
+            </div>
+
+            <div class="panel panel-default wim-sidebar-panel">
+                <div class="panel-heading" id="basemapsHeader">
+                    <h4 class="panel-title">
+                        <a data-toggle="collapse"  aria-expanded="false" aria-controls="basemapsPanel">Basemaps</a>
+                    </h4>
+                </div>
+                <div id="basemapsPanel" class="panel-collapse collapse" role="tabpanel" aria-labelledby="basemapsHeader">
+
+                </div>
+            </div>
+
+            <h3 ng-if="createSiteModeActive">CREATE SITE MODE ACTIVE</h3>
+
+            <button ng-click="createSiteModeActive = !createSiteModeActive">{{createSiteButtonText}}</button>
+            <button ng-if="createSiteModeActive" ng-click="createSiteFromMap()">Create New Site at Dot</button>
+
+        </div>
+
+
+
+        <div class="col-md-10">
+
+            <!--<h3>Map currently displaying sites for <b>{{sessionEvent}}</b></h3>-->
+
+                <div cg-busy="{promise:sitesPromise,message:'Loading Sites...'}">
+                    <leaflet ng-style="mapStyle" bounds="bounds" legend="legend" lf-center="mapCenter" markers="markers" layers="layers" event-broadcast="events" width="100%" height="800px"></leaflet>
+                </div>
+
+                <h4>{{error}}</h4>
+
+
+
+                <!--<br>Sites JSON: {{sites}}-->
+
+        </div>
+
+
     </div>
-
-    <h4>{{error}}</h4>
-
-    <h3 ng-if="createSiteModeActive">CREATE SITE MODE ACTIVE</h3>
-
-    <button ng-click="createSiteModeActive = !createSiteModeActive">{{createSiteButtonText}}</button>
-    <button ng-if="createSiteModeActive" ng-click="createSiteFromMap()">Create New Site at Dot</button>
-
-    <!--<br>Sites JSON: {{sites}}-->
-
 </div>
+
+
+
+
+

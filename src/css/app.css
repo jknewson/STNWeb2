@@ -321,3 +321,12 @@ a.disabled {
     opacity: .75;
     background-color: #FF0000;
 }
+
+
+.mapJumbotron {
+    padding: 5px !important;
+}
+
+.mapContainer {
+    padding:0px !important;
+}
