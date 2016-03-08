@@ -2,8 +2,8 @@
     'use strict';
     var STNControllers = angular.module('STNControllers');
 
-    STNControllers.controller('MapController', ['$scope', '$http', '$rootScope', '$cookies', '$location', 'SITE', "leafletMarkerEvents", '$state',
-        function ($scope, $http, $rootScope, $cookies, $location, SITE, leafletMarkerEvents, $state) {
+    STNControllers.controller('MapController', ['$scope', '$http', '$rootScope', '$cookies', '$location', 'SITE', 'leafletMarkerEvents', 'leafletBoundsHelpers', '$state',
+        function ($scope, $http, $rootScope, $cookies, $location, SITE, leafletMarkerEvents, leafletBoundsHelpers, $state) {
             if ($cookies.get('STNCreds') === undefined || $cookies.get('STNCreds') === "") {
                 $scope.auth = false;
                 $location.path('/login');
@@ -30,6 +30,7 @@
                     var sitesArray = response.data.Sites;
                     $scope.sites = response.data;
                     $scope.markers = [];
+                    $scope.markersLatLngArray = [];
                     for (var i = 0; i < sitesArray.length; i++) {
                         var a = sitesArray[i];
                         $scope.markers.push({
@@ -39,7 +40,16 @@
                             SITE_ID: a.SITE_ID,
                             icon: icons.stn
                         });
+                        $scope.markersLatLngArray.push([a.latitude, a.longitude]);
                     }
+
+                    var LLBounds =  new L.LatLngBounds($scope.markersLatLngArray);
+                    $scope.bounds = leafletBoundsHelpers.createBoundsFromArray([
+                        [LLBounds._northEast.lat, LLBounds._northEast.lng],
+                        [LLBounds._southWest.lat, LLBounds._southWest.lng]
+                    ]);
+
+
                 };
 
                 ///need to watch for session event id, do new call to server when that changes
@@ -51,14 +61,30 @@
                         $scope.sitesPromise = $http.get('https://stntest.wim.usgs.gov/STNServices2/Events/' + evID + '/Sites.json')
                                             .then(onSiteComplete, onError);
                         //below gets sites using the SITE 'factory'
-                        //SITE.getAll({
+                        //$scope.sitesPromise = SITE.getAll({
                         //    Event: evID
                         //},
                         //function success(response) {
                         //    //do stuff with Sites
+                        //    //var sitesArray = response.data.Sites;
+                        //    $scope.sites = response;
+                        //    $scope.markers = [];
+                        //    for (var i = 0; i < response.length; i++) {
+                        //        var a = response[i];
+                        //        $scope.markers.push({
+                        //            layer:'stnSites',
+                        //            lat: a.latitude,
+                        //            lng: a.longitude,
+                        //            SITE_ID: a.SITE_ID,
+                        //            icon: icons.stn
+                        //        });
+                        //    }
                         //}, function error(errorResponse) {
                         //        //show error message
                         //});
+
+                        $scope.layers.overlays.stnSites;
+
 
                     } else {
 
@@ -146,12 +172,13 @@
                             enable: leafletMarkerEvents.getAvailableEvents()
                         }
                     },
-                    centerUS: {
+                    mapCenter: {
                         lat: 41.278,
                         lng: -92.336,
                         zoom: 4
                     },
                     markers: [],
+                    markersLatLngArray: [],
                     createSiteModeActive: false,
                     userCreatedSite: {},
                     layers: {
@@ -306,6 +333,11 @@
                                 }
                             }
                         }
+                        //legend: {
+                        //    url: "http://gis.srh.noaa.gov/arcgis/rest/services/ahps_gauges/MapServer/legend?f=json",
+                        //    legendClass: "info legend-esri",
+                        //    position: "bottomleft"
+                        //}
                     }
                 });//end angular.extend statement
                 ///////////////////////////////////////////////////////////////////////////////////////
