@@ -58,7 +58,7 @@
                 }, true);
                 
                 // watch for the session event to change and update SITE FILES DO NOT HAVE AN EVENT                
-                $scope.$watch(function () { return $cookies.get('SessionEventName') }, function (newValue) {
+                $scope.$watch(function () { return $cookies.get('SessionEventName'); }, function (newValue) {
                     $scope.sessionEventName = newValue !== undefined ? newValue : "All Events";
                     $scope.sessionEventExists = $scope.sessionEventName != "All Events" ? true : false;
                     if (newValue !== undefined) {
