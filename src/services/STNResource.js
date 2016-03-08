@@ -66,7 +66,7 @@
             {}, {
                 query: {},
                 getAll: { method: 'GET', isArray: true },
-                getUnapprovedDFs: { method: 'GET', isArray: true, cache: false },
+                getUnapprovedDFs: { method: 'GET', isArray: true, cache: false },                
                 update: { method: 'PUT', cache: false, isArray: false },
                 save: { method: 'POST', cache: false, isArray: false },
                 delete: { method: 'DELETE', cache: false, isArray: false }
@@ -416,6 +416,20 @@
     }]);
     //#endregion of OP_TYPE
 
+    //#region PEAK
+    STNResource.factory('PEAK', ['$resource', function ($resource) {
+        return $resource(rootURL + '/PeakSummaries/:id.json',
+            {}, {
+                query: {},
+                getAll: { method: 'GET', isArray: true },
+                getPeakSummaryDFs: { method: 'GET', isArray: true, cache: false, url: rootURL + '/PeakSummaries/:id/DataFiles.json' },
+                update: { method: 'PUT', cache: false, isArray: false },
+                save: { method: 'POST', cache: false, isArray: false },
+                delete: { method: 'DELETE', cache: false, isArray: false }
+            });
+    }]);
+    //#endregion of PEAK
+
     //#region REPORT
     STNResource.factory('REPORT', ['$resource', function ($resource) {
         return $resource(rootURL + '/ReportingMetrics/:id.json',
@@ -511,7 +525,7 @@
                 getSiteSensors: { method: 'GET', isArray: true, url: rootURL + '/Sites/:id/FullInstrumentList.json' }, //all instruments and their stats together
                 getSiteHWMs: { method: 'GET', isArray: true, url: rootURL + '/Sites/:id/HWMs.json' },
                 getSiteFiles: { method: 'GET', isArray: true, url: rootURL + '/Sites/:id/Files.json' },
-                getSitePeaks: { method: 'GET', isArray: true, url: rootURL + '/Sites/:id/PeakSummaries.json' },
+                getSitePeaks: { method: 'GET', isArray: true, url: rootURL + '/Sites/:id/PeakSummaryView.json' },
                 //just the Site
                 update: { method: 'PUT', cache: false, isArray: false },
                 save: { method: 'POST', cache: false, isArray: false },

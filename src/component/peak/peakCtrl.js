@@ -3,8 +3,8 @@
 
     var STNControllers = angular.module('STNControllers');
 
-    STNControllers.controller('peakCtrl', ['$scope', '$cookies', '$location', '$state', '$http', '$uibModal', '$filter', '$timeout', 'thisSite', 'thisSitePeaks', 'allVertDatums', 'HWM', 'MEMBER', 'SITE',
-        function ($scope, $cookies, $location, $state, $http, $uibModal, $filter, $timeout, thisSite, thisSitePeaks, allVertDatums, HWM, MEMBER, SITE) {
+    STNControllers.controller('peakCtrl', ['$scope', '$cookies', '$location', '$state', '$http', '$uibModal', '$filter', '$timeout', 'thisSite', 'Site_Files', 'thisSitePeaks', 'allVertDatums', 'allHWMQualities', 'allHWMTypes', 'PEAK', 'HWM', 'MEMBER', 'SITE','INST_COLL_CONDITION',
+        function ($scope, $cookies, $location, $state, $http, $uibModal, $filter, $timeout, thisSite, Site_Files, thisSitePeaks, allVertDatums, allHWMQualities, allHWMTypes, PEAK, HWM, MEMBER, SITE,INST_COLL_CONDITION) {
             if ($cookies.get('STNCreds') === undefined || $cookies.get('STNCreds') === "") {
                 $scope.auth = false;
                 $location.path('/login');
@@ -17,17 +17,19 @@
                 $scope.$watch(function () { return $cookies.get('SessionEventName'); }, function (newValue) {
                     $scope.sessionEventName = newValue !== undefined ? newValue : "All Events";
                     $scope.sessionEventExists = $scope.sessionEventName != "All Events" ? true : false;
-                //    if (newValue !== undefined) {
-                //        $scope.SitePeaks = thisSitePeaks.filter(function (p) { return h.EVENT_ID == $cookies.get('SessionEventID'); });
-                //        $scope.hwmCount = { total: $scope.SiteHWMs.length };
-                //    } else {
-                //        $scope.SiteHWMs = thisSiteHWMs;
-                //        $scope.hwmCount = { total: $scope.SiteHWMs.length };
-                //    }
+                    if (newValue !== undefined) {
+                        $scope.SitePeaks = thisSitePeaks.filter(function (p) { return p.EVENT_NAME == $scope.sessionEventName; });
+                        $scope.peakCount = { total: $scope.SitePeaks.length };
+                    } else {
+                        $scope.SitePeaks = thisSitePeaks;
+                        $scope.peakCount = { total: $scope.SitePeaks.length };
+                    }
                 });
-                $scope.showPeakModal = function (peakClicked) {                    
-                    var indexClicked = $scope.SitePeaks.indexOf(peakClicked);
 
+                //create/edit a peak 
+                $scope.showPeakModal = function (peakClicked) {
+
+                    var indexClicked = $scope.SitePeaks.indexOf(peakClicked);
                     //modal
                     var modalInstance = $uibModal.open({
                         templateUrl: 'PEAKmodal.html',
@@ -36,12 +38,22 @@
                         backdrop: 'static',
                         windowClass: 'rep-dialog',
                         resolve: {
+                            allCollectConditions: function () {
+                                return INST_COLL_CONDITION.getAll().$promise;
+                            },
                             allVertDatums: function () {
                                 return allVertDatums;
                             },
                             thisPeak: function () {
-                                return peakClicked !== 0 ? peakClicked : "empty";
-                            },                            
+                                if (peakClicked !== 0) {
+                                    return PEAK.query({ id: peakClicked.PEAK_SUMMARY_ID }).$promise;
+                                } else { return "empty"; }
+                            },
+                            thisPeakDFs: function () {
+                                if (peakClicked !== 0){
+                                    return PEAK.getPeakSummaryDFs({id: peakClicked.PEAK_SUMMARY_ID}).$promise;
+                                }
+                            },
                             peakSite: function () {
                                 return thisSite;
                             },
@@ -53,31 +65,32 @@
                             allEventHWMs: function () {
                                 return HWM.getFilteredHWMs({ Event: $cookies.get('SessionEventID'), EventStatus: 0 }).$promise;
                             },
+                            allSiteFiles: function() {
+                                return Site_Files.getAllSiteFiles();
+                            },
                             allSiteSensors: function () {
                                 return SITE.getSiteSensors({ id: thisSite.SITE_ID }).$promise;
-                            },
-                            allSiteFiles: function () {
-                                return SITE.getSiteFiles({ id: thisSite.SITE_ID }).$promise;
-                            }
+                            }//,
+                            //allSiteFiles: function () {
+                            //    return SITE.getSiteFiles({ id: thisSite.SITE_ID }).$promise;
+                            //}
                         }
                     });
 
                     modalInstance.result.then(function (createdPeak) {
-                        //is there a new HWM or just closed modal
-                        //if (createdHWM[1] == 'created') {
-                        //    $scope.SiteHWMs.push(createdHWM[0]);
-                        //    $scope.hwmCount.total = $scope.SiteHWMs.length;
-                        //}
-                        //if (createdHWM[1] == 'updated') {
-                        //    //this is from edit -- refresh page?
-                        //    var indexClicked = $scope.SiteHWMs.indexOf(HWMclicked);
-                        //    $scope.SiteHWMs[indexClicked] = createdHWM[0];
-                        //}
-                        //if (createdHWM[1] == 'deleted') {
-                        //    var indexClicked1 = $scope.SiteHWMs.indexOf(HWMclicked);
-                        //    $scope.SiteHWMs.splice(indexClicked1, 1);
-                        //    $scope.hwmCount.total = $scope.SiteHWMs.length;
-                        //}
+                        //is there a new Peak,edited peak or just closed modal
+                        if (createdPeak[1] == 'created') {
+                            $scope.SitePeaks.push(createdPeak[0]);
+                            $scope.peakCount.total = $scope.SitePeaks.length;
+                        }
+                        if (createdPeak[1] == 'updated') {
+                            //this is from edit -- refresh page?
+                            $scope.SitePeaks[indexClicked] = createdPeak[0];
+                        }
+                        if (createdPeak[1] == 'deleted') {
+                            $scope.SitePeaks.splice(indexClicked, 1);
+                            $scope.peakCount.total = $scope.SitePeaks.length;
+                        }
                     });
                 }; //end showHWMModal function
 

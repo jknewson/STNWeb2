@@ -10,7 +10,7 @@
                 <span class="glyphicon glyphicon-plus"></span>
             </button>
         </div>
-        <div ng-show="!sessionEventExists">To create a HWM, first choose a session Event above.</div>
+        <div class="col-md-12" ng-show="!sessionEventExists" style="border:solid 1px red">To create a HWM, first choose an Event above.</div><br clear="all" />
         <ul>
             <li ng-repeat="h in SiteHWMs"><a class="btn" ng-click="showHWMModal(h)">{{h.FLAG_DATE | date: "MM/dd/yyyy"}} <span ng-if="h.ELEV_FT"> - ({{h.ELEV_FT}} ft.)</span></a></li>
         </ul>

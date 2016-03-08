@@ -620,8 +620,8 @@
         }]); //end SENSOR
 
     // Retrieve a Sensor modal
-    ModalControllers.controller('sensorRetrievalModalCtrl', ['$scope', '$timeout', '$cookies', '$http', '$uibModalInstance', '$uibModal', 'thisSensor', 'SensorSite', 'siteOPs', 'allEventList', 'allMembers', 'allStatusTypes', 'allInstCollCond', 'INSTRUMENT', 'INSTRUMENT_STATUS',
-        function ($scope, $timeout, $cookies, $http, $uibModalInstance, $uibModal, thisSensor, SensorSite, siteOPs, allEventList, allMembers, allStatusTypes, allInstCollCond, INSTRUMENT, INSTRUMENT_STATUS) {
+    ModalControllers.controller('sensorRetrievalModalCtrl', ['$scope', '$rootScope', '$timeout', '$cookies', '$http', '$uibModalInstance', '$uibModal', 'thisSensor', 'SensorSite', 'siteOPs', 'allEventList', 'allMembers', 'allStatusTypes', 'allInstCollCond', 'INSTRUMENT', 'INSTRUMENT_STATUS',
+        function ($scope, $rootScope, $timeout, $cookies, $http, $uibModalInstance, $uibModal, thisSensor, SensorSite, siteOPs, allEventList, allMembers, allStatusTypes, allInstCollCond, INSTRUMENT, INSTRUMENT_STATUS) {
             $scope.aSensor = thisSensor.Instrument;
             $scope.EventName = allEventList.filter(function (r) {return r.EVENT_ID == $scope.aSensor.EVENT_ID;})[0].EVENT_NAME;
             $scope.depSensStatus = angular.copy(thisSensor.InstrumentStats[0]);
@@ -688,10 +688,12 @@
             };
 
             //cancel
-            $scope.cancel = function () {           
+            $scope.cancel = function () {
+                $rootScope.stateIsLoading.showLoading = false;// loading..
                 $uibModalInstance.dismiss('cancel');
             };
 
+            //retrieve the sensor
             $scope.retrieveS = function (valid) {
                 if (valid) {
                     $http.defaults.headers.common.Authorization = 'Basic ' + $cookies.get('STNCreds');
@@ -729,6 +731,28 @@
                     });
                 }//end if valid
             };//end retrieveS
+
+            
+            $scope.$watch("aRetrieval.TIME_STAMP", function () {
+                if ($scope.aRetrieval.TIME_STAMP < $scope.depSensStatus.TIME_STAMP) {
+                    var fixDate = $uibModal.open({
+                        template: '<div class="modal-header"><h3 class="modal-title">Error</h3></div>' +
+                            '<div class="modal-body"><p>The retrieval date must be after the deployed date.</p></div>' +
+                            '<div class="modal-footer"><button class="btn btn-primary" ng-enter="ok()" ng-click="ok()">OK</button></div>',
+                        controller: ['$scope', '$uibModalInstance', function ($scope, $uibModalInstance) {
+                            $scope.ok = function () {
+                                $uibModalInstance.close();
+                            };
+                        }],
+                        size: 'sm'
+                    });
+                    fixDate.result.then(function () {
+                        $scope.aRetrieval.TIME_STAMP = '';
+                        $scope.aRetrieval.TIME_STAMP = getTimeZoneStamp()[0];
+                        angular.element('#retrievalDate').trigger('focus');
+                    });
+                }
+        }, true);
         }]);//end sensorRetrievalModalCtrl
 
     // view/edit retrieved sensor (deployed included here) modal
@@ -743,8 +767,9 @@
             $scope.allSFiles = Site_Files.getAllSiteFiles();
             $scope.sensorFiles = thisSensor !== "empty" ? $scope.allSFiles.filter(function (sf) { return sf.INSTRUMENT_ID == thisSensor.Instrument.INSTRUMENT_ID; }) : [];// holder for hwm files added
             $scope.sensImageFiles = $scope.sensorFiles.filter(function (hf) { return hf.FILETYPE_ID === 1; }); //image files for carousel
-            $scope.showFileForm = false; //hidden form to add file to hwm
-
+            $scope.showFileForm = false; //hidden form to add file to sensor
+            $scope.showNWISFileForm = false; //hidden form to add nwis file to sensor
+            $scope.sensorDataNWIS = false; //is this a rain gage, met station, or rdg sensor -- if so, data file must be created pointing to nwis (we don't store actual file, just metadata with link)
             $scope.collectCondList = allInstCollCond;
             $scope.OPsForTapeDown = siteOPs;
             $scope.depTypeList = allDepTypes; //get fresh version so not messed up with the Temperature twice
@@ -808,6 +833,7 @@
             $scope.thisSensorSite = SensorSite; $scope.userRole = $cookies.get('usersRole');
 
             $scope.sensor = angular.copy(thisSensor.Instrument);
+            $scope.sensorDataNWIS = (($scope.sensor.SENSOR_TYPE_ID == 2 || $scope.sensor.SENSOR_TYPE_ID == 5) || $scope.sensor.SENSOR_TYPE_ID == 6) ? true : false;
             //deploy part //////////////////
             $scope.DeployedSensorStat = angular.copy(thisSensor.InstrumentStats.filter(function (inst) { return inst.Status === "Deployed"; })[0]);
             $scope.DeployedSensorStat.TIME_STAMP = getDateTimeParts($scope.DeployedSensorStat.TIME_STAMP); //this keeps it as utc in display
@@ -822,7 +848,7 @@
             $scope.EventName = allEvents.filter(function (e) { return e.EVENT_ID === $scope.sensor.EVENT_ID; })[0].EVENT_NAME;
             
             //accordion open/close glyphs
-            $scope.s = { depOpen: false, retOpen: true, sFileOpen: false };
+            $scope.s = { depOpen: false, retOpen: true, sFileOpen: false, NWISFileOpen: false };
 
             //#region datetimepicker
             $scope.dateOptions = {
@@ -1007,6 +1033,107 @@
                 $scope.retStuffCopy = [];
             };
             //#endregion Retrieve edit
+
+            //#region NWIS DATA_FILE
+            if ($scope.sensorDataNWIS) {
+                //FILE.VALIDATED being used to store 1 if this is an nwis file metadata link
+                $scope.sensorNWISFiles = [];
+                angular.forEach($scope.sensorFiles, function (sf) {
+                    if (sf.VALIDATED == 1) {
+                        //$scope.datafile.GOOD_START = getDateTimeParts($scope.datafile.GOOD_START);
+                        //$scope.datafile.GOOD_END = getDateTimeParts($scope.datafile.GOOD_END);
+                        $scope.sensorNWISFiles.push(sf);
+                    }
+                });
+                var dt = getTimeZoneStamp();
+                $scope.NWISFile = {};
+                $scope.NWISDF = {};                
+                $scope.nwisProcessor = allMembers.filter(function (m) { return m.MEMBER_ID == $cookies.get("mID"); })[0];
+            }
+            $scope.showNWISFile = function (f) {
+                //want to add or edit file
+                $scope.existFileIndex = -1;
+                $scope.allSFileIndex = -1; //indexes for splice/change
+                if (f !== 0) {
+                    //edit NWIS file
+                    $scope.existFileIndex = $scope.sensorNWISFiles.indexOf(f);
+                    $scope.allSFileIndex = $scope.allSFiles.indexOf(f);
+                    $scope.NWISFile = angular.copy(f);
+                    $scope.NWISFile.FILE_DATE = new Date($scope.NWISFile.FILE_DATE); //date for validity of form on PUT
+                    DATA_FILE.query({ id: f.DATA_FILE_ID }).$promise.then(function (df) {
+                        $scope.NWISDF = df;
+                        $scope.nwisProcessor = allMembers.filter(function (m) { return m.MEMBER_ID == $scope.NWISDF.PROCESSOR_ID; })[0];
+                        $scope.NWISDF.COLLECT_DATE = new Date($scope.NWISDF.COLLECT_DATE);
+                        $scope.NWISDF.GOOD_START = getDateTimeParts($scope.NWISDF.GOOD_START);
+                        $scope.NWISDF.GOOD_END = getDateTimeParts($scope.NWISDF.GOOD_END);
+                    });
+                        
+                }//end existing file
+                else {
+                    //creating a nwis file
+                    $scope.NWISFile = {
+                        FILE_DATE: new Date(),
+                        FILETYPE_ID: 2,
+                        FileType: 'Data',
+                        PATH: 'whats the datafile name?',
+                        DESCRIPTION: 'Link to NWIS data file for this sensor.',
+                        SITE_ID: $scope.sensor.SITE_ID,
+                        FILE_URL: 'we will generate this using NWIS url with parameters from sensor',
+                        DATA_FILE_ID: 0,
+                        INSTRUMENT_ID: $scope.sensor.INSTRUMENT_ID,
+                        VALIDATED: 1
+                    }
+                    $scope.NWISDF = {
+                        PROCESSOR_ID: $cookies.get("mID"),
+                        INSTRUMENT_ID: $scope.sensor.INSTRUMENT_ID,
+                        COLLECT_DATE: dt[0],
+                        TIME_ZONE: dt[1],
+                        GOOD_START: new Date(),
+                        GOOD_END: new Date()
+                    }
+                    $scope.nwisProcessor = allMembers.filter(function (m) { return m.MEMBER_ID == $cookies.get('mID'); })[0];
+                        
+                } //end new file
+                $scope.showNWISFileForm = true;
+            
+            }
+            $scope.createNWISFile = function (valid) {
+                if (valid) {
+                    $http.defaults.headers.common.Authorization = 'Basic ' + $cookies.get('STNCreds');
+                    $http.defaults.headers.common.Accept = 'application/json';
+                    //post datafile first to get or DATA_FILE_ID
+                    //determine timezone
+                    if ($scope.NWISDF.TIME_ZONE != "UTC") {
+                        //convert it
+                        var utcStartDateTime = new Date($scope.NWISDF.GOOD_START).toUTCString();
+                        var utcEndDateTime = new Date($scope.NWISDF.GOOD_END).toUTCString();
+                        $scope.NWISDF.GOOD_START = utcStartDateTime;
+                        $scope.NWISDF.GOOD_END = utcEndDateTime;
+                        $scope.NWISDF.TIME_ZONE = 'UTC';
+                    } else {
+                        //make sure 'GMT' is tacked on so it doesn't try to add hrs to make the already utc a utc in db
+                        var si = $scope.NWISDF.GOOD_START.toString().indexOf('GMT') + 3;
+                        var ei = $scope.NWISDF.GOOD_END.toString().indexOf('GMT') + 3;
+                        $scope.NWISDF.GOOD_START = $scope.NWISDF.GOOD_START.toString().substring(0, si);
+                        $scope.NWISDF.GOOD_END = $scope.NWISDF.GOOD_END.toString().substring(0, ei);
+                    }                    
+                    DATA_FILE.save($scope.NWISDF).$promise.then(function (NdfResonse) {
+                        //then POST fileParts (Services populate PATH)
+                        $scope.NWISFile.DATA_FILE_ID = NdfResonse.DATA_FILE_ID;
+                        //now POST File
+                        FILE.save($scope.NWISFile).$promise.then(function (Fresponse) {
+                            toastr.success("File Data saved");
+                            Fresponse.fileBelongsTo = "DataFile File";
+                            $scope.sensorFiles.push(Fresponse);
+                            $scope.sensorNWISFiles.push(Fresponse);
+                            $scope.allSFiles.push(Fresponse);
+                            Site_Files.setAllSiteFiles($scope.allSFiles); //updates the file list on the sitedashboard                            
+                            $scope.showNWISFileForm = false;
+                        });
+                    });
+                }
+            }
+            //#endregion
 
             //delete aSensor and sensor statuses
             $scope.deleteS = function () {

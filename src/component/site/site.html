@@ -34,7 +34,7 @@
 <!-- MODAL for Site Create/edit-->
 <script type="text/ng-template" id="SITEmodal.html">
     <div class="modal-header">
-        <h3 class="modal-title">Site</h3>
+        <h3 class="modal-title">Site<button class="close" type="button" ng-click="cancel()" aria-hidden="true" style="color:gray;">&times;</button></h3>
     </div>
     <form class="form-horizontal" name="siteForm">
         <fieldset>
@@ -116,10 +116,26 @@
                 <div class="form-group required" ng-if="aSite.SITE_ID == undefined">
                     <label class="col-md-4 control-label" for="POPULATEBTN">Click here to populate address fields:</label>
                     <div class="col-md-7">
-                        <button type="button" ng-click="getAddress()" class="btn btn-primary">Check for Nearby Sites and Lookup Address</button>
+                        <button type="button" ng-click="getAddress()" class="btn btn-primary">Verify Location</button>
                     </div>
                 </div>
 
+                <!-- map showing lat/long location-->
+                <div class="col-md-7 col-md-offset-3" style="height:300px;display:table;" ng-show="showMap">
+                    <div><label>There are: {{closeSites.length}} sites nearby.</label></div>
+                    <p ng-if="closeSites.length > 0">
+                        <span>To use one of these sites (shown as blue dot) instead, click on the site name.</span>
+                        <ul style="max-height:50px;overflow:auto;">
+                            <li ng-repeat="s in closeSites" style="list-style:none">
+                                <a ui-sref="site.dashboard({id: s.SITE_ID})" ng-click="$dismiss()">{{s.SITE_NO}}</a>
+                            </li>
+                        </ul>
+                    </p>
+                    <div class="panel panel-primary" style="height:inherit">
+                        <leaflet lf-center="mapCenter" width="100%" height="100%" markers="mapMarkers"></leaflet>
+                    </div>
+                </div>
+                <br clear="all" />
                 <!--Horizontal Datum*-->
                 <div class="form-group required" ng-class="{'has-error':siteForm.HDATUM_ID.$invalid && siteForm.HDATUM_ID.$dirty}">
                     <label class="col-md-4 control-label req" for="HDATUM_ID">Horizontal Datum:</label>
@@ -384,8 +400,11 @@
                 </div>
 
                 <!--start Landowner contact area -->
+
+
                 <div ng-show="addLandowner">
-                    <div class="panel panel-default col-md-8 col-md-offset-1" style="padding:0">
+                    <div class="col-md-9 col-md-offset-1" style="border:solid 1px red">Do not record information that private citizens have a reasonable expectation of privacy about. No names or phone numbers of private citizens. Business contact information is acceptable.</div>
+                    <div class="panel panel-default col-md-9 col-md-offset-1" style="padding:0">
                         <div class="panel-heading">Land Owner Information</div>
                         <div class="panel-body">
                             <!--First Name:-->
@@ -520,7 +539,7 @@
 <!-- MODAL for Objective Point -->
 <script type="text/ng-template" id="OPmodal.html">
     <div class="modal-header">
-        <h3 class="modal-title">Objective Point</h3>
+        <h3 class="modal-title">Objective Point<button class="close" type="button" ng-click="cancel()" aria-hidden="true" style="color:gray;">&times;</button></h3>
     </div>
 
     <div class="modal-body">
@@ -1053,14 +1072,14 @@
     </div> <!-- end modal-body -->
     <br clear="all" />
     <div class="modal-footer">
-        
+
     </div> <!-- end modal-footer -->
 </script>
 
 <!-- MODAL for HWM-->
 <script type="text/ng-template" id="HWMmodal.html">
     <div class="modal-header">
-        <h3 class="modal-title">HWM</h3>
+        <h3 class="modal-title">HWM<button class="close" type="button" ng-click="cancel()" aria-hidden="true" style="color:gray;">&times;</button></h3>
     </div>
 
     <div class="modal-body">
@@ -1556,14 +1575,14 @@
     <br clear="all" />
 
     <div class="modal-footer">
-        
+
     </div> <!-- end modal-footer -->
 </script>
 
 <!-- MODAL for Proposed and Deployed Sensor-->
 <script type="text/ng-template" id="Sensormodal.html">
     <div class="modal-header">
-        <h3 class="modal-title">Deploy Sensor</h3>
+        <h3 class="modal-title">Deploy Sensor<button class="close" type="button" ng-click="cancel()" aria-hidden="true" style="color:gray;">&times;</button></h3>
     </div>
     <div class="modal-body">
         <form class="form-horizontal" name="SensorForm">
@@ -2059,7 +2078,7 @@
     <br clear="all" />
 
     <div class="modal-footer">
-        
+
     </div><!-- end modal-footer -->
 
 </script>
@@ -2180,9 +2199,9 @@
                 <div class="form-group required" ng-class="{'has-error':SensorFormR.TIME_STAMP.$invalid && SensorFormR.TIME_STAMP.$dirty}">
                     <label class="col-md-3 control-label req" style="margin-top:3%" for="TIME_STAMP">Retrieve Date and Time:</label>
                     <div class="col-md-6">
-                        <datetimepicker hour-step="1" minute-step="1" ng-model="aRetrieval.TIME_STAMP" show-meridian="true"
+                        <datetimepicker hour-step="1" minute-step="1" ng-model="aRetrieval.TIME_STAMP" show-meridian="true" id="retrievalDate"
                                         date-format="MM/dd/yyyy" readonly-date="false" readonly-time="false" date-options="dateOptions"
-                                        hidden-time="false" hidden-date="false" show-spinners="true">
+                                        hidden-time="false" hidden-date="false" show-spinners="true" ng-change="date_change(aRetrieval.TIME_STAMP)">
                         </datetimepicker>
                     </div>
                 </div>
@@ -2535,7 +2554,7 @@
                     <span>Sensor File Information</span>
                 </uib-accordion-heading>
                 <div class="col-md-12">
-                    <div class="col-md-5"><h3>Sensor Files</h3></div>
+                    <div class="col-md-5"><h4>Sensor Files</h4></div>
                     <div class="col-md-6" ng-if="!showFileForm" style="margin-top:14px">
                         <button type="button" class="borderLess" ng-click="showFile(0)" tooltip-placement="right" uib-tooltip="Upload a new File to this Sensor">
                             <span class="glyphicon glyphicon-plus"></span>
@@ -2783,7 +2802,162 @@
                 </div>
             </uib-accordion-group>
 
+            <!-- sensor files in nwis link part-->
+            <div ng-if="sensorDataNWIS" style="margin-top:5px;">
+                <uib-accordion-group is-open="s.NWISFileOpen">
+                    <uib-accordion-heading>
+                        <i style="margin-right:10px" class="pull-left glyphicon" ng-class="{'glyphicon-chevron-down': s.NWISFileOpen, 'glyphicon-chevron-right': !s.NWISFileOpen}"></i>
+                        <span>NWIS Data Connection</span>
+                    </uib-accordion-heading>
+                    <div class="col-md-12">
+                        <div class="col-md-5"><h4>NWIS metadata for sensor</h4></div>
+                        <div class="col-md-2" ng-if="!showNWISFileForm" style="margin-top:14px">
+                            <button type="button" class="borderLess" ng-click="showNWISFile(0)" tooltip-placement="top" uib-tooltip="Add file metadata to this Sensor">
+                                <span class="glyphicon glyphicon-plus"></span>
+                            </button>
+                        </div>
+                        <br clear="all" />
+                        <!-- list of existing files for this op -->
+                        <div class="col-md-6" ng-if="sensorNWISFiles.length > 0">
+                            <span ng-repeat="f in sensorNWISFiles">
+                                <ul style="padding-left: 0">
+                                    <li style="list-style:none;padding-bottom: 15px;">
+                                        <span class="col-sm-9 borderLess" style="padding:0">
+                                            <a class="btn borderLess" style="padding:0" title="{{f.FILE_DATE | date: 'MM/dd/yyyy'}} ({{f.PATH || f.FILE_URL || f.FILE_ID}})" ng-click="showNWISFile(f)">{{f.FILE_DATE | date: 'MM/dd/yyyy'}} ({{f.PATH || f.FILE_URL || f.FILE_ID}})</a>
+                                        </span>
+                                    </li>
+                                </ul>
+                            </span>
+                        </div>
+                        <div ng-if="showNWISFileForm">
+                            <hr />
+                            <form class="form-horizontal" name="NWISSenFILEForm">
+                                <fieldset>
+                                    <!-- File Type* -->
+                                    <div class="form-group" style="margin:0;padding:0">
+                                        <label class="col-md-4 control-label">File Type:</label>
+                                        <div class="col-md-6" style="margin-top:14px">
+                                            <span>{{NWISFile.FileType}}</span>                                            
+                                        </div>
+                                    </div>
 
+                                    <br clear="all" />
+
+                                    <!--File URL-->
+                                    <div class="form-group" style="margin:0;padding:0">
+                                        <label class="col-md-4 control-label" for="FILE_URL">File URL:</label>
+                                        <div class="col-md-6">
+                                            <input class="form-control" name="FILE_URL" ng-model="NWISFile.FILE_URL" type="text" />
+                                        </div>
+                                    </div>
+
+                                    <!--Data Processed by -->
+                                    <div class="form-group" style="margin:0;padding:0">
+                                        <label class="col-md-4 control-label" for="PROCESSOR_ID">Data Process By:</label>
+                                        <div class="col-md-6" style="margin-top:14px">
+                                            <span>{{nwisProcessor.FNAME}} {{nwisProcessor.LNAME}}</span>
+                                        </div>
+                                    </div>
+                                    <!-- Date Collected/Processed* (data)-->
+                                    <div class="form-group required" ng-class="{'has-error':NWISSenFILEForm.COLLECT_DATE.$invalid && NWISSenFILEForm.COLLECT_DATE.$dirty}" style="margin:0;padding:0">
+                                        <label class="col-md-4 control-label req" for="COLLECT_DATE">Date Collected/Processed:</label>
+                                        <div class="col-md-3 input-group" style="padding-right:14px;padding-left:14px">
+                                            <input class="form-control" name="dfcd" type="text" uib-datepicker-popup="MMM dd, yyyy" disabled="disabled" show-weeks="false"
+                                                   is-open="datepickrs.dfcd" ng-model="NWISDF.COLLECT_DATE" required />
+                                            <span class="input-group-btn">
+                                                <button class="btn btn-default" type="button" ng-click="open($event, 'dfcd')">
+                                                    <i class="glyphicon glyphicon-calendar" />
+                                                </button>
+                                            </span>
+                                        </div>
+                                    </div>
+
+
+
+                                    <!-- Date Uploaded* -->
+                                    <div class="form-group required" ng-class="{'has-error':NWISSenFILEForm.FILE_DATE.$invalid && NWISSenFILEForm.FILE_DATE.$dirty}" style="margin:0;padding:0">
+                                        <label class="col-md-4 control-label req" for="FILE_DATE">Date Uploaded:</label>
+                                        <div class="col-md-3 input-group" style="padding-right:14px;padding-left:14px">
+                                            <input class="form-control" name="fd" type="text" uib-datepicker-popup="MMM dd, yyyy" disabled="disabled" show-weeks="false"
+                                                   is-open="datepickrs.fd" ng-model="NWISFile.FILE_DATE" required />
+                                            <span class="input-group-btn">
+                                                <button class="btn btn-default" type="button" ng-click="open($event, 'fd')">
+                                                    <i class="glyphicon glyphicon-calendar" />
+                                                </button>
+                                            </span>
+                                        </div>
+                                    </div>
+
+                                    <!--Description*-->
+                                    <div class="form-group required" ng-class="{'has-error':NWISSenFILEForm.DESCRIPTION.$invalid && NWISSenFILEForm.DESCRIPTION.$dirty}" style="margin:0;padding:0">
+                                        <label class="col-md-4 control-label req" for="DESCRIPTION">Description:</label>
+                                        <div class="col-md-6">
+                                            <textarea class="form-control" id="DESCRIPTION" type="text" rows="3" placeholder="Description" ng-model="NWISFile.DESCRIPTION" required />
+                                        </div>
+                                    </div>
+
+                                    <!-- Good Data Start Time* (data) -->
+                                    <div class="form-group required" ng-class="{'has-error':NWISSenFILEForm.GOOD_START.$invalid && NWISSenFILEForm.GOOD_START.$dirty}" style="margin:0;padding:0">
+                                        <label class="col-md-4 control-label req" for="GOOD_START" style="margin-top:4%">Good Data Start Time:</label>
+                                        <div class="col-md-6">
+                                            <datetimepicker ng-model="NWISDF.GOOD_START" show-meridian="true" date-format="MM/dd/yyyy" readonly-date="false" date-options="dateOptions"
+                                                            hidden-time="false" hidden-date="false" show-spinners="true" date-opened="datepickrs.dfgs" date-ng-click="open($event, 'dfgs')" required>
+                                            </datetimepicker>
+                                        </div>
+                                    </div>
+
+                                    <!-- Good Data End Time* (data)-->
+                                    <div class="form-group required" ng-class="{'has-error':NWISSenFILEForm.GOOD_END.$invalid && NWISSenFILEForm.GOOD_END.$dirty}" style="margin:0;padding:0">
+                                        <label class="col-md-4 control-label req" for="GOOD_END" style="margin-top:4%">Good Data End Time:</label>
+                                        <div class="col-md-6">
+                                            <datetimepicker ng-model="NWISDF.GOOD_END" show-meridian="true" date-format="MM/dd/yyyy" readonly-date="false" date-options="dateOptions"
+                                                            hidden-time="false" hidden-date="false" show-spinners="true" date-opened="datepickrs.dfge" date-ng-click="open($event, 'dfge')" required>
+                                            </datetimepicker>
+                                        </div>
+                                    </div>
+
+                                    <!-- Timezone*: -->
+                                    <div class="form-group required" style="margin:0;padding:0">
+                                        <label class="col-md-4 control-label req">Time Zone:</label>
+                                        <div class="col-md-6">
+                                            <select class="form-control" name="TIME_ZONE" ng-model="NWISDF.TIME_ZONE" ng-options="vcm for vcm in timeZoneList" required>
+                                                <option value=""></option>
+                                            </select>
+                                        </div>
+                                        <button type="button" class="borderLess pull-left" tooltip-placement="right" tooltip-append-to-body="true" uib-tooltip="Date/Time will be stored in UTC.">
+                                            <span class="glyphicon glyphicon-question-sign"></span>
+                                        </button>
+                                    </div>
+
+                                    <!-- Elevation -->
+                                    <div class="form-group" style="margin:0;padding:0">
+                                        <label class="col-md-4 control-label">Elevation:</label>
+                                        <div class="col-md-6">
+                                            <label class="radio-inline">
+                                                <input type="radio" name="ELEVATION_STATUS" ng-model="NWISDF.ELEVATION_STATUS" value="Final" />Final
+                                            </label>
+                                            <label class="radio-inline">
+                                                <input type="radio" name="ELEVATION_STATUS" ng-model="NWISDF.ELEVATION_STATUS" value="Arbitrary" />Arbitrary
+                                            </label>
+                                        </div>
+                                    </div>
+
+                                    <div ng-if="NWISFile.FILE_ID !== undefined" class="form-group" style="margin:0;padding:0">
+                                        <label class="col-md-4 control-label">Associated File:</label>
+                                        <div class="col-md-6">
+                                            <a target="_blank" class="btn btn-primary" ng-href="https://stntest.wim.usgs.gov/STNServices2/Files/{{NWISFile.FILE_ID}}/Item">Download File</a>
+                                        </div>
+                                    </div>
+                                    <button class="btn btn-primary" ng-if="NWISFile.FILE_ID != undefined" ng-click="saveNWISFile(NWISSenFILEForm.$valid)">Save NWIS File Info</button>
+                                    <button class="btn btn-danger" ng-if="NWISFile.FILE_ID != undefined" ng-click="deleteNWISFile()">Delete NWIS File Info</button>
+                                    <button class="btn btn-primary" ng-if="NWISFile.FILE_ID == undefined" ng-click="createNWISFile(NWISSenFILEForm.$valid)">Create NWIS File Info</button>
+                                    <button class="btn btn-warning" type="button" ng-click="cancelFile()">Cancel File</button>
+                                </fieldset>
+                            </form>
+                        </div>
+                    </div>
+                </uib-accordion-group>
+            </div>
         </uib-accordion>
     </div>
     <div class="modal-footer">
@@ -2799,7 +2973,7 @@
 <!-- MODAL for FILE-->
 <script type="text/ng-template" id="FILEmodal.html">
     <div class="modal-header">
-        <h3 class="modal-title">Site File</h3>
+        <h3 class="modal-title">Site File<button class="close" type="button" ng-click="cancel()" aria-hidden="true" style="color:gray;">&times;</button></h3>
     </div>
 
     <form class="form-horizontal" name="FILEForm">
@@ -2810,8 +2984,6 @@
                     <label class="col-md-3 control-label" for="FILE">Upload File:</label>
                     <div class="col-md-9">
                         <input type="file" max="500000" file-model="aFile.File" />
-                        <!--<input type="file" ngf-select ng-model="aFile.File" name="file" ngf-max-size="500MB" ngf-min-height="100" ngf-resize="{width: 100, height: 100}" required />
-                        <button class="button" ngf-select="uploadFiles($files)" multiple>Select Files</button>-->
                         <img ngf-thumbnail="aFile.File" style="height:60px" class="thumbnail">
                     </div>
                 </div>
@@ -3009,7 +3181,7 @@
                         <img ng-if="aFile.FILETYPE_ID === 1" style="height:80px;" ng-src="https://stntest.wim.usgs.gov/STNServices2/Files/{{aFile.FILE_ID}}/Item" />
                     </div>
                 </div>
-            </div>           
+            </div>
 
             <div class="modal-footer">
                 <button class="btn btn-primary" ng-if="aFile.FILE_ID != undefined" ng-click="save(FILEForm.$valid)">Save</button>
@@ -3024,95 +3196,298 @@
 <!-- MODAL for PEAK Create/edit-->
 <script type="text/ng-template" id="PEAKmodal.html">
     <div class="modal-header">
-        <h3 class="modal-title">Peak Summary</h3>
+        <h3 class="modal-title">Peak Summary<button class="close" type="button" ng-click="cancel()" aria-hidden="true" style="color:gray;">&times;</button></h3>
     </div>
-    <form class="form-horizontal" name="peakForm">
+    <form class="form-horizontal" name="peakForm" role="form">
         <fieldset>
             <div class="modal-body">
-
-                <!--Peak creator-->
-                <div class="form-group">
-                    <label class="col-md-3 control-label" for="MEMBER_ID">Peak Creator:</label>
-                    <div class="col-md-4">
-                        <span>{{PeakCreator.FNAME}} {{PeakCreator.LNAME}}</span>
-                    </div>
+                <!-- Start SENSORs and HWMs used for Peak -->
+                <label class="col-md-4 text-center">Select Data used for Interpretation</label>
+                <!-- HWM list-->
+                <div class="col-md-9" ng-repeat="h in eventSiteHWMs">
+                    <input type="checkbox" class="col-sm-1 pull-left" ng-model="h.selected" ng-click="addHWM(h)" />
+                    <span class="col-md-7">
+                        HWM {{h.HWM_ID}} - {{h.ELEV_FT || '--'}} ft
+                    </span>
+                    <button type="button" class="borderLess" tooltip-placement="top" uib-tooltip="Show Details" ng-click="showHWMDetails(h)"><span class="glyphicon glyphicon-info-sign"></span></button>
+                    <button type="button" class="borderLess" tooltip-placement="top" uib-tooltip="Set as Primary" ng-click="primaryHWM(h)"><span class="glyphicon glyphicon-check"></span></button>
                 </div>
-                <!-- Peak Date/Time: * -->
-                <div class="form-group required" ng-class="{'has-error':peakForm.PEAK_DATE.$invalid && peakForm.PEAK_DATE.$dirty}">
-                    <label class="col-md-3 control-label req" style="margin-top:3%" for="PEAK_DATE">Peak Date &amp; Time:</label>
-                    <div class="col-md-4">
-                        <datetimepicker hour-step="1" minute-step="1" ng-model="aPeak.PEAK_DATE" show-meridian="true"
-                                        date-format="MM/dd/yyyy" readonly-date="false" readonly-time="false" date-options="dateOptions"
-                                        hidden-time="false" hidden-date="false" show-spinners="true" required>
-                        </datetimepicker>
-                    </div>
-                </div>
+                <!-- Sensor list -->
+                <div class="col-md-9" ng-repeat="s in eventSiteSensors">
+                    <span class="col-sm-1"> </span>
+                    <span class="col-md-7">
+                        {{s.Instrument.Deployment_Type || s.Instrument.Sensor_Type}} Sensor
+                    </span>
+                    <button type="button" class="borderLess" tooltip-placement="top" uib-tooltip="Show Details" ng-click="showSensorDetails(s)"><span class="glyphicon glyphicon-info-sign"></span></button>
+                    <div ng-repeat="f in s.files | where:{FILETYPE_ID: 2}">
+                        <span class="col-sm-1"> </span>
+                        <input type="checkbox" class="pull-left col-sm-1" ng-model="f.selected" ng-click="addDataFile(f)" />
+                        <span class="col-md-6">{{f.PATH}}</span>
+                        <button type="button" class="borderLess" tooltip-placement="top" uib-tooltip="Show Details" ng-click="showDataFileDetails(f)"><span class="glyphicon glyphicon-info-sign"></span></button>
+                        <button type="button" class="borderLess" tooltip-placement="top" uib-tooltip="Set as Primary" ng-click="primaryDataFile(f)"><span class="glyphicon glyphicon-check"></span></button>
 
-                <!-- Time Zone:* -->
-                <div class="form-group required">
-                    <label class="col-md-3 control-label" for="TIME_ZONE">Time Zone:</label>
-                    <div class="col-md-4">
-                        <select class="form-control" name="TIME_ZONE" ng-model="aPeak.TIME_ZONE"
-                                ng-options="vcm for vcm in timeZoneList" required>
-                            <option value=""></option>
-                        </select>
                     </div>
-                    <button type="button" class="borderLess" tooltip-placement="right" uib-tooltip="Date/Time will be stored in UTC.">
-                        <span class="glyphicon glyphicon-question-sign"></span>
-                    </button>
+
+
                 </div>
 
-                <!--Date Estimated-->
-                <div class="form-group">
-                    <label class="col-md-3 control-label" for="IS_PEAK_ESTIMATED">Peak Date Estimated:</label>
-                    <div class="col-md-4">
-                        <ul style="padding-left:0">
-                            <li style="list-style:none;">
-                                <input type="checkbox" name="IS_PEAK_ESTIMATED" ng-model="aPeak.IS_PEAK_ESTIMATED" ng-true-value="1" ng-false-value="0" />
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-                <!--Time Estimated-->
-                <div class="form-group">
-                    <label class="col-md-4 control-label" for="IS_PEAK_TIME_ESTIMATED">Peak Time Estimated:</label>
-                    <div class="col-md-6">
-                        <ul style="padding-left:0">
-                            <li style="list-style:none;">
-                                <input type="checkbox" name="IS_PEAK_TIME_ESTIMATED" ng-model="aPeak.IS_PEAK_TIME_ESTIMATED" ng-true-value="1" ng-false-value="0" />
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-                <!-- Peak Stage-->
-                <div class="form-group">
-                    <label class="col-md-4 control-label" for="PEAK_STAGE">Peak Stage (elevation ft):</label>
-                    <div class="col-md-6">
-                        <input class="form-control" ng-keypress="isNum($event)" name="PEAK_STAGE" ng-model="aPeak.PEAK_STAGE" type="text" />
-                    </div>
-                </div>
-                <!--Stage Estimated-->
-                <div class="form-group">
-                    <label class="col-md-4 control-label" for="IS_PEAK_STAGE_ESTIMATED">Peak Stage Estimated:</label>
-                    <div class="col-md-6">
-                        <ul style="padding-left:0">
-                            <li style="list-style:none;">
-                                <input type="checkbox" name="IS_PEAK_STAGE_ESTIMATED" ng-model="aPeak.IS_PEAK_STAGE_ESTIMATED" ng-true-value="1" ng-false-value="0" />
-                            </li>
-                        </ul>
-                    </div>
-                </div>
+                <br clear="all" />
 
-                <!-- Vertical Datum: -->
-                <div class="form-group">
-                    <label class="col-md-4 control-label" for="VDATUM_ID">Vertical Datum:</label>
-                    <div class="col-md-6">
-                        <select class="form-control" name="VDATUM_ID" ng-model="aPeak.VDATUM_ID"
-                                ng-options="vd.DATUM_ID as vd.DATUM_ABBREVIATION for vd in VDatumsList">
-                            <option value=""></option>
-                        </select>
+                <!-- hwm box of meta data and files -->
+                <div style="border:solid 1px black;padding-bottom:10px;" class="container col-md-12" ng-if="hwmDetail">
+                    <!-- only show if they click showHWMDetails() above -->
+                    <label>HWM {{HWMBox.HWM_ID}} Details</label><button class="close" type="button" ng-click="closeDetail()" aria-hidden="true" style="color:gray;">&times;</button>
+                    <ul>
+                        <li style="list-style:none">Location Description: {{HWMBox.HWM_LOCATION_DESCRIPTION || '--'}}</li>
+                        <li style="list-style:none">Bank: {{HWMBox.BANK}}</li>
+                        <li style="list-style:none">Flag Date: {{HWMBox.FLAG_DATE | date:'MM/dd/yyyy'}}</li>
+                        <li style="list-style:none">Elevation: {{HWMBox.ELEV_FT}} ft</li>
+                        <li style="list-style:none">Elevation above ground: {{HWMBox.HEIGHT_ABV_GND}} ft</li>
+                        <li style="list-style:none">Quality: {{HWMBox.HWM_QUALITY}}</li>
+                        <li style="list-style:none">Type: {{HWMBox.HWM_TYPE}}</li>
+                        <li style="list-style:none">Stillwater: {{HWMBox.STILLWATER}}</li>
+                    </ul><br clear="all" />
+                    <div class="col-md-12" ng-if="HWMBox.files.length > 0">
+                        <label>HWM Files</label>
+                        <span ng-repeat="f in HWMBox.files">
+                            <ul style="padding-left: 0">
+                                <li style="list-style:none;padding-bottom: 15px;">
+                                    <span class="col-sm-9 borderLess" style="padding:0">
+                                        <a class="btn borderLess" style="padding:0" target="_blank" class="btn btn-primary" ng-href="https://stntest.wim.usgs.gov/STNServices2/Files/{{f.FILE_ID}}/Item">
+                                            {{f.FILE_DATE | date: 'MM/dd/yyyy'}} ({{f.PATH || f.FILE_URL || f.FILE_ID}})
+                                        </a>
+                                    </span>
+                                </li>
+                            </ul>
+                        </span>
+                    </div>
+                    <!-- carousel of photo files -->
+                    <div class="col-md-6" ng-if="HWMBox.files.length > 0" style="height:120px;">
+                        <uib-carousel interval="4000">
+                            <uib-slide ng-repeat="f in HWMBox.files | where:{FILETYPE_ID:1}">
+                                <img ng-click="showImageModal(f.FILE_ID)" ng-src="https://stntest.wim.usgs.gov/STNServices2/Files/{{f.FILE_ID}}/Item" />
+                                <div class="carousel-caption">
+                                    <p>{{f.PATH || f.FILE_URL || f.FILE_ID}}</p>
+                                </div>
+                            </uib-slide>
+                        </uib-carousel>
                     </div>
                 </div>
+                <!-- sensor box of meta data and files -->
+                <div style="border:solid 1px black;padding-bottom:10px" class="container col-md-12" ng-if="sensorDetail">
+                    <!-- only show if they click showSensorDetails() above -->
+                    <label>{{SensorBox.Instrument.Deployment_Type || SensorBox.Instrument.Sensor_Type}} Sensor Details</label><button class="close" type="button" ng-click="closeDetail()" aria-hidden="true" style="color:gray;">&times;</button>
+                    <ul>
+                        <li style="list-style:none">Sensor Type: {{SensorBox.Instrument.Sensor_Type}}</li>
+                        <li style="list-style:none">Deployment Type: {{SensorBox.Instrument.Deployment_Type || '--'}}</li>
+                        <li style="list-style:none">Retrieved on: {{SensorBox.InstrumentStats[0].TIME_STAMP | date: 'MM/dd/yyyy hh:mm a'}}</li>
+                        <li style="list-style:none">Collection Condition: {{SensorBox.CollectCondition || '--'}}</li>
+                        <li style="list-style:none">Serial Number: {{SensorBox.Instrument.SERIAL_NUMBER || '--'}}</li>
+                        <li style="list-style:none">Location Description: {{SensorBox.Instrument.LOCATION_DESCRIPTION || '--'}}</li>
+                        <li style="list-style:none">Sensor Brand: {{SensorBox.Instrument.Sensor_Brand || '--'}}</li>
+                    </ul><br clear="all" />
+                    <div class="col-md-12" ng-if="SensorBox.files.length > 0">
+                        <label>Sensor Files</label>
+                        <span ng-repeat="f in SensorBox.files">
+                            <ul style="padding-left: 0">
+                                <li style="list-style:none;padding-bottom: 15px;">
+                                    <span class="col-sm-9 borderLess" style="padding:0">
+                                        <a class="btn borderLess" style="padding:0" target="_blank" class="btn btn-primary" ng-href="https://stntest.wim.usgs.gov/STNServices2/Files/{{f.FILE_ID}}/Item">
+                                            {{f.FILE_DATE | date: 'MM/dd/yyyy'}} ({{f.PATH || f.FILE_URL || f.FILE_ID}})
+                                        </a>
+                                    </span>
+                                </li>
+                            </ul>
+                        </span>
+                    </div>
+                    <!-- carousel of photo files-->
+                    <div class="col-md-6" ng-if="SensorBox.files.length > 0" style="height:120px;">
+                        <uib-carousel interval="4000">
+                            <uib-slide ng-repeat="f in SensorBox.files | where:{FILETYPE_ID:1}">
+                                <img ng-click="showImageModal(f.FILE_ID)" ng-src="https://stntest.wim.usgs.gov/STNServices2/Files/{{f.FILE_ID}}/Item" />
+                                <div class="carousel-caption">
+                                    <p>{{f.PATH || f.FILE_URL || f.FILE_ID}}</p>
+                                </div>
+                            </uib-slide>
+                        </uib-carousel>
+                    </div>
+                </div>
+                <!-- datafile box of meta data and datafiles -->
+                <div style="border:solid 1px black;padding-bottom:10px" class="container col-md-12" ng-if="dataFileDetail">
+                    <!-- only show if they click showDataFileDetails() above -->
+                    <label>Data File {{DFBox.filePath}} Details</label><button class="close" type="button" ng-click="closeDetail()" aria-hidden="true" style="color:gray;">&times;</button>
+                    <ul>
+                        <li style="list-style:none">Description: {{DFBox.fileDesc || '--'}}</li>
+                        <li style="list-style:none">Collected on: {{DFBox.COLLECT_DATE | date: 'MM/dd/yyyy hh:mm a'}} UTC</li>
+                        <li style="list-style:none">Good Start: {{DFBox.GOOD_START | date: 'MM/dd/yyyy hh:mm a'}} UTC</li>
+                        <li style="list-style:none">Good End:{{DFBox.GOOD_END | date: 'MM/dd/yyyy hh:mm a'}} UTC</li>
+                        <li style="list-style:none">Processed By: {{DFBox.processedBy.FNAME}} {{DFBox.processedBy.LNAME}}</li>
+                        <li style="list-style:none">Elevation Status: {{DFBox.ELEVATION_STATUS}}</li>
+                    </ul><br clear="all" />
+                    <div class="col-md-12">
+                        <label>File</label><br clear="all" />
+                        <span class="col-sm-9 borderLess" style="padding:0">
+                            <a class="btn borderLess" style="padding:0" target="_blank" class="btn btn-primary" ng-href="https://stntest.wim.usgs.gov/STNServices2/Files/{{DFBox.fileID}}/Item">
+                                {{DFBox.COLLECT_DATE | date: 'MM/dd/yyyy'}} ({{DFBox.filePath}})
+                            </a>
+                        </span>
+                    </div>
+                </div>
+            </div>
+            </div>
+            </div>
+            </div>
+            <!-- End SENSORs and HWMs used for Peak -->
+
+
+            <br clear="all" />
+
+            <!-- Location Description: -->
+            <div class="form-group">
+                <label class="col-md-4 control-label" for="CALC_NOTES">Peak Calculation Notes:</label>
+                <div class="col-md-5">
+                    <textarea class="form-control" name="CALC_NOTES" type=" text" rows="3" placeholder="Please document the reason this Peak was chosen for this event." ng-model="aPeak.CALC_NOTES" />
+                </div>
+            </div>
+            <br clear="all" />
+
+            <!--Peak creator-->
+            <div class="form-group">
+                <label class="col-md-4 control-label" for="MEMBER_ID">Peak Creator:</label>
+                <div class="col-md-5" style="margin-top:13px">
+                    <span>{{PeakCreator.FNAME}} {{PeakCreator.LNAME}}</span>
+                </div>
+            </div>
+
+            <!-- Peak Date: * -->
+            <div class="form-group required" ng-class="{'has-error':peakForm.PEAK_DATE.date.$invalid && peakForm.PEAK_DATE.date.$dirty}">
+                <label class="col-md-4 control-label req" for="PEAK_DATE.date">Peak Date:</label>
+                <div class="col-md-5">
+                    <datetimepicker hour-step="1" minute-step="1" ng-model="aPeak.PEAK_DATE.date" show-meridian="true"
+                                    date-format="MM/dd/yyyy" readonly-date="false" readonly-time="false" date-options="dateOptions"
+                                    hidden-time="true" hidden-date="false" show-spinners="true" required>
+                    </datetimepicker>
+                </div>
+                <div class="col-md-1">
+                    <span tooltip-placement="right" uib-tooltip="Date Estimated?">
+                        <input type="checkbox" name="IS_PEAK_ESTIMATED" ng-model="aPeak.IS_PEAK_ESTIMATED" ng-true-value="1" ng-false-value="0" />
+                    </span>
+                </div>
+            </div>
+
+            <!-- Peak Time: * -->
+            <div class="form-group required" ng-class="{'has-error':peakForm.PEAK_DATE.time.$invalid && peakForm.PEAK_DATE.time.$dirty}">
+                <label class="col-md-4 control-label req" style="margin-top:4%" for="PEAK_TIME.time">Peak Time:</label>
+                <div class="col-md-5">
+                    <datetimepicker hour-step="1" minute-step="1" ng-model="aPeak.PEAK_DATE.time" show-meridian="true"
+                                    date-format="MM/dd/yyyy" readonly-date="false" readonly-time="false" date-options="dateOptions"
+                                    hidden-time="false" hidden-date="true" show-spinners="true" required>
+                    </datetimepicker>
+                </div>
+                <div class="col-md-1" style="margin-top:4%">
+                    <span tooltip-placement="right" uib-tooltip="Time Estimated?">
+                        <input type="checkbox" name="IS_PEAK_TIME_ESTIMATED" ng-model="aPeak.IS_PEAK_TIME_ESTIMATED" ng-true-value="1" ng-false-value="0" />
+                    </span>
+                </div>
+            </div>
+
+            <!-- Time Zone:* -->
+            <div class="form-group required">
+                <label class="col-md-4 control-label" for="TIME_ZONE">Peak Recorded In:</label>
+                <div class="col-md-5">
+                    <select class="form-control" name="TIME_ZONE" ng-model="aPeak.TIME_ZONE"
+                            ng-options="vcm for vcm in timeZoneList" required>
+                        <option value=""></option>
+                    </select>
+                </div>
+                <button type="button" class="borderLess" tooltip-placement="right" uib-tooltip="Date/Time will be stored in UTC.">
+                    <span class="glyphicon glyphicon-question-sign"></span>
+                </button>
+            </div>
+
+            <!-- Peak Stage-->
+            <div class="form-group">
+                <label class="col-md-4 control-label" for="PEAK_STAGE">Peak Stage (elevation ft):</label>
+                <div class="col-md-5">
+                    <input class="form-control" ng-keypress="isNum($event)" name="PEAK_STAGE" ng-model="aPeak.PEAK_STAGE" type="text" />
+                </div>
+                <div class="col-md-1">
+                    <span tooltip-placement="right" uib-tooltip="Peak Stage Estimated?">
+                        <input type="checkbox" name="IS_PEAK_STAGE_ESTIMATED" ng-model="aPeak.IS_PEAK_STAGE_ESTIMATED" ng-true-value="1" ng-false-value="0" />
+                    </span>
+                </div>
+            </div>
+
+            <!-- Vertical Datum: -->
+            <div class="form-group">
+                <label class="col-md-4 control-label" for="VDATUM_ID">Vertical Datum:</label>
+                <div class="col-md-5">
+                    <select class="form-control" name="VDATUM_ID" ng-model="aPeak.VDATUM_ID"
+                            ng-options="vd.DATUM_ID as vd.DATUM_ABBREVIATION for vd in VDatumsList">
+                        <option value=""></option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Height Above Ground (ft)-->
+            <div class="form-group">
+                <label class="col-md-4 control-label" for="HEIGHT_ABOVE_GND">Height Above Ground <br />(depth of water in ft):</label>
+                <div class="col-md-5">
+                    <input class="form-control" ng-keypress="isNum($event)" name="HEIGHT_ABOVE_GND" ng-model="aPeak.HEIGHT_ABOVE_GND" type="text" />
+                </div>
+                <div class="col-md-1">
+                    <span tooltip-placement="right" uib-tooltip="HAG Estimated?">
+                        <input type="checkbox" name="IS_HAG_ESTIMATED" ng-model="aPeak.IS_HAG_ESTIMATED" ng-true-value="1" ng-false-value="0" />
+                    </span>
+                </div>
+            </div>
+
+            <!-- Peak Discharge-->
+            <div class="form-group">
+                <label class="col-md-4 control-label" for="PEAK_DISCHARGE">Peak Discharge:</label>
+                <div class="col-md-5">
+                    <input class="form-control" ng-keypress="isNum($event)" name="PEAK_DISCHARGE" ng-model="aPeak.PEAK_DISCHARGE" type="text" />
+                </div>
+                <div class="col-md-1">
+                    <span tooltip-placement="right" uib-tooltip="Peak Discharge Estimated?">
+                        <input type="checkbox" name="IS_PEAK_DISCHARGE_ESTIMATED" ng-model="aPeak.IS_PEAK_DISCHARGE_ESTIMATED" ng-true-value="1" ng-false-value="0" />
+                    </span>
+                </div>
+            </div>
+
+            <!--AEP: -->
+            <div class="form-group">
+                <label class="col-md-4 control-label" for="AEP">AEP:</label>
+                <div class="col-md-5">
+                    <input class="form-control" ng-keypress="isNum($event)" name="AEP" ng-model="aPeak.AEP" type="text" />
+                </div>
+            </div>
+
+            <!--AEP Confidence Interval (lower limit): -->
+            <div class="form-group">
+                <label class="col-md-4 control-label" for="AEP_LOWCI">AEP Confidence Interval<br />(lower limit):</label>
+                <div class="col-md-5">
+                    <input class="form-control" ng-keypress="isNum($event)" name="AEP_LOWCI" ng-model="aPeak.AEP_LOWCI" type="text" />
+                </div>
+            </div>
+
+            <!--AEP Confidence Interval (upper limit): -->
+            <div class="form-group">
+                <label class="col-md-4 control-label" for="AEP_UPPERCI">AEP Confidence Interval<br />(upper limit):</label>
+                <div class="col-md-5">
+                    <input class="form-control" ng-keypress="isNum($event)" name="AEP_UPPERCI" ng-model="aPeak.AEP_UPPERCI" type="text" />
+                </div>
+            </div>
+
+            <!--AEP Confidence Interval (percentage of limits): -->
+            <div class="form-group">
+                <label class="col-md-4 control-label" for="AEP_RANGE">AEP Confidence Interval<br />(percentage of limits):</label>
+                <div class="col-md-5">
+                    <input class="form-control" ng-keypress="isNum($event)" name="AEP_RANGE" ng-model="aPeak.AEP_RANGE" type="text" />
+                </div>
+            </div>
+
+
 
             </div><!-- end modal-body-->
             <div class="modal-footer">
