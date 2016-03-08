@@ -66,7 +66,7 @@
             {}, {
                 query: {},
                 getAll: { method: 'GET', isArray: true },
-                getUnapprovedDFs: { method: 'GET', isArray: true, cache: false },
+                getUnapprovedDFs: { method: 'GET', isArray: true, cache: false },                
                 update: { method: 'PUT', cache: false, isArray: false },
                 save: { method: 'POST', cache: false, isArray: false },
                 delete: { method: 'DELETE', cache: false, isArray: false }
@@ -415,6 +415,20 @@
             });
     }]);
     //#endregion of OP_TYPE
+
+    //#region PEAK
+    STNResource.factory('PEAK', ['$resource', function ($resource) {
+        return $resource(rootURL + '/PeakSummaries/:id.json',
+            {}, {
+                query: {},
+                getAll: { method: 'GET', isArray: true },
+                getPeakSummaryDFs: { method: 'GET', isArray: true, cache: false, url: rootURL + '/PeakSummaries/:id/DataFiles.json' },
+                update: { method: 'PUT', cache: false, isArray: false },
+                save: { method: 'POST', cache: false, isArray: false },
+                delete: { method: 'DELETE', cache: false, isArray: false }
+            });
+    }]);
+    //#endregion of PEAK
 
     //#region REPORT
     STNResource.factory('REPORT', ['$resource', function ($resource) {
