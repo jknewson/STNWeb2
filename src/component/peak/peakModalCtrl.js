@@ -3,12 +3,20 @@
     'use strict';
 
     var ModalControllers = angular.module('ModalControllers');
-    ModalControllers.controller('peakModalCtrl', ['$scope', '$rootScope', '$cookies', '$http', '$uibModalInstance', '$uibModal', 'allVertDatums', 'thisPeak', 'peakSite', 'allMembers', 'allEventHWMs', 'allSiteSensors', 'allSiteFiles',
-        function ($scope, $rootScope, $cookies, $http, $uibModalInstance, $uibModal, allVertDatums, thisPeak, peakSite, allMembers, allEventHWMs, allSiteSensors, allSiteFiles) {
+    ModalControllers.controller('peakModalCtrl', ['$scope', '$rootScope', '$cookies', '$http', '$uibModalInstance', '$uibModal', 'allVertDatums', 'allCollectConditions', 'thisPeak', 'peakSite', 'allMembers', 'allEventHWMs', 'allSiteSensors', 'allSiteFiles', 'thisPeakDFs', 'DATA_FILE', 'PEAK', 'HWM',
+        function ($scope, $rootScope, $cookies, $http, $uibModalInstance, $uibModal, allVertDatums, allCollectConditions, thisPeak, peakSite, allMembers, allEventHWMs, allSiteSensors, allSiteFiles, thisPeakDFs, DATA_FILE, PEAK, HWM) {
             //dropdowns
             $scope.VDatumsList = allVertDatums;
             $scope.thisSite = peakSite;
             $scope.memberList = allMembers;
+
+            //add selected prop now for data files/sensor files for later use
+            for (var sf = 0; sf < allSiteFiles.length; sf++) {
+                if (allSiteFiles[sf].fileBelongsTo == 'DataFile File' || allSiteFiles[sf].fileBelongsTo == 'Sensor File') {
+                    allSiteFiles[sf].selected = false;
+                }
+            };
+
             $scope.eventSiteHWMs = allEventHWMs.filter(function (h) { return h.SITE_ID == peakSite.SITE_ID; });
             angular.forEach($scope.eventSiteHWMs, function (esh) {
                 esh.selected = false;
@@ -17,18 +25,23 @@
             
             $scope.eventSiteSensors = allSiteSensors.filter(function (s) { return s.Instrument.EVENT_ID == $cookies.get('SessionEventID'); }); //maybe go from here to get all datafiles for each sensor
             angular.forEach($scope.eventSiteSensors, function (ess) {
-                ess.selected = false;
+                // ess.selected = false;
+                ess.CollectCondition = ess.Instrument.INST_COLLECTION_ID !== null && ess.Instrument.INST_COLLECTION_ID > 0 ?
+                    allCollectConditions.filter(function (cc) { return cc.ID == ess.Instrument.INST_COLLECTION_ID; })[0].CONDITION :
+                    '';
                 ess.files = allSiteFiles.filter(function (sf) { return sf.INSTRUMENT_ID == ess.Instrument.INSTRUMENT_ID && (sf.fileBelongsTo == "DataFile File" || sf.fileBelongsTo == "Sensor File"); });
            });
             // $scope.siteFilesForSensors = allSiteFiles.filter(function (f) { return f.INSTRUMENT_ID !== null && f.INSTRUMENT_ID > 0; });
             $scope.timeZoneList = ['UTC', 'PST', 'MST', 'CST', 'EST'];
             $scope.LoggedInMember = allMembers.filter(function (m) { return m.MEMBER_ID == $cookies.get('mID'); })[0];
             $scope.chosenHWMList = [];//holder of chosen hwms for this peak
-            $scope.chosenSensorList = []; //holder for chosen sensor for this peak
+            $scope.chosenDFList = []; //holder for chosen datafile for this peak
             $scope.hwmDetail = false; //show/hide hwm box of hwm details
             $scope.HWMBox = {}; //holds binding for what to show in hwm detail box
             $scope.sensorDetail = false; //show/hide sensor box of sensor details
             $scope.SensorBox = {}; //holds binding for what to show in the sensor detail box
+            $scope.dataFileDetail = false; //show/hide datafile box of datafile details
+            $scope.DFBox = {}; //holds binding for what to show in the datafile detail box
             $scope.aPeak = {};
             //formatting date and time properly for chrome and ff
             var getDateTimeParts = function (d) {
@@ -82,6 +95,21 @@
                 $scope.datepickrs[which] = true;
             };
 
+            //is it UTC or local time..make sure it stays UTC
+            var dealWithTimeStampb4Send = function () {
+                //check and see if they are not using UTC
+                if ($scope.aPeak.TIME_ZONE != "UTC") {
+                    //convert it
+                    var utcDateTime = new Date($scope.aPeak.PEAK_DATE).toUTCString();
+                    $scope.aPeak.PEAK_DATE = utcDateTime;
+                    $scope.aPeak.TIME_ZONE = 'UTC';
+                } else {
+                    //make sure 'GMT' is tacked on so it doesn't try to add hrs to make the already utc a utc in db
+                    var i = $scope.aPeak.PEAK_DATE.toString().indexOf('GMT') + 3;
+                    $scope.aPeak.PEAK_DATE = $scope.aPeak.PEAK_DATE.toString().substring(0, i);
+                }
+            };
+
             //cancel
             $scope.cancel = function () {
                 $rootScope.stateIsLoading.showLoading = false; // loading.. 
@@ -101,11 +129,25 @@
             if (thisPeak != "empty") {
                 //#region existing PEAK
                 $scope.aPeak = angular.copy(thisPeak);
-                $scope.aPeak.PEAK_DATE = getDateTimeParts($scope.aPeak.PEAK_DATE);
+                $scope.aPeak.PEAK_DATE = { date: getDateTimeParts($scope.aPeak.PEAK_DATE), time: getDateTimeParts($scope.aPeak.PEAK_DATE) };
                 //get peak creator name
                 $scope.PeakCreator = allMembers.filter(function (m) { return m.MEMBER_ID == $scope.aPeak.MEMBER_ID; })[0];
-                $scope.peakHWMs = eventSiteHWMs.filter(function (evsiH) { return evsiH.PEAK_SUMMARY_ID == $scope.aPeak.PEAK_SUMMARY_ID; });
-                //$scope.chosenDFsForPeak = need to go from files to get datafiles and filter those based on peaksummary id...??
+                //check off those hwms used for this peak
+                for (var h = 0; h < $scope.eventSiteHWMs.length; h++) {
+                    if ($scope.eventSiteHWMs[h].PEAK_SUMMARY_ID == $scope.aPeak.PEAK_SUMMARY_ID)
+                        $scope.eventSiteHWMs[h].selected = true;
+                }
+                //check off those hwms used for this peak
+                //for each eventSiteSensor.. for each file within each sensor... if dataFileID == any of the peakDFs datafileID ====> make that file.selected =true
+                for (var s = 0; s < $scope.eventSiteSensors.length; s++) {
+                    //for each eventSiteSensor
+                    var essI = s;
+                    for (var df = 0; df < $scope.eventSiteSensors[essI].files.length; df++) {
+                        //for each file within this eventSiteSensor
+                        var isThere = thisPeakDFs.filter(function (pdf) { return pdf.DATA_FILE_ID == $scope.eventSiteSensors[essI].files[df].DATA_FILE_ID; })[0];
+                        if (isThere !== undefined) $scope.eventSiteSensors[essI].files[df].selected = true;
+                    }
+                }
                 //#endregion existing PEAK
             } else {
                 //#region new PEAK
@@ -133,13 +175,44 @@
             };
 
             //#region hwm list stuff
+            var formatSelectedHWM = function (h) {
+                var fhwm = {};
+                fhwm.APPROVAL_ID = h.APPROVAL_ID;
+                fhwm.BANK = h.BANK;
+                fhwm.ELEV_FT = h.ELEV_FT;
+                fhwm.EVENT_ID = h.EVENT_ID;
+                fhwm.FLAG_DATE = h.FLAG_DATE;
+                fhwm.FLAG_MEMBER_ID = h.FLAG_MEMBER_ID;
+                fhwm.HCOLLECT_METHOD_ID = h.HCOLLECT_METHOD_ID;
+                fhwm.HDATUM_ID = h.HDATUM_ID;
+                fhwm.HEIGHT_ABOVE_GND = h.HEIGHT_ABOVE_GND;
+                fhwm.HWM_ENVIRONMENT = h.HWM_ENVIRONMENT;
+                fhwm.HWM_ID = h.HWM_ID;
+                fhwm.HWM_LOCATIONDESCRIPTION = h.HWM_LOCATIONDESCRIPTION;
+                fhwm.HWM_NOTES = h.HWM_NOTES;
+                fhwm.HWM_QUALITY_ID = h.HWM_QUALITY_ID;
+                fhwm.HWM_TYPE_ID = h.HWM_TYPE_ID;
+                fhwm.LATITUDE_DD = h.LATITUDE;
+                fhwm.LONGITUDE_DD = h.LONGITUDE;
+                fhwm.MARKER_ID = h.MARKER_ID;
+                fhwm.PEAK_SUMMARY_ID = h.PEAK_SUMMARY_ID;
+                fhwm.SITE_ID = h.SITE_ID;
+                fhwm.STILLWATER = h.STILLWATER == "No" ? 0 : 1;
+                fhwm.SURVEY_DATE = h.SURVEY_DATE;
+                fhwm.SURVEY_MEMBER_ID = h.SURVEY_MEMBER_ID;
+                fhwm.VCOLLECT_METHOD_ID = h.VCOLLECT_METHOD_ID;
+                fhwm.VDATUM_ID = h.VDATUM_ID;
+                fhwm.WATERBODY = h.WATERBODY;
+                return fhwm;
+            }
             //add or remove a hwm from the list of chosen hwms for determining this peak
             $scope.addHWM = function (h) {
-                if (h.selected === true) {
-                    $scope.chosenHWMList.push(h);
+                var aHWM = formatSelectedHWM(h);
+                if (h.selected === true) {                    
+                    $scope.chosenHWMList.push(aHWM);
                 } else {
                     if ($scope.chosenHWMList.length > 0) {
-                        var ind = $scope.chosenHWMList.indexOf(h);
+                        var ind = $scope.chosenHWMList.map(function (hwm) { return hwm.HWM_ID; }).indexOf(aHWM.HWM_ID); //not working:: $scope.chosenHWMList.indexOf(aHWM);
                         $scope.chosenHWMList.splice(ind, 1);
                     }
                 }
@@ -147,7 +220,7 @@
             
             //they want to see the details of the hwm, or not see it anymore
             $scope.showHWMDetails = function (h) {
-                $scope.hwmDetail = true; $scope.sensorDetail = false;
+                $scope.hwmDetail = true; $scope.sensorDetail = false; $scope.dataFileDetail = false;
                 $scope.HWMBox = h;
             };
 
@@ -169,7 +242,7 @@
                 });
                 setPrimHWM.result.then(function (setIt) {
                     if (setIt == 'Yes') {
-                        $scope.aPeak.PEAK_DATE.date = h.FLAG_DATE;
+                        $scope.aPeak.PEAK_DATE.date = new Date(h.FLAG_DATE);
                         $scope.aPeak.PEAK_STAGE = h.ELEV_FT;
                         $scope.aPeak.VDATUM_ID = h.VDATUM_ID;
                         $scope.aPeak.HEIGHT_ABOVE_GND = h.HEIGHT_ABV_GND;
@@ -179,30 +252,46 @@
             //#endregion
 
             $scope.closeDetail = function () {
-                $scope.sensorDetail = false; $scope.hwmDetail = false;
+                $scope.sensorDetail = false; $scope.hwmDetail = false; $scope.dataFileDetail = false;
             };
 
             //#region sensor list stuff
             //add or remove a sensor from the list of chosen sensor for determining this peak
-            $scope.addSensor = function (s) {
-                if (s.selected === true) {
-                    $scope.chosenSensorList.push(s);
-                } else {
-                    if ($scope.chosenSensorList.length > 0) {
-                        var ind = $scope.chosenSensorList.indexOf(s);
-                        $scope.chosenSensorList.splice(ind, 1);
+            $scope.addDataFile = function (datafile) {
+                var dataFile = {};                
+                DATA_FILE.query({ id: datafile.DATA_FILE_ID }).$promise.then(function (response) {
+                    dataFile = response;
+                    if (datafile.selected === true) {
+                        $scope.chosenDFList.push(dataFile);
+                    } else {
+                        if ($scope.chosenDFList.length > 0) {
+                            var ind = $scope.chosenDFList.map(function (df) { return df.DATA_FILE_ID; }).indexOf(datafile.DATA_FILE_ID); //not working:: $scope.chosenDFList.indexOf(s);
+                            $scope.chosenDFList.splice(ind, 1);
+                        }
                     }
-                }
+                });
             };
 
             //they want to see the details of the sensor, or not see it anymore
             $scope.showSensorDetails = function (s) {
-                $scope.sensorDetail = true; $scope.hwmDetail = false;
+                $scope.sensorDetail = true; $scope.hwmDetail = false; $scope.dataFileDetail = false;
                 $scope.SensorBox = s;
             };
-
+            //they want to see the details of the datafile, or not see it anymore
+            $scope.showDataFileDetails = function (f) {
+                DATA_FILE.query({ id: f.DATA_FILE_ID }, function success(response) {
+                    $scope.DFBox = response;
+                    $scope.DFBox.filePath = f.PATH;
+                    $scope.DFBox.fileID = f.FILE_ID;
+                    $scope.DFBox.fileDesc = f.DESCRIPTION;
+                    $scope.DFBox.processedBy = allMembers.filter(function (m) { return m.MEMBER_ID == response.PROCESSOR_ID; })[0];
+                    $scope.dataFileDetail = true; $scope.hwmDetail = false; $scope.sensorDetail = false;
+                });
+                
+                
+            };
             //use this hwm to populate peak parts (primary sensor for determining peak)
-            $scope.primarySensor = function (s) {
+            $scope.primaryDataFile = function (f) {
                 var setPrimHWM = $uibModal.open({
                     template: '<div class="modal-header"><h3 class="modal-title">Set as Primary</h3></div>' +
                         '<div class="modal-body"><p>Are you sure you want to set this as the Primary Sensor? Doing so will populate the Peak Date, Time and time zone, Stage, Vertical Datum and Height Above Ground.</p></div>' +
@@ -229,7 +318,7 @@
             //#endregion
             //save Peak
             $scope.save = function () {
-                if ($scope.HWMForm.$valid) {
+                if ($scope.peakForm.$valid) {
                         var updatedHWM = {};
                         if ($scope.adminChanged.EVENT_ID !== undefined) {
                             //admin changed the event for this hwm..
@@ -291,26 +380,30 @@
 
             //create Peak
             $scope.create = function () {
-                if (this.HWMForm.$valid) {
-                    var createdHWM = {};
-                    //if they entered a survey date or elevation, then set survey member as the flag member (flagging and surveying at same time
-                    if ($scope.aHWM.SURVEY_DATE !== undefined && $scope.aHWM.SURVEY_DATE !== null)
-                        $scope.aHWM.SURVEY_TEAM_ID = $scope.FLAG_TEAM_ID;
-
-                    if ($scope.aHWM.ELEV_FT !== undefined && $scope.aHWM.ELEV_FT !== null) {
-                        //make sure they added the survey date if they added an elevation
-                        if ($scope.aHWM.SURVEY_DATE === undefined)
-                            $scope.aHWM.SURVEY_DATE = makeAdate("");
-
-                        $scope.aHWM.SURVEY_TEAM_ID = $scope.FLAG_TEAM_ID;
-                    }
+                if (this.peakForm.$valid) {
+                    var createdPeak = {};
+                    //format to combine the date and time back together into 1 date object
+                    var datetime = new Date($scope.aPeak.PEAK_DATE.date.getFullYear(), $scope.aPeak.PEAK_DATE.date.getMonth(), $scope.aPeak.PEAK_DATE.date.getDate(),
+                       $scope.aPeak.PEAK_DATE.time.getHours(), $scope.aPeak.PEAK_DATE.time.getMinutes(), $scope.aPeak.PEAK_DATE.time.getSeconds());
+                    $scope.aPeak.PEAK_DATE = datetime;
+                    dealWithTimeStampb4Send(); //UTC or local?
 
                     $http.defaults.headers.common.Authorization = 'Basic ' + $cookies.get('STNCreds');
                     $http.defaults.headers.common.Accept = 'application/json';
-                    HWM.save($scope.aHWM).$promise.then(function (response) {
-                        createdHWM = response;
-                        toastr.success("HWM created");
-                        var sendBack = [createdHWM, 'created'];
+                    PEAK.save($scope.aPeak).$promise.then(function (response) {
+                        createdPeak = response;
+                        //update the chosen hwms/data files with peak id
+                        for (var h = 0; h < $scope.chosenHWMList.length; h++) {
+                            $scope.chosenHWMList[h].PEAK_SUMMARY_ID = response.PEAK_SUMMARY_ID;
+                            HWM.update({ id: $scope.chosenHWMList[h].HWM_ID }, $scope.chosenHWMList[h]).$promise;
+                        } //end foreach hwm save
+                        for (var d = 0; d < $scope.chosenDFList.length; d++) {
+                            $scope.chosenDFList[d].PEAK_SUMMARY_ID = response.PEAK_SUMMARY_ID;
+                            DATA_FILE.update({ id: $scope.chosenDFList[d].DATA_FILE_ID }, $scope.chosenDFList[d]).$promise;
+                        } //end foreach hwm save
+
+                        toastr.success("Peak created");
+                        var sendBack = [createdPeak, 'created'];
                         $uibModalInstance.close(sendBack);
                     });
                 }

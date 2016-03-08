@@ -53,7 +53,7 @@
             ///update newSite lat/lng after dragend
             $scope.$on("leafletDirectiveMarker.dragend", function (event, args) {
                 var dragendLocation = args.model;
-                $scope.aSite.LATITUDE_DD = parseFloat(dragendLocation.lat.toFixed(6)); ;
+                $scope.aSite.LATITUDE_DD = parseFloat(dragendLocation.lat.toFixed(6));
                 $scope.aSite.LONGITUDE_DD = parseFloat(dragendLocation.lng.toFixed(6));
             });
 
@@ -104,33 +104,13 @@
                                     lat: parseFloat($scope.aSite.LATITUDE_DD),
                                     lng: parseFloat($scope.aSite.LONGITUDE_DD),                                   
                                     icon: icons.newSTN,
-                                    message: 'New',
+                                    message: 'New draggable STN site',
                                     focus: false,
-                                    draggable: true,
+                                    draggable: true
                                 }); 
                                 
                                 $scope.showMap = true;
                                 
-                                //modal for showing # of sites near                  
-                                //var modalInstance = $uibModal.open({
-                                //    template: '<div class="modal-header"><h3 class="modal-title">Sites nearby</h3></div>' +
-                                //               '<div class="modal-body"><p>There are: {{num}} sites nearby.</p>' +
-                                //               '<p ng-if="num > 0"><span>To use one of these sites instead, click on the site name.</span>' +
-                                //               '<ul><li ng-repeat="s in siteListNear" style="list-style:none"><a ui-sref="site.dashboard({id: s.SITE_ID})" ng-click="$close()">{{s.SITE_NO}}</a></li></ul></p></div>' +
-                                //               '<div class="modal-footer"><button class="btn btn-primary" ng-click="ok()">OK</button></div>',
-                                //    controller: ['$scope', '$uibModalInstance', function ($scope, $uibModalInstance) {
-                                //        $scope.ok = function () {
-                                //            $uibModalInstance.close();
-                                //        };
-                                //        $scope.num = closeSites.length;
-                                //        $scope.siteListNear = closeSites;
-                                //    }],
-                                //    size: 'sm'
-                                //});
-                                //modalInstance.result.then(function () {
-                                //    $rootScope.stateIsLoading.showLoading = false; // loading..
-                                //});
-                                // alert("Number of nearby Sites: " + closeSites.length);
                             }, function error(errorResponse) {
                                 toastr.error("Error: " + errorResponse.statusText);
                             }).$promise;
