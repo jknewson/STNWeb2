@@ -692,67 +692,81 @@
                 $rootScope.stateIsLoading.showLoading = false;// loading..
                 $uibModalInstance.dismiss('cancel');
             };
+            var depTimeStampb4Send = function () {
+                //check and see if they are not using UTC
+                var returnThis;
+                    //make sure 'GMT' is tacked on so it doesn't try to add hrs to make the already utc a utc in db
+                var i = $scope.depSensStatus.TIME_STAMP.toString().indexOf('GMT') + 3;
+                returnThis = $scope.depSensStatus.TIME_STAMP.toString().substring(0, i);
+                return returnThis;
+            };
+
+            //cancel
+            $scope.cancel = function () {
+                $rootScope.stateIsLoading.showLoading = false;// loading..
+                $uibModalInstance.dismiss('cancel');
+            };
 
             //retrieve the sensor
             $scope.retrieveS = function (valid) {
                 if (valid) {
-                    $http.defaults.headers.common.Authorization = 'Basic ' + $cookies.get('STNCreds');
-                    $http.defaults.headers.common.Accept = 'application/json';
-                    var updatedSensor = {}; var createRetSens = {};
-                    dealWithTimeStampb4Send(); //UTC or local?
+                    dealWithTimeStampb4Send(); //for retrieval for post and for comparison to deployed (ensure it's after)
+                    var depSenTS = depTimeStampb4Send()//need to get dep status date in same format as retrieved to compare
+                    var retSenTS = angular.copy($scope.aRetrieval.TIME_STAMP.replace(/\,/g, "")); //stupid comma in there making it not the same
+                    if (new Date(retSenTS) < new Date(depSenTS)) {                        
+                        var fixDate = $uibModal.open({
+                            template: '<div class="modal-header"><h3 class="modal-title">Error</h3></div>' +
+                                '<div class="modal-body"><p>The retrieval date must be after the deployed date.</p></div>' +
+                                '<div class="modal-footer"><button class="btn btn-primary" ng-enter="ok()" ng-click="ok()">OK</button></div>',
+                            controller: ['$scope', '$uibModalInstance', function ($scope, $uibModalInstance) {
+                                $scope.ok = function () {
+                                    $uibModalInstance.close();
+                                };
+                            }],
+                            size: 'sm'
+                        });
+                        fixDate.result.then(function () {
+                            //reset to now
+                            $scope.aRetrieval.TIME_STAMP = '';
+                            $scope.aRetrieval.TIME_STAMP = getTimeZoneStamp()[0];
+                            $scope.aRetrieval.TIME_ZONE = getTimeZoneStamp()[1];
+                            angular.element('#retrievalDate').trigger('focus');
+                        });
+                    } else {
+                        $http.defaults.headers.common.Authorization = 'Basic ' + $cookies.get('STNCreds');
+                        $http.defaults.headers.common.Accept = 'application/json';
+                        var updatedSensor = {}; var createRetSens = {};
+                        INSTRUMENT.update({ id: $scope.aSensor.INSTRUMENT_ID }, $scope.aSensor).$promise.then(function (response) {
+                            //create instrumentstatus too need: STATUS_TYPE_ID and INSTRUMENT_ID
+                            updatedSensor = response;
+                            updatedSensor.Deployment_Type = $scope.aSensor.Deployment_Type;
+                            updatedSensor.Housing_Type = $scope.aSensor.Housing_Type;
+                            updatedSensor.Sensor_Brand = $scope.aSensor.Sensor_Brand;
+                            updatedSensor.Sensor_Type = $scope.aSensor.Sensor_Type;
+                            updatedSensor.Inst_Collection = $scope.collectCondList.filter(function (i) { return i.ID === $scope.aSensor.INST_COLLECTION_ID; })[0].CONDITION;
 
-                    INSTRUMENT.update({ id: $scope.aSensor.INSTRUMENT_ID }, $scope.aSensor).$promise.then(function (response) {
-                        //create instrumentstatus too need: STATUS_TYPE_ID and INSTRUMENT_ID
-                        updatedSensor = response;
-                        updatedSensor.Deployment_Type = $scope.aSensor.Deployment_Type;
-                        updatedSensor.Housing_Type = $scope.aSensor.Housing_Type;
-                        updatedSensor.Sensor_Brand = $scope.aSensor.Sensor_Brand;
-                        updatedSensor.Sensor_Type = $scope.aSensor.Sensor_Type;
-                        updatedSensor.Inst_Collection = $scope.collectCondList.filter(function (i){return i.ID === $scope.aSensor.INST_COLLECTION_ID;})[0].CONDITION;
-
-                        INSTRUMENT_STATUS.save($scope.aRetrieval).$promise.then(function (statResponse) {
-                            //build the createdSensor to send back and add to the list page
-                            createRetSens = statResponse;
-                            createRetSens.Status = 'Retrieved';
-                            //var rud = getTimeZoneStamp(createRetSens.TIME_STAMP.slice(0, -1)); //remove 'z' on end
-                            //createRetSens.TIME_STAMP = rud[0]; //this keeps it as utc in display
-                            var sensorObjectToSendBack = {
-                                Instrument: updatedSensor,
-                                InstrumentStats: [createRetSens, thisSensor.InstrumentStats[0]]
-                            };
-                            $timeout(function () {
-                                // anything you want can go here and will safely be run on the next digest.
-                                toastr.success("Sensor retrieved");
-                                var state = 'retrieved';
-                                var sendBack = [sensorObjectToSendBack, state];
-                                $uibModalInstance.close(sendBack);
+                            INSTRUMENT_STATUS.save($scope.aRetrieval).$promise.then(function (statResponse) {
+                                //build the createdSensor to send back and add to the list page
+                                createRetSens = statResponse;
+                                createRetSens.Status = 'Retrieved';
+                                //var rud = getTimeZoneStamp(createRetSens.TIME_STAMP.slice(0, -1)); //remove 'z' on end
+                                //createRetSens.TIME_STAMP = rud[0]; //this keeps it as utc in display
+                                var sensorObjectToSendBack = {
+                                    Instrument: updatedSensor,
+                                    InstrumentStats: [createRetSens, thisSensor.InstrumentStats[0]]
+                                };
+                                $timeout(function () {
+                                    // anything you want can go here and will safely be run on the next digest.
+                                    toastr.success("Sensor retrieved");
+                                    var state = 'retrieved';
+                                    var sendBack = [sensorObjectToSendBack, state];
+                                    $uibModalInstance.close(sendBack);
+                                });
                             });
                         });
-                    });
+                    } //end retr date is correct
                 }//end if valid
             };//end retrieveS
-
-            
-            $scope.$watch("aRetrieval.TIME_STAMP", function () {
-                if ($scope.aRetrieval.TIME_STAMP < $scope.depSensStatus.TIME_STAMP) {
-                    var fixDate = $uibModal.open({
-                        template: '<div class="modal-header"><h3 class="modal-title">Error</h3></div>' +
-                            '<div class="modal-body"><p>The retrieval date must be after the deployed date.</p></div>' +
-                            '<div class="modal-footer"><button class="btn btn-primary" ng-enter="ok()" ng-click="ok()">OK</button></div>',
-                        controller: ['$scope', '$uibModalInstance', function ($scope, $uibModalInstance) {
-                            $scope.ok = function () {
-                                $uibModalInstance.close();
-                            };
-                        }],
-                        size: 'sm'
-                    });
-                    fixDate.result.then(function () {
-                        $scope.aRetrieval.TIME_STAMP = '';
-                        $scope.aRetrieval.TIME_STAMP = getTimeZoneStamp()[0];
-                        angular.element('#retrievalDate').trigger('focus');
-                    });
-                }
-        }, true);
         }]);//end sensorRetrievalModalCtrl
 
     // view/edit retrieved sensor (deployed included here) modal
@@ -1011,21 +1025,14 @@
                             updatedRetSenStat = statResponse;
                             updatedRetSenStat.Status = $scope.statusTypeList.filter(function (sta) { return sta.STATUS_TYPE_ID === $scope.retStuffCopy[1].STATUS_TYPE_ID; })[0].STATUS;
                             $scope.sensor = updatedRetSensor;
-                            $scope.RetrievedSensorStat = updatedRetSenStat;
-                            //var ret_y = $scope.RetrievedSensorStat.TIME_STAMP.substr(0, 4);
-                            //var ret_m = $scope.RetrievedSensorStat.TIME_STAMP.substr(5, 2) - 1; //subtract 1 for index value (January is 0)
-                            //var ret_d = $scope.RetrievedSensorStat.TIME_STAMP.substr(8, 2);
-                            //var ret_h = $scope.RetrievedSensorStat.TIME_STAMP.substr(11, 2);
-                            //var ret_mi = $scope.RetrievedSensorStat.TIME_STAMP.substr(14, 2);
-                            //var ret_sec = $scope.RetrievedSensorStat.TIME_STAMP.substr(17, 2);
-                            //$scope.RetrievedSensorStat.TIME_STAMP = new Date(ret_y, ret_m, ret_d, ret_h, ret_mi, ret_sec);// rstatdate[0]; //this keeps it as utc in display
+                            $scope.RetrievedSensorStat = updatedRetSenStat;                            
                             $scope.RetrievedSensorStat.TIME_STAMP = getDateTimeParts($scope.RetrievedSensorStat.TIME_STAMP);//this keeps it as utc in display
                             $scope.retStuffCopy = [];
                             $scope.view.RETval = 'detail';
                         });
                     });
                 }
-        };//end saveDeployed()            
+            };//end saveRetrieved()            
 
             //never mind, don't want to edit retrieved sensor
             $scope.cancelRetEdit = function () {
@@ -1078,10 +1085,10 @@
                         FILE_DATE: new Date(),
                         FILETYPE_ID: 2,
                         FileType: 'Data',
-                        PATH: 'whats the datafile name?',
+                        PATH: 'datafile name',
                         DESCRIPTION: 'Link to NWIS data file for this sensor.',
                         SITE_ID: $scope.sensor.SITE_ID,
-                        FILE_URL: 'we will generate this using NWIS url with parameters from sensor',
+                        FILE_URL: 'http://nwis.gov/somethingHere',
                         DATA_FILE_ID: 0,
                         INSTRUMENT_ID: $scope.sensor.INSTRUMENT_ID,
                         VALIDATED: 1
