@@ -4,50 +4,26 @@
     <div class="container mapContainer">
 
 
-        <div class="col-md-2">
-            SITE INFO<br>
+        <div class="col-md-3">
+            <div ui-view="mapSiteInfo"></div>
 
-            PEAKS<br>
 
-            MAP LEGEND<br>
+            <div ui-view="mapPeaksView"></div>
 
-            SITE FILTERS<br>
+            <div ui-view="mapSensorPropose"></div>
 
-            PROPOSE SENSOR<br>
-
-            CREATE SITE<br>
-
-            <div class="panel panel-default wim-sidebar-panel">
-                <div class="panel-heading" id="layersPanelHeader">
-                    <h4 class="panel-title">
-                        <a class="collapsed" data-toggle="collapse"  aria-expanded="true" aria-controls="layersPanel">Map Layers</a>
-                    </h4>
-                </div>
-                <div id="layersPanel" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="layersPanelHeader">
-                </div>
-            </div>
-
-            <div class="panel panel-default wim-sidebar-panel">
-                <div class="panel-heading" id="basemapsHeader">
-                    <h4 class="panel-title">
-                        <a data-toggle="collapse"  aria-expanded="false" aria-controls="basemapsPanel">Basemaps</a>
-                    </h4>
-                </div>
-                <div id="basemapsPanel" class="panel-collapse collapse" role="tabpanel" aria-labelledby="basemapsHeader">
-
-                </div>
-            </div>
-
-            <h3 ng-if="createSiteModeActive">CREATE SITE MODE ACTIVE</h3>
+            <hr>
 
             <button ng-click="createSiteModeActive = !createSiteModeActive">{{createSiteButtonText}}</button>
             <button ng-if="createSiteModeActive" ng-click="createSiteFromMap()">Create New Site at Dot</button>
+
+            <h3 ng-if="createSiteModeActive">CREATE SITE MODE ACTIVE</h3>
 
         </div>
 
 
 
-        <div class="col-md-10">
+        <div class="col-md-9">
 
             <!--<h3>Map currently displaying sites for <b>{{sessionEvent}}</b></h3>-->
 
@@ -66,6 +42,9 @@
 
     </div>
 </div>
+
+<div ui-view="test"></div>
+
 
 
 

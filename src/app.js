@@ -61,11 +61,27 @@
                 //#endregion entry point once logged in
 
                 //#region map page
+                //.state("map", {
+                //    url: "/Map",
+                //    templateUrl: "component/map/map.html",
+                //    controller: "MapController",
+                //    authenticate: true,
+                //})
+
                 .state("map", {
                     url: "/Map",
-                    templateUrl: "component/map/map.html",
-                    controller: "MapController",
-                    authenticate: true
+                    //templateUrl: "component/map/map.html",
+                    //controller: "MapController",
+                    //authenticate: true,
+                    views: {
+                        '': {
+                            controller: 'MapController',
+                            templateUrl: "component/map/map.html"
+                        },
+                        'mapSiteInfo@map': {templateUrl: 'component/site/mapSiteInfoView.html', controller: 'MapSiteInfoController'},
+                        'mapPeaksView@map': {templateUrl: 'component/peak/mapPeaksView.html', controller: 'MapPeaksController'},
+                        'mapSensorPropose@map': {templateUrl: 'component/sensor/mapSensorPropose.html', controller: 'MapSensorProposeController'}
+                    }
                 })
                 //#endregion
 
@@ -283,7 +299,7 @@
                 })
                 //#endregion events.EventsList
 
-                //#region events.EventInfo
+                //#region events.EventInfof
                 .state("events.EventInfo", {
                     url: "/eventInfo/:id",
                     templateUrl: "component/event/eventInfo.html",
