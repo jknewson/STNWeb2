@@ -10,6 +10,15 @@
             $scope.thisSite = peakSite;
             $scope.memberList = allMembers;
 
+            //need a datafile for this kind of sensor, check files for presence of df to set flag on sensor
+            var determineDFPresent = function (f) {
+                for (var x = 0; x < f.length; x++) {
+                    if (f[x].FILETYPE_ID == 2) {
+                        return true;
+                    }
+                }
+                return false;
+            };
             //add selected prop now for data files/sensor files for later use
             for (var sf = 0; sf < allSiteFiles.length; sf++) {
                 if (allSiteFiles[sf].fileBelongsTo == 'DataFile File' || allSiteFiles[sf].fileBelongsTo == 'Sensor File') {
@@ -30,27 +39,23 @@
                     allCollectConditions.filter(function (cc) { return cc.ID == ess.Instrument.INST_COLLECTION_ID; })[0].CONDITION :
                     '';
                 ess.files = allSiteFiles.filter(function (sf) { return sf.INSTRUMENT_ID == ess.Instrument.INSTRUMENT_ID && (sf.fileBelongsTo == "DataFile File" || sf.fileBelongsTo == "Sensor File"); });
-                var hasDF = {value:true};
+                //var hasDF = {value:true};
                 if (ess.Instrument.SENSOR_TYPE_ID == 2 || ess.Instrument.SENSOR_TYPE_ID == 5 || ess.Instrument.SENSOR_TYPE_ID == 6) {
-                    //this is a met, rain gage or rdg sensor - must have data file
                     if (ess.files.length === 0) ess.NeedDF = true;
-                    if (ess.files.length > 0) {
-                        //there are files, but make sure one is a datafile                        
-                        angular.forEach(ess.files, function (f) {
-                            if (f.FILETYPE_ID == 2) hasDF.value = true;
-                            else hasDF.value = false;
-                        });
+                    else {
+                        if (!determineDFPresent(ess.files)) ess.NeedDF = true;
                     }
                 }//end if this is a datafile requiring sensor
-                if (ess.NeedDF === undefined) {
-                    if (hasDF.value === false) ess.NeedDF = true;
-                }
-           });
+            });
+
+            
             // $scope.siteFilesForSensors = allSiteFiles.filter(function (f) { return f.INSTRUMENT_ID !== null && f.INSTRUMENT_ID > 0; });
             $scope.timeZoneList = ['UTC', 'PST', 'MST', 'CST', 'EST'];
             $scope.LoggedInMember = allMembers.filter(function (m) { return m.MEMBER_ID == $cookies.get('mID'); })[0];
             $scope.chosenHWMList = [];//holder of chosen hwms for this peak
+            $scope.removedChosenHWMList = []; //holder for removed ones for PUT (if this is edit)
             $scope.chosenDFList = []; //holder for chosen datafile for this peak
+            $scope.removedChosenDFList = []; //holder for removed ones for PUT (if this is edit)
             $scope.hwmDetail = false; //show/hide hwm box of hwm details
             $scope.HWMBox = {}; //holds binding for what to show in hwm detail box
             $scope.sensorDetail = false; //show/hide sensor box of sensor details
@@ -226,6 +231,10 @@
                 if (h.selected === true) {                    
                     $scope.chosenHWMList.push(aHWM);
                 } else {
+                    if ($scope.aPeak.PEAK_SUMMARY_ID !== undefined) {
+                        //edit.. need to store removed ones for PUT
+                        $scope.removedChosenHWMList.push(dataFile);
+                    }
                     if ($scope.chosenHWMList.length > 0) {
                         var ind = $scope.chosenHWMList.map(function (hwm) { return hwm.HWM_ID; }).indexOf(aHWM.HWM_ID); //not working:: $scope.chosenHWMList.indexOf(aHWM);
                         $scope.chosenHWMList.splice(ind, 1);
@@ -279,6 +288,10 @@
                     if (datafile.selected === true) {
                         $scope.chosenDFList.push(dataFile);
                     } else {
+                        if ($scope.aPeak.PEAK_SUMMARY_ID !== undefined) {
+                            //edit.. need to store removed ones for PUT
+                            $scope.removedChosenDFList.push(dataFile);
+                        }
                         if ($scope.chosenDFList.length > 0) {
                             var ind = $scope.chosenDFList.map(function (df) { return df.DATA_FILE_ID; }).indexOf(datafile.DATA_FILE_ID); //not working:: $scope.chosenDFList.indexOf(s);
                             $scope.chosenDFList.splice(ind, 1);
@@ -300,6 +313,8 @@
                     $scope.DFBox.fileID = f.FILE_ID;
                     $scope.DFBox.fileDesc = f.DESCRIPTION;
                     $scope.DFBox.processedBy = allMembers.filter(function (m) { return m.MEMBER_ID == response.PROCESSOR_ID; })[0];
+                    $scope.DFBox.nwisFile = f.VALIDATED == 1 ? true : false;
+                    $scope.DFBox.fileURL = f.FILE_URL;
                     $scope.dataFileDetail = true; $scope.hwmDetail = false; $scope.sensorDetail = false;
                 });
                 
@@ -331,71 +346,82 @@
                 });
             };
             //#endregion
+
             //save Peak
-            $scope.save = function () {
-                if ($scope.peakForm.$valid) {
-                        var updatedHWM = {};
-                        if ($scope.adminChanged.EVENT_ID !== undefined) {
-                            //admin changed the event for this hwm..
-                            $scope.aHWM.EVENT_ID = $scope.adminChanged.EVENT_ID;
-                        }
-                        //if they added a survey date, apply survey member as logged in member
-                        if ($scope.aHWM.SURVEY_DATE !== undefined)
-                            $scope.aHWM.SURVEY_TEAM_ID = $cookies.get('mID');
-
-                        if ($scope.aHWM.ELEV_FT !== undefined && $scope.aHWM.ELEV_FT !== null) {
-                            //make sure they added the survey date if they added an elevation
-                            if ($scope.aHWM.SURVEY_DATE === undefined)
-                                $scope.aHWM.SURVEY_DATE = makeAdate("");
-
-                            $scope.aHWM.SURVEY_TEAM_ID = $cookies.get('mID');
-                        }
-
+            $scope.savePeak = function (valid) {
+                if (valid) {
+                        var updatedPeak = {};                       
+                        var datetime = new Date($scope.aPeak.PEAK_DATE.date.getFullYear(), $scope.aPeak.PEAK_DATE.date.getMonth(), $scope.aPeak.PEAK_DATE.date.getDate(),
+                           $scope.aPeak.PEAK_DATE.time.getHours(), $scope.aPeak.PEAK_DATE.time.getMinutes(), $scope.aPeak.PEAK_DATE.time.getSeconds());
+                        $scope.aPeak.PEAK_DATE = datetime;
                         $http.defaults.headers.common.Authorization = 'Basic ' + $cookies.get('STNCreds');
                         $http.defaults.headers.common.Accept = 'application/json';
-                        HWM.update({ id: $scope.aHWM.HWM_ID }, $scope.aHWM).$promise.then(function (response) {
-                            toastr.success("HWM updated");
-                            updatedHWM = response;
-                            var sendBack = [updatedHWM, 'updated'];
+                        PEAK.update({ id: $scope.aPeak.PEAK_SUMMARY_ID }, $scope.aPeak).$promise.then(function (response) {
+                            //update hwms/datafiles used
+                            //remove those unchosen
+                            if ($scope.removedChosenDFList.length > 0) {
+                                for (var d = 0; d < $scope.removedChosenDFList.length; d++) {
+                                    $scope.removedChosenDFList[d].PEAK_SUMMARY_ID = null;
+                                    DATA_FILE.update({ id: $scope.removedChosenDFList[d].DATA_FILE_ID }, $scope.removedChosenDFList[d]).$promise;
+                                }
+                            }
+                            if ($scope.removedChosenHWMList.length > 0) {
+                                for (var h = 0; h < $scope.removedChosenHWMList.length; h++) {
+                                    $scope.removedChosenHWMList[h].PEAK_SUMMARY_ID = null;
+                                    HWM.update({ id: $scope.removedChosenHWMList[h].DATA_FILE_ID }, $scope.removedChosenHWMList[h]).$promise;
+                                }
+                            }
+                            //add those chosen
+                            for (var h = 0; h < $scope.chosenHWMList.length; h++) {
+                                $scope.chosenHWMList[h].PEAK_SUMMARY_ID = response.PEAK_SUMMARY_ID;
+                                HWM.update({ id: $scope.chosenHWMList[h].HWM_ID }, $scope.chosenHWMList[h]).$promise;
+                            } //end foreach hwm save
+                            for (var d = 0; d < $scope.chosenDFList.length; d++) {
+                                $scope.chosenDFList[d].PEAK_SUMMARY_ID = response.PEAK_SUMMARY_ID;
+                                DATA_FILE.update({ id: $scope.chosenDFList[d].DATA_FILE_ID }, $scope.chosenDFList[d]).$promise;
+                            } //end foreach hwm save
+                            toastr.success("Peak updated");
+                            updatedPeak = response;
+                            var sendBack = [updatedPeak, 'updated'];
                             $uibModalInstance.close(sendBack);
                         });
                     }
                 };//end save()
 
             //delete Peak
-            $scope.deleteHWM = function () {
-                    //TODO:: Delete the files for this hwm too or reassign to the Site?? Services or client handling?
-                    var DeleteModalInstance = $uibModal.open({
-                        templateUrl: 'removemodal.html',
-                        controller: 'ConfirmModalCtrl',
-                        size: 'sm',
-                        resolve: {
-                            nameToRemove: function () {
-                                return $scope.aHWM;
-                            },
-                            what: function () {
-                                return "HWM";
-                            }
-                        }
-                    });
+            $scope.deletePeak = function () {
+                //TODO:: who can delete a peak??
+                //var DeleteModalInstance = $uibModal.open({
+                //    templateUrl: 'removemodal.html',
+                //    controller: 'ConfirmModalCtrl',
+                //    size: 'sm',
+                //    resolve: {
+                //        nameToRemove: function () {
+                //            return $scope.aHWM;
+                //        },
+                //        what: function () {
+                //            return "HWM";
+                //        }
+                //    }
+                //});
 
-                    DeleteModalInstance.result.then(function (hwmToRemove) {
-                        $http.defaults.headers.common.Authorization = 'Basic ' + $cookies.get('STNCreds');
-                        HWM.delete({ id: hwmToRemove.HWM_ID }, hwmToRemove).$promise.then(function () {
-                            toastr.success("HWM Removed");
-                            var sendBack = ["de", 'deleted'];
-                            $uibModalInstance.close(sendBack);
-                        }, function error(errorResponse) {
-                            toastr.error("Error: " + errorResponse.statusText);
-                        });
-                    }, function () {
-                        //logic for cancel
-                    });//end modal
-                };
+                //DeleteModalInstance.result.then(function (hwmToRemove) {
+                //    $http.defaults.headers.common.Authorization = 'Basic ' + $cookies.get('STNCreds');
+                //    HWM.delete({ id: hwmToRemove.HWM_ID }, hwmToRemove).$promise.then(function () {
+                //        toastr.success("HWM Removed");
+                //        var sendBack = ["de", 'deleted'];
+                //        $uibModalInstance.close(sendBack);
+                //    }, function error(errorResponse) {
+                //        toastr.error("Error: " + errorResponse.statusText);
+                //    });
+                //}, function () {
+                //    //logic for cancel
+                //});//end modal
+            };
 
             //create Peak
-            $scope.create = function () {
-                if (this.peakForm.$valid) {
+            $scope.createPeak = function (valid) {
+                if (valid) {
                     var createdPeak = {};
                     //format to combine the date and time back together into 1 date object
                     var datetime = new Date($scope.aPeak.PEAK_DATE.date.getFullYear(), $scope.aPeak.PEAK_DATE.date.getMonth(), $scope.aPeak.PEAK_DATE.date.getDate(),

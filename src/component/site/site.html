@@ -3323,10 +3323,13 @@
                     <div class="col-md-12">
                         <label>File</label><br clear="all" />
                         <!-- TODO :: IF this is an NWIS file, show link to go see the data instead of the link to download -->
-                        <span class="col-sm-9 borderLess" style="padding:0">
+                        <span ng-if="!DFBox.nwisFile" class="col-sm-9 borderLess" style="padding:0">
                             <a class="btn borderLess" style="padding:0" target="_blank" class="btn btn-primary" ng-href="https://stntest.wim.usgs.gov/STNServices2/Files/{{DFBox.fileID}}/Item">
                                 {{DFBox.COLLECT_DATE | date: 'MM/dd/yyyy'}} ({{DFBox.filePath}})
                             </a>
+                        </span>
+                        <span ng-if="DFBox.nwisFile" class="col-sm-9 borderLess" style="padding:0">
+                            <a class="btn borderLess" style="padding:0" target="_blank" class="btn btn-primary" ng-href="{{DFBox.fileURL}}">{{DFBox.fileURL}}</a>
                         </span>
                     </div>
                 </div>
@@ -3487,8 +3490,8 @@
 
             </div><!-- end modal-body-->
             <div class="modal-footer">
-                <button class="btn btn-primary" ng-if="aPeak.PEAK_SUMMARY_ID != undefined" ng-click="save(peakForm.$valid)">Save</button>
-                <button class="btn btn-primary" ng-if="aPeak.PEAK_SUMMARY_ID == undefined" ng-click="create(peakForm.$valid)">Create</button>
+                <button class="btn btn-primary" ng-if="aPeak.PEAK_SUMMARY_ID != undefined" ng-click="savePeak(peakForm.$valid)">Save</button>
+                <button class="btn btn-primary" ng-if="aPeak.PEAK_SUMMARY_ID == undefined" ng-click="createPeak(peakForm.$valid)">Create</button>
                 <button class="btn btn-warning" type="button" ng-click="cancel()">Cancel</button>
             </div>
         </fieldset>
