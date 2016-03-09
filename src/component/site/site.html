@@ -2872,8 +2872,6 @@
                                         </div>
                                     </div>
 
-
-
                                     <!-- Date Uploaded* -->
                                     <div class="form-group required" ng-class="{'has-error':NWISSenFILEForm.FILE_DATE.$invalid && NWISSenFILEForm.FILE_DATE.$dirty}" style="margin:0;padding:0">
                                         <label class="col-md-4 control-label req" for="FILE_DATE">Date Uploaded:</label>
@@ -2941,17 +2939,11 @@
                                             </label>
                                         </div>
                                     </div>
-
-                                    <div ng-if="NWISFile.FILE_ID !== undefined" class="form-group" style="margin:0;padding:0">
-                                        <label class="col-md-4 control-label">Associated File:</label>
-                                        <div class="col-md-6">
-                                            <a target="_blank" class="btn btn-primary" ng-href="https://stntest.wim.usgs.gov/STNServices2/Files/{{NWISFile.FILE_ID}}/Item">Download File</a>
-                                        </div>
-                                    </div>
+                                    
                                     <button class="btn btn-primary" ng-if="NWISFile.FILE_ID != undefined" ng-click="saveNWISFile(NWISSenFILEForm.$valid)">Save NWIS File Info</button>
                                     <button class="btn btn-danger" ng-if="NWISFile.FILE_ID != undefined" ng-click="deleteNWISFile()">Delete NWIS File Info</button>
                                     <button class="btn btn-primary" ng-if="NWISFile.FILE_ID == undefined" ng-click="createNWISFile(NWISSenFILEForm.$valid)">Create NWIS File Info</button>
-                                    <button class="btn btn-warning" type="button" ng-click="cancelFile()">Cancel File</button>
+                                    <button class="btn btn-warning" type="button" ng-click="cancelNWISFile()">Cancel NWIS File Info</button>
                                 </fieldset>
                             </form>
                         </div>
@@ -2963,8 +2955,8 @@
     <div class="modal-footer">
         <div class="form-group">
             <div class="col-md-12">
-                <span><button class="btn btn-danger" ng-disabled="showFileForm" ng-click="deleteS()"><span>Delete Sensor</span></button></span>
-                <span><button type="button" ng-disabled="showFileForm" class="btn btn-warning" ng-click="cancel()"><span>Close</span></button></span>
+                <span><button class="btn btn-danger" ng-disabled="showFileForm || showNWISFileForm" ng-click="deleteS()"><span>Delete Sensor</span></button></span>
+                <span><button type="button" ng-disabled="showFileForm || showNWISFileForm" class="btn btn-warning" ng-click="cancel()"><span>Close</span></button></span>
             </div>
         </div>
     </div>
@@ -3219,16 +3211,14 @@
                         {{s.Instrument.Deployment_Type || s.Instrument.Sensor_Type}} Sensor
                     </span>
                     <button type="button" class="borderLess" tooltip-placement="top" uib-tooltip="Show Details" ng-click="showSensorDetails(s)"><span class="glyphicon glyphicon-info-sign"></span></button>
+                    <button ng-if="s.NeedDF" type="button" class="borderLess" tooltip-placement="top" uib-tooltip="Incomplete" ng-click="showIncompleteInfo()"><span class="glyphicon glyphicon-alert"></span></button>
                     <div ng-repeat="f in s.files | where:{FILETYPE_ID: 2}">
                         <span class="col-sm-1"> </span>
                         <input type="checkbox" class="pull-left col-sm-1" ng-model="f.selected" ng-click="addDataFile(f)" />
                         <span class="col-md-6">{{f.PATH}}</span>
                         <button type="button" class="borderLess" tooltip-placement="top" uib-tooltip="Show Details" ng-click="showDataFileDetails(f)"><span class="glyphicon glyphicon-info-sign"></span></button>
                         <button type="button" class="borderLess" tooltip-placement="top" uib-tooltip="Set as Primary" ng-click="primaryDataFile(f)"><span class="glyphicon glyphicon-check"></span></button>
-
                     </div>
-
-
                 </div>
 
                 <br clear="all" />
@@ -3286,31 +3276,37 @@
                         <li style="list-style:none">Location Description: {{SensorBox.Instrument.LOCATION_DESCRIPTION || '--'}}</li>
                         <li style="list-style:none">Sensor Brand: {{SensorBox.Instrument.Sensor_Brand || '--'}}</li>
                     </ul><br clear="all" />
-                    <div class="col-md-12" ng-if="SensorBox.files.length > 0">
+                    <div class="col-md-12">
                         <label>Sensor Files</label>
-                        <span ng-repeat="f in SensorBox.files">
-                            <ul style="padding-left: 0">
-                                <li style="list-style:none;padding-bottom: 15px;">
-                                    <span class="col-sm-9 borderLess" style="padding:0">
-                                        <a class="btn borderLess" style="padding:0" target="_blank" class="btn btn-primary" ng-href="https://stntest.wim.usgs.gov/STNServices2/Files/{{f.FILE_ID}}/Item">
-                                            {{f.FILE_DATE | date: 'MM/dd/yyyy'}} ({{f.PATH || f.FILE_URL || f.FILE_ID}})
-                                        </a>
-                                    </span>
-                                </li>
-                            </ul>
-                        </span>
+                        <div ng-if="SensorBox.files.length > 0">
+                            <span ng-repeat="f in SensorBox.files">
+                                <ul style="padding-left: 0">
+                                    <li style="list-style:none;padding-bottom: 15px;">
+                                        <span class="col-sm-9 borderLess" style="padding:0">
+                                            <a class="btn borderLess" style="padding:0" target="_blank" class="btn btn-primary" ng-href="https://stntest.wim.usgs.gov/STNServices2/Files/{{f.FILE_ID}}/Item">
+                                                {{f.FILE_DATE | date: 'MM/dd/yyyy'}} ({{f.PATH || f.FILE_URL || f.FILE_ID}})
+                                            </a>
+                                        </span>
+                                    </li>
+                                </ul>
+                            </span>
+                        </div>
+                        <div ng-if="SensorBox.files.length == 0">
+                            <span>No files</span>
+                        </div>
+                        <!-- carousel of photo files-->
+                        <div class="col-md-6" ng-if="SensorBox.files.length > 0" style="height:120px;">
+                            <uib-carousel interval="4000">
+                                <uib-slide ng-repeat="f in SensorBox.files | where:{FILETYPE_ID:1}">
+                                    <img ng-click="showImageModal(f.FILE_ID)" ng-src="https://stntest.wim.usgs.gov/STNServices2/Files/{{f.FILE_ID}}/Item" />
+                                    <div class="carousel-caption">
+                                        <p>{{f.PATH || f.FILE_URL || f.FILE_ID}}</p>
+                                    </div>
+                                </uib-slide>
+                            </uib-carousel>
+                        </div>
                     </div>
-                    <!-- carousel of photo files-->
-                    <div class="col-md-6" ng-if="SensorBox.files.length > 0" style="height:120px;">
-                        <uib-carousel interval="4000">
-                            <uib-slide ng-repeat="f in SensorBox.files | where:{FILETYPE_ID:1}">
-                                <img ng-click="showImageModal(f.FILE_ID)" ng-src="https://stntest.wim.usgs.gov/STNServices2/Files/{{f.FILE_ID}}/Item" />
-                                <div class="carousel-caption">
-                                    <p>{{f.PATH || f.FILE_URL || f.FILE_ID}}</p>
-                                </div>
-                            </uib-slide>
-                        </uib-carousel>
-                    </div>
+
                 </div>
                 <!-- datafile box of meta data and datafiles -->
                 <div style="border:solid 1px black;padding-bottom:10px" class="container col-md-12" ng-if="dataFileDetail">
@@ -3326,6 +3322,7 @@
                     </ul><br clear="all" />
                     <div class="col-md-12">
                         <label>File</label><br clear="all" />
+                        <!-- TODO :: IF this is an NWIS file, show link to go see the data instead of the link to download -->
                         <span class="col-sm-9 borderLess" style="padding:0">
                             <a class="btn borderLess" style="padding:0" target="_blank" class="btn btn-primary" ng-href="https://stntest.wim.usgs.gov/STNServices2/Files/{{DFBox.fileID}}/Item">
                                 {{DFBox.COLLECT_DATE | date: 'MM/dd/yyyy'}} ({{DFBox.filePath}})
@@ -3333,159 +3330,158 @@
                         </span>
                     </div>
                 </div>
+                <!--</div>
             </div>
-            </div>
-            </div>
-            </div>
-            <!-- End SENSORs and HWMs used for Peak -->
+            </div>-->
+                <!-- End SENSORs and HWMs used for Peak -->
 
 
-            <br clear="all" />
+                <br clear="all" />
 
-            <!-- Location Description: -->
-            <div class="form-group">
-                <label class="col-md-4 control-label" for="CALC_NOTES">Peak Calculation Notes:</label>
-                <div class="col-md-5">
-                    <textarea class="form-control" name="CALC_NOTES" type=" text" rows="3" placeholder="Please document the reason this Peak was chosen for this event." ng-model="aPeak.CALC_NOTES" />
+                <!-- Location Description: -->
+                <div class="form-group">
+                    <label class="col-md-4 control-label" for="CALC_NOTES">Peak Calculation Notes:</label>
+                    <div class="col-md-5">
+                        <textarea class="form-control" name="CALC_NOTES" type=" text" rows="3" placeholder="Please document the reason this Peak was chosen for this event." ng-model="aPeak.CALC_NOTES" />
+                    </div>
                 </div>
-            </div>
-            <br clear="all" />
+                <br clear="all" />
 
-            <!--Peak creator-->
-            <div class="form-group">
-                <label class="col-md-4 control-label" for="MEMBER_ID">Peak Creator:</label>
-                <div class="col-md-5" style="margin-top:13px">
-                    <span>{{PeakCreator.FNAME}} {{PeakCreator.LNAME}}</span>
+                <!--Peak creator-->
+                <div class="form-group">
+                    <label class="col-md-4 control-label" for="MEMBER_ID">Peak Creator:</label>
+                    <div class="col-md-5" style="margin-top:13px">
+                        <span>{{PeakCreator.FNAME}} {{PeakCreator.LNAME}}</span>
+                    </div>
                 </div>
-            </div>
 
-            <!-- Peak Date: * -->
-            <div class="form-group required" ng-class="{'has-error':peakForm.PEAK_DATE.date.$invalid && peakForm.PEAK_DATE.date.$dirty}">
-                <label class="col-md-4 control-label req" for="PEAK_DATE.date">Peak Date:</label>
-                <div class="col-md-5">
-                    <datetimepicker hour-step="1" minute-step="1" ng-model="aPeak.PEAK_DATE.date" show-meridian="true"
-                                    date-format="MM/dd/yyyy" readonly-date="false" readonly-time="false" date-options="dateOptions"
-                                    hidden-time="true" hidden-date="false" show-spinners="true" required>
-                    </datetimepicker>
+                <!-- Peak Date: * -->
+                <div class="form-group required" ng-class="{'has-error':peakForm.PEAK_DATE.date.$invalid && peakForm.PEAK_DATE.date.$dirty}">
+                    <label class="col-md-4 control-label req" for="PEAK_DATE.date">Peak Date:</label>
+                    <div class="col-md-5">
+                        <datetimepicker hour-step="1" minute-step="1" ng-model="aPeak.PEAK_DATE.date" show-meridian="true"
+                                        date-format="MM/dd/yyyy" readonly-date="false" readonly-time="false" date-options="dateOptions"
+                                        hidden-time="true" hidden-date="false" show-spinners="true" required>
+                        </datetimepicker>
+                    </div>
+                    <div class="col-md-1">
+                        <span tooltip-placement="right" uib-tooltip="Date Estimated?">
+                            <input type="checkbox" name="IS_PEAK_ESTIMATED" ng-model="aPeak.IS_PEAK_ESTIMATED" ng-true-value="1" ng-false-value="0" />
+                        </span>
+                    </div>
                 </div>
-                <div class="col-md-1">
-                    <span tooltip-placement="right" uib-tooltip="Date Estimated?">
-                        <input type="checkbox" name="IS_PEAK_ESTIMATED" ng-model="aPeak.IS_PEAK_ESTIMATED" ng-true-value="1" ng-false-value="0" />
-                    </span>
-                </div>
-            </div>
 
-            <!-- Peak Time: * -->
-            <div class="form-group required" ng-class="{'has-error':peakForm.PEAK_DATE.time.$invalid && peakForm.PEAK_DATE.time.$dirty}">
-                <label class="col-md-4 control-label req" style="margin-top:4%" for="PEAK_TIME.time">Peak Time:</label>
-                <div class="col-md-5">
-                    <datetimepicker hour-step="1" minute-step="1" ng-model="aPeak.PEAK_DATE.time" show-meridian="true"
-                                    date-format="MM/dd/yyyy" readonly-date="false" readonly-time="false" date-options="dateOptions"
-                                    hidden-time="false" hidden-date="true" show-spinners="true" required>
-                    </datetimepicker>
+                <!-- Peak Time: * -->
+                <div class="form-group required" ng-class="{'has-error':peakForm.PEAK_DATE.time.$invalid && peakForm.PEAK_DATE.time.$dirty}">
+                    <label class="col-md-4 control-label req" style="margin-top:4%" for="PEAK_TIME.time">Peak Time:</label>
+                    <div class="col-md-5">
+                        <datetimepicker hour-step="1" minute-step="1" ng-model="aPeak.PEAK_DATE.time" show-meridian="true"
+                                        date-format="MM/dd/yyyy" readonly-date="false" readonly-time="false" date-options="dateOptions"
+                                        hidden-time="false" hidden-date="true" show-spinners="true" required>
+                        </datetimepicker>
+                    </div>
+                    <div class="col-md-1" style="margin-top:4%">
+                        <span tooltip-placement="right" uib-tooltip="Time Estimated?">
+                            <input type="checkbox" name="IS_PEAK_TIME_ESTIMATED" ng-model="aPeak.IS_PEAK_TIME_ESTIMATED" ng-true-value="1" ng-false-value="0" />
+                        </span>
+                    </div>
                 </div>
-                <div class="col-md-1" style="margin-top:4%">
-                    <span tooltip-placement="right" uib-tooltip="Time Estimated?">
-                        <input type="checkbox" name="IS_PEAK_TIME_ESTIMATED" ng-model="aPeak.IS_PEAK_TIME_ESTIMATED" ng-true-value="1" ng-false-value="0" />
-                    </span>
-                </div>
-            </div>
 
-            <!-- Time Zone:* -->
-            <div class="form-group required">
-                <label class="col-md-4 control-label" for="TIME_ZONE">Peak Recorded In:</label>
-                <div class="col-md-5">
-                    <select class="form-control" name="TIME_ZONE" ng-model="aPeak.TIME_ZONE"
-                            ng-options="vcm for vcm in timeZoneList" required>
-                        <option value=""></option>
-                    </select>
+                <!-- Time Zone:* -->
+                <div class="form-group required">
+                    <label class="col-md-4 control-label" for="TIME_ZONE">Peak Recorded In:</label>
+                    <div class="col-md-5">
+                        <select class="form-control" name="TIME_ZONE" ng-model="aPeak.TIME_ZONE"
+                                ng-options="vcm for vcm in timeZoneList" required>
+                            <option value=""></option>
+                        </select>
+                    </div>
+                    <button type="button" class="borderLess" tooltip-placement="right" uib-tooltip="Date/Time will be stored in UTC.">
+                        <span class="glyphicon glyphicon-question-sign"></span>
+                    </button>
                 </div>
-                <button type="button" class="borderLess" tooltip-placement="right" uib-tooltip="Date/Time will be stored in UTC.">
-                    <span class="glyphicon glyphicon-question-sign"></span>
-                </button>
-            </div>
 
-            <!-- Peak Stage-->
-            <div class="form-group">
-                <label class="col-md-4 control-label" for="PEAK_STAGE">Peak Stage (elevation ft):</label>
-                <div class="col-md-5">
-                    <input class="form-control" ng-keypress="isNum($event)" name="PEAK_STAGE" ng-model="aPeak.PEAK_STAGE" type="text" />
+                <!-- Peak Stage-->
+                <div class="form-group">
+                    <label class="col-md-4 control-label" for="PEAK_STAGE">Peak Stage (elevation ft):</label>
+                    <div class="col-md-5">
+                        <input class="form-control" ng-keypress="isNum($event)" name="PEAK_STAGE" ng-model="aPeak.PEAK_STAGE" type="text" />
+                    </div>
+                    <div class="col-md-1">
+                        <span tooltip-placement="right" uib-tooltip="Peak Stage Estimated?">
+                            <input type="checkbox" name="IS_PEAK_STAGE_ESTIMATED" ng-model="aPeak.IS_PEAK_STAGE_ESTIMATED" ng-true-value="1" ng-false-value="0" />
+                        </span>
+                    </div>
                 </div>
-                <div class="col-md-1">
-                    <span tooltip-placement="right" uib-tooltip="Peak Stage Estimated?">
-                        <input type="checkbox" name="IS_PEAK_STAGE_ESTIMATED" ng-model="aPeak.IS_PEAK_STAGE_ESTIMATED" ng-true-value="1" ng-false-value="0" />
-                    </span>
-                </div>
-            </div>
 
-            <!-- Vertical Datum: -->
-            <div class="form-group">
-                <label class="col-md-4 control-label" for="VDATUM_ID">Vertical Datum:</label>
-                <div class="col-md-5">
-                    <select class="form-control" name="VDATUM_ID" ng-model="aPeak.VDATUM_ID"
-                            ng-options="vd.DATUM_ID as vd.DATUM_ABBREVIATION for vd in VDatumsList">
-                        <option value=""></option>
-                    </select>
+                <!-- Vertical Datum: -->
+                <div class="form-group">
+                    <label class="col-md-4 control-label" for="VDATUM_ID">Vertical Datum:</label>
+                    <div class="col-md-5">
+                        <select class="form-control" name="VDATUM_ID" ng-model="aPeak.VDATUM_ID"
+                                ng-options="vd.DATUM_ID as vd.DATUM_ABBREVIATION for vd in VDatumsList">
+                            <option value=""></option>
+                        </select>
+                    </div>
                 </div>
-            </div>
 
-            <!-- Height Above Ground (ft)-->
-            <div class="form-group">
-                <label class="col-md-4 control-label" for="HEIGHT_ABOVE_GND">Height Above Ground <br />(depth of water in ft):</label>
-                <div class="col-md-5">
-                    <input class="form-control" ng-keypress="isNum($event)" name="HEIGHT_ABOVE_GND" ng-model="aPeak.HEIGHT_ABOVE_GND" type="text" />
+                <!-- Height Above Ground (ft)-->
+                <div class="form-group">
+                    <label class="col-md-4 control-label" for="HEIGHT_ABOVE_GND">Height Above Ground <br />(depth of water in ft):</label>
+                    <div class="col-md-5">
+                        <input class="form-control" ng-keypress="isNum($event)" name="HEIGHT_ABOVE_GND" ng-model="aPeak.HEIGHT_ABOVE_GND" type="text" />
+                    </div>
+                    <div class="col-md-1">
+                        <span tooltip-placement="right" uib-tooltip="HAG Estimated?">
+                            <input type="checkbox" name="IS_HAG_ESTIMATED" ng-model="aPeak.IS_HAG_ESTIMATED" ng-true-value="1" ng-false-value="0" />
+                        </span>
+                    </div>
                 </div>
-                <div class="col-md-1">
-                    <span tooltip-placement="right" uib-tooltip="HAG Estimated?">
-                        <input type="checkbox" name="IS_HAG_ESTIMATED" ng-model="aPeak.IS_HAG_ESTIMATED" ng-true-value="1" ng-false-value="0" />
-                    </span>
-                </div>
-            </div>
 
-            <!-- Peak Discharge-->
-            <div class="form-group">
-                <label class="col-md-4 control-label" for="PEAK_DISCHARGE">Peak Discharge:</label>
-                <div class="col-md-5">
-                    <input class="form-control" ng-keypress="isNum($event)" name="PEAK_DISCHARGE" ng-model="aPeak.PEAK_DISCHARGE" type="text" />
+                <!-- Peak Discharge-->
+                <div class="form-group">
+                    <label class="col-md-4 control-label" for="PEAK_DISCHARGE">Peak Discharge:</label>
+                    <div class="col-md-5">
+                        <input class="form-control" ng-keypress="isNum($event)" name="PEAK_DISCHARGE" ng-model="aPeak.PEAK_DISCHARGE" type="text" />
+                    </div>
+                    <div class="col-md-1">
+                        <span tooltip-placement="right" uib-tooltip="Peak Discharge Estimated?">
+                            <input type="checkbox" name="IS_PEAK_DISCHARGE_ESTIMATED" ng-model="aPeak.IS_PEAK_DISCHARGE_ESTIMATED" ng-true-value="1" ng-false-value="0" />
+                        </span>
+                    </div>
                 </div>
-                <div class="col-md-1">
-                    <span tooltip-placement="right" uib-tooltip="Peak Discharge Estimated?">
-                        <input type="checkbox" name="IS_PEAK_DISCHARGE_ESTIMATED" ng-model="aPeak.IS_PEAK_DISCHARGE_ESTIMATED" ng-true-value="1" ng-false-value="0" />
-                    </span>
-                </div>
-            </div>
 
-            <!--AEP: -->
-            <div class="form-group">
-                <label class="col-md-4 control-label" for="AEP">AEP:</label>
-                <div class="col-md-5">
-                    <input class="form-control" ng-keypress="isNum($event)" name="AEP" ng-model="aPeak.AEP" type="text" />
+                <!--AEP: -->
+                <div class="form-group">
+                    <label class="col-md-4 control-label" for="AEP">AEP:</label>
+                    <div class="col-md-5">
+                        <input class="form-control" ng-keypress="isNum($event)" name="AEP" ng-model="aPeak.AEP" type="text" />
+                    </div>
                 </div>
-            </div>
 
-            <!--AEP Confidence Interval (lower limit): -->
-            <div class="form-group">
-                <label class="col-md-4 control-label" for="AEP_LOWCI">AEP Confidence Interval<br />(lower limit):</label>
-                <div class="col-md-5">
-                    <input class="form-control" ng-keypress="isNum($event)" name="AEP_LOWCI" ng-model="aPeak.AEP_LOWCI" type="text" />
+                <!--AEP Confidence Interval (lower limit): -->
+                <div class="form-group">
+                    <label class="col-md-4 control-label" for="AEP_LOWCI">AEP Confidence Interval<br />(lower limit):</label>
+                    <div class="col-md-5">
+                        <input class="form-control" ng-keypress="isNum($event)" name="AEP_LOWCI" ng-model="aPeak.AEP_LOWCI" type="text" />
+                    </div>
                 </div>
-            </div>
 
-            <!--AEP Confidence Interval (upper limit): -->
-            <div class="form-group">
-                <label class="col-md-4 control-label" for="AEP_UPPERCI">AEP Confidence Interval<br />(upper limit):</label>
-                <div class="col-md-5">
-                    <input class="form-control" ng-keypress="isNum($event)" name="AEP_UPPERCI" ng-model="aPeak.AEP_UPPERCI" type="text" />
+                <!--AEP Confidence Interval (upper limit): -->
+                <div class="form-group">
+                    <label class="col-md-4 control-label" for="AEP_UPPERCI">AEP Confidence Interval<br />(upper limit):</label>
+                    <div class="col-md-5">
+                        <input class="form-control" ng-keypress="isNum($event)" name="AEP_UPPERCI" ng-model="aPeak.AEP_UPPERCI" type="text" />
+                    </div>
                 </div>
-            </div>
 
-            <!--AEP Confidence Interval (percentage of limits): -->
-            <div class="form-group">
-                <label class="col-md-4 control-label" for="AEP_RANGE">AEP Confidence Interval<br />(percentage of limits):</label>
-                <div class="col-md-5">
-                    <input class="form-control" ng-keypress="isNum($event)" name="AEP_RANGE" ng-model="aPeak.AEP_RANGE" type="text" />
+                <!--AEP Confidence Interval (percentage of limits): -->
+                <div class="form-group">
+                    <label class="col-md-4 control-label" for="AEP_RANGE">AEP Confidence Interval<br />(percentage of limits):</label>
+                    <div class="col-md-5">
+                        <input class="form-control" ng-keypress="isNum($event)" name="AEP_RANGE" ng-model="aPeak.AEP_RANGE" type="text" />
+                    </div>
                 </div>
-            </div>
 
 
 

@@ -15,7 +15,7 @@
                 if (allSiteFiles[sf].fileBelongsTo == 'DataFile File' || allSiteFiles[sf].fileBelongsTo == 'Sensor File') {
                     allSiteFiles[sf].selected = false;
                 }
-            };
+            }
 
             $scope.eventSiteHWMs = allEventHWMs.filter(function (h) { return h.SITE_ID == peakSite.SITE_ID; });
             angular.forEach($scope.eventSiteHWMs, function (esh) {
@@ -25,11 +25,26 @@
             
             $scope.eventSiteSensors = allSiteSensors.filter(function (s) { return s.Instrument.EVENT_ID == $cookies.get('SessionEventID'); }); //maybe go from here to get all datafiles for each sensor
             angular.forEach($scope.eventSiteSensors, function (ess) {
-                // ess.selected = false;
+                // if ess.Instrument.Sensor_type == 2, 5, or 6 .. and there are no files.. show red ! with text
                 ess.CollectCondition = ess.Instrument.INST_COLLECTION_ID !== null && ess.Instrument.INST_COLLECTION_ID > 0 ?
                     allCollectConditions.filter(function (cc) { return cc.ID == ess.Instrument.INST_COLLECTION_ID; })[0].CONDITION :
                     '';
                 ess.files = allSiteFiles.filter(function (sf) { return sf.INSTRUMENT_ID == ess.Instrument.INSTRUMENT_ID && (sf.fileBelongsTo == "DataFile File" || sf.fileBelongsTo == "Sensor File"); });
+                var hasDF = {value:true};
+                if (ess.Instrument.SENSOR_TYPE_ID == 2 || ess.Instrument.SENSOR_TYPE_ID == 5 || ess.Instrument.SENSOR_TYPE_ID == 6) {
+                    //this is a met, rain gage or rdg sensor - must have data file
+                    if (ess.files.length === 0) ess.NeedDF = true;
+                    if (ess.files.length > 0) {
+                        //there are files, but make sure one is a datafile                        
+                        angular.forEach(ess.files, function (f) {
+                            if (f.FILETYPE_ID == 2) hasDF.value = true;
+                            else hasDF.value = false;
+                        });
+                    }
+                }//end if this is a datafile requiring sensor
+                if (ess.NeedDF === undefined) {
+                    if (hasDF.value === false) ess.NeedDF = true;
+                }
            });
             // $scope.siteFilesForSensors = allSiteFiles.filter(function (f) { return f.INSTRUMENT_ID !== null && f.INSTRUMENT_ID > 0; });
             $scope.timeZoneList = ['UTC', 'PST', 'MST', 'CST', 'EST'];
@@ -204,7 +219,7 @@
                 fhwm.VDATUM_ID = h.VDATUM_ID;
                 fhwm.WATERBODY = h.WATERBODY;
                 return fhwm;
-            }
+            };
             //add or remove a hwm from the list of chosen hwms for determining this peak
             $scope.addHWM = function (h) {
                 var aHWM = formatSelectedHWM(h);
@@ -409,5 +424,18 @@
                 }
             };//end create()
       
+            $scope.showIncompleteInfo = function () {
+                var incompleteModal = $uibModal.open({
+                    template: '<div class="modal-header"><h3 class="modal-title">Incomplete Data File</h3></div>' +
+                        '<div class="modal-body"><p>All RDGs, Met Station, and Rain Gage sensors require data file information in order to compete a peak summary.</p><p>Please revisit the Retrieved Sensor and click on NWIS Data Connection to add a link to the NWIS data.</div>' +
+                        '<div class="modal-footer"><button class="btn btn-primary" ng-click="Ok()">OK</button></div>',
+                    controller: ['$scope', '$uibModalInstance', function ($scope, $uibModalInstance) {
+                        $scope.Ok = function () {
+                            $uibModalInstance.dismiss();
+                        };
+                    }],
+                    size: 'sm'
+                });
+            };
         }]); //end HWM
 })();

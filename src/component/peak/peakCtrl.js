@@ -3,8 +3,8 @@
 
     var STNControllers = angular.module('STNControllers');
 
-    STNControllers.controller('peakCtrl', ['$scope', '$cookies', '$location', '$state', '$http', '$uibModal', '$filter', '$timeout', 'thisSite', 'Site_Files', 'thisSitePeaks', 'allVertDatums', 'allHWMQualities', 'allHWMTypes', 'PEAK', 'HWM', 'MEMBER', 'SITE','INST_COLL_CONDITION',
-        function ($scope, $cookies, $location, $state, $http, $uibModal, $filter, $timeout, thisSite, Site_Files, thisSitePeaks, allVertDatums, allHWMQualities, allHWMTypes, PEAK, HWM, MEMBER, SITE,INST_COLL_CONDITION) {
+    STNControllers.controller('peakCtrl', ['$scope', '$rootScope', '$cookies', '$location', '$state', '$http', '$uibModal', '$filter', '$timeout', 'thisSite', 'Site_Files', 'thisSitePeaks', 'allVertDatums', 'allHWMQualities', 'allHWMTypes', 'PEAK', 'HWM', 'MEMBER', 'SITE','INST_COLL_CONDITION',
+        function ($scope, $rootScope, $cookies, $location, $state, $http, $uibModal, $filter, $timeout, thisSite, Site_Files, thisSitePeaks, allVertDatums, allHWMQualities, allHWMTypes, PEAK, HWM, MEMBER, SITE,INST_COLL_CONDITION) {
             if ($cookies.get('STNCreds') === undefined || $cookies.get('STNCreds') === "") {
                 $scope.auth = false;
                 $location.path('/login');
@@ -28,7 +28,7 @@
 
                 //create/edit a peak 
                 $scope.showPeakModal = function (peakClicked) {
-
+                    $rootScope.stateIsLoading.showLoading = true;// loading..// $(".page-loading").removeClass("hidden"); //loading...
                     var indexClicked = $scope.SitePeaks.indexOf(peakClicked);
                     //modal
                     var modalInstance = $uibModal.open({
@@ -91,6 +91,7 @@
                             $scope.SitePeaks.splice(indexClicked, 1);
                             $scope.peakCount.total = $scope.SitePeaks.length;
                         }
+                        $rootScope.stateIsLoading.showLoading = false;// loading..// $(".page-loading").removeClass("hidden"); //loading...
                     });
                 }; //end showHWMModal function
 
