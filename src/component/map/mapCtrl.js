@@ -52,6 +52,13 @@
 
                 };
 
+
+                ////this shows how to grab the Site ID in args.model.SITE_ID
+                $scope.$on('leafletDirectiveMarker.click', function(event, args){
+                    alert("Leaflet Click on Site " + args.model.SITE_ID);
+                });
+
+
                 ///need to watch for session event id, do new call to server when that changes
                 $scope.$watch(function () { return $cookies.get('SessionEventID'); }, function (newValue) {
                     if (newValue !== undefined) {
