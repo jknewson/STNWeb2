@@ -360,25 +360,25 @@
                             //update hwms/datafiles used
                             //remove those unchosen
                             if ($scope.removedChosenDFList.length > 0) {
-                                for (var d = 0; d < $scope.removedChosenDFList.length; d++) {
-                                    $scope.removedChosenDFList[d].PEAK_SUMMARY_ID = null;
-                                    DATA_FILE.update({ id: $scope.removedChosenDFList[d].DATA_FILE_ID }, $scope.removedChosenDFList[d]).$promise;
+                                for (var remd = 0; remd < $scope.removedChosenDFList.length; remd++) {
+                                    $scope.removedChosenDFList[remd].PEAK_SUMMARY_ID = null;
+                                    DATA_FILE.update({ id: $scope.removedChosenDFList[remd].DATA_FILE_ID }, $scope.removedChosenDFList[remd]).$promise;
                                 }
                             }
                             if ($scope.removedChosenHWMList.length > 0) {
-                                for (var h = 0; h < $scope.removedChosenHWMList.length; h++) {
-                                    $scope.removedChosenHWMList[h].PEAK_SUMMARY_ID = null;
-                                    HWM.update({ id: $scope.removedChosenHWMList[h].DATA_FILE_ID }, $scope.removedChosenHWMList[h]).$promise;
+                                for (var remh = 0; remh < $scope.removedChosenHWMList.length; remh++) {
+                                    $scope.removedChosenHWMList[remh].PEAK_SUMMARY_ID = null;
+                                    HWM.update({ id: $scope.removedChosenHWMList[remh].DATA_FILE_ID }, $scope.removedChosenHWMList[remh]).$promise;
                                 }
                             }
                             //add those chosen
-                            for (var h = 0; h < $scope.chosenHWMList.length; h++) {
-                                $scope.chosenHWMList[h].PEAK_SUMMARY_ID = response.PEAK_SUMMARY_ID;
-                                HWM.update({ id: $scope.chosenHWMList[h].HWM_ID }, $scope.chosenHWMList[h]).$promise;
+                            for (var addh = 0; addh < $scope.chosenHWMList.length; addh++) {
+                                $scope.chosenHWMList[addh].PEAK_SUMMARY_ID = response.PEAK_SUMMARY_ID;
+                                HWM.update({ id: $scope.chosenHWMList[addh].HWM_ID }, $scope.chosenHWMList[addh]).$promise;
                             } //end foreach hwm save
-                            for (var d = 0; d < $scope.chosenDFList.length; d++) {
-                                $scope.chosenDFList[d].PEAK_SUMMARY_ID = response.PEAK_SUMMARY_ID;
-                                DATA_FILE.update({ id: $scope.chosenDFList[d].DATA_FILE_ID }, $scope.chosenDFList[d]).$promise;
+                            for (var addd = 0; addd < $scope.chosenDFList.length; addd++) {
+                                $scope.chosenDFList[addd].PEAK_SUMMARY_ID = response.PEAK_SUMMARY_ID;
+                                DATA_FILE.update({ id: $scope.chosenDFList[addd].DATA_FILE_ID }, $scope.chosenDFList[addd]).$promise;
                             } //end foreach hwm save
                             toastr.success("Peak updated");
                             updatedPeak = response;

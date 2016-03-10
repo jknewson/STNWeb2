@@ -37,7 +37,7 @@
             //cancel proposing a sensor, close the list
             $scope.cancelProposing = function () {
                 $scope.showProposed = false;
-            }
+            };
             //add these checked Proposed sensors to this site
             $scope.AddProposed = function () {
                 var Time_STAMP = new Date();

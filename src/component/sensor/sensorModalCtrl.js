@@ -711,7 +711,7 @@
             $scope.retrieveS = function (valid) {
                 if (valid) {
                     dealWithTimeStampb4Send(); //for retrieval for post and for comparison to deployed (ensure it's after)
-                    var depSenTS = depTimeStampb4Send()//need to get dep status date in same format as retrieved to compare
+                    var depSenTS = depTimeStampb4Send();//need to get dep status date in same format as retrieved to compare
                     var retSenTS = angular.copy($scope.aRetrieval.TIME_STAMP.replace(/\,/g, "")); //stupid comma in there making it not the same
                     if (new Date(retSenTS) < new Date(depSenTS)) {                        
                         var fixDate = $uibModal.open({
