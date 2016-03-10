@@ -1,4 +1,4 @@
-﻿(function () {
+(function () {
     "use strict"; 
     var app = angular.module('app',
         ['ngResource', 'ui.router', 'ngCookies', 'ui.mask', 'ui.bootstrap', 'isteven-multi-select', 'ngInputModified', 'ui.validate', 'cgBusy',
