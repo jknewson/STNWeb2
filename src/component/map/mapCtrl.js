@@ -2,8 +2,8 @@
     'use strict';
     var STNControllers = angular.module('STNControllers');
 
-    STNControllers.controller('MapController', ['$scope', '$http', '$rootScope', '$cookies', '$location', 'SITE', 'leafletMarkerEvents', 'leafletBoundsHelpers', '$state',
-        function ($scope, $http, $rootScope, $cookies, $location, SITE, leafletMarkerEvents, leafletBoundsHelpers, $state) {
+    STNControllers.controller('MapController', ['$scope', '$http', '$rootScope', '$cookies', '$location', 'SITE', 'Map_Site', 'leafletMarkerEvents', 'leafletBoundsHelpers', '$state',
+        function ($scope, $http, $rootScope, $cookies, $location, SITE, Map_Site, leafletMarkerEvents, leafletBoundsHelpers, $state) {
             if ($cookies.get('STNCreds') === undefined || $cookies.get('STNCreds') === "") {
                 $scope.auth = false;
                 $location.path('/login');
@@ -54,8 +54,10 @@
 
 
                 ////this shows how to grab the Site ID in args.model.SITE_ID
-                $scope.$on('leafletDirectiveMarker.click', function(event, args){
-                    alert("Leaflet Click on Site " + args.model.SITE_ID);
+                $scope.$on('leafletDirectiveMarker.click', function (event, args) {
+                    $rootScope.stateIsLoading.showLoading = true;// loading..
+                    Map_Site.setMapSiteParts(args.model.SITE_ID);
+//                    console.log("Leaflet Click on Site " + args.model.SITE_ID);
                 });
 
 

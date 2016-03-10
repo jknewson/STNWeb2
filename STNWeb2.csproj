@@ -47,6 +47,9 @@
     <Content Include="src\component\main\mainCtrl.js" />
     <Content Include="src\component\map\map.html" />
     <Content Include="src\component\map\mapCtrl.js" />
+    <Content Include="src\component\map\MapPeaksController.js" />
+    <Content Include="src\component\map\MapSensorProposeController.js" />
+    <Content Include="src\component\map\MapSiteInfoController.js" />
     <Content Include="src\component\member\memberCtrl.js" />
     <Content Include="src\component\member\memberHolderView.html" />
     <Content Include="src\component\member\memberInfo.html" />

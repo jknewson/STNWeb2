@@ -304,6 +304,32 @@
     }]);
     //#endregion of LANDOWNER_CONTACT
 
+    //#region Map_Site
+    STNResource.factory('Map_Site', ['SITE', '$rootScope', '$cookies', function (SITE, $rootScope,$cookies) {
+        var MapSiteParts = [];
+
+        return {
+            getMapSiteParts: function () {
+                return MapSiteParts;
+            },
+            setMapSiteParts: function (siteId) {
+                MapSiteParts = [];
+                SITE.query({ id: siteId }).$promise.then(function (response) {
+                    MapSiteParts.push(response);
+                    SITE.getSitePeaks({ id: siteId }).$promise.then(function (pResponse) {
+                        MapSiteParts.push(pResponse);
+                        SITE.getSiteSensors({ id: siteId }).$promise.then(function (sResponse) {
+                            MapSiteParts.push(sResponse);
+                            $rootScope.$broadcast('mapSiteClick', MapSiteParts);
+                            $rootScope.stateIsLoading.showLoading = false;
+                        });
+                    });
+                });                
+            }
+        };
+    }]);
+    //#endregion of Map_Site
+
     //#region MARKER
     STNResource.factory('MARKER', ['$resource', function ($resource) {
         return $resource(rootURL + '/Markers/:id.json',
@@ -541,7 +567,7 @@
             getAllSiteFiles: function () {
                 return allSiteFiles;
             },
-            setAllSiteFiles: function (sf){//, hwms, inss) {
+            setAllSiteFiles: function (sf){
                 allSiteFiles = sf;
                 $rootScope.$broadcast('siteFilesUpdated', allSiteFiles);                
             }

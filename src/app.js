@@ -83,7 +83,20 @@
                             controller: 'MapSiteInfoController'
                         },
                         'mapPeaksView@map': {templateUrl: 'component/peak/mapPeaksView.html', controller: 'MapPeaksController'},
-                        'mapSensorPropose@map': {templateUrl: 'component/sensor/mapSensorPropose.html', controller: 'MapSensorProposeController'}
+                        'mapSensorPropose@map': {
+                            templateUrl: 'component/sensor/mapSensorPropose.html',
+                            resolve: {
+                                dt: 'DEPLOYMENT_TYPE',
+                                allDeployTypes: function (dt) {
+                                    return dt.getAll().$promise;
+                                },
+                                sd: 'SENSOR_DEPLOYMENT',
+                                allSensDeps: function (sd) {
+                                    return sd.getAll().$promise;
+                                }
+                            },
+                            controller: 'MapSensorProposeController'
+                        }
                     }
                 })
                 //#endregion
