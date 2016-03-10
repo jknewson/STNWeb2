@@ -56,6 +56,7 @@
     <Content Include="src\component\objectivePoint\objectivePointCtrl.js" />
     <Content Include="src\component\objectivePoint\objectivePointModalCtrl.js" />
     <Content Include="src\component\objectivePoint\objectivePointList.html" />
+    <Content Include="src\component\peak\mapPeaksView.html" />
     <Content Include="src\component\peak\peakModalCtrl.js" />
     <Content Include="src\component\peak\peakCtrl.js" />
     <Content Include="src\component\peak\peakList.html" />
@@ -96,6 +97,7 @@
     <Content Include="src\component\resources\statusType.html" />
     <Content Include="src\component\resources\verticalCollectionMethod.html" />
     <Content Include="src\component\resources\verticalDatum.html" />
+    <Content Include="src\component\sensor\mapSensorPropose.html" />
     <Content Include="src\component\sensor\sensorCtrl.js" />
     <Content Include="src\component\sensor\sensorModalCtrl.js" />
     <Content Include="src\component\sensor\sensorList.html" />
@@ -103,6 +105,7 @@
     <Content Include="src\component\settings\settingsCtrl.js" />
     <Content Include="src\component\siteSearch\siteSearch.html" />
     <Content Include="src\component\siteSearch\siteSearchCtrl.js" />
+    <Content Include="src\component\site\mapSiteInfoView.html" />
     <Content Include="src\component\site\site.html" />
     <Content Include="src\component\site\siteCtrl.js" />
     <Content Include="src\component\site\siteInfoView.html" />
