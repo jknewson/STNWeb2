@@ -99,8 +99,10 @@
                 case "File":
                     var f = nameToRemove.PATH !== undefined || nameToRemove.PATH !== null ? nameToRemove.PATH : nameToRemove.FILE_URL;
                     f = f !== null || f !== undefined ? f : nameToRemove.FILE_ID;
-
                     $scope.nameToRmv = f;
+                    break;
+                case "Peak":
+                    $scope.nameToRmv = nameToRemove.PEAK_SUMMARY_ID;
                     break;
             }
             //#endregion

@@ -28,7 +28,7 @@
             $scope.mapCenter = {
                 lat: $scope.siteLat,
                 lng: $scope.siteLong,
-                zoom: 18
+                zoom: 17
             };
             $scope.events = {
                 mapMarkers: {
@@ -50,11 +50,39 @@
                     iconAnchor: [5, 5]
                 }
             };
+            $scope.updateAddressOnly = function () {
+                var geocoder = new google.maps.Geocoder(); //reverse address lookup
+                var latlng = new google.maps.LatLng($scope.aSite.LATITUDE_DD, $scope.aSite.LONGITUDE_DD);
+                geocoder.geocode({ 'latLng': latlng }, function (results, status) {
+                    if (status == google.maps.GeocoderStatus.OK) {
+                        //parse the results out into components ('street_number', 'route', 'locality', 'administrative_area_level_2', 'administrative_area_level_1', 'postal_code'
+                        var address_components = results[0].address_components;
+                        var components = {};
+                        $.each(address_components, function (k, v1) {
+                            $.each(v1.types, function (k2, v2) {
+                                components[v2] = v1.long_name;
+                            });
+                        });
+
+                        $scope.aSite.ADDRESS = components.street_number !== undefined ? components.street_number + " " + components.route : components.route;
+                        $scope.aSite.CITY = components.locality;
+
+                        var thisState = $scope.StateList.filter(function (s) { return s.STATE_NAME == components.administrative_area_level_1; })[0];
+                        if (thisState !== undefined) {
+                            $scope.aSite.STATE = thisState.STATE_ABBREV;
+                            $scope.stateCountyList = $scope.AllCountyList.filter(function (c) { return c.STATE_ID == thisState.STATE_ID; });
+                            $scope.aSite.COUNTY = components.administrative_area_level_2;
+                            $scope.aSite.ZIP = components.postal_code;
+                        }
+                    }
+                });
+            };
             ///update newSite lat/lng after dragend
             $scope.$on("leafletDirectiveMarker.dragend", function (event, args) {
                 var dragendLocation = args.model;
                 $scope.aSite.LATITUDE_DD = parseFloat(dragendLocation.lat.toFixed(6));
                 $scope.aSite.LONGITUDE_DD = parseFloat(dragendLocation.lng.toFixed(6));
+                $scope.updateAddressOnly();
             });
 
             //get address parts and existing sites 
