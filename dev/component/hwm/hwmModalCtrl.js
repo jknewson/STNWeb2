@@ -3,8 +3,8 @@
     'use strict';
 
     var ModalControllers = angular.module('ModalControllers');
-    ModalControllers.controller('hwmModalCtrl', ['$scope', '$cookies', '$http', '$uibModalInstance', '$uibModal', 'allDropdowns', 'Site_Files', 'thisHWM', 'agencyList', 'hwmSite', 'allMembers', 'HWM', 'SOURCE', 'FILE',
-        function ($scope, $cookies, $http, $uibModalInstance, $uibModal, allDropdowns, Site_Files, thisHWM, agencyList, hwmSite, allMembers, HWM, SOURCE, FILE) {
+    ModalControllers.controller('hwmModalCtrl', ['$scope', '$cookies', '$http', '$uibModalInstance', '$uibModal', 'SERVER_URL', 'allDropdowns', 'Site_Files', 'thisHWM', 'agencyList', 'hwmSite', 'allMembers', 'HWM', 'SOURCE', 'FILE',
+        function ($scope, $cookies, $http, $uibModalInstance, $uibModal, SERVER_URL, allDropdowns, Site_Files, thisHWM, agencyList, hwmSite, allMembers, HWM, SOURCE, FILE) {
             //dropdowns
             $scope.hwmTypeList = allDropdowns[0];
             $scope.hwmQualList = allDropdowns[1];
@@ -24,7 +24,7 @@
             $scope.SurveyMember = ""; //just for show on page
             $scope.showEventDD = false; //toggle to show/hide event dd (admin only)
             $scope.adminChanged = {}; //will hold EVENT_ID if admin changes it. apply when PUTting
-
+            $scope.serverURL = SERVER_URL; //constant with stntest.wim.usgs.gov/STNServices2 
             //button click to show event dropdown to change it on existing hwm (admin only)
             $scope.showChangeEventDD = function () {
                 $scope.showEventDD = !$scope.showEventDD;
@@ -278,13 +278,14 @@
             $scope.showImageModal = function (image) {
                 var imageModal = $uibModal.open({
                     template: '<div class="modal-header"><h3 class="modal-title">Image File Preview</h3></div>' +
-                        '<div class="modal-body"><img ng-src="https://stntest.wim.usgs.gov/STNServices2/Files/{{imageId}}/Item" /></div>' +
+                        '<div class="modal-body"><img ng-src="{{setSRC}}" /></div>' +
                         '<div class="modal-footer"><button class="btn btn-primary" ng-enter="ok()" ng-click="ok()">OK</button></div>',
                     controller: ['$scope', '$uibModalInstance', function ($scope, $uibModalInstance) {
                         $scope.ok = function () {
                             $uibModalInstance.close();
                         };
                         $scope.imageId = image;
+                        $scope.setSRC = SERVER_URL + '/Files/' + $scope.imageId + '/Item';
                     }],
                     size: 'md'
                 });

@@ -2,10 +2,11 @@
     'use strict';
 
     var ModalControllers = angular.module('ModalControllers');
-    ModalControllers.controller('OPmodalCtrl', ['$scope', '$cookies', '$http', '$uibModalInstance', '$uibModal', 'Site_Files', 'allDropdowns', 'thisOP', 'thisOPControls', 'opSite', 'agencyList', 'allMembers', 'OBJECTIVE_POINT', 'OP_CONTROL_IDENTIFIER', 'SOURCE', 'FILE',
-        function ($scope, $cookies, $http, $uibModalInstance, $uibModal, Site_Files, allDropdowns, thisOP, thisOPControls, opSite, agencyList, allMembers, OBJECTIVE_POINT, OP_CONTROL_IDENTIFIER, SOURCE, FILE) {
+    ModalControllers.controller('OPmodalCtrl', ['$scope', '$cookies', '$http', '$uibModalInstance', '$uibModal', 'SERVER_URL', 'Site_Files', 'allDropdowns', 'thisOP', 'thisOPControls', 'opSite', 'agencyList', 'allMembers', 'OBJECTIVE_POINT', 'OP_CONTROL_IDENTIFIER', 'SOURCE', 'FILE',
+        function ($scope, $cookies, $http, $uibModalInstance, $uibModal, SERVER_URL, Site_Files, allDropdowns, thisOP, thisOPControls, opSite, agencyList, allMembers, OBJECTIVE_POINT, OP_CONTROL_IDENTIFIER, SOURCE, FILE) {
             //defaults for radio buttons
             //dropdowns
+            $scope.serverURL = SERVER_URL;
             $scope.OPTypeList = allDropdowns[0];
             $scope.HDList = allDropdowns[1];
             $scope.HCollectMethodList = allDropdowns[2];
@@ -34,13 +35,14 @@
             $scope.showImageModal = function (image) {
                 var imageModal = $uibModal.open({
                     template: '<div class="modal-header"><h3 class="modal-title">Image File Preview</h3></div>' +
-                        '<div class="modal-body"><img ng-src="https://stntest.wim.usgs.gov/STNServices2/Files/{{imageId}}/Item" /></div>' +
+                        '<div class="modal-body"><img ng-src="{{setSRC}}" /></div>' +
                         '<div class="modal-footer"><button class="btn btn-primary" ng-enter="ok()" ng-click="ok()">OK</button></div>',
                     controller:['$scope', '$uibModalInstance', function ($scope, $uibModalInstance) {
                         $scope.ok = function () {
                             $uibModalInstance.close();
                         };
                         $scope.imageId = image;
+                        $scope.setSRC = SERVER_URL + '/Files/' + $scope.imageId + '/Item';
                     }],
                     size: 'md'
                 });
@@ -145,34 +147,6 @@
                             });
                         });
                     }
-                    //#region data file for sensor add file
-                    //else {
-                    //    //data file
-                    //    //check timezone and make sure date stays utc
-                    //    if ($scope.datafile.TIME_ZONE != "UTC") {
-                    //        //convert it
-                    //        var utcStartDateTime = new Date($scope.datafile.GOOD_START).toUTCString();
-                    //        var utcEndDateTime = new Date($scope.datafile.GOOD_END).toUTCString();
-                    //        $scope.datafile.GOOD_START = utcStartDateTime;
-                    //        $scope.datafile.GOOD_END = utcEndDateTime;
-                    //        $scope.datafile.TIME_ZONE = 'UTC';
-                    //    } else {
-                    //        //make sure 'GMT' is tacked on so it doesn't try to add hrs to make the already utc a utc in db
-                    //        var si = $scope.datafile.GOOD_START.toString().indexOf('GMT') + 3;
-                    //        var ei = $scope.datafile.GOOD_END.toString().indexOf('GMT') + 3;
-                    //        $scope.datafile.GOOD_START = $scope.datafile.GOOD_START.toString().substring(0, si);
-                    //        $scope.datafile.GOOD_END = $scope.datafile.GOOD_END.toString().substring(0, ei);
-                    //    }
-
-                    //    DATA_FILE.update({ id: $scope.datafile.DATA_FILE_ID }, $scope.datafile).$promise.then(function () {
-                    //        FILE.update({ id: $scope.aFile.FILE_ID }, $scope.aFile).$promise.then(function (fileResponse) {
-                    //            toastr.success("File Updated");
-                    //            $scope.OPFiles[$scope.existFileIndex] = fileResponse;
-                    //            $scope.showFileForm = false;
-                    //        });
-                    //    });
-                    //} //end else (datafile)     
-                    //#endregion data file for sensor add file
                 }//end valid
             };//end save()
 

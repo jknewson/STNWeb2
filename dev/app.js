@@ -4,7 +4,8 @@
         ['ngResource', 'ui.router', 'ngCookies', 'ui.mask', 'ui.bootstrap', 'isteven-multi-select', 'ngInputModified', 'ui.validate', 'cgBusy',
             'angular.filter', 'xeditable', 'checklist-model', 'ngFileUpload', 'STNResource', 'ui.bootstrap.datetimepicker','leaflet-directive',
             'STNControllers', 'LogInOutController', 'ModalControllers', 'SettingsControllers']);
-    
+    app.constant('SERVER_URL', 'https://stntest.wim.usgs.gov/STNServices2');
+
     app.run(['$rootScope', '$uibModalStack', '$cookies', '$state', function ($rootScope, $uibModalStack, $cookies, $state) {
         $rootScope.$on('$stateChangeStart', function (event, toState, toParams, fromState, fromParams) {
             if (($cookies.get('STNCreds') === undefined || $cookies.get('STNCreds') === "") && toState.authenticate) {
@@ -83,7 +84,20 @@
                             controller: 'MapSiteInfoController'
                         },
                         'mapPeaksView@map': {templateUrl: 'component/peak/mapPeaksView.html', controller: 'MapPeaksController'},
-                        'mapSensorPropose@map': {templateUrl: 'component/sensor/mapSensorPropose.html', controller: 'MapSensorProposeController'}
+                        'mapSensorPropose@map': {
+                            templateUrl: 'component/sensor/mapSensorPropose.html',
+                            resolve: {
+                                dt: 'DEPLOYMENT_TYPE',
+                                allDeployTypes: function (dt) {
+                                    return dt.getAll().$promise;
+                                },
+                                sd: 'SENSOR_DEPLOYMENT',
+                                allSensDeps: function (sd) {
+                                    return sd.getAll().$promise;
+                                }
+                            },
+                            controller: 'MapSensorProposeController'
+                        }
                     }
                 })
                 //#endregion
@@ -841,12 +855,15 @@
                 })//#endregion site.info
 
                 //#region QuickHWM page
-                .state("quickHWM", {
-                    url: "/QuickHWM",
-                    templateUrl: "component/hwm/quickHWM.html",
-                    controller: "quickHWMCtrl",
+                .state("quickCreate", {
+                    url: "/QuickCreate/:id",                    
+                    templateUrl: "component/site/quickCreate.html",
+                    controller: "quickCreateCtrl",
                     authenticate: true,
                     resolve: {
+                        whichQuick: function ($stateParams){
+                            return $stateParams.id;
+                        },
                         //#region site stuff                        
                         hd: 'HORIZONTAL_DATUM',
                         allHorDatums: function (hd) {
@@ -883,20 +900,46 @@
                             return opQual.getAll().$promise;
                         },
                         //#endregion op stuff                        
-                        //#region hwm stuff
+                        //#region hwm stuff (if id='hwm'
                         hwmt: 'HWM_TYPE',
-                        allHWMTypes: function (hwmt) {
-                            return hwmt.getAll().$promise;
+                        allHWMTypes: function (hwmt, $stateParams) {
+                            if ($stateParams.id == 'HWM') return hwmt.getAll().$promise;
                         },
                         hq: 'HWM_QUALITY',
-                        allHWMQualities: function (hq) {
-                            return hq.getAll().$promise;
+                        allHWMQualities: function (hq, $stateParams) {
+                            if ($stateParams.id == 'HWM') return hq.getAll().$promise;
                         },
                         m: 'MARKER',
-                        allMarkers: function (m) {
-                            return m.getAll().$promise;
+                        allMarkers: function (m, $stateParams) {
+                            if ($stateParams.id == 'HWM') return m.getAll().$promise;
+                        },
+                        //#endregion hwm stuff  
+                        //#region sensor stuff
+                        dt: 'DEPLOYMENT_TYPE',
+                        allDeployTypes: function (dt) {
+                            return dt.getAll().$promise;
+                        },
+                        e: 'EVENT',
+                        allEvents: function (e, $stateParams) {
+                            if ($stateParams.id == 'Sensor') return e.getAll().$promise;
+                        },
+                        sent: 'SENSOR_TYPE',
+                        allSensorTypes: function (sent, $stateParams) {
+                            if ($stateParams.id == 'Sensor') return sent.getAll().$promise;
+                        },
+                        sb: 'SENSOR_BRAND',
+                        allSensorBrands: function (sb, $stateParams) {
+                            if ($stateParams.id == 'Sensor') return sb.getAll().$promise;
+                        },
+                        sd: 'SENSOR_DEPLOYMENT',
+                        allSensDeps: function (sd) {
+                            return sd.getAll().$promise;
+                        },
+                        ht: 'HOUSING_TYPE',
+                        allHousingTypes: function (ht) {
+                            return ht.getAll().$promise;
                         }
-                        //#endregion hwm stuff                        
+                        //#endregion
                     }
                 });
                 //#endregion QuickHWM page
