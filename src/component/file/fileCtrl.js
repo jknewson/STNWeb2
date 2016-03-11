@@ -4,13 +4,13 @@
 
     var STNControllers = angular.module('STNControllers');
 
-    STNControllers.controller('fileCtrl', ['$scope', '$cookies', '$location', '$state', '$http', 'Site_Files', '$uibModal', '$filter', '$timeout', 'thisSite', 'thisSiteFiles', 'allFileTypes', 'allAgencies', 'thisSiteSensors', 'thisSiteHWMs', 'FILE', 'DATA_FILE', 'MEMBER', 'SOURCE',
-        function ($scope, $cookies, $location, $state, $http, Site_Files, $uibModal, $filter, $timeout, thisSite, thisSiteFiles, allFileTypes, allAgencies, thisSiteSensors, thisSiteHWMs, FILE, DATA_FILE, MEMBER, SOURCE) {
+    STNControllers.controller('fileCtrl', ['$scope', '$cookies', '$location', '$state', '$http', 'SERVER_URL', 'Site_Files', '$uibModal', '$filter', '$timeout', 'thisSite', 'thisSiteFiles', 'allFileTypes', 'allAgencies', 'thisSiteSensors', 'thisSiteHWMs', 'FILE', 'DATA_FILE', 'MEMBER', 'SOURCE',
+        function ($scope, $cookies, $location, $state, $http, SERVER_URL, Site_Files, $uibModal, $filter, $timeout, thisSite, thisSiteFiles, allFileTypes, allAgencies, thisSiteSensors, thisSiteHWMs, FILE, DATA_FILE, MEMBER, SOURCE) {
             if ($cookies.get('STNCreds') === undefined || $cookies.get('STNCreds') === "") {
                 $scope.auth = false;
                 $location.path('/login');
-            } else {                
-                //$scope.fileCount = { total: thisSiteFiles.length };                
+            } else {
+                $scope.serverURL = SERVER_URL;
                 $scope.siteHWMs = thisSiteHWMs;
                 $scope.siteSensors = thisSiteSensors;
                 //include if HWM, Instrument, Data File or OP File for each               
@@ -89,13 +89,14 @@
                 $scope.showImageModal = function (image) {
                     var imageModal = $uibModal.open({
                         template: '<div class="modal-header"><h3 class="modal-title">Image File Preview</h3></div>' +
-                            '<div class="modal-body"><img ng-src="https://stntest.wim.usgs.gov/STNServices2/Files/{{imageId}}/Item" /></div>' +
+                            '<div class="modal-body"><img ng-src="{{setSRC}}" /></div>' +
                             '<div class="modal-footer"><button class="btn btn-primary" ng-enter="ok()" ng-click="ok()">OK</button></div>',
                         controller: ['$scope', '$uibModalInstance', function ($scope, $uibModalInstance) {
                             $scope.ok = function () {
                                 $uibModalInstance.close();
                             };
                             $scope.imageId = image;
+                            $scope.setSRC = SERVER_URL + '/Files/' + $scope.imageId + '/Item';
                         }],
                         size: 'md'
                     });

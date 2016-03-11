@@ -146,6 +146,7 @@
             {}, {
                 query: {},
                 getAll: { method: 'GET', isArray: true },
+                getEventSites: {method: 'GET', isArray:true, url: rootURL + '/Events/:id/Sites.json'},
                 getFilteredEvents: {method: 'GET', isArray: true, url: rootURL + '/Events/FilteredEvents.json'}, //?Date: null, Type: 0, State: null
                 update: { method: 'PUT', cache: false, isArray: false },
                 save: { method: 'POST', cache: false, isArray: false },
