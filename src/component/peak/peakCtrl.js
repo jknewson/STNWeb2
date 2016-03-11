@@ -70,10 +70,7 @@
                             },
                             allSiteSensors: function () {
                                 return SITE.getSiteSensors({ id: thisSite.SITE_ID }).$promise;
-                            }//,
-                            //allSiteFiles: function () {
-                            //    return SITE.getSiteFiles({ id: thisSite.SITE_ID }).$promise;
-                            //}
+                            }
                         }
                     });
 
@@ -91,7 +88,7 @@
                             $scope.SitePeaks.splice(indexClicked, 1);
                             $scope.peakCount.total = $scope.SitePeaks.length;
                         }
-                        $rootScope.stateIsLoading.showLoading = false;// loading..// $(".page-loading").removeClass("hidden"); //loading...
+                        $rootScope.stateIsLoading.showLoading = false;// loading..
                     });
                 }; //end showHWMModal function
 
