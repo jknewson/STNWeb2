@@ -3,13 +3,14 @@
     'use strict';
 
     var ModalControllers = angular.module('ModalControllers');
-    ModalControllers.controller('peakModalCtrl', ['$scope', '$rootScope', '$cookies', '$http', '$uibModalInstance', '$uibModal', 'allVertDatums', 'allCollectConditions', 'thisPeak', 'peakSite', 'allMembers', 'allEventHWMs', 'allSiteSensors', 'allSiteFiles', 'thisPeakDFs', 'DATA_FILE', 'PEAK', 'HWM',
-        function ($scope, $rootScope, $cookies, $http, $uibModalInstance, $uibModal, allVertDatums, allCollectConditions, thisPeak, peakSite, allMembers, allEventHWMs, allSiteSensors, allSiteFiles, thisPeakDFs, DATA_FILE, PEAK, HWM) {
+    ModalControllers.controller('peakModalCtrl', ['$scope', '$rootScope', '$cookies', '$http', '$uibModalInstance', '$uibModal', 'SERVER_URL', 'allVertDatums', 'allCollectConditions', 'thisPeak', 'peakSite', 'allMembers', 'allEventHWMs', 'allSiteSensors', 'allSiteFiles', 'thisPeakDFs', 'DATA_FILE', 'PEAK', 'HWM',
+        function ($scope, $rootScope, $cookies, $http, $uibModalInstance, $uibModal, SERVER_URL, allVertDatums, allCollectConditions, thisPeak, peakSite, allMembers, allEventHWMs, allSiteSensors, allSiteFiles, thisPeakDFs, DATA_FILE, PEAK, HWM) {
+            $scope.serverURL = SERVER_URL;
             //dropdowns
             $scope.VDatumsList = allVertDatums;
             $scope.thisSite = peakSite;
             $scope.memberList = allMembers;
-
+            $scope.loggedInRole = $cookies.get('usersRole');
             //need a datafile for this kind of sensor, check files for presence of df to set flag on sensor
             var determineDFPresent = function (f) {
                 for (var x = 0; x < f.length; x++) {
@@ -38,6 +39,8 @@
                 ess.CollectCondition = ess.Instrument.INST_COLLECTION_ID !== null && ess.Instrument.INST_COLLECTION_ID > 0 ?
                     allCollectConditions.filter(function (cc) { return cc.ID == ess.Instrument.INST_COLLECTION_ID; })[0].CONDITION :
                     '';
+                //store if this is retrieved (if not, show ! for them to retrieve it in order to complete the peak
+                ess.isRetrieved = ess.InstrumentStats[0].Status == 'Retrieved' ? true : false;
                 ess.files = allSiteFiles.filter(function (sf) { return sf.INSTRUMENT_ID == ess.Instrument.INSTRUMENT_ID && (sf.fileBelongsTo == "DataFile File" || sf.fileBelongsTo == "Sensor File"); });
                 //var hasDF = {value:true};
                 if (ess.Instrument.SENSOR_TYPE_ID == 2 || ess.Instrument.SENSOR_TYPE_ID == 5 || ess.Instrument.SENSOR_TYPE_ID == 6) {
@@ -182,13 +185,14 @@
             $scope.showImageModal = function (image) {
                 var imageModal = $uibModal.open({
                     template: '<div class="modal-header"><h3 class="modal-title">Image File Preview</h3></div>' +
-                        '<div class="modal-body"><img ng-src="https://stntest.wim.usgs.gov/STNServices2/Files/{{imageId}}/Item" /></div>' +
+                        '<div class="modal-body"><img ng-src="{{setSRC}}" /></div>' +
                         '<div class="modal-footer"><button class="btn btn-primary" ng-enter="ok()" ng-click="ok()">OK</button></div>',
                     controller: ['$scope', '$uibModalInstance', function ($scope, $uibModalInstance) {
                         $scope.ok = function () {
                             $uibModalInstance.close();
                         };
                         $scope.imageId = image;
+                        $scope.setSRC = SERVER_URL + '/Files/' + $scope.imageId + '/Item';
                     }],
                     size: 'md'
                 });
@@ -390,7 +394,6 @@
 
             //delete Peak
             $scope.deletePeak = function () {
-                //TODO:: who can delete a peak?? ADMIN
                 //var DeleteModalInstance = $uibModal.open({
                 //    templateUrl: 'removemodal.html',
                 //    controller: 'ConfirmModalCtrl',
@@ -453,7 +456,21 @@
             $scope.showIncompleteInfo = function () {
                 var incompleteModal = $uibModal.open({
                     template: '<div class="modal-header"><h3 class="modal-title">Incomplete Data File</h3></div>' +
-                        '<div class="modal-body"><p>All RDGs, Met Station, and Rain Gage sensors require data file information in order to compete a peak summary.</p><p>Please revisit the Retrieved Sensor and click on NWIS Data Connection to add a link to the NWIS data.</div>' +
+                        '<div class="modal-body"><p>All RDGs, Met Station, and Rain Gage sensors require data file information in order to compete a peak summary.</p><p>Please revisit the Retrieved Sensor and click on NWIS Data Connection to add a link to the NWIS data.</p></div>' +
+                        '<div class="modal-footer"><button class="btn btn-primary" ng-click="Ok()">OK</button></div>',
+                    controller: ['$scope', '$uibModalInstance', function ($scope, $uibModalInstance) {
+                        $scope.Ok = function () {
+                            $uibModalInstance.dismiss();
+                        };
+                    }],
+                    size: 'sm'
+                });
+            };
+
+            $scope.showRetrieveInfo = function () {
+                var goRetrieveModal = $uibModal.open({
+                    template: '<div class="modal-header"><h3 class="modal-title">Deployed Sensor</h3></div>' +
+                        '<div class="modal-body"><p>This senosr needs to be retrieved before a Peak can be created.</p></div>' +
                         '<div class="modal-footer"><button class="btn btn-primary" ng-click="Ok()">OK</button></div>',
                     controller: ['$scope', '$uibModalInstance', function ($scope, $uibModalInstance) {
                         $scope.Ok = function () {

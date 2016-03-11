@@ -3,8 +3,8 @@
 
     var STNControllers = angular.module('STNControllers');
 //#region Reporting Controller
-    STNControllers.controller('reportingCtrl', ['$scope', '$rootScope', '$cookies', '$location', '$http', '$uibModal', 'memberReports', 'allEvents', 'allStates', 'allReports', 'allEventTypes', 'allEventStatus', 'allAgencies', 'REPORT', 'MEMBER',
-        function ($scope, $rootScope, $cookies, $location, $http, $uibModal, memberReports, allEvents, allStates, allReports, allEventTypes, allEventStatus, allAgencies, REPORT, MEMBER) {
+    STNControllers.controller('reportingCtrl', ['$scope', '$rootScope', '$cookies', '$location', '$http', '$uibModal', 'memberReports', 'allEvents', 'allStates', 'allReports', 'allEventTypes', 'allEventStatus', 'allAgencies', 'SERVER_URL', 'REPORT', 'MEMBER',
+        function ($scope, $rootScope, $cookies, $location, $http, $uibModal, memberReports, allEvents, allStates, allReports, allEventTypes, allEventStatus, allAgencies, SERVER_URL, REPORT, MEMBER) {
             if ($cookies.get('STNCreds') === undefined || $cookies.get('STNCreds') === "") {
                 $scope.auth = false;
                 $location.path('/login');
@@ -62,6 +62,7 @@
                 };
 
                 //#region global vars
+                $scope.serverURL = SERVER_URL;
                 $scope.fullReportForm = {};
                 $scope.newReport = {};
                 $scope.DeployStaff = {}; $scope.GenStaff = {};

@@ -2,9 +2,10 @@
     'use strict';
 
     var ModalControllers = angular.module('ModalControllers');//
-    ModalControllers.controller('siteFileModalCtrl', ['$scope', '$cookies', '$http', '$uibModalInstance', '$uibModal', 'fileTypeList', 'thisFile', 'allMembers', 'fileSource', 'dataFile', 'agencyList', 'fileSite', 'FILE', 'SOURCE', 'DATA_FILE',
-        function ($scope, $cookies, $http, $uibModalInstance, $uibModal, fileTypeList, thisFile, allMembers, fileSource, dataFile, agencyList, fileSite, FILE, SOURCE, DATA_FILE) {
+    ModalControllers.controller('siteFileModalCtrl', ['$scope', '$cookies', '$http', '$uibModalInstance', '$uibModal', 'SERVER_URL', 'fileTypeList', 'thisFile', 'allMembers', 'fileSource', 'dataFile', 'agencyList', 'fileSite', 'FILE', 'SOURCE', 'DATA_FILE',
+        function ($scope, $cookies, $http, $uibModalInstance, $uibModal, SERVER_URL, fileTypeList, thisFile, allMembers, fileSource, dataFile, agencyList, fileSite, FILE, SOURCE, DATA_FILE) {
             //dropdowns
+            $scope.serverURL = SERVER_URL;
             $scope.fileTypes = fileTypeList;
             $scope.agencies = agencyList;
             $scope.theSite = fileSite;

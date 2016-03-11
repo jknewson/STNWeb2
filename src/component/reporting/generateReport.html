@@ -65,7 +65,7 @@
             <button class="btn btn-primary" ng-click="displayMetricSum(genReportForm.$valid)">Display Metrics Summary</button>
             <button class="btn btn-primary" ng-click="displayContactsSum(genReportForm.$valid)">Display Contacts Summary</button>
             <!--<button class="btn btn-primary" ng-click="getCSVfile(genReportForm.$valid)">Generate CSV Summary</button>-->
-            <a class="btn btn-primary" href="https://stntest.wim.usgs.gov/STNServices2/ReportingMetrics/FilteredReports.csv?Event={{genSummary.EVENT_ID}}&States={{StateAbbrevs}}&Date={{genSummary.SUM_DATE | date: 'MM/dd/yyyy'}}" target="_blank">Download CSV Summary</a>
+            <a class="btn btn-primary" ng-href="{{serverURL}}/ReportingMetrics/FilteredReports.csv?Event={{genSummary.EVENT_ID}}&States={{StateAbbrevs}}&Date={{genSummary.SUM_DATE | date: 'MM/dd/yyyy'}}" target="_blank">Download CSV Summary</a>
         </div>
     </div>
 </form>

@@ -38,8 +38,8 @@
     <Content Include="src\component\home\homeCtrl.js" />
     <Content Include="src\component\hwm\hwmCtrl.js" />
     <Content Include="src\component\hwm\hwmModalCtrl.js" />
-    <Content Include="src\component\hwm\quickHWM.html" />
-    <Content Include="src\component\hwm\quickHWMCtrl.js" />
+    <Content Include="src\component\site\quickCreate.html" />
+    <Content Include="src\component\site\quickCreateCtrl.js" />
     <Content Include="src\component\hwm\hwmList.html" />
     <Content Include="src\component\logInOut\login.html" />
     <Content Include="src\component\logInOut\logInOutCtrl.js" />
