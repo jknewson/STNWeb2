@@ -2,8 +2,8 @@
     'use strict';
     var STNControllers = angular.module('STNControllers');
 
-    STNControllers.controller('MapController', ['$scope', '$http', '$rootScope', '$cookies', '$location', 'SITE', 'leafletMarkerEvents', 'leafletBoundsHelpers', '$state',
-        function ($scope, $http, $rootScope, $cookies, $location, SITE, leafletMarkerEvents, leafletBoundsHelpers, $state) {
+    STNControllers.controller('MapController', ['$scope', '$http', '$rootScope', '$cookies', '$location', 'SITE', 'Map_Site', 'leafletMarkerEvents', 'leafletBoundsHelpers', '$state',
+        function ($scope, $http, $rootScope, $cookies, $location, SITE, Map_Site, leafletMarkerEvents, leafletBoundsHelpers, $state) {
             if ($cookies.get('STNCreds') === undefined || $cookies.get('STNCreds') === "") {
                 $scope.auth = false;
                 $location.path('/login');
@@ -18,11 +18,16 @@
                         iconSize: [10, 10],
                         className: 'stnSiteIcon'
                     },
-                    new: {
+                    newSite: {
                         type: 'div',
                         iconSize: [10, 10],
                         className: 'newSiteIcon',
                         iconAnchor:  [5, 5]
+                    },
+                    selected: {
+                        type: 'div',
+                        iconSize: [12, 12],
+                        className: 'selectedIcon'
                     }
                 };
                 //creates the markers on the map after getting JSON from STN web services call
@@ -38,6 +43,7 @@
                             lat: a.latitude,
                             lng: a.longitude,
                             SITE_ID: a.SITE_ID,
+                            title: "STN Site",
                             icon: icons.stn
                         });
                         $scope.markersLatLngArray.push([a.latitude, a.longitude]);
@@ -51,6 +57,52 @@
 
 
                 };
+
+                var pathsObj = {
+                    circleMarker: {
+                        type: "circleMarker",
+                        radius:20,
+                        weight:3,
+                        color: '#000099',
+                        latlngs: {}
+                    }
+                };
+
+                var selectedMarkerNum = 0;
+                ////this shows how to grab the Site ID in args.model.SITE_ID
+                $scope.$on('leafletDirectiveMarker.click', function (event, args) {
+
+                    $scope.markers[selectedMarkerNum].icon = icons.stn;
+                    delete $scope.markers[selectedMarkerNum].label;
+
+                    var  siteID = args.model.SITE_ID;
+                    //$rootScope.stateIsLoading.showLoading = true;// loading..
+                    Map_Site.setMapSiteParts(siteID);
+                    //gets array number of marker element
+                    selectedMarkerNum = parseInt(args.modelName);
+                    //sets the icon to the selected icon class
+                    $scope.markers[selectedMarkerNum].icon = icons.selected;
+
+                    $scope.markers[selectedMarkerNum].label = {
+                        message: 'Site ' + siteID,
+                        options: {
+                            noHide: true,
+                            offset: [25, -15]
+                        }
+                    };
+
+
+                    $scope.markers[selectedMarkerNum].focus = true;
+                    $scope.mapCenter = {lat: args.model.lat, lng: args.model.lng, zoom: 10};
+
+                    var addShape = function() {
+                        $scope.paths = {};
+                        pathsObj.circleMarker.latlngs = {lat: args.model.lat, lng: args.model.lng};
+                        $scope.paths['circleMarker'] = pathsObj['circleMarker'];
+
+                    };
+                    addShape();
+                });
 
                 ///need to watch for session event id, do new call to server when that changes
                 $scope.$watch(function () { return $cookies.get('SessionEventID'); }, function (newValue) {
@@ -83,9 +135,6 @@
                         //        //show error message
                         //});
 
-                        $scope.layers.overlays.stnSites;
-
-
                     } else {
 
                     }
@@ -108,13 +157,12 @@
                         //var createdSite = $scope.markers.filter(function (obj) {
                         //        return obj.SITE_ID === 'newSite';
                         //})[0];
-
                         $scope.markers.push({
                             layer: 'newSite',
                             lat: $scope.userCreatedSite.latitude,
                             lng: $scope.userCreatedSite.longitude,
                             SITE_ID: 'newSite',
-                            icon: icons.new,
+                            icon: icons.newSite,
                             message: "New draggable STN site",
                             draggable: true,
                             focus: false
@@ -177,6 +225,7 @@
                         lng: -92.336,
                         zoom: 4
                     },
+                    paths: {},
                     markers: [],
                     markersLatLngArray: [],
                     createSiteModeActive: false,

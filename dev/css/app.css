@@ -322,6 +322,12 @@ a.disabled {
     background-color: #FF0000;
 }
 
+.selectedIcon {
+    border-radius: 120px;
+    opacity: 1;
+    background-color: #000099;
+}
+
 
 .mapJumbotron {
     padding: 5px !important;
@@ -330,3 +336,10 @@ a.disabled {
 .mapContainer {
     padding:0px !important;
 }
+
+.leaflet-label {
+    color: #000099;
+    border-color: rgba(0,0,153,0.25);
+    z-index: 9999;
+}
+
