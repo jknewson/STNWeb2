@@ -337,3 +337,9 @@ a.disabled {
     padding:0px !important;
 }
 
+.leaflet-label {
+    color: #000099;
+    border-color: rgba(0,0,153,0.25);
+    z-index: 9999;
+}
+

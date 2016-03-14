@@ -354,72 +354,110 @@
             //save Peak
             $scope.savePeak = function (valid) {
                 if (valid) {
-                        var updatedPeak = {};                       
-                        var datetime = new Date($scope.aPeak.PEAK_DATE.date.getFullYear(), $scope.aPeak.PEAK_DATE.date.getMonth(), $scope.aPeak.PEAK_DATE.date.getDate(),
-                           $scope.aPeak.PEAK_DATE.time.getHours(), $scope.aPeak.PEAK_DATE.time.getMinutes(), $scope.aPeak.PEAK_DATE.time.getSeconds());
-                        $scope.aPeak.PEAK_DATE = datetime;
-                        $http.defaults.headers.common.Authorization = 'Basic ' + $cookies.get('STNCreds');
-                        $http.defaults.headers.common.Accept = 'application/json';
-                        PEAK.update({ id: $scope.aPeak.PEAK_SUMMARY_ID }, $scope.aPeak).$promise.then(function (response) {
-                            //update hwms/datafiles used
-                            //remove those unchosen
-                            if ($scope.removedChosenDFList.length > 0) {
-                                for (var remd = 0; remd < $scope.removedChosenDFList.length; remd++) {
-                                    $scope.removedChosenDFList[remd].PEAK_SUMMARY_ID = null;
-                                    DATA_FILE.update({ id: $scope.removedChosenDFList[remd].DATA_FILE_ID }, $scope.removedChosenDFList[remd]).$promise;
-                                }
+                    var updatedPeak = {};                       
+                    var datetime = new Date($scope.aPeak.PEAK_DATE.date.getFullYear(), $scope.aPeak.PEAK_DATE.date.getMonth(), $scope.aPeak.PEAK_DATE.date.getDate(),
+                        $scope.aPeak.PEAK_DATE.time.getHours(), $scope.aPeak.PEAK_DATE.time.getMinutes(), $scope.aPeak.PEAK_DATE.time.getSeconds());
+                    $scope.aPeak.PEAK_DATE = datetime;
+                    $http.defaults.headers.common.Authorization = 'Basic ' + $cookies.get('STNCreds');
+                    $http.defaults.headers.common.Accept = 'application/json';
+                    PEAK.update({ id: $scope.aPeak.PEAK_SUMMARY_ID }, $scope.aPeak).$promise.then(function (response) {
+                        //update hwms/datafiles used
+                        //remove those unchosen
+                        if ($scope.removedChosenDFList.length > 0) {
+                            for (var remd = 0; remd < $scope.removedChosenDFList.length; remd++) {
+                                $scope.removedChosenDFList[remd].PEAK_SUMMARY_ID = null;
+                                DATA_FILE.update({ id: $scope.removedChosenDFList[remd].DATA_FILE_ID }, $scope.removedChosenDFList[remd]).$promise;
                             }
-                            if ($scope.removedChosenHWMList.length > 0) {
-                                for (var remh = 0; remh < $scope.removedChosenHWMList.length; remh++) {
-                                    $scope.removedChosenHWMList[remh].PEAK_SUMMARY_ID = null;
-                                    HWM.update({ id: $scope.removedChosenHWMList[remh].DATA_FILE_ID }, $scope.removedChosenHWMList[remh]).$promise;
-                                }
+                        }
+                        if ($scope.removedChosenHWMList.length > 0) {
+                            for (var remh = 0; remh < $scope.removedChosenHWMList.length; remh++) {
+                                $scope.removedChosenHWMList[remh].PEAK_SUMMARY_ID = null;
+                                HWM.update({ id: $scope.removedChosenHWMList[remh].DATA_FILE_ID }, $scope.removedChosenHWMList[remh]).$promise;
                             }
-                            //add those chosen
-                            for (var addh = 0; addh < $scope.chosenHWMList.length; addh++) {
-                                $scope.chosenHWMList[addh].PEAK_SUMMARY_ID = response.PEAK_SUMMARY_ID;
-                                HWM.update({ id: $scope.chosenHWMList[addh].HWM_ID }, $scope.chosenHWMList[addh]).$promise;
-                            } //end foreach hwm save
-                            for (var addd = 0; addd < $scope.chosenDFList.length; addd++) {
-                                $scope.chosenDFList[addd].PEAK_SUMMARY_ID = response.PEAK_SUMMARY_ID;
-                                DATA_FILE.update({ id: $scope.chosenDFList[addd].DATA_FILE_ID }, $scope.chosenDFList[addd]).$promise;
-                            } //end foreach hwm save
-                            toastr.success("Peak updated");
-                            updatedPeak = response;
-                            var sendBack = [updatedPeak, 'updated'];
-                            $uibModalInstance.close(sendBack);
-                        });
-                    }
-                };//end save()
+                        }
+                        //add those chosen
+                        for (var addh = 0; addh < $scope.chosenHWMList.length; addh++) {
+                            $scope.chosenHWMList[addh].PEAK_SUMMARY_ID = response.PEAK_SUMMARY_ID;
+                            HWM.update({ id: $scope.chosenHWMList[addh].HWM_ID }, $scope.chosenHWMList[addh]).$promise;
+                        } //end foreach hwm save
+                        for (var addd = 0; addd < $scope.chosenDFList.length; addd++) {
+                            $scope.chosenDFList[addd].PEAK_SUMMARY_ID = response.PEAK_SUMMARY_ID;
+                            DATA_FILE.update({ id: $scope.chosenDFList[addd].DATA_FILE_ID }, $scope.chosenDFList[addd]).$promise;
+                        } //end foreach hwm save
+                        toastr.success("Peak updated");
+                        updatedPeak = response;
+                        var sendBack = [updatedPeak, 'updated'];
+                        $uibModalInstance.close(sendBack);
+                    });
+                }
+            };//end save()
 
+            //data file ID to get df and remove peakid for peakDelete
+            var updateDFwoPeakID = function (df_id) {
+                //get it, change peak id, put it back
+                DATA_FILE.query({ id: df_id }).$promise.then(function (res) {
+                    $http.defaults.headers.common.Authorization = 'Basic ' + $cookies.get('STNCreds');
+                    $http.defaults.headers.common.Accept = 'application/json';
+                    res.PEAK_SUMMARY_ID = null;
+                    DATA_FILE.update({ id: res.DATA_FILE_ID }, res).$promise;
+                })
+            };
             //delete Peak
             $scope.deletePeak = function () {
-                //var DeleteModalInstance = $uibModal.open({
-                //    templateUrl: 'removemodal.html',
-                //    controller: 'ConfirmModalCtrl',
-                //    size: 'sm',
-                //    resolve: {
-                //        nameToRemove: function () {
-                //            return $scope.aHWM;
-                //        },
-                //        what: function () {
-                //            return "HWM";
-                //        }
-                //    }
-                //});
+                var deletePeakMdl = $uibModal.open({
+                    template: '<div class="modal-header"><h3 class="modal-title">Remove Peak</h3></div>' +
+                        '<div class="modal-body"><p>Are you sure you want to delete this Peak?</p></div>' +
+                        '<div class="modal-footer"><button class="btn btn-primary" ng-click="Ok()">OK</button><button class="btn btn-warning" ng-click="cancel()">Cancel</button></div>',
+                    controller: ['$scope', '$uibModalInstance', function ($scope, $uibModalInstance) {
+                        $scope.Ok = function () {
+                            $uibModalInstance.close();
+                        };
+                        $scope.cancel = function () {
+                            $uibModalInstance.dismiss();
+                        };                       
+                    }],
+                    size: 'sm'
+                });               
 
-                //DeleteModalInstance.result.then(function (hwmToRemove) {
-                //    $http.defaults.headers.common.Authorization = 'Basic ' + $cookies.get('STNCreds');
-                //    HWM.delete({ id: hwmToRemove.HWM_ID }, hwmToRemove).$promise.then(function () {
-                //        toastr.success("HWM Removed");
-                //        var sendBack = ["de", 'deleted'];
-                //        $uibModalInstance.close(sendBack);
-                //    }, function error(errorResponse) {
-                //        toastr.error("Error: " + errorResponse.statusText);
-                //    });
-                //}, function () {
-                //    //logic for cancel
-                //});//end modal
+                deletePeakMdl.result.then(function () {
+                    var peakID = $scope.aPeak.PEAK_SUMMARY_ID;
+                    var datetime = new Date($scope.aPeak.PEAK_DATE.date.getFullYear(), $scope.aPeak.PEAK_DATE.date.getMonth(), $scope.aPeak.PEAK_DATE.date.getDate(),
+                        $scope.aPeak.PEAK_DATE.time.getHours(), $scope.aPeak.PEAK_DATE.time.getMinutes(), $scope.aPeak.PEAK_DATE.time.getSeconds());
+                    $scope.aPeak.PEAK_DATE = datetime;
+                    //delete the peak and then PUT all hwm and df that have peakID
+                    $http.defaults.headers.common.Authorization = 'Basic ' + $cookies.get('STNCreds');
+                    $http.defaults.headers.common.Accept = 'application/json';
+                    PEAK.delete({ id: $scope.aPeak.PEAK_SUMMARY_ID }).$promise.then(function () {
+                        //for each $scope.eventSiteSensors for each files if file.selected == true.. PUT and remove PEAKID
+                        for (var i = 0; i < $scope.eventSiteSensors.length; i++) {
+                            var thisS = $scope.eventSiteSensors[i];
+                            for (var f = 0; f < thisS.files.length; f++) {
+                                var thisF = thisS.files[f];
+                                if (thisF.selected)
+                                    updateDFwoPeakID(thisF.DATA_FILE_ID);
+                            }
+                        }
+                        //for each $scope.eventSiteHWMs if h.selected == true.. PUT and remove PEAKID 
+                        
+                        for (var h = 0; h < $scope.eventSiteHWMs.length; h++) {
+                            var thisH = $scope.eventSiteHWMs[h];
+                            if (thisH.selected) {
+                                //remove peakID and PUT
+                                thisH.PEAK_SUMMARY_ID = null;
+                                var updateThisHWM = formatSelectedHWM(thisH); //need to format it to remove all the site stuff
+                                HWM.update({ id: thisH.HWM_ID }, updateThisHWM).$promise;
+                            }
+                        }
+
+                        toastr.success("Peak Removed");
+                        var sendBack = ["de", 'deleted'];
+                        $uibModalInstance.close(sendBack);
+                    }, function error(errorResponse) {
+                        toastr.error("Error: " + errorResponse.statusText);
+                    });
+                }, function () {
+                    //logic for cancel
+                });//end modal
             };
 
             //create Peak
