@@ -109,6 +109,7 @@
     LogInOutController.controller('logoutCtrl', ['$scope', '$rootScope', '$cookies', '$location', 
         function ($scope, $rootScope, $cookies, $location) {
             $scope.logout = function () {
+                //clear $cookies
                 $cookies.remove('STNCreds');
                 $cookies.remove('STNUsername');
                 $cookies.remove('usersName');
@@ -116,7 +117,14 @@
                 $cookies.remove('mID');
                 $cookies.remove('SessionEventID');
                 $cookies.remove('SessionEventName');
-                $rootScope.thisPage = "";
+                //clear $rootScope
+                $rootScope.thisPage = undefined;
+                $rootScope.returnToState = undefined;
+                $rootScope.returnToStateParams = undefined;
+                $rootScope.stateIsLoading = undefined;
+                $rootScope.activeMenu = undefined;
+                $rootScope.sessionEvent = undefined;
+                $rootScope.isAuth = undefined;
                 $location.path('/login');
             };
         }]);
