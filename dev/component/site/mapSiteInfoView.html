@@ -3,16 +3,34 @@
     <uib-accordion-group is-open="status.siteOpen">
         <uib-accordion-heading>
             <i style="margin-right:10px" class="pull-left glyphicon" ng-class="{'glyphicon-chevron-down': status.siteOpen, 'glyphicon-chevron-right': !status.siteOpen}"></i>
-            <span>Site Info</span>
+            <span>Site Info</span><span ng-if="aSite.SITE_ID != null">: <b>SITE {{aSite.SITE_ID}}</b></span>
         </uib-accordion-heading>
         <div ng-if="aSite.SITE_ID != undefined">
+
+            <table class="table table-hover table-condensed">
+                <!--<thead><th>SITE {{aSite.SITE_ID}}</th></thead>-->
+                <!--<tr><td><strong>Site ID: </strong></td><td><span>{{aSite.SITE_ID}}</span></td></tr>-->
+                <tr><td><strong>Site Number: </strong></td><td><span>{{aSite.SITE_NO}}</span></td></tr>
+                <!--<tr><td><strong>Site Description: </strong></td><td><span>{{aSite.SITE_DESCRIPTION}}</span></td></tr>-->
+                <!--<tr><td><strong>Notes: </strong></td><td><span>{{aSite.SITE_NOTES || '-&#45;&#45;'}}</span></td></tr>-->
+                <tr><td><strong>Latitude, Longitude: </strong></td><td><span>{{aSite.LATITUDE_DD}}, {{aSite.LONGITUDE_DD}} </span></td></tr>
+                <tr><td><strong>Address </strong></td><td><span>{{aSite.ADDRESS || "---"}}</span><br></td></tr>
+                <tr><td><strong>City: </strong></td><td><span>{{aSite.CITY || "---"}}</span></td></tr>
+                <tr><td><strong>County: </strong></td><td><span>{{aSite.COUNTY || "---"}}</span></td></tr>
+                <!-- below not in spans-->
+                <tr><td><strong>State: </strong></td><td>{{aSite.STATE || "---"}}</td></tr>
+                <tr><td><strong>Waterbody: </strong></td><td>{{aSite.WATERBODY}}</td></tr>
+                <tr><td><strong>Zone: </strong></td><td>{{aSite.ZONE || "---"}}</td></tr>
+                <tr><td><strong>Sensor appropriate? </strong></td><td><span ng-if="aSite.SENSOR_NOT_APPROPRIATE != null">{{aSite.SENSOR_NOT_APPROPRIATE == 0 ? 'No' : 'Yes'}}</span><span ng-if="aSite.SENSOR_NOT_APPROPRIATE == null">---</span></td></tr>
+                <tr><td><strong>Permanent sensor housing? </strong></td><td><span>{{aSite.IS_PERMANENT_HOUSING_INSTALLED || "---"}}</span></td></tr>
+
+                <!--<tr><td><strong>STN Site Name: </strong></td><td><span id="siteName"></span></td></tr>-->
+                <!--<tr><td><strong>Status: </strong></td><td><span id="status"></span></td></tr>-->
+                <!--<tr><td><strong>Full data link: </strong></td><td><span id="sensorDataLink"></span></td></tr>-->
+            </table>
+
             <form>
                 <fieldset>
-                    <!--Site Description-->
-                    <div class="form-group">
-                        <label>Site Number:</label>
-                        <div>{{aSite.SITE_NO}}</div>
-                    </div>
 
                     <!--Site Description-->
                     <div class="form-group">
@@ -26,71 +44,24 @@
                         <div>{{aSite.SITE_NOTES || '---'}}</div>
                     </div>
 
-                    <!--Latitude-->
-                    <div class="form-group">
-                        <label>Latitude:</label>
-                        <div>{{aSite.LATITUDE_DD}}</div>
-                    </div>
 
-                    <!--Longitude-->
-                    <div class="form-group">
-                        <label>Longitude:</label>
-                        <div>{{aSite.LONGITUDE_DD}}</div>
-                    </div>
-
-                    <!--Address-->
-                    <div class="form-group">
-                        <label>Address:</label>
-                        <div>{{aSite.ADDRESS || "---"}}</div>
-                        <div>{{aSite.CITY || "---"}}, {{aSite.STATE || "---"}} {{aSite.ZIP || "---"}}</div>
-                        <div>{{aSite.COUNTY || "---"}}</div>
-                    </div>
-
-                    <!--City
-                <div class="form-group">
-                    <label>City:</label>
-                </div>
-                <!--State
-                <div class="form-group">
-                    <label>State:</label>
-                </div>
-                <!--Zip
-                <div class="form-group">
-                    <label>Zip:</label>
-                </div>-->
-                    <!--County
-                <div class="form-group">
-                    <label>County:</label>
-
-                </div>-->
-                    <!--Waterbody-->
-                    <div class="form-group">
-                        <label>Waterbody:</label>
-                        <div>{{aSite.WATERBODY}}</div>
-                    </div>
-
-                    <!--Zone-->
-                    <div class="form-group">
-                        <label>Zone:</label>
-                        <div>{{aSite.ZONE || "---"}}</div>
-                    </div>
 
                     <!--Sensor Not Appropriate-->
-                    <div class="form-group">
-                        <label>Sensor is not Appropriate here:</label>
-                        <div ng-if="aSite.SENSOR_NOT_APPROPRIATE != null">
-                            {{aSite.SENSOR_NOT_APPROPRIATE == 0 ? 'No' : 'Yes'}}
-                            <!-- <input type="checkbox" disabled="disabled" name="SENSOR_NOT_APPROPRIATE" ng-model="aSite.SENSOR_NOT_APPROPRIATE" ng-true-value="1" ng-false-value="0" />-->
-                        </div>
-                        <div ng-if="aSite.SENSOR_NOT_APPROPRIATE == null">
-                            ---
-                        </div>
-                    </div>
+                    <!--<div class="form-group">-->
+                        <!--<label>Sensor is not Appropriate here:</label>-->
+                        <!--<div ng-if="aSite.SENSOR_NOT_APPROPRIATE != null">-->
+                            <!--{{aSite.SENSOR_NOT_APPROPRIATE == 0 ? 'No' : 'Yes'}}-->
+                            <!--&lt;!&ndash; <input type="checkbox" disabled="disabled" name="SENSOR_NOT_APPROPRIATE" ng-model="aSite.SENSOR_NOT_APPROPRIATE" ng-true-value="1" ng-false-value="0" />&ndash;&gt;-->
+                        <!--</div>-->
+                        <!--<div ng-if="aSite.SENSOR_NOT_APPROPRIATE == null">-->
+                              <!-- -&#45;&#45;-->
+                        <!--</div>-->
+                    <!--</div>-->
                         <!--Permanent Sensor Housing?-->
-                        <div class="form-group">
-                            <label>Permanent Sensor Housing Installed?</label>
-                            <div>{{aSite.IS_PERMANENT_HOUSING_INSTALLED || "---"}}</div>
-                        </div>
+                        <!--<div class="form-group">-->
+                            <!--<label>Permanent Sensor Housing Installed?</label>-->
+                            <!--<div>{{aSite.IS_PERMANENT_HOUSING_INSTALLED || "-&#45;&#45;"}}</div>-->
+                        <!--</div>-->
                 </fieldset>
             </form>
         </div>
