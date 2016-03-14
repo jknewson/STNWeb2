@@ -6,16 +6,8 @@
 
         <div class="col-md-3">
             <div ui-view="mapSiteInfo"></div>
-
-
             <div ui-view="mapPeaksView"></div>
-
             <div ui-view="mapSensorPropose"></div>
-
-            <button ng-click="markers.icon=icons.stn">Default</button>
-            <button ng-click="markers.icon=selectedIcon">Selected</button>
-
-            <hr>
 
             <button ng-click="createSiteModeActive = !createSiteModeActive">{{createSiteButtonText}}</button>
             <button ng-if="createSiteModeActive" ng-click="createSiteFromMap()">Create New Site at Dot</button>
@@ -23,7 +15,7 @@
             <h3 ng-if="createSiteModeActive">CREATE SITE MODE ACTIVE</h3>
 
         </div>
-        
+
 
         <div class="col-md-9">
 

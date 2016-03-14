@@ -7,6 +7,7 @@
 
     STNControllers.controller('MapSiteInfoController', ['$scope', '$http', '$rootScope', '$cookies', '$location', 'SITE', 'leafletMarkerEvents', 'leafletBoundsHelpers', '$state',
         function ($scope, $http, $rootScope, $cookies, $location, SITE,  leafletMarkerEvents, leafletBoundsHelpers, $state) {
+            $scope.status = { siteOpen: true }; //accordion for siteInfo
             $rootScope.$on('mapSiteClick', function (event, siteParts) {
                 $scope.aSite = siteParts[0];
             });

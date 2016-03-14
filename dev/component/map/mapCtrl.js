@@ -45,14 +45,6 @@
                             SITE_ID: a.SITE_ID,
                             title: "STN Site",
                             icon: icons.stn
-                            //clickable: true,
-                            //focus: true,
-                            //label: {
-                            //    message: 'Site ID',
-                            //    options: {
-                            //        noHide: false
-                            //    }
-                            //}
                         });
                         $scope.markersLatLngArray.push([a.latitude, a.longitude]);
                     }
