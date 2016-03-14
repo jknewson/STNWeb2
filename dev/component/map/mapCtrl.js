@@ -43,8 +43,16 @@
                             lat: a.latitude,
                             lng: a.longitude,
                             SITE_ID: a.SITE_ID,
-                            icon: icons.stn,
-                            clickable: true
+                            title: "STN Site",
+                            icon: icons.stn
+                            //clickable: true,
+                            //focus: true,
+                            //label: {
+                            //    message: 'Site ID',
+                            //    options: {
+                            //        noHide: false
+                            //    }
+                            //}
                         });
                         $scope.markersLatLngArray.push([a.latitude, a.longitude]);
                     }
@@ -73,14 +81,25 @@
                 $scope.$on('leafletDirectiveMarker.click', function (event, args) {
 
                     $scope.markers[selectedMarkerNum].icon = icons.stn;
+                    delete $scope.markers[selectedMarkerNum].label;
 
                     var  siteID = args.model.SITE_ID;
-                    $rootScope.stateIsLoading.showLoading = true;// loading..
+                    //$rootScope.stateIsLoading.showLoading = true;// loading..
                     Map_Site.setMapSiteParts(siteID);
                     //gets array number of marker element
                     selectedMarkerNum = parseInt(args.modelName);
                     //sets the icon to the selected icon class
                     $scope.markers[selectedMarkerNum].icon = icons.selected;
+
+                    $scope.markers[selectedMarkerNum].label = {
+                        message: 'Site ' + siteID,
+                        options: {
+                            noHide: true,
+                            offset: [25, -15]
+                        }
+                    };
+
+
                     $scope.markers[selectedMarkerNum].focus = true;
                     $scope.mapCenter = {lat: args.model.lat, lng: args.model.lng, zoom: 10};
 
