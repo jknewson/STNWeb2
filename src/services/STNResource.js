@@ -319,11 +319,8 @@
                     MapSiteParts.push(response);
                     SITE.getSitePeaks({ id: siteId }).$promise.then(function (pResponse) {
                         MapSiteParts.push(pResponse);
-                        SITE.getSiteSensors({ id: siteId }).$promise.then(function (sResponse) {
-                            MapSiteParts.push(sResponse);
-                            $rootScope.$broadcast('mapSiteClick', MapSiteParts);
-                            $rootScope.stateIsLoading.showLoading = false;
-                        });
+                        $rootScope.$broadcast('mapSiteClick', MapSiteParts);
+                        $rootScope.stateIsLoading.showLoading = false;
                     });
                 });                
             }
