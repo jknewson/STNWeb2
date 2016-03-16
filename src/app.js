@@ -121,6 +121,10 @@
                         allSensorTypes: function (st) {
                             return st.getAll().$promise;
                         },
+                        dt: 'DEPLOYMENT_TYPE',
+                        allDepTypes: function (dt) {
+                            return dt.getAll().$promise;
+                        }
                     }
                 })
                 //#endregion
