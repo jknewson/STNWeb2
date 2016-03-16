@@ -104,6 +104,36 @@
                     addShape();
                 });
 
+
+                //var createSiteModeControl = L.Control.extend({
+                //    options: {
+                //        position: 'bottomleft'
+                //    },
+                //
+                //    onAdd: function (map) {
+                //        // create the control container with a particular class name
+                //        var container = L.DomUtil.create('div', 'my-custom-control');
+                //
+                //        // ... initialize other DOM elements, add listeners, etc.
+                //
+                //        return container;
+                //    }
+                //});
+
+                $scope.controls = {
+                    custom: []
+                };
+
+                var createSiteModeControl = L.control();
+                createSiteModeControl.setPosition('bottomleft');
+                createSiteModeControl.onAdd = function () {
+                    var className = 'createSiteModeIndicator',
+                        container = L.DomUtil.create('div', className + ' leaflet-bar');
+                    return container;
+                }
+
+                $scope.controls.custom.push(createSiteModeControl);
+
                 ///need to watch for session event id, do new call to server when that changes
                 $scope.$watch(function () { return $cookies.get('SessionEventID'); }, function (newValue) {
                     if (newValue !== undefined) {
@@ -196,6 +226,8 @@
                     $scope.createSiteButtonText = $scope.createSiteModeActive ? 'Cancel Create New Site' : 'Create New Site on Map';
                     $scope.mapStyle = $scope.createSiteModeActive ? {"cursor":"crosshair"} : {"cursor":"grab"};
                     if (!$scope.createSiteModeActive) {removeUserCreatedSite();}
+                    var createSiteModeIndicator = document.getElementsByClassName("createSiteModeIndicator")[0];
+                    createSiteModeIndicator.style.visibility = $scope.createSiteModeActive ? 'visible' :'hidden';
                 });
 
                 $scope.createSiteFromMap = function () {
