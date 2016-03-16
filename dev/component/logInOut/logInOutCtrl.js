@@ -75,7 +75,10 @@
                             if ($rootScope.returnToState !== undefined) {
                                 $state.go($rootScope.returnToState, {id: $rootScope.returnToStateParams});
                             } else {
-                                $state.go('home');
+                                //$state.go('home');
+                                $state.go('map');
+                               
+                               
                             }
                         }
                         else {
@@ -125,6 +128,7 @@
                 $rootScope.activeMenu = undefined;
                 $rootScope.sessionEvent = undefined;
                 $rootScope.isAuth = undefined;
+                $rootScope.searchTerm = undefined;
                 $location.path('/login');
             };
         }]);
