@@ -50,25 +50,8 @@
                     templateUrl: "component/main/mainView.html",
                     controller: "mainCtrl"
                 })
+
                 //#endregion entryPoint
-
-                //#region entry point once logged in
-                .state("home", {
-                    url: "/Home",
-                    templateUrl: "component/home/homeBase.html",
-                    controller: "homeCtrl",
-                    authenticate: true
-                })
-                //#endregion entry point once logged in
-
-                //#region map page
-                //.state("map", {
-                //    url: "/Map",
-                //    templateUrl: "component/map/map.html",
-                //    controller: "MapController",
-                //    authenticate: true,
-                //})
-
                 .state("map", {
                     url: "/Map",
                     //templateUrl: "component/map/map.html",
@@ -121,6 +104,10 @@
                         allSensorTypes: function (st) {
                             return st.getAll().$promise;
                         },
+                        dt: 'DEPLOYMENT_TYPE',
+                        allDepTypes: function (dt) {
+                            return dt.getAll().$promise;
+                        }
                     }
                 })
                 //#endregion

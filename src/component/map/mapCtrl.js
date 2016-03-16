@@ -9,7 +9,10 @@
                 $location.path('/login');
             } else {
                 $rootScope.thisPage = "Map";
-                $rootScope.activeMenu = "map"; 
+                $rootScope.activeMenu = "map";
+                $scope.message = "Many of the supplemental GIS data layers found in the map are from a range of sources and are not maintained by WiM. We offer these map layers as a" +
+                    "decision-support supplement to the main STN sites layer, but we cannot guarantee their performance and availability. Many of these externally maintained layers are" +
+                    "large datasets and may load slowly depending on network conditions, and in some cases may fail to load when bandwidth is low.";
                 //$scope.map = "Welcome to the new STN Map Page!!";
 
                 var icons = {

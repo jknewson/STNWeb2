@@ -1,5 +1,4 @@
-﻿
-<div class="jumbotron mapJumbotron">
+﻿<div class="jumbotron mapJumbotron">
 
     <div class="container mapContainer">
 
@@ -18,9 +17,9 @@
 
         </div>
 
-
+        
         <div class="col-md-9">
-
+           
             <!--<h3>Map currently displaying sites for <b>{{sessionEvent}}</b></h3>-->
 
                 <div cg-busy="{promise:sitesPromise,message:'Loading Sites...'}">
@@ -36,6 +35,17 @@
         </div>
 
 
+    </div>
+</div>
+
+<!-- notice text below map -->
+<div style="border:red 1px solid;padding:5px;margin-bottom:10px">
+    <span style="font-family:'BryantBold';font-size:large;">Important usage notes and instructions</span>
+    <div style="margin:5px">
+        <p>
+            {{message}}
+
+        </p>
     </div>
 </div>
 

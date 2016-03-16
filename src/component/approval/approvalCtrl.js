@@ -4,8 +4,8 @@
 
     var STNControllers = angular.module('STNControllers');
 
-    STNControllers.controller('approvalCtrl', ['$scope', '$cookies', '$rootScope', '$location', '$http', 'stateList', 'instrumentList', 'allSensorTypes', 'HWM', 'DATA_FILE', 'INSTRUMENT', 'MEMBER', 'SITE',
-        function ($scope, $cookies, $rootScope, $location, $http, stateList, instrumentList, allSensorTypes, HWM, DATA_FILE, INSTRUMENT, MEMBER, SITE) {
+    STNControllers.controller('approvalCtrl', ['$scope', '$cookies', '$rootScope', '$location', '$http', 'stateList', 'instrumentList', 'allSensorTypes', 'allDepTypes', 'HWM', 'DATA_FILE', 'INSTRUMENT', 'MEMBER', 'SITE',
+        function ($scope, $cookies, $rootScope, $location, $http, stateList, instrumentList, allSensorTypes, allDepTypes, HWM, DATA_FILE, INSTRUMENT, MEMBER, SITE) {
             if ($cookies.get('STNCreds') === undefined || $cookies.get('STNCreds') === "") {
                 $scope.auth = false;
                 $location.path('/login');
@@ -28,6 +28,7 @@
                 $scope.allStates = stateList;
                 $scope.allInstruments = instrumentList;
                 $scope.allSensorTypes = allSensorTypes;
+                $scope.allDeploymentTypes = allDepTypes;
                 $scope.ChosenEvent = {};
                 $scope.ChosenState = {};
                 $scope.ChosenMember = {};
@@ -39,14 +40,13 @@
                     $scope.unApprovedHWMs = []; $scope.showHWMbox = false;
                     $scope.unApprovedDFs = []; $scope.showDFbox = false;
                     var evID = $cookies.get('SessionEventID') !== null && $cookies.get('SessionEventID') !== undefined ? $cookies.get('SessionEventID') : 0;
-                    //var evID = this.ChosenEvent.id != undefined ? this.ChosenEvent.id : 0;
                     var sID = $scope.ChosenState.id !== undefined ? $scope.ChosenState.id : 0;
                     var mID = $scope.ChosenMember.id !== undefined ? $scope.ChosenMember.id : 0;
 
                     //go get the HWMs and DataFiles that need to be approved
                     $http.defaults.headers.common.Authorization = 'Basic ' + $cookies.get('STNCreds');
                     $http.defaults.headers.common.Accept = 'application/json';
-                    HWM.getUnapprovedHWMs({ IsApproved: 'false', Event: evID, TeamMember: mID, State: sID }, function success(response) {
+                    HWM.getUnapprovedHWMs({ IsApproved: 'false', Event: evID, Member: mID, State: sID }, function success(response) {
                         $scope.unApprovedHWMs = response.HWMs;
                         $scope.showHWMbox = true;
 
@@ -60,10 +60,14 @@
                             var thisdfInst = $scope.allInstruments.filter(function (i) { return i.INSTRUMENT_ID == df.INSTRUMENT_ID; })[0];
                             var formattedDF = {};
                             var siteID = thisdfInst.SITE_ID;
-                            var senType = $scope.allSensorTypes.filter(function (s) { return s.SENSOR_TYPE_ID == thisdfInst.SENSOR_TYPE_ID; })[0];
+                            formattedDF.SiteId = siteID;
+                            formattedDF.senType = $scope.allSensorTypes.filter(function (s) { return s.SENSOR_TYPE_ID == thisdfInst.SENSOR_TYPE_ID; })[0].SENSOR;
+                            var depType = $scope.allDeploymentTypes.filter(function (d) { return d.DEPLOYMENT_TYPE_ID == thisdfInst.DEPLOYMENT_TYPE_ID; })[0];
+                            formattedDF.depType = depType !== undefined ? depType.METHOD : undefined;
                             formattedDF.InstrID = thisdfInst.INSTRUMENT_ID;
                             SITE.query({ id: siteID }).$promise.then(function (response2) {
-                                formattedDF.stringToShow = response2.SITE_NO + ": " + senType.SENSOR;
+                                formattedDF.SiteNo = response2.SITE_NO;
+                                
                                 $scope.unApprovedDFs.push(formattedDF);
                             });
                         });
