@@ -34,7 +34,85 @@
     //            }
     //        }
     //    };
-    //}]);
+    //}]);nitAdvancedSearchbox
+    STNControllers.directive('siteSearch', function () {
+        return {
+            restrict: 'E',
+            scope: {
+                model: '=ngModel',
+                searchBy: '=', //required
+                searchTerm: '='
+            },
+            replace: true,
+            template: '<div class="col-md-4"><div><label class="radio-inline"><input type="radio" name="SearchBy" ng-model="searchBy.val" value="bySiteId" />ID</label>' +
+                '<label class="radio-inline"><input type="radio" name="SearchBy" ng-model="searchBy.val" value="bySiteNo" />Number</label><label class="radio-inline">' +
+                '<input type="radio" name="SearchBy" ng-model="searchBy.val" value="bySiteName" />Name</label></div><div class="input-group">' +
+                '<input type="text" ng-model="searchTerm" ng-enter="IndexSearchSites()" placeholder="Search Sites..." /><button class="borderLess" ng-click="IndexSearchSites()">' +
+                '<i class="glyphicon glyphicon-search"></i></button></div></div>',
+            controller: [
+                '$scope', '$state', 'SITE',
+                function ($scope, $state, SITE) {
+                    $scope.searchTerm = '';
+                    $scope.searchBy = { val: 'bySiteNo' } ;
+                    $scope.placeholder = '...';
+                    $scope.IndexSearchSites = function () {
+                       switch ($scope.searchBy.val) {
+                            case 'bySiteNo':
+                                SITE.query({ bySiteNo: $scope.searchTerm }, function success(resp) {
+                                    siteSearchResponse(resp);
+                                }, function error(errorResponse) {
+                                    siteSearchResponse(errorResponse);
+                                }).$promise;
+                                break;
+                            case 'bySiteId':
+                                SITE.query({ bySiteId: $scope.searchTerm }).$promise.then(function (resp) {
+                                    siteSearchResponse(resp);
+                                }), function (errorResponse) {
+                                    siteSearchResponse(errorResponse);
+                                };
+                                break;
+                            case 'bySiteName':
+                                SITE.query({ bySiteName: $scope.searchTerm }).$promise.then(function (resp) {
+                                    siteSearchResponse(resp);
+                                }), function (errorResponse) {
+                                    siteSearchResponse(errorResponse);
+                                };
+                                break;
+                        }
+                    }
+                    var siteSearchResponse = function (s) {
+                        if (s.status !== undefined) {
+                            //errorstatus show modal with error message 'no site found'
+                            var errorModal = $uibModal.open({
+                                template: '<div class="modal-header"><h3 class="modal-title">Error</h3></div>' +
+                                    '<div class="modal-body"><p>No site found. For more site search options, go to the Site Search navigation tab to search for site.</p></div>' +
+                                    '<div class="modal-footer"><button class="btn btn-primary" ng-click="ok()">OK</button></div>',
+                                controller: ['$scope', '$uibModalInstance', function ($scope, $uibModalInstance) {
+                                    $scope.ok = function () {
+                                        $uibModalInstance.close();
+                                    };
+                                }],
+                                size: 'sm'
+
+                            });
+                            errorModal.result.then(function () {
+                                $scope.searchTerm = '';
+                                $scope.searchBy = { val: 'bySiteNo' };
+                            });
+
+                        } else {
+                            //reset search and go to the site dash
+                            $scope.searchTerm = '';
+                            $scope.searchBy = { val: 'bySiteNo' };
+                            $state.go('site.dashboard', { id: s.SITE_ID });
+                        }
+                    };                   
+                }
+            ]
+        };
+    })
+
+
 
     //This directive allows us to pass a function in on an enter key to do what we want.
     STNControllers.directive('ngEnter', function () {

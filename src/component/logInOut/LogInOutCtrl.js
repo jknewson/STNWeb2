@@ -77,6 +77,8 @@
                             } else {
                                 //$state.go('home');
                                 $state.go('map');
+                               
+                               
                             }
                         }
                         else {
