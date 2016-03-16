@@ -343,3 +343,29 @@ a.disabled {
     z-index: 9999;
 }
 
+.siteLabel {
+    background-color: rgb(235,235,235) !important;
+    color: #000099 !important;
+    font-size: 90% !important;
+}
+
+.createSiteModeIndicator {
+    /*width: 50px;*/
+    /*height: 25px;*/
+    visibility: hidden;
+    display: inline;
+    padding: .2em .6em .3em;
+    font-size: 150%;
+    font-weight: bold;
+    line-height: 1;
+    color: #fff;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: baseline;
+    border-radius: .25em;
+    background-color: #f0ad4e;
+}
+
+.createSiteModeIndicator::before{
+    content: "CREATE SITE MODE ACTIVE"
+}
