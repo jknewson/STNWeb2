@@ -9,14 +9,15 @@
         function ($scope, $http, $timeout, $rootScope, $cookies, $location, SITE, INSTRUMENT, INSTRUMENT_STATUS, allDeployTypes, allSensDeps, leafletMarkerEvents, leafletBoundsHelpers, $state) {
             //when a site is  clicked, this will be triggered from service to let this controller know about it
             $rootScope.$on('mapSiteClick', function (event, siteParts) {
-                $scope.thisSite = siteParts[0];
-                var allSiteSensors = siteParts[2];
-                $scope.ProposedSensors4Site = allSiteSensors.filter(function (ss) { return ss.InstrumentStats[0].STATUS_TYPE_ID == 4; });
-                $scope.showProposed = false;
+                $scope.thisSite = siteParts[0]; //here's the site they clicked
+                $scope.status.sensorOpen = false; //make sure the proposed sensor accordion is closed so they have to open and trigger the get
+                $scope.ProposedSensors4Site = []; //make sure this is clear in case they are clicking on one site after another
+                $scope.showProposed = false; //hide the proposed sensor type list initially
             });
             //all deployment types
             $scope.deployTypeList = angular.copy(allDeployTypes);
             var tempDepTypeID = 0;
+
             //fix deployment types so that "Temperature" becomes 2 : Temperature (Met sensor)-SensorType:2 and Temperature (pressure transducer)-SensorType:1 -- just for proposed
             for (var d = 0; d < $scope.deployTypeList.length; d++) {
                 if ($scope.deployTypeList[d].METHOD === "Temperature") {
@@ -26,14 +27,22 @@
             }
             $scope.deployTypeList.push({ DEPLOYMENT_TYPE_ID: tempDepTypeID, METHOD: "Temperature (Pressure Transducer)" });
 
+            //proposed sensors accordion was opened, go get them
+            $scope.getProposedSensors = function () {
+                SITE.getSiteSensors({ id: $scope.thisSite.SITE_ID }).$promise.then(function (sResponse) {
+                    $scope.ProposedSensors4Site = sResponse.filter(function (ss) { return ss.InstrumentStats[0].STATUS_TYPE_ID == 4; });
+                });
+            }
+
             //all sensor deployments (relationship table)
             $scope.sensDepTypes = allSensDeps;
             $scope.showProposed = false; //they want to add a proposed sensor, open options (boolean toggle)
-
+            $scope.status = { sensorOpen: false }; //accordion open or closed
             //show/hide proposed sensors to add
             $scope.showHideProposed = function () {
                 $scope.showProposed = !$scope.showProposed;
             };
+
             //cancel proposing a sensor, close the list
             $scope.cancelProposing = function () {
                 $scope.showProposed = false;
