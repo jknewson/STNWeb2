@@ -36,8 +36,8 @@
         
     }]);
     //app.config(function that defines the config code. 'ui.select', 'ngSanitize','$locationProvider', $locationProvider
-    app.config(['$stateProvider', '$urlRouterProvider', '$locationProvider', 
-        function ($stateProvider, $urlRouterProvider, $locationProvider){
+    app.config(['$stateProvider', '$urlRouterProvider', 
+        function ($stateProvider, $urlRouterProvider){
             //if no active state, display state associated with this fragment identifier
             $urlRouterProvider.otherwise("/");
 

@@ -1603,7 +1603,7 @@
                 <!-- -------------------------- START TAPEDOWN SECTION --------------------------------  -->
                 <!--Add Tapedown button-->
                 <div class="form-group">
-                    <label class="col-md-3 control-label" for="TAPEDOWNBTN">Tape Down Information:</label>
+                    <label class="col-md-3 control-label" for="TAPEDOWNBTN"></label>
                     <div class="col-md-6">
                         <button type="button" ng-click="showTapedownPart()" class="btn btn-primary">Show/Hide Tape Down Information</button>
                     </div>
@@ -1613,14 +1613,21 @@
                 <div ng-if="addTapedown">
                     <hr />
                     <div class="form-group">
-                        <label class="col-md-3 control-label" for="TAPEDOWN">Site Objective Point(s):</label>
+                        <label class="col-md-3 control-label">Site Objective Point(s):</label>
                         <div class="col-md-6">
-                            <select class="form-control" id="OP" name="OP_LIST" ng-model="OPMeasure.OBJECTIVE_POINT_ID" ng-change="OPchosen()"
-                                    ng-options="o.OBJECTIVE_POINT_ID as o.NAME for o in OPsForTapeDown">
-                                <option value=""></option>
-                            </select>
+                            <div isteven-multi-select
+                                 input-model="OPsForTapeDown"
+                                 output-model="OPMeasure"
+                                 button-label="NAME"
+                                 item-label="NAME"                                 
+                                 on-item-click="OPchosen(data)"
+                                 tick-property="selected"
+                                 helper-elements="filter">
+
+                            </div>
                         </div>
                     </div>
+
 
                     <br clear="all" />
                     <div ng-show="tapeDownTable.length > 0">
@@ -1640,10 +1647,10 @@
                                     <td>{{t.OP_NAME}}<input type="hidden" ng-model="t.OBJECTIVE_TYPE_ID" /><input type="hidden" ng-model="t.OP_MEASUREMENTS_ID" /></td>
                                     <td>
                                         <label class="radio-inline">
-                                            <input type="radio" name="TYPE" ng-model="t.TYPE" value="Foreshot" />Foreshot
+                                            <input type="radio" name="TYPE{{$index}}" ng-model="t.TYPE" value="Foreshot" />Foreshot
                                         </label>
-                                        <label style="margin-left:0" class="radio-inline">
-                                            <input type="radio" name="TYPE" ng-model="t.TYPE" value="Elevation" />Elevation
+                                        <label class="radio-inline">
+                                            <input type="radio" name="TYPE{{$index}}" ng-model="t.TYPE" value="Elevation" />Elevation
                                         </label>
                                     </td>
                                     <td><input style="width: 90%" ng-keypress="isNum($event)" ng-model="t.FROM_RP" /></td>
@@ -2064,6 +2071,34 @@
                     <div class="col-md-3 col-md-offset-1">Housing Types:</div>
                     <div class="col-md-6">{{aSensor.Housing_Type || '---'}}</div>
                 </div>
+                <!--Tapedowns-->
+                <div ng-show="DEPtapeDownTable.length > 0">
+                    <div class="col-md-3 col-md-offset-1">Tapedowns:</div>
+                    <div class="col-md-8">
+                        <table class="table table-condensed">
+                            <thead>
+                                <tr>
+                                    <th>OP</th>
+                                    <th>Type</th>
+                                    <th>From OP</th>
+                                    <th>Hanging Length</th>
+                                    <th>Water Surface</th>
+                                    <th>Ground Surface</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="dt in DEPtapeDownTable">
+                                    <td>{{dt.OP_NAME}}</td>
+                                    <td style="text-align:center">{{dt.TYPE}}</td>
+                                    <td style="text-align:center">{{dt.FROM_RP}}</td>
+                                    <td style="text-align:center">{{dt.HANGING_LENGTH}}</td>
+                                    <td style="text-align:center">{{dt.WATER_SURFACE}}</td>
+                                    <td style="text-align:center">{{dt.GROUND_SURFACE}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
                 <!-- Vented (only if Sensor Type is Pressure Transducer)-->
                 <div ng-show="aSensor.SENSOR_TYPE_ID == 1">
                     <div>
@@ -2160,6 +2195,71 @@
                     </button>
                 </div>
 
+                <!-- -------------------------- START TAPEDOWN SECTION --------------------------------  -->
+                <!--Add Tapedown button-->
+                <div class="form-group">
+                    <label class="col-md-3 control-label" for="TAPEDOWNBTN"></label>
+                    <div class="col-md-6">
+                        <button type="button" ng-click="showTapedownPart()" class="btn btn-primary">Show/Hide Tape Down Information</button>
+                    </div>
+                </div>
+
+                <!--start add tapedown area -->
+                <div ng-if="addTapedown">
+                    <hr />
+                    <div class="form-group">
+                        <label class="col-md-3 control-label">Site Objective Point(s):</label>
+                        <div class="col-md-6">
+                            <div isteven-multi-select
+                                 input-model="OPsForTapeDown"
+                                 output-model="OPMeasure"
+                                 button-label="NAME"
+                                 item-label="NAME"
+                                 on-item-click="OPchosen(data)"
+                                 tick-property="selected"
+                                 helper-elements="filter">
+
+                            </div>
+                        </div>
+                    </div>
+
+                    <br clear="all" />
+                    <div ng-show="tapeDownTable.length > 0">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th class="col-sm-3">OP</th>
+                                    <th class="col-sm-3">Type</th>
+                                    <th class="col-sm-2">From OP</th>
+                                    <th class="col-sm-2">Hanging Length</th>
+                                    <th class="col-sm-1">Water Surface</th>
+                                    <th class="col-sm-1">Ground Surface</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="t in tapeDownTable">
+                                    <td>{{t.OP_NAME}}<input type="hidden" ng-model="t.OBJECTIVE_TYPE_ID" /><input type="hidden" ng-model="t.OP_MEASUREMENTS_ID" /></td>
+                                    <td>
+                                        <label class="radio-inline">
+                                            <input type="radio" name="TYPE{{$index}}" ng-model="t.TYPE" value="Foreshot" />Foreshot
+                                        </label>
+                                        <label class="radio-inline">
+                                            <input type="radio" name="TYPE{{$index}}" ng-model="t.TYPE" value="Elevation" />Elevation
+                                        </label>
+                                    </td>
+                                    <td><input style="width: 90%" ng-keypress="isNum($event)" ng-model="t.FROM_RP" /></td>
+                                    <td><input style="width: 90%" ng-keypress="isNum($event)" ng-model="t.HANGING_LENGTH" /></td>
+                                    <td><input style="width: 90%" ng-keypress="isNum($event)" ng-model="t.WATER_SURFACE" /></td>
+                                    <td><input style="width: 90%" ng-keypress="isNum($event)" ng-model="t.GROUND_SURFACE" /></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <hr />
+                </div>
+
+                <!-- -------------------------- END TAPEDOWN SECTION --------------------------------  -->
                 <!-- Retrieve Member: -->
                 <div class="form-group required">
                     <label class="col-md-3 control-label">Retrieve Member:</label>
@@ -2262,6 +2362,104 @@
                                 </select>
                             </div>
                         </div>
+
+                        <div class="form-group">
+                            <label class="col-md-3 col-md-offset-1 control-label">Tapedowns:</label>
+                            <div class="col-md-6">
+                                <div ng-show="view.DEPval == 'detail'">
+                                    <div ng-show="DEPtapeDownTable.length > 0">
+                                        <div class="col-md-8">
+                                            <table class="table table-condensed">
+                                                <thead>
+                                                    <tr>
+                                                        <th>OP</th>
+                                                        <th>Type</th>
+                                                        <th>From OP</th>
+                                                        <th>Hanging Length</th>
+                                                        <th>Water Surface</th>
+                                                        <th>Ground Surface</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr ng-repeat="dt in DEPtapeDownTable">
+                                                        <td>{{dt.OP_NAME}}</td>
+                                                        <td style="text-align:center">{{dt.TYPE}}</td>
+                                                        <td style="text-align:center">{{dt.FROM_RP}}</td>
+                                                        <td style="text-align:center">{{dt.HANGING_LENGTH}}</td>
+                                                        <td style="text-align:center">{{dt.WATER_SURFACE}}</td>
+                                                        <td style="text-align:center">{{dt.GROUND_SURFACE}}</td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                    <div ng-show="DEPtapeDownTable.length == 0">None chosen</div>
+                                </div><!-- detail view -->
+
+                                <div ng-show="view.DEPval == 'edit'">
+                                    <!--Add Tapedown button-->
+                                    <div class="form-group">
+                                        <div class="col-md-6">
+                                            <button type="button" ng-click="DEPshowTapedownPart()" class="btn btn-primary">Show/Hide Tape Down Information</button>
+                                        </div>
+                                    </div>
+
+                                    <!--start add tapedown area -->
+                                    <div ng-if="DEPaddTapedown">
+                                        <hr />
+                                        <div class="form-group">
+                                            <label class="col-md-3 control-label">OPs:</label>
+                                            <div class="col-md-6">
+                                                <div isteven-multi-select
+                                                     input-model="DEPOPsForTapeDown"
+                                                     output-model="DEPOPMeasure"
+                                                     button-label="NAME"
+                                                     item-label="NAME"
+                                                     on-item-click="DEPOPchosen(data)"
+                                                     tick-property="selected"
+                                                     helper-elements="filter">
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <br clear="all" />
+                                        <div ng-show="depTapeCopy.length > 0">
+                                            <table class="table">
+                                                <thead>
+                                                    <tr>
+                                                        <th class="col-sm-3">OP</th>
+                                                        <th class="col-sm-3">Type</th>
+                                                        <th class="col-sm-2">From OP</th>
+                                                        <th class="col-sm-2">Hanging Length</th>
+                                                        <th class="col-sm-1">Water Surface</th>
+                                                        <th class="col-sm-1">Ground Surface</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr ng-repeat="t in depTapeCopy">
+                                                        <td>{{t.OP_NAME}}<input type="hidden" ng-model="t.OBJECTIVE_TYPE_ID" /><input type="hidden" ng-model="t.OP_MEASUREMENTS_ID" /></td>
+                                                        <td>
+                                                            <label class="radio-inline">
+                                                                <input type="radio" name="TYPE{{$index}}" ng-model="t.TYPE" value="Foreshot" />Foreshot
+                                                            </label>
+                                                            <label class="radio-inline">
+                                                                <input type="radio" name="TYPE{{$index}}" ng-model="t.TYPE" value="Elevation" />Elevation
+                                                            </label>
+                                                        </td>
+                                                        <td><input style="width: 90%" ng-keypress="isNum($event)" ng-model="t.FROM_RP" /></td>
+                                                        <td><input style="width: 90%" ng-keypress="isNum($event)" ng-model="t.HANGING_LENGTH" /></td>
+                                                        <td><input style="width: 90%" ng-keypress="isNum($event)" ng-model="t.WATER_SURFACE" /></td>
+                                                        <td><input style="width: 90%" ng-keypress="isNum($event)" ng-model="t.GROUND_SURFACE" /></td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                        <hr />
+                                    </div><!-- end if addingTapedown -->
+                                </div><!-- end if editing -->
+                            </div>
+                        </div><!--end formgroup -->
+                        <br clear="all"/>
 
                         <!-- Vented (only if Sensor Type is Pressure Transducer)-->
                         <div ng-show="sensor.SENSOR_TYPE_ID == 1 || depStuffCopy[0].SENSOR_TYPE_ID == 1">
@@ -2457,6 +2655,104 @@
                                 <span class="glyphicon glyphicon-question-sign"></span>
                             </button>
                         </div>
+
+                        <div class="form-group">
+                            <label class="col-md-3 col-md-offset-1 control-label">Tapedowns:</label>
+                            <div class="col-md-6">
+                                <div ng-show="view.RETval == 'detail'">
+                                    <div ng-show="RETtapeDownTable.length > 0">
+                                        <div class="col-md-8">
+                                            <table class="table table-condensed">
+                                                <thead>
+                                                    <tr>
+                                                        <th>OP</th>
+                                                        <th>Type</th>
+                                                        <th>From OP</th>
+                                                        <th>Hanging Length</th>
+                                                        <th>Water Surface</th>
+                                                        <th>Ground Surface</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr ng-repeat="rt in RETtapeDownTable">
+                                                        <td>{{rt.OP_NAME}}</td>
+                                                        <td style="text-align:center">{{rt.TYPE}}</td>
+                                                        <td style="text-align:center">{{rt.FROM_RP}}</td>
+                                                        <td style="text-align:center">{{rt.HANGING_LENGTH}}</td>
+                                                        <td style="text-align:center">{{rt.WATER_SURFACE}}</td>
+                                                        <td style="text-align:center">{{rt.GROUND_SURFACE}}</td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                    <div ng-show="RETtapeDownTable.length == 0">None chosen</div>
+                                </div><!-- detail view -->
+
+                                <div ng-show="view.RETval == 'edit'">
+                                    <!--Add Tapedown button-->
+                                    <div class="form-group">
+                                        <div class="col-md-6">
+                                            <button type="button" ng-click="RETshowTapedownPart()" class="btn btn-primary">Show/Hide Tape Down Information</button>
+                                        </div>
+                                    </div>
+
+                                    <!--start add tapedown area -->
+                                    <div ng-if="RETaddTapedown">                                        
+                                        <div class="form-group">
+                                            <label class="col-md-3 control-label">OPs:</label>
+                                            <div class="col-md-6">
+                                                <div isteven-multi-select
+                                                     input-model="RETOPsForTapeDown"
+                                                     output-model="RETOPMeasure"
+                                                     button-label="NAME"
+                                                     item-label="NAME"
+                                                     on-item-click="RETOPchosen(data)"
+                                                     tick-property="selected"
+                                                     helper-elements="filter">
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <br clear="all" />
+                                        <div ng-show="retTapeCopy.length > 0">
+                                            <table class="table">
+                                                <thead>
+                                                    <tr>
+                                                        <th class="col-sm-3">OP</th>
+                                                        <th class="col-sm-3">Type</th>
+                                                        <th class="col-sm-2">From OP</th>
+                                                        <th class="col-sm-2">Hanging Length</th>
+                                                        <th class="col-sm-1">Water Surface</th>
+                                                        <th class="col-sm-1">Ground Surface</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr ng-repeat="rt in retTapeCopy">
+                                                        <td>{{rt.OP_NAME}}<input type="hidden" ng-model="rt.OBJECTIVE_TYPE_ID" /><input type="hidden" ng-model="rt.OP_MEASUREMENTS_ID" /></td>
+                                                        <td>
+                                                            <label class="radio-inline">
+                                                                <input type="radio" name="TYPE{{$index}}" ng-model="rt.TYPE" value="Foreshot" />Foreshot
+                                                            </label>
+                                                            <label class="radio-inline">
+                                                                <input type="radio" name="TYPE{{$index}}" ng-model="rt.TYPE" value="Elevation" />Elevation
+                                                            </label>
+                                                        </td>
+                                                        <td><input style="width: 90%" ng-keypress="isNum($event)" ng-model="rt.FROM_RP" /></td>
+                                                        <td><input style="width: 90%" ng-keypress="isNum($event)" ng-model="rt.HANGING_LENGTH" /></td>
+                                                        <td><input style="width: 90%" ng-keypress="isNum($event)" ng-model="rt.WATER_SURFACE" /></td>
+                                                        <td><input style="width: 90%" ng-keypress="isNum($event)" ng-model="rt.GROUND_SURFACE" /></td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                        <hr />
+                                    </div><!-- end if addingTapedown -->
+                                </div><!-- end if editing -->
+                            </div>
+                        </div><!--end formgroup -->
+                        <br clear="all" />
+
 
                         <!-- Retrieve Member: -->
                         <div class="form-group required">

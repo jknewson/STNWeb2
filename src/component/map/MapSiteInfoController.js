@@ -10,6 +10,9 @@
             $scope.status = { siteOpen: true }; //accordion for siteInfo
             $rootScope.$on('mapSiteClick', function (event, siteParts) {
                 $scope.aSite = siteParts[0];
+                //only 6 decimal places for lat/long
+                $scope.aSite.LATITUDE_DD = parseFloat($scope.aSite.LATITUDE_DD.toFixed(6));
+                $scope.aSite.LONGITUDE_DD = parseFloat($scope.aSite.LONGITUDE_DD.toFixed(6));
             });
             
         }]);//end controller function
