@@ -18,6 +18,7 @@
 
     <!--<script src="app.js"></script>-->
     <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?v=3.exp"></script>
+
 </head>
 
 <body ng-app="app" ng-strict-di>
@@ -50,7 +51,7 @@
             <div ng-show="isAuth.val" class="container">
 
                 <div class="collapse navbar-collapse" id="">
-                    <ul class="nav navbar-nav">
+                    <ul class="nav navbar-nav col-md-6">
                         <li ng-class="{active: activeMenu == 'home'}"><a style="color:#000" ui-sref="entry" ng-click="activeMenu = 'home'">Home</a></li>
                         <li ng-class="{active: activeMenu == 'map'}"><a style="color:#000" ui-sref="map" ng-click="activeMenu = 'map'">Map</a></li>
                         <li ng-class="{active: activeMenu == 'approval'}"><a style="color:#000" ui-sref="approval" ng-click="activeMenu = 'approval'">Approval</a></li>
@@ -59,15 +60,8 @@
                         <li ng-class="{active: activeMenu == 'settings'}"><a style="color:#000" ui-sref="settings" ng-click="activeMenu = 'settings'">Settings</a></li>
                     </ul>
 
-                    <!--<div class="span6" style="text-align:center">
-                        <a ui-sref="site.dashboard({id: 0})">
-                            <button class="btn btn-primary large">
-                                Site Create
-                            </button>
-                        </a>
-                    </div>-->
                     <!-- Single button -->
-                    <div class="span6" style="text-align:center">
+                    <div class="col-md-2">
                         <div class="btn-group" uib-dropdown is-open="status.isopen">
                             <button id="single-button" type="button" class="btn btn-primary" uib-dropdown-toggle ng-disabled="disabled">
                                 Create <span class="caret"></span>
@@ -79,7 +73,26 @@
                             </ul>
                         </div>
                     </div>
+                    <div class="col-md-4">
+                        <div>
+                            <label class="radio-inline">
+                                <input type="radio" name="SearchBy" ng-model="searchTerm.searchBy" value="bySiteId" />ID
+                            </label>
+                            <label class="radio-inline">
+                                <input type="radio" name="SearchBy" ng-model="searchTerm.searchBy" value="bySiteNo" />Number
+                            </label>
+                            <label class="radio-inline">
+                                <input type="radio" name="SearchBy" ng-model="searchTerm.searchBy" value="bySiteName" />Name
+                            </label>
+                        </div>
 
+                        <div class="input-group">
+                            <input type="text" ng-model="searchTerm.term" ng-enter="IndexSearchSites()" placeholder="Search Sites..." />
+                            <button class="borderLess" ng-click="IndexSearchSites()">
+                                <i class="glyphicon glyphicon-search"></i>                                
+                            </button>
+                        </div>
+                    </div>
 
                 </div>
             </div>
@@ -99,7 +112,6 @@
 
 </body>
 </html>
-
 <!-- MODALs for "are you sure you want to remove this thing (Keyword or URL) -->
 <script type="text/ng-template" id="removemodal.html">
     <div class="modal-header">

@@ -41,15 +41,13 @@
 
 <div ng-if="showHWMbox" class="col-md-5 panel panel-default" style="padding:0;margin:1em;">
     <div class="panel-heading">
-        <h3 class="panel-title">
-            Unapproved Site HWMs
-        </h3>
+        <h3 class="panel-title">Unapproved Site HWMs</h3>
     </div>
     <div class="panel-body">
         <div ng-show="unApprovedHWMs.length > 0">
             <ul>
-                <li style="list-style:none;" ng-repeat="h in unApprovedHWMs">
-                    <span>{{h.SITE_NO}}: {{h.HWM_ID}} ({{h.ELEV_FT}} ft.)</span>
+                <li style="list-style:none;" ng-repeat="h in unApprovedHWMs | orderBy: 'SITE_ID'">
+                    <span><a ui-sref="site.dashboard({id h.site_id})">{{h.SITE_NO}}</a>: {{h.HWM_ID}} ({{h.ELEV_FT}} ft.)</span>
                 </li>
             </ul>
         </div>
@@ -67,9 +65,9 @@
     </div>
     <div class="panel-body">
         <div ng-show="unApprovedDFs.length > 0">
-            <ul>
-                <li style="list-style:none;" ng-repeat="d in unApprovedDFs track by $index">
-                    <span>{{d.stringToShow}}</span>
+            <ul> <!--track by $index-->
+                <li style="list-style:none;" ng-repeat="d in unApprovedDFs | orderBy: 'SiteId'">
+                    <span><a ui-sref="site.dashboard({id: d.SiteId})">{{d.SiteNo}}</a>: {{d.depType || d.senType}}</span>
                 </li>
             </ul>
         </div>
