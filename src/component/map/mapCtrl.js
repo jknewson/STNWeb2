@@ -87,7 +87,8 @@
                         message: 'Site ' + siteID,
                         options: {
                             noHide: true,
-                            offset: [25, -15]
+                            offset: [25, -15],
+                            className: "siteLabel"
                         }
                     };
 
@@ -104,22 +105,7 @@
                     addShape();
                 });
 
-
-                //var createSiteModeControl = L.Control.extend({
-                //    options: {
-                //        position: 'bottomleft'
-                //    },
-                //
-                //    onAdd: function (map) {
-                //        // create the control container with a particular class name
-                //        var container = L.DomUtil.create('div', 'my-custom-control');
-                //
-                //        // ... initialize other DOM elements, add listeners, etc.
-                //
-                //        return container;
-                //    }
-                //});
-
+                ///this needs to be instantiated before it can be filled programmatically below. may need to move scope.extend block to top
                 $scope.controls = {
                     custom: []
                 };
@@ -195,7 +181,14 @@
                             icon: icons.newSite,
                             message: "New draggable STN site",
                             draggable: true,
-                            focus: false
+                            focus: false,
+                            label: {
+                                message: 'New Site',
+                                options: {
+                                    noHide: true,
+                                    className: 'newSiteLabel'
+                                }
+                            }
                         });
                     }
                     //use new clicked site lat/lng and create new site from that

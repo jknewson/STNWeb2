@@ -319,7 +319,8 @@ a.disabled {
 .newSiteIcon {
     border-radius: 120px;
     opacity: .75;
-    background-color: #FF0000;
+    /*background-color: #FF0000;*/
+    background-color : #d9534f;
 }
 
 .selectedIcon {
@@ -338,14 +339,20 @@ a.disabled {
 }
 
 .leaflet-label {
-    color: #000099;
-    border-color: rgba(0,0,153,0.25);
     z-index: 9999;
 }
 
 .siteLabel {
     background-color: rgb(235,235,235) !important;
+    border-color: rgba(0,0,153,0.25);
     color: #000099 !important;
+    font-size: 90% !important;
+}
+
+.newSiteLabel {
+    background-color: rgb(235,235,235) !important;
+    border-color: rgba(217,83,79,0.25);
+    color:  #d9534f !important;
     font-size: 90% !important;
 }
 
@@ -363,7 +370,8 @@ a.disabled {
     white-space: nowrap;
     vertical-align: baseline;
     border-radius: .25em;
-    background-color: #f0ad4e;
+    /*background-color: #f0ad4e;*/
+    background-color : #d9534f;
 }
 
 .createSiteModeIndicator::before{
