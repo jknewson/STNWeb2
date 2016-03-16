@@ -52,7 +52,7 @@
 
                 <div class="collapse navbar-collapse" id="">
                     <ul class="nav navbar-nav col-md-6">
-                        <li ng-class="{active: activeMenu == 'home'}"><a style="color:#000" ui-sref="entry" ng-click="activeMenu = 'home'">Home</a></li>
+                        <!--<li ng-class="{active: activeMenu == 'home'}"><a style="color:#000" ui-sref="entry" ng-click="activeMenu = 'home'">Home</a></li>-->
                         <li ng-class="{active: activeMenu == 'map'}"><a style="color:#000" ui-sref="map" ng-click="activeMenu = 'map'">Map</a></li>
                         <li ng-class="{active: activeMenu == 'approval'}"><a style="color:#000" ui-sref="approval" ng-click="activeMenu = 'approval'">Approval</a></li>
                         <li ng-class="{active: activeMenu == 'sites'}"><a style="color:#000" ui-sref="siteSearch" ng-click="activeMenu = 'sites'">Sites</a></li>
@@ -73,27 +73,7 @@
                             </ul>
                         </div>
                     </div>
-                    <div class="col-md-4">
-                        <div>
-                            <label class="radio-inline">
-                                <input type="radio" name="SearchBy" ng-model="searchTerm.searchBy" value="bySiteId" />ID
-                            </label>
-                            <label class="radio-inline">
-                                <input type="radio" name="SearchBy" ng-model="searchTerm.searchBy" value="bySiteNo" />Number
-                            </label>
-                            <label class="radio-inline">
-                                <input type="radio" name="SearchBy" ng-model="searchTerm.searchBy" value="bySiteName" />Name
-                            </label>
-                        </div>
-
-                        <div class="input-group">
-                            <input type="text" ng-model="searchTerm.term" ng-enter="IndexSearchSites()" placeholder="Search Sites..." />
-                            <button class="borderLess" ng-click="IndexSearchSites()">
-                                <i class="glyphicon glyphicon-search"></i>                                
-                            </button>
-                        </div>
-                    </div>
-
+                    <site-search />                    
                 </div>
             </div>
         </div>
