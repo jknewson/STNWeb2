@@ -12,6 +12,7 @@
                 $rootScope.thisPage = "Site Search";
                 $rootScope.activeMenu = "sites"; // report, settings
                 //$scope.events = eventList;
+                
                 // watch for the session event to change and update
                 $scope.$watch(function () { return $cookies.get('SessionEventName'); }, function (newValue) {
                     $scope.sessionEvent = $cookies.get('SessionEventName') !== null && $cookies.get('SessionEventName') !== undefined ? $cookies.get('SessionEventName') : "All Events";

@@ -1036,7 +1036,7 @@
                     $scope.DEPOPMeasure.OP_NAME = DEPopChosen.NAME;
                     $scope.DEPOPMeasure.OBJECTIVE_POINT_ID = DEPopChosen.OBJECTIVE_POINT_ID;
                     //$scope.DEPtapeDownTable.push($scope.DEPOPMeasure);
-                    $scope.depTapeCopy.push($scope.DEPOPMeasure)
+                    $scope.depTapeCopy.push($scope.DEPOPMeasure);
                 } else {
                     //they unchecked the op to remove
                     //ask them are they sure?

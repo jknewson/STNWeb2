@@ -66,7 +66,7 @@
             {}, {
                 query: {},
                 getAll: { method: 'GET', isArray: true },
-                getUnapprovedDFs: { method: 'GET', isArray: true, cache: false },                
+                getUnapprovedDFs: { method: 'GET', isArray: true, cache: false }, //?IsApproved={approved}&Event={eventId}&Processor={memberId}&State={state}
                 update: { method: 'PUT', cache: false, isArray: false },
                 save: { method: 'POST', cache: false, isArray: false },
                 delete: { method: 'DELETE', cache: false, isArray: false }
@@ -216,7 +216,7 @@
                 query: {},
                 getAll: { method: 'GET', isArray: true },
                 getFilteredHWMs: { method: 'GET', isArray: true, url: rootURL + '/HWMs/FilteredHWMs.json' }, //Event={eventIds}&EventType={eventTypeIDs}&EventStatus={eventStatusID}&States={states}&County={counties}&HWMType={hwmTypeIDs}&HWMQuality={hwmQualIDs}&HWMEnvironment={hwmEnvironment}&SurveyComplete={surveyComplete}&StillWater={stillWater}
-                getUnapprovedHWMs: {method: 'GET', cache: false},
+                getUnapprovedHWMs: { method: 'GET', cache: false }, //IsApproved={'true'/'false'}&Event={eventId}&Member={memberId}&State={state}
                 update: { method: 'PUT', cache: false, isArray: false },
                 save: { method: 'POST', cache: false, isArray: false },
                 delete: { method: 'DELETE', cache: false, isArray: false }

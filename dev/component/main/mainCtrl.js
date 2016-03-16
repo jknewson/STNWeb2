@@ -2,7 +2,7 @@
     'use strict';
 
     var STNControllers = angular.module('STNControllers'); 
-    STNControllers.controller('mainCtrl', ['$scope', '$rootScope', '$cookies', '$uibModal', '$location', '$state', 
+    STNControllers.controller('mainCtrl', ['$scope', '$rootScope', '$cookies', '$uibModal', '$location', '$state',
         function ($scope, $rootScope, $cookies, $uibModal, $location, $state) {
             $rootScope.isAuth = {};        
             $rootScope.activeMenu = 'home'; //scope var for setting active class
@@ -15,18 +15,9 @@
                 $rootScope.userID = $cookies.get('mID');
                 var EventName = $cookies.get('SessionEventName');
                 if (EventName !== null && EventName !== undefined)
-                    $rootScope.sessionEvent = "Session Event: " + EventName + "."; 
-               // $rootScope.sessionTeam = "";
-                $state.go('home');
+                    $rootScope.sessionEvent = "Session Event: " + EventName + ".";                
                 
-                $scope.status = {
-                    isopen: false
-                };
-                $scope.toggleDropdown = function ($event) {
-                    $event.preventDefault();
-                    $event.stopPropagation();
-                    $scope.status.isopen = !$scope.status.isopen;
-                };
+                $state.go('map');
             }
         }]);
 })();
