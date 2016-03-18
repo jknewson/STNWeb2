@@ -224,6 +224,21 @@
     }]);
     //#endregion of HWM
 
+    //#region HWM_Service
+    STNResource.factory('HWM_Service', [function () {
+        //when hwm is created or deleted, this gets updated so that filesCtrl will update it's list of siteHWMs
+        var allSiteHWMs = [];
+        return {
+            getAllSiteHWMs: function () {
+                return allSiteHWMs;
+            },
+            setAllSiteHWMs: function (sh) {
+                allSiteHWMs = sh;               
+            }
+        };
+    }]);
+    //#endregion of HWM_Service
+
     //#region HWM_QUALITY
     STNResource.factory('HWM_QUALITY', ['$resource', function ($resource) {
         return $resource(rootURL + '/HWMQualities/:id.json',
@@ -265,6 +280,21 @@
             });
     }]);
     //#endregion of INSTRUMENT
+
+    //#region Instrument_Service
+    STNResource.factory('Instrument_Service', [function () {
+        //when hwm is created or deleted, this gets updated so that filesCtrl will update it's list of siteHWMs
+        var allSiteSensors = [];
+        return {
+            getAllSiteSensors: function () {
+                return allSiteSensors;
+            },
+            setAllSiteSensors: function (ss) {
+                allSiteSensors = ss;
+            }
+        };
+    }]);
+    //#endregion of Instrument_Service
 
     //#region INSTRUMENT_STATUS
     STNResource.factory('INSTRUMENT_STATUS', ['$resource', function ($resource) {
@@ -428,7 +458,6 @@
             });
     }]);
     //#endregion of OP_MEASURE
-
 
     //#region OP_QUALITY
     STNResource.factory('OP_QUALITY', ['$resource', function ($resource) {

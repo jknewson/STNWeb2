@@ -75,7 +75,6 @@
                             if ($rootScope.returnToState !== undefined) {
                                 $state.go($rootScope.returnToState, {id: $rootScope.returnToStateParams});
                             } else {
-                                //$state.go('home');
                                 $state.go('map');
                                
                                
