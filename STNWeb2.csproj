@@ -34,8 +34,6 @@
     <Content Include="src\component\file\fileUploadCtrl.js" />
     <Content Include="src\component\file\fileList.html" />
     <Content Include="src\component\help\helpCtrl.js" />
-    <Content Include="src\component\home\homeBase.html" />
-    <Content Include="src\component\home\homeCtrl.js" />
     <Content Include="src\component\hwm\hwmCtrl.js" />
     <Content Include="src\component\hwm\hwmModalCtrl.js" />
     <Content Include="src\component\site\quickCreate.html" />

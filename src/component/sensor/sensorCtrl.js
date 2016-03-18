@@ -3,8 +3,8 @@
 
     var STNControllers = angular.module('STNControllers');
 
-    STNControllers.controller('sensorCtrl', ['$scope', '$rootScope', '$q', '$cookies', '$location', '$state', '$http', '$uibModal', '$filter', '$timeout', 'thisSite', 'thisSiteSensors', 'allSensorBrands', 'allAgencies', 'allDeployTypes', 'allSensorTypes', 'allSensDeps', 'allHousingTypes', 'allEvents', 'allFileTypes', 'INSTRUMENT', 'INSTRUMENT_STATUS', 'SITE', 'MEMBER', 'DEPLOYMENT_TYPE', 'STATUS_TYPE', 'INST_COLL_CONDITION',
-        function ($scope, $rootScope, $q, $cookies, $location, $state, $http, $uibModal, $filter, $timeout, thisSite, thisSiteSensors, allSensorBrands, allAgencies, allDeployTypes, allSensorTypes, allSensDeps, allHousingTypes, allEvents, allFileTypes, INSTRUMENT, INSTRUMENT_STATUS, SITE, MEMBER, DEPLOYMENT_TYPE, STATUS_TYPE, INST_COLL_CONDITION) {
+    STNControllers.controller('sensorCtrl', ['$scope', '$rootScope', '$q', '$cookies', '$location', '$state', '$http', '$uibModal', '$filter', '$timeout', 'thisSite', 'Instrument_Service', 'thisSiteSensors', 'allSensorBrands', 'allAgencies', 'allVertDatums', 'allDeployTypes', 'allSensorTypes', 'allSensDeps', 'allHousingTypes', 'allEvents', 'allFileTypes', 'INSTRUMENT', 'INSTRUMENT_STATUS', 'SITE', 'MEMBER', 'DEPLOYMENT_TYPE', 'STATUS_TYPE', 'INST_COLL_CONDITION',
+        function ($scope, $rootScope, $q, $cookies, $location, $state, $http, $uibModal, $filter, $timeout, thisSite, Instrument_Service, thisSiteSensors, allSensorBrands, allAgencies, allVertDatums, allDeployTypes, allSensorTypes, allSensDeps, allHousingTypes, allEvents, allFileTypes, INSTRUMENT, INSTRUMENT_STATUS, SITE, MEMBER, DEPLOYMENT_TYPE, STATUS_TYPE, INST_COLL_CONDITION) {
             if ($cookies.get('STNCreds') === undefined || $cookies.get('STNCreds') === "") {
                 $scope.auth = false;
                 $location.path('/login');
@@ -131,6 +131,9 @@
                             },
                             allInstCollCond: function () {
                                 return INST_COLL_CONDITION.getAll().$promise;
+                            },
+                            allVDatumList: function () {
+                                return allVertDatums;
                             }
                         }
                     });
@@ -149,7 +152,7 @@
 
                 //want to deploy a proposed sensor, edit a deployed sensor or create a new deployed sensor
                 $scope.showSensorModal = function (sensorClicked) {
-                    var passAllLists = [allSensorTypes, allSensorBrands, allHousingTypes, allSensDeps, allEvents, SensFileTypes];
+                    var passAllLists = [allSensorTypes, allSensorBrands, allHousingTypes, allSensDeps, allEvents, SensFileTypes, allVertDatums];
                     var indexClicked = $scope.SiteSensors.indexOf(sensorClicked);
                     $rootScope.stateIsLoading.showLoading = true;// loading..// $(".page-loading").removeClass("hidden"); //loading...
                 
@@ -189,19 +192,25 @@
                         var i = $scope.SiteSensors.indexOf(sensorClicked); var si = thisSiteSensors.indexOf(sensorClicked);
                         //'deployP' -> createdSensor[1] will be: 'proposedDeployed' deploy new -> createdSensor[1] will be: 'newDeployed';
                         if (createdSensor[1] == 'proposedDeployed') {
-                            $scope.SiteSensors[i] = createdSensor[0]; thisSiteSensors[si] = createdSensor[0];
+                            $scope.SiteSensors[i] = createdSensor[0];
+                            thisSiteSensors[si] = createdSensor[0];
+                            Instrument_Service.setAllSiteSensors($scope.SiteSensors);
                         }
                         if (createdSensor[1] == 'newDeployed') {
                             $scope.SiteSensors.push(createdSensor[0]); 
                             $scope.sensorCount.total = $scope.SiteSensors.length;
+                            Instrument_Service.setAllSiteSensors($scope.SiteSensors);
                         }
                         if (createdSensor[1] == 'edit') {
                             //this is from edit -- refresh page?
-                            $scope.SiteSensors[i] = createdSensor[0]; thisSiteSensors[si] = createdSensor[0];
+                            $scope.SiteSensors[i] = createdSensor[0];
+                            thisSiteSensors[si] = createdSensor[0];
+                            Instrument_Service.setAllSiteSensors($scope.SiteSensors);
                         }
                         if (createdSensor[1] == 'deleted') {
                             $scope.SiteSensors.splice(i, 1);
                             $scope.sensorCount.total = $scope.SiteSensors.length;
+                            Instrument_Service.setAllSiteSensors($scope.SiteSensors);
                         }
                         $rootScope.stateIsLoading.showLoading = false;// loading..
                     });
@@ -210,7 +219,7 @@
                 //want to see the retrieved sensor (can edit deployed part and retrieved part on here)
                 $scope.showFullSensorModal = function (sensorClicked) {
                     //send all deployed stuff and retrieved stuff to modal
-                    var deployedStuff = [allSensorTypes, allSensorBrands, allHousingTypes, allSensDeps, SensFileTypes];
+                    var deployedStuff = [allSensorTypes, allSensorBrands, allHousingTypes, allSensDeps, SensFileTypes, allVertDatums];
                     var retrievedStuff = [];
                     var indexClicked = $scope.SiteSensors.indexOf(sensorClicked);
                     $rootScope.stateIsLoading.showLoading = true;// loading..// $(".page-loading").removeClass("hidden"); //loading...
