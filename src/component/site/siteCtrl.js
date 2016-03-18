@@ -64,7 +64,7 @@
                             $scope.siteNetworkTypes = r[2];
                         } else {
                             $scope.aSite = {};
-                            $state.go('home');
+                            $state.go('map');
                         }
                         $rootScope.stateIsLoading.showLoading = false; // loading..
                     });

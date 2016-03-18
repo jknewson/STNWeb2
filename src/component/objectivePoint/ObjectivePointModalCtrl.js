@@ -477,6 +477,16 @@
                 DeleteModalInstance.result.then(function (opToRemove) {
                     $http.defaults.headers.common.Authorization = 'Basic ' + $cookies.get('STNCreds');
                     OBJECTIVE_POINT.delete({ id: opToRemove.OBJECTIVE_POINT_ID }, opToRemove).$promise.then(function () {
+                        $scope.OPFiles = []; //clear out hwmFiles for this hwm
+                        $scope.opImageFiles = []; //clear out image files for this hwm
+                        //now remove all these files from SiteFiles
+                        var l = $scope.allSFiles.length;
+                        while (l--) {
+                            if ($scope.allSFiles[l].OBJECTIVE_POINT_ID == opToRemove.OBJECTIVE_POINT_ID) $scope.allSFiles.splice(l, 1);
+                        }
+                        //updates the file list on the sitedashboard
+                        Site_Files.setAllSiteFiles($scope.allSFiles);
+
                         toastr.success("Objective Point Removed");
                         var sendBack = ["de", 'deleted'];
                         $uibModalInstance.close(sendBack);
