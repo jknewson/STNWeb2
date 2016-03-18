@@ -3,35 +3,33 @@
     <div class="container mapContainer">
 
         <!--<h3 class="col-md-12"ng-if="createSiteModeActive"><span class="label label-warning">CREATE SITE MODE ACTIVE</span></h3>-->
-
-
-        <div class="col-md-3">
+        <div class="col-md-4">
             <div ui-view="mapSiteInfo"></div>
             <div ui-view="mapPeaksView"></div>
             <div ui-view="mapSensorPropose"></div>
-
-            <button ng-click="createSiteModeActive = !createSiteModeActive">{{createSiteButtonText}}</button>
-            <button ng-if="createSiteModeActive" ng-click="createSiteFromMap()">Create New Site at Dot</button>
-
-            <!--<h3 ng-if="createSiteModeActive">CREATE SITE MODE ACTIVE</h3>-->
-
         </div>
 
-        
-        <div class="col-md-9">
+        <div class="col-md-8">
            
             <!--<h3>Map currently displaying sites for <b>{{sessionEvent}}</b></h3>-->
+
+                <div class="createSiteModeActive createSiteModeActiveTop col-md-12" ng-if="createSiteModeActive"><span >CREATE SITE MODE</span></div>
 
                 <div cg-busy="{promise:sitesPromise,message:'Loading Sites...'}">
                     <leaflet ng-style="mapStyle" controls="controls" bounds="bounds" paths="paths" legend="legend" lf-center="mapCenter" markers="markers" layers="layers" event-broadcast="events" width="100%" height="800px"></leaflet>
                 </div>
 
-                <h4>{{error}}</h4>
+                <div class="createSiteModeActive createSiteModeActiveBottom col-md-12" ng-if="createSiteModeActive"><span >CREATE SITE MODE</span></div>
 
+                <br>
+
+                <div class="mapCreateSiteButtonsDiv">
+                    <button ng-class="createSiteModeActive ? 'btn btn-danger' : 'btn btn-primary'" ng-click="createSiteModeActive = !createSiteModeActive">{{createSiteButtonText}}</button>
+                    <button ng-class="'btn btn-warning'" ng-if="createSiteModeActive" ng-click="createSiteFromMap()">Create New Site</button>
+                </div>
 
 
                 <!--<br>Sites JSON: {{sites}}-->
-
         </div>
 
 

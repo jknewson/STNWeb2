@@ -318,8 +318,12 @@ a.disabled {
 
 .newSiteIcon {
     border-radius: 120px;
-    opacity: .75;
-    background-color: #FF0000;
+    border-color: black;
+    opacity: 1;
+    /*background-color: #FF0000;*/
+    /*background-color : #d9534f;*/
+    /*background-color: #f0ad4e;*/
+    background-color: #F7AB02;
 }
 
 .selectedIcon {
@@ -338,21 +342,50 @@ a.disabled {
 }
 
 .leaflet-label {
-    color: #000099;
-    border-color: rgba(0,0,153,0.25);
     z-index: 9999;
 }
 
 .siteLabel {
     background-color: rgb(235,235,235) !important;
+    border-color: rgba(0,0,153,0.25);
     color: #000099 !important;
     font-size: 90% !important;
 }
 
-.createSiteModeIndicator {
-    /*width: 50px;*/
-    /*height: 25px;*/
-    visibility: hidden;
+.newSiteLabel {
+    /*background-color: rgb(235,235,235) !important;*/
+    background-color: #F7AB02;
+    /*border-color: rgba(217,83,79,0.25);*/
+    border-color: rgba(247,171,2, 0.25);
+    /*color:  #d9534f !important;*/
+    /*color: #f0ad4e !important;*/
+    color: #fff;
+    font-size: 90% !important;
+}
+
+/*.createSiteModeIndicator {*/
+    /*!*width: 50px;*!*/
+    /*!*height: 25px;*!*/
+    /*visibility: hidden;*/
+    /*display: inline;*/
+    /*padding: .2em .6em .3em;*/
+    /*font-size: 150%;*/
+    /*font-weight: bold;*/
+    /*line-height: 1;*/
+    /*color: #fff;*/
+    /*text-align: center;*/
+    /*white-space: nowrap;*/
+    /*vertical-align: baseline;*/
+    /*border-radius: .25em;*/
+    /*!*background-color: #f0ad4e;*!*/
+    /*background-color : #d9534f;*/
+/*}*/
+
+/*.createSiteModeIndicator::before{*/
+    /*content: "CREATE SITE MODE ACTIVE"*/
+/*}*/
+
+.createSiteModeActive {
     display: inline;
     padding: .2em .6em .3em;
     font-size: 150%;
@@ -362,10 +395,25 @@ a.disabled {
     text-align: center;
     white-space: nowrap;
     vertical-align: baseline;
-    border-radius: .25em;
-    background-color: #f0ad4e;
+    /*border-radius: .25em;*/
+    /*border-top-left-radius:.25em;*/
+    /*border-top-right-radius:.25em;*/
+    /*background-color: #f0ad4e;*/
+    /*background-color : #d9534f;*/
+    background-color :#F7AB02;
 }
 
-.createSiteModeIndicator::before{
-    content: "CREATE SITE MODE ACTIVE"
+.createSiteModeActiveTop{
+    border-top-left-radius:.25em;
+    border-top-right-radius:.25em;
+ }
+
+.createSiteModeActiveBottom{
+    border-bottom-left-radius:.25em;
+    border-bottom-right-radius:.25em;
 }
+
+.mapCreateSiteButtonsDiv {
+    margin-top:1.5em;
+}
+

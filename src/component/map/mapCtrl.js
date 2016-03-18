@@ -10,9 +10,9 @@
             } else {
                 $rootScope.thisPage = "Map";
                 $rootScope.activeMenu = "map";
-                $scope.message = "Many of the supplemental GIS data layers found in the map are from a range of sources and are not maintained by WiM. We offer these map layers as a" +
-                    "decision-support supplement to the main STN sites layer, but we cannot guarantee their performance and availability. Many of these externally maintained layers are" +
-                    "large datasets and may load slowly depending on network conditions, and in some cases may fail to load when bandwidth is low.";
+                $scope.message = "Many of the supplemental GIS data layers found in the map are from a range of sources and are not maintained by WiM. We offer these map layers as a " +
+                    "decision support supplement to the STN sites layer, but we cannot guarantee their performance and availability. Many of these externally maintained layers are" +
+                    "large datasets and may load slowly depending on network latency. In some cases they may fail to load when network latency is high.";
                 //$scope.map = "Welcome to the new STN Map Page!!";
 
                 var icons = {
@@ -90,7 +90,8 @@
                         message: 'Site ' + siteID,
                         options: {
                             noHide: true,
-                            offset: [25, -15]
+                            offset: [25, -15],
+                            className: "siteLabel"
                         }
                     };
 
@@ -107,35 +108,21 @@
                     addShape();
                 });
 
-
-                //var createSiteModeControl = L.Control.extend({
-                //    options: {
-                //        position: 'bottomleft'
-                //    },
-                //
-                //    onAdd: function (map) {
-                //        // create the control container with a particular class name
-                //        var container = L.DomUtil.create('div', 'my-custom-control');
-                //
-                //        // ... initialize other DOM elements, add listeners, etc.
-                //
-                //        return container;
-                //    }
-                //});
-
+                ///this needs to be instantiated before it can be filled programmatically below. may need to move scope.extend block to top
                 $scope.controls = {
                     custom: []
                 };
 
-                var createSiteModeControl = L.control();
-                createSiteModeControl.setPosition('bottomleft');
-                createSiteModeControl.onAdd = function () {
-                    var className = 'createSiteModeIndicator',
-                        container = L.DomUtil.create('div', className + ' leaflet-bar');
-                    return container;
-                }
-
-                $scope.controls.custom.push(createSiteModeControl);
+                //commented block below is for making custom leaflet control for create site mode indicator
+                //var createSiteModeControl = L.control();
+                //createSiteModeControl.setPosition('bottomleft');
+                //createSiteModeControl.onAdd = function () {
+                //    var className = 'createSiteModeIndicator',
+                //        container = L.DomUtil.create('div', className + ' leaflet-bar');
+                //    return container;
+                //}
+                //
+                //$scope.controls.custom.push(createSiteModeControl);
 
                 ///need to watch for session event id, do new call to server when that changes
                 $scope.$watch(function () { return $cookies.get('SessionEventID'); }, function (newValue) {
@@ -198,7 +185,14 @@
                             icon: icons.newSite,
                             message: "New draggable STN site",
                             draggable: true,
-                            focus: false
+                            focus: false,
+                            label: {
+                                message: 'New Site',
+                                options: {
+                                    noHide: true,
+                                    className: 'newSiteLabel'
+                                }
+                            }
                         });
                     }
                     //use new clicked site lat/lng and create new site from that
@@ -226,15 +220,20 @@
                 });
                 ///listens (watches) for change of the createSiteModeActive attribute - cued by click of the Create Site button
                 $scope.$watch('createSiteModeActive', function(){
-                    $scope.createSiteButtonText = $scope.createSiteModeActive ? 'Cancel Create New Site' : 'Create New Site on Map';
+                    $scope.createSiteButtonText = $scope.createSiteModeActive ? 'Cancel Create Site Mode' : 'Create New Site on Map';
                     $scope.mapStyle = $scope.createSiteModeActive ? {"cursor":"crosshair"} : {"cursor":"grab"};
                     if (!$scope.createSiteModeActive) {removeUserCreatedSite();}
-                    var createSiteModeIndicator = document.getElementsByClassName("createSiteModeIndicator")[0];
-                    createSiteModeIndicator.style.visibility = $scope.createSiteModeActive ? 'visible' :'hidden';
+                    //two lines below referenced createSiteModeIndicator leaflet control. can be removed eventually.
+                    //var createSiteModeIndicator = document.getElementsByClassName("createSiteModeIndicator")[0];
+                    //createSiteModeIndicator.style.visibility = $scope.createSiteModeActive ? 'visible' :'hidden';
                 });
 
                 $scope.createSiteFromMap = function () {
-                    $state.go('site.dashboard', { id: 0, latitude: $scope.userCreatedSite.latitude, longitude: $scope.userCreatedSite.longitude });
+                   if($scope.userCreatedSite.latitude !== undefined &&  $scope.userCreatedSite.longitude !== undefined ) {
+                       $state.go('site.dashboard', { id: 0, latitude: $scope.userCreatedSite.latitude, longitude: $scope.userCreatedSite.longitude });
+                   } else {
+                       alert("Please click a location on the map to create a site this way.");
+                   }
                 };
 
                 //get all STN sites

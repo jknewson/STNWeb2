@@ -66,7 +66,7 @@
             {}, {
                 query: {},
                 getAll: { method: 'GET', isArray: true },
-                getUnapprovedDFs: { method: 'GET', isArray: true, cache: false },                
+                getUnapprovedDFs: { method: 'GET', isArray: true, cache: false }, //?IsApproved={approved}&Event={eventId}&Processor={memberId}&State={state}
                 update: { method: 'PUT', cache: false, isArray: false },
                 save: { method: 'POST', cache: false, isArray: false },
                 delete: { method: 'DELETE', cache: false, isArray: false }
@@ -216,7 +216,7 @@
                 query: {},
                 getAll: { method: 'GET', isArray: true },
                 getFilteredHWMs: { method: 'GET', isArray: true, url: rootURL + '/HWMs/FilteredHWMs.json' }, //Event={eventIds}&EventType={eventTypeIDs}&EventStatus={eventStatusID}&States={states}&County={counties}&HWMType={hwmTypeIDs}&HWMQuality={hwmQualIDs}&HWMEnvironment={hwmEnvironment}&SurveyComplete={surveyComplete}&StillWater={stillWater}
-                getUnapprovedHWMs: {method: 'GET', cache: false},
+                getUnapprovedHWMs: { method: 'GET', cache: false }, //IsApproved={'true'/'false'}&Event={eventId}&Member={memberId}&State={state}
                 update: { method: 'PUT', cache: false, isArray: false },
                 save: { method: 'POST', cache: false, isArray: false },
                 delete: { method: 'DELETE', cache: false, isArray: false }
@@ -319,11 +319,8 @@
                     MapSiteParts.push(response);
                     SITE.getSitePeaks({ id: siteId }).$promise.then(function (pResponse) {
                         MapSiteParts.push(pResponse);
-                        SITE.getSiteSensors({ id: siteId }).$promise.then(function (sResponse) {
-                            MapSiteParts.push(sResponse);
-                            $rootScope.$broadcast('mapSiteClick', MapSiteParts);
-                            $rootScope.stateIsLoading.showLoading = false;
-                        });
+                        $rootScope.$broadcast('mapSiteClick', MapSiteParts);
+                        $rootScope.stateIsLoading.showLoading = false;
                     });
                 });                
             }
@@ -416,6 +413,22 @@
             });
     }]);
     //#endregion of OP_CONTROL_IDENTIFIER
+
+    //#region OP_MEASURE
+    STNResource.factory('OP_MEASURE', ['$resource', function ($resource) {
+        return $resource(rootURL + '/OPMeasurements/:id.json',
+            {}, {
+                query: {},
+                getAll: { method: 'GET', isArray: true },
+                getInstStatOPMeasures: {method: 'GET', isArray:true, url: rootURL + '/InstrumentStatus/:instrumentStatusId/InstrMeasurements'},
+                update: { method: 'PUT', cache: false, isArray: false },
+                addInstStatMeasure: { method: 'POST', cache: false, isArray: false, url: rootURL + '/InstrumentStatus/:instrumentStatusId/AddInstrMeasurement' },
+                save: { method: 'POST', cache: false, isArray: false },
+                delete: { method: 'DELETE', cache: false, isArray: false }
+            });
+    }]);
+    //#endregion of OP_MEASURE
+
 
     //#region OP_QUALITY
     STNResource.factory('OP_QUALITY', ['$resource', function ($resource) {

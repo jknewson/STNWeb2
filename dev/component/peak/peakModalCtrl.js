@@ -400,7 +400,7 @@
                     $http.defaults.headers.common.Accept = 'application/json';
                     res.PEAK_SUMMARY_ID = null;
                     DATA_FILE.update({ id: res.DATA_FILE_ID }, res).$promise;
-                })
+                });
             };
             //delete Peak
             $scope.deletePeak = function () {
