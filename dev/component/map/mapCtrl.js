@@ -61,7 +61,7 @@
 
                 };
 
-                var pathsObj = {
+                $scope.pathsObj = {
                     circleMarker: {
                         type: "circleMarker",
                         radius:20,
@@ -70,23 +70,24 @@
                         latlngs: {}
                     }
                 };
-
-                var selectedMarkerNum = 0;
+                //stores the last selected marker index, so its icon and label can be reset as the first thing to happen after click
+                //var selectedMarkerNum = 0;
+                $scope.selectedMarkerNum = 0;
                 ////this shows how to grab the Site ID in args.model.SITE_ID
                 $scope.$on('leafletDirectiveMarker.click', function (event, args) {
 
-                    $scope.markers[selectedMarkerNum].icon = icons.stn;
-                    delete $scope.markers[selectedMarkerNum].label;
+                    $scope.markers[$scope.selectedMarkerNum].icon = icons.stn;
+                    delete $scope.markers[$scope.selectedMarkerNum].label;
 
                     var  siteID = args.model.SITE_ID;
                     //$rootScope.stateIsLoading.showLoading = true;// loading..
                     Map_Site.setMapSiteParts(siteID);
                     //gets array number of marker element
-                    selectedMarkerNum = parseInt(args.modelName);
+                    $scope.selectedMarkerNum = parseInt(args.modelName);
                     //sets the icon to the selected icon class
-                    $scope.markers[selectedMarkerNum].icon = icons.selected;
+                    $scope.markers[$scope.selectedMarkerNum].icon = icons.selected;
 
-                    $scope.markers[selectedMarkerNum].label = {
+                    $scope.markers[$scope.selectedMarkerNum].label = {
                         message: 'Site ' + siteID,
                         options: {
                             noHide: true,
@@ -95,14 +96,19 @@
                         }
                     };
 
+                    //////
+                    // console.log("The args.model.SITE_ID property for clicked site is " + args.model.SITE_ID + ", at " + args.model.lat + "," + args.model.lng );
+                    // console.log("Corresponding marker SITE ID is " + $scope.markers[$scope.selectedMarkerNum].SITE_ID);
+                    // console.log("They match, no problem:" + (args.model.SITE_ID === $scope.markers[$scope.selectedMarkerNum].SITE_ID));
+                    /////
 
-                    $scope.markers[selectedMarkerNum].focus = true;
                     $scope.mapCenter = {lat: args.model.lat, lng: args.model.lng, zoom: 10};
 
                     var addShape = function() {
                         $scope.paths = {};
-                        pathsObj.circleMarker.latlngs = {lat: args.model.lat, lng: args.model.lng};
-                        $scope.paths['circleMarker'] = pathsObj['circleMarker'];
+                        $scope.pathsObj.circleMarker.latlngs = {lat: args.model.lat, lng: args.model.lng};
+                        $scope.paths['circleMarker'] = $scope.pathsObj['circleMarker'];
+                        console.log("wut");
 
                     };
                     addShape();
@@ -130,6 +136,8 @@
                         $scope.sessionEvent = $cookies.get('SessionEventName') !== null && $cookies.get('SessionEventName') !== undefined ? $cookies.get('SessionEventName') : "All Events";
                         var evID = newValue;
                         //below gets sites using $http.get
+                        $scope.selectedMarkerNum = 0;
+                        $scope.paths = {};
                         $scope.sitesPromise = $http.get('https://stntest.wim.usgs.gov/STNServices2/Events/' + evID + '/Sites.json')
                                             .then(onSiteComplete, onError);
                         //below gets sites using the SITE 'factory'
