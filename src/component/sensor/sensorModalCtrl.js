@@ -729,6 +729,10 @@
                $scope.Deployer = $scope.LoggedInMember;           
                //#endregion new Sensor
            }
+
+           $scope.myData = [$scope.aSensStatus.SENSOR_ELEVATION, $scope.aSensStatus.WS_ELEVATION, $scope.aSensStatus.GS_ELEVATION];
+
+
         }]); //end SENSOR
 
     // Retrieve a Sensor modal
