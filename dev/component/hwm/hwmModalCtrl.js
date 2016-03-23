@@ -3,8 +3,8 @@
     'use strict';
 
     var ModalControllers = angular.module('ModalControllers');
-    ModalControllers.controller('hwmModalCtrl', ['$scope', '$cookies', '$http', '$uibModalInstance', '$uibModal', 'SERVER_URL', 'allDropdowns', 'Site_Files', 'thisHWM', 'agencyList', 'hwmSite', 'allMembers', 'HWM', 'SOURCE', 'FILE',
-        function ($scope, $cookies, $http, $uibModalInstance, $uibModal, SERVER_URL, allDropdowns, Site_Files, thisHWM, agencyList, hwmSite, allMembers, HWM, SOURCE, FILE) {
+    ModalControllers.controller('hwmModalCtrl', ['$scope', '$rootScope', '$cookies', '$http', '$uibModalInstance', '$uibModal', 'SERVER_URL', 'allDropdowns', 'Site_Files', 'thisHWM', 'agencyList', 'hwmSite', 'allMembers', 'HWM', 'SOURCE', 'FILE',
+        function ($scope, $rootScope, $cookies, $http, $uibModalInstance, $uibModal, SERVER_URL, allDropdowns, Site_Files, thisHWM, agencyList, hwmSite, allMembers, HWM, SOURCE, FILE) {
             //dropdowns
             $scope.hwmTypeList = allDropdowns[0];
             $scope.hwmQualList = allDropdowns[1];
@@ -255,6 +255,15 @@
                 DeleteModalInstance.result.then(function (hwmToRemove) {
                     $http.defaults.headers.common.Authorization = 'Basic ' + $cookies.get('STNCreds');
                     HWM.delete({ id: hwmToRemove.HWM_ID }, hwmToRemove).$promise.then(function () {
+                        $scope.HWMFiles = []; //clear out hwmFiles for this hwm
+                        $scope.hwmImageFiles = []; //clear out image files for this hwm
+                        //now remove all these files from SiteFiles
+                        var l = $scope.allSFiles.length;
+                        while (l--) {
+                            if ($scope.allSFiles[l].HWM_ID == hwmToRemove.HWM_ID) $scope.allSFiles.splice(l, 1);
+                        }
+                        //updates the file list on the sitedashboard
+                        Site_Files.setAllSiteFiles($scope.allSFiles); 
                         toastr.success("HWM Removed");
                         var sendBack = ["de", 'deleted'];
                         $uibModalInstance.close(sendBack);
@@ -432,6 +441,6 @@
                 $scope.showFileForm = false;
             };
             //#endregion FILE STUFF
-
+            $rootScope.stateIsLoading.showLoading = false; // loading..
         }]); //end HWM
 })();
