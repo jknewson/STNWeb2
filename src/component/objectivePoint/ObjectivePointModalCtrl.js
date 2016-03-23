@@ -388,7 +388,7 @@
                     var OPtoPOST = trimOP($scope.OP); //make it an OBJECTIVE_POINT for saving                    
 
                     OBJECTIVE_POINT.save(OPtoPOST, function success(response) {
-                        toastr.success("Objective Point created");
+                        toastr.success("Datum Location created");
                         createdOP = response;
                         if ($scope.addedIdentifiers.length > 0) {
                             //post each one
@@ -447,7 +447,7 @@
                     OPtoPOST.OBJECTIVE_POINT_ID = $scope.OP.OBJECTIVE_POINT_ID;                    
                     //$http.defaults.headers.common['X-HTTP-Method-Override'] = 'PUT';
                     OBJECTIVE_POINT.update({ id: OPtoPOST.OBJECTIVE_POINT_ID }, OPtoPOST, function success(response) {
-                        toastr.success("Objective Point updated");
+                        toastr.success("Datum Location updated");
                         updatedOP = response;
                         //    delete $http.defaults.headers.common['X-HTTP-Method-Override'];
                     }).$promise.then(function () {
@@ -487,7 +487,7 @@
                         //updates the file list on the sitedashboard
                         Site_Files.setAllSiteFiles($scope.allSFiles);
 
-                        toastr.success("Objective Point Removed");
+                        toastr.success("Datum Location Removed");
                         var sendBack = ["de", 'deleted'];
                         $uibModalInstance.close(sendBack);
                     }, function error(errorResponse) {

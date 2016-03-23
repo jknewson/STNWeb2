@@ -128,6 +128,8 @@
                 $rootScope.sessionEvent = undefined;
                 $rootScope.isAuth = undefined;
                 $rootScope.searchTerm = undefined;
+                $rootScope.searchParams = undefined;
+                $rootScope.approvalSearch = undefined;
                 $location.path('/login');
             };
         }]);
