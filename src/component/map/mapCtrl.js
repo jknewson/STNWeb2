@@ -2,8 +2,8 @@
     'use strict';
     var STNControllers = angular.module('STNControllers');
 
-    STNControllers.controller('MapController', ['$scope', '$http', '$rootScope', '$cookies', '$location', 'SITE', 'Map_Site', 'leafletMarkerEvents', 'leafletBoundsHelpers', '$state',
-        function ($scope, $http, $rootScope, $cookies, $location, SITE, Map_Site, leafletMarkerEvents, leafletBoundsHelpers, $state) {
+    STNControllers.controller('MapController', ['$scope', '$http', '$rootScope', '$cookies', '$location', 'SITE', 'Map_Site', 'leafletMarkerEvents', 'leafletBoundsHelpers', 'leafletData', '$state',
+        function ($scope, $http, $rootScope, $cookies, $location, SITE, Map_Site, leafletMarkerEvents, leafletBoundsHelpers, leafletData, $state) {
             if ($cookies.get('STNCreds') === undefined || $cookies.get('STNCreds') === "") {
                 $scope.auth = false;
                 $location.path('/login');
@@ -36,31 +36,69 @@
                 //creates the markers on the map after getting JSON from STN web services call
                 var onSiteComplete = function(response) {
                     var sitesArray = response.data.Sites;
+                    console.table(sitesArray);
                     $scope.sites = response.data;
                     $scope.markers = [];
                     $scope.markersLatLngArray = [];
-                    for (var i = 0; i < sitesArray.length; i++) {
-                        var a = sitesArray[i];
-                        $scope.markers.push({
-                            layer:'stnSites',
-                            lat: a.latitude,
-                            lng: a.longitude,
-                            SITE_ID: a.SITE_ID,
-                            title: "STN Site",
-                            icon: icons.stn
-                        });
-                        $scope.markersLatLngArray.push([a.latitude, a.longitude]);
-                    }
 
-                    var LLBounds =  new L.LatLngBounds($scope.markersLatLngArray);
-                    $scope.bounds = leafletBoundsHelpers.createBoundsFromArray([
-                        [LLBounds._northEast.lat, LLBounds._northEast.lng],
-                        [LLBounds._southWest.lat, LLBounds._southWest.lng]
-                    ]);
+                    /////controls method///////////////////////////////////////////////////////
+                    leafletData.getDirectiveControls().then(function (controls) {
 
+                        controls.markers.create({}, $scope.markers);
+
+                        var markers = [];
+                        for (var i = 0; i < sitesArray.length; i++) {
+                            var a = sitesArray[i];
+                            markers.push({
+                                layer:'stnSites',
+                                lat: a.latitude,
+                                lng: a.longitude,
+                                SITE_ID: a.SITE_ID,
+                                title: "STN Site",
+                                icon: icons.stn
+                            });
+                            $scope.markersLatLngArray.push([a.latitude, a.longitude]);
+                        }
+
+                        controls.markers.create(markers ,$scope.markers);
+                        $scope.markers = markers;
+
+                        var LLBounds =  new L.LatLngBounds($scope.markersLatLngArray);
+                        $scope.bounds = leafletBoundsHelpers.createBoundsFromArray([
+                            [LLBounds._northEast.lat, LLBounds._northEast.lng],
+                            [LLBounds._southWest.lat, LLBounds._southWest.lng]
+                        ]);
+
+
+                    });
+                    /////end controls method///////////////////////////////////////////////////////
+
+                    /////////////rando keys method//////////////////////////////////////////
+                    // for (var i = 0; i < sitesArray.length; i++) {
+                    //     var a = sitesArray[i];
+                    //     var markerID = $scope.makeID();
+                    //     // $scope.markers.push({
+                    //     //     layer:'stnSites',
+                    //     //     lat: a.latitude,
+                    //     //     lng: a.longitude,
+                    //     //     SITE_ID: a.SITE_ID,
+                    //     //     title: "STN Site",
+                    //     //     icon: icons.stn
+                    //     // });
+                    //     //
+                    //     $scope.markers[markerID] = {
+                    //         layer:'stnSites',
+                    //         lat: a.latitude,
+                    //         lng: a.longitude,
+                    //         SITE_ID: a.SITE_ID,
+                    //         title: "STN Site",
+                    //         icon: icons.stn
+                    //     };
+                    //     $scope.markersLatLngArray.push([a.latitude, a.longitude]);
+                    // }
+                    /////////////end rando keys method//////////////////////////////////////////
 
                 };
-
                 $scope.pathsObj = {
                     circleMarker: {
                         type: "circleMarker",
@@ -95,15 +133,7 @@
                             className: "siteLabel"
                         }
                     };
-
-                    //////
-                    // console.log("The args.model.SITE_ID property for clicked site is " + args.model.SITE_ID + ", at " + args.model.lat + "," + args.model.lng );
-                    // console.log("Corresponding marker SITE ID is " + $scope.markers[$scope.selectedMarkerNum].SITE_ID);
-                    // console.log("They match, no problem:" + (args.model.SITE_ID === $scope.markers[$scope.selectedMarkerNum].SITE_ID));
-                    /////
-
                     $scope.mapCenter = {lat: args.model.lat, lng: args.model.lng, zoom: 10};
-
                     var addShape = function() {
                         $scope.paths = {};
                         $scope.pathsObj.circleMarker.latlngs = {lat: args.model.lat, lng: args.model.lng};
@@ -170,7 +200,7 @@
                     $scope.error = "Could not fetch sites";
                 };
 
-                ///get site from click
+                //TODO: this has a bug - clicking map when new site already placed is not replacing the old one
                 $scope.$on("leafletDirectiveMap.click", function(event, args){
                     if ($scope.createSiteModeActive == true) {
                         //first, remove previously click-created site
@@ -205,7 +235,9 @@
                     //use new clicked site lat/lng and create new site from that
                 });
 
+
                 var removeUserCreatedSite = function () {
+
                     //returns created site index so it can be removed to make way for its replacement
                     var createdSiteIndex = $scope.markers.map(function(obj) {
                         return obj.SITE_ID;
@@ -266,11 +298,28 @@
                         lng: -92.336,
                         zoom: 4
                     },
+                    markersWatchOptions: {
+                        doWatch: true,
+                        isDeep: true,
+                        individual: {
+                            doWatch: false,
+                            isDeep: false
+                        }
+                    },
                     paths: {},
                     markers: [],
                     markersLatLngArray: [],
                     createSiteModeActive: false,
                     userCreatedSite: {},
+                    makeID: function() {
+                        var text = "";
+                        var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+
+                        for( var i=0; i < 5; i++ )
+                            text += possible.charAt(Math.floor(Math.random() * possible.length));
+
+                        return text;
+                    },
                     layers: {
                         baselayers: {
                             gray: {

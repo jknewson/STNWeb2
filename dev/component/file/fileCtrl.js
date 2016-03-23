@@ -4,14 +4,14 @@
 
     var STNControllers = angular.module('STNControllers');
 
-    STNControllers.controller('fileCtrl', ['$scope', '$cookies', '$location', '$state', '$http', 'SERVER_URL', 'Site_Files', '$uibModal', '$filter', '$timeout', 'thisSite', 'thisSiteFiles', 'allFileTypes', 'allAgencies', 'thisSiteSensors', 'thisSiteHWMs', 'FILE', 'DATA_FILE', 'MEMBER', 'SOURCE',
-        function ($scope, $cookies, $location, $state, $http, SERVER_URL, Site_Files, $uibModal, $filter, $timeout, thisSite, thisSiteFiles, allFileTypes, allAgencies, thisSiteSensors, thisSiteHWMs, FILE, DATA_FILE, MEMBER, SOURCE) {
+    STNControllers.controller('fileCtrl', ['$scope', '$cookies', '$location', '$state', '$http', 'SERVER_URL', 'Site_Files', 'HWM_Service', 'Instrument_Service', '$uibModal', '$filter', '$timeout', 'thisSite', 'thisSiteFiles', 'allFileTypes', 'allAgencies', 'thisSiteSensors', 'thisSiteHWMs', 'FILE', 'DATA_FILE', 'MEMBER', 'SOURCE',
+        function ($scope, $cookies, $location, $state, $http, SERVER_URL, Site_Files, HWM_Service, Instrument_Service, $uibModal, $filter, $timeout, thisSite, thisSiteFiles, allFileTypes, allAgencies, thisSiteSensors, thisSiteHWMs, FILE, DATA_FILE, MEMBER, SOURCE) {
             if ($cookies.get('STNCreds') === undefined || $cookies.get('STNCreds') === "") {
                 $scope.auth = false;
                 $location.path('/login');
             } else {
                 $scope.serverURL = SERVER_URL;
-                $scope.siteHWMs = thisSiteHWMs;
+                $scope.siteHWMs = thisSiteHWMs; //HWM_Service.getAllSiteHWMs(); //if create a new one, then add a file to it.. doesn't show in fileList because this doesn't have that new hwm yet..
                 $scope.siteSensors = thisSiteSensors;
                 //include if HWM, Instrument, Data File or OP File for each               
                 for (var sf = 0; sf < thisSiteFiles.length; sf++) {
@@ -37,6 +37,8 @@
                 //if files are added/edited, deleted from other parts (objective Points, sensors, hwms), make sure if event is chosen to update siteFiles accordingly
                 $scope.$on('siteFilesUpdated', function (event, sitefiles) {                    
                     if ($cookies.get('SessionEventID') !== undefined) {
+                        $scope.siteHWMs = HWM_Service.getAllSiteHWMs(); $scope.siteSensors = Instrument_Service.getAllSiteSensors();
+                        //now go about updating the FileList
                         $scope.SiteFiles = sitefiles.filter(function (h) { return h.fileBelongsTo == 'Site File' || h.fileBelongsTo == 'Objective Point File'; });  //keep all site and op files
                         var hwmFiles = sitefiles.filter(function (sfiles) { return sfiles.fileBelongsTo == 'HWM File'; });
                         var sensFiles = sitefiles.filter(function (sfi) { return sfi.INSTRUMENT_ID > 0 && sfi.INSTRUMENT_ID !== null; });
@@ -53,8 +55,8 @@
                                 if (sensFiles[sf].INSTRUMENT_ID == $scope.siteSensors[inst].Instrument.INSTRUMENT_ID && $scope.siteSensors[inst].Instrument.EVENT_ID == $cookies.get('SessionEventID'))
                                     $scope.SiteFiles.push(sensFiles[sf]);
                             }
-                        }
-                    }
+                        }                        
+                    }//end if SessionEventID !== undefined
                 }, true);
                 
                 // watch for the session event to change and update SITE FILES DO NOT HAVE AN EVENT                
@@ -62,6 +64,7 @@
                     $scope.sessionEventName = newValue !== undefined ? newValue : "All Events";
                     $scope.sessionEventExists = $scope.sessionEventName != "All Events" ? true : false;
                     if (newValue !== undefined) {
+                        $scope.siteHWMs = HWM_Service.getAllSiteHWMs(); $scope.siteSensors = Instrument_Service.getAllSiteSensors();
                         //keep all site & OP Files, filter HWM, Instrument (DF files use Instrument event)
                         $scope.SiteFiles = Site_Files.getAllSiteFiles().filter(function (h) { return h.fileBelongsTo == 'Site File' || h.fileBelongsTo == 'Objective Point File'; });  //keep all site and op files
                         var hwmFiles = Site_Files.getAllSiteFiles().filter(function (sfiles) { return sfiles.fileBelongsTo == 'HWM File'; }); 

@@ -50,13 +50,13 @@
                 '<input type="text" ng-model="searchTerm" ng-enter="IndexSearchSites()" placeholder="Search Sites..." /><button class="borderLess" ng-click="IndexSearchSites()">' +
                 '<i class="glyphicon glyphicon-search"></i></button></div></div>',
             controller: [
-                '$scope', '$state', 'SITE',
-                function ($scope, $state, SITE) {
+                '$scope', '$state', 'SITE', '$uibModal',
+                function ($scope, $state, SITE, $uibModal) {
                     $scope.searchTerm = '';
-                    $scope.searchBy = { val: 'bySiteNo' } ;
+                    $scope.searchBy = { val: 'bySiteNo' };
                     $scope.placeholder = '...';
                     $scope.IndexSearchSites = function () {
-                       switch ($scope.searchBy.val) {
+                        switch ($scope.searchBy.val) {
                             case 'bySiteNo':
                                 SITE.query({ bySiteNo: $scope.searchTerm }, function success(resp) {
                                     siteSearchResponse(resp);
@@ -79,13 +79,13 @@
                                 };
                                 break;
                         }
-                    }
+                    };
                     var siteSearchResponse = function (s) {
                         if (s.status !== undefined) {
                             //errorstatus show modal with error message 'no site found'
                             var errorModal = $uibModal.open({
                                 template: '<div class="modal-header"><h3 class="modal-title">Error</h3></div>' +
-                                    '<div class="modal-body"><p>No site found. For more site search options, go to the Site Search navigation tab to search for site.</p></div>' +
+                                    '<div class="modal-body"><p>No site found. For more site search options, go to the Sites navigation tab to search for sites.</p></div>' +
                                     '<div class="modal-footer"><button class="btn btn-primary" ng-click="ok()">OK</button></div>',
                                 controller: ['$scope', '$uibModalInstance', function ($scope, $uibModalInstance) {
                                     $scope.ok = function () {
@@ -106,11 +106,11 @@
                             $scope.searchBy = { val: 'bySiteNo' };
                             $state.go('site.dashboard', { id: s.SITE_ID });
                         }
-                    };                   
+                    };
                 }
             ]
         };
-    })
+    });
 
 
 

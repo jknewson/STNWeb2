@@ -13,6 +13,7 @@
            $scope.sensorDeployList = allDropdowns[3];
            $scope.eventList = allDropdowns[4];
            $scope.fileTypeList = allDropdowns[5]; //used if creating/editing depSens file
+           $scope.vertDatumList = allDropdowns[6];
            $scope.allSFiles = Site_Files.getAllSiteFiles();
            $scope.DepSensorFiles = thisSensor !== "empty" ? $scope.allSFiles.filter(function (sf) { return sf.INSTRUMENT_ID == thisSensor.Instrument.INSTRUMENT_ID; }) : [];// holder for hwm files added
            $scope.depSensImageFiles = $scope.DepSensorFiles.filter(function (hf) { return hf.FILETYPE_ID === 1; }); //image files for carousel
@@ -274,6 +275,7 @@
             //delete this file
            $scope.deleteFile = function () {
                var DeleteModalInstance = $uibModal.open({
+                   backdrop: 'static',
                    templateUrl: 'removemodal.html',
                    controller: 'ConfirmModalCtrl',
                    size: 'sm',
@@ -327,6 +329,8 @@
                    //they picked an OP to use for tapedown
                    $scope.OPMeasure = {};
                    $scope.OPMeasure.OP_NAME = opChosen.NAME;
+                   $scope.OPMeasure.elevation = opChosen.ELEV_FT;
+                   $scope.OPMeasure.Vdatum = $scope.vertDatumList.filter(function (vd) { return vd.DATUM_ID == opChosen.VDATUM_ID; })[0].DATUM_ABBREVIATION;
                    $scope.OPMeasure.OBJECTIVE_POINT_ID = opChosen.OBJECTIVE_POINT_ID;
                    //$scope.OPMeasure.OP_NAME = opName;
                    $scope.tapeDownTable.push($scope.OPMeasure);
@@ -334,6 +338,7 @@
                    //they unchecked the op to remove
                    //ask them are they sure?
                    var removeOPMeas = $uibModal.open({
+                       backdrop: 'static',
                        template: '<div class="modal-header"><h3 class="modal-title">Remove OP Measure</h3></div>' +
                            '<div class="modal-body"><p>Are you sure you want to remove this OP Measurement from this sensor?</p></div>' +
                            '<div class="modal-footer"><button class="btn btn-primary" ng-enter="ok()" ng-click="ok()">OK</button><button class="btn btn-primary" ng-click="cancel()">Cancel</button></div>',
@@ -351,8 +356,8 @@
                        if (yesOrNo == 'remove') {
                            //add to remove it list
                            var tapeDownToRemove = $scope.tapeDownTable.filter(function (a) { return a.OBJECTIVE_POINT_ID == opChosen.OBJECTIVE_POINT_ID; })[0];
-                           var tInd = $scope.tapeDownTable.map(function (o) { return o.OP_MEASUREMENTS_ID; }).indexOf(tapeDownToRemove.OP_MEASUREMENTS_ID);
-                           $scope.removeOPList.push(tapeDownToRemove.OP_MEASUREMENTS_ID);
+                           var tInd = $scope.tapeDownTable.map(function (o) { return o.OBJECTIVE_POINT_ID; }).indexOf(tapeDownToRemove.OBJECTIVE_POINT_ID);
+                           if (tapeDownToRemove.OP_MEASUREMENTS_ID !== undefined) $scope.removeOPList.push(tapeDownToRemove.OP_MEASUREMENTS_ID);
                            $scope.tapeDownTable.splice(tInd, 1);
                        } else {
                            //never mind, make it selected again
@@ -543,6 +548,15 @@
                            createdSensor.Sensor_Type = $scope.sensorTypeList.filter(function (t) { return t.SENSOR_TYPE_ID == response.SENSOR_TYPE_ID; })[0].SENSOR;
                            $scope.aSensStatus.INSTRUMENT_ID = response.INSTRUMENT_ID;
                            INSTRUMENT_STATUS.save($scope.aSensStatus).$promise.then(function (statResponse) {
+                               //any tape downs?
+                               if ($scope.tapeDownTable.length > 0) {
+                                   for (var t = 0; t < $scope.tapeDownTable.length; t++) {
+                                       var thisTape = $scope.tapeDownTable[t];
+                                       thisTape.INSTRUMENT_STATUS_ID = statResponse.INSTRUMENT_STATUS_ID;
+                                       ///POST IT///
+                                       OP_MEASURE.addInstStatMeasure({ instrumentStatusId: statResponse.INSTRUMENT_STATUS_ID }, thisTape).$promise;
+                                   }
+                               }
                                //build the createdSensor to send back and add to the list page
                                depSenStat = statResponse;
                                //add Status
@@ -607,6 +621,7 @@
                    templateUrl: 'removemodal.html',
                    controller: 'ConfirmModalCtrl',
                    size: 'sm',
+                   backdrop: 'static',
                    resolve: {
                        nameToRemove: function () {
                            return $scope.aSensor;
@@ -621,7 +636,15 @@
                    $http.defaults.headers.common.Authorization = 'Basic ' + $cookies.get('STNCreds');
                    //this will delete the instrument and all it's statuses
                    INSTRUMENT.delete({ id: sensorToRemove.INSTRUMENT_ID }).$promise.then(function () {
-                       //remove the statuses too
+                       $scope.DepSensorFiles = []; //clear out sensorFiles for this sensor
+                       $scope.depSensImageFiles = []; //clear out image files for this sensor
+                       //now remove all these files from SiteFiles
+                       var l = $scope.allSFiles.length;
+                       while (l--) {
+                           if ($scope.allSFiles[l].INSTRUMENT_ID == sensorToRemove.INSTRUMENT_ID) $scope.allSFiles.splice(l, 1);
+                       }
+                       //updates the file list on the sitedashboard
+                       Site_Files.setAllSiteFiles($scope.allSFiles);
                        toastr.success("Sensor Removed");
                        var sendBack = ["de", 'deleted'];
                        $uibModalInstance.close(sendBack);
@@ -668,7 +691,10 @@
                    OP_MEASURE.getInstStatOPMeasures({instrumentStatusId: $scope.aSensStatus.INSTRUMENT_STATUS_ID}).$promise.then(function(response){
                        for (var r = 0; r < response.length; r++) {
                            var sensMeasures = response[r];
-                           sensMeasures.OP_NAME = siteOPs.filter(function (op) { return op.OBJECTIVE_POINT_ID == response[r].OBJECTIVE_POINT_ID; })[0].NAME;
+                           var whichOP = siteOPs.filter(function (op) { return op.OBJECTIVE_POINT_ID == response[r].OBJECTIVE_POINT_ID; })[0];
+                           sensMeasures.elevation = whichOP.ELEV_FT;
+                           sensMeasures.Vdatum = $scope.vertDatumList.filter(function (vd) { return vd.DATUM_ID == whichOP.VDATUM_ID; })[0].DATUM_ABBREVIATION;
+                           sensMeasures.OP_NAME = whichOP.NAME;
                            $scope.tapeDownTable.push(sensMeasures);
                        }
                         //go through OPsForTapeDown and add selected Property.
@@ -706,8 +732,8 @@
         }]); //end SENSOR
 
     // Retrieve a Sensor modal
-    ModalControllers.controller('sensorRetrievalModalCtrl', ['$scope', '$rootScope', '$timeout', '$cookies', '$http', '$uibModalInstance', '$uibModal', 'thisSensor', 'SensorSite', 'siteOPs', 'allEventList', 'allMembers', 'allStatusTypes', 'allInstCollCond', 'INSTRUMENT', 'INSTRUMENT_STATUS', 'OP_MEASURE',
-        function ($scope, $rootScope, $timeout, $cookies, $http, $uibModalInstance, $uibModal, thisSensor, SensorSite, siteOPs, allEventList, allMembers, allStatusTypes, allInstCollCond, INSTRUMENT, INSTRUMENT_STATUS, OP_MEASURE) {
+    ModalControllers.controller('sensorRetrievalModalCtrl', ['$scope', '$rootScope', '$timeout', '$cookies', '$http', '$uibModalInstance', '$uibModal', 'thisSensor', 'SensorSite', 'siteOPs', 'allEventList', 'allVDatumList', 'allMembers', 'allStatusTypes', 'allInstCollCond', 'INSTRUMENT', 'INSTRUMENT_STATUS', 'OP_MEASURE',
+        function ($scope, $rootScope, $timeout, $cookies, $http, $uibModalInstance, $uibModal, thisSensor, SensorSite, siteOPs, allEventList, allVDatumList, allMembers, allStatusTypes, allInstCollCond, INSTRUMENT, INSTRUMENT_STATUS, OP_MEASURE) {
             $scope.aSensor = thisSensor.Instrument;
             $scope.EventName = allEventList.filter(function (r) {return r.EVENT_ID == $scope.aSensor.EVENT_ID;})[0].EVENT_NAME;
             $scope.depSensStatus = angular.copy(thisSensor.InstrumentStats[0]);
@@ -720,6 +746,7 @@
             $scope.depSensStatus.TIME_STAMP = new Date(y, m, d, h, mi, sec);
 
             $scope.OPsForTapeDown = siteOPs;
+            $scope.vertDatumList = allVDatumList;
             $scope.removeOPList = [];
             $scope.tapeDownTable = []; //holder of tapedown OP_MEASUREMENTS
             $scope.DEPtapeDownTable = []; //holds any deployed tapedowns
@@ -775,6 +802,8 @@
                     //they picked an OP to use for tapedown
                     $scope.OPMeasure = {};
                     $scope.OPMeasure.OP_NAME = opChosen.NAME;
+                    $scope.OPMeasure.elevation = opChosen.ELEV_FT;
+                    $scope.OPMeasure.Vdatum = $scope.vertDatumList.filter(function (vd) { return vd.DATUM_ID == opChosen.VDATUM_ID; })[0].DATUM_ABBREVIATION;
                     $scope.OPMeasure.OBJECTIVE_POINT_ID = opChosen.OBJECTIVE_POINT_ID;
                     //$scope.OPMeasure.OP_NAME = opName;
                     $scope.tapeDownTable.push($scope.OPMeasure);
@@ -782,6 +811,7 @@
                     //they unchecked the op to remove
                     //ask them are they sure?
                     var removeOPMeas = $uibModal.open({
+                        backdrop: 'static',
                         template: '<div class="modal-header"><h3 class="modal-title">Remove OP Measure</h3></div>' +
                             '<div class="modal-body"><p>Are you sure you want to remove this OP Measurement from this sensor?</p></div>' +
                             '<div class="modal-footer"><button class="btn btn-primary" ng-enter="ok()" ng-click="ok()">OK</button><button class="btn btn-primary" ng-click="cancel()">Cancel</button></div>',
@@ -799,8 +829,8 @@
                         if (yesOrNo == 'remove') {
                             //add to remove it list
                             var tapeDownToRemove = $scope.tapeDownTable.filter(function (a) { return a.OBJECTIVE_POINT_ID == opChosen.OBJECTIVE_POINT_ID; })[0];
-                            var tInd = $scope.tapeDownTable.map(function (o) { return o.OP_MEASUREMENTS_ID; }).indexOf(tapeDownToRemove.OP_MEASUREMENTS_ID);
-                            $scope.removeOPList.push(tapeDownToRemove.OP_MEASUREMENTS_ID);
+                            var tInd = $scope.tapeDownTable.map(function (o) { return o.OBJECTIVE_POINT_ID; }).indexOf(tapeDownToRemove.OBJECTIVE_POINT_ID);
+                            if (tapeDownToRemove.OP_MEASUREMENTS_ID !== undefined) $scope.removeOPList.push(tapeDownToRemove.OP_MEASUREMENTS_ID);
                             $scope.tapeDownTable.splice(tInd, 1);
                         } else {
                             //never mind, make it selected again
@@ -813,7 +843,10 @@
             OP_MEASURE.getInstStatOPMeasures({ instrumentStatusId: $scope.depSensStatus.INSTRUMENT_STATUS_ID }).$promise.then(function (response) {
                 for (var r = 0; r < response.length; r++) {
                     var sensMeasures = response[r];
-                    sensMeasures.OP_NAME = siteOPs.filter(function (op) { return op.OBJECTIVE_POINT_ID == response[r].OBJECTIVE_POINT_ID; })[0].NAME;
+                    var whichOP = siteOPs.filter(function (op) { return op.OBJECTIVE_POINT_ID == response[r].OBJECTIVE_POINT_ID; })[0];
+                    sensMeasures.elevation = whichOP.ELEV_FT;
+                    sensMeasures.Vdatum = $scope.vertDatumList.filter(function (vd) { return vd.DATUM_ID == whichOP.VDATUM_ID; })[0].DATUM_ABBREVIATION;
+                    sensMeasures.OP_NAME = whichOP.NAME;
                     $scope.DEPtapeDownTable.push(sensMeasures);
                 }                
             });
@@ -940,6 +973,7 @@
             $scope.houseTypeList = allDepDropdowns[2];
             $scope.sensorDeployList = allDepDropdowns[3];
             $scope.fileTypeList = allDepDropdowns[4]; //used if creating/editing depSens file
+            $scope.vertDatumList = allDepDropdowns[5];
             $scope.allSFiles = Site_Files.getAllSiteFiles();
             $scope.sensorFiles = thisSensor !== "empty" ? $scope.allSFiles.filter(function (sf) { return sf.INSTRUMENT_ID == thisSensor.Instrument.INSTRUMENT_ID; }) : [];// holder for hwm files added
             $scope.sensImageFiles = $scope.sensorFiles.filter(function (hf) { return hf.FILETYPE_ID === 1; }); //image files for carousel
@@ -984,17 +1018,6 @@
                 sendThis = [d, zone];
                 return sendThis;
             };
-            $scope.addTapedown = false; //toggle tapedown section
-
-            $scope.showTapedownPart = function () {
-                if ($scope.addTapedown) {
-                    //they are closing it. clear inputs and close
-                    $scope.addTapedown = false;
-                } else {
-                    //they are opening to add tape down information
-                    $scope.addTapedown = true;
-                }
-            };
 
             //formatting date and time properly for chrome and ff
             var getDateTimeParts = function (d) {
@@ -1018,22 +1041,24 @@
             $scope.Deployer = allMembers.filter(function (m) { return m.MEMBER_ID === $scope.DeployedSensorStat.MEMBER_ID; })[0];
             $scope.DEPremoveOPList = [];
             $scope.DEPtapeDownTable = []; //holder of tapedown OP_MEASUREMENTS
-            $scope.DEPaddTapedown = false; //toggle tapedown section
-            $scope.DEPshowTapedownPart = function () {
-                if ($scope.DEPaddTapedown) {
-                    //they are closing it. clear inputs and close
-                    $scope.DEPaddTapedown = false;
-                } else {
-                    //they are opening to add tape down information
-                    $scope.DEPaddTapedown = true;
-                }
-            };
+            //$scope.DEPaddTapedown = true; //toggle tapedown section
+            //$scope.DEPshowTapedownPart = function () {
+            //    if ($scope.DEPaddTapedown) {
+            //        //they are closing it. clear inputs and close
+            //        $scope.DEPaddTapedown = false;
+            //    } else {
+            //        //they are opening to add tape down information
+            //        $scope.DEPaddTapedown = true;
+            //    }
+            //};
             $scope.DEPOPchosen = function (DEPopChosen) {
                 var opI = $scope.DEPOPsForTapeDown.map(function (o) { return o.OBJECTIVE_POINT_ID; }).indexOf(DEPopChosen.OBJECTIVE_POINT_ID);
                 if (DEPopChosen.selected) {
                     //they picked an OP to use for tapedown
                     $scope.DEPOPMeasure = {};
                     $scope.DEPOPMeasure.OP_NAME = DEPopChosen.NAME;
+                    $scope.DEPOPMeasure.elevation = DEPopChosen.ELEV_FT;
+                    $scope.DEPOPMeasure.Vdatum = $scope.vertDatumList.filter(function (vd) { return vd.DATUM_ID == DEPopChosen.VDATUM_ID; })[0].DATUM_ABBREVIATION;
                     $scope.DEPOPMeasure.OBJECTIVE_POINT_ID = DEPopChosen.OBJECTIVE_POINT_ID;
                     //$scope.DEPtapeDownTable.push($scope.DEPOPMeasure);
                     $scope.depTapeCopy.push($scope.DEPOPMeasure);
@@ -1041,6 +1066,7 @@
                     //they unchecked the op to remove
                     //ask them are they sure?
                     var DEPremoveOPMeas = $uibModal.open({
+                        backdrop: 'static',
                         template: '<div class="modal-header"><h3 class="modal-title">Remove OP Measure</h3></div>' +
                             '<div class="modal-body"><p>Are you sure you want to remove this OP Measurement from this deployed sensor?</p></div>' +
                             '<div class="modal-footer"><button class="btn btn-primary" ng-click="DEPok()">OK</button><button class="btn btn-primary" ng-click="DEPcancel()">Cancel</button></div>',
@@ -1058,8 +1084,8 @@
                         if (yesOrNo == 'remove') {
                             //add to remove it list
                             var DEPtapeDownToRemove = $scope.depTapeCopy.filter(function (a) { return a.OBJECTIVE_POINT_ID == DEPopChosen.OBJECTIVE_POINT_ID; })[0];
-                            var DEPtInd = $scope.depTapeCopy.map(function (o) { return o.OP_MEASUREMENTS_ID; }).indexOf(DEPtapeDownToRemove.OP_MEASUREMENTS_ID);
-                            $scope.DEPremoveOPList.push(DEPtapeDownToRemove.OP_MEASUREMENTS_ID);
+                            var DEPtInd = $scope.depTapeCopy.map(function (o) { return o.OBJECTIVE_POINT_ID; }).indexOf(DEPtapeDownToRemove.OBJECTIVE_POINT_ID);
+                            if (DEPtapeDownToRemove.OP_MEASUREMENTS_ID !== undefined) $scope.DEPremoveOPList.push(DEPtapeDownToRemove.OP_MEASUREMENTS_ID);
                             // $scope.DEPtapeDownTable.splice(DEPtInd, 1);
                             $scope.depTapeCopy.splice(DEPtInd, 1);
                         } else {
@@ -1073,6 +1099,9 @@
             OP_MEASURE.getInstStatOPMeasures({ instrumentStatusId: $scope.DeployedSensorStat.INSTRUMENT_STATUS_ID }).$promise.then(function (DEPresponse) {
                 for (var r = 0; r < DEPresponse.length; r++) {
                     var DEPsensMeasures = DEPresponse[r];
+                    var whichOP = siteOPs.filter(function (op) { return op.OBJECTIVE_POINT_ID == DEPresponse[r].OBJECTIVE_POINT_ID; })[0];
+                    DEPsensMeasures.elevation = whichOP.ELEV_FT;
+                    DEPsensMeasures.Vdatum = $scope.vertDatumList.filter(function (vd) { return vd.DATUM_ID == whichOP.VDATUM_ID; })[0].DATUM_ABBREVIATION;
                     DEPsensMeasures.OP_NAME = $scope.DEPOPsForTapeDown.filter(function (op) { return op.OBJECTIVE_POINT_ID == DEPresponse[r].OBJECTIVE_POINT_ID; })[0].NAME;
                     $scope.DEPtapeDownTable.push(DEPsensMeasures);
                 }
@@ -1099,28 +1128,31 @@
             $scope.Retriever = allMembers.filter(function (m) { return m.MEMBER_ID === $scope.RetrievedSensorStat.MEMBER_ID; })[0];
             $scope.RETremoveOPList = [];
             $scope.RETtapeDownTable = []; //holder of tapedown OP_MEASUREMENTS
-            $scope.RETaddTapedown = false; //toggle tapedown section
-            $scope.RETshowTapedownPart = function () {
-                if ($scope.RETaddTapedown) {
-                    //they are closing it. clear inputs and close
-                    $scope.RETaddTapedown = false;
-                } else {
-                    //they are opening to add tape down information
-                    $scope.RETaddTapedown = true;
-                }
-            };
+           // $scope.RETaddTapedown = false; //toggle tapedown section
+            //$scope.RETshowTapedownPart = function () {
+            //    if ($scope.RETaddTapedown) {
+            //        //they are closing it. clear inputs and close
+            //        $scope.RETaddTapedown = false;
+            //    } else {
+            //        //they are opening to add tape down information
+            //        $scope.RETaddTapedown = true;
+            //    }
+            //};
             $scope.RETOPchosen = function (RETopChosen) {
                 var opI = $scope.RETOPsForTapeDown.map(function (o) { return o.OBJECTIVE_POINT_ID; }).indexOf(RETopChosen.OBJECTIVE_POINT_ID);
                 if (RETopChosen.selected) {
                     //they picked an OP to use for tapedown
                     $scope.RETOPMeasure = {};
                     $scope.RETOPMeasure.OP_NAME = RETopChosen.NAME;
+                    $scope.RETOPMeasure.elevation = RETopChosen.ELEV_FT;
+                    $scope.RETOPMeasure.Vdatum = $scope.vertDatumList.filter(function (vd) { return vd.DATUM_ID == RETopChosen.VDATUM_ID; })[0].DATUM_ABBREVIATION;
                     $scope.RETOPMeasure.OBJECTIVE_POINT_ID = RETopChosen.OBJECTIVE_POINT_ID;
                     $scope.retTapeCopy.push($scope.RETOPMeasure);
                 } else {
                     //they unchecked the op to remove
                     //ask them are they sure?
                     var RETremoveOPMeas = $uibModal.open({
+                        backdrop: 'static',
                         template: '<div class="modal-header"><h3 class="modal-title">Remove OP Measure</h3></div>' +
                             '<div class="modal-body"><p>Are you sure you want to remove this OP Measurement from this retrieved sensor?</p></div>' +
                             '<div class="modal-footer"><button class="btn btn-primary" ng-click="RETok()">OK</button><button class="btn btn-primary" ng-click="RETcancel()">Cancel</button></div>',
@@ -1138,7 +1170,7 @@
                         if (yesOrNo == 'remove') {
                             //add to remove it list
                             var RETtapeDownToRemove = $scope.retTapeCopy.filter(function (a) { return a.OBJECTIVE_POINT_ID == RETopChosen.OBJECTIVE_POINT_ID; })[0];
-                            var RETtInd = $scope.retTapeCopy.map(function (o) { return o.OP_MEASUREMENTS_ID; }).indexOf(RETtapeDownToRemove.OP_MEASUREMENTS_ID);
+                            var RETtInd = $scope.retTapeCopy.map(function (o) { return o.OBJECTIVE_POINT_ID; }).indexOf(RETtapeDownToRemove.OBJECTIVE_POINT_ID);
                             $scope.RETremoveOPList.push(RETtapeDownToRemove.OP_MEASUREMENTS_ID);
                             $scope.retTapeCopy.splice(RETtInd, 1);
                         } else {
@@ -1151,6 +1183,9 @@
             OP_MEASURE.getInstStatOPMeasures({ instrumentStatusId: $scope.RetrievedSensorStat.INSTRUMENT_STATUS_ID }).$promise.then(function (RETresponse) {
                 for (var r = 0; r < RETresponse.length; r++) {
                     var RETsensMeasures = RETresponse[r];
+                    var whichOP = siteOPs.filter(function (op) { return op.OBJECTIVE_POINT_ID == RETresponse[r].OBJECTIVE_POINT_ID; })[0];
+                    RETsensMeasures.elevation = whichOP.ELEV_FT;
+                    RETsensMeasures.Vdatum = $scope.vertDatumList.filter(function (vd) { return vd.DATUM_ID == whichOP.VDATUM_ID; })[0].DATUM_ABBREVIATION;
                     RETsensMeasures.OP_NAME = $scope.RETOPsForTapeDown.filter(function (op) { return op.OBJECTIVE_POINT_ID == RETresponse[r].OBJECTIVE_POINT_ID; })[0].NAME;
                     $scope.RETtapeDownTable.push(RETsensMeasures);
                 }
@@ -1336,7 +1371,22 @@
                 $scope.view.DEPval = 'detail';
                 $scope.depStuffCopy = [];
                 $scope.depTapeCopy = [];
-                $scope.DEPaddTapedown = false;
+                //MAKE SURE ALL SELECTED OP'S STAY SELECTED
+                for (var i = 0; i < $scope.DEPOPsForTapeDown.length; i++) {
+                    //for each one, if response has this id, add 'selected:true' else add 'selected:false'
+                    for (var y = 0; y < $scope.DEPtapeDownTable.length; y++) {
+                        if ($scope.DEPtapeDownTable[y].OBJECTIVE_POINT_ID == $scope.DEPOPsForTapeDown[i].OBJECTIVE_POINT_ID) {
+                            $scope.DEPOPsForTapeDown[i].selected = true;
+                            y = $scope.DEPtapeDownTable.length; //ensures it doesn't set it as false after setting it as true
+                        }
+                        else {
+                            $scope.DEPOPsForTapeDown[i].selected = false;
+                        }
+                    }
+                    if ($scope.DEPtapeDownTable.length === 0)
+                        $scope.DEPOPsForTapeDown[i].selected = false;
+                }
+                //$scope.DEPaddTapedown = false;
             };
             //#endregion deploy edit
 
@@ -1403,7 +1453,22 @@
                 $scope.view.RETval = 'detail';
                 $scope.retStuffCopy = [];
                 $scope.retTapeCopy = [];
-                $scope.RETaddTapedown = false;                
+                //$scope.RETaddTapedown = false;
+                //MAKE SURE ALL SELECTED OP'S STAY SELECTED
+                for (var i = 0; i < $scope.RETOPsForTapeDown.length; i++) {
+                    //for each one, if response has this id, add 'selected:true' else add 'selected:false'
+                    for (var y = 0; y < $scope.RETtapeDownTable.length; y++) {
+                        if ($scope.RETtapeDownTable[y].OBJECTIVE_POINT_ID == $scope.RETOPsForTapeDown[i].OBJECTIVE_POINT_ID) {
+                            $scope.RETOPsForTapeDown[i].selected = true;
+                            y = $scope.RETtapeDownTable.length; //ensures it doesn't set it as false after setting it as true
+                        }
+                        else {
+                            $scope.RETOPsForTapeDown[i].selected = false;
+                        }
+                    }
+                    if ($scope.RETtapeDownTable.length === 0)
+                        $scope.RETOPsForTapeDown[i].selected = false;
+                }
             };
             //#endregion Retrieve edit
 
@@ -1546,6 +1611,7 @@
             //delete this file
             $scope.deleteNWISFile = function () {
                 var DeleteModalInstance = $uibModal.open({
+                    backdrop: 'static',
                     templateUrl: 'removemodal.html',
                     controller: 'ConfirmModalCtrl',
                     size: 'sm',
@@ -1584,6 +1650,7 @@
             $scope.deleteS = function () {
                 //TODO:: Delete the files for this sensor too or reassign to the Site?? Services or client handling?
                 var DeleteModalInstance = $uibModal.open({
+                    backdrop: 'static',
                     templateUrl: 'removemodal.html',
                     controller: 'ConfirmModalCtrl',
                     size: 'sm',
@@ -1601,7 +1668,15 @@
                     $http.defaults.headers.common.Authorization = 'Basic ' + $cookies.get('STNCreds');
                     //this will delete the instrument and all it's statuses
                     INSTRUMENT.delete({ id: sensorToRemove.INSTRUMENT_ID }).$promise.then(function () {
-                        //remove the statuses too
+                        $scope.sensorFiles = []; //clear out sensorFiles for this sensor
+                        $scope.sensImageFiles = []; //clear out image files for this sensor
+                        //now remove all these files from SiteFiles
+                        var l = $scope.allSFiles.length;
+                        while (l--) {
+                            if ($scope.allSFiles[l].INSTRUMENT_ID == sensorToRemove.INSTRUMENT_ID) $scope.allSFiles.splice(l, 1);
+                        }
+                        //updates the file list on the sitedashboard
+                        Site_Files.setAllSiteFiles($scope.allSFiles);
                         toastr.success("Sensor Removed");
                         var sendBack = ["de", 'deleted'];
                         $uibModalInstance.close(sendBack);
@@ -1829,6 +1904,7 @@
             //delete this file
             $scope.deleteFile = function () {
                 var DeleteModalInstance = $uibModal.open({
+                    backdrop: 'static',
                     templateUrl: 'removemodal.html',
                     controller: 'ConfirmModalCtrl',
                     size: 'sm',
