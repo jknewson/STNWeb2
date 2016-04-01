@@ -130,9 +130,10 @@
                         options: {
                             noHide: true,
                             offset: [25, -15],
-                            className: "siteLabel"
+                            className: 'siteLabel'
                         }
                     };
+
                     $scope.mapCenter = {lat: args.model.lat, lng: args.model.lng, zoom: 10};
                     var addShape = function() {
                         $scope.paths = {};
@@ -200,7 +201,6 @@
                     $scope.error = "Could not fetch sites";
                 };
 
-                //TODO: this has a bug - clicking map when new site already placed is not replacing the old one
                 $scope.$on("leafletDirectiveMap.click", function(event, args){
                     if ($scope.createSiteModeActive == true) {
                         //first, remove previously click-created site
@@ -302,7 +302,7 @@
                         doWatch: true,
                         isDeep: true,
                         individual: {
-                            doWatch: false,
+                            doWatch: true,
                             isDeep: false
                         }
                     },
@@ -311,15 +311,15 @@
                     markersLatLngArray: [],
                     createSiteModeActive: false,
                     userCreatedSite: {},
-                    makeID: function() {
-                        var text = "";
-                        var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-
-                        for( var i=0; i < 5; i++ )
-                            text += possible.charAt(Math.floor(Math.random() * possible.length));
-
-                        return text;
-                    },
+                    // makeID: function() {
+                    //     var text = "";
+                    //     var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+                    //
+                    //     for( var i=0; i < 5; i++ )
+                    //         text += possible.charAt(Math.floor(Math.random() * possible.length));
+                    //
+                    //     return text;
+                    // },
                     layers: {
                         baselayers: {
                             gray: {

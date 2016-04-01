@@ -47,6 +47,7 @@
                     }
                 };
 
+                //if they are coming back here, see if a search has been stored last time.
                 if ($rootScope.searchParams !== undefined) {
                     var thisSearch = $rootScope.searchParams;
                     $scope.sessionEvent = Number(thisSearch.event);
