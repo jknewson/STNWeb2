@@ -353,7 +353,7 @@
                     SITE.getSitePeaks({ id: siteId }).$promise.then(function (pResponse) {
                         MapSiteParts.push(pResponse);
                         $rootScope.$broadcast('mapSiteClick', MapSiteParts);
-                        $rootScope.stateIsLoading.showLoading = false;
+                        //$rootScope.stateIsLoading.showLoading = false;
                     });
                 });                
             }

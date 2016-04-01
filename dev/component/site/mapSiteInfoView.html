@@ -5,11 +5,8 @@
             <i style="margin-right:10px" class="pull-left glyphicon" ng-class="{'glyphicon-chevron-down': status.siteOpen, 'glyphicon-chevron-right': !status.siteOpen}"></i>
             <span>Site Info </span><span class="label label-primary siteLabel" ng-if="aSite.SITE_ID != null"> <b>Site {{aSite.SITE_ID}}</b></span>
         </uib-accordion-heading>
-
-
         <div ng-if="aSite.SITE_ID == undefined">Click a site to see info</div>
         <div ng-if="aSite.SITE_ID != undefined">
-
 
             <table class="table table-hover table-condensed">
                 <!--<thead><th>SITE {{aSite.SITE_ID}}</th></thead>-->
@@ -80,6 +77,10 @@
 
     </uib-accordion-group>
 </uib-accordion>
+
+
+
+
 <style type="text/css">
     .form-group {
         margin-bottom:0;

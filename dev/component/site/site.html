@@ -539,7 +539,7 @@
 <!-- MODAL for Objective Point -->
 <script type="text/ng-template" id="OPmodal.html">
     <div class="modal-header">
-        <h3 class="modal-title">Objective Point<button class="close" type="button" ng-click="cancel()" aria-hidden="true" style="color:gray;">&times;</button></h3>
+        <h3 class="modal-title">Datum Location<button class="close" type="button" ng-click="cancel()" aria-hidden="true" style="color:gray;">&times;</button></h3>
     </div>
 
     <div class="modal-body">
@@ -766,7 +766,7 @@
 
                 <!-- Objective Point Notes: -->
                 <div class="form-group">
-                    <label class="col-md-4 control-label" for="OP_NOTES">Objective Point Notes:</label>
+                    <label class="col-md-4 control-label" for="OP_NOTES">Datum Location Notes:</label>
                     <div class="col-md-6">
                         <textarea class="form-control" type="text" rows="3" ng-model="OP.OP_NOTES" />
                     </div>
@@ -829,7 +829,7 @@
 
         <!-- OBJECTIVE POINT FILES SECTION -->
         <div ng-if="OP.OBJECTIVE_POINT_ID !== undefinfed" class="col-md-12">
-            <div class="col-md-4"><h3>Objective Point Files</h3></div>
+            <div class="col-md-4"><h3>Datum Location Files</h3></div>
             <div class="col-md-6" ng-if="!showFileForm" style="margin-top:14px">
                 <button type="button" class="borderLess" ng-click="showFile(0)" tooltip-placement="right" uib-tooltip="Upload a new File to this OP">
                     <span class="glyphicon glyphicon-plus"></span>
@@ -1319,10 +1319,26 @@
                         <span>{{SurveyMember.FNAME}} {{SurveyMember.LNAME}}</span>
                     </div>
                 </div>
+
+                <!-- Approval info -->
+                <div class="form-group">
+                    <label class="col-md-3 control-label" for="APPROVAL_ID">Approval Info:</label>
+                    <div class="col-md-6">
+                        <span>Approved By:</span><span ng-if="ApprovalInfo.Member"> {{ApprovalInfo.Member.FNAME || '---'}} {{ApprovalInfo.Member.LNAME || '---'}}</span><br />
+                        <span>On:</span><span ng-if="ApprovalInfo.approvalDate"> {{ApprovalInfo.approvalDate | date: 'MM/dd/yyyy hh:mm a' || '---'}}</span>
+                        <button ng-if="ApprovalInfo.approvalDate" type="button" class="borderLess" tooltip-placement="right" uib-tooltip="Time displayed as local, stored in UTC.">
+                            <span class="glyphicon glyphicon-question-sign"></span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- form buttons -->
                 <div class="form-group">
                     <div class="col-md-12">
                         <span><button ng-show="aHWM.HWM_ID == undefined" class="btn btn-primary" ng-click="create(HWMForm.$valid)"><span>Create</span></button></span>
                         <span><button ng-show="aHWM.HWM_ID != undefined" ng-disabled="showFileForm" class="btn btn-primary" ng-click="save(HWMForm.$valid)"><span>Save</span></button></span>
+                        <span><button ng-show="(aHWM.HWM_ID != undefined && ApprovalInfo.approvalDate == undefined) && (userRole == 'Admin' || userRole == 'Manager')" class="btn btn-primary" ng-click="approveHWM(HWMForm.$valid)"><span>Approve</span></button></span>
+                        <span><button ng-show="(aHWM.HWM_ID != undefined && ApprovalInfo.approvalDate != undefined) && (userRole == 'Admin' || userRole == 'Manager')" class="btn btn-primary" ng-click="unApproveHWM(HWMForm.$valid)"><span>UnApprove</span></button></span>
                         <span><button ng-show="aHWM.HWM_ID != undefined" ng-disabled="showFileForm" class="btn btn-danger" ng-click="deleteHWM(HWMForm.$valid)"><span>Delete</span></button></span>
                         <span><button type="button" class="btn btn-warning" ng-disabled="showFileForm" ng-click="cancel()"><span>Cancel/Close</span></button></span>
                     </div>
@@ -1688,10 +1704,10 @@
                             <div class="pull-left col-md-12"><em>Note: these elevations are used in the sensor processing and the final products</em></div>
                         </div>
 
-                        <!-- area for D3 vertical ruler -->
-                        <div class="col-md-3">
-                            
-                        </div>
+                        <!-- area for D3 vertical ruler
+                        <div class="col-md-6">
+                            <bars-chart elevation-data="myData"></bars-chart>
+                        </div> -->
                     </div>
                     <br clear="all" />
                     <hr />
@@ -2060,6 +2076,7 @@
     </div><!-- end modal-footer -->
 
 </script>
+
 
 <!-- MODAL for Retrieving a Sensor-->
 <script type="text/ng-template" id="SensorRetrievalModal.html">
@@ -3569,6 +3586,21 @@
 <style type="text/css">
     .needRetrieve {
         color: red;
+    }
+    
+
+    .chart div {
+      width: 0;
+      transition: all 1s ease-out;
+      -moz-transition: all 1s ease-out;
+      -webkit-transition: all 1s ease-out;    
+      font: 10px sans-serif;
+      background-color: steelblue;
+      text-align: right;
+      padding: 3px;
+      margin: 5px;
+      color: white;
+      box-shadow: 2px 2px 2px #666;
     }
 </style>
 <!-- MODAL for PEAK Create/edit-->
