@@ -458,3 +458,7 @@ a.disabled {
     border-width: 0 5px 8.7px 5px;
     border-color: transparent transparent #000000 transparent;
 }
+
+.leaflet-popup-content {
+    width:auto !important;
+}
