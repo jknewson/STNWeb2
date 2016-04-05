@@ -150,7 +150,6 @@
                     };
                     addShape();
                 });
-
                 ///this needs to be instantiated before it can be filled programmatically below. may need to move scope.extend block to top
                 // $scope.controls = {
                 //     custom: []
@@ -206,7 +205,6 @@
                 var onError = function(reason){
                     $scope.error = "Could not fetch sites";
                 };
-
                 $scope.$on("leafletDirectiveMap.click", function(event, args){
                     if ($scope.createSiteModeActive == true) {
                         //first, remove previously click-created site
@@ -240,10 +238,7 @@
                     }
                     //use new clicked site lat/lng and create new site from that
                 });
-
-
                 var removeUserCreatedSite = function () {
-
                     //returns created site index so it can be removed to make way for its replacement
                     var createdSiteIndex = $scope.markers.map(function(obj) {
                         return obj.SITE_ID;
@@ -293,11 +288,6 @@
                 //$http.get('https://stn.wim.usgs.gov/STNServices/Events/' + evID + '/Sites.json')
                 //    .then(onSiteComplete, onError);
                 //copies scope object/////////////////////////////
-
-
-
-
-
                 angular.extend($scope, {
                     events: {
                         markers: {
@@ -414,15 +404,10 @@
                                         });
                                     },
                                     onEachFeature: function(feature, layer) {
-                                        layer.bindPopup(function(features){
-                                            console.log(feature);
-                                            return "Name: " + feature.Name;
-                                        });
+                                        //layer.bindPopup("USGS ID: " + feature.properties.Name);
+                                        layer.bindPopup(feature.properties.PopupInfo + '<br><img style="width: 350px" src="http://waterdata.usgs.gov/nwisweb/graph?agency_cd=USGS&site_no=' + feature.properties.Name + '&parm_cd=00065&period=7">');
                                     }
                                 }
-                                // bindPopup:function(features){
-                                //         return "Name: " + features.properties.NAME;
-                                //     }
                             },
                             ahps : {
                                 name: "AHPS Gages",
@@ -502,12 +487,6 @@
                         //}
                     }
                 });//end angular $scope.extend statement
-
-                // var nwisFeatureLayer = $scope.layers.overlays.nwis;
-                // nwisFeatureLayer.bindPopup(function(features){
-                //     console.log(features);
-                //     return "Name: " + features.Name;
-                // });
                 ///////////////////////////////////////////////////////////////////////////////////////
             } //end -if credentials pass- statement
         }]);//end controller function
