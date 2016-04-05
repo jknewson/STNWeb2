@@ -447,3 +447,14 @@ a.disabled {
     font-size:larger;
     padding-top:80px;
 }
+
+.arrow-up {
+    width: 0;
+    height: 0;
+    border-left: 5px solid transparent;
+    border-right: 5px solid transparent;
+    border-bottom: 5px solid black;
+    border-style: solid;
+    border-width: 0 5px 8.7px 5px;
+    border-color: transparent transparent #000000 transparent;
+}

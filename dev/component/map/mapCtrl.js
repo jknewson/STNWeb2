@@ -31,7 +31,13 @@
                         type: 'div',
                         iconSize: [12, 12],
                         className: 'selectedIcon'
-                    }
+                    },
+                    nwis: L.divIcon({
+                        iconSize: [10, 10],
+                        className: 'arrow-up'
+                        // iconAnchor: [13.5, 17.5],
+                        // popupAnchor: [0, -11]
+                    })
                 };
                 //creates the markers on the map after getting JSON from STN web services call
                 var onSiteComplete = function(response) {
@@ -287,6 +293,11 @@
                 //$http.get('https://stn.wim.usgs.gov/STNServices/Events/' + evID + '/Sites.json')
                 //    .then(onSiteComplete, onError);
                 //copies scope object/////////////////////////////
+
+
+
+
+
                 angular.extend($scope, {
                     events: {
                         markers: {
@@ -393,13 +404,25 @@
                             },
                             nwis : {
                                 name: "USGS real-time streamgages",
-                                type: "agsDynamic",
-                                url : "https://stnmapservices.wim.usgs.gov:6443/arcgis/rest/services/STN/STN_nwis_rt/MapServer",
-                                visible: false,
+                                type: "agsFeature",
+                                url : "https://stnmapservices.wim.usgs.gov:6443/arcgis/rest/services/STN/STN_nwis_rt/MapServer/0",
+                                visible: true,
                                 layerOptions : {
-                                    layers: [0],
-                                    opacity: 1
+                                    pointToLayer: function (geojson, latlng) {
+                                        return L.marker(latlng, {
+                                            icon: icons.nwis
+                                        });
+                                    },
+                                    onEachFeature: function(feature, layer) {
+                                        layer.bindPopup(function(features){
+                                            console.log(feature);
+                                            return "Name: " + feature.Name;
+                                        });
+                                    }
                                 }
+                                // bindPopup:function(features){
+                                //         return "Name: " + features.properties.NAME;
+                                //     }
                             },
                             ahps : {
                                 name: "AHPS Gages",
@@ -478,7 +501,13 @@
                         //    position: "bottomleft"
                         //}
                     }
-                });//end angular.extend statement
+                });//end angular $scope.extend statement
+
+                // var nwisFeatureLayer = $scope.layers.overlays.nwis;
+                // nwisFeatureLayer.bindPopup(function(features){
+                //     console.log(features);
+                //     return "Name: " + features.Name;
+                // });
                 ///////////////////////////////////////////////////////////////////////////////////////
             } //end -if credentials pass- statement
         }]);//end controller function
