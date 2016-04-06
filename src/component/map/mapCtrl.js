@@ -37,6 +37,33 @@
                         className: 'arrow-up'
                         // iconAnchor: [13.5, 17.5],
                         // popupAnchor: [0, -11]
+                    }),
+                    action: L.icon({
+                        iconUrl: 'images/action.png'
+                    }),
+                    low_threshold: L.icon({
+                        iconUrl: 'images/low_threshold.png'
+                    }),
+                    major: L.icon({
+                        iconUrl: 'images/major.png'
+                    }),
+                    minor: L.icon({
+                        iconUrl: 'images/minor.png'
+                    }),
+                    moderate: L.icon({
+                        iconUrl: 'images/moderate.png'
+                    }),
+                    no_flooding: L.icon({
+                        iconUrl: 'images/no_flooding.png'
+                    }),
+                    not_defined: L.icon({
+                        iconUrl: 'images/not_defined.png'
+                    }),
+                    obs_not_current: L.icon({
+                        iconUrl: 'images/obs_not_current.png'
+                    }),
+                    out_of_service: L.icon({
+                        iconUrl: 'images/out_of_service.png'
                     })
                 };
                 //creates the markers on the map after getting JSON from STN web services call
@@ -411,12 +438,22 @@
                             },
                             ahps : {
                                 name: "AHPS Gages",
-                                type: "agsDynamic",
-                                url : "http://gis.srh.noaa.gov/arcgis/rest/services/ahps_gauges/MapServer",
-                                visible: false,
+                                type: "agsFeature",
+                                url : "http://gis.srh.noaa.gov/arcgis/rest/services/ahps_gauges/MapServer/0",
+                                visible: true,
                                 layerOptions : {
-                                    layers: [0],
-                                    opacity: 1
+                                    //layers: [0],
+                                    opacity: 1,
+                                    pointToLayer: function (geojson, latlng) {
+                                        return L.marker(latlng, {
+                                            icon: icons[geojson.properties.status]
+                                        });
+                                    },
+                                    onEachFeature: function(feature, layer) {
+                                        //layer.bindPopup("USGS ID: " + feature.properties.Name);
+                                        var graphURL = "http://water.weather.gov/resources/hydrographs/" + feature.properties.gaugelid.toLowerCase() + "_hg.png";
+                                        layer.bindPopup("<b>Gage ID: </b>" + feature.properties.gaugelid + "</br><b>Location: </b>" + feature.properties.location + "</br><b>Waterbody: </b>" + feature.properties.waterbody + "</br><a target='_blank' href='"+ feature.properties.url + "'><img title='Click for details page' width=300 src='" + graphURL +"'/></a>");
+                                    }
                                 }
                             },
                             radar : {
