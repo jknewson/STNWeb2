@@ -62,6 +62,10 @@
                             controller: 'MapController',
                             templateUrl: "component/map/map.html"
                         },
+                        'mapFilters@map': {
+                            templateUrl: 'component/map/mapFilters.html',
+                            controller: 'MapFiltersController'
+                        },
                         'mapSiteInfo@map': {
                             templateUrl: 'component/site/mapSiteInfoView.html', 
                             controller: 'MapSiteInfoController'

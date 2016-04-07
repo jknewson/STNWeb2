@@ -4,6 +4,7 @@
 
         <!--<h3 class="col-md-12"ng-if="createSiteModeActive"><span class="label label-warning">CREATE SITE MODE ACTIVE</span></h3>-->
         <div class="col-md-4">
+            <!--<div ui-view="mapFilters"></div>-->
             <div ui-view="mapSiteInfo"></div>
             <div ui-view="mapPeaksView"></div>
             <div ui-view="mapSensorPropose"></div>
@@ -27,6 +28,8 @@
                     <button ng-class="createSiteModeActive ? 'btn btn-danger' : 'btn btn-primary'" ng-click="createSiteModeActive = !createSiteModeActive">{{createSiteButtonText}}</button>
                     <button ng-class="'btn btn-warning'" ng-if="createSiteModeActive" ng-click="createSiteFromMap()">Create new site at clicked location</button>
                 </div>
+
+               <div ui-view="mapFilters"></div>
 
 
                 <!--<br>Sites JSON: {{sites}}-->

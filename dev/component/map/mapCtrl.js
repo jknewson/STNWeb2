@@ -11,8 +11,8 @@
                 $rootScope.thisPage = "Map";
                 $rootScope.activeMenu = "map";
                 $scope.message = "Many of the supplemental GIS data layers found in the map are from a range of sources and are not maintained by WiM. We offer these map layers as a " +
-                    "decision support supplement to the STN sites layer, but we cannot guarantee their performance and availability. Many of these externally maintained layers are" +
-                    "large datasets and may load slowly depending on network latency. In some cases they may fail to load when network latency is high.";
+                    "decision support supplement to the STN sites layer, but we cannot guarantee their performance and availability. Many of these externally maintained layers are " +
+                    "large datasets and may load slowly depending on network latency. In some cases they may fail to load entirely when network latency is high.";
                 //$scope.map = "Welcome to the new STN Map Page!!";
 
                 var icons = {
@@ -39,31 +39,40 @@
                         // popupAnchor: [0, -11]
                     }),
                     action: L.icon({
-                        iconUrl: 'images/action.png'
+                        iconUrl: 'images/action.png',
+                        popupAnchor: [10, 10]
                     }),
                     low_threshold: L.icon({
-                        iconUrl: 'images/low_threshold.png'
+                        iconUrl: 'images/low_threshold.png',
+                        popupAnchor: [10, 10]
                     }),
                     major: L.icon({
-                        iconUrl: 'images/major.png'
+                        iconUrl: 'images/major.png',
+                        popupAnchor: [10, 10]
                     }),
                     minor: L.icon({
-                        iconUrl: 'images/minor.png'
+                        iconUrl: 'images/minor.png',
+                        popupAnchor: [10, 10]
                     }),
                     moderate: L.icon({
-                        iconUrl: 'images/moderate.png'
+                        iconUrl: 'images/moderate.png',
+                        popupAnchor: [10, 10]
                     }),
                     no_flooding: L.icon({
-                        iconUrl: 'images/no_flooding.png'
+                        iconUrl: 'images/no_flooding.png',
+                        popupAnchor: [10, 10]
                     }),
                     not_defined: L.icon({
-                        iconUrl: 'images/not_defined.png'
+                        iconUrl: 'images/not_defined.png',
+                        popupAnchor: [10, 10]
                     }),
                     obs_not_current: L.icon({
-                        iconUrl: 'images/obs_not_current.png'
+                        iconUrl: 'images/obs_not_current.png',
+                        popupAnchor: [10, 10]
                     }),
                     out_of_service: L.icon({
-                        iconUrl: 'images/out_of_service.png'
+                        iconUrl: 'images/out_of_service.png',
+                        popupAnchor: [10, 10]
                     })
                 };
                 //creates the markers on the map after getting JSON from STN web services call
@@ -324,7 +333,8 @@
                     mapCenter: {
                         lat: 41.278,
                         lng: -92.336,
-                        zoom: 4
+                        zoom: 4,
+                        minZoom: 4
                     },
                     markersWatchOptions: {
                         doWatch: true,
@@ -423,7 +433,7 @@
                                 name: "USGS real-time streamgages",
                                 type: "agsFeature",
                                 url : "https://stnmapservices.wim.usgs.gov:6443/arcgis/rest/services/STN/STN_nwis_rt/MapServer/0",
-                                visible: true,
+                                visible: false,
                                 layerOptions : {
                                     pointToLayer: function (geojson, latlng) {
                                         return L.marker(latlng, {
@@ -440,7 +450,7 @@
                                 name: "AHPS Gages",
                                 type: "agsFeature",
                                 url : "http://gis.srh.noaa.gov/arcgis/rest/services/ahps_gauges/MapServer/0",
-                                visible: true,
+                                visible: false,
                                 layerOptions : {
                                     //layers: [0],
                                     opacity: 1,
@@ -452,7 +462,9 @@
                                     onEachFeature: function(feature, layer) {
                                         //layer.bindPopup("USGS ID: " + feature.properties.Name);
                                         var graphURL = "http://water.weather.gov/resources/hydrographs/" + feature.properties.gaugelid.toLowerCase() + "_hg.png";
-                                        layer.bindPopup("<b>Gage ID: </b>" + feature.properties.gaugelid + "</br><b>Location: </b>" + feature.properties.location + "</br><b>Waterbody: </b>" + feature.properties.waterbody + "</br><a target='_blank' href='"+ feature.properties.url + "'><img title='Click for details page' width=300 src='" + graphURL +"'/></a>");
+                                        //layer.bindPopup("<b>Gage ID: </b>" + feature.properties.gaugelid + "</br><b>Location: </b>" + feature.properties.location + "</br><b>Waterbody: </b>" + feature.properties.waterbody + "</br><a target='_blank' href='"+ feature.properties.url + "'><img title='Click for details page' width=300 src='" + graphURL +"'/></a>");
+                                        layer.bindPopup("<b>Gage ID: </b>" + feature.properties.gaugelid + "</br><a target='_blank' href='"+ feature.properties.url + "'><img title='Click for details page' width=300 src='" + graphURL +"'/></a>");
+
                                     }
                                 }
                             },
@@ -469,7 +481,7 @@
                             watchWarn : {
                                 name: "NWS Watches & Warnings",
                                 type: "agsDynamic",
-                                url : "http://gis.srh.noaa.gov/ArcGIS/rest/services/watchWarn/MapServer",
+                                url : "http://gis.srh.noaa.gov/arcgis/rest/services/watchWarn/MapServer",
                                 visible: false,
                                 layerOptions : {
                                     layers: [1],
