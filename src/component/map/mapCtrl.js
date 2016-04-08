@@ -2,8 +2,8 @@
     'use strict';
     var STNControllers = angular.module('STNControllers');
 
-    STNControllers.controller('MapController', ['$scope', '$http', '$rootScope', '$cookies', '$location', 'SITE', 'Map_Site', 'leafletMarkerEvents', 'leafletBoundsHelpers', '$state',
-        function ($scope, $http, $rootScope, $cookies, $location, SITE, Map_Site, leafletMarkerEvents, leafletBoundsHelpers, $state) {
+    STNControllers.controller('MapController', ['$scope', '$http', '$rootScope', '$cookies', '$location', 'SITE', 'Map_Site', 'leafletMarkerEvents', 'leafletBoundsHelpers', 'leafletData', '$state',
+        function ($scope, $http, $rootScope, $cookies, $location, SITE, Map_Site, leafletMarkerEvents, leafletBoundsHelpers, leafletData, $state) {
             if ($cookies.get('STNCreds') === undefined || $cookies.get('STNCreds') === "") {
                 $scope.auth = false;
                 $location.path('/login');
@@ -11,8 +11,8 @@
                 $rootScope.thisPage = "Map";
                 $rootScope.activeMenu = "map";
                 $scope.message = "Many of the supplemental GIS data layers found in the map are from a range of sources and are not maintained by WiM. We offer these map layers as a " +
-                    "decision support supplement to the STN sites layer, but we cannot guarantee their performance and availability. Many of these externally maintained layers are" +
-                    "large datasets and may load slowly depending on network latency. In some cases they may fail to load when network latency is high.";
+                    "decision support supplement to the STN sites layer, but we cannot guarantee their performance and availability. Many of these externally maintained layers are " +
+                    "large datasets and may load slowly depending on network latency. In some cases they may fail to load entirely when network latency is high.";
                 //$scope.map = "Welcome to the new STN Map Page!!";
 
                 var icons = {
@@ -31,36 +31,116 @@
                         type: 'div',
                         iconSize: [12, 12],
                         className: 'selectedIcon'
-                    }
+                    },
+                    nwis: L.divIcon({
+                        iconSize: [10, 10],
+                        className: 'arrow-up'
+                        // iconAnchor: [13.5, 17.5],
+                        // popupAnchor: [0, -11]
+                    }),
+                    action: L.icon({
+                        iconUrl: 'images/action.png',
+                        popupAnchor: [10, 10]
+                    }),
+                    low_threshold: L.icon({
+                        iconUrl: 'images/low_threshold.png',
+                        popupAnchor: [10, 10]
+                    }),
+                    major: L.icon({
+                        iconUrl: 'images/major.png',
+                        popupAnchor: [10, 10]
+                    }),
+                    minor: L.icon({
+                        iconUrl: 'images/minor.png',
+                        popupAnchor: [10, 10]
+                    }),
+                    moderate: L.icon({
+                        iconUrl: 'images/moderate.png',
+                        popupAnchor: [10, 10]
+                    }),
+                    no_flooding: L.icon({
+                        iconUrl: 'images/no_flooding.png',
+                        popupAnchor: [10, 10]
+                    }),
+                    not_defined: L.icon({
+                        iconUrl: 'images/not_defined.png',
+                        popupAnchor: [10, 10]
+                    }),
+                    obs_not_current: L.icon({
+                        iconUrl: 'images/obs_not_current.png',
+                        popupAnchor: [10, 10]
+                    }),
+                    out_of_service: L.icon({
+                        iconUrl: 'images/out_of_service.png',
+                        popupAnchor: [10, 10]
+                    })
                 };
                 //creates the markers on the map after getting JSON from STN web services call
                 var onSiteComplete = function(response) {
                     var sitesArray = response.data.Sites;
+                    console.table(sitesArray);
                     $scope.sites = response.data;
                     $scope.markers = [];
                     $scope.markersLatLngArray = [];
-                    for (var i = 0; i < sitesArray.length; i++) {
-                        var a = sitesArray[i];
-                        $scope.markers.push({
-                            layer:'stnSites',
-                            lat: a.latitude,
-                            lng: a.longitude,
-                            SITE_ID: a.SITE_ID,
-                            title: "STN Site",
-                            icon: icons.stn
-                        });
-                        $scope.markersLatLngArray.push([a.latitude, a.longitude]);
-                    }
 
-                    var LLBounds =  new L.LatLngBounds($scope.markersLatLngArray);
-                    $scope.bounds = leafletBoundsHelpers.createBoundsFromArray([
-                        [LLBounds._northEast.lat, LLBounds._northEast.lng],
-                        [LLBounds._southWest.lat, LLBounds._southWest.lng]
-                    ]);
+                    /////controls method///////////////////////////////////////////////////////
+                    leafletData.getDirectiveControls().then(function (controls) {
 
+                        controls.markers.create({}, $scope.markers);
+
+                        var markers = [];
+                        for (var i = 0; i < sitesArray.length; i++) {
+                            var a = sitesArray[i];
+                            markers.push({
+                                layer:'stnSites',
+                                lat: a.latitude,
+                                lng: a.longitude,
+                                SITE_ID: a.SITE_ID,
+                                title: "STN Site",
+                                icon: icons.stn
+                            });
+                            $scope.markersLatLngArray.push([a.latitude, a.longitude]);
+                        }
+
+                        controls.markers.create(markers ,$scope.markers);
+                        $scope.markers = markers;
+
+                        var LLBounds =  new L.LatLngBounds($scope.markersLatLngArray);
+                        $scope.bounds = leafletBoundsHelpers.createBoundsFromArray([
+                            [LLBounds._northEast.lat, LLBounds._northEast.lng],
+                            [LLBounds._southWest.lat, LLBounds._southWest.lng]
+                        ]);
+
+
+                    });
+                    /////end controls method///////////////////////////////////////////////////////
+
+                    /////////////rando keys method//////////////////////////////////////////
+                    // for (var i = 0; i < sitesArray.length; i++) {
+                    //     var a = sitesArray[i];
+                    //     var markerID = $scope.makeID();
+                    //     // $scope.markers.push({
+                    //     //     layer:'stnSites',
+                    //     //     lat: a.latitude,
+                    //     //     lng: a.longitude,
+                    //     //     SITE_ID: a.SITE_ID,
+                    //     //     title: "STN Site",
+                    //     //     icon: icons.stn
+                    //     // });
+                    //     //
+                    //     $scope.markers[markerID] = {
+                    //         layer:'stnSites',
+                    //         lat: a.latitude,
+                    //         lng: a.longitude,
+                    //         SITE_ID: a.SITE_ID,
+                    //         title: "STN Site",
+                    //         icon: icons.stn
+                    //     };
+                    //     $scope.markersLatLngArray.push([a.latitude, a.longitude]);
+                    // }
+                    /////////////end rando keys method//////////////////////////////////////////
 
                 };
-
                 $scope.pathsObj = {
                     circleMarker: {
                         type: "circleMarker",
@@ -92,18 +172,11 @@
                         options: {
                             noHide: true,
                             offset: [25, -15],
-                            className: "siteLabel"
+                            className: 'siteLabel'
                         }
                     };
 
-                    //////
-                    // console.log("The args.model.SITE_ID property for clicked site is " + args.model.SITE_ID + ", at " + args.model.lat + "," + args.model.lng );
-                    // console.log("Corresponding marker SITE ID is " + $scope.markers[$scope.selectedMarkerNum].SITE_ID);
-                    // console.log("They match, no problem:" + (args.model.SITE_ID === $scope.markers[$scope.selectedMarkerNum].SITE_ID));
-                    /////
-
                     $scope.mapCenter = {lat: args.model.lat, lng: args.model.lng, zoom: 10};
-
                     var addShape = function() {
                         $scope.paths = {};
                         $scope.pathsObj.circleMarker.latlngs = {lat: args.model.lat, lng: args.model.lng};
@@ -113,7 +186,6 @@
                     };
                     addShape();
                 });
-
                 ///this needs to be instantiated before it can be filled programmatically below. may need to move scope.extend block to top
                 // $scope.controls = {
                 //     custom: []
@@ -169,8 +241,6 @@
                 var onError = function(reason){
                     $scope.error = "Could not fetch sites";
                 };
-
-                ///get site from click
                 $scope.$on("leafletDirectiveMap.click", function(event, args){
                     if ($scope.createSiteModeActive == true) {
                         //first, remove previously click-created site
@@ -204,7 +274,6 @@
                     }
                     //use new clicked site lat/lng and create new site from that
                 });
-
                 var removeUserCreatedSite = function () {
                     //returns created site index so it can be removed to make way for its replacement
                     var createdSiteIndex = $scope.markers.map(function(obj) {
@@ -264,13 +333,31 @@
                     mapCenter: {
                         lat: 41.278,
                         lng: -92.336,
-                        zoom: 4
+                        zoom: 4,
+                        minZoom: 4
+                    },
+                    markersWatchOptions: {
+                        doWatch: true,
+                        isDeep: true,
+                        individual: {
+                            doWatch: true,
+                            isDeep: false
+                        }
                     },
                     paths: {},
                     markers: [],
                     markersLatLngArray: [],
                     createSiteModeActive: false,
                     userCreatedSite: {},
+                    // makeID: function() {
+                    //     var text = "";
+                    //     var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+                    //
+                    //     for( var i=0; i < 5; i++ )
+                    //         text += possible.charAt(Math.floor(Math.random() * possible.length));
+                    //
+                    //     return text;
+                    // },
                     layers: {
                         baselayers: {
                             gray: {
@@ -344,22 +431,41 @@
                             },
                             nwis : {
                                 name: "USGS real-time streamgages",
-                                type: "agsDynamic",
-                                url : "https://stnmapservices.wim.usgs.gov:6443/arcgis/rest/services/STN/STN_nwis_rt/MapServer",
+                                type: "agsFeature",
+                                url : "https://stnmapservices.wim.usgs.gov:6443/arcgis/rest/services/STN/STN_nwis_rt/MapServer/0",
                                 visible: false,
                                 layerOptions : {
-                                    layers: [0],
-                                    opacity: 1
+                                    pointToLayer: function (geojson, latlng) {
+                                        return L.marker(latlng, {
+                                            icon: icons.nwis
+                                        });
+                                    },
+                                    onEachFeature: function(feature, layer) {
+                                        //layer.bindPopup("USGS ID: " + feature.properties.Name);
+                                        layer.bindPopup(feature.properties.PopupInfo + '<br><img style="width: 350px" src="http://waterdata.usgs.gov/nwisweb/graph?agency_cd=USGS&site_no=' + feature.properties.Name + '&parm_cd=00065&period=7">');
+                                    }
                                 }
                             },
                             ahps : {
                                 name: "AHPS Gages",
-                                type: "agsDynamic",
-                                url : "http://gis.srh.noaa.gov/arcgis/rest/services/ahps_gauges/MapServer",
+                                type: "agsFeature",
+                                url : "http://gis.srh.noaa.gov/arcgis/rest/services/ahps_gauges/MapServer/0",
                                 visible: false,
                                 layerOptions : {
-                                    layers: [0],
-                                    opacity: 1
+                                    //layers: [0],
+                                    opacity: 1,
+                                    pointToLayer: function (geojson, latlng) {
+                                        return L.marker(latlng, {
+                                            icon: icons[geojson.properties.status]
+                                        });
+                                    },
+                                    onEachFeature: function(feature, layer) {
+                                        //layer.bindPopup("USGS ID: " + feature.properties.Name);
+                                        var graphURL = "http://water.weather.gov/resources/hydrographs/" + feature.properties.gaugelid.toLowerCase() + "_hg.png";
+                                        //layer.bindPopup("<b>Gage ID: </b>" + feature.properties.gaugelid + "</br><b>Location: </b>" + feature.properties.location + "</br><b>Waterbody: </b>" + feature.properties.waterbody + "</br><a target='_blank' href='"+ feature.properties.url + "'><img title='Click for details page' width=300 src='" + graphURL +"'/></a>");
+                                        layer.bindPopup("<b>Gage ID: </b>" + feature.properties.gaugelid + "</br><a target='_blank' href='"+ feature.properties.url + "'><img title='Click for details page' width=300 src='" + graphURL +"'/></a>");
+
+                                    }
                                 }
                             },
                             radar : {
@@ -375,7 +481,7 @@
                             watchWarn : {
                                 name: "NWS Watches & Warnings",
                                 type: "agsDynamic",
-                                url : "http://gis.srh.noaa.gov/ArcGIS/rest/services/watchWarn/MapServer",
+                                url : "http://gis.srh.noaa.gov/arcgis/rest/services/watchWarn/MapServer",
                                 visible: false,
                                 layerOptions : {
                                     layers: [1],
@@ -429,7 +535,7 @@
                         //    position: "bottomleft"
                         //}
                     }
-                });//end angular.extend statement
+                });//end angular $scope.extend statement
                 ///////////////////////////////////////////////////////////////////////////////////////
             } //end -if credentials pass- statement
         }]);//end controller function

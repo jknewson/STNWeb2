@@ -47,7 +47,7 @@
         <div ng-show="unApprovedHWMs.length > 0">
             <ul>
                 <li style="list-style:none;" ng-repeat="h in unApprovedHWMs | orderBy: 'SITE_ID'">
-                    <span><a ui-sref="site.dashboard({id h.site_id})">{{h.SITE_NO}}</a>: {{h.HWM_ID}} ({{h.ELEV_FT}} ft.)</span>
+                    <span><a ui-sref="site.dashboard({id: h.SITE_ID})">{{h.SITE_NO}}</a>: {{h.HWM_ID}} ({{h.ELEV_FT}} ft.)</span>
                 </li>
             </ul>
         </div>

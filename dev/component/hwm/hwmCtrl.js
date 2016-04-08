@@ -4,14 +4,15 @@
 
     var STNControllers = angular.module('STNControllers');
 
-    STNControllers.controller('hwmCtrl', ['$scope', '$cookies', '$location', '$state', '$http', '$uibModal', '$filter', '$timeout', 'thisSite', 'thisSiteHWMs', 'allAgencies', 'allHWMTypes', 'allHWMQualities', 'allHorDatums', 'allMarkers', 'allHorCollMethods', 'allVertDatums', 'allVertColMethods', 'allEvents', 'allFileTypes', 'MEMBER', 
-        function ($scope, $cookies, $location, $state, $http, $uibModal, $filter, $timeout, thisSite, thisSiteHWMs, allAgencies, allHWMTypes, allHWMQualities, allHorDatums, allMarkers, allHorCollMethods, allVertDatums, allVertColMethods, allEvents, allFileTypes, MEMBER) {
+    STNControllers.controller('hwmCtrl', ['$scope', '$rootScope', '$cookies', '$location', '$state', '$http', '$uibModal', '$filter', '$timeout', 'thisSite', 'thisSiteHWMs', 'HWM_Service', 'allAgencies', 'allHWMTypes', 'allHWMQualities', 'allHorDatums', 'allMarkers', 'allHorCollMethods', 'allVertDatums', 'allVertColMethods', 'allEvents', 'allFileTypes', 'MEMBER', 'HWM',
+        function ($scope, $rootScope, $cookies, $location, $state, $http, $uibModal, $filter, $timeout, thisSite, thisSiteHWMs, HWM_Service, allAgencies, allHWMTypes, allHWMQualities, allHorDatums, allMarkers, allHorCollMethods, allVertDatums, allVertColMethods, allEvents, allFileTypes, MEMBER, HWM) {
             if ($cookies.get('STNCreds') === undefined || $cookies.get('STNCreds') === "") {
                 $scope.auth = false;
                 $location.path('/login');
                 } else {
                 //global vars
                 $scope.hwmCount = { total: thisSiteHWMs.length };
+
                 $scope.SiteHWMs = thisSiteHWMs;
                 // watch for the session event to change and update
                 $scope.$watch(function () { return $cookies.get('SessionEventName'); }, function (newValue) {
@@ -34,7 +35,7 @@
                     });
                     var passAllLists = [allHWMTypes, allHWMQualities, allHorDatums, allHorCollMethods, allVertDatums, allVertColMethods, allMarkers, allEvents, hwmFileTypes];
                     var indexClicked = $scope.SiteHWMs.indexOf(HWMclicked);
-
+                    $rootScope.stateIsLoading.showLoading = true; // loading..
                     //modal
                     var modalInstance = $uibModal.open({
                         templateUrl: 'HWMmodal.html',
@@ -48,6 +49,11 @@
                                 },
                                 thisHWM: function () {
                                     return HWMclicked !== 0 ? HWMclicked: "empty";
+                                },
+                                hwmApproval: function () {
+                                    if (HWMclicked !== 0 && (HWMclicked.APPROVAL_ID !== undefined && HWMclicked.APPROVAL_ID > 0)) {
+                                        return HWM.getHWMApproval({ id: HWMclicked.HWM_ID }).$promise;
+                                    }
                                 },
                                 hwmSite: function () {
                                     return thisSite;
@@ -67,17 +73,20 @@
                         //is there a new HWM or just closed modal
                         if (createdHWM[1]== 'created') {
                             $scope.SiteHWMs.push(createdHWM[0]);
+                            HWM_Service.setAllSiteHWMs($scope.SiteHWMs);
                             $scope.hwmCount.total = $scope.SiteHWMs.length;
                             }
                         if (createdHWM[1]== 'updated') {
                                 //this is from edit -- refresh page?
                             var indexClicked = $scope.SiteHWMs.indexOf(HWMclicked);
-                            $scope.SiteHWMs[indexClicked]= createdHWM[0];
+                            $scope.SiteHWMs[indexClicked] = createdHWM[0];
+                            HWM_Service.setAllSiteHWMs($scope.SiteHWMs);
                             }
                         if (createdHWM[1]== 'deleted') {
                             var indexClicked1 = $scope.SiteHWMs.indexOf(HWMclicked);
                             $scope.SiteHWMs.splice(indexClicked1, 1);
                             $scope.hwmCount.total = $scope.SiteHWMs.length;
+                            HWM_Service.setAllSiteHWMs($scope.SiteHWMs);
                         }
                     });
                 }; //end showHWMModal function

@@ -99,6 +99,7 @@
     <script src="component/map/MapSiteInfoController.js"></script>
     <script src="component/map/MapSensorProposeController.js"></script>
     <script src="component/map/MapPeaksController.js"></script>
+    <script src="component/map/MapFiltersController.js"></script>
     <script src="component/map/mapCtrl.js"></script>
     <script src="component/main/mainCtrl.js"></script>
     <script src="component/logInOut/LogInOutCtrl.js"></script>
@@ -125,6 +126,7 @@
 
     <!--<script src="app.js"></script>-->
     <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?v=3.exp"></script>
+    <script src="//d3js.org/d3.v3.min.js" charset="utf-8"></script>
 
 </head>
 
@@ -159,7 +161,6 @@
 
                 <div class="collapse navbar-collapse" id="">
                     <ul class="nav navbar-nav col-md-6">
-                        <!--<li ng-class="{active: activeMenu == 'home'}"><a style="color:#000" ui-sref="entry" ng-click="activeMenu = 'home'">Home</a></li>-->
                         <li ng-class="{active: activeMenu == 'map'}"><a style="color:#000" ui-sref="map" ng-click="activeMenu = 'map'">Map</a></li>
                         <li ng-class="{active: activeMenu == 'approval'}"><a style="color:#000" ui-sref="approval" ng-click="activeMenu = 'approval'">Approval</a></li>
                         <li ng-class="{active: activeMenu == 'sites'}"><a style="color:#000" ui-sref="siteSearch" ng-click="activeMenu = 'sites'">Sites</a></li>

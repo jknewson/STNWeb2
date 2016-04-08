@@ -75,7 +75,6 @@
                             if ($rootScope.returnToState !== undefined) {
                                 $state.go($rootScope.returnToState, {id: $rootScope.returnToStateParams});
                             } else {
-                                //$state.go('home');
                                 $state.go('map');
                                
                                
@@ -129,6 +128,8 @@
                 $rootScope.sessionEvent = undefined;
                 $rootScope.isAuth = undefined;
                 $rootScope.searchTerm = undefined;
+                $rootScope.searchParams = undefined;
+                $rootScope.approvalSearch = undefined;
                 $location.path('/login');
             };
         }]);

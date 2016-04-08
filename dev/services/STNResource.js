@@ -217,12 +217,30 @@
                 getAll: { method: 'GET', isArray: true },
                 getFilteredHWMs: { method: 'GET', isArray: true, url: rootURL + '/HWMs/FilteredHWMs.json' }, //Event={eventIds}&EventType={eventTypeIDs}&EventStatus={eventStatusID}&States={states}&County={counties}&HWMType={hwmTypeIDs}&HWMQuality={hwmQualIDs}&HWMEnvironment={hwmEnvironment}&SurveyComplete={surveyComplete}&StillWater={stillWater}
                 getUnapprovedHWMs: { method: 'GET', cache: false }, //IsApproved={'true'/'false'}&Event={eventId}&Member={memberId}&State={state}
+                getHWMApproval: {method: 'GET', cache: false, isArray: false, url: rootURL + '/hwms/:id/Approval.json'},
+                approveHWM: { method: 'POST', cache: false, isArray: false, params: { id: '@id' }, url: rootURL + '/hwms/:id/Approve.json' }, //posts an APPROVAL, updates the HWM with approval_id and returns APPROVAL
+                unApproveHWM: { method: 'DELETE', cache: false, isArray: false, url: rootURL + '/hwms/:id/Unapprove.json' }, //posts an APPROVAL, updates the HWM with approval_id and returns APPROVAL
                 update: { method: 'PUT', cache: false, isArray: false },
                 save: { method: 'POST', cache: false, isArray: false },
                 delete: { method: 'DELETE', cache: false, isArray: false }
             });
     }]);
     //#endregion of HWM
+
+    //#region HWM_Service
+    STNResource.factory('HWM_Service', [function () {
+        //when hwm is created or deleted, this gets updated so that filesCtrl will update it's list of siteHWMs
+        var allSiteHWMs = [];
+        return {
+            getAllSiteHWMs: function () {
+                return allSiteHWMs;
+            },
+            setAllSiteHWMs: function (sh) {
+                allSiteHWMs = sh;               
+            }
+        };
+    }]);
+    //#endregion of HWM_Service
 
     //#region HWM_QUALITY
     STNResource.factory('HWM_QUALITY', ['$resource', function ($resource) {
@@ -265,6 +283,21 @@
             });
     }]);
     //#endregion of INSTRUMENT
+
+    //#region Instrument_Service
+    STNResource.factory('Instrument_Service', [function () {
+        //when hwm is created or deleted, this gets updated so that filesCtrl will update it's list of siteHWMs
+        var allSiteSensors = [];
+        return {
+            getAllSiteSensors: function () {
+                return allSiteSensors;
+            },
+            setAllSiteSensors: function (ss) {
+                allSiteSensors = ss;
+            }
+        };
+    }]);
+    //#endregion of Instrument_Service
 
     //#region INSTRUMENT_STATUS
     STNResource.factory('INSTRUMENT_STATUS', ['$resource', function ($resource) {
@@ -320,7 +353,7 @@
                     SITE.getSitePeaks({ id: siteId }).$promise.then(function (pResponse) {
                         MapSiteParts.push(pResponse);
                         $rootScope.$broadcast('mapSiteClick', MapSiteParts);
-                        $rootScope.stateIsLoading.showLoading = false;
+                        //$rootScope.stateIsLoading.showLoading = false;
                     });
                 });                
             }
@@ -428,7 +461,6 @@
             });
     }]);
     //#endregion of OP_MEASURE
-
 
     //#region OP_QUALITY
     STNResource.factory('OP_QUALITY', ['$resource', function ($resource) {

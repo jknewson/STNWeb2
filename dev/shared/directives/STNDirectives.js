@@ -35,6 +35,37 @@
     //        }
     //    };
     //}]);nitAdvancedSearchbox
+    //try this one Monday::: 
+    //http://www.ng-newsletter.com/posts/d3-on-angular.html
+    STNControllers.directive('barsChart',['$parse', function ($parse) {
+        var directiveDefinitionObject = {
+            //We restrict its use to an element as usually  <bars-chart> is semantically more understandable
+            restrict: 'E',
+            //this is important, we don't want to overwrite our directive declaration in the HTML mark-up
+            replace: false,
+            scope: {
+                data: '=elevationData'                
+            },
+            link: function (scope, element, attrs) {
+                //converting all data passed thru into an array
+                var data = attrs.elevationData.split(',');
+                //in D3, any selection[0] contains the group selection[0][0] is the DOM node but we won't need that this time
+                var chart = d3.select(element[0]);
+                //to our original directive markup bars-chart we add a div with out chart stling and bind each data entry to the chart
+                chart.append("div").attr("class", "chart")
+                 .selectAll('div')
+                 .data(scope.data).enter().append("div")
+                 .transition().ease("elastic")
+                 .style("width", function (d) { return d + "%"; })
+                 .text(function (d) { return d + "%"; });
+                //a little of magic: setting it's width based on the data value (d) and text all with a smooth transition
+                scope.$watch('data', function (newValue, oldValue) {
+                    scope.data = newValue;
+                });
+            }
+        };
+        return directiveDefinitionObject;
+    }]);
     STNControllers.directive('siteSearch', function () {
         return {
             restrict: 'E',
@@ -50,13 +81,13 @@
                 '<input type="text" ng-model="searchTerm" ng-enter="IndexSearchSites()" placeholder="Search Sites..." /><button class="borderLess" ng-click="IndexSearchSites()">' +
                 '<i class="glyphicon glyphicon-search"></i></button></div></div>',
             controller: [
-                '$scope', '$state', 'SITE',
-                function ($scope, $state, SITE) {
+                '$scope', '$state', 'SITE', '$uibModal',
+                function ($scope, $state, SITE, $uibModal) {
                     $scope.searchTerm = '';
-                    $scope.searchBy = { val: 'bySiteNo' } ;
+                    $scope.searchBy = { val: 'bySiteNo' };
                     $scope.placeholder = '...';
                     $scope.IndexSearchSites = function () {
-                       switch ($scope.searchBy.val) {
+                        switch ($scope.searchBy.val) {
                             case 'bySiteNo':
                                 SITE.query({ bySiteNo: $scope.searchTerm }, function success(resp) {
                                     siteSearchResponse(resp);
@@ -79,13 +110,13 @@
                                 };
                                 break;
                         }
-                    }
+                    };
                     var siteSearchResponse = function (s) {
                         if (s.status !== undefined) {
                             //errorstatus show modal with error message 'no site found'
                             var errorModal = $uibModal.open({
                                 template: '<div class="modal-header"><h3 class="modal-title">Error</h3></div>' +
-                                    '<div class="modal-body"><p>No site found. For more site search options, go to the Site Search navigation tab to search for site.</p></div>' +
+                                    '<div class="modal-body"><p>No site found. For more site search options, go to the Sites navigation tab to search for sites.</p></div>' +
                                     '<div class="modal-footer"><button class="btn btn-primary" ng-click="ok()">OK</button></div>',
                                 controller: ['$scope', '$uibModalInstance', function ($scope, $uibModalInstance) {
                                     $scope.ok = function () {
@@ -106,11 +137,11 @@
                             $scope.searchBy = { val: 'bySiteNo' };
                             $state.go('site.dashboard', { id: s.SITE_ID });
                         }
-                    };                   
+                    };
                 }
             ]
         };
-    })
+    });
 
 
 

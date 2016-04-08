@@ -7,7 +7,7 @@
         </uib-accordion-heading>
         <div class="btn-group pull-right">
             <div class="btn-group">
-                <button type="button" class="borderLess" ng-click="showFileModal(0)" tooltip-placement="right" tooltip-append-to-body="true" uib-tooltip="Add a File">
+                <button type="button" class="borderLess" ng-click="showFileModal(0)" tooltip-placement="right" tooltip-append-to-body="true" uib-tooltip="Add a Site File">
                     <span class="glyphicon glyphicon-plus"></span>
                 </button>
             </div>
@@ -30,7 +30,10 @@
         </div>
 
         <!-- ------ Objective Point Files here ------ -->
-        <label class="col-md-9">-- Objective Point Files --</label>
+        <label class="col-md-8">-- Datum Location Files --</label>
+        <button type="button" class="borderLess" tooltip-placement="right" uib-tooltip="To add a Datum Location file, go to the OP to add it">
+            <span class="glyphicon glyphicon-question-sign"></span>
+        </button>
         <br clear="all" />
         <div ng-repeat="f in SiteFiles">
             <div ng-if="f.fileBelongsTo == 'Objective Point File'">
@@ -45,7 +48,10 @@
         </div>
 
         <!-- ------ Sensor Files here ------ -->
-        <label class="col-md-9">-- Sensor Files --</label>
+        <label class="col-md-8">-- Sensor Files --</label>
+        <button type="button" class="borderLess" tooltip-placement="right" uib-tooltip="To add a Sensor file, go to the Sensor to add it">
+            <span class="glyphicon glyphicon-question-sign"></span>
+        </button>
         <br clear="all" />
         <div ng-repeat="f in SiteFiles">
             <div ng-if="f.fileBelongsTo == 'Sensor File' || f.fileBelongsTo == 'DataFile File'">
@@ -60,7 +66,10 @@
         </div>
 
         <!-- ------ HWM Files here ------ -->
-        <label class="col-md-9">-- HWM Files --</label>
+        <label class="col-md-8">-- HWM Files --</label>
+        <button type="button" class="borderLess" tooltip-placement="right" uib-tooltip="To add a HWM file, go to the HWM to add it">
+            <span class="glyphicon glyphicon-question-sign"></span>
+        </button>
         <br clear="all" />
         <div ng-repeat="f in SiteFiles">
             <div ng-if="f.fileBelongsTo == 'HWM File'">

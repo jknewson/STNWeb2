@@ -489,55 +489,58 @@
                 //POST site
                 SITE.save($scope.aSite, function success(response) {
                     createdSiteID = response.SITE_ID;
-                    var defer = $q.defer();
-                    var postPromises = [];
-                    //site_housingTypes (if any)
-                    angular.forEach($scope.siteHouseTypesTable, function (htype) {
-                        htype.SITE_ID = createdSiteID;
-                        delete htype.TYPE_NAME;
-                        var hTPromise = SITE.postSiteHousing({ id: createdSiteID }, htype).$promise;
-                        postPromises.push(hTPromise);
-                    });
-                    //site_NetworkNames
-                    angular.forEach($scope.NetNameList, function (nName) {
-                        if (nName.selected === true) {
-                            var siteNetName = { NETWORK_NAME_ID: nName.NETWORK_NAME_ID, NAME: nName.NAME };
-                            var nNPromise = SITE.postSiteNetworkName({ id: createdSiteID }, siteNetName).$promise;
-                            postPromises.push(nNPromise);
-                        }
-                    });
-                    //site_NetworkTypes
-                    angular.forEach($scope.NetTypeList, function (nType) {
-                        if (nType.selected === true) {
-                            var siteNetType = { NETWORK_TYPE_ID: nType.NETWORK_TYPE_ID, NETWORK_TYPE_NAME: nType.NETWORK_TYPE_NAME };
-                            var nTPromise = SITE.postSiteNetworkType({ id: createdSiteID }, siteNetType).$promise;
-                            postPromises.push(nTPromise);
-                        }
-                    });
+                    //do proposed sensors first since it's 2 parts to it.
                     if ($scope.disableSensorParts === false) {
                         for (var ps = 0; ps < $scope.ProposedSens.length; ps++) {
                             if ($scope.ProposedSens[ps].selected === true) {
                                 //POST it
                                 var sensorTypeID = $scope.SensorDeployment.filter(function (sd) { return sd.DEPLOYMENT_TYPE_ID == $scope.ProposedSens[ps].DEPLOYMENT_TYPE_ID; })[0].SENSOR_TYPE_ID;
                                 var inst = { DEPLOYMENT_TYPE_ID: $scope.ProposedSens[ps].DEPLOYMENT_TYPE_ID, SITE_ID: createdSiteID, SENSOR_TYPE_ID: sensorTypeID };
-                                var instrPromise = INSTRUMENT.save(inst).$promise.then(function (insResponse) {
+                                INSTRUMENT.save(inst).$promise.then(function (insResponse) {
                                     var instStat = { INSTRUMENT_ID: insResponse.INSTRUMENT_ID, STATUS_TYPE_ID: 4, MEMBER_ID: $scope.aSite.MEMBER_ID, TIME_STAMP: new Date(), TIME_ZONE: 'UTC' };
-                                    INSTRUMENT_STATUS.save(instStat).$promise;
-                                }).$promise;
-                                postPromises.push(instrPromise);
+                                    INSTRUMENT_STATUS.save(instStat).$promise.then(function () {
+                                        //now do all the rest....
+                                        var defer = $q.defer();
+                                        var postPromises = [];
+                                        //site_housingTypes (if any)
+                                        angular.forEach($scope.siteHouseTypesTable, function (htype) {
+                                            htype.SITE_ID = createdSiteID;
+                                            delete htype.TYPE_NAME;
+                                            var hTPromise = SITE.postSiteHousing({ id: createdSiteID }, htype).$promise;
+                                            postPromises.push(hTPromise);
+                                        });
+                                        //site_NetworkNames
+                                        angular.forEach($scope.NetNameList, function (nName) {
+                                            if (nName.selected === true) {
+                                                var siteNetName = { NETWORK_NAME_ID: nName.NETWORK_NAME_ID, NAME: nName.NAME };
+                                                var nNPromise = SITE.postSiteNetworkName({ id: createdSiteID }, siteNetName).$promise;
+                                                postPromises.push(nNPromise);
+                                            }
+                                        });
+                                        //site_NetworkTypes
+                                        angular.forEach($scope.NetTypeList, function (nType) {
+                                            if (nType.selected === true) {
+                                                var siteNetType = { NETWORK_TYPE_ID: nType.NETWORK_TYPE_ID, NETWORK_TYPE_NAME: nType.NETWORK_TYPE_NAME };
+                                                var nTPromise = SITE.postSiteNetworkType({ id: createdSiteID }, siteNetType).$promise;
+                                                postPromises.push(nTPromise);
+                                            }
+                                        });
+                    
+
+                                        $q.all(postPromises).then(function (response) {
+                                            $uibModalInstance.dismiss('cancel');
+                                            $rootScope.stateIsLoading.showLoading = false; // loading..
+                                            $timeout(function () {
+                                                // anything you want can go here and will safely be run on the next digest.                   
+                                                $state.go('site.dashboard', { id: createdSiteID });                       
+                                            });
+                       
+                                        });
+                                    });
+                                });
                             }
                         }
-                    }
-
-                    $q.all(postPromises).then(function (response) {
-                        $uibModalInstance.dismiss('cancel');
-                        $rootScope.stateIsLoading.showLoading = false; // loading..
-                        $timeout(function () {
-                            // anything you want can go here and will safely be run on the next digest.                   
-                            $state.go('site.dashboard', { id: createdSiteID });                       
-                        });
-                       
-                    });
+                    }                    
                 }, function error(errorResponse) {
                     toastr.error("Error creating Site: " + errorResponse.statusText);
                 });
