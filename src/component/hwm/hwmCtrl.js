@@ -42,6 +42,7 @@
                         controller: 'hwmModalCtrl',
                             size: 'lg',
                             backdrop: 'static',
+                            keyboard: false,
                             windowClass: 'rep-dialog',
                             resolve: {
                                 allDropdowns: function () {

@@ -13,6 +13,7 @@
                     controller: 'eventSessionModalCtrl',
                     size: 'md',
                     backdrop: 'static',
+                    keyboard: false,
                     windowClass: 'rep-dialog',
                     resolve: {
                         allEvents: function () {

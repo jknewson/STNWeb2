@@ -133,6 +133,7 @@
                         controller: 'siteFileModalCtrl',
                         size: 'lg',
                         backdrop: 'static',
+                        keyboard: false,
                         windowClass: 'rep-dialog',
                         resolve: {
                             fileTypeList: function () {

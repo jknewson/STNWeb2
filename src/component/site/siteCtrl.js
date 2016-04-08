@@ -29,6 +29,7 @@
                             templateUrl: 'SITEmodal.html',
                             controller: 'siteModalCtrl',
                             size: 'lg',
+                            keyboard: false,
                             backdrop: 'static',
                             windowClass: 'rep-dialog',
                             resolve: {
