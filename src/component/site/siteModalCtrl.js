@@ -50,8 +50,23 @@
                     iconAnchor: [5, 5]
                 }
             };
+            //convert deg min sec to dec degrees
+            var azimuth = function (deg, min, sec) {
+                var azi = 0;
+                if (deg < 0) {
+                    azi = -1.0 * deg + 1.0 * min / 60.0 + 1.0 * sec / 3600.0;
+                    return (-1.0 * azi).toFixed(5);
+                }
+                else {
+                    azi = 1.0 * deg + 1.0 * min / 60.0 + 1.0 * sec / 3600.0;
+                    return (azi).toFixed(5);
+                }
+            };
+
             $scope.updateAddressOnly = function () {
                 var geocoder = new google.maps.Geocoder(); //reverse address lookup
+                if ($scope.aSite.LATITUDE_DD === undefined) $scope.aSite.LATITUDE_DD = azimuth($scope.DMS.LADeg, $scope.DMS.LAMin, $scope.DMS.LASec);
+                if ($scope.aSite.LONGITUDE_DD === undefined) $scope.aSite.LONGITUDE_DD = azimuth($scope.DMS.LODeg, $scope.DMS.LOMin, $scope.DMS.LOSec);
                 var latlng = new google.maps.LatLng($scope.aSite.LATITUDE_DD, $scope.aSite.LONGITUDE_DD);
                 geocoder.geocode({ 'latLng': latlng }, function (results, status) {
                     if (status == google.maps.GeocoderStatus.OK) {
@@ -80,13 +95,29 @@
             ///update newSite lat/lng after dragend
             $scope.$on("leafletDirectiveMarker.dragend", function (event, args) {
                 var dragendLocation = args.model;
+                //update lat/long
                 $scope.aSite.LATITUDE_DD = parseFloat(dragendLocation.lat.toFixed(6));
                 $scope.aSite.LONGITUDE_DD = parseFloat(dragendLocation.lng.toFixed(6));
+                //update dms also in case they have that showing
+                var latDMS = (deg_to_dms($scope.aSite.LATITUDE_DD)).toString();
+                var ladDMSarray = latDMS.split(':');
+                $scope.DMS.LADeg = ladDMSarray[0];
+                $scope.DMS.LAMin = ladDMSarray[1];
+                $scope.DMS.LASec = ladDMSarray[2];
+
+                var longDMS = deg_to_dms($scope.aSite.LONGITUDE_DD);
+                var longDMSarray = longDMS.split(':');
+                $scope.DMS.LODeg = longDMSarray[0] * -1;
+                $scope.DMS.LOMin = longDMSarray[1];
+                $scope.DMS.LOSec = longDMSarray[2];
+            
                 $scope.updateAddressOnly();
             });
 
             //get address parts and existing sites 
             $scope.getAddress = function () {
+                if ($scope.aSite.LATITUDE_DD === undefined) $scope.aSite.LATITUDE_DD = azimuth($scope.DMS.LADeg, $scope.DMS.LAMin, $scope.DMS.LASec);
+                if ($scope.aSite.LONGITUDE_DD === undefined) $scope.aSite.LONGITUDE_DD = azimuth($scope.DMS.LODeg, $scope.DMS.LOMin, $scope.DMS.LOSec);
                 $scope.mapCenter = { lat: parseFloat($scope.aSite.LATITUDE_DD), lng: parseFloat($scope.aSite.LONGITUDE_DD), zoom: 18 };
                 $scope.mapMarkers = [];
                 var geocoder = new google.maps.Geocoder(); //reverse address lookup
@@ -178,19 +209,7 @@
             $scope.siteHousesToRemove = []; //holder for editing site to add removing house types to for PUT
             $scope.siteNetworkNames = []; //holds the NetworkName (list of strings) to pass back;
             $scope.siteNetworkTypes = []; //holds the NetworkType (list of strings) to pass back;
-            //convert deg min sec to dec degrees
-            var azimuth = function (deg, min, sec) {
-                var azi = 0;
-                if (deg < 0) {
-                    azi = -1.0 * deg + 1.0 * min / 60.0 + 1.0 * sec / 3600.0;
-                    return (-1.0 * azi).toFixed(5);
-                }
-                else {
-                    azi = 1.0 * deg + 1.0 * min / 60.0 + 1.0 * sec / 3600.0;
-                    return (azi).toFixed(5);
-                }
-            };
-
+           
             //lat modal 
             var openLatModal = function (w) {
                 var latModal = $uibModal.open({
@@ -360,6 +379,8 @@
                 }
             };//end save
             var putSiteAndParts = function () {
+                if ($scope.aSite.LATITUDE_DD === undefined) $scope.aSite.LATITUDE_DD = azimuth($scope.DMS.LADeg, $scope.DMS.LAMin, $scope.DMS.LASec);
+                if ($scope.aSite.LONGITUDE_DD === undefined) $scope.aSite.LONGITUDE_DD = azimuth($scope.DMS.LODeg, $scope.DMS.LOMin, $scope.DMS.LOSec);
                 SITE.update({ id: $scope.aSite.SITE_ID }, $scope.aSite, function success(response) {      
                     //update site housings
                     var defer = $q.defer();
@@ -485,7 +506,9 @@
             };
             var postSiteAndParts = function () {
                 //make sure longitude is < 0, otherwise * (-1),
-                var createdSiteID = 0;            
+                var createdSiteID = 0;
+                if ($scope.aSite.LATITUDE_DD === undefined) $scope.aSite.LATITUDE_DD = azimuth($scope.DMS.LADeg, $scope.DMS.LAMin, $scope.DMS.LASec);
+                if ($scope.aSite.LONGITUDE_DD === undefined) $scope.aSite.LONGITUDE_DD = azimuth($scope.DMS.LODeg, $scope.DMS.LOMin, $scope.DMS.LOSec);
                 //POST site
                 SITE.save($scope.aSite, function success(response) {
                     createdSiteID = response.SITE_ID;
