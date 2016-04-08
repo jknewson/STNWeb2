@@ -3,7 +3,7 @@
     var STNControllers = angular.module('STNControllers');
 
     STNControllers.controller('MapController', ['$scope', '$http', '$rootScope', '$cookies', '$location', 'SITE', 'Map_Site', 'leafletMarkerEvents', 'leafletBoundsHelpers', 'leafletData', '$state',
-        function ($scope, $http, $rootScope, $cookies, $location, SITE, Map_Site, leafletMarkerEvents, leafletBoundsHelpers, leafletData, $state) {
+        function ($scope, $http, $rootScope, $cookies, $location, SITE, Map_Site,leafletMarkerEvents, leafletBoundsHelpers, leafletData, $state) {
             if ($cookies.get('STNCreds') === undefined || $cookies.get('STNCreds') === "") {
                 $scope.auth = false;
                 $location.path('/login');
@@ -14,6 +14,14 @@
                     "decision support supplement to the STN sites layer, but we cannot guarantee their performance and availability. Many of these externally maintained layers are " +
                     "large datasets and may load slowly depending on network latency. In some cases they may fail to load entirely when network latency is high.";
                 //$scope.map = "Welcome to the new STN Map Page!!";
+
+
+                $rootScope.$on('filterSitesClick', function (event, filteredSitesArray) {
+                    $scope.paths = {};
+                    $scope.selectedMarkerNum = 0;
+                    onSiteComplete(filteredSitesArray);
+                });
+
 
                 var icons = {
                     stn: {
@@ -77,9 +85,16 @@
                 };
                 //creates the markers on the map after getting JSON from STN web services call
                 var onSiteComplete = function(response) {
-                    var sitesArray = response.data.Sites;
+                    console.table(response);
+                    //sites array fo $http.get method
+                    //var sitesArray = response.data.Sites;
+                    //sitesArray for SITE factory method
+                    var sitesArray = response;
                     console.table(sitesArray);
-                    $scope.sites = response.data;
+                    //$http.get method
+                    //$scope.sites = response.data;
+                    //SITE factory method
+                    $scope.sites = sitesArray;
                     $scope.markers = [];
                     $scope.markersLatLngArray = [];
 
@@ -104,6 +119,7 @@
 
                         controls.markers.create(markers ,$scope.markers);
                         $scope.markers = markers;
+                        console.table($scope.markers);
 
                         var LLBounds =  new L.LatLngBounds($scope.markersLatLngArray);
                         $scope.bounds = leafletBoundsHelpers.createBoundsFromArray([
@@ -166,7 +182,6 @@
                     $scope.selectedMarkerNum = parseInt(args.modelName);
                     //sets the icon to the selected icon class
                     $scope.markers[$scope.selectedMarkerNum].icon = icons.selected;
-
                     $scope.markers[$scope.selectedMarkerNum].label = {
                         message: 'Site ' + siteID,
                         options: {
@@ -175,8 +190,11 @@
                             className: 'siteLabel'
                         }
                     };
-
-                    $scope.mapCenter = {lat: args.model.lat, lng: args.model.lng, zoom: 10};
+                    if ($scope.mapCenter.zoom <= 9) {
+                        $scope.mapCenter = {lat: args.model.lat, lng: args.model.lng, zoom: 10};
+                    } else if ($scope.mapCenter.zoom >= 10) {
+                        $scope.mapCenter = {lat: args.model.lat, lng: args.model.lng, zoom : $scope.mapCenter.zoom};
+                    }
                     var addShape = function() {
                         $scope.paths = {};
                         $scope.pathsObj.circleMarker.latlngs = {lat: args.model.lat, lng: args.model.lng};
@@ -209,31 +227,18 @@
                         //below gets sites using $http.get
                         $scope.selectedMarkerNum = 0;
                         $scope.paths = {};
-                        $scope.sitesPromise = $http.get('https://stntest.wim.usgs.gov/STNServices2/Events/' + evID + '/Sites.json')
-                                            .then(onSiteComplete, onError);
+                        //bloew gets sites using simple angular $http service
+                        // $scope.sitesPromise = $http.get('https://stntest.wim.usgs.gov/STNServices2/Events/' + evID + '/Sites.json')
+                        //                     .then(onSiteComplete, onError);
                         //below gets sites using the SITE 'factory'
-                        //$scope.sitesPromise = SITE.getAll({
-                        //    Event: evID
-                        //},
-                        //function success(response) {
-                        //    //do stuff with Sites
-                        //    //var sitesArray = response.data.Sites;
-                        //    $scope.sites = response;
-                        //    $scope.markers = [];
-                        //    for (var i = 0; i < response.length; i++) {
-                        //        var a = response[i];
-                        //        $scope.markers.push({
-                        //            layer:'stnSites',
-                        //            lat: a.latitude,
-                        //            lng: a.longitude,
-                        //            SITE_ID: a.SITE_ID,
-                        //            icon: icons.stn
-                        //        });
-                        //    }
-                        //}, function error(errorResponse) {
-                        //        //show error message
-                        //});
-
+                        $scope.sitesPromise = SITE.getAll({
+                           Event: evID
+                        },
+                        function success(response) {
+                            onSiteComplete(response);
+                        }, function error(errorResponse) {
+                                $scope.error = "Could not fetch sites";
+                        });
                     } else {
 
                     }

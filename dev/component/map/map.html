@@ -5,9 +5,14 @@
         <!--<h3 class="col-md-12"ng-if="createSiteModeActive"><span class="label label-warning">CREATE SITE MODE ACTIVE</span></h3>-->
         <div class="col-md-4">
             <!--<div ui-view="mapFilters"></div>-->
+            <div class="mapCreateSiteButtonsDiv">
+                <button ng-class="createSiteModeActive ? 'btn btn-danger' : 'btn btn-primary'" ng-click="createSiteModeActive = !createSiteModeActive">{{createSiteButtonText}}</button>
+                <button ng-class="'btn btn-warning'" ng-if="createSiteModeActive" ng-click="createSiteFromMap()">Create new site at clicked location</button>
+            </div><br>
             <div ui-view="mapSiteInfo"></div>
             <div ui-view="mapPeaksView"></div>
             <div ui-view="mapSensorPropose"></div>
+
         </div>
 
         <div class="col-md-8">
@@ -20,14 +25,12 @@
                     <leaflet ng-style="mapStyle" markers-watch-options="markersWatchOptions" controls="controls" bounds="bounds" paths="paths" legend="legend" lf-center="mapCenter" markers="markers" layers="layers" event-broadcast="events" width="100%" height="800px"></leaflet>
                 </div>
 
-                <div class="createSiteModeActive createSiteModeActiveBottom col-md-12" ng-if="createSiteModeActive"><span >CREATE SITE MODE</span></div>
+                <div class="createSiteModeActive createSiteModeActiveBottom col-md-12" ng-if="createSiteModeActive"><span >CREATE SITE MODE</span></div><br>
 
-                <br>
-
-                <div class="mapCreateSiteButtonsDiv">
-                    <button ng-class="createSiteModeActive ? 'btn btn-danger' : 'btn btn-primary'" ng-click="createSiteModeActive = !createSiteModeActive">{{createSiteButtonText}}</button>
-                    <button ng-class="'btn btn-warning'" ng-if="createSiteModeActive" ng-click="createSiteFromMap()">Create new site at clicked location</button>
-                </div>
+                <!--<div class="mapCreateSiteButtonsDiv">-->
+                    <!--<button ng-class="createSiteModeActive ? 'btn btn-danger' : 'btn btn-primary'" ng-click="createSiteModeActive = !createSiteModeActive">{{createSiteButtonText}}</button>-->
+                    <!--<button ng-class="'btn btn-warning'" ng-if="createSiteModeActive" ng-click="createSiteFromMap()">Create new site at clicked location</button>-->
+                <!--</div><br>-->
 
                <div ui-view="mapFilters"></div>
 
