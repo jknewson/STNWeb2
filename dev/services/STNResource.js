@@ -361,6 +361,22 @@
     }]);
     //#endregion of Map_Site
 
+    //#region Map_filter
+    STNResource.factory('Map_Filter', [ '$rootScope', function ($rootScope) {
+        var filteredSites = [];
+
+        return {
+            // getFilteredSites: function () {
+            //     return filteredSites;
+            // },
+            setFilteredSites: function (sitesArray) {
+                filteredSites = sitesArray;
+                $rootScope.$broadcast('filterSitesClick', filteredSites);
+            }
+        };
+    }]);
+    //#endregion of Map_Filter
+
     //#region MARKER
     STNResource.factory('MARKER', ['$resource', function ($resource) {
         return $resource(rootURL + '/Markers/:id.json',
