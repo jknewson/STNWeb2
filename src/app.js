@@ -64,7 +64,21 @@
                         },
                         'mapFilters@map': {
                             templateUrl: 'component/map/mapFilters.html',
-                            controller: 'MapFiltersController'
+                            controller: 'MapFiltersController',
+                            resolve: {
+                                s: 'STATE',
+                                stateList: function (s) {
+                                    return s.getAll().$promise;
+                                },
+                                sensT: 'SENSOR_TYPE',
+                                sensorTypes: function (sensT) {
+                                    return sensT.getAll().$promise;
+                                },
+                                netwN: 'NETWORK_NAME',
+                                networkNames: function (netwN) {
+                                    return netwN.getAll().$promise;
+                                }
+                            }
                         },
                         'mapSiteInfo@map': {
                             templateUrl: 'component/site/mapSiteInfoView.html', 
