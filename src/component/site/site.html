@@ -2236,7 +2236,7 @@
 
                 <!-- Retrieve Time: * -->
                 <div class="form-group required" ng-class="{'has-error':SensorFormR.TIME_STAMP.$invalid && SensorFormR.TIME_STAMP.$dirty}">
-                    <label class="col-md-3 control-label req" style="margin-top:3%" for="TIME_STAMP">Retrieve Date and Time:</label>
+                    <label class="col-md-3 control-label req" style="margin-top:3%" for="TIME_STAMP">Date and Time:</label>
                     <div class="col-md-6">
                         <datetimepicker hour-step="1" minute-step="1" ng-model="aRetrieval.TIME_STAMP" show-meridian="true" id="retrievalDate"
                                         date-format="MM/dd/yyyy" readonly-date="false" readonly-time="false" date-options="dateOptions"
@@ -2366,7 +2366,7 @@
                         <div class="col-md-12">
                             <span>
                                 <button ng-if="whichButton == 'Retrieve'" class="btn btn-primary" ng-click="retrieveS(SensorFormR.$valid)">
-                                    <span>Retrieve</span>
+                                    <span>Submit</span>
                                 </button>
                             </span>
                             <span>
@@ -2717,7 +2717,7 @@
             <uib-accordion-group is-open="s.retOpen">
                 <uib-accordion-heading>
                     <i style="margin-right:10px" class="pull-left glyphicon" ng-class="{'glyphicon-chevron-down': s.retOpen, 'glyphicon-chevron-right': !s.retOpen}"></i>
-                    <span>Retrieved Sensor Information</span>
+                    <span>{{mostRecentStatus}} Sensor Information</span>
                 </uib-accordion-heading>
                 <form name="editableRetrievedForm">
                     <fieldset>
@@ -2915,7 +2915,7 @@
 
                         <!-- Retrieve Member: -->
                         <div class="form-group required">
-                            <label class="col-md-3 col-md-offset-1 control-label">Retrieve Member:</label>
+                            <label class="col-md-3 col-md-offset-1 control-label">Member:</label>
                             <div class="col-md-6">{{Retriever.FNAME}} {{Retriever.LNAME}}</div>
                         </div>
 
@@ -2923,7 +2923,7 @@
                             <div class="col-md-12">
                                 <span>
                                     <button ng-show="view.RETval == 'detail'" ng-disabled="view.DEPval == 'edit'" type="button" class="btn btn-primary" ng-click="wannaEditRet()">
-                                        <span>Edit Retrieved Sensor</span>
+                                        <span>Edit {{mostRecentStatus}} Sensor</span>
                                     </button>
                                 </span>
                                 <span>
