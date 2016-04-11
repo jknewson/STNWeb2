@@ -85,6 +85,20 @@
                 </ul>
             </div>
         </div>
+        <!-- only lost sensors here -->
+        <label class="col-md-9">-- Lost Sensors --</label>
+        <br clear="all" />
+        <div ng-repeat="s in SiteSensors">
+            <div ng-if="s.InstrumentStats[0].STATUS_TYPE_ID == 3">
+                <ul>
+                    <li style="list-style:none;padding-bottom: 15px;">
+                        <span class="col-sm-9 borderLess" style="padding:0">
+                            <a class="btn borderLess" style="padding:0" ng-click="showFullSensorModal(s)">{{s.Instrument.Deployment_Type || s.Instrument.Sensor_Type}} Sensor</a>
+                        </span>
+                    </li>
+                </ul>
+            </div>
+        </div>
 
     </uib-accordion-group>
 </uib-accordion>

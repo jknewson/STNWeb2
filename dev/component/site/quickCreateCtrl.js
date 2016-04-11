@@ -211,6 +211,65 @@
                     }
                 };
 
+                //lat modal 
+                var openLatModal = function (w) {
+                    var latModal = $uibModal.open({
+                        template: '<div class="modal-header"><h3 class="modal-title">Error</h3></div>' +
+                            '<div class="modal-body"><p>The Latitude must be between 0 and 73.0</p></div>' +
+                            '<div class="modal-footer"><button class="btn btn-primary" ng-enter="ok()" ng-click="ok()">OK</button></div>',
+                        controller: ['$scope', '$uibModalInstance', function ($scope, $uibModalInstance) {
+                            $scope.ok = function () {
+                                $uibModalInstance.close();
+                            };
+                        }],
+                        size: 'sm'
+                    });
+                    latModal.result.then(function (fieldFocus) {
+                        if (w == 'latlong') $("#SITE_LATITUDE_DD").focus();
+                        else $("#LaDeg").focus();
+                    });
+                };
+
+                //long modal
+                var openLongModal = function (w) {
+                    var longModal = $uibModal.open({
+                        template: '<div class="modal-header"><h3 class="modal-title">Error</h3></div>' +
+                            '<div class="modal-body"><p>The Longitude must be between -175.0 and -60.0</p></div>' +
+                            '<div class="modal-footer"><button class="btn btn-primary" ng-enter="ok()" ng-click="ok()">OK</button></div>',
+                        controller: ['$scope', '$uibModalInstance', function ($scope, $uibModalInstance) {
+                            $scope.ok = function () {
+                                $uibModalInstance.close();
+                            };
+                        }],
+                        size: 'sm'
+                    });
+                    longModal.result.then(function (fieldFocus) {
+                        if (w == 'latlong') $("#SITE_longitude_dd").focus();
+                        else $("#LoDeg").focus();
+                    });
+                };
+
+                //make sure lat/long are right number range
+                $scope.checkValue = function (d) {
+                    if (d == 'dms') {
+                        //check the degree value
+                        if ($scope.DMS.LADeg < 0 || $scope.DMS.LADeg > 73) {
+                            openLatModal('dms');
+                        }
+                        if ($scope.DMS.LODeg < -175 || $scope.DMS.LODeg > -60) {
+                            openLongModal('dms');
+                        }
+                    } else {
+                        //check the latitude/longitude
+                        if ($scope.aSite.LATITUDE_DD < 0 || $scope.aSite.LATITUDE_DD > 73) {
+                            openLatModal('latlong');
+                        }
+                        if ($scope.aSite.LONGITUDE_DD < -175 || $scope.aSite.LONGITUDE_DD > -60) {
+                            openLongModal('latlong');
+                        }
+                    }
+                };
+
                 //  lat/long =is number
                 $scope.isNum = function (evt) {
                     var theEvent = evt || window.event;
@@ -226,7 +285,8 @@
                     //clear them all first
                     delete $scope.aSite.ADDRESS; delete $scope.aSite.CITY; delete $scope.aSite.STATE;
                     $scope.stateCountyList = []; delete $scope.aSite.ZIP;
-
+                    if ($scope.aSite.LATITUDE_DD === undefined) $scope.aSite.LATITUDE_DD = azimuth($scope.DMS.LADeg, $scope.DMS.LAMin, $scope.DMS.LASec);
+                    if ($scope.aSite.LONGITUDE_DD === undefined) $scope.aSite.LONGITUDE_DD = azimuth($scope.DMS.LODeg, $scope.DMS.LOMin, $scope.DMS.LOSec);
                     $rootScope.stateIsLoading.showLoading = true; //loading...
                     var geocoder = new google.maps.Geocoder(); //reverse address lookup
                     var latlng = new google.maps.LatLng($scope.aSite.LATITUDE_DD, $scope.aSite.LONGITUDE_DD);
@@ -333,10 +393,9 @@
                         //site POST
                         $http.defaults.headers.common.Authorization = 'Basic ' + $cookies.get('STNCreds');
                         $http.defaults.headers.common.Accept = 'application/json';
-
-                        var createdSiteID = 0;
-                        if ($scope.aSite.LONGITUDE_DD > 0)
-                            $scope.aSite.LONGITUDE_DD = $scope.aSite.LONGITUDE_DD * (-1);
+                        if ($scope.aSite.LATITUDE_DD === undefined) $scope.aSite.LATITUDE_DD = azimuth($scope.DMS.LADeg, $scope.DMS.LAMin, $scope.DMS.LASec);
+                        if ($scope.aSite.LONGITUDE_DD === undefined) $scope.aSite.LONGITUDE_DD = azimuth($scope.DMS.LODeg, $scope.DMS.LOMin, $scope.DMS.LOSec);
+                        var createdSiteID = 0;                        
                         //POST site
                         SITE.save($scope.aSite, function success(response) {
                             createdSiteID = response.SITE_ID;
@@ -425,8 +484,6 @@
                         toastr.error("Quick HWM not created.");
                     }
                 };
-
-
             }//end else (logged in)
         }]);
   

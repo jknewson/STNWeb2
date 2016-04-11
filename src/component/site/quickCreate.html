@@ -37,12 +37,12 @@
                             <label class="col-md-4 control-label req" for="SITE_LATITUDE_DD">Latitude:</label>
                             <div class="col-md-8" ng-if="decDegORdms.val == 'dd'">
                                 <input class="form-control" ng-keypress="isNum($event)" name="LATITUDE_DD" id="SITE_LATITUDE_DD" ng-model="aSite.LATITUDE_DD"
-                                       type="text" placeholder="Latitude" required />
+                                       ng-model-options="{ updateOn: 'blur' }" ng-change="checkValue()" type="text" placeholder="Latitude" required />
                             </div>
                             <div class="col-md-8" ng-if="decDegORdms.val == 'dms'">
                                 <table>
                                     <tr>
-                                        <td><input class="form-control" ng-keypress="isNum($event)" name="Deg" ng-model="DMS.LADeg" type="text" /></td>
+                                        <td><input class="form-control" ng-keypress="isNum($event)" ng-change="checkValue('dms')" id="LaDeg" name="Deg" ng-model="DMS.LADeg" type="text" /></td>
                                         <td>°</td>
                                         <td><input class="form-control" ng-keypress="isNum($event)" name="Min" ng-model="DMS.LAMin" type="text" /></td>
                                         <td>′</td>
@@ -58,12 +58,12 @@
                             <label class="col-md-4 control-label req" for="SITE_LONGITUDE_DD">Longitude:</label>
                             <div class="col-md-8" ng-if="decDegORdms.val == 'dd'">
                                 <input class="form-control" ng-keypress="isNum($event)" ng-enter="getAddress()" id="SITE_longitude_dd" name="LONGITUDE_DD" ng-model="aSite.LONGITUDE_DD"
-                                       type="text" placeholder="Longitude" required />
+                                       ng-model-options="{ updateOn: 'blur' }" ng-change="checkValue()" type="text" placeholder="Longitude" required />
                             </div>
                             <div class="col-md-8" ng-if="decDegORdms.val == 'dms'">
                                 <table>
                                     <tr>
-                                        <td><input class="form-control" ng-keypress="isNum($event)" name="Deg" ng-model="DMS.LODeg" type="text" /></td>
+                                        <td><input class="form-control" ng-keypress="isNum($event)" name="Deg" ng-model-options="{ updateOn: 'blur' }" ng-change="checkValue('dms')" id="LoDeg" ng-model="DMS.LODeg" type="text" /></td>
                                         <td>°</td>
                                         <td><input class="form-control" ng-keypress="isNum($event)" name="Min" ng-model="DMS.LOMin" type="text" /></td>
                                         <td>′</td>
