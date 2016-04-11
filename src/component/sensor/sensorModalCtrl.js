@@ -742,7 +742,7 @@
     ModalControllers.controller('sensorRetrievalModalCtrl', ['$scope', '$rootScope', '$timeout', '$cookies', '$http', '$uibModalInstance', '$uibModal', 'thisSensor', 'SensorSite', 'siteOPs', 'allEventList', 'allVDatumList', 'allMembers', 'allStatusTypes', 'allInstCollCond', 'INSTRUMENT', 'INSTRUMENT_STATUS', 'OP_MEASURE',
         function ($scope, $rootScope, $timeout, $cookies, $http, $uibModalInstance, $uibModal, thisSensor, SensorSite, siteOPs, allEventList, allVDatumList, allMembers, allStatusTypes, allInstCollCond, INSTRUMENT, INSTRUMENT_STATUS, OP_MEASURE) {
             $scope.aSensor = thisSensor.Instrument;
-            $scope.EventName = allEventList.filter(function (r) {return r.EVENT_ID == $scope.aSensor.EVENT_ID;})[0].EVENT_NAME;
+            $scope.EventName = allEventList.filter(function (r) {return r.EVENT_ID == $scope.aSensor.EVENT_ID;})[0].EVENT_NAME;            
             $scope.depSensStatus = angular.copy(thisSensor.InstrumentStats[0]);
             var y = $scope.depSensStatus.TIME_STAMP.substr(0, 4);
             var m = $scope.depSensStatus.TIME_STAMP.substr(5, 2) - 1; //subtract 1 for index value (January is 0)
@@ -951,7 +951,7 @@
                                 }
                                 //build the createdSensor to send back and add to the list page
                                 createRetSens = statResponse;
-                                createRetSens.Status = 'Retrieved';
+                                createRetSens.Status = statResponse.STATUS_TYPE_ID == 2 ? 'Retrieved' : 'Lost';
                                 var sensorObjectToSendBack = {
 
                                     Instrument: updatedSensor,
@@ -994,7 +994,7 @@
             $scope.depTypeList = allDepTypes; //get fresh version so not messed up with the Temperature twice
             $scope.filteredDeploymentTypes = []; //will be populated based on the sensor type chosen
             $scope.timeZoneList = ['UTC', 'PST', 'MST', 'CST', 'EST'];
-            $scope.statusTypeList = allStatusTypes.filter(function (s) { return s.STATUS !== 'Proposed' || s.STATUS !== 'Deployed'; });
+            $scope.statusTypeList = allStatusTypes.filter(function (s) { return s.STATUS == 'Retrieved' || s.STATUS == 'Lost'; });
             //default setting for interval
             $scope.IntervalType = { type: 'Seconds' };
             //ng-show determines whether they are editing or viewing details
@@ -1029,13 +1029,20 @@
 
             //formatting date and time properly for chrome and ff
             var getDateTimeParts = function (d) {
-                var y = d.substr(0, 4);
-                var m = d.substr(5, 2) - 1; //subtract 1 for index value (January is 0)
-                var da = d.substr(8, 2);
-                var h = d.substr(11, 2);
-                var mi = d.substr(14, 2);
-                var sec = d.substr(17, 2);
-                var theDate = new Date(y, m, da, h, mi, sec);
+                var theDate;
+                var isDate = Object.prototype.toString.call(d) === '[object Date]';
+                if (isDate === false) {
+                    var y = d.substr(0, 4);
+                    var m = d.substr(5, 2) - 1; //subtract 1 for index value (January is 0)
+                    var da = d.substr(8, 2);
+                    var h = d.substr(11, 2);
+                    var mi = d.substr(14, 2);
+                    var sec = d.substr(17, 2);
+                    theDate = new Date(y, m, da, h, mi, sec);
+                } else {
+                    //this is already a date, return it back
+                    theDate = d;
+                }
                 return theDate;
             };
             
@@ -1049,16 +1056,7 @@
             $scope.Deployer = allMembers.filter(function (m) { return m.MEMBER_ID === $scope.DeployedSensorStat.MEMBER_ID; })[0];
             $scope.DEPremoveOPList = [];
             $scope.DEPtapeDownTable = []; //holder of tapedown OP_MEASUREMENTS
-            //$scope.DEPaddTapedown = true; //toggle tapedown section
-            //$scope.DEPshowTapedownPart = function () {
-            //    if ($scope.DEPaddTapedown) {
-            //        //they are closing it. clear inputs and close
-            //        $scope.DEPaddTapedown = false;
-            //    } else {
-            //        //they are opening to add tape down information
-            //        $scope.DEPaddTapedown = true;
-            //    }
-            //};
+            
             $scope.DEPOPchosen = function (DEPopChosen) {
                 var opI = $scope.DEPOPsForTapeDown.map(function (o) { return o.OBJECTIVE_POINT_ID; }).indexOf(DEPopChosen.OBJECTIVE_POINT_ID);
                 if (DEPopChosen.selected) {
@@ -1133,20 +1131,18 @@
             });
             //retrieve part //////////////////
             $scope.RetrievedSensorStat = angular.copy(thisSensor.InstrumentStats.filter(function (inst) { return inst.Status === "Retrieved"; })[0]);
+            //if there isn't one .. then this is a lost status
+            if ($scope.RetrievedSensorStat === undefined) {
+                $scope.RetrievedSensorStat = angular.copy(thisSensor.InstrumentStats.filter(function (inst) { return inst.Status === "Lost"; })[0]);
+                $scope.mostRecentStatus = "Lost";
+            } else {
+                $scope.mostRecentStatus = "Retrieved";
+            }
             $scope.RetrievedSensorStat.TIME_STAMP = getDateTimeParts($scope.RetrievedSensorStat.TIME_STAMP); //this keeps it as utc in display
             $scope.Retriever = allMembers.filter(function (m) { return m.MEMBER_ID === $scope.RetrievedSensorStat.MEMBER_ID; })[0];
             $scope.RETremoveOPList = [];
             $scope.RETtapeDownTable = []; //holder of tapedown OP_MEASUREMENTS
-           // $scope.RETaddTapedown = false; //toggle tapedown section
-            //$scope.RETshowTapedownPart = function () {
-            //    if ($scope.RETaddTapedown) {
-            //        //they are closing it. clear inputs and close
-            //        $scope.RETaddTapedown = false;
-            //    } else {
-            //        //they are opening to add tape down information
-            //        $scope.RETaddTapedown = true;
-            //    }
-            //};
+          
             $scope.RETOPchosen = function (RETopChosen) {
                 var opI = $scope.RETOPsForTapeDown.map(function (o) { return o.OBJECTIVE_POINT_ID; }).indexOf(RETopChosen.OBJECTIVE_POINT_ID);
                 if (RETopChosen.selected) {
@@ -1267,13 +1263,10 @@
             $scope.getDepTypes($scope.sensor); //call it first time through
 
             //cancel
-            $scope.cancel = function () {
+            $scope.cancel = function () {               
                 var sensorObjectToSendBack = {
                     Instrument: thisSensor.Instrument,
-                    InstrumentStats: [
-                        thisSensor.InstrumentStats.filter(function (inst) { return inst.Status === "Retrieved"; })[0],
-                        thisSensor.InstrumentStats.filter(function (inst) { return inst.Status === "Deployed"; })[0]
-                    ]
+                    InstrumentStats: thisSensor.InstrumentStats
                 };
                 $timeout(function () {
                     // anything you want can go here and will safely be run on the next digest.                   
@@ -1363,11 +1356,16 @@
                             }
 
                             updatedSenStat = statResponse;
-                            updatedSenStat.Status = $scope.statusTypeList.filter(function (sta) { return sta.STATUS_TYPE_ID === $scope.depStuffCopy[1].STATUS_TYPE_ID; })[0].STATUS;
+                            updatedSenStat.Status = "Deployed"; //can't change status on a deployed edit..still deployed
                             $scope.sensor = updatedSensor;
+                            thisSensor.Instrument = updatedSensor;
                             $scope.DeployedSensorStat = updatedSenStat;
                            
                             $scope.DeployedSensorStat.TIME_STAMP = getDateTimeParts($scope.DeployedSensorStat.TIME_STAMP);//this keeps it as utc in display
+                            var ind = thisSensor.InstrumentStats.map(function (i) { return i.STATUS_TYPE_ID; }).indexOf(1);
+                            thisSensor.InstrumentStats[ind] = $scope.DeployedSensorStat;
+
+                            
                             $scope.depStuffCopy = []; $scope.depTapeCopy = [];
                             $scope.IntervalType = { type: 'Seconds' };
                             $scope.view.DEPval = 'detail';                    
@@ -1423,7 +1421,16 @@
                         updatedRetSensor.Sensor_Brand = $scope.sensorBrandList.filter(function (s) { return s.SENSOR_BRAND_ID === $scope.retStuffCopy[0].SENSOR_BRAND_ID; })[0].BRAND_NAME;
                         updatedRetSensor.Sensor_Type = $scope.sensorTypeList.filter(function (t) { return t.SENSOR_TYPE_ID === $scope.retStuffCopy[0].SENSOR_TYPE_ID; })[0].SENSOR;
                         updatedRetSensor.Inst_Collection = $scope.collectCondList.filter(function (i) { return i.ID === $scope.retStuffCopy[0].INST_COLLECTION_ID; })[0].CONDITION;
+                        //update copied references for passing back to list
+                        $scope.sensor = updatedRetSensor;
+                        thisSensor.Instrument = updatedRetSensor;
                         INSTRUMENT_STATUS.update({ id: $scope.retStuffCopy[1].INSTRUMENT_STATUS_ID }, $scope.retStuffCopy[1]).$promise.then(function (statResponse) {
+                            $scope.mostRecentStatus = statResponse.STATUS_TYPE_ID == 2 ? "Retrieved" : "Lost";
+                            $scope.RetrievedSensorStat = statResponse;
+                            $scope.RetrievedSensorStat.Status = statResponse.STATUS_TYPE_ID == 2 ? "Retrieved" : "Lost";
+                            $scope.RetrievedSensorStat.TIME_STAMP = getDateTimeParts($scope.RetrievedSensorStat.TIME_STAMP);//this keeps it as utc in display
+                            thisSensor.InstrumentStats[0] = $scope.RetrievedSensorStat;
+
                             //deal with tapedowns. remove/add
                             for (var rt = 0; rt < $scope.RETremoveOPList.length; rt++) {
                                 var RETidToRemove = $scope.RETremoveOPList[rt];
@@ -1445,12 +1452,6 @@
                                     });
                                 }
                             }
-
-                            updatedRetSenStat = statResponse;
-                            updatedRetSenStat.Status = $scope.statusTypeList.filter(function (sta) { return sta.STATUS_TYPE_ID === $scope.retStuffCopy[1].STATUS_TYPE_ID; })[0].STATUS;
-                            $scope.sensor = updatedRetSensor;
-                            $scope.RetrievedSensorStat = updatedRetSenStat;                            
-                            $scope.RetrievedSensorStat.TIME_STAMP = getDateTimeParts($scope.RetrievedSensorStat.TIME_STAMP);//this keeps it as utc in display
                             $scope.retStuffCopy = []; $scope.retTapeCopy = [];
                             $scope.view.RETval = 'detail';
                         });

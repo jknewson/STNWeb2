@@ -161,6 +161,7 @@
                         controller: 'sensorModalCtrl',
                         size: 'lg',
                         backdrop: 'static',
+                        keyboard: false,
                         windowClass: 'rep-dialog',
                         resolve: {
                             allDropdowns: function () {
@@ -229,6 +230,7 @@
                         controller: 'fullSensorModalCtrl',
                         size: 'lg',
                         backdrop: 'static',
+                        keyboard: false,
                         windowClass: 'rep-dialog',
                         resolve: {
                             allDepDropdowns: function () {
