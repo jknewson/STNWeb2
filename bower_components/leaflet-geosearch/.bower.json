@@ -1,0 +1,47 @@
+{
+  "name": "leaflet-geosearch",
+  "description": "Adds support for address lookup (a.k.a. geocoding / geoseaching) to Leaflet.",
+  "main": [
+    "src/js/l.control.geosearch.js",
+    "src/js/l.geosearch.provider.bing.js",
+    "src/js/l.geosearch.provider.esri.js",
+    "src/js/l.geosearch.provider.google.js",
+    "src/js/l.geosearch.provider.openstreetmap.js",
+    "src/css/l.geosearch.css",
+    "src/img/alert.png",
+    "src/img/geosearch.png",
+    "src/img/spinner.gif"
+  ],
+  "authors": [
+    "Stephan Meijer"
+  ],
+  "license": "MIT",
+  "keywords": [
+    "geolocation",
+    "geocoding",
+    "plugins",
+    "leaflet",
+    "geo",
+    "map"
+  ],
+  "homepage": "https://github.com/smeijer/L.GeoSearch",
+  "moduleType": [],
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "version": "1.1.0",
+  "_release": "1.1.0",
+  "_resolution": {
+    "type": "version",
+    "tag": "1.1.0",
+    "commit": "4b089bca0fcb7fc5741ae3e95dcf57b2983ee947"
+  },
+  "_source": "https://github.com/smeijer/L.GeoSearch.git",
+  "_target": "^1.1.0",
+  "_originalSource": "L.GeoSearch",
+  "_direct": true
+}

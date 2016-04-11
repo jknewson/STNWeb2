@@ -276,6 +276,7 @@
            $scope.deleteFile = function () {
                var DeleteModalInstance = $uibModal.open({
                    backdrop: 'static',
+                   keyboard: false,
                    templateUrl: 'removemodal.html',
                    controller: 'ConfirmModalCtrl',
                    size: 'sm',
@@ -339,6 +340,7 @@
                    //ask them are they sure?
                    var removeOPMeas = $uibModal.open({
                        backdrop: 'static',
+                       keyboard: false,
                        template: '<div class="modal-header"><h3 class="modal-title">Remove OP Measure</h3></div>' +
                            '<div class="modal-body"><p>Are you sure you want to remove this OP Measurement from this sensor?</p></div>' +
                            '<div class="modal-footer"><button class="btn btn-primary" ng-enter="ok()" ng-click="ok()">OK</button><button class="btn btn-primary" ng-click="cancel()">Cancel</button></div>',
@@ -622,6 +624,7 @@
                    controller: 'ConfirmModalCtrl',
                    size: 'sm',
                    backdrop: 'static',
+                   keyboard: false,
                    resolve: {
                        nameToRemove: function () {
                            return $scope.aSensor;
@@ -816,6 +819,7 @@
                     //ask them are they sure?
                     var removeOPMeas = $uibModal.open({
                         backdrop: 'static',
+                        keyboard: false,
                         template: '<div class="modal-header"><h3 class="modal-title">Remove OP Measure</h3></div>' +
                             '<div class="modal-body"><p>Are you sure you want to remove this OP Measurement from this sensor?</p></div>' +
                             '<div class="modal-footer"><button class="btn btn-primary" ng-enter="ok()" ng-click="ok()">OK</button><button class="btn btn-primary" ng-click="cancel()">Cancel</button></div>',
@@ -1071,6 +1075,7 @@
                     //ask them are they sure?
                     var DEPremoveOPMeas = $uibModal.open({
                         backdrop: 'static',
+                        keyboard: false,
                         template: '<div class="modal-header"><h3 class="modal-title">Remove OP Measure</h3></div>' +
                             '<div class="modal-body"><p>Are you sure you want to remove this OP Measurement from this deployed sensor?</p></div>' +
                             '<div class="modal-footer"><button class="btn btn-primary" ng-click="DEPok()">OK</button><button class="btn btn-primary" ng-click="DEPcancel()">Cancel</button></div>',
@@ -1157,6 +1162,7 @@
                     //ask them are they sure?
                     var RETremoveOPMeas = $uibModal.open({
                         backdrop: 'static',
+                        keyboard: false,
                         template: '<div class="modal-header"><h3 class="modal-title">Remove OP Measure</h3></div>' +
                             '<div class="modal-body"><p>Are you sure you want to remove this OP Measurement from this retrieved sensor?</p></div>' +
                             '<div class="modal-footer"><button class="btn btn-primary" ng-click="RETok()">OK</button><button class="btn btn-primary" ng-click="RETcancel()">Cancel</button></div>',
@@ -1616,6 +1622,7 @@
             $scope.deleteNWISFile = function () {
                 var DeleteModalInstance = $uibModal.open({
                     backdrop: 'static',
+                    keyboard: false,
                     templateUrl: 'removemodal.html',
                     controller: 'ConfirmModalCtrl',
                     size: 'sm',
@@ -1655,6 +1662,7 @@
                 //TODO:: Delete the files for this sensor too or reassign to the Site?? Services or client handling?
                 var DeleteModalInstance = $uibModal.open({
                     backdrop: 'static',
+                    keyboard: false,
                     templateUrl: 'removemodal.html',
                     controller: 'ConfirmModalCtrl',
                     size: 'sm',
@@ -1909,6 +1917,7 @@
             $scope.deleteFile = function () {
                 var DeleteModalInstance = $uibModal.open({
                     backdrop: 'static',
+                    keyboard: false,
                     templateUrl: 'removemodal.html',
                     controller: 'ConfirmModalCtrl',
                     size: 'sm',

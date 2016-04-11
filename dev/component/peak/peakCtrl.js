@@ -36,6 +36,7 @@
                         controller: 'peakModalCtrl',
                         size: 'lg',
                         backdrop: 'static',
+                        keyboard: false,
                         windowClass: 'rep-dialog',
                         resolve: {
                             allCollectConditions: function () {
