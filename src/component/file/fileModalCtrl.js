@@ -6,6 +6,7 @@
         function ($scope, $cookies, $http, $uibModalInstance, $uibModal, SERVER_URL, fileTypeList, thisFile, allMembers, fileSource, dataFile, agencyList, fileSite, FILE, SOURCE, DATA_FILE) {
             //dropdowns
             $scope.serverURL = SERVER_URL;
+            $scope.sFileIsUploading = false; //Loading...    
             $scope.fileTypes = fileTypeList;
             $scope.agencies = agencyList;
             $scope.theSite = fileSite;
@@ -79,6 +80,7 @@
             //create this new file
             $scope.create = function (valid) {
                 if (valid) {//only be photo file or other .. no DATA here
+                    $scope.sFileIsUploading = true;
                     $http.defaults.headers.common.Authorization = 'Basic ' + $cookies.get('STNCreds');
                     $http.defaults.headers.common.Accept = 'application/json';
                     //post source first to get SOURCE_ID
@@ -123,8 +125,15 @@
                             var state = 'created';
                             //send the file back to be added to the scope list
                             var sendBack = [fresponse, state];
+                            $scope.sFileIsUploading = false;
                             $uibModalInstance.close(sendBack);
+                        }, function (errorResponse) {
+                            $scope.sFileIsUploading = false;
+                            toastr.error("Error saving file:" + errorResponse.statusText);
                         });
+                    }, function (errorResponse) {
+                        $scope.sFileIsUploading = false;
+                        toastr.error("Error saving Source info:" + errorResponse.statusText);
                     });//end source.save()
                 }//end valid
             };//end create()
@@ -132,6 +141,7 @@
             //update this file
             $scope.save = function (valid) {
                 if (valid) {
+                    $scope.sFileIsUploading = true;
                     //only photo or other file type (no data file here)
                     //put source or datafile, put file
                     var whatkind = $scope.aFile.fileBelongsTo;
@@ -144,10 +154,17 @@
                                 toastr.success("File Updated");
                                 var state = 'updated';
                                 fileResponse.fileBelongsTo = whatkind;
+                                $scope.sFileIsUploading = false;
                                 //send the file back to be added to the scope list
                                 var sendBack = [fileResponse, state];
                                 $uibModalInstance.close(sendBack);
+                            }, function (errorResponse) {
+                                $scope.sFileIsUploading = false;
+                                toastr.error("Error saving file:" + errorResponse.statusText);
                             });
+                        }, function (errorResponse) {
+                            $scope.sFileIsUploading = false; //Loading...
+                            toastr.error("Error saving source:" + errorResponse.statusText);
                         });
                     } else {
                         //data file
@@ -172,10 +189,17 @@
                                 toastr.success("File Updated");
                                 var state = 'updated';
                                 fileResponse.fileBelongsTo = whatkind;
+                                $scope.sFileIsUploading = false;
                                 //send the file back to be added to the scope list
                                 var sendBack = [fileResponse, state];
                                 $uibModalInstance.close(sendBack);
+                            }, function (errorResponse) {
+                                $scope.sFileIsUploading = false;
+                                toastr.error("Error saving file:" + errorResponse.statusText);
                             });
+                        }, function (errorResponse) {
+                            $scope.sFileIsUploading = false; //Loading...
+                            toastr.error("Error saving data file:" + errorResponse.statusText);
                         });
                     } //end else (datafile)
                 }//end valid

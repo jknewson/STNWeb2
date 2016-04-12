@@ -4,8 +4,8 @@
 
     var STNControllers = angular.module('STNControllers');
 
-    STNControllers.controller('objectivePointCtrl', ['$scope', '$cookies', '$location', '$state', '$http', '$uibModal', '$filter', '$timeout', 'OBJECTIVE_POINT', 'MEMBER', 'thisSite', 'thisSiteOPs', 'allOPTypes', 'allHorDatums', 'allHorCollMethods', 'allVertDatums', 'allVertColMethods', 'allOPQualities', 'allFileTypes', 'allAgencies',
-        function ($scope, $cookies, $location, $state, $http, $uibModal, $filter, $timeout, OBJECTIVE_POINT, MEMBER, thisSite, thisSiteOPs, allOPTypes, allHorDatums, allHorCollMethods, allVertDatums, allVertColMethods, allOPQualities, allFileTypes, allAgencies) {
+    STNControllers.controller('objectivePointCtrl', ['$scope', '$rootScope', '$cookies', '$location', '$state', '$http', '$uibModal', '$filter', '$timeout', 'OBJECTIVE_POINT', 'MEMBER', 'thisSite', 'thisSiteOPs', 'allOPTypes', 'allHorDatums', 'allHorCollMethods', 'allVertDatums', 'allVertColMethods', 'allOPQualities', 'allFileTypes', 'allAgencies',
+        function ($scope, $rootScope, $cookies, $location, $state, $http, $uibModal, $filter, $timeout, OBJECTIVE_POINT, MEMBER, thisSite, thisSiteOPs, allOPTypes, allHorDatums, allHorCollMethods, allVertDatums, allVertColMethods, allOPQualities, allFileTypes, allAgencies) {
             if ($cookies.get('STNCreds') === undefined || $cookies.get('STNCreds') === "") {
                 $scope.auth = false;
                 $location.path('/login');
@@ -21,13 +21,14 @@
                     });
                     var passAllLists = [allOPTypes, allHorDatums, allHorCollMethods, allVertDatums, allVertColMethods, allOPQualities, $scope.opFileTypes];
                     var indexClicked = $scope.SiteObjectivePoints.indexOf(OPclicked);
-
+                    $rootScope.stateIsLoading = { showLoading: true }; //Loading...
                     //modal
                     var modalInstance = $uibModal.open({
                         templateUrl : 'OPmodal.html',
                         controller: 'OPmodalCtrl',
                         size: 'lg',
                         backdrop: 'static',
+                        keyboard: false,
                         windowClass: 'rep-dialog',
                         resolve: {
                             allDropdowns: function () {
@@ -56,6 +57,7 @@
                     });
                     modalInstance.result.then(function (createdOP) {
                         //is there a new op or just closed modal
+                        $rootScope.stateIsLoading = { showLoading: false }; //Loading...
                         if (createdOP !== undefined) {
                             if (createdOP[1] == 'created') {
                                 $scope.SiteObjectivePoints.push(createdOP[0]);
