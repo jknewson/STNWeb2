@@ -7,7 +7,7 @@
             <!--<div ui-view="mapFilters"></div>-->
             <div class="mapCreateSiteButtonsDiv">
                 <button ng-class="createSiteModeActive ? 'btn btn-danger' : 'btn btn-primary'" ng-click="createSiteModeActive = !createSiteModeActive">{{createSiteButtonText}}</button>
-                <button ng-class="'btn btn-warning'" ng-if="createSiteModeActive" ng-click="createSiteFromMap()">Create new site at clicked location</button>
+                <button ng-class="'btn btn-warning'" ng-if="createSiteModeActive" ng-click="createSiteFromMap()">Create new site at dot location</button>
             </div><br>
             <div ui-view="mapSiteInfo"></div>
             <div ui-view="mapPeaksView"></div>

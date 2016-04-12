@@ -17,9 +17,13 @@
 
 
                 $rootScope.$on('filterSitesClick', function (event, filteredSitesArray) {
-                    $scope.paths = {};
-                    $scope.selectedMarkerNum = 0;
-                    onSiteComplete(filteredSitesArray);
+                    if (filteredSitesArray.length > 0) {
+                        $scope.paths = {};
+                        $scope.selectedMarkerNum = 0;
+                        onSiteComplete(filteredSitesArray);
+                    } else {
+                        alert("Your filter returned no results.");
+                    }
                 });
 
 
@@ -329,6 +333,17 @@
                 //$http.get('https://stn.wim.usgs.gov/STNServices/Events/' + evID + '/Sites.json')
                 //    .then(onSiteComplete, onError);
                 //copies scope object/////////////////////////////
+
+                leafletData.getMap().then(function(map) {
+                    var geoSearchControl = new L.Control.GeoSearch({
+                        provider: new L.GeoSearch.Provider.Google(),
+                        position: 'topleft',
+                        zoomLevel: 15
+                    });
+                    geoSearchControl.addTo(map);
+                });
+
+
                 angular.extend($scope, {
                     events: {
                         markers: {
@@ -341,6 +356,7 @@
                         zoom: 4,
                         minZoom: 4
                     },
+                    controls: {},
                     markersWatchOptions: {
                         doWatch: true,
                         isDeep: true,
