@@ -4,11 +4,12 @@
 
     var STNControllers = angular.module('STNControllers');
 
-    STNControllers.controller('quickCreateCtrl', ['$scope', '$rootScope', '$cookies', '$location', '$state', '$http', '$uibModal', '$filter', 'whichQuick',
-        'allHorDatums', 'allHorCollMethods', 'allStates', 'allCounties', 'allOPTypes', 'allVertDatums', 'allVertColMethods', 
-        'allOPQualities', 'allHWMTypes', 'allHWMQualities', 'allMarkers', 'allEvents', 'allSensorTypes', 'allSensorBrands', 'allDeployTypes', 'allHousingTypes', 'allSensDeps', 'SITE', 'OBJECTIVE_POINT', 'HWM', 'MEMBER', 'INSTRUMENT', 'INSTRUMENT_STATUS',
-        function ($scope, $rootScope, $cookies, $location, $state, $http, $uibModal, $filter, whichQuick, allHorDatums, allHorCollMethods, allStates,
-        allCounties, allOPTypes, allVertDatums, allVertColMethods, allOPQualities, allHWMTypes, allHWMQualities, allMarkers, allEvents, allSensorTypes, allSensorBrands, allDeployTypes, allHousingTypes, allSensDeps, SITE, OBJECTIVE_POINT, HWM, MEMBER, INSTRUMENT, INSTRUMENT_STATUS) {
+    STNControllers.controller('quickCreateCtrl', ['$scope', '$rootScope', '$cookies', '$location', '$state', '$http', '$uibModal', '$filter', 'whichQuick', 'allHorDatums',
+        'allHorCollMethods', 'allStates', 'allCounties', 'allOPTypes', 'allVertDatums', 'allVertColMethods', 'allOPQualities', 'allHWMTypes', 'allHWMQualities', 'allMarkers',
+        'allEvents', 'allSensorTypes', 'allSensorBrands', 'allDeployTypes', 'allHousingTypes', 'allSensDeps', 'SITE', 'OBJECTIVE_POINT', 'HWM', 'MEMBER', 'INSTRUMENT', 'INSTRUMENT_STATUS', 'OP_MEASURE',
+        function ($scope, $rootScope, $cookies, $location, $state, $http, $uibModal, $filter, whichQuick, allHorDatums, allHorCollMethods, allStates, allCounties, allOPTypes,
+            allVertDatums, allVertColMethods, allOPQualities, allHWMTypes, allHWMQualities, allMarkers, allEvents, allSensorTypes, allSensorBrands, allDeployTypes, allHousingTypes, allSensDeps,
+            SITE, OBJECTIVE_POINT, HWM, MEMBER, INSTRUMENT, INSTRUMENT_STATUS, OP_MEASURE) {
             if ($cookies.get('STNCreds') === undefined || $cookies.get('STNCreds') === "") {
                 $scope.auth = false;
                 $location.path('/login');
@@ -120,7 +121,7 @@
 
                 //want to add OP identifier
                 $scope.addNewIdentifier = function () {
-                    $scope.addedIdentifiers.push({ OBJECTIVE_POINT_ID: $scope.aOP.OBJECTIVE_POINT_ID, IDENTIFIER: "", IDENTIFIER_TYPE: "" });
+                    $scope.addedIdentifiers.push({ IDENTIFIER: "", IDENTIFIER_TYPE: "" });
                     $scope.showControlIDinput = true;
                 };//end addNewIdentifier for OP
 
@@ -201,7 +202,7 @@
                             $scope.DMS.LADeg = ladDMSarray[0];
                             $scope.DMS.LAMin = ladDMSarray[1];
                             $scope.DMS.LASec = ladDMSarray[2];
-
+                            
                             var longDMS = deg_to_dms($scope.aSite.LONGITUDE_DD);
                             var longDMSarray = longDMS.split(':');
                             $scope.DMS.LODeg = longDMSarray[0] * -1;
@@ -285,8 +286,8 @@
                     //clear them all first
                     delete $scope.aSite.ADDRESS; delete $scope.aSite.CITY; delete $scope.aSite.STATE;
                     $scope.stateCountyList = []; delete $scope.aSite.ZIP;
-                    if ($scope.aSite.LATITUDE_DD === undefined) $scope.aSite.LATITUDE_DD = azimuth($scope.DMS.LADeg, $scope.DMS.LAMin, $scope.DMS.LASec);
-                    if ($scope.aSite.LONGITUDE_DD === undefined) $scope.aSite.LONGITUDE_DD = azimuth($scope.DMS.LODeg, $scope.DMS.LOMin, $scope.DMS.LOSec);
+                    if ($scope.DMS.LADeg !== undefined) $scope.aSite.LATITUDE_DD = azimuth($scope.DMS.LADeg, $scope.DMS.LAMin, $scope.DMS.LASec);
+                    if ($scope.DMS.LODeg !== undefined) $scope.aSite.LONGITUDE_DD = azimuth($scope.DMS.LODeg, $scope.DMS.LOMin, $scope.DMS.LOSec);
                     $rootScope.stateIsLoading.showLoading = true; //loading...
                     var geocoder = new google.maps.Geocoder(); //reverse address lookup
                     var latlng = new google.maps.LatLng($scope.aSite.LATITUDE_DD, $scope.aSite.LONGITUDE_DD);
@@ -385,6 +386,80 @@
                     }
                 };
 
+                //sensor section, clicked Show/Hide Tape down information
+                var showNeedOPfirstModal = function () {
+                    var needOPModal = $uibModal.open({
+                        template: '<div class="modal-header"><h3 class="modal-title">No Datum Location</h3></div>' +
+                            '<div class="modal-body"><p>In order to add tape down information, please populate the Datum Location section above first.</p>' +
+                            '<p>The following fields are required for the tape down section: <b>Name</b>, <b>Elevation</b> and <b>Vertical Datum</b>.</p></div>' +
+                            '<div class="modal-footer"><button class="btn btn-primary" ng-enter="ok()" ng-click="ok()">OK</button></div>',
+                        controller: ['$scope', '$uibModalInstance', function ($scope, $uibModalInstance) {
+                            $scope.ok = function () {
+                                $uibModalInstance.dismiss();
+                            };
+                        }],
+                        size: 'sm'
+                    });
+                };
+                $scope.tapeDownTable = []; //holder for the op if they choose it from the dropdown for tape down
+                $scope.OPchosen = function (opChosen) {
+                    //var opI = $scope.OPsForTapeDown.map(function (o) { return o.OBJECTIVE_POINT_ID; }).indexOf(opChosen.OBJECTIVE_POINT_ID);
+                    if (opChosen.selected) {
+                        //they picked an OP to use for tapedown
+                        $scope.OPMeasure = {};
+                        $scope.OPMeasure.OP_NAME = opChosen.NAME;
+                        $scope.OPMeasure.elevation = opChosen.ELEV_FT;
+                        $scope.OPMeasure.Vdatum = $scope.vertDatumList.filter(function (vd) { return vd.DATUM_ID == opChosen.VDATUM_ID; })[0].DATUM_ABBREVIATION;
+                        $scope.tapeDownTable.push($scope.OPMeasure);                        
+                    } else {
+                        //they unchecked the op to remove
+                        //ask them are they sure?
+                        var removeOPMeas = $uibModal.open({
+                            backdrop: 'static',
+                            keyboard: false,
+                            template: '<div class="modal-header"><h3 class="modal-title">Remove OP Measure</h3></div>' +
+                                '<div class="modal-body"><p>Are you sure you want to remove this OP Measurement from this sensor?</p></div>' +
+                                '<div class="modal-footer"><button class="btn btn-primary" ng-enter="ok()" ng-click="ok()">OK</button><button class="btn btn-primary" ng-click="cancel()">Cancel</button></div>',
+                            controller: ['$scope', '$uibModalInstance', function ($scope, $uibModalInstance) {
+                                $scope.ok = function () {
+                                    $uibModalInstance.close('remove');
+                                };
+                                $scope.cancel = function () {
+                                    $uibModalInstance.close('cancel');
+                                };
+                            }],
+                            size: 'sm'
+                        });
+                        removeOPMeas.result.then(function (yesOrNo) {
+                            if (yesOrNo == 'remove') {
+                                //remove it
+                                $scope.tapeDownTable.splice(0, 1);
+                                $scope.OPsForTapeDown = [];
+                                $scope.OPMeasure = {}; $scope.addTapedown = false;
+                                $scope.aSensStatus.SENSOR_ELEVATION = ''; $scope.aSensStatus.WS_ELEVATION = ''; $scope.aSensStatus.GS_ELEVATION = ''; $scope.aSensStatus.VDATUM_ID = '';
+                            } else {
+                                //never mind, make it selected again
+                                $scope.OPsForTapeDown[0].selected = true;
+                            }
+                        });
+                    }
+                };
+                $scope.addTapedown = false; //toggle tapedown section
+                $scope.OPsForTapeDown = []; //will hold OP they add in op accordion.. get this when they click the button and show modal if they haven't populated it yet.
+                $scope.showTapedownPart = function () {
+                    if ($scope.addTapedown) {
+                        //they are closing it. clear inputs and close
+                        $scope.addTapedown = false;
+                    } else {
+                        //they are opening to add tape down information
+                        if ($scope.aOP.NAME !== undefined && $scope.aOP.ELEV_FT !== undefined && $scope.aOP.VDATUM_ID !== undefined) {
+                            $scope.OPsForTapeDown.push($scope.aOP);
+                            $scope.addTapedown = true;
+                        } else {
+                            showNeedOPfirstModal();
+                        }                       
+                    }
+                };
                 $scope.siteErrors = false; $scope.opErrors = false; $scope.hwmErrors = false; 
                 $scope.create = function () {
                     $rootScope.stateIsLoading.showLoading = true;// loading..
@@ -415,9 +490,11 @@
                             OBJECTIVE_POINT.save(OPtoPOST, function success(response) {
                                 createdOP = response;
                                 if ($scope.addedIdentifiers.length > 0) {
-                                    //post each one
-                                    for (var opc = 0; opc < $scope.addedIdentifiers.length; opc++)
+                                    //post each one THIS WILL CHANGE SOON TO HAVE OBJECTIVE_POINT_ID already added and not sent along with it
+                                    for (var opc = 0; opc < $scope.addedIdentifiers.length; opc++) {
+                                        $scope.addedIdentifiers[opc].OBJECTIVE_POINT_ID = response.OBJECTIVE_POINT_ID;
                                         OBJECTIVE_POINT.createOPControlID({ id: response.OBJECTIVE_POINT_ID }, $scope.addedIdentifiers[opc]).$promise;
+                                    }
                                 }
                                 //HWM stuff POST if HWM
                                 if ($scope.CreateWhat == 'HWM') {
@@ -454,6 +531,17 @@
                                         createdSensor = response;
                                         $scope.aSensStatus.INSTRUMENT_ID = response.INSTRUMENT_ID;
                                         INSTRUMENT_STATUS.save($scope.aSensStatus).$promise.then(function (statResponse) {
+                                            //added tape downs?
+                                            if ($scope.tapeDownTable.length > 0) {
+                                                for (var t = 0; t < $scope.tapeDownTable.length; t++) {
+                                                    var thisTape = $scope.tapeDownTable[t];
+                                                    thisTape.INSTRUMENT_STATUS_ID = statResponse.INSTRUMENT_STATUS_ID;
+                                                    thisTape.OBJECTIVE_POINT_ID = createdOP.OBJECTIVE_POINT_ID;
+                                                    ///POST IT///
+                                                    OP_MEASURE.addInstStatMeasure({ instrumentStatusId: statResponse.INSTRUMENT_STATUS_ID }, thisTape).$promise;
+                                                }
+                                            }
+
                                             toastr.success("Quick Sensor created");
                                             $rootScope.stateIsLoading.showLoading = false;// loading..
                                             $location.path('/Site/' + createdSiteID + '/SiteDashboard').replace();//.notify(false);

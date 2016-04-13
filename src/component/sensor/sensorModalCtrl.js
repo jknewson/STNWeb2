@@ -1159,7 +1159,7 @@
                     }
                     //end if thisSiteHousings != undefined
                 });
-            };
+            }
             //retrieve part //////////////////
             $scope.RetrievedSensorStat = angular.copy(thisSensor.InstrumentStats.filter(function (inst) { return inst.Status === "Retrieved"; })[0]);
             //if there isn't one .. then this is a lost status
@@ -1245,7 +1245,7 @@
                             $scope.RETOPsForTapeDown[i].selected = false;
                     }
                 });
-            };
+            }
 
             $scope.EventName = allEvents.filter(function (e) { return e.EVENT_ID === $scope.sensor.EVENT_ID; })[0].EVENT_NAME;
 
