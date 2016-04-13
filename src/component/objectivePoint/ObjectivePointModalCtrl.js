@@ -2,11 +2,13 @@
     'use strict';
 
     var ModalControllers = angular.module('ModalControllers');
-    ModalControllers.controller('OPmodalCtrl', ['$scope', '$cookies', '$http', '$uibModalInstance', '$uibModal', 'SERVER_URL', 'Site_Files', 'allDropdowns', 'thisOP', 'thisOPControls', 'opSite', 'agencyList', 'allMembers', 'OBJECTIVE_POINT', 'OP_CONTROL_IDENTIFIER', 'SOURCE', 'FILE',
-        function ($scope, $cookies, $http, $uibModalInstance, $uibModal, SERVER_URL, Site_Files, allDropdowns, thisOP, thisOPControls, opSite, agencyList, allMembers, OBJECTIVE_POINT, OP_CONTROL_IDENTIFIER, SOURCE, FILE) {
+    ModalControllers.controller('OPmodalCtrl', ['$scope', '$rootScope', '$cookies', '$http', '$uibModalInstance', '$uibModal', 'SERVER_URL', 'Site_Files', 'allDropdowns', 'thisOP', 'thisOPControls', 'opSite', 'agencyList', 'allMembers', 'OBJECTIVE_POINT', 'OP_CONTROL_IDENTIFIER', 'SOURCE', 'FILE',
+        function ($scope, $rootScope, $cookies, $http, $uibModalInstance, $uibModal, SERVER_URL, Site_Files, allDropdowns, thisOP, thisOPControls, opSite, agencyList, allMembers, OBJECTIVE_POINT, OP_CONTROL_IDENTIFIER, SOURCE, FILE) {
             //defaults for radio buttons
             //dropdowns
             $scope.serverURL = SERVER_URL;
+            $scope.fileIsUploading = false; //Loading...    
+            
             $scope.OPTypeList = allDropdowns[0];
             $scope.HDList = allDropdowns[1];
             $scope.HCollectMethodList = allDropdowns[2];
@@ -81,9 +83,7 @@
             //create this new file
             $scope.createFile = function (valid) {
                 if (valid) {
-                    /*aFile.FILETYPE_ID, (pdo)aFile.FILE_URL, (pdo)aFile.FILE_DATE, (pdo)aFile.DESCRIPTION, (p)aFile.PHOTO_DIRECTION, (p)aFile.LATITUDE_DD, (p)aFile.LONGITUDE_DD,
-                     * OP WILL NOT HAVE DATAFILE:: (d)datafile.PROCESSOR_ID, (d)datafile.COLLECT_DATE, (d)datafile.GOOD_START, (d)datafile.GOOD_END, (d)datafile.TIME_ZONE, (d)datafile.ELEVATION_STATUS
-                     * (po)aSource.FULLNAME, (po)aSource.AGENCY_ID, (po)aSource.SOURCE_DATE,  */
+                    $scope.fileIsUploading = true;
                     $http.defaults.headers.common.Authorization = 'Basic ' + $cookies.get('STNCreds');
                     $http.defaults.headers.common.Accept = 'application/json';
                     //post source first to get SOURCE_ID
@@ -119,16 +119,23 @@
                                 $scope.allSFiles.push(fresponse);
                                 Site_Files.setAllSiteFiles($scope.allSFiles); //updates the file list on the sitedashboard
                                 if (fresponse.FILETYPE_ID === 1) $scope.opImageFiles.push(fresponse);
-                                $scope.showFileForm = false;
+                                $scope.showFileForm = false; $scope.fileIsUploading = false;
+                            }, function (errorResponse) {
+                                $scope.fileIsUploading = false;
+                                toastr.error("Error saving file:" + errorResponse.statusText);
                             });
+                        }, function (errorResponse) {
+                            $scope.fileIsUploading = false;
+                            toastr.error("Error saving Source info:" + errorResponse.statusText);
                         });//end source.save()
-                    }//end if source
+                    }
                 }//end valid
             };//end create()
 
             //update this file
             $scope.saveFile = function (valid) {
                 if (valid) {
+                    $scope.fileIsUploading = true;
                     //only photo or other file type (no data file here)
                     //put source or datafile, put file
                     var whatkind = $scope.aFile.fileBelongsTo;
@@ -143,8 +150,14 @@
                                 $scope.OPFiles[$scope.existFileIndex] = fileResponse;
                                 $scope.allSFiles[$scope.allSFileIndex] = fileResponse;
                                 Site_Files.setAllSiteFiles($scope.allSFiles); //updates the file list on the sitedashboard
-                                $scope.showFileForm = false;
+                                $scope.showFileForm = false; $scope.fileIsUploading = false;
+                            }, function (errorResponse) {
+                                $scope.fileIsUploading = false;
+                                toastr.error("Error saving file:" + errorResponse.statusText);
                             });
+                        }, function (errorResponse) {
+                            $scope.fileIsUploading = false; //Loading...
+                            toastr.error("Error saving source:" + errorResponse.statusText);
                         });
                     }
                 }//end valid
@@ -174,7 +187,7 @@
                         $scope.allSFiles.splice($scope.allSFileIndex, 1);
                         $scope.opImageFiles.splice($scope.existIMGFileIndex, 1);
                         Site_Files.setAllSiteFiles($scope.allSFiles); //updates the file list on the sitedashboard
-                        $scope.showFileForm = false;
+                        $scope.showFileForm = false; 
                     }, function error(errorResponse) {
                         toastr.error("Error: " + errorResponse.statusText);
                     });
@@ -379,7 +392,7 @@
 
             //Create this OP
             $scope.create = function () {
-                if (this.OPForm.$valid) {
+                if (this.OPForm.$valid) {                    
                     $http.defaults.headers.common.Authorization = 'Basic ' + $cookies.get('STNCreds');
                     $http.defaults.headers.common.Accept = 'application/json';
                     var createdOP = {};
@@ -391,10 +404,12 @@
                         toastr.success("Datum Location created");
                         createdOP = response;
                         if ($scope.addedIdentifiers.length > 0) {
-                            //post each one
+                            //post each one THIS WILL CHANGE SOON TO HAVE OBJECTIVE_POINT_ID already added and not sent along with it
                             for (var opc = 0; opc < $scope.addedIdentifiers.length; opc++)
                                 OBJECTIVE_POINT.createOPControlID({ id: response.OBJECTIVE_POINT_ID }, $scope.addedIdentifiers[opc]).$promise;
                         }
+                    }, function error(errorResponse) {
+                        toastr.error("Error creating Datum Location" + errorResponse.statusText);
                     }).$promise.then(function () {
                         var sendBack = [createdOP, 'created'];
                         $uibModalInstance.close(sendBack);
@@ -450,6 +465,8 @@
                         toastr.success("Datum Location updated");
                         updatedOP = response;
                         //    delete $http.defaults.headers.common['X-HTTP-Method-Override'];
+                    }, function error(errorResponse) {
+                        toastr.error("Error updating Datum Location:" + errorResponse.statusText);
                     }).$promise.then(function () {
                         var sendBack = [updatedOP, 'updated'];
                         $uibModalInstance.close(sendBack);
@@ -497,6 +514,66 @@
                     //logic for cancel
                 });//end modal
             };
+
+            //lat modal 
+            var openLatModal = function (w) {
+                var latModal = $uibModal.open({
+                    template: '<div class="modal-header"><h3 class="modal-title">Error</h3></div>' +
+                        '<div class="modal-body"><p>The Latitude must be between 0 and 73.0</p></div>' +
+                        '<div class="modal-footer"><button class="btn btn-primary" ng-enter="ok()" ng-click="ok()">OK</button></div>',
+                    controller: ['$scope', '$uibModalInstance', function ($scope, $uibModalInstance) {
+                        $scope.ok = function () {
+                            $uibModalInstance.close();
+                        };
+                    }],
+                    size: 'sm'
+                });
+                latModal.result.then(function (fieldFocus) {
+                    if (w == 'latlong') $("#LATITUDE_DD").focus();
+                    else $("#LaDeg").focus();
+                });
+            };
+
+            //long modal
+            var openLongModal = function (w) {
+                var longModal = $uibModal.open({
+                    template: '<div class="modal-header"><h3 class="modal-title">Error</h3></div>' +
+                        '<div class="modal-body"><p>The Longitude must be between -175.0 and -60.0</p></div>' +
+                        '<div class="modal-footer"><button class="btn btn-primary" ng-enter="ok()" ng-click="ok()">OK</button></div>',
+                    controller: ['$scope', '$uibModalInstance', function ($scope, $uibModalInstance) {
+                        $scope.ok = function () {
+                            $uibModalInstance.close();
+                        };
+                    }],
+                    size: 'sm'
+                });
+                longModal.result.then(function (fieldFocus) {
+                    if (w == 'latlong') $("#LONGITUDE_DD").focus();
+                    else $("#LoDeg").focus();
+                });
+            };
+
+            //make sure lat/long are right number range
+            $scope.checkValue = function (d) {
+                if (d == 'dms') {
+                    //check the degree value
+                    if ($scope.DMS.LADeg < 0 || $scope.DMS.LADeg > 73) {
+                        openLatModal('dms');
+                    }
+                    if ($scope.DMS.LODeg < -175 || $scope.DMS.LODeg > -60) {
+                        openLongModal('dms');
+                    }
+                } else {
+                    //check the latitude/longitude
+                    if ($scope.aSite.LATITUDE_DD < 0 || $scope.aSite.LATITUDE_DD > 73) {
+                        openLatModal('latlong');
+                    }
+                    if ($scope.aSite.LONGITUDE_DD < -175 || $scope.aSite.LONGITUDE_DD > -60) {
+                        openLongModal('latlong');
+                    }
+                }
+            };
+
         }]);//end OPmodalCtrl
 
 })();

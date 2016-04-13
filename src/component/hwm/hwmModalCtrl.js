@@ -14,7 +14,8 @@
             $scope.vCollMList = allDropdowns[5];
             $scope.markerList = allDropdowns[6];
             $scope.eventList = allDropdowns[7];            
-            $scope.fileTypeList = allDropdowns[8]; //used if creating/editing HWM file           
+            $scope.fileTypeList = allDropdowns[8]; //used if creating/editing HWM file    
+            $scope.HWMfileIsUploading = false; //Loading...    
             $scope.allSFiles = Site_Files.getAllSiteFiles();
             $scope.HWMFiles = thisHWM !== "empty" ? $scope.allSFiles.filter(function (sf) { return sf.HWM_ID == thisHWM.HWM_ID; }) : [];// holder for hwm files added
             $scope.hwmImageFiles = $scope.HWMFiles.filter(function (hf) { return hf.FILETYPE_ID === 1; }); //image files for carousel
@@ -412,9 +413,7 @@
             //create this new file
             $scope.createFile = function (valid) {
                 if (valid) {
-                    /*aFile.FILETYPE_ID, (pdo)aFile.FILE_URL, (pdo)aFile.FILE_DATE, (pdo)aFile.DESCRIPTION, (p)aFile.PHOTO_DIRECTION, (p)aFile.LATITUDE_DD, (p)aFile.LONGITUDE_DD,
-                     * HWM WILL NOT HAVE DATAFILE:: (d)datafile.PROCESSOR_ID, (d)datafile.COLLECT_DATE, (d)datafile.GOOD_START, (d)datafile.GOOD_END, (d)datafile.TIME_ZONE, (d)datafile.ELEVATION_STATUS
-                     * (po)aSource.FULLNAME, (po)aSource.AGENCY_ID, (po)aSource.SOURCE_DATE,  */
+                    $scope.HWMfileIsUploading = true;
                     $http.defaults.headers.common.Authorization = 'Basic ' + $cookies.get('STNCreds');
                     $http.defaults.headers.common.Accept = 'application/json';
                     //post source first to get SOURCE_ID
@@ -450,8 +449,14 @@
                                 $scope.allSFiles.push(fresponse);
                                 Site_Files.setAllSiteFiles($scope.allSFiles); //updates the file list on the sitedashboard
                                 if (fresponse.FILETYPE_ID === 1) $scope.hwmImageFiles.push(fresponse);
-                                $scope.showFileForm = false;
+                                $scope.showFileForm = false; $scope.HWMfileIsUploading = false;
+                            }, function (errorResponse) {
+                                $scope.HWMfileIsUploading = false;
+                                toastr.error("Error uploading file:" + errorResponse.statusText);
                             });
+                        }, function (errorResponse) {
+                            $scope.HWMfileIsUploading = false;
+                            toastr.error("Error creating Source info:" + errorResponse.statusText);
                         });//end source.save()
                     }//end if source                   
                 }//end valid
@@ -460,6 +465,7 @@
             //update this file
             $scope.saveFile = function (valid) {
                 if (valid) {
+                    $scope.HWMfileIsUploading = true;
                     //only photo or other file type (no data file here)
                     //put source or datafile, put file
                     var whatkind = $scope.aFile.fileBelongsTo;
@@ -474,8 +480,14 @@
                                 $scope.HWMFiles[$scope.existFileIndex] = fileResponse;
                                 $scope.allSFiles[$scope.allSFileIndex] = fileResponse;
                                 Site_Files.setAllSiteFiles($scope.allSFiles); //updates the file list on the sitedashboard
-                                $scope.showFileForm = false;
+                                $scope.showFileForm = false; $scope.HWMfileIsUploading = false;
+                            }, function (errorResponse) {
+                                $scope.HWMfileIsUploading = false;
+                                toastr.error("Error saving file:" + errorResponse.statusText);
                             });
+                        }, function (errorResponse) {
+                            $scope.HWMfileIsUploading = false; //Loading...
+                            toastr.error("Error saving file:" + errorResponse.statusText);
                         });
                     }
                 }//end valid
