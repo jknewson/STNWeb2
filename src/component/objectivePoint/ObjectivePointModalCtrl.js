@@ -404,7 +404,7 @@
                         toastr.success("Datum Location created");
                         createdOP = response;
                         if ($scope.addedIdentifiers.length > 0) {
-                            //post each one
+                            //post each one THIS WILL CHANGE SOON TO HAVE OBJECTIVE_POINT_ID already added and not sent along with it
                             for (var opc = 0; opc < $scope.addedIdentifiers.length; opc++)
                                 OBJECTIVE_POINT.createOPControlID({ id: response.OBJECTIVE_POINT_ID }, $scope.addedIdentifiers[opc]).$promise;
                         }
