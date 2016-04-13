@@ -51,7 +51,7 @@
     "jshint-stylish": "^1.0.0",
     "karma": "^0.10",
     "karma-junit-reporter": "^0.2.2",
-    "main-bower-files": "^2.5.0",
+    "main-bower-files": "^2.11.1",
     "method-override": "^2.1.2",
     "open": "0.0.5",
     "protractor": "^1.1.1",

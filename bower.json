@@ -55,5 +55,20 @@
     "angular-bootstrap": ">=0.14.0",
     "angular": "1.4.7",
     "checklist-model": "~0.6.0"
+  },
+  "overrides": {
+    "leaflet-geosearch" :{
+      "main" : [
+        "src/js/l.control.geosearch.js",
+        "src/js/l.geosearch.provider.bing.js",
+        "src/js/l.geosearch.provider.esri.js",
+        "src/js/l.geosearch.provider.google.js",
+        "src/js/l.geosearch.provider.openstreetmap.js",
+        "src/css/l.geosearch.css",
+        "src/img/alert.png",
+        "src/img/geosearch.png",
+        "src/img/spinner.gif"
+      ]
+    }
   }
 }
