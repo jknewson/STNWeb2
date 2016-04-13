@@ -2,12 +2,12 @@ var gulp = require('gulp');
 var plugins = require('gulp-load-plugins')();
 var del = require('del');
 var es = require('event-stream');
-var bowerFiles = require('main-bower-files');
 var print = require('gulp-print');
 var less = require('gulp-less');
 var Q = require('q');
 var connect = require('gulp-connect');
 var open = require('open');
+var mainBowerFiles = require('main-bower-files');
 
 // == PATH STRINGS ========
 
@@ -22,7 +22,8 @@ var paths = {
     partials: ['src/component/**/*.html', '!src/index.html'],
     dev: 'dev',
     dist: 'dist',
-    distScriptsProd: 'dist/scripts'
+    distScriptsProd: 'dist/scripts',
+    vendorLibs: 'bower_components'
     //scriptsDevServer: 'devServer/**/*.js'
 };
 
@@ -33,6 +34,10 @@ var pipes = {};
 pipes.orderedVendorScripts = function() {
     return plugins.order(['jquery.js', 'angular.js', 'leaflet-src.js', 'esri-leaflet.js', 'angular-leaflet-directive.js']);
 };
+
+// pipes.orderedVendorScripts = function() {
+//     return plugins.order(['jquery/dist/jquery.js', 'angular/angular.js', 'leaflet/dist/leaflet-src.js', 'esri-leaflet/dist/esri-leaflet.js', 'angular-leaflet-directive/dist/angular-leaflet-directive.js']);
+// };
 
 //pipes.orderedAppStyles = function(){
 //    return plugins.order(['select.css, app.css']);
@@ -74,26 +79,36 @@ pipes.builtAppScriptsProd = function() {
 };
 
 //this actually takes everything listed in the "main" object in the package's bower.json file. not just scripts.
+// pipes.builtVendorScriptsDev = function() {
+//     //return gulp.src(paths.vendorLibs + '/**/**/*')
+//          return mainBowerFiles().pipe(gulp.dest('dev/bower_components'));
+// };
+//this does not use the main-bower-files plugin - too messy in real world dev
+// pipes.builtVendorScriptsDev = function() {
+//     return gulp.src(paths.vendorLibs + '/**/**/*')
+//         .pipe(gulp.dest('dev/bower_components'));
+// };
+
 pipes.builtVendorScriptsDev = function() {
-    return gulp.src(bowerFiles())
+    return gulp.src(mainBowerFiles())
         .pipe(gulp.dest('dev/bower_components'));
 };
 
 pipes.builtVendorImagesDev = function() {
     //in parens below is filter statement for bowerFiles retrieval
-    return gulp.src(bowerFiles(['images/**', '**/images/**']))
+    return gulp.src(mainBowerFiles(['images/**', '**/images/**']))
         .pipe(gulp.dest('dev/bower_components/images'));
 };
 
 pipes.builtVendorImagesProd = function() {
     //in parens below is filter statement for bowerFiles retrieval
-    return gulp.src(bowerFiles(['images/**', '**/images/**']))
+    return gulp.src(mainBowerFiles(['images/**', '**/images/**']))
         .pipe(gulp.dest(paths.dist + '/images/'));
 };
 
 
 pipes.builtVendorScriptsProd = function() {
-    return gulp.src(bowerFiles('**/*.js'))
+    return gulp.src(mainBowerFiles('**/*.js'))
         .pipe(pipes.orderedVendorScripts())
         //added
         .pipe(plugins.sourcemaps.init())
