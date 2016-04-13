@@ -336,7 +336,7 @@
 
                 leafletData.getMap().then(function(map) {
                     var geoSearchControl = new L.Control.GeoSearch({
-                        provider: new L.GeoSearch.Provider.Google(),
+                        provider: new L.GeoSearch.Provider.Esri(),
                         position: 'topleft',
                         zoomLevel: 15
                     });
