@@ -378,7 +378,7 @@
                     $scope.landowner.STATE = "";
                     $scope.landowner.ZIP = "";
                 }
-            }
+            };
             //site PUT
             $scope.save = function (valid) {
                 if (valid) {
@@ -596,14 +596,14 @@
                                     });//end status post
                                 });//end sensor post
                             });//end angular.foreach on proposed sensors
-                        } else finishPOST(createdSiteID)
+                        } else finishPOST(createdSiteID);
                     } else {
                         finishPOST(createdSiteID);
                     }
-                }, function (errorResponse){
-                    toastr.error("Error creating site: "+ errorResponse.statusText);
+                }, function (errorResponse) {
+                    toastr.error("Error creating site: " + errorResponse.statusText);
                 });
-            }//end postSiteand Parts
+            };//end postSiteand Parts
         
             if (thisSiteStuff !== undefined) {
                 //#region existing site 

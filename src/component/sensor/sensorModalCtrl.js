@@ -123,6 +123,11 @@
                    $scope.datafile.GOOD_END = new Date();
                } //end new file
                $scope.showFileForm = true;
+
+               $scope.agencyNameForCap = $scope.agencies.filter(function (a) { return a.AGENCY_ID == $scope.aSource.AGENCY_ID; })[0].AGENCY_NAME;
+               $scope.updateAgencyForCaption = function () {
+                   $scope.agencyNameForCap = $scope.agencies.filter(function (a) { return a.AGENCY_ID == $scope.aSource.AGENCY_ID; })[0].AGENCY_NAME;
+               };
            };
             //create this new file
            $scope.createFile = function (valid) {
@@ -761,7 +766,7 @@
            }
 
            $scope.myData = [$scope.aSensStatus.SENSOR_ELEVATION, $scope.aSensStatus.WS_ELEVATION, $scope.aSensStatus.GS_ELEVATION];
-
+          
 
         }]); //end SENSOR
 
