@@ -118,68 +118,83 @@
             $scope.getAddress = function () {
                 if ($scope.DMS.LADeg !== undefined) $scope.aSite.LATITUDE_DD = azimuth($scope.DMS.LADeg, $scope.DMS.LAMin, $scope.DMS.LASec);
                 if ($scope.DMS.LODeg !== undefined) $scope.aSite.LONGITUDE_DD = azimuth($scope.DMS.LODeg, $scope.DMS.LOMin, $scope.DMS.LOSec);
-                $scope.mapCenter = { lat: parseFloat($scope.aSite.LATITUDE_DD), lng: parseFloat($scope.aSite.LONGITUDE_DD), zoom: 18 };
-                $scope.mapMarkers = [];
-                var geocoder = new google.maps.Geocoder(); //reverse address lookup
-                var latlng = new google.maps.LatLng($scope.aSite.LATITUDE_DD, $scope.aSite.LONGITUDE_DD);
-                geocoder.geocode({ 'latLng': latlng }, function (results, status) {
-                    if (status == google.maps.GeocoderStatus.OK) {
-                        //parse the results out into components ('street_number', 'route', 'locality', 'administrative_area_level_2', 'administrative_area_level_1', 'postal_code'
-                        var address_components = results[0].address_components;
-                        var components = {};
-                        $.each(address_components, function (k, v1) {
-                            $.each(v1.types, function (k2, v2) {
-                                components[v2] = v1.long_name;
+                if ($scope.aSite.LATITUDE_DD !== undefined && $scope.aSite.LONGITUDE_DD !== undefined) {
+                    $scope.mapCenter = { lat: parseFloat($scope.aSite.LATITUDE_DD), lng: parseFloat($scope.aSite.LONGITUDE_DD), zoom: 18 };
+                    $scope.mapMarkers = [];
+                    var geocoder = new google.maps.Geocoder(); //reverse address lookup
+                    var latlng = new google.maps.LatLng($scope.aSite.LATITUDE_DD, $scope.aSite.LONGITUDE_DD);
+                    geocoder.geocode({ 'latLng': latlng }, function (results, status) {
+                        if (status == google.maps.GeocoderStatus.OK) {
+                            //parse the results out into components ('street_number', 'route', 'locality', 'administrative_area_level_2', 'administrative_area_level_1', 'postal_code'
+                            var address_components = results[0].address_components;
+                            var components = {};
+                            $.each(address_components, function (k, v1) {
+                                $.each(v1.types, function (k2, v2) {
+                                    components[v2] = v1.long_name;
+                                });
                             });
-                        });
 
-                        $scope.aSite.ADDRESS = components.street_number !== undefined ? components.street_number + " " + components.route : components.route;
-                        $scope.aSite.CITY = components.locality;
+                            $scope.aSite.ADDRESS = components.street_number !== undefined ? components.street_number + " " + components.route : components.route;
+                            $scope.aSite.CITY = components.locality;
 
-                        var thisState = $scope.StateList.filter(function (s) { return s.STATE_NAME == components.administrative_area_level_1; })[0];
-                        if (thisState !== undefined) {
-                            $scope.aSite.STATE = thisState.STATE_ABBREV;
-                            $scope.stateCountyList = $scope.AllCountyList.filter(function (c) { return c.STATE_ID == thisState.STATE_ID; });
-                            $scope.aSite.COUNTY = components.administrative_area_level_2;
-                            $scope.aSite.ZIP = components.postal_code;
-                            //see if there are any sites within a 0.0005 buffer of here for them to use instead
-                            SITE.query({ Latitude: $scope.aSite.LATITUDE_DD, Longitude: $scope.aSite.LONGITUDE_DD, Buffer: 0.0005 }, function success(response) {
-                                $scope.closeSites = response.Sites;
-                                if ($scope.closeSites.length > 0) {
-                                    for (var i = 0; i < $scope.closeSites.length; i++) {
-                                        var a = $scope.closeSites[i];
-                                        $scope.mapMarkers.push({
-                                            lat: a.latitude,
-                                            lng: a.longitude,
-                                            SITE_ID: a.SITE_ID,
-                                            SITE_NO: a.SITE_NO,
-                                            icon: icons.stn,
-                                            message: a.SITE_NO,
-                                            focus: false
-                                        });
+                            var thisState = $scope.StateList.filter(function (s) { return s.STATE_NAME == components.administrative_area_level_1; })[0];
+                            if (thisState !== undefined) {
+                                $scope.aSite.STATE = thisState.STATE_ABBREV;
+                                $scope.stateCountyList = $scope.AllCountyList.filter(function (c) { return c.STATE_ID == thisState.STATE_ID; });
+                                $scope.aSite.COUNTY = components.administrative_area_level_2;
+                                $scope.aSite.ZIP = components.postal_code;
+                                //see if there are any sites within a 0.0005 buffer of here for them to use instead
+                                SITE.query({ Latitude: $scope.aSite.LATITUDE_DD, Longitude: $scope.aSite.LONGITUDE_DD, Buffer: 0.0005 }, function success(response) {
+                                    $scope.closeSites = response.Sites;
+                                    if ($scope.closeSites.length > 0) {
+                                        for (var i = 0; i < $scope.closeSites.length; i++) {
+                                            var a = $scope.closeSites[i];
+                                            $scope.mapMarkers.push({
+                                                lat: a.latitude,
+                                                lng: a.longitude,
+                                                SITE_ID: a.SITE_ID,
+                                                SITE_NO: a.SITE_NO,
+                                                icon: icons.stn,
+                                                message: a.SITE_NO,
+                                                focus: false
+                                            });
+                                        }
                                     }
-                                }
-                                $scope.mapMarkers.push({
-                                    lat: parseFloat($scope.aSite.LATITUDE_DD),
-                                    lng: parseFloat($scope.aSite.LONGITUDE_DD),                                   
-                                    icon: icons.newSTN,
-                                    message: 'New draggable STN site',
-                                    focus: false,
-                                    draggable: true
-                                }); 
-                                
-                                $scope.showMap = true;
-                                
-                            }, function error(errorResponse) {
-                                toastr.error("Error: " + errorResponse.statusText);
-                            }).$promise;
+                                    $scope.mapMarkers.push({
+                                        lat: parseFloat($scope.aSite.LATITUDE_DD),
+                                        lng: parseFloat($scope.aSite.LONGITUDE_DD),
+                                        icon: icons.newSTN,
+                                        message: 'New draggable STN site',
+                                        focus: false,
+                                        draggable: true
+                                    });
+
+                                    $scope.showMap = true;
+
+                                }, function error(errorResponse) {
+                                    toastr.error("Error: " + errorResponse.statusText);
+                                }).$promise;
+                            } else {
+                                toastr.error("The Latitude/Longitude did not return a location within the U.S.");
+                            }
                         } else {
-                            toastr.error("The Latitude/Longitude did not return a location within the U.S.");
+                            toastr.error("There was an error getting address. Please try again.");
                         }
-                    } else {
-                        toastr.error("There was an error getting address. Please try again.");
-                    }
-                });
+                    });
+                } else {
+                    //they did not type a lat/long first...
+                    var emptyLatLongModal = $uibModal.open({
+                        template: '<div class="modal-header"><h3 class="modal-title">Error</h3></div>' +
+                            '<div class="modal-body"><p>Please provide a Latitude and Longitude before clicking Verify Location</p></div>' +
+                            '<div class="modal-footer"><button class="btn btn-primary" ng-enter="ok()" ng-click="ok()">OK</button></div>',
+                        controller: ['$scope', '$uibModalInstance', function ($scope, $uibModalInstance) {
+                            $scope.ok = function () {
+                                $uibModalInstance.close();
+                            };
+                        }],
+                        size: 'sm'
+                    });
+                }
             };
 
             //globals 
@@ -350,6 +365,20 @@
                 }
             };
 
+            $scope.useSiteAddress;
+            $scope.useAddressforLO = function () {
+                if ($scope.useSiteAddress) {
+                    $scope.landowner.ADDRESS = $scope.aSite.ADDRESS;
+                    $scope.landowner.CITY = $scope.aSite.CITY;
+                    $scope.landowner.STATE = $scope.aSite.STATE;
+                    $scope.landowner.ZIP = $scope.aSite.ZIP;
+                } else {
+                    $scope.landowner.ADDRESS = "";
+                    $scope.landowner.CITY = "";
+                    $scope.landowner.STATE = "";
+                    $scope.landowner.ZIP = "";
+                }
+            }
             //site PUT
             $scope.save = function (valid) {
                 if (valid) {
@@ -477,7 +506,7 @@
                 });//end SITE.save(...
             }; // end PUTsite()
 
-            //create this site clicked
+            //create this site clicked (3 separate functions.. 1: landowner, 2: the site and proposed instruments, 3: network names & types, housing types
             var finishPOST = function (sID) {
                 //do all the rest....
                 var defer = $q.defer();
@@ -553,18 +582,21 @@
                     if ($scope.disableSensorParts === false) {
                         //not disabled..could be selected proposed sensors
                         var selectedProposedSensors = $scope.ProposedSens.filter(function (p) { return p.selected === true; });
-                        angular.forEach(selectedProposedSensors, function (propSens, index) {
-                            //POST it
-                            var sensorTypeID = $scope.SensorDeployment.filter(function (sd) { return sd.DEPLOYMENT_TYPE_ID == propSens.DEPLOYMENT_TYPE_ID; })[0].SENSOR_TYPE_ID;
-                            var inst = { DEPLOYMENT_TYPE_ID: propSens.DEPLOYMENT_TYPE_ID, SITE_ID: createdSiteID, SENSOR_TYPE_ID: sensorTypeID };
-                            INSTRUMENT.save(inst).$promise.then(function (insResponse) {
-                                var instStat = { INSTRUMENT_ID: insResponse.INSTRUMENT_ID, STATUS_TYPE_ID: 4, MEMBER_ID: $scope.aSite.MEMBER_ID, TIME_STAMP: new Date(), TIME_ZONE: 'UTC' };
-                                INSTRUMENT_STATUS.save(instStat).$promise.then(function () {
-                                    if (index == selectedProposedSensors.length-1)
-                                        finishPOST(createdSiteID);
-                                });
-                            });
-                        });//end angular.foreach on proposed sensors
+                        if (selectedProposedSensors.length > 0) {
+                            angular.forEach(selectedProposedSensors, function (propSens, index) {
+                                //POST each sensor and status type
+                                var sensorTypeID = $scope.SensorDeployment.filter(function (sd) { return sd.DEPLOYMENT_TYPE_ID == propSens.DEPLOYMENT_TYPE_ID; })[0].SENSOR_TYPE_ID;
+                                var inst = { DEPLOYMENT_TYPE_ID: propSens.DEPLOYMENT_TYPE_ID, SITE_ID: createdSiteID, SENSOR_TYPE_ID: sensorTypeID };
+                                INSTRUMENT.save(inst).$promise.then(function (insResponse) {
+                                    var instStat = { INSTRUMENT_ID: insResponse.INSTRUMENT_ID, STATUS_TYPE_ID: 4, MEMBER_ID: $scope.aSite.MEMBER_ID, TIME_STAMP: new Date(), TIME_ZONE: 'UTC' };
+                                    INSTRUMENT_STATUS.save(instStat).$promise.then(function () {
+                                        //when done looping, go to last step in this post
+                                        if (index == selectedProposedSensors.length - 1)
+                                            finishPOST(createdSiteID);
+                                    });//end status post
+                                });//end sensor post
+                            });//end angular.foreach on proposed sensors
+                        } else finishPOST(createdSiteID)
                     } else {
                         finishPOST(createdSiteID);
                     }
@@ -572,8 +604,6 @@
                     toastr.error("Error creating site: "+ errorResponse.statusText);
                 });
             }//end postSiteand Parts
-
-            
         
             if (thisSiteStuff !== undefined) {
                 //#region existing site 

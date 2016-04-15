@@ -112,31 +112,6 @@
                     </div>
                 </div>
 
-                <!--populate button*-->
-                <div class="form-group required" ng-if="aSite.SITE_ID == undefined">
-                    <label class="col-md-4 control-label" for="POPULATEBTN">Click here to populate address fields:</label>
-                    <div class="col-md-7">
-                        <button type="button" ng-click="getAddress()" class="btn btn-primary">Verify Location</button>
-                    </div>
-                </div>
-
-                <!-- map showing lat/long location-->
-                <div class="col-md-7 col-md-offset-3" style="height:300px;display:table;" ng-show="showMap">
-                    <div><label>There are: {{closeSites.length}} sites nearby.</label></div>
-                    <p ng-if="closeSites.length > 0">
-                        <span>To use one of these sites (shown as blue dot) instead, click on the site name.</span>
-                        <ul style="max-height:50px;overflow:auto;">
-                            <li ng-repeat="s in closeSites" style="list-style:none">
-                                <a ui-sref="site.dashboard({id: s.SITE_ID})" ng-click="$dismiss()">{{s.SITE_NO}}</a>
-                            </li>
-                        </ul>
-                    </p>
-                    <p>Click and drag the point to relocate this site (all related fields will update).</p>
-                    <div class="panel panel-primary" style="height:inherit">
-                        <leaflet lf-center="mapCenter" width="100%" height="100%" markers="mapMarkers"></leaflet>
-                    </div>
-                </div>
-                <br clear="all" />
                 <!--Horizontal Datum*-->
                 <div class="form-group required" ng-class="{'has-error':siteForm.HDATUM_ID.$invalid && siteForm.HDATUM_ID.$dirty}">
                     <label class="col-md-4 control-label req" for="HDATUM_ID">Horizontal Datum:</label>
@@ -159,51 +134,82 @@
                     </div>
                 </div>
 
-                <!--Address-->
+                <!--populate button*-->
                 <div class="form-group">
-                    <label class="col-md-4 control-label" for="ADDRESS">Address:</label>
-                    <div class="col-md-7">
-                        <input class="form-control" name="ADDRESS" ng-model="aSite.ADDRESS" type="text" />
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">Location</h3>
+                        </div>
+                        <div class="panel-body">
+                            <div class="form-group required" ng-if="aSite.SITE_ID == undefined">
+                                <label class="col-md-4 control-label" for="POPULATEBTN">Click here to populate location fields:</label>
+                                <div class="col-md-7">
+                                    <button type="button" ng-click="getAddress()" class="btn btn-primary">Verify Location</button>
+                                </div>
+                            </div>
+
+                            <!-- map showing lat/long location-->
+                            <div class="col-md-7 col-md-offset-3" style="height:300px;display:table;" ng-show="showMap">
+                                <div><label>There are: {{closeSites.length}} sites nearby.</label></div>
+                                <p ng-if="closeSites.length > 0">
+                                    <span>To use one of these sites (shown as blue dot) instead, click on the site name.</span>
+                                    <ul style="max-height:50px;overflow:auto;">
+                                        <li ng-repeat="s in closeSites" style="list-style:none">
+                                            <a ui-sref="site.dashboard({id: s.SITE_ID})" ng-click="$dismiss()">{{s.SITE_NO}}</a>
+                                        </li>
+                                    </ul>
+                                </p>
+                                <p>Click and drag the point to relocate this site (all related fields will update).</p>
+                                <div class="panel panel-primary" style="height:inherit">
+                                    <leaflet lf-center="mapCenter" width="100%" height="100%" markers="mapMarkers"></leaflet>
+                                </div>
+                            </div>
+                            <br clear="all" />
+                            <!--Address-->
+                            <div class="form-group">
+                                <label class="col-md-4 control-label" for="ADDRESS">Address:</label>
+                                <div class="col-md-7">
+                                    <input class="form-control" name="ADDRESS" ng-model="aSite.ADDRESS" type="text" />
+                                </div>
+                            </div>
+                            <!--City-->
+                            <div class="form-group">
+                                <label class="col-md-4 control-label" for="CITY">City:</label>
+                                <div class="col-md-7">
+                                    <input class="form-control" name="CITY" ng-model="aSite.CITY" type="text" />
+                                </div>
+                            </div>
+                            <!--State*-->
+                            <div class="form-group required" ng-class="{'has-error':siteForm.STATE.$invalid && siteForm.STATE.$dirty}">
+                                <label class="col-md-4 control-label req" for="STATE">State:</label>
+                                <div class="col-md-7">
+                                    <select class="form-control" name="STATE" ng-model="aSite.STATE" ng-change="updateCountyList(aSite.STATE)"
+                                            ng-options="state.STATE_ABBREV as state.STATE_NAME for state in StateList" required>
+                                        <option value=""></option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <!--Zip-->
+                            <div class="form-group">
+                                <label class="col-md-4 control-label" for="ZIP">Zip:</label>
+                                <div class="col-md-7">
+                                    <input class="form-control" name="ZIP" ng-model="aSite.ZIP" type="text" ui-mask="{{'99999'}}" />
+                                </div>
+                            </div>
+
+                            <!--County*-->
+                            <div class="form-group required" ng-class="{'has-error':siteForm.COUNTY.$invalid && siteForm.COUNTY.$dirty}">
+                                <label class="col-md-4 control-label req" for="COUNTY">County:</label>
+                                <div class="col-md-7">
+                                    <select class="form-control" name="COUNTY" ng-model="aSite.COUNTY" ng-options="c.COUNTY_NAME as c.COUNTY_NAME for c in stateCountyList" required>
+                                        <option value=""></option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
-
-                <!--City-->
-                <div class="form-group">
-                    <label class="col-md-4 control-label" for="CITY">City:</label>
-                    <div class="col-md-7">
-                        <input class="form-control" name="CITY" ng-model="aSite.CITY" type="text" />
-                    </div>
-                </div>
-
-                <!--State*-->
-                <div class="form-group required" ng-class="{'has-error':siteForm.STATE.$invalid && siteForm.STATE.$dirty}">
-                    <label class="col-md-4 control-label req" for="STATE">State:</label>
-                    <div class="col-md-7">
-                        <select class="form-control" name="STATE" ng-model="aSite.STATE" ng-change="updateCountyList(aSite.STATE)"
-                                ng-options="state.STATE_ABBREV as state.STATE_NAME for state in StateList" required>
-                            <option value=""></option>
-                        </select>
-                    </div>
-                </div>
-
-                <!--Zip-->
-                <div class="form-group">
-                    <label class="col-md-4 control-label" for="ZIP">Zip:</label>
-                    <div class="col-md-7">
-                        <input class="form-control" name="ZIP" ng-model="aSite.ZIP" type="text" ui-mask="{{'99999'}}" />
-                    </div>
-                </div>
-
-                <!--County*-->
-                <div class="form-group required" ng-class="{'has-error':siteForm.COUNTY.$invalid && siteForm.COUNTY.$dirty}">
-                    <label class="col-md-4 control-label req" for="COUNTY">County:</label>
-                    <div class="col-md-7">
-                        <select class="form-control" name="COUNTY" ng-model="aSite.COUNTY" ng-options="c.COUNTY_NAME as c.COUNTY_NAME for c in stateCountyList" required>
-                            <option value=""></option>
-                        </select>
-                    </div>
-                </div>
-
                 <!--Waterbody*-->
                 <div class="form-group required" ng-class="{'has-error':siteForm.WATERBODY.$invalid && siteForm.WATERBODY.$dirty}">
                     <label class="col-md-4 control-label req" for="WATERBODY">Waterbody:</label>
@@ -429,6 +435,13 @@
                                     <input class="form-control" id="LOTITLE" name="TITLE" ng-model="landowner.TITLE" type="text" />
                                 </div>
                             </div>
+
+                            <div>
+                                <label class="col-md-4 control-label"></label>
+                                <div class="col-md-7">
+                                    <input type="checkbox" ng-model="useSiteAddress" ng-click="useAddressforLO()" /><span style="padding-left:8px">Address same as Site address</span>
+                                </div>
+                            </div>
                             <!--Address:-->
                             <div class="form-group">
                                 <label class="col-md-4 control-label" for="ADDRESS">Address:</label>
@@ -485,8 +498,8 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
-                </div>
+                            </div>
+                        </div>
                 <br clear="all" />
                 <!--end Landowner contact area-->
                 <!--Access Permission Granted-->
@@ -1835,7 +1848,7 @@
                         <span><button ng-if="whichButton == 'deploy' || whichButton == 'deployP'" class="btn btn-primary" ng-click="deploy(SensorForm.$valid)"><span>Deploy</span></button></span>
                         <span><button ng-show="whichButton == 'edit'" class="btn btn-primary" ng-disabled="showFileForm" ng-click="save(SensorForm.$valid)"><span>Save</span></button></span>
                         <span><button ng-show="whichButton == 'edit'" class="btn btn-danger" ng-disabled="showFileForm" ng-click="deleteS(SensorForm.$valid)"><span>Delete</span></button></span>
-                        <span><button type="button" class="btn btn-warning" ng-disabled="showFileForm" ng-click="cancel()"><span>Cancel</span></button></span>
+                        <span><button type="button" class="btn btn-warning" ng-disabled="showFileForm" ng-click="cancel()"><span>Cancel / Close</span></button></span>
                     </div>
                 </div>
             </fieldset>
