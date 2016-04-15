@@ -24,7 +24,7 @@
                     }
                     if (thisSiteFiles[sf].INSTRUMENT_ID > 0 && thisSiteFiles[sf].INSTRUMENT_ID !== null) {
                         whatKindaFile = "Sensor File";
-                        var thisIns = thisSiteSensors.filter(function (s) { return s.Instrument.INSTRUMENT_ID == thisSiteFiles[sf].INSTRUMENT_ID })[0];
+                        var thisIns = thisSiteSensors.filter(function (s) { return s.Instrument.INSTRUMENT_ID == thisSiteFiles[sf].INSTRUMENT_ID; })[0];
                         thisSiteFiles[sf].typeName = thisIns.Instrument.SERIAL_NUMBER;
                     }
                     if (thisSiteFiles[sf].OBJECTIVE_POINT_ID > 0 && thisSiteFiles[sf].OBJECTIVE_POINT_ID !== null) {
