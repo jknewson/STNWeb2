@@ -1668,108 +1668,106 @@
                 </div>
 
                 <!-- -------------------------- START TAPEDOWN SECTION --------------------------------  -->
-                <!--Add Tapedown button-->
-                <div ng-if="OPsPresent" class="form-group">
-                    <label class="col-md-3 control-label" for="TAPEDOWNBTN">Tape Down:</label>
-                    <div class="col-md-6">
-                        <button type="button" ng-click="showTapedownPart()" class="btn btn-primary">Show/Hide Tape Down Information</button>
-                    </div>
-                </div>
-                <div ng-if="!OPsPresent" class="form-group">
-                    <label class="col-md-3 control-label" for="TAPEDOWNBTN">Tape Down:</label>
-                    <div class="col-md-6">
-                        <span>No Datum Locations added to this site for tapedown</span>
-                    </div>
-                </div>
-
-                <!--start add tapedown area -->
-                <div ng-if="addTapedown">
-                    <hr />
-                    <div class="form-group">
-                        <label class="col-md-3 control-label">Datum Location(s):</label>
-                        <div class="col-md-6">
-                            <div isteven-multi-select
-                                 input-model="OPsForTapeDown"
-                                 output-model="OPMeasure"
-                                 button-label="NAME"
-                                 item-label="NAME"
-                                 on-item-click="OPchosen(data)"
-                                 tick-property="selected"
-                                 helper-elements="filter">
-
-                            </div>
-                        </div>
-                    </div>
-
-                    <br clear="all" />
-                    <div ng-show="tapeDownTable.length > 0">
-                        <div class="pull-right col-md-6"><em>Note: these are not used for any calculations but are to facilitate field activities</em></div>
-                        <table class="table table-condensed">
-                            <thead>
-                                <tr>
-                                    <th>Datum Location</th>
-                                    <th>Elevation</th>
-                                    <th class="col-md-2">Offset Correction</th>
-                                    <th class="col-md-2">Water Surface</th>
-                                    <th class="col-md-2">Ground Surface</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr ng-repeat="t in tapeDownTable">
-                                    <td>{{t.OP_NAME}}<input type="hidden" ng-model="t.OBJECTIVE_TYPE_ID" /><input type="hidden" ng-model="t.OP_MEASUREMENTS_ID" /></td>
-                                    <td>
-                                        {{t.elevation}} {{t.Vdatum}}
-                                    </td>
-                                    <td><input class="form-control" ng-keypress="isNum($event)" ng-model="t.OFFSET_CORRECTION" /></td>
-                                    <td><input class="form-control" ng-keypress="isNum($event)" ng-model="t.WATER_SURFACE" /></td>
-                                    <td><input class="form-control" ng-keypress="isnum($event)" ng-model="t.GROUND_SURFACE" /></td>
-                                </tr>
-                            </tbody>
-                        </table>
-                        <!-- Sensor status fields for tapedown -->
-                        <div class="col-md-6">
-                            <div class="form-group" style="margin-bottom:0">
-                                <label class="col-md-6 control-label" for="SENSOR_ELEVATION">Sensor Elevation:</label>
-                                <div class="col-md-6">
-                                    <input class="form-control" ng-keypress="isNum($event)" name="SENSOR_ELEVATION" ng-model="aSensStatus.SENSOR_ELEVATION" type="text" />
-                                </div>
-                            </div>
-
-                            <div class="form-group" style="margin-bottom:0">
-                                <label class="col-md-6 control-label" for="WS_ELEVATION">Water Surface Elevation:</label>
-                                <div class="col-md-6">
-                                    <input class="form-control" ng-keypress="isNum($event)" name="WS_ELEVATION" ng-model="aSensStatus.WS_ELEVATION" type="text" />
-                                </div>
-                            </div>
-
-                            <div class="form-group" style="margin-bottom:0">
-                                <label class="col-md-6 control-label" for="GS_ELEVATION">Ground Elevation:</label>
-                                <div class="col-md-6">
-                                    <input class="form-control" ng-keypress="isNum($event)" name="GS_ELEVATION" ng-model="aSensStatus.GS_ELEVATION" type="text" />
-                                </div>
-                            </div>
-
+                <uib-accordion close-others="false">
+                    <uib-accordion-group is-open="tapedownOpen">
+                        <uib-accordion-heading>
+                            <i style="margin-right:10px" class="pull-left glyphicon" ng-class="{'glyphicon-chevron-down': tapedownOpen, 'glyphicon-chevron-right': !tapedownOpen}"></i>
+                            <span>Tape Down Information</span>
+                        </uib-accordion-heading>
+                        <!--Add Tapedown button-->
+                        <div ng-if="OPsPresent" class="form-group">
                             <div class="form-group">
-                                <label class="col-md-6 control-label req" for="VDATUM_ID">In feet above:</label>
+                                <label class="col-md-3 control-label">Datum Location(s):</label>
                                 <div class="col-md-6">
-                                    <select class="form-control" id="VDATUM_ID" name="VDATUM_ID" ng-model="aSensStatus.VDATUM_ID"
-                                            ng-options="vd.DATUM_ID as vd.DATUM_ABBREVIATION for vd in vertDatumList">
-                                        <option value=""></option>
-                                    </select>
+                                    <div isteven-multi-select
+                                         input-model="OPsForTapeDown"
+                                         output-model="OPMeasure"
+                                         button-label="NAME"
+                                         item-label="NAME"
+                                         on-item-click="OPchosen(data)"
+                                         tick-property="selected"
+                                         helper-elements="filter">
+                                    </div>
                                 </div>
                             </div>
-                            <div class="pull-left col-md-12"><em>Note: these elevations are used in the sensor processing and the final products</em></div>
+                        </div><!-- end if OPsArePresent-->
+                        <div ng-if="!OPsPresent" class="form-group">
+                            <label class="col-md-3 control-label" for="TAPEDOWNBTN">Tape Down:</label>
+                            <div class="col-md-6">
+                                <span>No Datum Locations have been added to this site yet to use for a tape down</span>
+                            </div>
                         </div>
 
-                        <!-- area for D3 vertical ruler
-                        <div class="col-md-6">
-                            <bars-chart elevation-data="myData"></bars-chart>
-                        </div> -->
-                    </div>
-                    <br clear="all" />
-                    <hr />
-                </div>
+                        <!--start add tapedown area -->
+                        <br clear="all" />
+                        <div ng-show="tapeDownTable.length > 0">
+                            <div class="pull-right col-md-6"><em>Note: these are not used for any calculations but are to facilitate field activities</em></div>
+                            <table class="table table-condensed">
+                                <thead>
+                                    <tr>
+                                        <th>Datum Location</th>
+                                        <th>Elevation</th>
+                                        <th class="col-md-2">Offset Correction</th>
+                                        <th class="col-md-2">Water Surface</th>
+                                        <th class="col-md-2">Ground Surface</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr ng-repeat="t in tapeDownTable">
+                                        <td>{{t.OP_NAME}}<input type="hidden" ng-model="t.OBJECTIVE_TYPE_ID" /><input type="hidden" ng-model="t.OP_MEASUREMENTS_ID" /></td>
+                                        <td>
+                                            {{t.elevation}} {{t.Vdatum}}
+                                        </td>
+                                        <td><input class="form-control" ng-keypress="isNum($event)" ng-model="t.OFFSET_CORRECTION" /></td>
+                                        <td><input class="form-control" ng-keypress="isNum($event)" ng-model="t.WATER_SURFACE" /></td>
+                                        <td><input class="form-control" ng-keypress="isnum($event)" ng-model="t.GROUND_SURFACE" /></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <!-- Sensor status fields for tapedown -->
+                            <div class="col-md-6">
+                                <div class="form-group" style="margin-bottom:0">
+                                    <label class="col-md-6 control-label" for="SENSOR_ELEVATION">Sensor Elevation:</label>
+                                    <div class="col-md-6">
+                                        <input class="form-control" ng-keypress="isNum($event)" name="SENSOR_ELEVATION" ng-model="aSensStatus.SENSOR_ELEVATION" type="text" />
+                                    </div>
+                                </div>
 
+                                <div class="form-group" style="margin-bottom:0">
+                                    <label class="col-md-6 control-label" for="WS_ELEVATION">Water Surface Elevation:</label>
+                                    <div class="col-md-6">
+                                        <input class="form-control" ng-keypress="isNum($event)" name="WS_ELEVATION" ng-model="aSensStatus.WS_ELEVATION" type="text" />
+                                    </div>
+                                </div>
+
+                                <div class="form-group" style="margin-bottom:0">
+                                    <label class="col-md-6 control-label" for="GS_ELEVATION">Ground Elevation:</label>
+                                    <div class="col-md-6">
+                                        <input class="form-control" ng-keypress="isNum($event)" name="GS_ELEVATION" ng-model="aSensStatus.GS_ELEVATION" type="text" />
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="col-md-6 control-label req" for="VDATUM_ID">In feet above:</label>
+                                    <div class="col-md-6">
+                                        <select class="form-control" id="VDATUM_ID" name="VDATUM_ID" ng-model="aSensStatus.VDATUM_ID"
+                                                ng-options="vd.DATUM_ID as vd.DATUM_ABBREVIATION for vd in vertDatumList">
+                                            <option value=""></option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="pull-left col-md-12"><em>Note: these elevations are used in the sensor processing and the final products</em></div>
+                            </div>
+
+                            <!-- area for D3 vertical ruler
+                    <div class="col-md-6">
+                        <bars-chart elevation-data="myData"></bars-chart>
+                    </div> -->
+                        </div>
+                        <br clear="all" />
+                    </uib-accordion-group>
+                </uib-accordion>
+                
                 <!-- -------------------------- END TAPEDOWN SECTION --------------------------------  -->
                 <!-- Vented (only if Sensor Type is Pressure Transducer)-->
                 <div ng-show="aSensor.SENSOR_TYPE_ID == 1">
@@ -2323,106 +2321,100 @@
                 </div>
 
                 <!-- -------------------------- START TAPEDOWN SECTION --------------------------------  -->
-                <!--Add Tapedown button-->
-                <div ng-if="OPsPresent" class="form-group">
-                    <label class="col-md-3 control-label" for="TAPEDOWNBTN">Tape Down:</label>
-                    <div class="col-md-6">
-                        <button type="button" ng-click="showTapedownPart()" class="btn btn-primary">Show/Hide Tape Down Information</button>
-                    </div>
-                </div>
-                <div ng-if="!OPsPresent" class="form-group">
-                    <label class="col-md-3 control-label" for="TAPEDOWNBTN">Tape Down:</label>
-                    <div class="col-md-6">
-                        <span>No Datum Locations added to this site for tapedown</span>
-                    </div>
-                </div>
-                <!--start add tapedown area -->
-                <div ng-if="addTapedown">
-                    <hr />
-                    <div class="form-group">
-                        <label class="col-md-3 control-label">Datum Location(s):</label>
-                        <div class="col-md-6">
-                            <div isteven-multi-select
-                                 input-model="OPsForTapeDown"
-                                 output-model="OPMeasure"
-                                 button-label="NAME"
-                                 item-label="NAME"
-                                 on-item-click="OPchosen(data)"
-                                 tick-property="selected"
-                                 helper-elements="filter">
-
+                <uib-accordion close-others="false">
+                    <uib-accordion-group is-open="tapedownOpen">
+                        <uib-accordion-heading>
+                            <i style="margin-right:10px" class="pull-left glyphicon" ng-class="{'glyphicon-chevron-down': tapedownOpen, 'glyphicon-chevron-right': !tapedownOpen}"></i>
+                            <span>Tape Down Information</span>
+                        </uib-accordion-heading>
+                        <!--Add Tapedown button-->
+                        <div ng-if="OPsPresent" class="form-group">
+                            <label class="col-md-3 control-label" for="TAPEDOWNBTN">Datum Location(s):</label>
+                            <div class="col-md-6">
+                                <div isteven-multi-select
+                                     input-model="OPsForTapeDown"
+                                     container="body"
+                                     output-model="OPMeasure"
+                                     button-label="NAME"
+                                     item-label="NAME"
+                                     on-item-click="OPchosen(data)"
+                                     tick-property="selected"
+                                     helper-elements="filter">
+                                </div>
+                            </div>
+                        </div><!-- end if OPsArePresent-->
+                        <div ng-if="!OPsPresent" class="form-group">
+                            <label class="col-md-3 control-label" for="TAPEDOWNBTN">Tape Down:</label>
+                            <div class="col-md-6">
+                                <span>No Datum Locations have been added to this site yet to use for a tape down</span>
                             </div>
                         </div>
-                    </div>
-
-                    <br clear="all" />
-                    <div ng-show="tapeDownTable.length > 0">
-                        <div class="pull-right col-md-6"><em>Note: these are not used for any calculations but are to facilitate field activities</em></div>
-                        <table class="table table-condensed">
-                            <thead>
-                                <tr>
-                                    <th>Datum Location</th>
-                                    <th>Elevation</th>
-                                    <th class="col-md-2">Offset Correction</th>
-                                    <th class="col-md-2">Water Surface</th>
-                                    <th class="col-md-2">Ground Surface</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr ng-repeat="t in tapeDownTable">
-                                    <td>{{t.OP_NAME}}<input type="hidden" ng-model="t.OBJECTIVE_TYPE_ID" /><input type="hidden" ng-model="t.OP_MEASUREMENTS_ID" /></td>
-                                    <td>
-                                        {{t.elevation}} {{t.Vdatum}}
-                                    </td>
-                                    <td><input class="form-control" ng-keypress="isNum($event)" ng-model="t.OFFSET_CORRECTION" /></td>
-                                    <td><input class="form-control" ng-keypress="isNum($event)" ng-model="t.WATER_SURFACE" /></td>
-                                    <td><input class="form-control" ng-keypress="isnum($event)" ng-model="t.GROUND_SURFACE" /></td>
-                                </tr>
-                            </tbody>
-                        </table>
-
-                        <!-- Sensor status fields for tapedown -->
-                        <div class="col-md-6">
-                            <div class="form-group" style="margin-bottom:0">
-                                <label class="col-md-6 control-label" for="SENSOR_ELEVATION">Sensor Elevation:</label>
-                                <div class="col-md-6">
-                                    <input class="form-control" ng-keypress="isNum($event)" name="SENSOR_ELEVATION" ng-model="aRetrieval.SENSOR_ELEVATION" type="text" />
+                        <!--start add tapedown area -->
+                        <br clear="all" />
+                        <div ng-show="tapeDownTable.length > 0">
+                            <div class="pull-right col-md-6"><em>Note: these are not used for any calculations but are to facilitate field activities</em></div>
+                            <table class="table table-condensed">
+                                <thead>
+                                    <tr>
+                                        <th>Datum Location</th>
+                                        <th>Elevation</th>
+                                        <th class="col-md-2">Offset Correction</th>
+                                        <th class="col-md-2">Water Surface</th>
+                                        <th class="col-md-2">Ground Surface</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr ng-repeat="t in tapeDownTable">
+                                        <td>{{t.OP_NAME}}<input type="hidden" ng-model="t.OBJECTIVE_TYPE_ID" /><input type="hidden" ng-model="t.OP_MEASUREMENTS_ID" /></td>
+                                        <td>
+                                            {{t.elevation}} {{t.Vdatum}}
+                                        </td>
+                                        <td><input class="form-control" ng-keypress="isNum($event)" ng-model="t.OFFSET_CORRECTION" /></td>
+                                        <td><input class="form-control" ng-keypress="isNum($event)" ng-model="t.WATER_SURFACE" /></td>
+                                        <td><input class="form-control" ng-keypress="isnum($event)" ng-model="t.GROUND_SURFACE" /></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <!-- Sensor status fields for tapedown -->
+                            <div class="col-md-6">
+                                <div class="form-group" style="margin-bottom:0">
+                                    <label class="col-md-6 control-label" for="SENSOR_ELEVATION">Sensor Elevation:</label>
+                                    <div class="col-md-6">
+                                        <input class="form-control" ng-keypress="isNum($event)" name="SENSOR_ELEVATION" ng-model="aRetrieval.SENSOR_ELEVATION" type="text" />
+                                    </div>
                                 </div>
-                            </div>
 
-                            <div class="form-group" style="margin-bottom:0">
-                                <label class="col-md-6 control-label" for="WS_ELEVATION">Water Surface Elevation:</label>
-                                <div class="col-md-6">
-                                    <input class="form-control" ng-keypress="isNum($event)" name="WS_ELEVATION" ng-model="aRetrieval.WS_ELEVATION" type="text" />
+                                <div class="form-group" style="margin-bottom:0">
+                                    <label class="col-md-6 control-label" for="WS_ELEVATION">Water Surface Elevation:</label>
+                                    <div class="col-md-6">
+                                        <input class="form-control" ng-keypress="isNum($event)" name="WS_ELEVATION" ng-model="aRetrieval.WS_ELEVATION" type="text" />
+                                    </div>
                                 </div>
-                            </div>
 
-                            <div class="form-group" style="margin-bottom:0">
-                                <label class="col-md-6 control-label" for="GS_ELEVATION">Ground Elevation:</label>
-                                <div class="col-md-6">
-                                    <input class="form-control" ng-keypress="isNum($event)" name="GS_ELEVATION" ng-model="aRetrieval.GS_ELEVATION" type="text" />
+                                <div class="form-group" style="margin-bottom:0">
+                                    <label class="col-md-6 control-label" for="GS_ELEVATION">Ground Elevation:</label>
+                                    <div class="col-md-6">
+                                        <input class="form-control" ng-keypress="isNum($event)" name="GS_ELEVATION" ng-model="aRetrieval.GS_ELEVATION" type="text" />
+                                    </div>
                                 </div>
-                            </div>
 
-                            <div class="form-group">
-                                <label class="col-md-6 control-label req" for="VDATUM_ID">In feet above:</label>
-                                <div class="col-md-6">
-                                    <select class="form-control" id="VDATUM_ID" name="VDATUM_ID" ng-model="aRetrieval.VDATUM_ID"
-                                            ng-options="vd.DATUM_ID as vd.DATUM_ABBREVIATION for vd in vertDatumList">
-                                        <option value=""></option>
-                                    </select>
+                                <div class="form-group">
+                                    <label class="col-md-6 control-label req" for="VDATUM_ID">In feet above:</label>
+                                    <div class="col-md-6">
+                                        <select class="form-control" id="VDATUM_ID" name="VDATUM_ID" ng-model="aRetrieval.VDATUM_ID"
+                                                ng-options="vd.DATUM_ID as vd.DATUM_ABBREVIATION for vd in vertDatumList">
+                                            <option value=""></option>
+                                        </select>
+                                    </div>
                                 </div>
+                                <div class="pull-left col-md-12"><em>Note: these elevations are used in the sensor processing and the final products</em></div>
                             </div>
-                            <div class="pull-left col-md-12"><em>Note: these elevations are used in the sensor processing and the final products</em></div>
                         </div>
-                        <hr />
-                    </div>
+                        <br clear="all" />
+                    </uib-accordion-group>
+                </uib-accordion>
 
-                    <!-- -------------------------- END TAPEDOWN SECTION --------------------------------  -->
-
-                </div>
-                <br clear="all" />
-
+                <!-- -------------------------- END TAPEDOWN SECTION --------------------------------  -->
                 <!-- Retrieve Member: -->
                 <div class="form-group required">
                     <label class="col-md-3 control-label">Retrieve Member:</label>
@@ -2646,7 +2638,7 @@
                             <label class="col-md-3 col-md-offset-1 control-label">In feet above:</label>
                             <div class="col-md-6">
                                 <div ng-show="view.DEPval == 'detail'">
-                                    {{DeployedSensorStat.VDatum}}
+                                    {{DeployedSensorStat.vdatumName}}
                                 </div>
                                 <div ng-show="view.DEPval == 'edit'">
                                     <select class="form-control" id="VDATUM_ID" name="VDATUM_ID" ng-model="depStuffCopy[1].VDATUM_ID"
@@ -2971,7 +2963,7 @@
                             <label class="col-md-3 col-md-offset-1 control-label">In feet above:</label>
                             <div class="col-md-6">
                                 <div ng-show="view.RETval == 'detail'">
-                                    {{RetrievedSensorStat.VDatum}}
+                                    {{RetrievedSensorStat.vdatumName}}
                                 </div>
                                 <div ng-show="view.RETval == 'edit'">
                                     <select class="form-control" id="VDATUM_ID" name="VDATUM_ID" ng-model="retStuffCopy[1].VDATUM_ID"
