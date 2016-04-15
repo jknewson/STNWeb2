@@ -19,7 +19,7 @@
            $scope.DepSensorFiles = thisSensor !== "empty" ? $scope.allSFiles.filter(function (sf) { return sf.INSTRUMENT_ID == thisSensor.Instrument.INSTRUMENT_ID; }) : [];// holder for hwm files added
            $scope.depSensImageFiles = $scope.DepSensorFiles.filter(function (hf) { return hf.FILETYPE_ID === 1; }); //image files for carousel
            $scope.showFileForm = false; //hidden form to add file to hwm
-           $scope.OPsPresent = siteOPs.length > 0 ? true : false;
+           $scope.OPsPresent = siteOPs.length > 0 ? true : false;           
            $scope.OPsForTapeDown = siteOPs;
            $scope.removeOPList = [];
            $scope.tapeDownTable = []; //holder of tapedown OP_MEASUREMENTS
@@ -345,18 +345,8 @@
            };
            //#endregion FILE STUFF
 
-            //#region tape down section 
-           $scope.addTapedown = false; //toggle tapedown section
-           $scope.showTapedownPart = function () {
-               if ($scope.addTapedown) {
-                   //they are closing it. clear inputs and close
-                   $scope.addTapedown = false;
-               } else {
-                   //they are opening to add tape down information
-                   $scope.addTapedown = true;
-               }
-           };
-           $scope.OPchosen = function (opChosen) {
+            //#region tape down section           
+            $scope.OPchosen = function (opChosen) {
                var opI = $scope.OPsForTapeDown.map(function (o) { return o.OBJECTIVE_POINT_ID; }).indexOf(opChosen.OBJECTIVE_POINT_ID);               
                if (opChosen.selected) {
                    //they picked an OP to use for tapedown
@@ -367,6 +357,7 @@
                    $scope.OPMeasure.OBJECTIVE_POINT_ID = opChosen.OBJECTIVE_POINT_ID;
                    //$scope.OPMeasure.OP_NAME = opName;
                    $scope.tapeDownTable.push($scope.OPMeasure);
+                   $scope.aSensStatus.VDATUM_ID = opChosen.VDATUM_ID;
                } else {
                    //they unchecked the op to remove
                    //ask them are they sure?
@@ -393,6 +384,10 @@
                            var tInd = $scope.tapeDownTable.map(function (o) { return o.OBJECTIVE_POINT_ID; }).indexOf(tapeDownToRemove.OBJECTIVE_POINT_ID);
                            if (tapeDownToRemove.OP_MEASUREMENTS_ID !== undefined) $scope.removeOPList.push(tapeDownToRemove.OP_MEASUREMENTS_ID);
                            $scope.tapeDownTable.splice(tInd, 1);
+                           //if this empties the table, clear the sensStatus fields related to tapedowns
+                           if ($scope.tapeDownTable.length == 0) {
+                               $scope.aSensStatus.VDATUM_ID = 0; $scope.aSensStatus.GS_ELEVATION = ''; $scope.aSensStatus.WS_ELEVATION = ''; $scope.aSensStatus.SENSOR_ELEVATION = '';
+                           }
                        } else {
                            //never mind, make it selected again
                            $scope.OPsForTapeDown[opI].selected = true;
@@ -784,6 +779,7 @@
             var sec = $scope.depSensStatus.TIME_STAMP.substr(17, 2);
             $scope.depSensStatus.TIME_STAMP = new Date(y, m, d, h, mi, sec);
             $scope.OPsForTapeDown = siteOPs;
+            $scope.OPsPresent = siteOPs.length > 0 ? true : false;
             $scope.vertDatumList = allVDatumList;
             $scope.removeOPList = [];
             $scope.tapeDownTable = []; //holder of tapedown OP_MEASUREMENTS
@@ -823,17 +819,7 @@
                 return sendThis;
             };
             
-            //#region tape down section 
-            $scope.addTapedown = false; //toggle tapedown section
-            $scope.showTapedownPart = function () {
-                if ($scope.addTapedown) {
-                    //they are closing it. clear inputs and close
-                    $scope.addTapedown = false;
-                } else {
-                    //they are opening to add tape down information
-                    $scope.addTapedown = true;
-                }
-            };
+            //#region tape down section            
             $scope.OPchosen = function (opChosen) {
                 var opI = $scope.OPsForTapeDown.map(function (o) { return o.OBJECTIVE_POINT_ID; }).indexOf(opChosen.OBJECTIVE_POINT_ID);
                 if (opChosen.selected) {
@@ -845,6 +831,7 @@
                     $scope.OPMeasure.OBJECTIVE_POINT_ID = opChosen.OBJECTIVE_POINT_ID;
                     //$scope.OPMeasure.OP_NAME = opName;
                     $scope.tapeDownTable.push($scope.OPMeasure);
+                    $scope.aRetrieval.VDATUM_ID = opChosen.VDATUM_ID;
                 } else {
                     //they unchecked the op to remove
                     //ask them are they sure?
@@ -871,6 +858,9 @@
                             var tInd = $scope.tapeDownTable.map(function (o) { return o.OBJECTIVE_POINT_ID; }).indexOf(tapeDownToRemove.OBJECTIVE_POINT_ID);
                             if (tapeDownToRemove.OP_MEASUREMENTS_ID !== undefined) $scope.removeOPList.push(tapeDownToRemove.OP_MEASUREMENTS_ID);
                             $scope.tapeDownTable.splice(tInd, 1);
+                            if ($scope.tapeDownTable.length == 0) {
+                                $scope.aRetrieval.VDATUM_ID = 0; $scope.aRetrieval.GS_ELEVATION = ''; $scope.aRetrieval.WS_ELEVATION = ''; $scope.aRetrieval.SENSOR_ELEVATION = '';
+                            }
                         } else {
                             //never mind, make it selected again
                             $scope.OPsForTapeDown[opI].selected = true;
@@ -1086,6 +1076,8 @@
             //deploy part //////////////////
             $scope.DeployedSensorStat = angular.copy(thisSensor.InstrumentStats.filter(function (inst) { return inst.Status === "Deployed"; })[0]);
             $scope.DeployedSensorStat.TIME_STAMP = getDateTimeParts($scope.DeployedSensorStat.TIME_STAMP); //this keeps it as utc in display
+            if ($scope.DeployedSensorStat.VDATUM_ID !== undefined)
+                $scope.DeployedSensorStat.vdatumName = $scope.vertDatumList.filter(function (vd) { return vd.DATUM_ID == $scope.DeployedSensorStat.VDATUM_ID; })[0].DATUM_ABBREVIATION;
             $scope.Deployer = allMembers.filter(function (m) { return m.MEMBER_ID === $scope.DeployedSensorStat.MEMBER_ID; })[0];
             $scope.DEPremoveOPList = [];
             $scope.DEPtapeDownTable = []; //holder of tapedown OP_MEASUREMENTS
@@ -1101,6 +1093,7 @@
                     $scope.DEPOPMeasure.OBJECTIVE_POINT_ID = DEPopChosen.OBJECTIVE_POINT_ID;
                     //$scope.DEPtapeDownTable.push($scope.DEPOPMeasure);
                     $scope.depTapeCopy.push($scope.DEPOPMeasure);
+                    $scope.depStuffCopy[1].VDATUM_ID = DEPopChosen.VDATUM_ID;
                 } else {
                     //they unchecked the op to remove
                     //ask them are they sure?
@@ -1128,11 +1121,13 @@
                             if (DEPtapeDownToRemove.OP_MEASUREMENTS_ID !== undefined) $scope.DEPremoveOPList.push(DEPtapeDownToRemove.OP_MEASUREMENTS_ID);
                             // $scope.DEPtapeDownTable.splice(DEPtInd, 1);
                             $scope.depTapeCopy.splice(DEPtInd, 1);
+                            if ($scope.depTapeCopy.length == 0) {
+                                $scope.depStuffCopy[1].VDATUM_ID = 0; $scope.depStuffCopy[1].GS_ELEVATION = ''; $scope.depStuffCopy[1].WS_ELEVATION = ''; $scope.depStuffCopy[1].SENSOR_ELEVATION = '';
+                            }
                         } else {
                             //never mind, make it selected again
                             $scope.DEPOPsForTapeDown[opI].selected = true;
                         }
-
                     });
                 }
             };
@@ -1174,6 +1169,9 @@
             } else {
                 $scope.mostRecentStatus = "Retrieved";
             }
+            if ($scope.RetrievedSensorStat.VDATUM_ID !== undefined) {
+                $scope.RetrievedSensorStat.vdatumName = $scope.vertDatumList.filter(function (vd) { return vd.DATUM_ID == $scope.RetrievedSensorStat.VDATUM_ID; })[0].DATUM_ABBREVIATION;
+}
             $scope.RetrievedSensorStat.TIME_STAMP = getDateTimeParts($scope.RetrievedSensorStat.TIME_STAMP); //this keeps it as utc in display
             $scope.Retriever = allMembers.filter(function (m) { return m.MEMBER_ID === $scope.RetrievedSensorStat.MEMBER_ID; })[0];
             $scope.RETremoveOPList =[];
@@ -1189,6 +1187,7 @@
                     $scope.RETOPMeasure.Vdatum = $scope.vertDatumList.filter(function (vd) { return vd.DATUM_ID == RETopChosen.VDATUM_ID;})[0].DATUM_ABBREVIATION;
                     $scope.RETOPMeasure.OBJECTIVE_POINT_ID = RETopChosen.OBJECTIVE_POINT_ID;
                     $scope.retTapeCopy.push($scope.RETOPMeasure);
+                    $scope.retStuffCopy[1].VDATUM_ID = RETopChosen.VDATUM_ID;
                 } else {
                     //they unchecked the op to remove
                     //ask them are they sure?
@@ -1215,6 +1214,9 @@
                             var RETtInd = $scope.retTapeCopy.map(function (o) { return o.OBJECTIVE_POINT_ID; }).indexOf(RETtapeDownToRemove.OBJECTIVE_POINT_ID);
                             $scope.RETremoveOPList.push(RETtapeDownToRemove.OP_MEASUREMENTS_ID);
                             $scope.retTapeCopy.splice(RETtInd, 1);
+                            if ($scope.retTapeCopy.length == 0) {
+                                $scope.retStuffCopy[1].VDATUM_ID = 0; $scope.retStuffCopy[1].GS_ELEVATION = ''; $scope.retStuffCopy[1].WS_ELEVATION = ''; $scope.retStuffCopy[1].SENSOR_ELEVATION = '';
+                            }
                         } else {
                             //never mind, make it selected again
                             $scope.RETOPsForTapeDown[opI].selected = true;
@@ -1433,7 +1435,7 @@
                     if ($scope.DEPtapeDownTable.length === 0)
                         $scope.DEPOPsForTapeDown[i].selected = false;
             }
-            //$scope.DEPaddTapedown = false;
+            
         };
             //#endregion deploy edit
 
@@ -1508,7 +1510,6 @@
                 $scope.view.RETval = 'detail';
                 $scope.retStuffCopy =[];
                 $scope.retTapeCopy =[];
-                //$scope.RETaddTapedown = false;
                 //MAKE SURE ALL SELECTED OP'S STAY SELECTED
                 for (var i = 0; i < $scope.RETOPsForTapeDown.length; i++) {
                     //for each one, if response has this id, add 'selected:true' else add 'selected:false'
