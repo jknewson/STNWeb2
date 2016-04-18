@@ -65,8 +65,8 @@
 
             $scope.updateAddressOnly = function () {
                 var geocoder = new google.maps.Geocoder(); //reverse address lookup
-                if ($scope.aSite.LATITUDE_DD === undefined) $scope.aSite.LATITUDE_DD = azimuth($scope.DMS.LADeg, $scope.DMS.LAMin, $scope.DMS.LASec);
-                if ($scope.aSite.LONGITUDE_DD === undefined) $scope.aSite.LONGITUDE_DD = azimuth($scope.DMS.LODeg, $scope.DMS.LOMin, $scope.DMS.LOSec);
+                if ($scope.DMS.LADeg !== undefined) $scope.aSite.LATITUDE_DD = azimuth($scope.DMS.LADeg, $scope.DMS.LAMin, $scope.DMS.LASec);
+                if ($scope.DMS.LODeg !== undefined) $scope.aSite.LONGITUDE_DD = azimuth($scope.DMS.LODeg, $scope.DMS.LOMin, $scope.DMS.LOSec);
                 var latlng = new google.maps.LatLng($scope.aSite.LATITUDE_DD, $scope.aSite.LONGITUDE_DD);
                 geocoder.geocode({ 'latLng': latlng }, function (results, status) {
                     if (status == google.maps.GeocoderStatus.OK) {
@@ -116,8 +116,8 @@
 
             //get address parts and existing sites 
             $scope.getAddress = function () {
-                if ($scope.aSite.LATITUDE_DD === undefined) $scope.aSite.LATITUDE_DD = azimuth($scope.DMS.LADeg, $scope.DMS.LAMin, $scope.DMS.LASec);
-                if ($scope.aSite.LONGITUDE_DD === undefined) $scope.aSite.LONGITUDE_DD = azimuth($scope.DMS.LODeg, $scope.DMS.LOMin, $scope.DMS.LOSec);
+                if ($scope.DMS.LADeg !== undefined) $scope.aSite.LATITUDE_DD = azimuth($scope.DMS.LADeg, $scope.DMS.LAMin, $scope.DMS.LASec);
+                if ($scope.DMS.LODeg !== undefined) $scope.aSite.LONGITUDE_DD = azimuth($scope.DMS.LODeg, $scope.DMS.LOMin, $scope.DMS.LOSec);
                 $scope.mapCenter = { lat: parseFloat($scope.aSite.LATITUDE_DD), lng: parseFloat($scope.aSite.LONGITUDE_DD), zoom: 18 };
                 $scope.mapMarkers = [];
                 var geocoder = new google.maps.Geocoder(); //reverse address lookup
@@ -379,8 +379,8 @@
                 }
             };//end save
             var putSiteAndParts = function () {
-                if ($scope.aSite.LATITUDE_DD === undefined) $scope.aSite.LATITUDE_DD = azimuth($scope.DMS.LADeg, $scope.DMS.LAMin, $scope.DMS.LASec);
-                if ($scope.aSite.LONGITUDE_DD === undefined) $scope.aSite.LONGITUDE_DD = azimuth($scope.DMS.LODeg, $scope.DMS.LOMin, $scope.DMS.LOSec);
+                if ($scope.DMS.LADeg !== undefined) $scope.aSite.LATITUDE_DD = azimuth($scope.DMS.LADeg, $scope.DMS.LAMin, $scope.DMS.LASec);
+                if ($scope.DMS.LODeg !== undefined) $scope.aSite.LONGITUDE_DD = azimuth($scope.DMS.LODeg, $scope.DMS.LOMin, $scope.DMS.LOSec);
                 SITE.update({ id: $scope.aSite.SITE_ID }, $scope.aSite, function success(response) {      
                     //update site housings
                     var defer = $q.defer();
@@ -507,8 +507,8 @@
             var postSiteAndParts = function () {
                 //make sure longitude is < 0, otherwise * (-1),
                 var createdSiteID = 0;
-                if ($scope.aSite.LATITUDE_DD === undefined) $scope.aSite.LATITUDE_DD = azimuth($scope.DMS.LADeg, $scope.DMS.LAMin, $scope.DMS.LASec);
-                if ($scope.aSite.LONGITUDE_DD === undefined) $scope.aSite.LONGITUDE_DD = azimuth($scope.DMS.LODeg, $scope.DMS.LOMin, $scope.DMS.LOSec);
+                if ($scope.DMS.LADeg !== undefined) $scope.aSite.LATITUDE_DD = azimuth($scope.DMS.LADeg, $scope.DMS.LAMin, $scope.DMS.LASec);
+                if ($scope.DMS.LODeg !== undefined) $scope.aSite.LONGITUDE_DD = azimuth($scope.DMS.LODeg, $scope.DMS.LOMin, $scope.DMS.LOSec);
                 //POST site
                 SITE.save($scope.aSite, function success(response) {
                     createdSiteID = response.SITE_ID;

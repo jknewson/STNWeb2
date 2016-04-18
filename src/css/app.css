@@ -468,3 +468,196 @@ a.disabled {
 .leaflet-popup-content {
     width:auto !important;
 }
+
+
+.info {
+    padding: 20px;
+    font-family: sans-serif;
+    font-size: 1em;
+    background: rgba(255, 255, 255, 0.9);
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.4);
+}
+.info h4 {
+    margin: 0 0 5px;
+    color: #3D3938;
+}
+
+.legend-esri {
+    color: #555555;
+    line-height: 18px;
+    max-height: 250px;
+    width: 215px;
+    padding-bottom: 10px;
+    padding-top: 10px;
+    overflow: auto;
+}
+.legend-esri .outline {
+    border: 1px solid #CCCCCC;
+    border-radius: 6px 6px 6px 6px;
+    float: left;
+    height: 12px;
+    margin: 3px 10px 3px 3px;
+    padding: 2px;
+    width: 12px;
+}
+.legend-esri .outline i {
+    border-radius: 4px 4px 4px 4px;
+    float: left;
+    height: 6px;
+    width: 6px;
+}
+.legend-esri .inline {
+    clear: both;
+    float: left;
+    margin-right: 10px;
+}
+.legend-esri .info-title {
+    clear: both;
+    float: left;
+    font-size: 0.9em;
+    font-weight: bold;
+    margin: 5px 0;
+    width: 100%;
+}
+.legend-esri .info-label {
+    float: left;
+    width: 170px;
+    font-size: 0.8em;
+}
+
+/* disable some default controls*/
+.leaflet-control-layers.leaflet-control {
+    display: none;
+}
+
+.angular-leaflet-control-layers-collapsed {
+
+    position: absolute;
+    background: white;
+    z-index: 100;
+    right: 10px;
+    top: 10px;
+    box-shadow: 1px 1px 5px #333;
+    padding: 15px;
+    background-image: url(../images/layers.png);
+    background-repeat: no-repeat;
+    background-position: center;
+    width: 36px;
+    height: 36px;
+}
+
+.angular-leaflet-control-layers-expanded {
+    position: absolute;
+    background: white;
+    z-index: 100;
+    right: 10px;
+    top: 10px;
+    width: 250px;
+    height:90%;
+    box-shadow: 1px 1px 5px #333;
+    padding: 5px;
+    overflow-y:auto;
+    overflow-x:hidden;
+    transition: all .2s;
+}
+
+.angular-leaflet-control-layers-header {
+    height: 30px;
+    display: inline-block;
+    float: left;
+}
+
+.angular-leaflet-control-layers-close-button {
+    margin-right:20px;
+}
+
+.angular-leaflet-control-layers-header .close{
+    font-size: 22pt;
+    margin: 0 auto;
+    width: 40px;
+    height: 40px;
+    opacity: 1;
+    background-color: white;
+    border-radius: 50%;
+    box-sizing: border-box;
+    padding: 0 0 2px 0;
+    float: left;
+    color: rgba(0,0,0,0.5);
+    box-shadow: 1px 1px 5px #333;
+    position: relative;
+    left: 10px;
+    top: -25px;
+}
+.angular-leaflet-control-layers-header .close:hover{
+    border: none;
+    color: rgba(44,116,183,.5);
+}
+
+.angular-leaflet-control-layers .lf-row label {
+    cursor: pointer;
+    width: 75%;
+}
+
+.angular-leaflet-control-layers .lf-row .lf-icon-ol {
+    padding-left: 8px;
+}
+
+.angular-leaflet-control-layers .lf-row .lf-icon {
+    cursor: pointer;
+    float: left;
+    margin-right: 5px;
+    padding-top: 2px;
+}
+
+.angular-leaflet-control-layers .lf-row label .lf-text {
+    float: left;
+}
+
+.angular-leaflet-control-layers .lf-row .lf-icon-ol-group {
+    color: #00650a;
+}
+
+.angular-leaflet-control-layers .lf-row .lf-icons {
+    float: right;
+}
+
+/*Layers/right button*/
+.angular-leaflet-control-layers-expanded{
+    padding: 0;
+}
+.angular-leaflet-control-layers-expanded .close-legend{
+    display: block;
+    margin: 0 auto;
+    padding: 10px 0;
+    border: none;
+    width: 100%;
+    font-size:9pt;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+}
+.angular-leaflet-control-layers-expanded .list-group-item,
+.angular-leaflet-control-layers-expanded .list-group-item-active{
+    padding: 15px 5px 25px 5px;
+    font-weight: 400;
+    text-align: center;
+}
+.angular-leaflet-control-layers-expanded .list-group-item-active{
+    background-color: #2D3245;
+}
+.angular-leaflet-control-layers-expanded .list-group-item-active label{
+    color: #FFF;
+}
+.angular-leaflet-control-layers-expanded .list-group-item-active label,
+.angular-leaflet-control-layers-expanded .list-group-item label{
+    display: block;
+    text-align: center;
+}
+.angular-leaflet-control-layers-expanded .list-group-item .fa-chevron-down,
+.angular-leaflet-control-layers-expanded .list-group-item-active .fa-chevron-up{
+    display: block !important;
+    width: 100% !important;
+    padding: 0 0 10px 0 !important;
+    text-align: center !important;
+
+}
+
