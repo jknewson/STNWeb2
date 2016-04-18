@@ -32,7 +32,7 @@
                 SITE.getSiteSensors({ id: $scope.thisSite.SITE_ID }).$promise.then(function (sResponse) {
                     $scope.ProposedSensors4Site = sResponse.filter(function (ss) { return ss.InstrumentStats[0].STATUS_TYPE_ID == 4; });
                 });
-            }
+            };
 
             //all sensor deployments (relationship table)
             $scope.sensDepTypes = allSensDeps;

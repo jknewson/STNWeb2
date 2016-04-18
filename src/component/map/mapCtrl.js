@@ -379,6 +379,19 @@
                     //
                     //     return text;
                     // },
+                    // legend: {
+                    //     url: "http://gis.srh.noaa.gov/arcgis/rest/services/ahps_gauges/MapServer/legend/?f=json",
+                    //     legendClass: "info legend-esri",
+                    //     position: "bottomleft"
+                    // },
+                    // legendURL1: "http://services.arcgisonline.com/arcgis/rest/services/Demographics/USA_1990-2000_Population_Change/MapServer/legend?f=json",
+                    // legendURL2: "https://hazards.fema.gov/gis/nfhl/rest/services/public/NFHL/MapServer/legend?f=json",
+                    // switchLegend: function() {
+                    //     $scope.layers.overlays.usa_social.visible = !$scope.layers.overlays.usa_social.visible;
+                    //     $scope.legend.url =
+                    //         $scope.legend.url == $scope.legendURL1? $scope.legendURL2:$scope.legendURL1;
+                    // },
+                    //////////!!!need to add legend="legend" back to map directive if using this!!!!!!!!
                     layers: {
                         baselayers: {
                             gray: {
@@ -489,16 +502,16 @@
                                     }
                                 }
                             },
-                            radar : {
-                                name: "Weather Radar",
-                                type: "agsDynamic",
-                                url : "http://gis.srh.noaa.gov/arcgis/rest/services/RIDGERadar/MapServer",
-                                visible: false,
-                                layerOptions : {
-                                    layers: [0],
-                                    opacity: 1
-                                }
-                            },
+                            // radar : {
+                            //     name: "Weather Radar",
+                            //     type: "agsDynamic",
+                            //     url : "http://gis.srh.noaa.gov/arcgis/rest/services/RIDGERadar/MapServer",
+                            //     visible: false,
+                            //     layerOptions : {
+                            //         layers: [0],
+                            //         opacity: 1
+                            //     }
+                            // },
                             watchWarn : {
                                 name: "NWS Watches & Warnings",
                                 type: "agsDynamic",
@@ -509,16 +522,16 @@
                                     opacity: 1
                                 }
                             },
-                            floodThresholds : {
-                                name: "NWS WFO Coastal Flood Thresholds",
-                                type: "agsDynamic",
-                                url : "https://www.csc.noaa.gov/arcgis/rest/services/dc_slr/Flood_Frequency/MapServer",
-                                visible: false,
-                                layerOptions : {
-                                    layers: [1],
-                                    opacity: 1
-                                }
-                            },
+                            // floodThresholds : {
+                            //     name: "NWS WFO Coastal Flood Thresholds",
+                            //     type: "agsDynamic",
+                            //     url : "https://www.csc.noaa.gov/arcgis/rest/services/dc_slr/Flood_Frequency/MapServer",
+                            //     visible: false,
+                            //     layerOptions : {
+                            //         layers: [1],
+                            //         opacity: 1
+                            //     }
+                            // },
                             lmwa : {
                                 name: "Limit Moderate Wave Action",
                                 type: "agsDynamic",

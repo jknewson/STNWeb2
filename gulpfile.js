@@ -15,11 +15,11 @@ var paths = {
     scripts: 'src/**/*.js',
     styles: 'src/**/*.css',
     //vendorStyles: '../bower_components/**/**/**/*.css',
-    less:'src/less',
+    less: 'src/less',
     images: 'src/images/**/*',
-    fonts: 'src/fonts/**/*',
+    fonts: ['src/fonts/**/*', 'bower_components/font-awesome/fonts/*'],
     index: 'src/index.html',
-    partials: ['src/component/**/*.html', '!src/index.html'],
+    partials: ['src/component/**/**/*.html', '!src/index.html'],
     dev: 'dev',
     dist: 'dist',
     distScriptsProd: 'dist/scripts',
@@ -32,7 +32,7 @@ var paths = {
 var pipes = {};
 
 pipes.orderedVendorScripts = function() {
-    return plugins.order(['jquery.js', 'angular.js', 'leaflet-src.js', 'esri-leaflet.js', 'angular-leaflet-directive.js']);
+    return plugins.order(['jquery.js', 'angular.js', 'leaflet-src.js', 'esri-leaflet.js', 'angular-leaflet-directive.js', 'directives.module.js', 'service.module.js', 'RequestInfo.js', 'HTTPServiceBase.js', 'RequestTransform.js', 'EventManager.js','EventArgs.js', 'wimLegend.js']);
 };
 
 // pipes.orderedVendorScripts = function() {

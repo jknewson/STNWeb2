@@ -20,7 +20,7 @@
     "angularjs-toaster": "0.4.16",
     "angular-animate": "1.3.20",
     "mobile-angular-ui": "~1.2.0-beta.11",
-    "font-awesome": "~4.3.0",
+    "font-awesome": "^4.6.1",
     "lato": "~0.3.0",
     "angular-xeditable": "~0.1.9",
     "angular-resource": "~1.4.7",
@@ -45,7 +45,8 @@
     "esri-leaflet": "^1.0.2",
     "angular-busy": "^4.1.3",
     "Leaflet.label": "^0.2.1",
-    "leaflet-geosearch": "L.GeoSearch#^1.1.0"
+    "leaflet-geosearch": "L.GeoSearch#^1.1.0",
+    "wim_angular": "https://github.com/USGS-WiM/wim_angular.git"
   },
   "devDependencies": {
     "angular-mocks": "^1.2.23",
@@ -54,11 +55,12 @@
   "resolutions": {
     "angular-bootstrap": ">=0.14.0",
     "angular": "1.4.7",
-    "checklist-model": "~0.6.0"
+    "checklist-model": "~0.6.0",
+    "font-awesome": "^4.6.1"
   },
   "overrides": {
-    "leaflet-geosearch" :{
-      "main" : [
+    "leaflet-geosearch": {
+      "main": [
         "src/js/l.control.geosearch.js",
         "src/js/l.geosearch.provider.bing.js",
         "src/js/l.geosearch.provider.esri.js",
@@ -68,6 +70,21 @@
         "src/img/alert.png",
         "src/img/geosearch.png",
         "src/img/spinner.gif"
+      ]
+    },
+    "wim_angular": {
+      "main": [
+        "dist/src/directives/wimLegend.js",
+        "dist/src/Directives/directives.module.js",
+        "dist/src/Services/Helpers/RequestTransform.js",
+        "dist/src/Services/Helpers/RequestInfo.js",
+        "dist/src/Events/EventManager.js",
+        "dist/src/Events/Delegate.js",
+        "dist/src/Events/EventArgs.js",
+        "dist/src/Events/EventHandler.js",
+        "dist/src/Services/service.module.js",
+        "dist/src/Services/HTTPServiceBase.js",
+        "dist/src/wim_ang.js"
       ]
     }
   }
