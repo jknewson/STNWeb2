@@ -428,11 +428,10 @@
                     $scope.HWMfileIsUploading = true;
                     $http.defaults.headers.common.Authorization = 'Basic ' + $cookies.get('STNCreds');
                     $http.defaults.headers.common.Accept = 'application/json';
+                    var theSource = { SOURCE_NAME: $scope.aSource.FULLNAME, AGENCY_ID: $scope.aSource.AGENCY_ID };
                     //post source first to get SOURCE_ID
-                    if ($scope.aSource.AGENCY_ID !== null) {
-                        var theSource = { SOURCE_NAME: $scope.aSource.FULLNAME, AGENCY_ID: $scope.aSource.AGENCY_ID};
-                        //now POST SOURCE, 
-                        SOURCE.save(theSource).$promise.then(function (response) {
+                    SOURCE.save(theSource).$promise.then(function (response) {
+                        if ($scope.aFile.FILETYPE_ID !== 8) {
                             //then POST fileParts (Services populate PATH)
                             var fileParts = {
                                 FileEntity: {
@@ -465,13 +464,26 @@
                                 $scope.showFileForm = false; $scope.HWMfileIsUploading = false;
                             }, function (errorResponse) {
                                 $scope.HWMfileIsUploading = false;
-                                toastr.error("Error uploading file:" + errorResponse.statusText);
+                                toastr.error("Error uploading file: " + errorResponse.statusText);
                             });
-                        }, function (errorResponse) {
-                            $scope.HWMfileIsUploading = false;
-                            toastr.error("Error creating Source info:" + errorResponse.statusText);
-                        });//end source.save()
-                    }//end if source                   
+                        } else {
+                            $scope.aFile.SOURCE_ID = response.SOURCE_ID; $scope.aFile.SITE_ID = $scope.thisHWMsite.SITE_ID; $scope.aFile.HWM_ID = $scope.aHWM.HWM_ID;
+                            FILE.save($scope.aFile).$promise.then(function (fresponse) {
+                                toastr.success("Link saved");
+                                fresponse.fileBelongsTo = "HWM File";
+                                $scope.HWMFiles.push(fresponse);
+                                $scope.allSFiles.push(fresponse);
+                                Site_Files.setAllSiteFiles($scope.allSFiles); //updates the file list on the sitedashboard                                
+                                $scope.showFileForm = false; $scope.HWMfileIsUploading = false;
+                            }, function (errorResponse) {
+                                $scope.HWMfileIsUploading = false;
+                                toastr.error("Error saving file: " + errorResponse.statusText);
+                            });
+                        }//end else
+                    }, function (errorResponse) {
+                        $scope.HWMfileIsUploading = false;
+                        toastr.error("Error creating Source info: " + errorResponse.statusText);
+                    });//end source.save()              
                 }//end valid
             };//end create()
 
@@ -496,11 +508,11 @@
                                 $scope.showFileForm = false; $scope.HWMfileIsUploading = false;
                             }, function (errorResponse) {
                                 $scope.HWMfileIsUploading = false;
-                                toastr.error("Error saving file:" + errorResponse.statusText);
+                                toastr.error("Error saving file: " + errorResponse.statusText);
                             });
                         }, function (errorResponse) {
                             $scope.HWMfileIsUploading = false; //Loading...
-                            toastr.error("Error saving file:" + errorResponse.statusText);
+                            toastr.error("Error saving file: " + errorResponse.statusText);
                         });
                     }
                 }//end valid
