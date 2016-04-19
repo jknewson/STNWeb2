@@ -51,10 +51,10 @@
                 //edit file
                 $scope.aFile = thisFile;
                 $scope.aFile.FILE_DATE = new Date($scope.aFile.FILE_DATE); //date for validity of form on PUT
+                if ($scope.aFile.PHOTO_DATE !== undefined) $scope.aFile.PHOTO_DATE = new Date($scope.aFile.PHOTO_DATE); //date for validity of form on PUT
                 if (fileSource !== undefined)  {
                     $scope.aSource = fileSource;
                     $scope.aSource.FULLNAME = $scope.aSource.SOURCE_NAME;
-                    $scope.aSource.SOURCE_DATE = new Date($scope.aSource.SOURCE_DATE); //date for validity of form on put
                 }
                 if (dataFile !== undefined) {
                     $scope.datafile = dataFile;
@@ -68,9 +68,9 @@
             } else {
                 //create file
                 $scope.aFile.FILE_DATE = new Date();
+                $scope.aFile.PHOTO_DATE = new Date();
                 $scope.aSource = allMembers.filter(function (m) { return m.MEMBER_ID == $cookies.get('mID'); })[0];
-                $scope.aSource.FULLNAME = $scope.aSource.FNAME + " " + $scope.aSource.LNAME;
-                $scope.aSource.SOURCE_DATE = new Date();
+                $scope.aSource.FULLNAME = $scope.aSource.FNAME + " " + $scope.aSource.LNAME;               
             }
 
             $scope.cancel = function () {
@@ -84,7 +84,7 @@
                     $http.defaults.headers.common.Authorization = 'Basic ' + $cookies.get('STNCreds');
                     $http.defaults.headers.common.Accept = 'application/json';
                     //post source first to get SOURCE_ID
-                    var theSource = { SOURCE_NAME: $scope.aSource.FULLNAME, AGENCY_ID: $scope.aSource.AGENCY_ID, SOURCE_DATE: $scope.aSource.SOURCE_DATE };
+                    var theSource = { SOURCE_NAME: $scope.aSource.FULLNAME, AGENCY_ID: $scope.aSource.AGENCY_ID};
                     //now POST SOURCE, 
                     SOURCE.save(theSource).$promise.then(function (response) {
                         //then POST fileParts (Services populate PATH)
@@ -93,6 +93,7 @@
                                 FILETYPE_ID: $scope.aFile.FILETYPE_ID,
                                 FILE_URL: $scope.aFile.FILE_URL,
                                 FILE_DATE: $scope.aFile.FILE_DATE,
+                                PHOTO_DATE: $scope.aFile.PHOTO_DATE,
                                 DESCRIPTION: $scope.aFile.DESCRIPTION,
                                 SITE_ID: $scope.theSite.SITE_ID,
                                 SOURCE_ID: response.SOURCE_ID,
