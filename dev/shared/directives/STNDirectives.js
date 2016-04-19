@@ -93,21 +93,21 @@
                                     siteSearchResponse(resp);
                                 }, function error(errorResponse) {
                                     siteSearchResponse(errorResponse);
-                                }).$promise;
+                                });
                                 break;
                             case 'bySiteId':
-                                SITE.query({ bySiteId: $scope.searchTerm }).$promise.then(function (resp) {
+                                SITE.query({ bySiteId: $scope.searchTerm }, function (resp) {
                                     siteSearchResponse(resp);
-                                }), function (errorResponse) {
+                                }, function (errorResponse) {
                                     siteSearchResponse(errorResponse);
-                                };
+                                });
                                 break;
                             case 'bySiteName':
-                                SITE.query({ bySiteName: $scope.searchTerm }).$promise.then(function (resp) {
+                                SITE.query({ bySiteName: $scope.searchTerm }, function (resp) {
                                     siteSearchResponse(resp);
-                                }), function (errorResponse) {
+                                }, function (errorResponse) {
                                     siteSearchResponse(errorResponse);
-                                };
+                                });
                                 break;
                         }
                     };
