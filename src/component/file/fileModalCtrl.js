@@ -49,6 +49,8 @@
             };
             if (thisFile !== undefined) {
                 //edit file
+                $scope.whoseFile = thisFile.fileBelongsTo;
+                if ($scope.whoseFile == 'Objective Point File') $scope.whoseFile = 'Datum Location File';
                 $scope.aFile = thisFile;
                 $scope.aFile.FILE_DATE = new Date($scope.aFile.FILE_DATE); //date for validity of form on PUT
                 if ($scope.aFile.PHOTO_DATE !== undefined) $scope.aFile.PHOTO_DATE = new Date($scope.aFile.PHOTO_DATE); //date for validity of form on PUT
@@ -87,54 +89,57 @@
                     var theSource = { SOURCE_NAME: $scope.aSource.FULLNAME, AGENCY_ID: $scope.aSource.AGENCY_ID};
                     //now POST SOURCE, 
                     SOURCE.save(theSource).$promise.then(function (response) {
-                        //then POST fileParts (Services populate PATH)
-                        var fileParts = {
-                            FileEntity: {
-                                FILETYPE_ID: $scope.aFile.FILETYPE_ID,
-                                FILE_URL: $scope.aFile.FILE_URL,
-                                FILE_DATE: $scope.aFile.FILE_DATE,
-                                PHOTO_DATE: $scope.aFile.PHOTO_DATE,
-                                DESCRIPTION: $scope.aFile.DESCRIPTION,
-                                SITE_ID: $scope.theSite.SITE_ID,
-                                SOURCE_ID: response.SOURCE_ID,
-                                PHOTO_DIRECTION: $scope.aFile.PHOTO_DIRECTION
-                            },
-                            File: $scope.aFile.File
-                        };
-                        //need to put the fileParts into correct format for post
-                        var fd = new FormData();
-                        fd.append("FileEntity", JSON.stringify(fileParts.FileEntity));
-                        fd.append("File", fileParts.File);
-                        //now POST it (fileparts)
-                        FILE.uploadFile(fd).$promise.then(function (fresponse) {
-                            toastr.success("File Uploaded");
-                            var whatKindaFile = '';
-                            if (fresponse.HWM_ID > 0 && fresponse.HWM_ID !== null) {
-                                whatKindaFile = "HWM File";
-                            }
-                            if (fresponse.DATA_FILE_ID > 0 && fresponse.DATA_FILE_ID !== null) {
-                                whatKindaFile = "DataFile File";
-                            }
-                            if (fresponse.INSTRUMENT_ID > 0 && fresponse.INSTRUMENT_ID !== null) {
-                                whatKindaFile = "Sensor File";
-                            }
-                            if (fresponse.OBJECTIVE_POINT_ID > 0 && fresponse.OBJECTIVE_POINT_ID !== null) {
-                                whatKindaFile = "Objective Point File";
-                            }
-                            if (whatKindaFile === '') whatKindaFile = "Site File";
-                            fresponse.fileBelongsTo = whatKindaFile;
-                            var state = 'created';
-                            //send the file back to be added to the scope list
-                            var sendBack = [fresponse, state];
-                            $scope.sFileIsUploading = false;
-                            $uibModalInstance.close(sendBack);
-                        }, function (errorResponse) {
-                            $scope.sFileIsUploading = false;
-                            toastr.error("Error saving file:" + errorResponse.statusText);
-                        });
+                        if ($scope.aFile.FILETYPE_ID !== 8) {
+                            //then POST fileParts (Services populate PATH)
+                            var fileParts = {
+                                FileEntity: {
+                                    FILETYPE_ID: $scope.aFile.FILETYPE_ID,
+                                    FILE_URL: $scope.aFile.FILE_URL,
+                                    FILE_DATE: $scope.aFile.FILE_DATE,
+                                    PHOTO_DATE: $scope.aFile.PHOTO_DATE,
+                                    DESCRIPTION: $scope.aFile.DESCRIPTION,
+                                    SITE_ID: $scope.theSite.SITE_ID,
+                                    SOURCE_ID: response.SOURCE_ID,
+                                    PHOTO_DIRECTION: $scope.aFile.PHOTO_DIRECTION
+                                },
+                                File: $scope.aFile.File
+                            };
+                            //need to put the fileParts into correct format for post
+                            var fd = new FormData();
+                            fd.append("FileEntity", JSON.stringify(fileParts.FileEntity));
+                            fd.append("File", fileParts.File);
+                            //now POST it (fileparts)
+                            FILE.uploadFile(fd).$promise.then(function (fresponse) {
+                                toastr.success("File Uploaded");
+                                fresponse.fileBelongsTo = "Site File";
+                                var state = 'created';
+                                //send the file back to be added to the scope list
+                                var sendBack = [fresponse, state];
+                                $scope.sFileIsUploading = false;
+                                $uibModalInstance.close(sendBack);
+                            }, function (errorResponse) {
+                                $scope.sFileIsUploading = false;
+                                toastr.error("Error saving file: " + errorResponse.statusText);
+                            });
+                        } else {
+                            //this is a link
+                            $scope.aFile.SITE_ID = $scope.theSite.SITE_ID; $scope.aFile.SOURCE_ID = response.SOURCE_ID;
+                            FILE.save($scope.aFile).$promise.then(function (fresponse) {
+                                toastr.success("File Uploaded");
+                                fresponse.fileBelongsTo = "Site File";
+                                var state = 'created';
+                                //send the file back to be added to the scope list
+                                var sendBack = [fresponse, state];
+                                $scope.sFileIsUploading = false;
+                                $uibModalInstance.close(sendBack);
+                            }, function (errorResponse) {
+                                $scope.sFileIsUploading = false;
+                                toastr.error("Error saving file: " + errorResponse.statusText);
+                            });
+                        }//end save link file
                     }, function (errorResponse) {
                         $scope.sFileIsUploading = false;
-                        toastr.error("Error saving Source info:" + errorResponse.statusText);
+                        toastr.error("Error saving Source info: " + errorResponse.statusText);
                     });//end source.save()
                 }//end valid
             };//end create()
@@ -161,11 +166,11 @@
                                 $uibModalInstance.close(sendBack);
                             }, function (errorResponse) {
                                 $scope.sFileIsUploading = false;
-                                toastr.error("Error saving file:" + errorResponse.statusText);
+                                toastr.error("Error saving file: " + errorResponse.statusText);
                             });
                         }, function (errorResponse) {
                             $scope.sFileIsUploading = false; //Loading...
-                            toastr.error("Error saving source:" + errorResponse.statusText);
+                            toastr.error("Error saving source: " + errorResponse.statusText);
                         });
                     } else {
                         //data file
@@ -196,11 +201,11 @@
                                 $uibModalInstance.close(sendBack);
                             }, function (errorResponse) {
                                 $scope.sFileIsUploading = false;
-                                toastr.error("Error saving file:" + errorResponse.statusText);
+                                toastr.error("Error saving file: " + errorResponse.statusText);
                             });
                         }, function (errorResponse) {
                             $scope.sFileIsUploading = false; //Loading...
-                            toastr.error("Error saving data file:" + errorResponse.statusText);
+                            toastr.error("Error saving data file: " + errorResponse.statusText);
                         });
                     } //end else (datafile)
                 }//end valid

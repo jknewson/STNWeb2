@@ -122,11 +122,11 @@
                                 $scope.showFileForm = false; $scope.fileIsUploading = false;
                             }, function (errorResponse) {
                                 $scope.fileIsUploading = false;
-                                toastr.error("Error saving file:" + errorResponse.statusText);
+                                toastr.error("Error saving file: " + errorResponse.statusText);
                             });
                         }, function (errorResponse) {
                             $scope.fileIsUploading = false;
-                            toastr.error("Error saving Source info:" + errorResponse.statusText);
+                            toastr.error("Error saving Source info: " + errorResponse.statusText);
                         });//end source.save()
                     }
                 }//end valid
@@ -153,11 +153,11 @@
                                 $scope.showFileForm = false; $scope.fileIsUploading = false;
                             }, function (errorResponse) {
                                 $scope.fileIsUploading = false;
-                                toastr.error("Error saving file:" + errorResponse.statusText);
+                                toastr.error("Error saving file: " + errorResponse.statusText);
                             });
                         }, function (errorResponse) {
                             $scope.fileIsUploading = false; //Loading...
-                            toastr.error("Error saving source:" + errorResponse.statusText);
+                            toastr.error("Error saving source: " + errorResponse.statusText);
                         });
                     }
                 }//end valid
@@ -409,7 +409,7 @@
                                 OBJECTIVE_POINT.createOPControlID({ id: response.OBJECTIVE_POINT_ID }, $scope.addedIdentifiers[opc]).$promise;
                         }
                     }, function error(errorResponse) {
-                        toastr.error("Error creating Datum Location" + errorResponse.statusText);
+                        toastr.error("Error creating Datum Location: " + errorResponse.statusText);
                     }).$promise.then(function () {
                         var sendBack = [createdOP, 'created'];
                         $uibModalInstance.close(sendBack);
@@ -466,7 +466,7 @@
                         updatedOP = response;
                         //    delete $http.defaults.headers.common['X-HTTP-Method-Override'];
                     }, function error(errorResponse) {
-                        toastr.error("Error updating Datum Location:" + errorResponse.statusText);
+                        toastr.error("Error updating Datum Location: " + errorResponse.statusText);
                     }).$promise.then(function () {
                         var sendBack = [updatedOP, 'updated'];
                         $uibModalInstance.close(sendBack);
