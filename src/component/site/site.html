@@ -48,6 +48,9 @@
                     <div class="col-md-7">
                         <textarea class="form-control" id="SITE_DESCRIPTION" type="text" rows="3" placeholder="Site Description" ng-model="aSite.SITE_DESCRIPTION" required />
                     </div>
+                    <button type="button" class="col-md-1 borderLess pull-left" tooltip-placement="right" tooltip-append-to-body="false" uib-tooltip="Brief description of the site area. Displayed publicly.">
+                        <span class="glyphicon glyphicon-question-sign"></span>
+                    </button>
                 </div>
 
                 <!--Internal Notes-->
@@ -147,6 +150,9 @@
                                 <div class="col-md-7">
                                     <button type="button" ng-click="getAddress()" class="btn btn-primary">Verify Location</button>
                                 </div>
+                                <button type="button" class="col-md-1 borderLess pull-left" tooltip-placement="right" tooltip-append-to-body="false" uib-tooltip="Also checks for nearby sites within x ft, and populates 5 fields below.">
+                                    <span class="glyphicon glyphicon-question-sign"></span>
+                                </button>
                             </div>
 
                             <!-- map showing lat/long location-->
@@ -189,6 +195,9 @@
                                         <option value=""></option>
                                     </select>
                                 </div>
+                                <button type="button" class="col-md-1 borderLess pull-left" tooltip-placement="right" tooltip-append-to-body="false" uib-tooltip="Used to autogenerate the Site Number.">
+                                    <span class="glyphicon glyphicon-question-sign"></span>
+                                </button>
                             </div>
 
                             <!--Zip-->
@@ -207,6 +216,9 @@
                                         <option value=""></option>
                                     </select>
                                 </div>
+                                <button type="button" class="col-md-1 borderLess pull-left" tooltip-placement="right" tooltip-append-to-body="false" uib-tooltip="Used to autogenerate the Site Number. Use the verify location to populate.">
+                                    <span class="glyphicon glyphicon-question-sign"></span>
+                                </button>
                             </div>
                         </div>
                     </div>
@@ -217,6 +229,9 @@
                     <div class="col-md-7">
                         <input class="form-control" name="WATERBODY" ng-model="aSite.WATERBODY" type="text" required />
                     </div>
+                    <button type="button" class="col-md-1 borderLess pull-left" tooltip-placement="right" tooltip-append-to-body="false" uib-tooltip-html="htmlDescriptionTip">
+                        <span class="glyphicon glyphicon-question-sign"></span>
+                    </button>
                 </div>
 
                 <!--Drainage Area-->
@@ -265,7 +280,13 @@
                 <div class="form-group">
                     <div style="padding:0" class="panel panel-default">
                         <div class="panel-heading">
-                            <h3 class="panel-title">Site Housing</h3>
+                            <h3 class="panel-title">
+                                <span>Site Housing</span>
+                                <button type="button" class="col-md-1 borderLess pull-right" tooltip-placement="left" tooltip-append-to-body="false" uib-tooltip="Housing needed at this site. Think about what it would take to pack your truck.">
+                                    <span class="glyphicon glyphicon-question-sign"></span>
+                                </button>
+                            </h3>
+                            
                         </div>
                         <div class="panel-body">
                             <label class="col-md-4 control-label" for="HOUSING_TYPE">Site Housing(s):</label>
@@ -350,6 +371,9 @@
                     <div class="col-md-7">
                         <input class="form-control" name="ZONE" ng-model="aSite.ZONE" type="text" />
                     </div>
+                    <button type="button" class="col-md-1 borderLess pull-left" tooltip-placement="right" tooltip-append-to-body="false" uib-tooltip="For Water Science Center specific planning.">
+                        <span class="glyphicon glyphicon-question-sign"></span>
+                    </button>
                 </div>
 
                 <!--Sensor Not Appropriate-->
@@ -362,6 +386,9 @@
                             </li>
                         </ul>
                     </div>
+                    <button type="button" class="col-md-1 borderLess pull-left" tooltip-placement="right" tooltip-append-to-body="false" uib-tooltip="Only HWMs can be flagged at this site. Sensors can not be or do not have permission to be deployed.">
+                        <span class="glyphicon glyphicon-question-sign"></span>
+                    </button>
                 </div>
 
                 <!--Permanent Sensor Housing?-->
@@ -388,6 +415,9 @@
                             </li>
                         </ul>
                     </div>
+                    <button type="button" class="col-md-1 borderLess pull-left" tooltip-placement="right" tooltip-append-to-body="false" uib-tooltip="Sensors desired or appropriate for this site should be targeted in the next deployment.">
+                        <span class="glyphicon glyphicon-question-sign"></span>
+                    </button>
                 </div>
 
                 <!--Site creator-->
@@ -403,8 +433,10 @@
                     <label class="col-md-4 control-label" for="LANDOWNERBTN">Landowner Contact:</label>
                     <div class="col-md-7">
                         <button type="button" ng-click="showLandOwnerPart()" class="btn btn-primary">Add Landowner</button>
-                        <!-- <button type="button" ng-click="collapseLandowner = !collapseLandowner" class="btn btn-primary">Add Landowner</button>-->
                     </div>
+                    <button type="button" class="col-md-1 borderLess pull-left" tooltip-placement="right" tooltip-append-to-body="false" uib-tooltip="Do not record information that private citizens have a reasonable expectation of privacy about. No names or phone numbers of private citizens. Business contact information is acceptable.">
+                        <span class="glyphicon glyphicon-question-sign"></span>
+                    </button>
                 </div>
 
                 <!--start Landowner contact area -->
@@ -571,9 +603,7 @@
                         <!--edit button-->
                         <div class="form-group">
                             <div class="col-md-12">
-
                                 <button ng-show="OP.OBJECTIVE_POINT_ID != undefined" ng-disabled="showFileForm" class="btn btn-primary" ng-click="save(OPForm.$valid)"><span>Save</span></button>
-
                             </div>
                         </div>
 
@@ -602,6 +632,9 @@
                             <div class="col-md-6">
                                 <textarea class="form-control" name="DESCRIPTION" type=" text" rows="3" ng-model="OP.DESCRIPTION" required />
                             </div>
+                            <button type="button" class="col-md-1 borderLess pull-left" tooltip-placement="right" tooltip-append-to-body="false" uib-tooltip-html="htmlDescriptionTip">
+                                <span class="glyphicon glyphicon-question-sign"></span>
+                            </button>
                         </div>
 
                         <!-- Control Identifier add button -->
@@ -610,6 +643,9 @@
                             <div class="col-md-6">
                                 <button type="button" class="btn btn-default" ng-click="addNewIdentifier()">Add New Identifier</button>
                             </div>
+                            <button type="button" class="col-md-1 borderLess pull-left" tooltip-placement="right" tooltip-append-to-body="false" uib-tooltip="National Geodetic Survey permanent identifier. See: ngs.noaa.gov/NGSDataExplorer/ for more information.">
+                                <span class="glyphicon glyphicon-question-sign"></span>
+                            </button>
                         </div>
 
                         <!-- Control Identifier input: -->
@@ -782,6 +818,9 @@
                                         <input type="checkbox" ng-model="OP.UNQUANTIFIED" ng-checked="OP.UNQUANTIFIED==1" ng-true-value="1" ng-false-value="0" ng-click="UnquantChecked()" />
                                         <span style="margin-left:10px">Unquantified</span>
                                     </div>
+                                    <button type="button" class="col-md-1 borderLess pull-left" tooltip-placement="right" tooltip-append-to-body="false" uib-tooltip="From GNSS or OPUS solution.">
+                                        <span class="glyphicon glyphicon-question-sign"></span>
+                                    </button>
                                     <br />
                                 </div>
                             </div>
@@ -1672,6 +1711,9 @@
                     <div class="col-md-6">
                         <input class="form-control" name="SERIAL_NUMBER" ng-model="aSensor.SERIAL_NUMBER" type="text" required />
                     </div>
+                    <button type="button" class="col-md-1 borderLess pull-left" tooltip-placement="right" tooltip-append-to-body="false" uib-tooltip="Will be used in netCDF metadata.">
+                        <span class="glyphicon glyphicon-question-sign"></span>
+                    </button>
                 </div>
 
                 <!-- Housing Serial Number: -->
@@ -1680,6 +1722,9 @@
                     <div class="col-md-6">
                         <input class="form-control" name="HOUSING_SERIAL_NUMBER" ng-model="aSensor.HOUSING_SERIAL_NUMBER" type="text" />
                     </div>
+                    <button type="button" class="col-md-1 borderLess pull-left" tooltip-placement="right" tooltip-append-to-body="false" uib-tooltip="Required for DOI WATCH OFFICE 800 number.">
+                        <span class="glyphicon glyphicon-question-sign"></span>
+                    </button>
                 </div>
 
                 <!-- Housing Types: -->
@@ -1699,6 +1744,9 @@
                         <uib-accordion-heading>
                             <i style="margin-right:10px" class="pull-left glyphicon" ng-class="{'glyphicon-chevron-down': tapedownOpen, 'glyphicon-chevron-right': !tapedownOpen}"></i>
                             <span>Tape Down Information</span>
+                            <button type="button" class="col-md-1 borderLess pull-right" tooltip-placement="left" tooltip-append-to-body="false" uib-tooltip="These elevations and tape down data are used for both field activities and final products. Please pay attention to how your data is entered.">
+                                <span class="glyphicon glyphicon-question-sign"></span>
+                            </button>
                         </uib-accordion-heading>
                         <!--Add Tapedown button-->
                         <div ng-if="OPsPresent" class="form-group">
@@ -1733,7 +1781,12 @@
                                     <tr>
                                         <th>Datum Location</th>
                                         <th>Elevation</th>
-                                        <th class="col-md-2">Offset Correction</th>
+                                        <th class="col-md-2">
+                                            Offset<br/>Correction
+                                            <button type="button" class="borderLess" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="From the datum location to the sensor orifice.">
+                                                <span class="glyphicon glyphicon-question-sign"></span>
+                                            </button>
+                                        </th>
                                         <th class="col-md-2">Water Surface</th>
                                         <th class="col-md-2">Ground Surface</th>
                                     </tr>
@@ -1754,28 +1807,37 @@
                             <div class="col-md-6">
                                 <div class="form-group" style="margin-bottom:0">
                                     <label class="col-md-6 control-label" for="SENSOR_ELEVATION">Sensor Elevation:</label>
-                                    <div class="col-md-6">
+                                    <div class="col-md-5">
                                         <input class="form-control" ng-keypress="isNum($event)" name="SENSOR_ELEVATION" ng-model="aSensStatus.SENSOR_ELEVATION" type="text" />
                                     </div>
+                                    <button type="button" class="col-md-1 borderLess pull-left" tooltip-placement="right" tooltip-append-to-body="false" uib-tooltip="Using the offset correction, elevation of the sensor orifice.">
+                                        <span class="glyphicon glyphicon-question-sign"></span>
+                                    </button>
                                 </div>
 
                                 <div class="form-group" style="margin-bottom:0">
                                     <label class="col-md-6 control-label" for="WS_ELEVATION">Water Surface Elevation:</label>
-                                    <div class="col-md-6">
+                                    <div class="col-md-5">
                                         <input class="form-control" ng-keypress="isNum($event)" name="WS_ELEVATION" ng-model="aSensStatus.WS_ELEVATION" type="text" />
                                     </div>
+                                    <button type="button" class="col-md-1 borderLess pull-left" tooltip-placement="right" tooltip-append-to-body="false" uib-tooltip="Using the water surface tape down, elevation of the water surface.">
+                                        <span class="glyphicon glyphicon-question-sign"></span>
+                                    </button>
                                 </div>
 
                                 <div class="form-group" style="margin-bottom:0">
                                     <label class="col-md-6 control-label" for="GS_ELEVATION">Ground Elevation:</label>
-                                    <div class="col-md-6">
+                                    <div class="col-md-5">
                                         <input class="form-control" ng-keypress="isNum($event)" name="GS_ELEVATION" ng-model="aSensStatus.GS_ELEVATION" type="text" />
                                     </div>
+                                    <button type="button" class="col-md-1 borderLess pull-left" tooltip-placement="right" tooltip-append-to-body="false" uib-tooltip="Using the ground surface tape down, elevation of the ground surface.">
+                                        <span class="glyphicon glyphicon-question-sign"></span>
+                                    </button>
                                 </div>
 
                                 <div class="form-group">
                                     <label class="col-md-6 control-label req" for="VDATUM_ID">In feet above:</label>
-                                    <div class="col-md-6">
+                                    <div class="col-md-5">
                                         <select class="form-control" id="VDATUM_ID" name="VDATUM_ID" ng-model="aSensStatus.VDATUM_ID"
                                                 ng-options="vd.DATUM_ID as vd.DATUM_ABBREVIATION for vd in vertDatumList">
                                             <option value=""></option>
@@ -1786,9 +1848,9 @@
                             </div>
 
                             <!-- area for D3 vertical ruler
-                            <div class="col-md-6">
-                                <bars-chart elevation-data="myData"></bars-chart>
-                            </div> -->
+                    <div class="col-md-6">
+                        <bars-chart elevation-data="myData"></bars-chart>
+                    </div> -->
                         </div>
                         <br clear="all" />
                     </uib-accordion-group>
@@ -1827,6 +1889,9 @@
                     <div class="col-md-6">
                         <textarea class="form-control" name="LOCATION_DESCRIPTION" type="text" rows="3" ng-model="aSensor.LOCATION_DESCRIPTION" />
                     </div>
+                    <button type="button" class="col-md-1 borderLess pull-left" tooltip-placement="right" tooltip-append-to-body="false" uib-tooltip="Please be specific so someone else can find this sensor later. This field is public.">
+                        <span class="glyphicon glyphicon-question-sign"></span>
+                    </button>
                 </div>
 
                 <!-- Interval: -->
@@ -1997,6 +2062,9 @@
                                 <span ng-show="view.DEPval =='detail'">{{aSensor.SERIAL_NUMBER || '---'}}</span>
                                 <input ng-show="view.DEPval =='edit'" class="form-control" name="SERIAL_NUMBER" ng-model="depStuffCopy[0].SERIAL_NUMBER" type="text" required />
                             </div>
+                            <button ng-show="view.DEPval == 'edit'" type="button" class="col-md-1 borderLess pull-left" tooltip-placement="right" tooltip-append-to-body="false" uib-tooltip="Will be used in netCDF metadata.">
+                                <span class="glyphicon glyphicon-question-sign"></span>
+                            </button>
                         </div>
 
                         <!-- Housing Serial Number: -->
@@ -2006,6 +2074,9 @@
                                 <span ng-show="view.DEPval == 'detail'">{{aSensor.HOUSING_SERIAL_NUMBER || '---'}}</span>
                                 <input ng-show="view.DEPval == 'edit'" class="form-control" name="HOUSING_SERIAL_NUMBER" ng-model="depStuffCopy[0].HOUSING_SERIAL_NUMBER" type="text" />
                             </div>
+                            <button ng-show="view.DEPval == 'edit'" type="button" class="col-md-1 borderLess pull-left" tooltip-placement="right" tooltip-append-to-body="false" uib-tooltip="Required for DOI WATCH OFFICE 800 number.">
+                                <span class="glyphicon glyphicon-question-sign"></span>
+                            </button>
                         </div>
 
                         <!-- Housing Types: -->
@@ -2075,7 +2146,13 @@
                                                 <tr>
                                                     <th>Datum Location</th>
                                                     <th>Elevation</th>
-                                                    <th class="col-sm-2">Offset Correction</th>
+                                                    <th class="col-sm-2">
+                                                        Offset
+                                                        <button type="button" class="borderLess" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="From the datum location to the sensor orifice.">
+                                                            <span class="glyphicon glyphicon-question-sign"></span>
+                                                        </button>
+                                                        <br />Correction
+                                                    </th>
                                                     <th class="col-sm-1">Water Surface</th>
                                                     <th class="col-sm-1">Ground Surface</th>
                                                 </tr>
@@ -2097,6 +2174,9 @@
 
                                 </div><!-- end if editing -->
                             </div>
+                            <button ng-show="view.DEPval == 'edit'" type="button" class="col-md-1 borderLess pull-left" tooltip-placement="left" tooltip-append-to-body="false" uib-tooltip="These elevations and tape down data are used for both field activities and final products. Please pay attention to how your data is entered.">
+                                <span class="glyphicon glyphicon-question-sign"></span>
+                            </button>
                         </div><!--end formgroup for Tapedowns-->
                         <br clear="all" />
 
@@ -2111,6 +2191,9 @@
                                     <input class="form-control" ng-keypress="isNum($event)" name="SENSOR_ELEVATION" ng-model="depStuffCopy[1].SENSOR_ELEVATION" type="text" />
                                 </div>
                             </div>
+                            <button ng-show="view.DEPval == 'edit'" type="button" class="col-md-1 borderLess pull-left" tooltip-placement="right" tooltip-append-to-body="false" uib-tooltip="Using the offset correction, elevation of the sensor orifice.">
+                                <span class="glyphicon glyphicon-question-sign"></span>
+                            </button>
                         </div>
 
                         <div ng-if="OPsPresent" class="form-group">
@@ -2123,6 +2206,9 @@
                                     <input class="form-control" ng-keypress="isNum($event)" name="WS_ELEVATION" ng-model="depStuffCopy[1].WS_ELEVATION" type="text" />
                                 </div>
                             </div>
+                            <button ng-show="view.DEPval == 'edit'" type="button" class="col-md-1 borderLess pull-left" tooltip-placement="right" tooltip-append-to-body="false" uib-tooltip="Using the water surface tape down, elevation of the water surface.">
+                                <span class="glyphicon glyphicon-question-sign"></span>
+                            </button>
                         </div>
 
                         <div ng-if="OPsPresent" class="form-group">
@@ -2135,6 +2221,9 @@
                                     <input class="form-control" ng-keypress="isNum($event)" name="GS_ELEVATION" ng-model="depStuffCopy[1].GS_ELEVATION" type="text" />
                                 </div>
                             </div>
+                            <button ng-show="view.DEPval == 'edit'" type="button" class="col-md-1 borderLess pull-left" tooltip-placement="right" tooltip-append-to-body="false" uib-tooltip="Using the ground surface tape down, elevation of the ground surface.">
+                                <span class="glyphicon glyphicon-question-sign"></span>
+                            </button>
                         </div>
 
                         <div ng-if="OPsPresent" class="form-group">
@@ -2191,6 +2280,9 @@
                                 <span ng-show="view.DEPval == 'detail'">{{aSensor.LOCATION_DESCRIPTION || '---'}}</span>
                                 <textarea ng-show="view.DEPval == 'edit'" class="form-control" name="LOCATION_DESCRIPTION" type="text" rows="3" ng-model="depStuffCopy[0].LOCATION_DESCRIPTION" />
                             </div>
+                            <button ng-show="view.DEPval == 'edit'" type="button" class="col-md-1 borderLess pull-left" tooltip-placement="right" tooltip-append-to-body="false" uib-tooltip="Please be specific so someone else can find this sensor later. This field is public.">
+                                <span class="glyphicon glyphicon-question-sign"></span>
+                            </button>
                         </div>
 
                         <!-- Interval: -->
@@ -2236,7 +2328,7 @@
                                     <option value=""></option>
                                 </select>
                             </div>
-                            <button ng-show="view.DEPval == 'edit'" type="button" class="borderLess pull-left" tooltip-placement="right" tooltip-append-to-body="true" uib-tooltip="Date/Time will be stored in UTC.">
+                            <button ng-show="view.DEPval == 'edit'" type="button" class="borderLess pull-left" tooltip-placement="right" tooltip-append-to-body="false" uib-tooltip="Date/Time will be stored in UTC.">
                                 <span class="glyphicon glyphicon-question-sign"></span>
                             </button>
                         </div>
@@ -3033,6 +3125,9 @@
                                 <span ng-show="view.DEPval =='detail'">{{sensor.SERIAL_NUMBER || '---'}}</span>
                                 <input ng-show="view.DEPval =='edit'" class="form-control" name="SERIAL_NUMBER" ng-model="depStuffCopy[0].SERIAL_NUMBER" type="text" required />
                             </div>
+                            <button ng-show="view.DEPval == 'edit'" type="button" class="col-md-1 borderLess pull-left" tooltip-placement="right" tooltip-append-to-body="false" uib-tooltip="Will be used in netCDF metadata.">
+                                <span class="glyphicon glyphicon-question-sign"></span>
+                            </button>
                         </div>
 
                         <!-- Housing Serial Number: -->
@@ -3042,6 +3137,9 @@
                                 <span ng-show="view.DEPval == 'detail'">{{sensor.HOUSING_SERIAL_NUMBER || '---'}}</span>
                                 <input ng-show="view.DEPval == 'edit'" class="form-control" name="HOUSING_SERIAL_NUMBER" ng-model="depStuffCopy[0].HOUSING_SERIAL_NUMBER" type="text" />
                             </div>
+                            <button ng-show="view.DEPval == 'edit'" type="button" class="col-md-1 borderLess pull-left" tooltip-placement="right" tooltip-append-to-body="false" uib-tooltip="Required for DOI WATCH OFFICE 800 number.">
+                                <span class="glyphicon glyphicon-question-sign"></span>
+                            </button>
                         </div>
 
                         <!-- Housing Types: -->
@@ -3111,7 +3209,13 @@
                                                 <tr>
                                                     <th>Datum Location</th>
                                                     <th>Elevation</th>
-                                                    <th class="col-sm-2">Offset Correction</th>
+                                                    <th class="col-sm-2">
+                                                        Offset
+                                                        <button type="button" class="borderLess" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="From the datum location to the sensor orifice.">
+                                                            <span class="glyphicon glyphicon-question-sign"></span>
+                                                        </button>
+                                                        <br />Correction
+                                                    </th>
                                                     <th class="col-sm-1">Water Surface</th>
                                                     <th class="col-sm-1">Ground Surface</th>
                                                 </tr>
@@ -3133,6 +3237,9 @@
 
                                 </div><!-- end if editing -->
                             </div>
+                            <button ng-show="view.DEPval == 'edit'" type="button" class="col-md-1 borderLess pull-left" tooltip-placement="left" tooltip-append-to-body="false" uib-tooltip="These elevations and tape down data are used for both field activities and final products. Please pay attention to how your data is entered.">
+                                <span class="glyphicon glyphicon-question-sign"></span>
+                            </button>
                         </div><!--end formgroup for Tapedowns-->
                         <br clear="all" />
 
@@ -3147,6 +3254,9 @@
                                     <input class="form-control" ng-keypress="isNum($event)" name="SENSOR_ELEVATION" ng-model="depStuffCopy[1].SENSOR_ELEVATION" type="text" />
                                 </div>
                             </div>
+                            <button ng-show="view.DEPval == 'edit'" type="button" class="col-md-1 borderLess pull-left" tooltip-placement="right" tooltip-append-to-body="false" uib-tooltip="Using the offset correction, elevation of the sensor orifice.">
+                                <span class="glyphicon glyphicon-question-sign"></span>
+                            </button>
                         </div>
 
                         <div ng-if="OPsPresent" class="form-group">
@@ -3159,6 +3269,9 @@
                                     <input class="form-control" ng-keypress="isNum($event)" name="WS_ELEVATION" ng-model="depStuffCopy[1].WS_ELEVATION" type="text" />
                                 </div>
                             </div>
+                            <button ng-show="view.DEPval == 'edit'" type="button" class="col-md-1 borderLess pull-left" tooltip-placement="right" tooltip-append-to-body="false" uib-tooltip="Using the water surface tape down, elevation of the water surface.">
+                                <span class="glyphicon glyphicon-question-sign"></span>
+                            </button>
                         </div>
 
                         <div ng-if="OPsPresent" class="form-group">
@@ -3171,6 +3284,9 @@
                                     <input class="form-control" ng-keypress="isNum($event)" name="GS_ELEVATION" ng-model="depStuffCopy[1].GS_ELEVATION" type="text" />
                                 </div>
                             </div>
+                            <button ng-show="view.DEPval == 'edit'" type="button" class="col-md-1 borderLess pull-left" tooltip-placement="right" tooltip-append-to-body="false" uib-tooltip="Using the ground surface tape down, elevation of the ground surface.">
+                                <span class="glyphicon glyphicon-question-sign"></span>
+                            </button>
                         </div>
 
                         <div ng-if="OPsPresent" class="form-group">
@@ -3225,6 +3341,9 @@
                                 <span ng-show="view.DEPval == 'detail'">{{sensor.LOCATION_DESCRIPTION || '---'}}</span>
                                 <textarea ng-show="view.DEPval == 'edit'" class="form-control" id="LOCATION_DESCRIPTION" name="LOCATION_DESCRIPTION" type=" text" rows="3" ng-model="depStuffCopy[0].LOCATION_DESCRIPTION" />
                             </div>
+                            <button ng-show="view.DEPval == 'edit'" type="button" class="col-md-1 borderLess pull-left" tooltip-placement="right" tooltip-append-to-body="false" uib-tooltip="Please be specific so someone else can find this sensor later. This field is public.">
+                                <span class="glyphicon glyphicon-question-sign"></span>
+                            </button>
                         </div>
 
                         <!-- Interval: -->
@@ -3270,7 +3389,7 @@
                                     <option value=""></option>
                                 </select>
                             </div>
-                            <button ng-show="view.DEPval == 'edit'" type="button" class="borderLess pull-left" tooltip-placement="right" tooltip-append-to-body="true" uib-tooltip="Date/Time will be stored in UTC.">
+                            <button ng-show="view.DEPval == 'edit'" type="button" class="borderLess pull-left" tooltip-placement="right" tooltip-append-to-body="false" uib-tooltip="Date/Time will be stored in UTC.">
                                 <span class="glyphicon glyphicon-question-sign"></span>
                             </button>
                         </div>

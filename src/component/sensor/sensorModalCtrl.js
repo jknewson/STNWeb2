@@ -540,7 +540,7 @@
                    $scope.OPMeasure.Vdatum = $scope.vertDatumList.filter(function (vd) { return vd.DATUM_ID == opChosen.VDATUM_ID; })[0].DATUM_ABBREVIATION;
                    $scope.OPMeasure.OBJECTIVE_POINT_ID = opChosen.OBJECTIVE_POINT_ID;
                    //are we looking at create deployment or edit deployment;
-                   if ($scope.aSensor.INSTRUMENT_ID !== undefined) {
+                   if ($scope.aSensor.INSTRUMENT_ID !== undefined && $scope.aSensStatus.STATUS_TYPE_ID !== 4) {
                        $scope.depTapeCopy.push($scope.OPMeasure);
                        $scope.depStuffCopy[1].VDATUM_ID = opChosen.VDATUM_ID;
                    } else {
@@ -569,7 +569,7 @@
                    removeOPMeas.result.then(function (yesOrNo) {
                        if (yesOrNo == 'remove') {
                            //add to remove it list
-                           var createOrEdit = $scope.aSensor.INSTRUMENT_ID !== undefined ? "edit" : "create"; // edit deployment or creating a deployment
+                           var createOrEdit = $scope.aSensor.INSTRUMENT_ID !== undefined && $scope.aSensStatus.STATUS_TYPE_ID !== 4 ? "edit" : "create"; // edit deployment or creating a deployment
                            var tapeDownToRemove = createOrEdit == 'edit' ? $scope.depTapeCopy.filter(function(a) { return a.OBJECTIVE_POINT_ID == opChosen.OBJECTIVE_POINT_ID; })[0] :
                                $scope.tapeDownTable.filter(function (a) { return a.OBJECTIVE_POINT_ID == opChosen.OBJECTIVE_POINT_ID; })[0];
 

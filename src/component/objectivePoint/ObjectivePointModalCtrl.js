@@ -2,8 +2,8 @@
     'use strict';
 
     var ModalControllers = angular.module('ModalControllers');
-    ModalControllers.controller('OPmodalCtrl', ['$scope', '$rootScope', '$cookies', '$http', '$uibModalInstance', '$uibModal', 'SERVER_URL', 'Site_Files', 'allDropdowns', 'thisOP', 'thisOPControls', 'opSite', 'agencyList', 'allMembers', 'OBJECTIVE_POINT', 'OP_CONTROL_IDENTIFIER', 'SOURCE', 'FILE',
-        function ($scope, $rootScope, $cookies, $http, $uibModalInstance, $uibModal, SERVER_URL, Site_Files, allDropdowns, thisOP, thisOPControls, opSite, agencyList, allMembers, OBJECTIVE_POINT, OP_CONTROL_IDENTIFIER, SOURCE, FILE) {
+    ModalControllers.controller('OPmodalCtrl', ['$scope', '$rootScope', '$cookies', '$http', '$sce', '$uibModalInstance', '$uibModal', 'SERVER_URL', 'Site_Files', 'allDropdowns', 'thisOP', 'thisOPControls', 'opSite', 'agencyList', 'allMembers', 'OBJECTIVE_POINT', 'OP_CONTROL_IDENTIFIER', 'SOURCE', 'FILE',
+        function ($scope, $rootScope, $cookies, $http, $sce, $uibModalInstance, $uibModal, SERVER_URL, Site_Files, allDropdowns, thisOP, thisOPControls, opSite, agencyList, allMembers, OBJECTIVE_POINT, OP_CONTROL_IDENTIFIER, SOURCE, FILE) {
             //defaults for radio buttons
             //dropdowns
             $scope.serverURL = SERVER_URL;
@@ -16,6 +16,8 @@
             $scope.VCollectMethodList = allDropdowns[4];
             $scope.OPQualityList = allDropdowns[5];
             $scope.fileTypeList = allDropdowns[6]; //used if creating/editing OP file
+            $scope.htmlDescriptionTip = $sce.trustAsHtml('Please describe location and type of mark <em>ie. \'chiseled square on third sidewalk block on the south side of the street\'</em>');
+            $scope.HWMfileIsUploading = false; //Loading...    
             $scope.OP = {};
             $scope.removeOPCarray = []; //holder if they remove any OP controls
             $scope.thisOPsite = opSite; //this OP's SITE
