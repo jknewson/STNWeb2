@@ -7,7 +7,11 @@
         width: 1800px !important;
     }
 }
-
+.dateInputStyle::-webkit-calendar-picker-indicator {
+    /*styling to remove arrow from input type=date. use my own datepicker */
+    display: none;
+    -webkit-appearance: none;
+}
 form .ng-pristine.ng-invalid-required 
 {
     box-shadow: none;

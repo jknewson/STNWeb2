@@ -22,7 +22,7 @@
             <div class="form-group col-md-12 required">
                 <label class="col-md-12 control-label req" for="SUM_DATE">Date:</label>
                 <div class="col-md-3 input-group" style="padding-left:15px;padding-right:15px;">
-                    <input datepicker-append-to-body="true" class="form-control" id="SUM_DATE" disabled="disabled" show-weeks="false" name="sd" type="text" uib-datepicker-popup="MMM dd, yyyy"
+                    <input datepicker-append-to-body="true" class="form-control dateInputStyle" id="SUM_DATE" show-weeks="false" name="sd" type="date" uib-datepicker-popup="MM/dd/yyyy"
                            is-open="datepickrs.sd" ng-model="genSummary.SUM_DATE" required />
                     <span class="input-group-btn">
                         <button class="btn btn-default" ng-click="open($event, 'sd')">

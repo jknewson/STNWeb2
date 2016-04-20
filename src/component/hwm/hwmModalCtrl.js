@@ -6,6 +6,7 @@
     ModalControllers.controller('hwmModalCtrl', ['$scope', '$rootScope', '$cookies', '$http', '$uibModalInstance', '$uibModal', 'SERVER_URL', 'allDropdowns', 'Site_Files', 'thisHWM', 'hwmApproval', 'agencyList', 'hwmSite', 'allMembers', 'HWM', 'SOURCE', 'FILE',
         function ($scope, $rootScope, $cookies, $http, $uibModalInstance, $uibModal, SERVER_URL, allDropdowns, Site_Files, thisHWM, hwmApproval, agencyList, hwmSite, allMembers, HWM, SOURCE, FILE) {
             //dropdowns
+            $scope.h = { hOpen: true, hFileOpen: false }; //accordions
             $scope.hwmTypeList = allDropdowns[0];
             $scope.hwmQualList = allDropdowns[1];
             $scope.HDatumsList = allDropdowns[2];
@@ -140,7 +141,7 @@
             if (thisHWM != "empty") {
                 //#region existing HWM
                 $scope.aHWM = angular.copy(thisHWM);
-
+                $scope.hwmModalHeader = "HWM Information";
                 //get this hwm's event name
                 $scope.EventName = $scope.eventList.filter(function (e) { return e.EVENT_ID == $scope.aHWM.EVENT_ID; })[0].EVENT_NAME;
                 //date formatting
@@ -154,14 +155,15 @@
                 //if this is surveyed, date format and get survey member's name
                 if ($scope.aHWM.SURVEY_DATE !== null) {
                     $scope.aHWM.SURVEY_DATE = makeAdate($scope.aHWM.SURVEY_DATE);
-                    $scope.SurveyMember = allMembers.filter(function (m) { return m.MEMBER_ID == $scope.aHWM.SURVEY_TEAM_ID; })[0];
+                    $scope.SurveyMember = allMembers.filter(function (m) { return m.MEMBER_ID == $scope.aHWM.SURVEY_MEMBER_ID; })[0];
                 }
 
                 //get flagging member's name
-                $scope.FlagMember = allMembers.filter(function (m) { return m.MEMBER_ID == $scope.aHWM.FLAG_TEAM_ID; })[0];
+                $scope.FlagMember = allMembers.filter(function (m) { return m.MEMBER_ID == $scope.aHWM.FLAG_MEMBER_ID; })[0];
                 //#endregion existing HWM
             } else {
                 //#region new HWM
+                $scope.hwmModalHeader = "Create new HWM";
                 //use site's LAT, LONG, WATERBODY, HDATUM, HCOLLECTMETHOD, set FLAGDATE with today
                 $scope.aHWM = {
                     SITE_ID: $scope.thisHWMsite.SITE_ID,
@@ -175,7 +177,7 @@
                     HDATUM_ID: hwmSite.HDATUM_ID,
                     HCOLLECT_METHOD_ID: hwmSite.HCOLLECT_METHOD_ID,
                     FLAG_DATE: makeAdate(""),
-                    FLAG_TEAM_ID: $scope.LoggedInMember.MEMBER_ID //need to make this FLAG_MEMBER_ID ... and at siteCtrl level get all members and pass to these modals to filter for member info to show
+                    FLAG_MEMBER_ID: $scope.LoggedInMember.MEMBER_ID
                 };
                 $scope.EventName = $cookies.get('SessionEventName');
                 $scope.FlagMember = $scope.LoggedInMember;
@@ -190,7 +192,7 @@
                     var createdHWM = {};
                     //if they entered a survey date or elevation, then set survey member as the flag member (flagging and surveying at same time
                     if ($scope.aHWM.SURVEY_DATE !== undefined && $scope.aHWM.SURVEY_DATE !== null)
-                        $scope.aHWM.SURVEY_TEAM_ID = $scope.FLAG_TEAM_ID;
+                        $scope.aHWM.SURVEY_MEMBER_ID = $scope.FLAG_MEMBER_ID;
 
                     if ($scope.FTorCM == "cm") {
                         $scope.FTorCM = 'ft';
@@ -203,7 +205,7 @@
                         if ($scope.aHWM.SURVEY_DATE === undefined)
                             $scope.aHWM.SURVEY_DATE = makeAdate("");
 
-                        $scope.aHWM.SURVEY_TEAM_ID = $scope.FLAG_TEAM_ID;
+                        $scope.aHWM.SURVEY_MEMBER_ID = $scope.FLAG_MEMBER_ID;
                     }
 
                     $http.defaults.headers.common.Authorization = 'Basic ' + $cookies.get('STNCreds');
@@ -300,7 +302,7 @@
                     }
                     //if they added a survey date, apply survey member as logged in member
                     if ($scope.aHWM.SURVEY_DATE !== undefined)
-                        $scope.aHWM.SURVEY_TEAM_ID = $cookies.get('mID');
+                        $scope.aHWM.SURVEY_MEMBER_ID = $cookies.get('mID');
 
                     if ($scope.FTorCM == "cm") {
                         $scope.FTorCM = 'ft';
@@ -313,7 +315,7 @@
                         if ($scope.aHWM.SURVEY_DATE === undefined)
                             $scope.aHWM.SURVEY_DATE = makeAdate("");
 
-                        $scope.aHWM.SURVEY_TEAM_ID = $cookies.get('mID');
+                        $scope.aHWM.SURVEY_MEMBER_ID = $cookies.get('mID');
                     }
 
                     $http.defaults.headers.common.Authorization = 'Basic ' + $cookies.get('STNCreds');

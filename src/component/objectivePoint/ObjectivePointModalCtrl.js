@@ -8,7 +8,7 @@
             //dropdowns
             $scope.serverURL = SERVER_URL;
             $scope.fileIsUploading = false; //Loading...    
-            
+            $scope.dl = { dlOpen: true, dlFileOpen: false };//accordions
             $scope.OPTypeList = allDropdowns[0];
             $scope.HDList = allDropdowns[1];
             $scope.HCollectMethodList = allDropdowns[2];
@@ -219,6 +219,7 @@
             };
 
             if (thisOP != "empty") {
+                $scope.opModalHeader = "Datum Location Information";
                 //#region existing OP
                 $scope.OP = angular.copy(thisOP); //set a copy so list view doesnt change if they cancel from here after making changes
                 //formatted as date for datepicker
@@ -233,6 +234,7 @@
                 }               
                 //#endregion 
             } else {
+                $scope.opModalHeader = "Create new Datum Location";
                 //#region new OP 
                 $scope.OP.LATITUDE_DD = opSite.LATITUDE_DD;
                 $scope.OP.LONGITUDE_DD = opSite.LONGITUDE_DD;
