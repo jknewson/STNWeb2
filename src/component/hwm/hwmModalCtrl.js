@@ -3,8 +3,8 @@
     'use strict';
 
     var ModalControllers = angular.module('ModalControllers');
-    ModalControllers.controller('hwmModalCtrl', ['$scope', '$rootScope', '$cookies', '$http', '$uibModalInstance', '$uibModal', 'SERVER_URL', 'allDropdowns', 'Site_Files', 'thisHWM', 'hwmApproval', 'agencyList', 'hwmSite', 'allMembers', 'HWM', 'SOURCE', 'FILE',
-        function ($scope, $rootScope, $cookies, $http, $uibModalInstance, $uibModal, SERVER_URL, allDropdowns, Site_Files, thisHWM, hwmApproval, agencyList, hwmSite, allMembers, HWM, SOURCE, FILE) {
+    ModalControllers.controller('hwmModalCtrl', ['$scope', '$rootScope', '$cookies', '$http', '$sce', '$uibModalInstance', '$uibModal', 'SERVER_URL', 'allDropdowns', 'Site_Files', 'thisHWM', 'hwmApproval', 'agencyList', 'hwmSite', 'allMembers', 'HWM', 'SOURCE', 'FILE',
+        function ($scope, $rootScope, $cookies, $http, $sce, $uibModalInstance, $uibModal, SERVER_URL, allDropdowns, Site_Files, thisHWM, hwmApproval, agencyList, hwmSite, allMembers, HWM, SOURCE, FILE) {
             //dropdowns
             $scope.h = { hOpen: true, hFileOpen: false }; //accordions
             $scope.hwmTypeList = allDropdowns[0];
@@ -16,7 +16,7 @@
             $scope.markerList = allDropdowns[6];
             $scope.eventList = allDropdowns[7];            
             $scope.fileTypeList = allDropdowns[8]; //used if creating/editing HWM file    
-            $scope.HWMfileIsUploading = false; //Loading...    
+            
             $scope.allSFiles = Site_Files.getAllSiteFiles();
             $scope.HWMFiles = thisHWM !== "empty" ? $scope.allSFiles.filter(function (sf) { return sf.HWM_ID == thisHWM.HWM_ID; }) : [];// holder for hwm files added
             $scope.hwmImageFiles = $scope.HWMFiles.filter(function (hf) { return hf.FILETYPE_ID === 1; }); //image files for carousel

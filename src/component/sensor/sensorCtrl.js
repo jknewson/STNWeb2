@@ -155,10 +155,10 @@
                     var passAllLists = [allSensorTypes, allSensorBrands, allHousingTypes, allSensDeps, allEvents, SensFileTypes, allVertDatums];
                     var indexClicked = $scope.SiteSensors.indexOf(sensorClicked);
                     $rootScope.stateIsLoading.showLoading = true;// loading..// $(".page-loading").removeClass("hidden"); //loading...
-                
+                    
                     //if this is a create, show the sensormodal.html, if looking at deployed sensor, go to the depsensormodal.html
                     var modalInstance = $uibModal.open({
-                        templateUrl: sensorClicked === 0 ? 'Sensormodal.html' : 'DepSensormodal.html',
+                        templateUrl: sensorClicked === 0 || sensorClicked.InstrumentStats[0].STATUS_TYPE_ID === 4 ? 'Sensormodal.html' : 'DepSensormodal.html',
                         controller: 'sensorModalCtrl',
                         size: 'lg',
                         backdrop: 'static',

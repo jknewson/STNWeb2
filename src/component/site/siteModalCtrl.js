@@ -3,9 +3,9 @@
 
     var ModalControllers = angular.module('ModalControllers');
 
-    ModalControllers.controller('siteModalCtrl', ['$scope', '$rootScope', '$cookies', '$q', '$location', '$state', '$http', '$timeout', '$uibModal', '$uibModalInstance', '$filter', 'leafletMarkerEvents', 'allDropDownParts', 'latlong', 'thisSiteStuff', 
+    ModalControllers.controller('siteModalCtrl', ['$scope', '$rootScope', '$cookies', '$q', '$location', '$state', '$http', '$sce', '$timeout', '$uibModal', '$uibModalInstance', '$filter', 'leafletMarkerEvents', 'allDropDownParts', 'latlong', 'thisSiteStuff', 
         'SITE', 'SITE_HOUSING', 'MEMBER', 'INSTRUMENT', 'INSTRUMENT_STATUS', 'LANDOWNER_CONTACT', 
-        function ($scope, $rootScope, $cookies, $q, $location, $state, $http, $timeout, $uibModal, $uibModalInstance, $filter, leafletMarkerEvents, allDropDownParts, latlong, thisSiteStuff, SITE, SITE_HOUSING, 
+        function ($scope, $rootScope, $cookies, $q, $location, $state, $http, $sce, $timeout, $uibModal, $uibModalInstance, $filter, leafletMarkerEvents, allDropDownParts, latlong, thisSiteStuff, SITE, SITE_HOUSING, 
             MEMBER, INSTRUMENT, INSTRUMENT_STATUS, LANDOWNER_CONTACT) {
             //dropdowns
             $scope.HorizontalDatumList = allDropDownParts[0];
@@ -24,7 +24,7 @@
             $scope.showMap = false;
             $scope.siteLat = 0;
             $scope.siteLong = 0;
-
+            $scope.htmlDescriptionTip = $sce.trustAsHtml('Required by NWIS. Can be listed as <em>\'unknown\'</em> or <em>\'Atlantic Ocean\'</em>');
             $scope.mapCenter = {
                 lat: $scope.siteLat,
                 lng: $scope.siteLong,
