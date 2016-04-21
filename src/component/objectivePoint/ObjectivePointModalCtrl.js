@@ -80,6 +80,13 @@
                     $scope.aSource.FULLNAME = $scope.aSource.FNAME + " " + $scope.aSource.LNAME;
                 } //end new file
                 $scope.showFileForm = true;
+                //add agency name to photo caption
+                if ($scope.aFile.FILETYPE_ID == 1)
+                    $scope.agencyNameForCap = $scope.agencies.filter(function (a) { return a.AGENCY_ID == $scope.aSource.AGENCY_ID; })[0].AGENCY_NAME;
+                $scope.updateAgencyForCaption = function () {
+                    if ($scope.aFile.FILETYPE_ID == 1)
+                        $scope.agencyNameForCap = $scope.agencies.filter(function (a) { return a.AGENCY_ID == $scope.aSource.AGENCY_ID; })[0].AGENCY_NAME;
+                };
             };
             //create this new file
             $scope.createFile = function (valid) {
@@ -226,6 +233,8 @@
                 $scope.OP = angular.copy(thisOP); //set a copy so list view doesnt change if they cancel from here after making changes
                 //formatted as date for datepicker
                 $scope.OP.DATE_ESTABLISHED = makeAdate($scope.OP.DATE_ESTABLISHED);
+                //check if VDATUM_ID == 0, if so make undefined
+                if ($scope.OP.VDATUM_ID == 0) delete $scope.OP.VDATUM_ID;
 
                 if ($scope.OP.DATE_RECOVERED !== null)
                     $scope.OP.DATE_RECOVERED = makeAdate($scope.OP.DATE_RECOVERED);
@@ -434,8 +443,8 @@
             };
 
             //Save this OP
-            $scope.save = function () {
-                if ($scope.OPForm.$valid) {
+            $scope.save = function (valid) {
+                if (valid) {
                     $http.defaults.headers.common.Authorization = 'Basic ' + $cookies.get('STNCreds');
                     $http.defaults.headers.common.Accept = 'application/json';
 

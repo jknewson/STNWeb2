@@ -14,6 +14,7 @@
                 $scope.hwmCount = { total: thisSiteHWMs.length };
 
                 $scope.SiteHWMs = thisSiteHWMs;
+                HWM_Service.setAllSiteHWMs($scope.SiteHWMs);
                 // watch for the session event to change and update
                 $scope.$watch(function () { return $cookies.get('SessionEventName'); }, function (newValue) {
                     $scope.sessionEventName = newValue !== undefined ? newValue : "All Events";

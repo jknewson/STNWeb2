@@ -25,6 +25,7 @@
                 $scope.sensDepTypes = allSensDeps;
                 $scope.showProposed = false; //they want to add a proposed sensor, open options
                 $scope.SiteSensors = thisSiteSensors;
+                Instrument_Service.setAllSiteSensors($scope.SiteSensors);
                 //to pass to the sensor modals for sensor files
                 var SensFileTypes = allFileTypes.filter(function (sft) {
                     //Photo (1), Data (2), Historic (3), Field Sheets (4), Level Notes (5), Other (7), Link (8), Sketch (10)
