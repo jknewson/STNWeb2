@@ -632,7 +632,7 @@
                             <div class="col-md-6">
                                 <textarea class="form-control" name="DESCRIPTION" type=" text" rows="3" ng-model="OP.DESCRIPTION" required />
                             </div>
-                            <button type="button" class="col-md-1 borderLess pull-left" tooltip-placement="right" tooltip-append-to-body="false" uib-tooltip-html="htmlDescriptionTip">
+                            <button type="button" class="col-md-1 borderLess pull-left" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip-html="htmlDescriptionTip">
                                 <span class="glyphicon glyphicon-question-sign"></span>
                             </button>
                         </div>
@@ -643,7 +643,7 @@
                             <div class="col-md-6">
                                 <button type="button" class="btn btn-default" ng-click="addNewIdentifier()">Add New Identifier</button>
                             </div>
-                            <button type="button" class="col-md-1 borderLess pull-left" tooltip-placement="right" tooltip-append-to-body="false" uib-tooltip="National Geodetic Survey permanent identifier. See: ngs.noaa.gov/NGSDataExplorer/ for more information.">
+                            <button type="button" class="col-md-1 borderLess pull-left" tooltip-placement="bottom" tooltip-append-to-body="false" uib-tooltip="National Geodetic Survey permanent identifier. See: ngs.noaa.gov/NGSDataExplorer/ for more information.">
                                 <span class="glyphicon glyphicon-question-sign"></span>
                             </button>
                         </div>
@@ -665,7 +665,7 @@
                                             <input type="radio" name="IDENTIFIER_TYPE{{$index}}" ng-model="id.IDENTIFIER_TYPE" value="Other" /> Other
                                         </label>
                                         <div class="buttons pull-right">
-                                            <button class="btn" ng-click="RemoveID(id)">
+                                            <button class="btn borderLess" ng-click="RemoveID(id)">
                                                 <i class="glyphicon glyphicon-remove"></i>
                                             </button>
                                         </div>
@@ -772,12 +772,12 @@
                             </div>
                         </div>
 
-                        <!-- Vertical Datum: -->
-                        <div class="form-group">
-                            <label class="col-md-4 control-label" for="VDATUM_ID">Vertical Datum:</label>
+                        <!--  Vertical Datum: -->
+                        <div class="form-group required" ng-class="{'has-error':OPForm.VDATUM_ID.$invalid && OPForm.VDATUM_ID.$dirty}">
+                            <label class="col-md-4 control-label req" for="VDATUM_ID">Vertical Datum:</label>
                             <div class="col-md-6">
                                 <select class="form-control" name="VDATUM_ID" ng-model="OP.VDATUM_ID"
-                                        ng-options="vd.DATUM_ID as vd.DATUM_ABBREVIATION for vd in VDatumList">
+                                        ng-options="vd.DATUM_ID as vd.DATUM_ABBREVIATION for vd in VDatumList" required>
                                     <option value=""></option>
                                 </select>
                             </div>
@@ -818,7 +818,7 @@
                                         <input type="checkbox" ng-model="OP.UNQUANTIFIED" ng-checked="OP.UNQUANTIFIED==1" ng-true-value="1" ng-false-value="0" ng-click="UnquantChecked()" />
                                         <span style="margin-left:10px">Unquantified</span>
                                     </div>
-                                    <button type="button" class="col-md-1 borderLess pull-left" tooltip-placement="right" tooltip-append-to-body="false" uib-tooltip="From GNSS or OPUS solution.">
+                                    <button type="button" class="col-md-1 borderLess pull-left" tooltip-placement="bottom" tooltip-append-to-body="false" uib-tooltip="From GNSS or OPUS solution.">
                                         <span class="glyphicon glyphicon-question-sign"></span>
                                     </button>
                                     <br />
@@ -936,7 +936,7 @@
                                     <div class="form-group required" ng-class="{'has-error':OPFILEForm.FILETYPE_ID.$invalid && OPFILEForm.FILETYPE_ID.$dirty}" style="margin:0;padding:0">
                                         <label class="col-md-3 control-label req" for="FILETYPE_ID">File Type:</label>
                                         <div class="col-md-6">
-                                            <select class="form-control" name="FILETYPE_ID" ng-model="aFile.FILETYPE_ID"
+                                            <select class="form-control" name="FILETYPE_ID" ng-model="aFile.FILETYPE_ID" ng-change="updateAgencyForCaption()"
                                                     ng-options="ft.FILETYPE_ID as ft.FILETYPE for ft in fileTypes" required>
                                                 <option value=""></option>
                                             </select>
@@ -972,9 +972,9 @@
 
                                     <!--Source Agency* (photo, allOther)-->
                                     <div ng-if="aFile.FILETYPE_ID === 1 || aFile.FILETYPE_ID > 2" class="form-group required" ng-class="{'has-error':OPFILEForm.AGENCY_ID.$invalid && OPFILEForm.AGENCY_ID.$dirty}" style="margin:0;padding:0">
-                                        <label class="col-md-3 control-label req" for="FILETYPE_ID">Source Agency:</label>
+                                        <label class="col-md-3 control-label req" for="AGENCY_ID">Source Agency:</label>
                                         <div class="col-md-6">
-                                            <select class="form-control" name="AGENCY_ID" ng-model="aSource.AGENCY_ID"
+                                            <select class="form-control" name="AGENCY_ID" ng-model="aSource.AGENCY_ID" ng-change="updateAgencyForCaption()"
                                                     ng-options="a.AGENCY_ID as a.AGENCY_NAME for a in agencies" required>
                                                 <option value=""></option>
                                             </select>
@@ -1046,7 +1046,7 @@
                                         <label class="col-md-3 control-label" for="Caption">Preview Caption:</button></label>
                                         <div class="col-md-6">
                                             <span>
-                                                Photo of {{aFile.DESCRIPTION || ' (Description HERE) '}} at {{thisOPsite.SITE_DESCRIPTION}}, {{thisOPsite.COUNTY}}, {{thisOPsite.STATE}}, {{aFile.PHOTO_DATE | date: 'MM/dd/yyyy' || ' Date taken HERE '}}. Photograph by {{aSource.FULLNAME || ' Source Name HERE ' }}, {{(agencies | filter :{AGENCY_ID: aSource.AGENCY_ID})[0].AGENCY_NAME || ' Agency HERE '}}.
+                                                Photo of {{aFile.DESCRIPTION || ' (Description HERE) '}} at {{thisOPsite.SITE_DESCRIPTION}}, {{thisOPsite.COUNTY}}, {{thisOPsite.STATE}}, {{aFile.PHOTO_DATE | date: 'MM/dd/yyyy' || ' Date taken HERE '}}. Photograph by {{aSource.FULLNAME || ' Source Name HERE ' }}, {{agencyNameForCap || ' Agency HERE '}}.
                                             </span>
                                         </div>
                                     </div>
@@ -1225,6 +1225,9 @@
                             <div class="col-md-6">
                                 <textarea class="form-control" name="HWM_LOCATIONDESCRIPTION" type=" text" rows="3" ng-model="aHWM.HWM_LOCATIONDESCRIPTION" />
                             </div>
+                            <button type="button" class="col-md-1 borderLess pull-left" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Please be specific so someone else can find this sensor later. This field is public.">
+                                <span class="glyphicon glyphicon-question-sign"></span>
+                            </button>
                         </div>
 
                         <!-- dec deg or dms: -->
@@ -1326,21 +1329,26 @@
                         <!-- Surveyed Date: -->
                         <div class="form-group" ng-class="{'has-error':HWMForm.SURVEY_DATE.$invalid && HWMForm.SURVEY_DATE.$dirty}">
                             <label class="col-md-4 control-label" for="SURVEY_DATE">Surveyed Date:</label>
-                            <div class="col-md-3 input-group" style="padding-right:14px;padding-left:14px">
-                                <input show-weeks="false" class="form-control dateInputStyle" type="date" id="SURVEY_DATE" name="sd" uib-datepicker-popup="MM/dd/yyyy" is-open="datepickrs.sd" ng-model="aHWM.SURVEY_DATE" />
-                                <span class="input-group-btn">
-                                    <button class="btn btn-default" ng-click="open($event, 'sd')">
-                                        <i class="glyphicon glyphicon-calendar" />
-                                    </button>
-                                </span>
+                            <div class="col-md-3">
+                                <div class="col-md-3 input-group">
+                                    <input show-weeks="false" class="form-control dateInputStyle" type="date" id="SURVEY_DATE" name="sd" uib-datepicker-popup="MM/dd/yyyy" is-open="datepickrs.sd" ng-model="aHWM.SURVEY_DATE" />
+                                    <span class="input-group-btn">
+                                        <button class="btn btn-default" ng-click="open($event, 'sd')">
+                                            <i class="glyphicon glyphicon-calendar" />
+                                        </button>
+                                    </span>
+                                </div>
                             </div>
+                            <button type="button" class="col-md-3 borderLess pull-right" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Elevation required below if survey date is populated.">
+                                <span class="glyphicon glyphicon-question-sign"></span>
+                            </button>
                         </div>
 
                         <!-- Surveyed Elevation (ft): -->
-                        <div class="form-group">
-                            <label class="col-md-4 control-label" for="ELEV_FT">Surveyed Elevation (ft):</label>
+                        <div class="form-group" ng-class="{'required': aHWM.SURVEY_DATE}">
+                            <label class="col-md-4 control-label" ng-class="{'req': aHWM.SURVEY_DATE}" for="ELEV_FT">Surveyed Elevation (ft):</label>
                             <div class="col-md-6">
-                                <input class="form-control" ng-keypress="isNum($event)" name="ELEV_FT" ng-model="aHWM.ELEV_FT" type="text" />
+                                <input class="form-control" ng-keypress="isNum($event)" name="ELEV_FT" ng-model="aHWM.ELEV_FT" type="text" ng-required='aHWM.SURVEY_DATE' />
                             </div>
                         </div>
 
@@ -1408,6 +1416,9 @@
                                     <input type="radio" name="STILLWATER" ng-model="aHWM.STILLWATER" value="0" />No
                                 </label>
                             </div>
+                            <button type="button" class="col-md-1 borderLess pull-left" tooltip-placement="bottom" tooltip-append-to-body="false" uib-tooltip="Tranquil-Water HWMs preferred over Rapid-Water HWMs. Refer to T&M 3-A24 for details.">
+                                <span class="glyphicon glyphicon-question-sign"></span>
+                            </button>
                         </div>
 
                         <!-- Flagging Member: -->
@@ -1427,7 +1438,7 @@
                         </div>
 
                         <!-- Approval info -->
-                        <div class="form-group">
+                        <div class="form-group" ng-show="ApprovalInfo.Member !==undefined">
                             <label class="col-md-4 control-label" for="APPROVAL_ID">Approval Info:</label>
                             <div class="col-md-6">
                                 <span>Approved By:</span><span ng-if="ApprovalInfo.Member"> {{ApprovalInfo.Member.FNAME || '---'}} {{ApprovalInfo.Member.LNAME || '---'}}</span><br />
@@ -1496,7 +1507,7 @@
                                     <div class="form-group required" ng-class="{'has-error':HWMFILEForm.FILETYPE_ID.$invalid && HWMFILEForm.FILETYPE_ID.$dirty}" style="margin:0;padding:0">
                                         <label class="col-md-3 control-label req" for="FILETYPE_ID">File Type:</label>
                                         <div class="col-md-6">
-                                            <select class="form-control" name="FILETYPE_ID" ng-model="aFile.FILETYPE_ID" ng-options="ft.FILETYPE_ID as ft.FILETYPE for ft in fileTypes" required>
+                                            <select class="form-control" name="FILETYPE_ID" ng-model="aFile.FILETYPE_ID" ng-change="updateAgencyForCaption()" ng-options="ft.FILETYPE_ID as ft.FILETYPE for ft in fileTypes" required>
                                                 <option value=""></option>
                                             </select>
                                         </div>
@@ -1538,9 +1549,9 @@
 
                                     <!--Source Agency* (photo, allOther)-->
                                     <div ng-if="aFile.FILETYPE_ID === 1 || aFile.FILETYPE_ID > 2" class="form-group required" ng-class="{'has-error':HWMFILEForm.AGENCY_ID.$invalid && HWMFILEForm.AGENCY_ID.$dirty}" style="margin:0;padding:0">
-                                        <label class="col-md-3 control-label req" for="FILETYPE_ID">Source Agency:</label>
+                                        <label class="col-md-3 control-label req" for="AGENCY_ID">Source Agency:</label>
                                         <div class="col-md-6">
-                                            <select class="form-control" name="AGENCY_ID" ng-model="aSource.AGENCY_ID"
+                                            <select class="form-control" name="AGENCY_ID" ng-model="aSource.AGENCY_ID" ng-change="updateAgencyForCaption()"
                                                     ng-options="a.AGENCY_ID as a.AGENCY_NAME for a in agencies" required>
                                                 <option value=""></option>
                                             </select>
@@ -1612,7 +1623,7 @@
                                         <label class="col-md-3 control-label" for="Caption">Preview Caption:</button></label>
                                         <div class="col-md-6">
                                             <span>
-                                                Photo of {{aFile.DESCRIPTION || ' (Description HERE) '}} at {{thisHWMsite.SITE_DESCRIPTION}}, {{thisHWMsite.COUNTY}}, {{thisHWMsite.STATE}}, {{aFile.PHOTO_DATE | date: 'MM/dd/yyyy' || ' Date taken HERE '}}. Photograph by {{aSource.FULLNAME || ' Source Name HERE ' }}, {{(agencies | filter :{AGENCY_ID: aSource.AGENCY_ID})[0].AGENCY_NAME || ' Agency HERE '}}.
+                                                Photo of {{aFile.DESCRIPTION || ' (Description HERE) '}} at {{thisHWMsite.SITE_DESCRIPTION}}, {{thisHWMsite.COUNTY}}, {{thisHWMsite.STATE}}, {{aFile.PHOTO_DATE | date: 'MM/dd/yyyy' || ' Date taken HERE '}}. Photograph by {{aSource.FULLNAME || ' Source Name HERE ' }}, {{agencyNameForCap || ' Agency HERE '}}.
                                             </span>
                                         </div>
                                     </div>
@@ -1810,7 +1821,7 @@
                                     <div class="col-md-5">
                                         <input class="form-control" ng-keypress="isNum($event)" name="SENSOR_ELEVATION" ng-model="aSensStatus.SENSOR_ELEVATION" type="text" />
                                     </div>
-                                    <button type="button" class="col-md-1 borderLess pull-left" tooltip-placement="right" tooltip-append-to-body="false" uib-tooltip="Using the offset correction, elevation of the sensor orifice.">
+                                    <button type="button" class="col-md-1 borderLess pull-left" tooltip-placement="right-top" tooltip-append-to-body="false" uib-tooltip="Using the offset correction, elevation of the sensor orifice.">
                                         <span class="glyphicon glyphicon-question-sign"></span>
                                     </button>
                                 </div>
@@ -1820,7 +1831,7 @@
                                     <div class="col-md-5">
                                         <input class="form-control" ng-keypress="isNum($event)" name="WS_ELEVATION" ng-model="aSensStatus.WS_ELEVATION" type="text" />
                                     </div>
-                                    <button type="button" class="col-md-1 borderLess pull-left" tooltip-placement="right" tooltip-append-to-body="false" uib-tooltip="Using the water surface tape down, elevation of the water surface.">
+                                    <button type="button" class="col-md-1 borderLess pull-left" tooltip-placement="right-top" tooltip-append-to-body="false" uib-tooltip="Using the water surface tape down, elevation of the water surface.">
                                         <span class="glyphicon glyphicon-question-sign"></span>
                                     </button>
                                 </div>
@@ -1830,7 +1841,7 @@
                                     <div class="col-md-5">
                                         <input class="form-control" ng-keypress="isNum($event)" name="GS_ELEVATION" ng-model="aSensStatus.GS_ELEVATION" type="text" />
                                     </div>
-                                    <button type="button" class="col-md-1 borderLess pull-left" tooltip-placement="right" tooltip-append-to-body="false" uib-tooltip="Using the ground surface tape down, elevation of the ground surface.">
+                                    <button type="button" class="col-md-1 borderLess pull-left" tooltip-placement="right-top" tooltip-append-to-body="false" uib-tooltip="Using the ground surface tape down, elevation of the ground surface.">
                                         <span class="glyphicon glyphicon-question-sign"></span>
                                     </button>
                                 </div>
@@ -2221,7 +2232,7 @@
                                     <input class="form-control" ng-keypress="isNum($event)" name="GS_ELEVATION" ng-model="depStuffCopy[1].GS_ELEVATION" type="text" />
                                 </div>
                             </div>
-                            <button ng-show="view.DEPval == 'edit'" type="button" class="col-md-1 borderLess pull-left" tooltip-placement="right" tooltip-append-to-body="false" uib-tooltip="Using the ground surface tape down, elevation of the ground surface.">
+                            <button ng-show="view.DEPval == 'edit'" type="button" class="col-md-1 borderLess pull-left" tooltip-placement="right-top" tooltip-append-to-body="false" uib-tooltip="Using the ground surface tape down, elevation of the ground surface.">
                                 <span class="glyphicon glyphicon-question-sign"></span>
                             </button>
                         </div>
@@ -2403,7 +2414,7 @@
                                 <div class="form-group required" ng-class="{'has-error':DepSenFILEForm.FILETYPE_ID.$invalid && DepSenFILEForm.FILETYPE_ID.$dirty}" style="margin:0;padding:0">
                                     <label class="col-md-4 control-label req" for="FILETYPE_ID">File Type:</label>
                                     <div class="col-md-6">
-                                        <select class="form-control" name="FILETYPE_ID" ng-model="aFile.FILETYPE_ID" ng-options="ft.FILETYPE_ID as ft.FILETYPE for ft in fileTypes" required>
+                                        <select class="form-control" name="FILETYPE_ID" ng-model="aFile.FILETYPE_ID" ng-change="updateAgencyForCaption()" ng-options="ft.FILETYPE_ID as ft.FILETYPE for ft in fileTypes" required>
                                             <option value=""></option>
                                         </select>
                                     </div>
@@ -2464,9 +2475,9 @@
 
                                 <!--Source Agency* (photo, allOther)-->
                                 <div ng-if="aFile.FILETYPE_ID === 1 || aFile.FILETYPE_ID > 2" class="form-group required" ng-class="{'has-error':DepSenFILEForm.AGENCY_ID.$invalid && DepSenFILEForm.AGENCY_ID.$dirty}" style="margin:0;padding:0">
-                                    <label class="col-md-4 control-label req" for="FILETYPE_ID">Source Agency:</label>
+                                    <label class="col-md-4 control-label req" for="AGENCY_ID">Source Agency:</label>
                                     <div class="col-md-6">
-                                        <select class="form-control" name="AGENCY_ID" ng-model="aSource.AGENCY_ID"
+                                        <select class="form-control" name="AGENCY_ID" ng-model="aSource.AGENCY_ID" ng-change="updateAgencyForCaption()"
                                                 ng-options="a.AGENCY_ID as a.AGENCY_NAME for a in agencies" required>
                                             <option value=""></option>
                                         </select>
@@ -2730,7 +2741,7 @@
                                                 <option value=""></option>
                                             </select>
                                         </div>
-                                        <button type="button" class="borderLess pull-left" tooltip-placement="right" tooltip-append-to-body="true" uib-tooltip="Date/Time will be stored in UTC.">
+                                        <button type="button" class="borderLess pull-left" tooltip-placement="right" tooltip-append-to-body="false" uib-tooltip="Date/Time will be stored in UTC.">
                                             <span class="glyphicon glyphicon-question-sign"></span>
                                         </button>
                                     </div>
@@ -3709,7 +3720,7 @@
                                 <div class="form-group required" ng-class="{'has-error':DepSenFILEForm.FILETYPE_ID.$invalid && DepSenFILEForm.FILETYPE_ID.$dirty}" style="margin:0;padding:0">
                                     <label class="col-md-4 control-label req" for="FILETYPE_ID">File Type:</label>
                                     <div class="col-md-6">
-                                        <select class="form-control" name="FILETYPE_ID" ng-model="aFile.FILETYPE_ID" ng-options="ft.FILETYPE_ID as ft.FILETYPE for ft in fileTypes" required>
+                                        <select class="form-control" name="FILETYPE_ID" ng-model="aFile.FILETYPE_ID" ng-change="updateAgencyForCaption()" ng-options="ft.FILETYPE_ID as ft.FILETYPE for ft in fileTypes" required>
                                             <option value=""></option>
                                         </select>
                                     </div>
@@ -3770,9 +3781,9 @@
 
                                 <!--Source Agency* (photo, allOther)-->
                                 <div ng-if="aFile.FILETYPE_ID === 1 || aFile.FILETYPE_ID > 2" class="form-group required" ng-class="{'has-error':DepSenFILEForm.AGENCY_ID.$invalid && DepSenFILEForm.AGENCY_ID.$dirty}" style="margin:0;padding:0">
-                                    <label class="col-md-4 control-label req" for="FILETYPE_ID">Source Agency:</label>
+                                    <label class="col-md-4 control-label req" for="AGENCY_ID">Source Agency:</label>
                                     <div class="col-md-6">
-                                        <select class="form-control" name="AGENCY_ID" ng-model="aSource.AGENCY_ID"
+                                        <select class="form-control" name="AGENCY_ID" ng-model="aSource.AGENCY_ID" ng-change="updateAgencyForCaption()"
                                                 ng-options="a.AGENCY_ID as a.AGENCY_NAME for a in agencies" required>
                                             <option value=""></option>
                                         </select>
@@ -3886,7 +3897,7 @@
                                 </div>
 
                                 <!-- Approval info -->
-                                <div class="form-group">
+                                <div class="form-group" ng-if="aFile.FILETYPE_ID === 2 && aFile.FILE_ID !== undefined">
                                     <label class="col-md-4 control-label" for="APPROVAL_ID">Approval Info:</label>
                                     <div class="col-md-6" ng-if="ApprovalInfo.Member !== undefined">
                                         <span>Approved By:</span><span ng-if="ApprovalInfo.Member"> {{ApprovalInfo.Member.FNAME || '---'}} {{ApprovalInfo.Member.LNAME || '---'}}</span><br />
@@ -3901,7 +3912,7 @@
                                     <label class="col-md-4 control-label" for="Caption">Preview Caption:</button></label>
                                     <div class="col-md-6">
                                         <span>
-                                            Photo of {{aFile.DESCRIPTION || ' (Description HERE) '}} at {{thisSensorSite.SITE_DESCRIPTION}}, {{thisSensorSite.COUNTY}}, {{thisSensorSite.STATE}}, {{aFile.PHOTO_DATE | date: 'MM/dd/yyyy' || ' Date taken HERE '}}. Photograph by {{aSource.FULLNAME || ' Source Name HERE ' }}, {{(agencies | filter :{AGENCY_ID: aSource.AGENCY_ID})[0].AGENCY_NAME || ' Agency HERE '}}.
+                                            Photo of {{aFile.DESCRIPTION || ' (Description HERE) '}} at {{thisSensorSite.SITE_DESCRIPTION}}, {{thisSensorSite.COUNTY}}, {{thisSensorSite.STATE}}, {{aFile.PHOTO_DATE | date: 'MM/dd/yyyy' || ' Date taken HERE '}}. Photograph by {{aSource.FULLNAME || ' Source Name HERE ' }}, {{agencyNameForCap || ' Agency HERE '}}.
                                         </span>
                                     </div>
                                 </div>
@@ -4103,7 +4114,7 @@
                 <div class="form-group required" ng-class="{'has-error':FILEForm.FILETYPE_ID.$invalid && FILEForm.FILETYPE_ID.$dirty}">
                     <label class="col-md-3 control-label req" for="FILETYPE_ID">File Type:</label>
                     <div class="col-md-6">
-                        <select class="form-control" name="FILETYPE_ID" ng-model="aFile.FILETYPE_ID" ng-options="ft.FILETYPE_ID as ft.FILETYPE for ft in fileTypes" required>
+                        <select class="form-control" name="FILETYPE_ID" ng-model="aFile.FILETYPE_ID" ng-change="updateAgencyForCaption()" ng-options="ft.FILETYPE_ID as ft.FILETYPE for ft in fileTypes" required>
                             <option value=""></option>
                         </select>
                     </div>
@@ -4167,9 +4178,9 @@
 
                 <!--Source Agency* (photo, allOther)-->
                 <div ng-if="aFile.FILETYPE_ID === 1 || aFile.FILETYPE_ID > 2" class="form-group required" ng-class="{'has-error':FILEForm.AGENCY_ID.$invalid && FILEForm.AGENCY_ID.$dirty}">
-                    <label class="col-md-3 control-label req" for="FILETYPE_ID">Source Agency:</label>
+                    <label class="col-md-3 control-label req" for="AGENCY_ID">Source Agency:</label>
                     <div class="col-md-6">
-                        <select class="form-control" name="AGENCY_ID" ng-model="aSource.AGENCY_ID"
+                        <select class="form-control" name="AGENCY_ID" ng-model="aSource.AGENCY_ID" ng-change="updateAgencyForCaption()"
                                 ng-options="a.AGENCY_ID as a.AGENCY_NAME for a in agencies" required>
                             <option value=""></option>
                         </select>
@@ -4286,7 +4297,7 @@
                     <label class="col-md-3 control-label" for="Caption">Preview Caption:</button></label>
                     <div class="col-md-6">
                         <span>
-                            Photo of {{aFile.DESCRIPTION || ' (Description HERE) '}} at {{theSite.SITE_DESCRIPTION}}, {{theSite.COUNTY}}, {{theSite.STATE}}, {{aFile.PHOTO_DATE | date: 'MM/dd/yyyy' || ' Date taken HERE '}}. Photograph by {{aSource.FULLNAME || ' Source Name HERE ' }}, {{(agencies | filter :{AGENCY_ID: aSource.AGENCY_ID})[0].AGENCY_NAME || ' Agency HERE '}}.
+                            Photo of {{aFile.DESCRIPTION || ' (Description HERE) '}} at {{theSite.SITE_DESCRIPTION}}, {{theSite.COUNTY}}, {{theSite.STATE}}, {{aFile.PHOTO_DATE | date: 'MM/dd/yyyy' || ' Date taken HERE '}}. Photograph by {{aSource.FULLNAME || ' Source Name HERE ' }}, {{agencyNameForCap || ' Agency HERE '}}.
                         </span>
                     </div>
                 </div>
@@ -4372,7 +4383,7 @@
                 <br clear="all" />
 
                 <!-- hwm box of meta data and files -->
-                <div style="border:solid 1px black;padding-bottom:10px;" class="container col-md-12" ng-if="hwmDetail">
+                <div style="border:solid 1px black;padding-bottom:10px;" class="col-md-12" ng-if="hwmDetail">
                     <!-- only show if they click showHWMDetails() above -->
                     <label>HWM {{HWMBox.HWM_ID}} Details</label><button class="close" type="button" ng-click="closeDetail()" aria-hidden="true" style="color:gray;">&times;</button>
                     <ul>
@@ -4412,7 +4423,7 @@
                     </div>
                 </div>
                 <!-- sensor box of meta data and files -->
-                <div style="border:solid 1px black;padding-bottom:10px" class="container col-md-12" ng-if="sensorDetail">
+                <div style="border:solid 1px black;padding-bottom:10px" class="col-md-12" ng-if="sensorDetail">
                     <!-- only show if they click showSensorDetails() above -->
                     <label>{{SensorBox.Instrument.Deployment_Type || SensorBox.Instrument.Sensor_Type}} Sensor Details</label><button class="close" type="button" ng-click="closeDetail()" aria-hidden="true" style="color:gray;">&times;</button>
                     <ul>
@@ -4457,7 +4468,7 @@
 
                 </div>
                 <!-- datafile box of meta data and datafiles -->
-                <div style="border:solid 1px black;padding-bottom:10px" class="container col-md-12" ng-if="dataFileDetail">
+                <div style="border:solid 1px black;padding-bottom:10px" class="col-md-12" ng-if="dataFileDetail">
                     <!-- only show if they click showDataFileDetails() above -->
                     <label>Data File {{DFBox.filePath}} Details</label><button class="close" type="button" ng-click="closeDetail()" aria-hidden="true" style="color:gray;">&times;</button>
                     <ul>

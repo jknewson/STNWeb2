@@ -187,8 +187,8 @@
             $scope.aHWM.decDegORdms = 'dd';
             $scope.FTorCM = 'ft';
 
-            $scope.create = function () {
-                if (this.HWMForm.$valid) {
+            $scope.create = function (valid) {
+                if (valid) {
                     var createdHWM = {};
                     //if they entered a survey date or elevation, then set survey member as the flag member (flagging and surveying at same time
                     if ($scope.aHWM.SURVEY_DATE !== undefined && $scope.aHWM.SURVEY_DATE !== null)
@@ -293,8 +293,8 @@
             };
             
             //save aHWM
-            $scope.save = function () {
-                if ($scope.HWMForm.$valid) {
+            $scope.save = function (valid) {
+                if (valid) {
                     var updatedHWM = {};
                     if ($scope.adminChanged.EVENT_ID !== undefined) {
                         //admin changed the event for this hwm..
@@ -414,6 +414,7 @@
                         SOURCE.query({ id: file.SOURCE_ID }).$promise.then(function (s) {
                             $scope.aSource = s;
                             $scope.aSource.FULLNAME = $scope.aSource.SOURCE_NAME;
+                            $scope.agencyNameForCap = $scope.agencies.filter(function (a) { return a.AGENCY_ID == $scope.aSource.AGENCY_ID; })[0].AGENCY_NAME;
                         });
                     }//end if source
                 }//end existing file
@@ -421,8 +422,15 @@
                     $scope.aFile.FILE_DATE = new Date(); $scope.aFile.PHOTO_DATE = new Date();
                     $scope.aSource = allMembers.filter(function (m) { return m.MEMBER_ID == $cookies.get('mID'); })[0];
                     $scope.aSource.FULLNAME = $scope.aSource.FNAME + " " + $scope.aSource.LNAME;
+                    $scope.agencyNameForCap = $scope.agencies.filter(function (a) { return a.AGENCY_ID == $scope.aSource.AGENCY_ID; })[0].AGENCY_NAME;
                 } //end new file
                 $scope.showFileForm = true;
+
+                  
+                $scope.updateAgencyForCaption = function () {
+                    if ($scope.aFile.FILETYPE_ID == 1)
+                        $scope.agencyNameForCap = $scope.agencies.filter(function (a) { return a.AGENCY_ID == $scope.aSource.AGENCY_ID; })[0].AGENCY_NAME;
+                };
             };
             //create this new file
             $scope.createFile = function (valid) {

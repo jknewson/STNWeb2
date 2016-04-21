@@ -133,10 +133,12 @@
                } //end new file
                $scope.showFileForm = true;
 
+               //add agency name to photo caption
                if ($scope.aFile.FILETYPE_ID == 1)
                    $scope.agencyNameForCap = $scope.agencies.filter(function (a) { return a.AGENCY_ID == $scope.aSource.AGENCY_ID; })[0].AGENCY_NAME;
                $scope.updateAgencyForCaption = function () {
-                   $scope.agencyNameForCap = $scope.agencies.filter(function (a) { return a.AGENCY_ID == $scope.aSource.AGENCY_ID; })[0].AGENCY_NAME;
+                   if ($scope.aFile.FILETYPE_ID == 1)
+                       $scope.agencyNameForCap = $scope.agencies.filter(function (a) { return a.AGENCY_ID == $scope.aSource.AGENCY_ID; })[0].AGENCY_NAME;
                };
            };
             //create this new file
@@ -414,6 +416,12 @@
                 } //end new file
                 $scope.showNWISFileForm = true;
             };
+            //var postApprovalForNWISfile = function (newDF) {
+            //    var theApproval = {
+            //        MEMBER_ID: $scope.eventList.filter(function (ev) { return ev.EVENT_ID == $scope.aSensor.EVENT_ID; })[0].EVENT_COORDINATOR,
+
+            //    }
+            //}
             $scope.createNWISFile = function (valid) {
                 if (valid) {
                     $http.defaults.headers.common.Authorization = 'Basic ' +$cookies.get('STNCreds');
@@ -434,8 +442,11 @@
                         $scope.NWISDF.GOOD_START = $scope.NWISDF.GOOD_START.toString().substring(0, si);
                         $scope.NWISDF.GOOD_END = $scope.NWISDF.GOOD_END.toString().substring(0, ei);
                     }
+                    $scope.NWISDF.APPROVAL_ID = 
                     DATA_FILE.save($scope.NWISDF).$promise.then(function (NdfResonse) {
-                        //then POST fileParts (Services populate PATH)
+                        //now create an approval with the event's coordinator and add the approval_id, put it, then post the file TODO ::: NEW ENDPOINT FOR THIS
+                        //postApprovalForNWISfile(NdfResonse);
+                        //then POST file
                         $scope.NWISFile.DATA_FILE_ID = NdfResonse.DATA_FILE_ID;
                         //now POST File
                         FILE.save($scope.NWISFile).$promise.then(function (Fresponse) {
@@ -650,6 +661,9 @@
                        }
                    }
                }
+               if ($scope.filteredDeploymentTypes.length == 1) 
+                   $scope.aSensor.DEPLOYMENT_TYPE_ID = $scope.filteredDeploymentTypes[0].DEPLOYMENT_TYPE_ID;
+               
            };
 
            // $scope.sessionEvent = $cookies.get('SessionEventName');
@@ -1031,6 +1045,7 @@
                        $scope.OPsForTapeDown[i].selected = false;
                }
            };
+
         }]); //end SENSOR
 
     // Retrieve a Sensor modal
@@ -1039,13 +1054,17 @@
             $scope.aSensor = thisSensor.Instrument;
             $scope.EventName = allEventList.filter(function (r) {return r.EVENT_ID == $scope.aSensor.EVENT_ID;})[0].EVENT_NAME;            
             $scope.depSensStatus = angular.copy(thisSensor.InstrumentStats[0]);
-            var y = $scope.depSensStatus.TIME_STAMP.substr(0, 4);
-            var m = $scope.depSensStatus.TIME_STAMP.substr(5, 2) - 1; //subtract 1 for index value (January is 0)
-            var d = $scope.depSensStatus.TIME_STAMP.substr(8, 2);
-            var h = $scope.depSensStatus.TIME_STAMP.substr(11, 2);
-            var mi = $scope.depSensStatus.TIME_STAMP.substr(14, 2);
-            var sec = $scope.depSensStatus.TIME_STAMP.substr(17, 2);
-            $scope.depSensStatus.TIME_STAMP = new Date(y, m, d, h, mi, sec);
+            var isDate = Object.prototype.toString.call($scope.depSensStatus.TIME_STAMP) === '[object Date]';
+            if (isDate === false) {
+                var y = $scope.depSensStatus.TIME_STAMP.substr(0, 4);
+                var m = $scope.depSensStatus.TIME_STAMP.substr(5, 2) - 1; //subtract 1 for index value (January is 0)
+                var d = $scope.depSensStatus.TIME_STAMP.substr(8, 2);
+                var h = $scope.depSensStatus.TIME_STAMP.substr(11, 2);
+                var mi = $scope.depSensStatus.TIME_STAMP.substr(14, 2);
+                var sec = $scope.depSensStatus.TIME_STAMP.substr(17, 2);
+                $scope.depSensStatus.TIME_STAMP = new Date(y, m, d, h, mi, sec);
+            }
+
             $scope.OPsForTapeDown = siteOPs;
             $scope.OPsPresent = siteOPs.length > 0 ? true : false;
             $scope.vertDatumList = allVDatumList;
@@ -1913,6 +1932,14 @@
                     $scope.datafile.GOOD_END = new Date();
                 } //end new file
                 $scope.showFileForm = true;
+
+                //add agency name to photo caption
+                if ($scope.aFile.FILETYPE_ID == 1)
+                    $scope.agencyNameForCap = $scope.agencies.filter(function (a) { return a.AGENCY_ID == $scope.aSource.AGENCY_ID; })[0].AGENCY_NAME;
+                $scope.updateAgencyForCaption = function () {
+                    if ($scope.aFile.FILETYPE_ID == 1)
+                        $scope.agencyNameForCap = $scope.agencies.filter(function (a) { return a.AGENCY_ID == $scope.aSource.AGENCY_ID; })[0].AGENCY_NAME;
+                };
             };
 
             //create this new file

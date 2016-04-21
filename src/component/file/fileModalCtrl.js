@@ -36,6 +36,11 @@
                 $scope.datepickrs[which] = true;
             };
             //#endregion
+
+            $scope.updateAgencyForCaption = function () {
+                if ($scope.aFile.FILETYPE_ID == 1)
+                    $scope.agencyNameForCap = $scope.agencies.filter(function (a) { return a.AGENCY_ID == $scope.aSource.AGENCY_ID; })[0].AGENCY_NAME;
+            };
             //formatting date and time properly for chrome and ff
             var getDateTimeParts = function (d) {
                 var y = d.substr(0, 4);
@@ -57,6 +62,8 @@
                 if (fileSource !== undefined)  {
                     $scope.aSource = fileSource;
                     $scope.aSource.FULLNAME = $scope.aSource.SOURCE_NAME;
+                    //add agency name to photo caption
+                    $scope.agencyNameForCap = $scope.agencies.filter(function (a) { return a.AGENCY_ID == $scope.aSource.AGENCY_ID; })[0].AGENCY_NAME;                    
                 }
                 if (dataFile !== undefined) {
                     $scope.datafile = dataFile;
@@ -69,10 +76,12 @@
                 }
             } else {
                 //create file
+                $scope.whoseFile = "Site File";
                 $scope.aFile.FILE_DATE = new Date();
                 $scope.aFile.PHOTO_DATE = new Date();
                 $scope.aSource = allMembers.filter(function (m) { return m.MEMBER_ID == $cookies.get('mID'); })[0];
-                $scope.aSource.FULLNAME = $scope.aSource.FNAME + " " + $scope.aSource.LNAME;               
+                $scope.aSource.FULLNAME = $scope.aSource.FNAME + " " + $scope.aSource.LNAME;
+                $scope.agencyNameForCap = $scope.agencies.filter(function (a) { return a.AGENCY_ID == $scope.aSource.AGENCY_ID; })[0].AGENCY_NAME;
             }
 
             $scope.cancel = function () {
