@@ -2,8 +2,8 @@
     'use strict';
 
     var ModalControllers = angular.module('ModalControllers');
-    ModalControllers.controller('OPmodalCtrl', ['$scope', '$rootScope', '$cookies', '$http', '$sce', '$uibModalInstance', '$uibModal', 'SERVER_URL', 'Site_Files', 'allDropdowns', 'thisOP', 'thisOPControls', 'opSite', 'agencyList', 'allMembers', 'OBJECTIVE_POINT', 'OP_CONTROL_IDENTIFIER', 'SOURCE', 'FILE',
-        function ($scope, $rootScope, $cookies, $http, $sce, $uibModalInstance, $uibModal, SERVER_URL, Site_Files, allDropdowns, thisOP, thisOPControls, opSite, agencyList, allMembers, OBJECTIVE_POINT, OP_CONTROL_IDENTIFIER, SOURCE, FILE) {
+    ModalControllers.controller('OPmodalCtrl', ['$scope', '$rootScope', '$cookies', '$http', '$sce', '$uibModalInstance', '$uibModal', 'SERVER_URL', 'Site_Files', 'allDropdowns', 'thisOP', 'thisOPControls', 'opSite', 'agencyList', 'allMembers', 'OBJECTIVE_POINT', 'OP_CONTROL_IDENTIFIER', 'OP_MEASURE', 'SOURCE', 'FILE',
+        function ($scope, $rootScope, $cookies, $http, $sce, $uibModalInstance, $uibModal, SERVER_URL, Site_Files, allDropdowns, thisOP, thisOPControls, opSite, agencyList, allMembers, OBJECTIVE_POINT, OP_CONTROL_IDENTIFIER, OP_MEASURE, SOURCE, FILE) {
             //defaults for radio buttons
             //dropdowns
             $scope.serverURL = SERVER_URL;
@@ -15,7 +15,7 @@
             $scope.VDatumList = allDropdowns[3];
             $scope.VCollectMethodList = allDropdowns[4];
             $scope.OPQualityList = allDropdowns[5];
-            $scope.fileTypeList = allDropdowns[6]; //used if creating/editing OP file
+            $scope.fileTypeList = allDropdowns[6]; //used if creating/editing OP file            
             $scope.htmlDescriptionTip = $sce.trustAsHtml('Please describe location and type of mark <em>ie. \'chiseled square on third sidewalk block on the south side of the street\'</em>');
             $scope.HWMfileIsUploading = false; //Loading...    
             $scope.OP = {};
@@ -489,44 +489,59 @@
 
             //delete this OP from the SITE
             $scope.deleteOP = function () {
-                //TODO:: Delete the files for this OP too or reassign to the Site?? Services or client handling?
-                var DeleteModalInstance = $uibModal.open({
-                    templateUrl: 'removemodal.html',
-                    controller: 'ConfirmModalCtrl',
-                    size: 'sm',
-                    resolve: {
-                        nameToRemove: function () {
-                            return $scope.OP;
-                        },
-                        what: function () {
-                            return "Objective Point";
-                        }
-                    }
-                });
+                OP_MEASURE.getDatumLocationOPMeasures({ objectivePointId: $scope.OP.OBJECTIVE_POINT_ID }).$promise.then(function (result) {
+                    if (result.length > 0) {
+                        var opOnTapedownModal = $uibModal.open({
+                            template: '<div class="modal-header"><h3 class="modal-title">Cannot Delete</h3></div>' +
+                                '<div class="modal-body"><p>This Datum Location is being used for one or more sensor tape downs. Please delete the tape down before deleting the datum location.</p></div>' +
+                                '<div class="modal-footer"><button class="btn btn-primary" ng-enter="ok()" ng-click="ok()">OK</button></div>',
+                            controller: ['$scope', '$uibModalInstance', function ($scope, $uibModalInstance) {
+                                $scope.ok = function () {
+                                    $uibModalInstance.dismiss();
+                                };
+                            }],
+                            size: 'sm'
+                        });
+                    } else {
+                        //no tapedowns, proceed
+                        var DeleteModalInstance = $uibModal.open({
+                            templateUrl: 'removemodal.html',
+                            controller: 'ConfirmModalCtrl',
+                            size: 'sm',
+                            resolve: {
+                                nameToRemove: function () {
+                                    return $scope.OP;
+                                },
+                                what: function () {
+                                    return "Objective Point";
+                                }
+                            }
+                        });
+                        DeleteModalInstance.result.then(function (opToRemove) {
+                            $http.defaults.headers.common.Authorization = 'Basic ' + $cookies.get('STNCreds');
+                            OBJECTIVE_POINT.delete({ id: opToRemove.OBJECTIVE_POINT_ID }, opToRemove).$promise.then(function () {
+                                $scope.OPFiles = []; //clear out hwmFiles for this hwm
+                                $scope.opImageFiles = []; //clear out image files for this hwm
+                                //now remove all these files from SiteFiles
+                                var l = $scope.allSFiles.length;
+                                while (l--) {
+                                    if ($scope.allSFiles[l].OBJECTIVE_POINT_ID == opToRemove.OBJECTIVE_POINT_ID) $scope.allSFiles.splice(l, 1);
+                                }
+                                //updates the file list on the sitedashboard
+                                Site_Files.setAllSiteFiles($scope.allSFiles);
 
-                DeleteModalInstance.result.then(function (opToRemove) {
-                    $http.defaults.headers.common.Authorization = 'Basic ' + $cookies.get('STNCreds');
-                    OBJECTIVE_POINT.delete({ id: opToRemove.OBJECTIVE_POINT_ID }, opToRemove).$promise.then(function () {
-                        $scope.OPFiles = []; //clear out hwmFiles for this hwm
-                        $scope.opImageFiles = []; //clear out image files for this hwm
-                        //now remove all these files from SiteFiles
-                        var l = $scope.allSFiles.length;
-                        while (l--) {
-                            if ($scope.allSFiles[l].OBJECTIVE_POINT_ID == opToRemove.OBJECTIVE_POINT_ID) $scope.allSFiles.splice(l, 1);
-                        }
-                        //updates the file list on the sitedashboard
-                        Site_Files.setAllSiteFiles($scope.allSFiles);
-
-                        toastr.success("Datum Location Removed");
-                        var sendBack = ["de", 'deleted'];
-                        $uibModalInstance.close(sendBack);
-                    }, function error(errorResponse) {
-                        toastr.error("Error: " + errorResponse.statusText);
-                    });
-                }, function () {
-                    //logic for cancel
-                });//end modal
-            };
+                                toastr.success("Datum Location Removed");
+                                var sendBack = ["de", 'deleted'];
+                                $uibModalInstance.close(sendBack);
+                            }, function error(errorResponse) {
+                                toastr.error("Error: " + errorResponse.statusText);
+                            });
+                        }, function () {
+                            //logic for cancel
+                        });//end modal
+                    }//end else (proceed with delete)
+                }); //end get opmeasurements
+            }; //end delete
 
             //lat modal 
             var openLatModal = function (w) {

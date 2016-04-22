@@ -472,7 +472,8 @@
             {}, {
                 query: {},
                 getAll: { method: 'GET', isArray: true },
-                getInstStatOPMeasures: {method: 'GET', isArray:true, url: rootURL + '/InstrumentStatus/:instrumentStatusId/InstrMeasurements'},
+                getInstStatOPMeasures: { method: 'GET', isArray: true, url: rootURL + '/InstrumentStatus/:instrumentStatusId/InstrMeasurements' },
+                getDatumLocationOPMeasures: { method: 'GET', isArray: true, url: rootURL + '/ObjectivePoints/:objectivePointId/OPMeasurements' },
                 update: { method: 'PUT', cache: false, isArray: false },
                 addInstStatMeasure: { method: 'POST', cache: false, isArray: false, url: rootURL + '/InstrumentStatus/:instrumentStatusId/AddInstrMeasurement' },
                 save: { method: 'POST', cache: false, isArray: false },

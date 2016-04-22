@@ -6,6 +6,7 @@
     ModalControllers.controller('hwmModalCtrl', ['$scope', '$rootScope', '$cookies', '$http', '$sce', '$uibModalInstance', '$uibModal', 'SERVER_URL', 'allDropdowns', 'Site_Files', 'thisHWM', 'hwmApproval', 'agencyList', 'hwmSite', 'allMembers', 'HWM', 'SOURCE', 'FILE',
         function ($scope, $rootScope, $cookies, $http, $sce, $uibModalInstance, $uibModal, SERVER_URL, allDropdowns, Site_Files, thisHWM, hwmApproval, agencyList, hwmSite, allMembers, HWM, SOURCE, FILE) {
             //dropdowns
+            $scope.view = { HWMval: 'detail' };
             $scope.h = { hOpen: true, hFileOpen: false }; //accordions
             $scope.hwmTypeList = allDropdowns[0];
             $scope.hwmQualList = allDropdowns[1];
@@ -84,31 +85,31 @@
 
             //they changed radio button for dms dec deg
             $scope.latLongChange = function () {
-                if ($scope.aHWM.decDegORdms == "dd") {
+                if ($scope.hwmCopy.decDegORdms == "dd") {
                     //they clicked Dec Deg..
                     if ($scope.DMS.LADeg !== undefined) {
                         //convert what's here for each lat and long
-                        $scope.aHWM.LATITUDE_DD = azimuth($scope.DMS.LADeg, $scope.DMS.LAMin, $scope.DMS.LASec);
-                        $scope.aHWM.LONGITUDE_DD = azimuth($scope.DMS.LODeg, $scope.DMS.LOMin, $scope.DMS.LOSec);
+                        $scope.hwmCopy.LATITUDE_DD = azimuth($scope.DMS.LADeg, $scope.DMS.LAMin, $scope.DMS.LASec);
+                        $scope.hwmCopy.LONGITUDE_DD = azimuth($scope.DMS.LODeg, $scope.DMS.LOMin, $scope.DMS.LOSec);
                         //clear
                         $scope.DMS = {};
                     }
                 } else {
                     //they clicked dms (convert lat/long to dms)
-                    if ($scope.aHWM.LATITUDE_DD !== undefined) {
-                        var latDMS = (deg_to_dms($scope.aHWM.LATITUDE_DD)).toString();
+                    if ($scope.hwmCopy.LATITUDE_DD !== undefined) {
+                        var latDMS = (deg_to_dms($scope.hwmCopy.LATITUDE_DD)).toString();
                         var ladDMSarray = latDMS.split(':');
                         $scope.DMS.LADeg = ladDMSarray[0];
                         $scope.DMS.LAMin = ladDMSarray[1];
                         $scope.DMS.LASec = ladDMSarray[2];
 
-                        var longDMS = deg_to_dms($scope.aHWM.LONGITUDE_DD);
+                        var longDMS = deg_to_dms($scope.hwmCopy.LONGITUDE_DD);
                         var longDMSarray = longDMS.split(':');
                         $scope.DMS.LODeg = longDMSarray[0] * -1;
                         $scope.DMS.LOMin = longDMSarray[1];
                         $scope.DMS.LOSec = longDMSarray[2];
                         //clear
-                        $scope.aHWM.LATITUDE_DD = undefined; $scope.aHWM.LONGITUDE_DD = undefined;
+                        $scope.hwmCopy.LATITUDE_DD = undefined; $scope.hwmCopy.LONGITUDE_DD = undefined;
                     }
                 }
             };
@@ -140,10 +141,23 @@
 
             if (thisHWM != "empty") {
                 //#region existing HWM
+                $scope.createOReditHWM = 'edit';
                 $scope.aHWM = angular.copy(thisHWM);
+                //get all the names for details view
+                $scope.aHWM.HWM_Type = $scope.hwmTypeList.filter(function (ht) { return ht.HWM_TYPE_ID == $scope.aHWM.HWM_TYPE_ID; })[0].HWM_TYPE;
+                if ($scope.aHWM.STILLWATER !== null) {
+                    $scope.aHWM.Tranquil = $scope.aHWM.STILLWATER > 0 ? 'Yes' : 'No';
+                }
+                $scope.aHWM.Marker = $scope.aHWM.MARKER_ID > 0 ? $scope.markerList.filter(function (m) { return m.MARKER_ID == $scope.aHWM.MARKER_ID; })[0].MARKER1 : '';
+                $scope.aHWM.Quality = $scope.aHWM.HWM_QUALITY_ID > 0 ? $scope.hwmQualList.filter(function (hq) { return hq.HWM_QUALITY_ID == $scope.aHWM.HWM_QUALITY_ID; })[0].HWM_QUALITY : '';
+                $scope.aHWM.hdatum = $scope.aHWM.HDATUM_ID > 0 ? $scope.HDatumsList.filter(function (hd) { return hd.DATUM_ID == $scope.aHWM.HDATUM_ID; })[0].DATUM_NAME : '';
+                $scope.aHWM.hCollectMethod = $scope.aHWM.HCOLLECT_METHOD_ID > 0 ? $scope.hCollMList.filter(function (hc) { return hc.HCOLLECT_METHOD_ID == $scope.aHWM.HCOLLECT_METHOD_ID; })[0].HCOLLECT_METHOD : '';
+                $scope.aHWM.vDatum = $scope.aHWM.VDATUM_ID > 0 ? $scope.VDatumsList.filter(function (vd) { return vd.DATUM_ID == $scope.aHWM.VDATUM_ID; })[0].DATUM_NAME : '';
+                $scope.aHWM.vCollectMethod = $scope.aHWM.VCOLLECT_METHOD_ID > 0 ? $scope.vCollMList.filter(function (vc) { return vc.VCOLLECT_METHOD_ID == $scope.aHWM.VCOLLECT_METHOD_ID; })[0].VCOLLECT_METHOD : '';
+
                 $scope.hwmModalHeader = "HWM Information";
                 //get this hwm's event name
-                $scope.EventName = $scope.eventList.filter(function (e) { return e.EVENT_ID == $scope.aHWM.EVENT_ID; })[0].EVENT_NAME;
+                $scope.EventName = $scope.aHWM.EVENT_ID > 0 ? $scope.eventList.filter(function (e) { return e.EVENT_ID == $scope.aHWM.EVENT_ID; })[0].EVENT_NAME : 'None provided';
                 //date formatting
                 $scope.aHWM.FLAG_DATE = makeAdate($scope.aHWM.FLAG_DATE);
                 //is it approved?
@@ -164,6 +178,7 @@
             } else {
                 //#region new HWM
                 $scope.hwmModalHeader = "Create new HWM";
+                $scope.createOReditHWM = 'create';
                 //use site's LAT, LONG, WATERBODY, HDATUM, HCOLLECTMETHOD, set FLAGDATE with today
                 $scope.aHWM = {
                     SITE_ID: $scope.thisHWMsite.SITE_ID,
@@ -245,8 +260,10 @@
                         HWM.approveHWM({ id: h.HWM_ID }).$promise.then(function (approvalResponse) {
                             h.APPROVAL_ID = approvalResponse.APPROVAL_ID;
                             toastr.success("HWM Approved");
-                            var sendBack = [h, 'updated'];
-                            $uibModalInstance.close(sendBack);
+                            $scope.ApprovalInfo.approvalDate = new Date(approvalResponse.APPROVAL_DATE); //include note that it's displayed in their local time but stored in UTC
+                            $scope.ApprovalInfo.Member = allMembers.filter(function (amem) { return amem.MEMBER_ID == approvalResponse.MEMBER_ID; })[0];
+                            //var sendBack = [h, 'updated'];
+                            //$uibModalInstance.close(sendBack);
                         }, function error(errorResponse) {
                             toastr.error("Error: " + errorResponse.statusText);
                         });
@@ -296,35 +313,50 @@
             $scope.save = function (valid) {
                 if (valid) {
                     var updatedHWM = {};
+                    if ($scope.DMS.LADeg !== undefined) $scope.hwmCopy.LATITUDE_DD = azimuth($scope.DMS.LADeg, $scope.DMS.LAMin, $scope.DMS.LASec);
+                    if ($scope.DMS.LODeg !== undefined) $scope.hwmCopy.LONGITUDE_DD = azimuth($scope.DMS.LODeg, $scope.DMS.LOMin, $scope.DMS.LOSec);
                     if ($scope.adminChanged.EVENT_ID !== undefined) {
                         //admin changed the event for this hwm..
-                        $scope.aHWM.EVENT_ID = $scope.adminChanged.EVENT_ID;
+                        $scope.hwmCopy.EVENT_ID = $scope.adminChanged.EVENT_ID;
                     }
                     //if they added a survey date, apply survey member as logged in member
-                    if ($scope.aHWM.SURVEY_DATE !== undefined)
-                        $scope.aHWM.SURVEY_MEMBER_ID = $cookies.get('mID');
+                    if ($scope.hwmCopy.SURVEY_DATE !== undefined)
+                        $scope.hwmCopy.SURVEY_MEMBER_ID = $cookies.get('mID');
 
                     if ($scope.FTorCM == "cm") {
                         $scope.FTorCM = 'ft';
-                        if ($scope.aHWM.UNCERTAINTY !== undefined)
-                            $scope.aHWM.UNCERTAINTY = $scope.aHWM.UNCERTAINTY / 30.48;
+                        if ($scope.hwmCopy.UNCERTAINTY !== undefined)
+                            $scope.hwmCopy.UNCERTAINTY = $scope.hwmCopy.UNCERTAINTY / 30.48;
                     }
 
-                    if ($scope.aHWM.ELEV_FT !== undefined && $scope.aHWM.ELEV_FT !== null) {
+                    if ($scope.hwmCopy.ELEV_FT !== undefined && $scope.hwmCopy.ELEV_FT !== null) {
                         //make sure they added the survey date if they added an elevation
-                        if ($scope.aHWM.SURVEY_DATE === undefined)
-                            $scope.aHWM.SURVEY_DATE = makeAdate("");
+                        if ($scope.hwmCopy.SURVEY_DATE === undefined)
+                            $scope.hwmCopy.SURVEY_DATE = makeAdate("");
 
-                        $scope.aHWM.SURVEY_MEMBER_ID = $cookies.get('mID');
+                        $scope.hwmCopy.SURVEY_MEMBER_ID = $cookies.get('mID');
                     }
 
                     $http.defaults.headers.common.Authorization = 'Basic ' + $cookies.get('STNCreds');
                     $http.defaults.headers.common.Accept = 'application/json';
-                    HWM.update({ id: $scope.aHWM.HWM_ID }, $scope.aHWM).$promise.then(function (response) {
+                    HWM.update({ id: $scope.hwmCopy.HWM_ID }, $scope.hwmCopy).$promise.then(function (response) {
                         toastr.success("HWM updated");
-                        updatedHWM = response;
-                        var sendBack = [updatedHWM, 'updated'];
-                        $uibModalInstance.close(sendBack);
+                        $scope.aHWM = response; thisHWM = response;
+                        //get all the names for details view
+                        $scope.aHWM.HWM_Type = $scope.hwmTypeList.filter(function (ht) { return ht.HWM_TYPE_ID == $scope.aHWM.HWM_TYPE_ID; })[0].HWM_TYPE;
+                        if ($scope.aHWM.STILLWATER !== null) {
+                            $scope.aHWM.Tranquil = $scope.aHWM.STILLWATER > 0 ? 'Yes' : 'No';
+                        }
+                        $scope.aHWM.Marker = $scope.aHWM.MARKER_ID > 0 ? $scope.markerList.filter(function (m) { return m.MARKER_ID == $scope.aHWM.MARKER_ID; })[0].MARKER1 : '';
+                        $scope.aHWM.Quality = $scope.aHWM.HWM_QUALITY_ID > 0 ? $scope.hwmQualList.filter(function (hq) { return hq.HWM_QUALITY_ID == $scope.aHWM.HWM_QUALITY_ID; })[0].HWM_QUALITY : '';
+                        $scope.aHWM.hdatum = $scope.aHWM.HDATUM_ID > 0 ? $scope.HDatumsList.filter(function (hd) { return hd.DATUM_ID == $scope.aHWM.HDATUM_ID; })[0].DATUM_NAME : '';
+                        $scope.aHWM.hCollectMethod = $scope.aHWM.HCOLLECT_METHOD_ID > 0 ? $scope.hCollMList.filter(function (hc) { return hc.HCOLLECT_METHOD_ID == $scope.aHWM.HCOLLECT_METHOD_ID; })[0].HCOLLECT_METHOD : '';
+                        $scope.aHWM.vDatum = $scope.aHWM.VDATUM_ID > 0 ? $scope.VDatumsList.filter(function (vd) { return vd.DATUM_ID == $scope.aHWM.VDATUM_ID; })[0].DATUM_NAME : '';
+                        $scope.aHWM.vCollectMethod = $scope.aHWM.VCOLLECT_METHOD_ID > 0 ? $scope.vCollMList.filter(function (vc) { return vc.VCOLLECT_METHOD_ID == $scope.aHWM.VCOLLECT_METHOD_ID; })[0].VCOLLECT_METHOD : '';
+                        $scope.hwmCopy = {};
+                        $scope.view.HWMval = 'detail';
+                        //var sendBack = [updatedHWM, 'updated'];
+                        //$uibModalInstance.close(sendBack);
                     });
                 }
             };//end save()
@@ -371,9 +403,21 @@
 
             //cancel
             $scope.cancel = function () {
+                $rootScope.stateIsLoading.showLoading = false; // loading.. 
+                var sendBack = $scope.aHWM;
+                $uibModalInstance.close(sendBack);
+            };
+
+            //edit button clicked. make copy of hwm 
+            $scope.wannaEditHWM = function () {
+                $scope.view.HWMval = 'edit';
+                $scope.hwmCopy = angular.copy($scope.aHWM);
+            };
+            $scope.cancelHWMEdit = function () {
+                $scope.view.HWMval = 'detail';
+                $scope.hwmCopy = []; 
                 $scope.adminChanged = {};
                 $scope.EventName = $scope.eventList.filter(function (e) { return e.EVENT_ID == $scope.aHWM.EVENT_ID; })[0].EVENT_NAME;
-                $uibModalInstance.dismiss('cancel');
             };
 
             //#region FILE STUFF
