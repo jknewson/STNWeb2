@@ -13,6 +13,7 @@
             $scope.StateList = allDropDownParts[2];
             $scope.AllCountyList = allDropDownParts[3];
             $scope.stateCountyList = [];
+            $scope.DMS = {}; //holder of deg min sec values
             $scope.allHousingTypeList = allDropDownParts[4];
             $scope.DepPriorityList = allDropDownParts[5];
             $scope.NetNameList = allDropDownParts[6];
@@ -212,7 +213,7 @@
             }
 
             $scope.aSite.decDegORdms = 'dd';
-            $scope.DMS = {}; //holder of deg min sec values
+            
             $scope.originalSiteHousings = [];
             $scope.checked = ""; $scope.checkedName = "Not Defined"; //comparers for disabling network names if 'Not Defined' checked
             $scope.landowner = {};

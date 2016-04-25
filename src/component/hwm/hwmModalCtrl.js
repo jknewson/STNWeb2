@@ -113,6 +113,7 @@
                         }
                     }
                 } else {
+                    //create view
                     if ($scope.aHWM.decDegORdms == "dd") {
                         //they clicked Dec Deg..
                         if ($scope.DMS.LADeg !== undefined) {
@@ -125,17 +126,17 @@
                     } else {
                         //they clicked dms (convert lat/long to dms)
                         if ($scope.aHWM.LATITUDE_DD !== undefined) {
-                            var latDMS = (deg_to_dms($scope.aHWM.LATITUDE_DD)).toString();
-                            var ladDMSarray = latDMS.split(':');
-                            $scope.DMS.LADeg = ladDMSarray[0];
-                            $scope.DMS.LAMin = ladDMSarray[1];
-                            $scope.DMS.LASec = ladDMSarray[2];
+                            var create_latDMS = (deg_to_dms($scope.aHWM.LATITUDE_DD)).toString();
+                            var create_ladDMSarray = create_latDMS.split(':');
+                            $scope.DMS.LADeg = create_ladDMSarray[0];
+                            $scope.DMS.LAMin = create_ladDMSarray[1];
+                            $scope.DMS.LASec = create_ladDMSarray[2];
 
-                            var longDMS = deg_to_dms($scope.aHWM.LONGITUDE_DD);
-                            var longDMSarray = longDMS.split(':');
-                            $scope.DMS.LODeg = longDMSarray[0] * -1;
-                            $scope.DMS.LOMin = longDMSarray[1];
-                            $scope.DMS.LOSec = longDMSarray[2];
+                            var create_longDMS = deg_to_dms($scope.aHWM.LONGITUDE_DD);
+                            var create_longDMSarray = create_longDMS.split(':');
+                            $scope.DMS.LODeg = create_longDMSarray[0] * -1;
+                            $scope.DMS.LOMin = create_longDMSarray[1];
+                            $scope.DMS.LOSec = create_longDMSarray[2];
                             //clear
                             $scope.aHWM.LATITUDE_DD = undefined; $scope.aHWM.LONGITUDE_DD = undefined;
                         }

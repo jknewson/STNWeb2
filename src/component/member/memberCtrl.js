@@ -41,7 +41,7 @@
                     case 'Manager':
                         $scope.roleList = allRoles.filter(function (r) { return r.ROLE_ID == 3; });
                         break;
-                };
+                }
 //                $scope.roleList = allRoles;
                 $scope.agencyList = allAgencies;
                 $http.defaults.headers.common.Authorization = 'Basic ' + $cookies.get('STNCreds');
