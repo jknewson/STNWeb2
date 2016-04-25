@@ -42,7 +42,7 @@
                 //store if this is retrieved (if not, show ! for them to retrieve it in order to complete the peak
                 ess.isRetrieved = ess.InstrumentStats[0].Status == 'Retrieved' ? true : false;
                 ess.files = allSiteFiles.filter(function (sf) { return sf.INSTRUMENT_ID == ess.Instrument.INSTRUMENT_ID && (sf.fileBelongsTo == "DataFile File" || sf.fileBelongsTo == "Sensor File"); });
-                //var hasDF = {value:true};
+                //var hasDF = {value:true}; (2: Met Station, 5: Rapid Deployment Gage, 6: Rain Gage)
                 if (ess.Instrument.SENSOR_TYPE_ID == 2 || ess.Instrument.SENSOR_TYPE_ID == 5 || ess.Instrument.SENSOR_TYPE_ID == 6) {
                     if (ess.files.length === 0) ess.NeedDF = true;
                     else {
@@ -325,10 +325,12 @@
                 
             };
             //use this hwm to populate peak parts (primary sensor for determining peak)
+            /*'<div class="modal-body"><p>Are you sure you want to set this as the Primary Data file? Doing so will populate the Peak Date, Time and time zone, Stage, Vertical Datum and Height Above Ground.</p></div>' +
+                        '<div class="modal-footer"><button class="btn btn-primary" ng-click="SetIt()">Set as Primary</button><button class="btn btn-primary" ng-click="cancel()">Cancel</button></div>',*/
             $scope.primaryDataFile = function (f) {
                 var setPrimHWM = $uibModal.open({
                     template: '<div class="modal-header"><h3 class="modal-title">Set as Primary</h3></div>' +
-                        '<div class="modal-body"><p>Are you sure you want to set this as the Primary Sensor? Doing so will populate the Peak Date, Time and time zone, Stage, Vertical Datum and Height Above Ground.</p></div>' +
+                        '<div class="modal-body"><p>Are you sure you want to set this as the Primary Data file?</p><p>(Coming soon: Script processing to populate the Peak date, time and time zone, Stage, Vertical Datum and Height above ground)</p></div>' +
                         '<div class="modal-footer"><button class="btn btn-primary" ng-click="SetIt()">Set as Primary</button><button class="btn btn-primary" ng-click="cancel()">Cancel</button></div>',
                     controller: ['$scope', '$uibModalInstance', function ($scope, $uibModalInstance) {
                         $scope.cancel = function () {
@@ -491,10 +493,11 @@
                 }
             };//end create()
       
-            $scope.showIncompleteInfo = function () {
+            $scope.showIncompleteDFInfo = function () {
                 var incompleteModal = $uibModal.open({
                     template: '<div class="modal-header"><h3 class="modal-title">Incomplete Data File</h3></div>' +
-                        '<div class="modal-body"><p>All RDGs, Met Station, and Rain Gage sensors require data file information in order to compete a peak summary.</p><p>Please revisit the Retrieved Sensor and click on NWIS Data Connection to add a link to the NWIS data.</p></div>' +
+                        '<div class="modal-body"><p>All RDGs, Met Station, and Rain Gage sensors require data file information in order to use as primary in the Peak summary.</p>' + 
+                        '<p>Please revisit the Retrieved Sensor and click on NWIS Data Connection to add a link to the NWIS data if you want to use as primary.</p></div>' +
                         '<div class="modal-footer"><button class="btn btn-primary" ng-click="Ok()">OK</button></div>',
                     controller: ['$scope', '$uibModalInstance', function ($scope, $uibModalInstance) {
                         $scope.Ok = function () {
@@ -504,7 +507,20 @@
                     size: 'sm'
                 });
             };
-
+            $scope.showIncompleteHWMInfo = function () {
+                var incompleteModal = $uibModal.open({
+                    template: '<div class="modal-header"><h3 class="modal-title">Incomplete HWM</h3></div>' +
+                        '<div class="modal-body"><p>Survey date and elevation are required in order to use as primary in the Peak summary.</p>' +
+                        '<p>Please revisit the HWM and add Survey date and elevation if you want to use as primary.</p><p>The HWM can be used for interpreation withouth a final elevation.</p></div>' +
+                        '<div class="modal-footer"><button class="btn btn-primary" ng-click="Ok()">OK</button></div>',
+                    controller: ['$scope', '$uibModalInstance', function ($scope, $uibModalInstance) {
+                        $scope.Ok = function () {
+                            $uibModalInstance.dismiss();
+                        };
+                    }],
+                    size: 'sm'
+                });
+            };
             $scope.showRetrieveInfo = function () {
                 var goRetrieveModal = $uibModal.open({
                     template: '<div class="modal-header"><h3 class="modal-title">Deployed Sensor</h3></div>' +

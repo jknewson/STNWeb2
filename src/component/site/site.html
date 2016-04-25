@@ -5289,7 +5289,8 @@
                         HWM {{h.HWM_ID}} - {{h.ELEV_FT || '--'}} ft
                     </span>
                     <button type="button" class="borderLess" tooltip-placement="top" uib-tooltip="Show Details" ng-click="showHWMDetails(h)"><span class="glyphicon glyphicon-info-sign"></span></button>
-                    <button type="button" class="borderLess" tooltip-placement="top" uib-tooltip="Set as Primary" ng-click="primaryHWM(h)"><span class="glyphicon glyphicon-check"></span></button>
+                    <button ng-if ="h.ELEV_FT" type="button" class="borderLess" tooltip-placement="top" uib-tooltip="Set as Primary" ng-click="primaryHWM(h)"><span class="glyphicon glyphicon-check"></span></button>
+                    <button ng-if="!h.ELEV_FT" type="button" class="borderLess" tooltip-placement="top" uib-tooltip="Incomplete" ng-click="showIncompleteHWMInfo()"><span class="glyphicon glyphicon-alert"></span></button>
                 </div>
                 <!-- Sensor list -->
                 <div class="col-md-9" ng-repeat="s in eventSiteSensors">
@@ -5298,12 +5299,12 @@
                         {{s.Instrument.Deployment_Type || s.Instrument.Sensor_Type}} Sensor
                     </span>
                     <button type="button" class="borderLess" tooltip-placement="top" uib-tooltip="Show Details" ng-click="showSensorDetails(s)"><span class="glyphicon glyphicon-info-sign"></span></button>
-                    <button ng-if="s.NeedDF" type="button" class="borderLess" tooltip-placement="top" uib-tooltip="Incomplete" ng-click="showIncompleteInfo()"><span class="glyphicon glyphicon-alert"></span></button>
+                    <button ng-if="s.NeedDF" type="button" class="borderLess" tooltip-placement="top" uib-tooltip="Incomplete" ng-click="showIncompleteDFInfo()"><span class="glyphicon glyphicon-alert"></span></button>
                     <button ng-if="!s.isRetrieved" type="button" class="borderLess" tooltip-placement="top" uib-tooltip="Needs to be Retrieved" ng-click="showRetrieveInfo()"><span class="needRetrieve glyphicon glyphicon-alert"></span></button>
                     <div ng-repeat="f in s.files | where:{FILETYPE_ID: 2}">
                         <span class="col-sm-1"> </span>
                         <input type="checkbox" class="pull-left col-sm-1" ng-model="f.selected" ng-click="addDataFile(f)" />
-                        <span class="col-md-6">{{f.PATH}}</span>
+                        <span class="col-md-6">{{f.PATH || f.FILE_URL}}</span>
                         <button type="button" class="borderLess" tooltip-placement="top" uib-tooltip="Show Details" ng-click="showDataFileDetails(f)"><span class="glyphicon glyphicon-info-sign"></span></button>
                         <button type="button" class="borderLess" tooltip-placement="top" uib-tooltip="Set as Primary" ng-click="primaryDataFile(f)"><span class="glyphicon glyphicon-check"></span></button>
                     </div>
