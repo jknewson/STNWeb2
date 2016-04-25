@@ -584,501 +584,803 @@
 
 <!-- MODAL for Objective Point -->
 <script type="text/ng-template" id="OPmodal.html">
-
     <div class="modal-header">
         <h3 class="modal-title">Datum Location<button class="close" type="button" ng-click="cancel()" aria-hidden="true" style="color:gray;">&times;</button></h3>
     </div>
-
     <div class="modal-body">
-        <uib-accordion close-others="false">
-            <!--Datum Location Part-->
-            <uib-accordion-group is-open="dl.dlOpen">
-                <uib-accordion-heading>
-                    <i style="margin-right:10px" class="pull-left glyphicon" ng-class="{'glyphicon-chevron-down': dl.dlOpen, 'glyphicon-chevron-right': !dl.dlOpen}"></i>
-                    <span>{{opModalHeader}}</span>
-                </uib-accordion-heading>
-                <form class="form-horizontal" name="OPForm">
-                    <fieldset>
-                        <!--edit button-->
-                        <div class="form-group">
-                            <div class="col-md-12">
-                                <button ng-show="OP.OBJECTIVE_POINT_ID != undefined" ng-disabled="showFileForm" class="btn btn-primary" ng-click="save(OPForm.$valid)"><span>Save</span></button>
-                            </div>
-                        </div>
-
-                        <!-- Type: -->
-                        <div class="form-group required" ng-class="{'has-error':OPForm.OP_TYPE_ID.$invalid && OPForm.OP_TYPE_ID.$dirty}">
-                            <label class="col-md-4 control-label req" for="OP_TYPE_ID">Type:</label>
-                            <div class="col-md-6">
-                                <select class="form-control" name="OP_TYPE_ID" ng-model="OP.OP_TYPE_ID"
-                                        ng-options="opt.OBJECTIVE_POINT_TYPE_ID as opt.OP_TYPE for opt in OPTypeList" required>
-                                    <option value=""></option>
-                                </select>
-                            </div>
-                        </div>
-
-                        <!-- Name: -->
-                        <div class="form-group required" ng-class="{'has-error':OPForm.NAME.$invalid && OPForm.NAME.$dirty}">
-                            <label class="col-md-4 control-label req" for="NAME">Name:</label>
-                            <div class="col-md-6">
-                                <input class="form-control" name="NAME" ng-model="OP.NAME" type="text" required />
-                            </div>
-                        </div>
-
-                        <!-- Description: -->
-                        <div class="form-group required" ng-class="{'has-error':OPForm.DESCRIPTION.$invalid && OPForm.DESCRIPTION.$dirty}">
-                            <label class="col-md-4 control-label req" for="DESCRIPTION">Description:</label>
-                            <div class="col-md-6">
-                                <textarea class="form-control" name="DESCRIPTION" type=" text" rows="3" ng-model="OP.DESCRIPTION" required />
-                            </div>
-                            <button type="button" class="col-md-1 borderLess pull-left" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip-html="htmlDescriptionTip">
-                                <span class="glyphicon glyphicon-question-sign"></span>
-                            </button>
-                        </div>
-
-                        <!-- Control Identifier add button -->
-                        <div class="form-group">
-                            <label class="col-md-4 control-label" for="CONTROL">Control Identifier:</label>
-                            <div class="col-md-6">
-                                <button type="button" class="btn btn-default" ng-click="addNewIdentifier()">Add New Identifier</button>
-                            </div>
-                            <button type="button" class="col-md-1 borderLess pull-left" tooltip-placement="bottom" tooltip-append-to-body="false" uib-tooltip="National Geodetic Survey permanent identifier. See: ngs.noaa.gov/NGSDataExplorer/ for more information.">
-                                <span class="glyphicon glyphicon-question-sign"></span>
-                            </button>
-                        </div>
-
-                        <!-- Control Identifier input: -->
-                        <div class="form-group" ng-show="showControlIDinput">
-                            <label class="col-md-4 control-label"></label>
-                            <div class="col-md-6">
-                                <div ng-repeat="id in addedIdentifiers">
-                                    <div class="col-md-12" style="margin-bottom:5px">
-                                        <div class="col-md-7"><input class="form-control" name="OPControl" ng-model="id.IDENTIFIER" type="text" /></div>
-                                        <input type="hidden" name="OP_CONTROL_IDENTIFIER_ID" ng-model="id.OP_CONTROL_IDENTIFIER_ID" />
-                                        <input type="hidden" name="OBJECTIVE_POINT_ID" ng-model="id.OBJECTIVE_POINT_ID" />
-
-                                        <label class="radio-inline">
-                                            <input type="radio" name="IDENTIFIER_TYPE{{$index}}" ng-model="id.IDENTIFIER_TYPE" value="PID" /> PID
-                                        </label>
-                                        <label class="radio-inline">
-                                            <input type="radio" name="IDENTIFIER_TYPE{{$index}}" ng-model="id.IDENTIFIER_TYPE" value="Other" /> Other
-                                        </label>
-                                        <div class="buttons pull-right">
-                                            <button class="btn borderLess" ng-click="RemoveID(id)">
-                                                <i class="glyphicon glyphicon-remove"></i>
-                                            </button>
-                                        </div>
-                                    </div><br />
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- dec deg or dms: -->
-                        <div class="form-group" style="margin-bottom: 0;padding-bottom: 0">
-                            <label class="col-md-4 control-label"></label>
-                            <div class="col-md-6">
-                                <label class="radio-inline">
-                                    <input type="radio" name="decDegORdms" ng-change="latLongChange()" ng-model="OP.decDegORdms" value="dd" /> Dec Deg
-                                </label>
-                                <label class="radio-inline">
-                                    <input type="radio" name="decDegORdms" ng-change="latLongChange()" ng-model="OP.decDegORdms" value="dms" /> DMS
-                                </label>
-                            </div>
-                        </div>
-
-                        <!-- Latitude: -->
-                        <div class="form-group">
-                            <label class="col-md-4 control-label" for="LATITUDE_DD">Latitude:</label>
-                            <div class="col-md-6" ng-if="OP.decDegORdms == 'dd'">
-                                <input class="form-control" ng-keypress="isNum($event)" name="LATITUDE_DD" id="LATITUDE_DD" ng-model="OP.LATITUDE_DD"
-                                       ng-model-options="{ updateOn: 'blur' }" ng-change="checkValue()" type="text" />
-                            </div>
-                            <div class="col-md-6" ng-if="OP.decDegORdms == 'dms'">
-                                <table>
-                                    <tr>
-                                        <td><input class="form-control" ng-keypress="isNum($event)" ng-model-options="{ updateOn: 'blur' }" ng-change="checkValue('dms')" id="LaDeg" name="Deg" ng-model="DMS.LADeg" type="text" /></td>
-                                        <td>°</td>
-                                        <td><input class="form-control" ng-keypress="isNum($event)" name="Min" ng-model="DMS.LAMin" type="text" /></td>
-                                        <td>′</td>
-                                        <td><input class="form-control" ng-keypress="isNum($event)" name="Sec" ng-model="DMS.LASec" type="text" /></td>
-                                        <td>″</td>
-                                    </tr>
-                                </table>
-                            </div>
-                        </div>
-
-                        <!-- Longitude: -->
-                        <div class="form-group">
-                            <label class="col-md-4 control-label" for="LONGITUDE_DD">Longitude:</label>
-                            <div class="col-md-6" ng-if="OP.decDegORdms == 'dd'">
-                                <input class="form-control" ng-keypress="isNum($event)" id="LONGITUDE_DD" name="LONGITUDE_DD" ng-model="OP.LONGITUDE_DD"
-                                       ng-model-options="{ updateOn: 'blur' }" ng-change="checkValue()" type="text" />
-                            </div>
-                            <div class="col-md-6" ng-if="OP.decDegORdms == 'dms'">
-                                <table>
-                                    <tr>
-                                        <td><input class="form-control" ng-keypress="isNum($event)" ng-model-options="{ updateOn: 'blur' }" ng-change="checkValue('dms')" id="LoDeg" name="Deg" ng-model="DMS.LODeg" type="text" /></td>
-                                        <td>°</td>
-                                        <td><input class="form-control" ng-keypress="isNum($event)" name="Min" ng-model="DMS.LOMin" type="text" /></td>
-                                        <td>′</td>
-                                        <td><input class="form-control" ng-keypress="isNum($event)" name="Sec" ng-model="DMS.LOSec" type="text" /></td>
-                                        <td>″</td>
-                                    </tr>
-                                </table>
-                            </div>
-                        </div>
-
-                        <!-- Horizontal Datum: -->
-                        <div class="form-group">
-                            <label class="col-md-4 control-label" for="HDATUM_ID">Horizontal Datum:</label>
-                            <div class="col-md-6">
-                                <select class="form-control" name="HDATUM_ID" ng-model="OP.HDATUM_ID"
-                                        ng-options="hd.DATUM_ID as hd.DATUM_NAME for hd in HDList">
-                                    <option value=""></option>
-                                </select>
-                            </div>
-                        </div>
-
-                        <!-- Horizontal Collection Method: -->
-                        <div class="form-group">
-                            <label class="col-md-4 control-label" for="HCOLLECT_METHOD_ID">Horizontal Collection Method:</label>
-                            <div class="col-md-6">
-                                <select class="form-control" name="HCOLLECT_METHOD_ID" ng-model="OP.HCOLLECT_METHOD_ID"
-                                        ng-options="hcm.HCOLLECT_METHOD_ID as hcm.HCOLLECT_METHOD for hcm in HCollectMethodList">
-                                    <option value=""></option>
-                                </select>
-                            </div>
-                        </div>
-
-                        <!-- Ft or Meter radios: -->
-                        <div class="form-group" style="margin-bottom: 0;padding-bottom: 0">
-                            <label class="col-md-4 control-label"></label>
-                            <div class="col-md-6">
-                                <label class="radio-inline">
-                                    <input type="radio" name="FTorMETER" ng-model="OP.FTorMETER" value="ft" /> ft
-                                </label>
-                                <label class="radio-inline">
-                                    <input type="radio" name="FTorMETER" ng-model="OP.FTorMETER" value="meter" /> meter
-                                </label>
-                            </div>
-                        </div>
-
-                        <!-- Elevation: -->
-                        <div class="form-group">
-                            <label class="col-md-4 control-label" for="ELEV_FT">Elevation:</label>
-                            <div class="col-md-6">
-                                <input class="form-control" ng-keypress="isNum($event)" name="ELEV_FT" ng-model="OP.ELEV_FT" type="text" />
-                            </div>
-                        </div>
-
-                        <!--  Vertical Datum: -->
-                        <div class="form-group required" ng-class="{'has-error':OPForm.VDATUM_ID.$invalid && OPForm.VDATUM_ID.$dirty}">
-                            <label class="col-md-4 control-label req" for="VDATUM_ID">Vertical Datum:</label>
-                            <div class="col-md-6">
-                                <select class="form-control" name="VDATUM_ID" ng-model="OP.VDATUM_ID"
-                                        ng-options="vd.DATUM_ID as vd.DATUM_ABBREVIATION for vd in VDatumList" required>
-                                    <option value=""></option>
-                                </select>
-                            </div>
-                        </div>
-
-                        <!-- Vertical Collection Method: -->
-                        <div class="form-group">
-                            <label class="col-md-4 control-label" for="VCOLLECT_METHOD_ID">Vertical Collection Method:</label>
-                            <div class="col-md-6">
-                                <select class="form-control" name="VCOLLECT_METHOD_ID" ng-model="OP.VCOLLECT_METHOD_ID"
-                                        ng-options="vcm.VCOLLECT_METHOD_ID as vcm.VCOLLECT_METHOD for vcm in VCollectMethodList">
-                                    <option value=""></option>
-                                </select>
-                            </div>
-                        </div>
-
-                        <!-- Ft or CM radios: -->
-                        <div class="form-group" style="margin-bottom: 0;padding-bottom: 0">
-                            <label class="col-md-4 control-label"></label>
-                            <div class="col-md-6">
-                                <label class="radio-inline">
-                                    <input type="radio" name="FTorCM" ng-model="OP.FTorCM" value="ft" /> +/- ft
-                                </label>
-                                <label class="radio-inline">
-                                    <input type="radio" name="FTorCM" ng-model="OP.FTorCM" value="cm" /> +/- cm
-                                </label>
-                            </div>
-                        </div>
-
-                        <!-- Uncertainty: -->
-                        <div class="form-group">
-                            <label class="col-md-4 control-label" for="UNCERTAINTY">Uncertainty:</label>
-                            <div class="col-md-6">
-                                <div class="col-md-12" style="margin-bottom:5px;padding-left:0">
-                                    <div class="col-md-3" style="padding-left: 0;"><input class="form-control" ng-disabled="OP.UNQUANTIFIED==1" ng-keypress="isNum($event)" ng-model="OP.UNCERTAINTY" type="text" /></div>
-                                    <div class="col-md-2" style="text-decoration:underline">OR</span></div>
-                                    <div class="col-md-5">
-                                        <input type="checkbox" ng-model="OP.UNQUANTIFIED" ng-checked="OP.UNQUANTIFIED==1" ng-true-value="1" ng-false-value="0" ng-click="UnquantChecked()" />
-                                        <span style="margin-left:10px">Unquantified</span>
-                                    </div>
-                                    <button type="button" class="col-md-1 borderLess pull-left" tooltip-placement="bottom" tooltip-append-to-body="false" uib-tooltip="From GNSS or OPUS solution.">
-                                        <span class="glyphicon glyphicon-question-sign"></span>
-                                    </button>
-                                    <br />
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Quality: -->
-                        <div class="form-group">
-                            <label class="col-md-4 control-label" for="OP_QUALITY_ID">Quality:</label>
-                            <div class="col-md-6">
-                                <select class="form-control" name="OP_QUALITY_ID" ng-model="OP.OP_QUALITY_ID"
-                                        ng-options="opq.OP_QUALITY_ID as opq.QUALITY for opq in OPQualityList">
-                                    <option value=""></option>
-                                </select>
-                            </div>
-                        </div>
-
-                        <!-- Objective Point Notes: -->
-                        <div class="form-group">
-                            <label class="col-md-4 control-label" for="OP_NOTES">Datum Location Notes:</label>
-                            <div class="col-md-6">
-                                <textarea class="form-control" type="text" rows="3" ng-model="OP.OP_NOTES" />
-                            </div>
-                        </div>
-
-                        <!-- Date Established: -->
-                        <div class="form-group required" ng-class="{'has-error':OPForm.DATE_ESTABLISHED.$invalid && OPForm.DATE_ESTABLISHED.$dirty}">
-                            <label class="col-md-4 control-label req" for="DATE_ESTABLISHED">Date Established:</label>
-                            <div class="col-md-3 input-group" style="padding-right:14px;padding-left:14px">
-                                <input class="form-control dateInputStyle" type="date" name="de" uib-datepicker-popup="MM/dd/yyyy" show-weeks="false" is-open="datepickrs.de" ng-model="OP.DATE_ESTABLISHED" required />
-                                <span class="input-group-btn">
-                                    <button class="btn btn-default" ng-click="open($event, 'de')">
-                                        <i class="glyphicon glyphicon-calendar" />
-                                    </button>
-                                </span>
-                            </div>
-                        </div>
-
-                        <!-- Date Recovered: -->
-                        <div class="form-group">
-                            <label class="col-md-4 control-label" for="DATE_RECOVERED">Date Recovered:</label>
-                            <div class="col-md-3 input-group" style="padding-right:14px;padding-left:14px">
-                                <input show-weeks="false" class="form-control dateInputStyle" type="date" name="dr" uib-datepicker-popup="MM/dd/yyyy" is-open="datepickrs.dr" ng-model="OP.DATE_RECOVERED" />
-                                <span class="input-group-btn">
-                                    <button class="btn btn-default" ng-click="open($event, 'dr')">
-                                        <i class="glyphicon glyphicon-calendar" />
-                                    </button>
-                                </span>
-                            </div>
-                        </div>
-                        <!--create button-->
-                        <div class="form-group">
-                            <div class="col-md-12 text-center">
-                                <button ng-show="OP.OBJECTIVE_POINT_ID == undefined" class="btn btn-primary" ng-click="create(OPForm.$valid)"><span>Create</span></button>
-                            </div>
-                        </div>
-                    </fieldset>
-                </form>
-            </uib-accordion-group>
-            <!-- OBJECTIVE POINT FILES SECTION -->
-            <div ng-if="OP.OBJECTIVE_POINT_ID !== undefinfed">
-                <!--OP File Part-->
-                <uib-accordion-group is-open="dl.dlFileOpen">
-                    <uib-accordion-heading>
-                        <i style="margin-right:10px" class="pull-left glyphicon" ng-class="{'glyphicon-chevron-down': dl.dlFileOpen, 'glyphicon-chevron-right': !dl.dlFileOpen}"></i>
-                        <span>Datum Location File Information</span>
-                    </uib-accordion-heading>
-                    <div class="col-md-12">
-                        <div class="col-md-4"><h3>Datum Location Files</h3></div>
-                        <div class="col-md-6" ng-if="!showFileForm" style="margin-top:14px">
-                            <button type="button" class="borderLess" ng-click="showFile(0)" tooltip-placement="right" uib-tooltip="Upload a new File to this OP">
-                                <span class="glyphicon glyphicon-plus"></span>
-                            </button>
-                        </div>
-                        <br clear="all" />
-                        <!-- list of existing files for this op -->
-                        <div class="col-md-6" ng-if="OPFiles.length > 0">
-                            <span ng-repeat="f in OPFiles">
-                                <ul style="padding-left: 0">
-                                    <li style="list-style:none;padding-bottom: 15px;">
-                                        <span class="col-sm-9 borderLess" style="padding:0">
-                                            <a class="btn borderLess" style="padding:0" title="{{f.FILE_DATE | date: 'MM/dd/yyyy'}} ({{f.PATH || f.FILE_URL || f.FILE_ID}})" ng-click="showFile(f)">{{f.FILE_DATE | date: 'MM/dd/yyyy'}} ({{f.PATH || f.FILE_URL || f.FILE_ID}})</a>
-                                        </span>
-                                    </li>
-                                </ul>
-                            </span>
-                        </div>
-                        <!-- carousel of photo files -->
-                        <div class="col-md-6" ng-if="opImageFiles.length > 0" style="height:120px;">
-                            <uib-carousel interval="4000">
-                                <uib-slide ng-repeat="f in opImageFiles">
-                                    <img ng-click="showImageModal(f.FILE_ID)" ng-src="{{serverURL}}/Files/{{f.FILE_ID}}/Item" />
-                                    <div class="carousel-caption">
-                                        <p>{{f.PATH || f.FILE_URL || f.FILE_ID}}</p>
-                                    </div>
-                                </uib-slide>
-                            </uib-carousel>
-                        </div>
-                        <br clear="all" />
-
-                        <div ng-if="showFileForm">
-                            <hr />
-                            <form class="form-horizontal" name="OPFILEForm">
-                                <fieldset>
-                                    <!--Upload Single Image with validations*-->
-                                    <div ng-if="aFile.FILE_ID === undefined" class="form-group required" style="margin:0;padding:0">
-                                        <label class="col-md-3 control-label" for="FILE">Upload File:</label>
-                                        <div class="col-md-9">
-                                            <input type="file" max="500000" file-model="aFile.File" />
-                                            <img ngf-thumbnail="aFile.File" style="height:60px" class="thumbnail">
-                                        </div>
-                                    </div>
-                                    <!-- File Type* -->
-                                    <div class="form-group required" ng-class="{'has-error':OPFILEForm.FILETYPE_ID.$invalid && OPFILEForm.FILETYPE_ID.$dirty}" style="margin:0;padding:0">
-                                        <label class="col-md-3 control-label req" for="FILETYPE_ID">File Type:</label>
-                                        <div class="col-md-6">
-                                            <select class="form-control" name="FILETYPE_ID" ng-model="aFile.FILETYPE_ID" ng-change="updateAgencyForCaption()"
-                                                    ng-options="ft.FILETYPE_ID as ft.FILETYPE for ft in fileTypes" required>
-                                                <option value=""></option>
-                                            </select>
-                                        </div>
-                                    </div>
-
-                                    <br clear="all" />
-
-                                    <!-- photo file fileType==1-->  <!-- all other file fileType > 2-->    <!--data file fileType==2 -->
-                                    <!--File URL (Link file only)-->
-                                    <div ng-if="aFile.FILETYPE_ID === 8" class="form-group" style="margin:0;padding:0">
-                                        <label class="col-md-3 control-label" for="FILE_URL">File URL:</label>
-                                        <div class="col-md-6">
-                                            <input class="form-control" name="FILE_URL" ng-model="aFile.FILE_URL" type="text" />
-                                        </div>
-                                    </div>
-
-                                    <!--Source Name (photo)-->
-                                    <div class="form-group required" ng-if="aFile.FILETYPE_ID === 1" ng-class="{'has-error':OPFILEForm.FULLNAME.$invalid && OPFILEForm.FULLNAME.$dirty}" style="margin:0;padding:0">
-                                        <label class="col-md-3 control-label req" for="SOURCE_ID">Source Photographer:</label>
-                                        <div class="col-md-6">
-                                            <input class="form-control" name="FULLNAME" ng-model="aSource.FULLNAME" type="text" required />
-                                        </div>
-                                    </div>
-
-                                    <!--Source Name (all other)-->
-                                    <div class="form-group required" ng-if="aFile.FILETYPE_ID  > 2" ng-class="{'has-error':OPFILEForm.FULLNAME.$invalid && OPFILEForm.FULLNAME.$dirty}" style="margin:0;padding:0">
-                                        <label class="col-md-3 control-label req" for="SOURCE_ID">Source Name:</label>
-                                        <div class="col-md-6">
-                                            <input class="form-control" name="FULLNAME" ng-model="aSource.FULLNAME" type="text" required />
-                                        </div>
-                                    </div>
-
-                                    <!--Source Agency* (photo, allOther)-->
-                                    <div ng-if="aFile.FILETYPE_ID === 1 || aFile.FILETYPE_ID > 2" class="form-group required" ng-class="{'has-error':OPFILEForm.AGENCY_ID.$invalid && OPFILEForm.AGENCY_ID.$dirty}" style="margin:0;padding:0">
-                                        <label class="col-md-3 control-label req" for="AGENCY_ID">Source Agency:</label>
-                                        <div class="col-md-6">
-                                            <select class="form-control" name="AGENCY_ID" ng-model="aSource.AGENCY_ID" ng-change="updateAgencyForCaption()"
-                                                    ng-options="a.AGENCY_ID as a.AGENCY_NAME for a in agencies" required>
-                                                <option value=""></option>
-                                            </select>
-                                        </div>
-                                    </div>
-
-                                    <!-- Photo Date* (photo) -->
-                                    <div ng-if="aFile.FILETYPE_ID === 1" class="form-group required" ng-class="{'has-error':OPFILEForm.PHOTO_DATE.$invalid && OPFILEForm.PHOTO_DATE.$dirty}" style="margin:0;padding:0">
-                                        <label class="col-md-3 control-label req" for="PHOTO_DATE">Photo Date:</label>
-                                        <div class="col-md-3 input-group" style="padding-right:14px;padding-left:14px">
-                                            <input class="form-control dateInputStyle" type="date" name="sd" uib-datepicker-popup="MM/dd/yyyy" show-weeks="false" is-open="datepickrs.sd" ng-model="aFile.PHOTO_DATE" required />
-                                            <span class="input-group-btn">
-                                                <button class="btn btn-default" ng-click="open($event, 'sd')">
-                                                    <i class="glyphicon glyphicon-calendar" />
-                                                </button>
-                                            </span>
-                                        </div>
-                                    </div>
-
-                                    <!-- Date Uploaded* (photo, data, allother) -->
-                                    <div ng-if="aFile.FILETYPE_ID > 0" class="form-group required" ng-class="{'has-error':OPFILEForm.FILE_DATE.$invalid && OPFILEForm.FILE_DATE.$dirty}" style="margin:0;padding:0">
-                                        <label class="col-md-3 control-label req" for="FILE_DATE">Date Uploaded:</label>
-                                        <div class="col-md-3 input-group" style="padding-right:14px;padding-left:14px">
-                                            <input class="form-control dateInputStyle" type="date" name="fd" uib-datepicker-popup="MM/dd/yyyy" show-weeks="false" is-open="datepickrs.fd" ng-model="aFile.FILE_DATE" required />
-                                            <span class="input-group-btn">
-                                                <button class="btn btn-default" ng-click="open($event, 'fd')">
-                                                    <i class="glyphicon glyphicon-calendar" />
-                                                </button>
-                                            </span>
-                                        </div>
-                                    </div>
-
-                                    <!--Description*(photo, data, allother)-->
-                                    <div ng-if="aFile.FILETYPE_ID > 0" class="form-group required" ng-class="{'has-error':OPFILEForm.DESCRIPTION.$invalid && OPFILEForm.DESCRIPTION.$dirty}" style="margin:0;padding:0">
-                                        <label class="col-md-3 control-label req" for="DESCRIPTION">Description:</label>
-                                        <div class="col-md-6">
-                                            <textarea class="form-control" id="DESCRIPTION" type="text" rows="3" placeholder="Description" ng-model="aFile.DESCRIPTION" required />
-                                        </div>
-                                    </div>
-
-                                    <!-- This is where Other ends, rest is for Photo -->
-                                    <!--Photo Direction (photo)-->
-                                    <div ng-if="aFile.FILETYPE_ID === 1" class="form-group" style="margin:0;padding:0;padding-top:5px;">
-                                        <label class="col-md-3 control-label" for="PHOTO_DIRECTION">Photo Direction:</label>
-                                        <div class="col-md-6">
-                                            <input class="form-control" id="PHOTO_DIRECTION" name="PHOTO_DIRECTION" ng-model="aFile.PHOTO_DIRECTION" type="text" />
-                                        </div>
-                                    </div>
-
-                                    <!-- Photo Latitude (photo)-->
-                                    <div ng-if="aFile.FILETYPE_ID === 1" class="form-group" style="margin:0;padding:0">
-                                        <label class="col-md-3 control-label" for="LATITUDE_DD">Photo Latitude <br /> (if different):</label>
-                                        <div class="col-md-6">
-                                            <input class="form-control" ng-keypress="isNum($event)" name="LATITUDE_DD" id="LATITUDE_DD" ng-model="aFile.LATITUDE_DD"
-                                                   type="text" />
-                                        </div>
-                                    </div>
-
-                                    <!--Photo Longitude (photo)-->
-                                    <div ng-if="aFile.FILETYPE_ID === 1" class="form-group" style="margin:0;padding:0">
-                                        <label class="col-md-3 control-label" for="LONGITUDE_DD">Photo Longitude <br /> (if different):</label>
-                                        <div class="col-md-6">
-                                            <input class="form-control" ng-keypress="isNum($event)" id="LONGITUDE_DD" name="LONGITUDE_DD" ng-model="aFile.LONGITUDE_DD"
-                                                   type="text" />
-                                        </div>
-                                    </div>
-
-                                    <div ng-if="aFile.FILETYPE_ID === 1" class="form-group" style="margin:0;padding:0">
-                                        <label class="col-md-3 control-label" for="Caption">Preview Caption:</button></label>
-                                        <div class="col-md-6">
-                                            <span>
-                                                Photo of {{aFile.DESCRIPTION || ' (Description HERE) '}} at {{thisOPsite.SITE_DESCRIPTION}}, {{thisOPsite.COUNTY}}, {{thisOPsite.STATE}}, {{aFile.PHOTO_DATE | date: 'MM/dd/yyyy' || ' Date taken HERE '}}. Photograph by {{aSource.FULLNAME || ' Source Name HERE ' }}, {{agencyNameForCap || ' Agency HERE '}}.
-                                            </span>
-                                        </div>
-                                    </div>
-
-                                    <div ng-show="aFile.FILE_ID !== undefined && aFile.FILETYPE_ID !== 8" class="form-group" style="margin:0;padding:0">
-                                        <label class="col-md-3 control-label">Associated File:</label>
-                                        <div class="col-md-6">
-                                            <a target="_blank" class="btn btn-primary" ng-href="{{serverURL}}/Files/{{aFile.FILE_ID}}/Item">Download File</a>
-                                            <img ng-if="aFile.FILETYPE_ID === 1" style="height:80px;" ng-src="{{serverURL}}/Files/{{aFile.FILE_ID}}/Item" />
-                                        </div>
-                                    </div>
-
-                                    <div ng-show="!fileIsUploading">
-                                        <button class="btn btn-primary" ng-if="aFile.FILE_ID != undefined" ng-click="saveFile(OPFILEForm.$valid)">Save File</button>
-                                        <button class="btn btn-danger" ng-if="aFile.FILE_ID != undefined" ng-click="deleteFile()">Delete File</button>
-                                        <button class="btn btn-primary" ng-if="aFile.FILE_ID == undefined" ng-click="createFile(OPFILEForm.$valid)">Create File</button>
-                                        <button class="btn btn-warning" type="button" ng-click="cancelFile()">Close/Cancel File</button>
-                                    </div>
-                                    <div ng-show="fileIsUploading"><img src="images/fileUpload.gif" /></div>
-
-                                </fieldset>
-                            </form>
+        <div ng-if="createOReditOP == 'create'">
+            <form class="form-horizontal" name="OPForm">
+                <fieldset>
+                    <!-- Type: -->
+                    <div class="form-group required" ng-class="{'has-error':OPForm.OP_TYPE_ID.$invalid && OPForm.OP_TYPE_ID.$dirty}">
+                        <label class="col-md-4 control-label req" for="OP_TYPE_ID">Type:</label>
+                        <div class="col-md-6">
+                            <select class="form-control" name="OP_TYPE_ID" ng-model="OP.OP_TYPE_ID"
+                                    ng-options="opt.OBJECTIVE_POINT_TYPE_ID as opt.OP_TYPE for opt in OPTypeList" required>
+                                <option value=""></option>
+                            </select>
                         </div>
                     </div>
+
+                    <!-- Name: -->
+                    <div class="form-group required" ng-class="{'has-error':OPForm.NAME.$invalid && OPForm.NAME.$dirty}">
+                        <label class="col-md-4 control-label req" for="NAME">Name:</label>
+                        <div class="col-md-6">
+                            <input class="form-control" name="NAME" ng-model="OP.NAME" type="text" required />
+                        </div>
+                    </div>
+
+                    <!-- Description: -->
+                    <div class="form-group required" ng-class="{'has-error':OPForm.DESCRIPTION.$invalid && OPForm.DESCRIPTION.$dirty}">
+                        <label class="col-md-4 control-label req" for="DESCRIPTION">Description:</label>
+                        <div class="col-md-6">
+                            <textarea class="form-control" name="DESCRIPTION" type=" text" rows="3" ng-model="OP.DESCRIPTION" required />
+                        </div>
+                        <button type="button" class="col-md-1 borderLess pull-left" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip-html="htmlDescriptionTip">
+                            <span class="glyphicon glyphicon-question-sign"></span>
+                        </button>
+                    </div>
+
+                    <!-- Control Identifier add button -->
+                    <div class="form-group">
+                        <label class="col-md-4 control-label" for="CONTROL">Control Identifier:</label>
+                        <div class="col-md-6">
+                            <button type="button" class="btn btn-default" ng-click="addNewIdentifier()">Add New Identifier</button>
+                        </div>
+                        <button type="button" class="col-md-1 borderLess pull-left" tooltip-placement="bottom" tooltip-append-to-body="false" uib-tooltip="National Geodetic Survey permanent identifier. See: ngs.noaa.gov/NGSDataExplorer/ for more information.">
+                            <span class="glyphicon glyphicon-question-sign"></span>
+                        </button>
+                    </div>
+
+                    <!-- Control Identifier input: -->
+                    <div class="form-group" ng-show="showControlIDinput">
+                        <label class="col-md-4 control-label"></label>
+                        <div class="col-md-6">
+                            <div ng-repeat="id in addedIdentifiers">
+                                <div class="col-md-12" style="margin-bottom:5px">
+                                    <div class="col-md-7"><input class="form-control" name="OPControl" ng-model="id.IDENTIFIER" type="text" /></div>
+                                    <input type="hidden" name="OP_CONTROL_IDENTIFIER_ID" ng-model="id.OP_CONTROL_IDENTIFIER_ID" />
+                                    <input type="hidden" name="OBJECTIVE_POINT_ID" ng-model="id.OBJECTIVE_POINT_ID" />
+
+                                    <label class="radio-inline">
+                                        <input type="radio" name="IDENTIFIER_TYPE{{$index}}" ng-model="id.IDENTIFIER_TYPE" value="PID" /> PID
+                                    </label>
+                                    <label class="radio-inline">
+                                        <input type="radio" name="IDENTIFIER_TYPE{{$index}}" ng-model="id.IDENTIFIER_TYPE" value="Other" /> Other
+                                    </label>
+                                    <div class="buttons pull-right">
+                                        <button class="btn borderLess" ng-click="RemoveID(id)">
+                                            <i class="glyphicon glyphicon-remove"></i>
+                                        </button>
+                                    </div>
+                                </div><br />
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- dec deg or dms: -->
+                    <div class="form-group" style="margin-bottom: 0;padding-bottom: 0">
+                        <label class="col-md-4 control-label"></label>
+                        <div class="col-md-6">
+                            <label class="radio-inline">
+                                <input type="radio" name="decDegORdms" ng-change="latLongChange()" ng-model="OP.decDegORdms" value="dd" /> Dec Deg
+                            </label>
+                            <label class="radio-inline">
+                                <input type="radio" name="decDegORdms" ng-change="latLongChange()" ng-model="OP.decDegORdms" value="dms" /> DMS
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Latitude: -->
+                    <div class="form-group">
+                        <label class="col-md-4 control-label" for="LATITUDE_DD">Latitude:</label>
+                        <div class="col-md-6" ng-if="OP.decDegORdms == 'dd'">
+                            <input class="form-control" ng-keypress="isNum($event)" name="LATITUDE_DD" id="LATITUDE_DD" ng-model="OP.LATITUDE_DD"
+                                   ng-model-options="{ updateOn: 'blur' }" ng-change="checkValue('dd')" type="text" />
+                        </div>
+                        <div class="col-md-6" ng-if="OP.decDegORdms == 'dms'">
+                            <table>
+                                <tr>
+                                    <td><input class="form-control" ng-keypress="isNum($event)" ng-model-options="{ updateOn: 'blur' }" ng-change="checkValue('dms')" id="LaDeg" name="Deg" ng-model="DMS.LADeg" type="text" /></td>
+                                    <td>°</td>
+                                    <td><input class="form-control" ng-keypress="isNum($event)" name="Min" ng-model="DMS.LAMin" type="text" /></td>
+                                    <td>′</td>
+                                    <td><input class="form-control" ng-keypress="isNum($event)" name="Sec" ng-model="DMS.LASec" type="text" /></td>
+                                    <td>″</td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- Longitude: -->
+                    <div class="form-group">
+                        <label class="col-md-4 control-label" for="LONGITUDE_DD">Longitude:</label>
+                        <div class="col-md-6" ng-if="OP.decDegORdms == 'dd'">
+                            <input class="form-control" ng-keypress="isNum($event)" id="LONGITUDE_DD" name="LONGITUDE_DD" ng-model="OP.LONGITUDE_DD"
+                                   ng-model-options="{ updateOn: 'blur' }" ng-change="checkValue('dd')" type="text" />
+                        </div>
+                        <div class="col-md-6" ng-if="OP.decDegORdms == 'dms'">
+                            <table>
+                                <tr>
+                                    <td><input class="form-control" ng-keypress="isNum($event)" ng-model-options="{ updateOn: 'blur' }" ng-change="checkValue('dms')" id="LoDeg" name="Deg" ng-model="DMS.LODeg" type="text" /></td>
+                                    <td>°</td>
+                                    <td><input class="form-control" ng-keypress="isNum($event)" name="Min" ng-model="DMS.LOMin" type="text" /></td>
+                                    <td>′</td>
+                                    <td><input class="form-control" ng-keypress="isNum($event)" name="Sec" ng-model="DMS.LOSec" type="text" /></td>
+                                    <td>″</td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- Horizontal Datum: -->
+                    <div class="form-group">
+                        <label class="col-md-4 control-label" for="HDATUM_ID">Horizontal Datum:</label>
+                        <div class="col-md-6">
+                            <select class="form-control" name="HDATUM_ID" ng-model="OP.HDATUM_ID"
+                                    ng-options="hd.DATUM_ID as hd.DATUM_NAME for hd in HDList">
+                                <option value=""></option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Horizontal Collection Method: -->
+                    <div class="form-group">
+                        <label class="col-md-4 control-label" for="HCOLLECT_METHOD_ID">Horizontal Collection Method:</label>
+                        <div class="col-md-6">
+                            <select class="form-control" name="HCOLLECT_METHOD_ID" ng-model="OP.HCOLLECT_METHOD_ID"
+                                    ng-options="hcm.HCOLLECT_METHOD_ID as hcm.HCOLLECT_METHOD for hcm in HCollectMethodList">
+                                <option value=""></option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Ft or Meter radios: -->
+                    <div class="form-group" style="margin-bottom: 0;padding-bottom: 0">
+                        <label class="col-md-4 control-label"></label>
+                        <div class="col-md-6">
+                            <label class="radio-inline">
+                                <input type="radio" name="FTorMETER" ng-model="OP.FTorMETER" value="ft" /> ft
+                            </label>
+                            <label class="radio-inline">
+                                <input type="radio" name="FTorMETER" ng-model="OP.FTorMETER" value="meter" /> meter
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Elevation: -->
+                    <div class="form-group">
+                        <label class="col-md-4 control-label" for="ELEV_FT">Elevation:</label>
+                        <div class="col-md-6">
+                            <input class="form-control" ng-keypress="isNum($event)" name="ELEV_FT" ng-model="OP.ELEV_FT" type="text" />
+                        </div>
+                    </div>
+
+                    <!--  Vertical Datum: -->
+                    <div class="form-group required" ng-class="{'has-error':OPForm.VDATUM_ID.$invalid && OPForm.VDATUM_ID.$dirty}">
+                        <label class="col-md-4 control-label req" for="VDATUM_ID">Vertical Datum:</label>
+                        <div class="col-md-6">
+                            <select class="form-control" name="VDATUM_ID" ng-model="OP.VDATUM_ID"
+                                    ng-options="vd.DATUM_ID as vd.DATUM_ABBREVIATION for vd in VDatumList" required>
+                                <option value=""></option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Vertical Collection Method: -->
+                    <div class="form-group">
+                        <label class="col-md-4 control-label" for="VCOLLECT_METHOD_ID">Vertical Collection Method:</label>
+                        <div class="col-md-6">
+                            <select class="form-control" name="VCOLLECT_METHOD_ID" ng-model="OP.VCOLLECT_METHOD_ID"
+                                    ng-options="vcm.VCOLLECT_METHOD_ID as vcm.VCOLLECT_METHOD for vcm in VCollectMethodList">
+                                <option value=""></option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Ft or CM radios: -->
+                    <div class="form-group" style="margin-bottom: 0;padding-bottom: 0">
+                        <label class="col-md-4 control-label"></label>
+                        <div class="col-md-6">
+                            <label class="radio-inline">
+                                <input type="radio" name="FTorCM" ng-model="OP.FTorCM" value="ft" /> +/- ft
+                            </label>
+                            <label class="radio-inline">
+                                <input type="radio" name="FTorCM" ng-model="OP.FTorCM" value="cm" /> +/- cm
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Uncertainty: -->
+                    <div class="form-group">
+                        <label class="col-md-4 control-label" for="UNCERTAINTY">Uncertainty:</label>
+                        <div class="col-md-6">
+                            <div class="col-md-12" style="margin-bottom:5px;padding-left:0">
+                                <div class="col-md-3" style="padding-left: 0;"><input class="form-control" ng-disabled="OP.UNQUANTIFIED==1" ng-keypress="isNum($event)" ng-model="OP.UNCERTAINTY" type="text" /></div>
+                                <div class="col-md-2" style="text-decoration:underline">OR</span></div>
+                                <div class="col-md-5">
+                                    <input type="checkbox" ng-model="OP.UNQUANTIFIED" ng-checked="OP.UNQUANTIFIED==1" ng-true-value="1" ng-false-value="0" ng-click="UnquantChecked()" />
+                                    <span style="margin-left:10px">Unquantified</span>
+                                </div>
+                                <button type="button" class="col-md-1 borderLess pull-left" tooltip-placement="bottom" tooltip-append-to-body="false" uib-tooltip="From GNSS or OPUS solution.">
+                                    <span class="glyphicon glyphicon-question-sign"></span>
+                                </button>
+                                <br />
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Quality: -->
+                    <div class="form-group">
+                        <label class="col-md-4 control-label" for="OP_QUALITY_ID">Quality:</label>
+                        <div class="col-md-6">
+                            <select class="form-control" name="OP_QUALITY_ID" ng-model="OP.OP_QUALITY_ID"
+                                    ng-options="opq.OP_QUALITY_ID as opq.QUALITY for opq in OPQualityList">
+                                <option value=""></option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Objective Point Notes: -->
+                    <div class="form-group">
+                        <label class="col-md-4 control-label" for="OP_NOTES">Datum Location Notes:</label>
+                        <div class="col-md-6">
+                            <textarea class="form-control" type="text" rows="3" ng-model="OP.OP_NOTES" />
+                        </div>
+                    </div>
+
+                    <!-- Date Established: -->
+                    <div class="form-group required" ng-class="{'has-error':OPForm.DATE_ESTABLISHED.$invalid && OPForm.DATE_ESTABLISHED.$dirty}">
+                        <label class="col-md-4 control-label req" for="DATE_ESTABLISHED">Date Established:</label>
+                        <div class="col-md-3 input-group" style="padding-right:14px;padding-left:14px">
+                            <input class="form-control dateInputStyle" type="date" name="de" uib-datepicker-popup="MM/dd/yyyy" show-weeks="false" is-open="datepickrs.de" ng-model="OP.DATE_ESTABLISHED" required />
+                            <span class="input-group-btn">
+                                <button class="btn btn-default" ng-click="open($event, 'de')">
+                                    <i class="glyphicon glyphicon-calendar" />
+                                </button>
+                            </span>
+                        </div>
+                    </div>
+
+                    <!-- Date Recovered: -->
+                    <div class="form-group">
+                        <label class="col-md-4 control-label" for="DATE_RECOVERED">Date Recovered:</label>
+                        <div class="col-md-3 input-group" style="padding-right:14px;padding-left:14px">
+                            <input show-weeks="false" class="form-control dateInputStyle" type="date" name="dr" uib-datepicker-popup="MM/dd/yyyy" is-open="datepickrs.dr" ng-model="OP.DATE_RECOVERED" />
+                            <span class="input-group-btn">
+                                <button class="btn btn-default" ng-click="open($event, 'dr')">
+                                    <i class="glyphicon glyphicon-calendar" />
+                                </button>
+                            </span>
+                        </div>
+                    </div>
+                    <!--create button-->
+                    <div class="form-group">
+                        <div class="col-md-12 text-center">
+                            <button class="btn btn-primary" ng-click="create(OPForm.$valid)"><span>Create</span></button>
+                        </div>
+                    </div>
+                </fieldset>
+            </form>
+        </div>
+
+        <div ng-if="createOReditOP == 'edit'">
+            <uib-accordion close-others="false">
+                <!--Datum Location Part-->
+                <uib-accordion-group is-open="dl.dlOpen">
+                    <uib-accordion-heading>
+                        <i style="margin-right:10px" class="pull-left glyphicon" ng-class="{'glyphicon-chevron-down': dl.dlOpen, 'glyphicon-chevron-right': !dl.dlOpen}"></i>
+                        <span>{{opModalHeader}}</span>
+                    </uib-accordion-heading>
+                    <form class="form-horizontal" name="OPEditForm">
+                        <fieldset>
+                            <!--edit button-->
+                            <div class="form-group">
+                                <div class="col-md-12">
+                                    <span><button ng-show="view.OPval == 'detail'" type="button" class="btn btn-primary" ng-click="wannaEditOP()"><span>Edit Datum Location</span></button></span>
+                                    <span><button ng-show="view.OPval == 'edit'" class="btn btn-primary" ng-click="save(OPEditForm.$valid)"><span>Save</span></button></span>
+                                    <span><button ng-show="view.OPval == 'edit'" type="button" class=" btn btn-primary" ng-click="cancelOPEdit()"><span>Cancel</span></button></span>
+                                </div>
+                            </div>
+
+                            <!-- Type: -->
+                            <div class="form-group required" ng-class="{'has-error':OPEditForm.OP_TYPE_ID.$invalid && OPEditForm.OP_TYPE_ID.$dirty && view.OPval =='edit'}">
+                                <label class="col-md-4 control-label req" for="OP_TYPE_ID">Type:</label>
+                                <div class="col-md-6">
+                                    <span ng-show="view.OPval == 'detail'">{{OP.opType || '---'}}</span>
+                                    <select ng-show="view.OPval == 'edit'" class="form-control" name="OP_TYPE_ID" ng-model="opCopy.OP_TYPE_ID"
+                                            ng-options="opt.OBJECTIVE_POINT_TYPE_ID as opt.OP_TYPE for opt in OPTypeList" required>
+                                        <option value=""></option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <!-- Name: -->
+                            <div class="form-group required" ng-class="{'has-error':OPEditForm.NAME.$invalid && OPEditForm.NAME.$dirty && view.OPval =='edit'}">
+                                <label class="col-md-4 control-label req" for="NAME">Name:</label>
+                                <div class="col-md-6">
+                                    <span ng-show="view.OPval == 'detail'">{{OP.NAME || '---'}}</span>
+                                    <input ng-show="view.OPval == 'edit'" class="form-control" name="NAME" ng-model="opCopy.NAME" type="text" required />
+                                </div>
+                            </div>
+
+                            <!-- Description: -->
+                            <div class="form-group required" ng-class="{'has-error':OPEditForm.DESCRIPTION.$invalid && OPEditForm.DESCRIPTION.$dirty && view.OPval =='edit'}">
+                                <label class="col-md-4 control-label req" for="DESCRIPTION">Description:</label>
+                                <div class="col-md-6">
+                                    <span ng-show="view.OPval == 'detail'">{{OP.DESCRIPTION || '---'}}</span>
+                                    <textarea ng-show="view.OPval == 'edit'" class="form-control" name="DESCRIPTION" type=" text" rows="3" ng-model="opCopy.DESCRIPTION" required />
+                                </div>
+                                <button ng-show="view.OPval == 'edit'" type="button" class="col-md-1 borderLess pull-left" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip-html="htmlDescriptionTip">
+                                    <span class="glyphicon glyphicon-question-sign"></span>
+                                </button>
+                            </div>
+
+                            <!-- Control Identifier add button -->
+                            <div ng-show="view.OPval == 'edit'" class="form-group">
+                                <label class="col-md-4 control-label" for="CONTROL">Control Identifier:</label>
+                                <div class="col-md-6">
+                                    <button type="button" class="btn btn-default" ng-click="addNewIdentifier()">Add New Identifier</button>
+                                </div>
+                                <button ng-show="view.OPval == 'edit'" type="button" class="col-md-1 borderLess pull-left" tooltip-placement="bottom" tooltip-append-to-body="false" uib-tooltip="National Geodetic Survey permanent identifier. See: ngs.noaa.gov/NGSDataExplorer/ for more information.">
+                                    <span class="glyphicon glyphicon-question-sign"></span>
+                                </button>
+                            </div>
+
+                            <!-- Control Identifier input: -->
+                            <div class="form-group" ng-show="showControlIDinput">
+                                <label class="col-md-4 control-label"><span ng-show="view.OPval == 'detail'">Control Identifier:</span></label>
+                                <div class="col-md-6">
+                                    <div ng-show="view.OPval == 'detail'">
+                                        <div ng-repeat="id in addedIdentifiers">
+                                            <div class="col-md-12" style="margin-bottom:5px">
+                                                <div class="col-md-7"><span>{{id.IDENTIFIER}}, {{id.IDENTIFIER_TYPE}}</span></div>
+                                            </div><br />
+                                        </div>
+                                    </div> <!-- end detail -->
+                                    <div ng-show="view.OPval == 'edit'">
+                                        <div ng-repeat="idC in addedIdentifiersCopy">
+                                            <div class="col-md-12" style="margin-bottom:5px">
+                                                <div class="col-md-7"><input class="form-control" name="OPControl" ng-model="idC.IDENTIFIER" type="text" /></div>
+                                                <input type="hidden" name="OP_CONTROL_IDENTIFIER_ID" ng-model="idC.OP_CONTROL_IDENTIFIER_ID" />
+                                                <input type="hidden" name="OBJECTIVE_POINT_ID" ng-model="idC.OBJECTIVE_POINT_ID" />
+
+                                                <label class="radio-inline">
+                                                    <input type="radio" name="IDENTIFIER_TYPE{{$index}}" ng-model="idC.IDENTIFIER_TYPE" value="PID" /> PID
+                                                </label>
+                                                <label class="radio-inline">
+                                                    <input type="radio" name="IDENTIFIER_TYPE{{$index}}" ng-model="idC.IDENTIFIER_TYPE" value="Other" /> Other
+                                                </label>
+                                                <div class="buttons pull-right">
+                                                    <button class="btn borderLess" ng-click="RemoveID(idC)">
+                                                        <i class="glyphicon glyphicon-remove"></i>
+                                                    </button>
+                                                </div>
+                                            </div><br />
+                                        </div> <!-- end repeat -->
+                                    </div><!-- end edit -->
+                                </div>
+                            </div>
+
+                            <!-- dec deg or dms: -->
+                            <div class="form-group" ng-show="view.OPval == 'edit'" style="margin-bottom: 0;padding-bottom: 0">
+                                <label class="col-md-4 control-label"></label>
+                                <div class="col-md-6">
+                                    <label class="radio-inline">
+                                        <input type="radio" name="decDegORdms" ng-change="latLongChange()" ng-model="opCopy.decDegORdms" value="dd" /> Dec Deg
+                                    </label>
+                                    <label class="radio-inline">
+                                        <input type="radio" name="decDegORdms" ng-change="latLongChange()" ng-model="opCopy.decDegORdms" value="dms" /> DMS
+                                    </label>
+                                </div>
+                            </div>
+
+                            <!-- Latitude: -->
+                            <div class="form-group">
+                                <label class="col-md-4 control-label" for="LATITUDE_DD">Latitude:</label>
+                                <div class="col-md-6"><span ng-show="view.OPval == 'detail'">{{OP.LATITUDE_DD}}</span></div>
+                                <span ng-show="view.OPval == 'edit'">
+                                    <div class="col-md-6" ng-if="opCopy.decDegORdms == 'dd'">
+                                        <input class="form-control" ng-keypress="isNum($event)" name="LATITUDE_DD" id="LATITUDE_DD" ng-model="opCopy.LATITUDE_DD"
+                                               ng-model-options="{ updateOn: 'blur' }" ng-change="checkValue('dd')" type="text" />
+                                    </div>
+                                    <div class="col-md-6" ng-if="opCopy.decDegORdms == 'dms'">
+                                        <table>
+                                            <tr>
+                                                <td><input class="form-control" ng-keypress="isNum($event)" ng-model-options="{ updateOn: 'blur' }" ng-change="checkValue('dms')" id="LaDeg" name="Deg" ng-model="DMS.LADeg" type="text" /></td>
+                                                <td>°</td>
+                                                <td><input class="form-control" ng-keypress="isNum($event)" name="Min" ng-model="DMS.LAMin" type="text" /></td>
+                                                <td>′</td>
+                                                <td><input class="form-control" ng-keypress="isNum($event)" name="Sec" ng-model="DMS.LASec" type="text" /></td>
+                                                <td>″</td>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                </span>
+                            </div>
+
+                            <!-- Longitude: -->
+                            <div class="form-group">
+                                <label class="col-md-4 control-label" for="LONGITUDE_DD">Longitude:</label>
+                                <div class="col-md-6"><span ng-show="view.OPval == 'detail'">{{OP.LONGITUDE_DD}}</span></div>
+                                <span ng-show="view.OPval == 'edit'">
+                                    <div class="col-md-6" ng-if="opCopy.decDegORdms == 'dd'">
+                                        <input class="form-control" ng-keypress="isNum($event)" id="LONGITUDE_DD" name="LONGITUDE_DD" ng-model="opCopy.LONGITUDE_DD"
+                                               ng-model-options="{ updateOn: 'blur' }" ng-change="checkValue('dd')" type="text" />
+                                    </div>
+                                    <div class="col-md-6" ng-if="opCopy.decDegORdms == 'dms'">
+                                        <table>
+                                            <tr>
+                                                <td><input class="form-control" ng-keypress="isNum($event)" ng-model-options="{ updateOn: 'blur' }" ng-change="checkValue('dms')" id="LoDeg" name="Deg" ng-model="DMS.LODeg" type="text" /></td>
+                                                <td>°</td>
+                                                <td><input class="form-control" ng-keypress="isNum($event)" name="Min" ng-model="DMS.LOMin" type="text" /></td>
+                                                <td>′</td>
+                                                <td><input class="form-control" ng-keypress="isNum($event)" name="Sec" ng-model="DMS.LOSec" type="text" /></td>
+                                                <td>″</td>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                </span>
+                            </div>
+
+                            <!-- Horizontal Datum: -->
+                            <div class="form-group">
+                                <label class="col-md-4 control-label" for="HDATUM_ID">Horizontal Datum:</label>
+                                <div class="col-md-6">
+                                    <span ng-show="view.OPval == 'detail'">{{OP.hdatum || '---'}}</span>
+                                    <select ng-show="view.OPval == 'edit'" class="form-control" name="HDATUM_ID" ng-model="opCopy.HDATUM_ID"
+                                            ng-options="hd.DATUM_ID as hd.DATUM_NAME for hd in HDList">
+                                        <option value=""></option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <!-- Horizontal Collection Method: -->
+                            <div class="form-group">
+                                <label class="col-md-4 control-label" for="HCOLLECT_METHOD_ID">Horizontal Collection Method:</label>
+                                <div class="col-md-6">
+                                    <span ng-show="view.OPval == 'detail'">{{OP.hCollectMethod || '---'}}</span>
+                                    <select ng-show="view.OPval == 'edit'" class="form-control" name="HCOLLECT_METHOD_ID" ng-model="opCopy.HCOLLECT_METHOD_ID"
+                                            ng-options="hcm.HCOLLECT_METHOD_ID as hcm.HCOLLECT_METHOD for hcm in HCollectMethodList">
+                                        <option value=""></option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <!-- Ft or Meter radios: -->
+                            <div ng-show="view.OPval == 'edit'" class="form-group" style="margin-bottom: 0;padding-bottom: 0">
+                                <label class="col-md-4 control-label"></label>
+                                <div class="col-md-6">
+                                    <label class="radio-inline">
+                                        <input type="radio" name="FTorMETER" ng-model="opCopy.FTorMETER" value="ft" /> ft
+                                    </label>
+                                    <label class="radio-inline">
+                                        <input type="radio" name="FTorMETER" ng-model="opCopy.FTorMETER" value="meter" /> meter
+                                    </label>
+                                </div>
+                            </div>
+
+                            <!-- Elevation: -->
+                            <div class="form-group">
+                                <label class="col-md-4 control-label" for="ELEV_FT">Elevation:</label>
+                                <div class="col-md-6">
+                                    <span ng-show="view.OPval == 'detail'">{{OP.ELEV_FT || '---'}}<span ng-if="OP.ELEV_FT"> ft.</span></span>
+                                    <input ng-show="view.OPval == 'edit'" class="form-control" ng-keypress="isNum($event)" name="ELEV_FT" ng-model="opCopy.ELEV_FT" type="text" />
+                                </div>
+                            </div>
+
+                            <!--  Vertical Datum: -->
+                            <div class="form-group required" ng-class="{'has-error':OPEditForm.VDATUM_ID.$invalid && OPEditForm.VDATUM_ID.$dirty && view.OPval =='edit'}">
+                                <label class="col-md-4 control-label req" for="VDATUM_ID">Vertical Datum:</label>
+                                <div class="col-md-6">
+                                    <span ng-show="view.OPval == 'detail'">{{OP.vDatum || '---'}}</span>
+                                    <select ng-show="view.OPval == 'edit'" class="form-control" name="VDATUM_ID" ng-model="opCopy.VDATUM_ID"
+                                            ng-options="vd.DATUM_ID as vd.DATUM_NAME for vd in VDatumList" required>
+                                        <option value=""></option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <!-- Vertical Collection Method: -->
+                            <div class="form-group">
+                                <label class="col-md-4 control-label" for="VCOLLECT_METHOD_ID">Vertical Collection Method:</label>
+                                <div class="col-md-6">
+                                    <span ng-show="view.OPval == 'detail'">{{OP.vCollectMethod || '---'}}</span>
+                                    <select ng-show="view.OPval == 'edit'" class="form-control" name="VCOLLECT_METHOD_ID" ng-model="opCopy.VCOLLECT_METHOD_ID"
+                                            ng-options="vcm.VCOLLECT_METHOD_ID as vcm.VCOLLECT_METHOD for vcm in VCollectMethodList">
+                                        <option value=""></option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <!-- Ft or CM radios: -->
+                            <div ng-show="view.OPval == 'edit'" class="form-group" style="margin-bottom: 0;padding-bottom: 0">
+                                <label class="col-md-4 control-label"></label>
+                                <div class="col-md-6">
+                                    <label class="radio-inline">
+                                        <input type="radio" name="FTorCM" ng-model="opCopy.FTorCM" value="ft" /> +/- ft
+                                    </label>
+                                    <label class="radio-inline">
+                                        <input type="radio" name="FTorCM" ng-model="opCopy.FTorCM" value="cm" /> +/- cm
+                                    </label>
+                                </div>
+                            </div>
+
+                            <!-- Uncertainty: -->
+                            <div class="form-group">
+                                <label class="col-md-4 control-label" for="UNCERTAINTY">Uncertainty:</label>
+                                <div class="col-md-6">
+                                    <div ng-show="view.OPval == 'detail'">{{OP.UNCERTAINTY || OP.UNQUANTIFIED == 1 ? 'Unquantified' : '---'}}</div>
+                                    <div ng-show="view.OPval == 'edit'">
+                                        <div class="col-md-12" style="margin-bottom:5px;padding-left:0">
+                                            <div class="col-md-3" style="padding-left: 0;"><input class="form-control" ng-disabled="opCopy.UNQUANTIFIED==1" ng-keypress="isNum($event)" ng-model="opCopy.UNCERTAINTY" type="text" /></div>
+                                            <div class="col-md-2" style="text-decoration:underline">OR</span></div>
+                                            <div class="col-md-5">
+                                                <input type="checkbox" ng-model="opCopy.UNQUANTIFIED" ng-checked="opCopy.UNQUANTIFIED==1" ng-true-value="1" ng-false-value="0" ng-click="UnquantChecked()" />
+                                                <span style="margin-left:10px">Unquantified</span>
+                                            </div>
+                                            <button type="button" class="col-md-1 borderLess pull-left" tooltip-placement="bottom" tooltip-append-to-body="false" uib-tooltip="From GNSS or OPUS solution.">
+                                                <span class="glyphicon glyphicon-question-sign"></span>
+                                            </button>
+                                            <br />
+                                        </div>
+                                    </div><!-- end edit -->
+                                </div>
+                            </div>
+
+                            <!-- Quality: -->
+                            <div class="form-group">
+                                <label class="col-md-4 control-label" for="OP_QUALITY_ID">Quality:</label>
+                                <div class="col-md-6">
+                                    <span ng-show="view.OPval == 'detail'">{{OP.quality || '---'}}</span>
+                                    <select ng-show="view.OPval == 'edit'" class="form-control" name="OP_QUALITY_ID" ng-model="opCopy.OP_QUALITY_ID"
+                                            ng-options="opq.OP_QUALITY_ID as opq.QUALITY for opq in OPQualityList">
+                                        <option value=""></option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <!-- Objective Point Notes: -->
+                            <div class="form-group">
+                                <label class="col-md-4 control-label" for="OP_NOTES">Datum Location Notes:</label>
+                                <div class="col-md-6">
+                                    <span ng-show="view.OPval == 'detail'">{{OP.OP_NOTES || '---'}}</span>
+                                    <textarea ng-show="view.OPval == 'edit'" class="form-control" type="text" rows="3" ng-model="opCopy.OP_NOTES" />
+                                </div>
+                            </div>
+
+                            <!-- Date Established: -->
+                            <div class="form-group required" ng-class="{'has-error':OPEditForm.DATE_ESTABLISHED.$invalid && OPEditForm.DATE_ESTABLISHED.$dirty && view.OPval =='edit'}">
+                                <label class="col-md-4 control-label req" for="DATE_ESTABLISHED">Date Established:</label>
+                                <div class="col-md-3 input-group" style="padding-right:14px;padding-left:14px">
+                                    <span ng-show="view.OPval == 'detail'">{{OP.DATE_ESTABLISHED | date: 'MM/dd/yyyy' || '---'}}</span>
+                                    <input ng-show="view.OPval == 'edit'" class="form-control dateInputStyle" type="date" name="de" uib-datepicker-popup="MM/dd/yyyy" show-weeks="false" is-open="datepickrs.de" ng-model="opCopy.DATE_ESTABLISHED" required />
+                                    <span ng-show="view.OPval == 'edit'" class="input-group-btn">
+                                        <button class="btn btn-default" ng-click="open($event, 'de')">
+                                            <i class="glyphicon glyphicon-calendar" />
+                                        </button>
+                                    </span>
+                                </div>
+                            </div>
+
+                            <!-- Date Recovered: -->
+                            <div class="form-group">
+                                <label class="col-md-4 control-label" for="DATE_RECOVERED">Date Recovered:</label>
+                                <div class="col-md-3 input-group" style="padding-right:14px;padding-left:14px">
+                                    <span ng-show="view.OPval == 'detail'">{{OP.DATE_RECOVERED | date: 'MM/dd/yyyy' || '---'}}</span>
+                                    <input ng-show="view.OPval == 'edit'" show-weeks="false" class="form-control dateInputStyle" type="date" name="dr" uib-datepicker-popup="MM/dd/yyyy" is-open="datepickrs.dr" ng-model="opCopy.DATE_RECOVERED" />
+                                    <span ng-show="view.OPval == 'edit'" class="input-group-btn">
+                                        <button class="btn btn-default" ng-click="open($event, 'dr')">
+                                            <i class="glyphicon glyphicon-calendar" />
+                                        </button>
+                                    </span>
+                                </div>
+                            </div>
+                        </fieldset>
+                    </form>
                 </uib-accordion-group>
-            </div>
-        </uib-accordion>
+                <!-- OBJECTIVE POINT FILES SECTION -->
+                <div ng-if="OP.OBJECTIVE_POINT_ID !== undefinfed">
+                    <!--OP File Part-->
+                    <uib-accordion-group is-open="dl.dlFileOpen">
+                        <uib-accordion-heading>
+                            <i style="margin-right:10px" class="pull-left glyphicon" ng-class="{'glyphicon-chevron-down': dl.dlFileOpen, 'glyphicon-chevron-right': !dl.dlFileOpen}"></i>
+                            <span>Datum Location File Information</span>
+                        </uib-accordion-heading>
+                        <div class="col-md-12">
+                            <div class="col-md-4"><h3>Datum Location Files</h3></div>
+                            <div class="col-md-6" ng-if="!showFileForm" style="margin-top:14px">
+                                <button type="button" class="borderLess" ng-click="showFile(0)" tooltip-placement="right" uib-tooltip="Upload a new File to this OP">
+                                    <span class="glyphicon glyphicon-plus"></span>
+                                </button>
+                            </div>
+                            <br clear="all" />
+                            <!-- list of existing files for this op -->
+                            <div class="col-md-6" ng-if="OPFiles.length > 0">
+                                <span ng-repeat="f in OPFiles">
+                                    <ul style="padding-left: 0">
+                                        <li style="list-style:none;padding-bottom: 15px;">
+                                            <span class="col-sm-9 borderLess" style="padding:0">
+                                                <a class="btn borderLess" style="padding:0" title="{{f.FILE_DATE | date: 'MM/dd/yyyy'}} ({{f.PATH || f.FILE_URL || f.FILE_ID}})" ng-click="showFile(f)">{{f.FILE_DATE | date: 'MM/dd/yyyy'}} ({{f.PATH || f.FILE_URL || f.FILE_ID}})</a>
+                                            </span>
+                                        </li>
+                                    </ul>
+                                </span>
+                            </div>
+                            <!-- carousel of photo files -->
+                            <div class="col-md-6" ng-if="opImageFiles.length > 0" style="height:120px;">
+                                <uib-carousel interval="4000">
+                                    <uib-slide ng-repeat="f in opImageFiles">
+                                        <img ng-click="showImageModal(f.FILE_ID)" ng-src="{{serverURL}}/Files/{{f.FILE_ID}}/Item" />
+                                        <div class="carousel-caption">
+                                            <p>{{f.PATH || f.FILE_URL || f.FILE_ID}}</p>
+                                        </div>
+                                    </uib-slide>
+                                </uib-carousel>
+                            </div>
+                            <br clear="all" />
+
+                            <div ng-if="showFileForm">
+                                <hr />
+                                <form class="form-horizontal" name="OPFILEForm">
+                                    <fieldset>
+                                        <!--Upload Single Image with validations*-->
+                                        <div ng-if="aFile.FILE_ID === undefined" class="form-group required" style="margin:0;padding:0">
+                                            <label class="col-md-3 control-label" for="FILE">Upload File:</label>
+                                            <div class="col-md-9">
+                                                <input type="file" max="500000" file-model="aFile.File" />
+                                                <img ngf-thumbnail="aFile.File" style="height:60px" class="thumbnail">
+                                            </div>
+                                        </div>
+                                        <!-- File Type* -->
+                                        <div class="form-group required" ng-class="{'has-error':OPFILEForm.FILETYPE_ID.$invalid && OPFILEForm.FILETYPE_ID.$dirty}" style="margin:0;padding:0">
+                                            <label class="col-md-3 control-label req" for="FILETYPE_ID">File Type:</label>
+                                            <div class="col-md-6">
+                                                <select class="form-control" name="FILETYPE_ID" ng-model="aFile.FILETYPE_ID" ng-change="updateAgencyForCaption()"
+                                                        ng-options="ft.FILETYPE_ID as ft.FILETYPE for ft in fileTypes" required>
+                                                    <option value=""></option>
+                                                </select>
+                                            </div>
+                                        </div>
+
+                                        <br clear="all" />
+
+                                        <!-- photo file fileType==1-->  <!-- all other file fileType > 2-->    <!--data file fileType==2 -->
+                                        <!--File URL (Link file only)-->
+                                        <div ng-if="aFile.FILETYPE_ID === 8" class="form-group" style="margin:0;padding:0">
+                                            <label class="col-md-3 control-label" for="FILE_URL">File URL:</label>
+                                            <div class="col-md-6">
+                                                <input class="form-control" name="FILE_URL" ng-model="aFile.FILE_URL" type="text" />
+                                            </div>
+                                        </div>
+
+                                        <!--Source Name (photo)-->
+                                        <div class="form-group required" ng-if="aFile.FILETYPE_ID === 1" ng-class="{'has-error':OPFILEForm.FULLNAME.$invalid && OPFILEForm.FULLNAME.$dirty}" style="margin:0;padding:0">
+                                            <label class="col-md-3 control-label req" for="SOURCE_ID">Source Photographer:</label>
+                                            <div class="col-md-6">
+                                                <input class="form-control" name="FULLNAME" ng-model="aSource.FULLNAME" type="text" required />
+                                            </div>
+                                        </div>
+
+                                        <!--Source Name (all other)-->
+                                        <div class="form-group required" ng-if="aFile.FILETYPE_ID  > 2" ng-class="{'has-error':OPFILEForm.FULLNAME.$invalid && OPFILEForm.FULLNAME.$dirty}" style="margin:0;padding:0">
+                                            <label class="col-md-3 control-label req" for="SOURCE_ID">Source Name:</label>
+                                            <div class="col-md-6">
+                                                <input class="form-control" name="FULLNAME" ng-model="aSource.FULLNAME" type="text" required />
+                                            </div>
+                                        </div>
+
+                                        <!--Source Agency* (photo, allOther)-->
+                                        <div ng-if="aFile.FILETYPE_ID === 1 || aFile.FILETYPE_ID > 2" class="form-group required" ng-class="{'has-error':OPFILEForm.AGENCY_ID.$invalid && OPFILEForm.AGENCY_ID.$dirty}" style="margin:0;padding:0">
+                                            <label class="col-md-3 control-label req" for="AGENCY_ID">Source Agency:</label>
+                                            <div class="col-md-6">
+                                                <select class="form-control" name="AGENCY_ID" ng-model="aSource.AGENCY_ID" ng-change="updateAgencyForCaption()"
+                                                        ng-options="a.AGENCY_ID as a.AGENCY_NAME for a in agencies" required>
+                                                    <option value=""></option>
+                                                </select>
+                                            </div>
+                                        </div>
+
+                                        <!-- Photo Date* (photo) -->
+                                        <div ng-if="aFile.FILETYPE_ID === 1" class="form-group required" ng-class="{'has-error':OPFILEForm.PHOTO_DATE.$invalid && OPFILEForm.PHOTO_DATE.$dirty}" style="margin:0;padding:0">
+                                            <label class="col-md-3 control-label req" for="PHOTO_DATE">Photo Date:</label>
+                                            <div class="col-md-3 input-group" style="padding-right:14px;padding-left:14px">
+                                                <input class="form-control dateInputStyle" type="date" name="sd" uib-datepicker-popup="MM/dd/yyyy" show-weeks="false" is-open="datepickrs.sd" ng-model="aFile.PHOTO_DATE" required />
+                                                <span class="input-group-btn">
+                                                    <button class="btn btn-default" ng-click="open($event, 'sd')">
+                                                        <i class="glyphicon glyphicon-calendar" />
+                                                    </button>
+                                                </span>
+                                            </div>
+                                        </div>
+
+                                        <!-- Date Uploaded* (photo, data, allother) -->
+                                        <div ng-if="aFile.FILETYPE_ID > 0" class="form-group required" ng-class="{'has-error':OPFILEForm.FILE_DATE.$invalid && OPFILEForm.FILE_DATE.$dirty}" style="margin:0;padding:0">
+                                            <label class="col-md-3 control-label req" for="FILE_DATE">Date Uploaded:</label>
+                                            <div class="col-md-3 input-group" style="padding-right:14px;padding-left:14px">
+                                                <input class="form-control dateInputStyle" type="date" name="fd" uib-datepicker-popup="MM/dd/yyyy" show-weeks="false" is-open="datepickrs.fd" ng-model="aFile.FILE_DATE" required />
+                                                <span class="input-group-btn">
+                                                    <button class="btn btn-default" ng-click="open($event, 'fd')">
+                                                        <i class="glyphicon glyphicon-calendar" />
+                                                    </button>
+                                                </span>
+                                            </div>
+                                        </div>
+
+                                        <!--Description*(photo, data, allother)-->
+                                        <div ng-if="aFile.FILETYPE_ID > 0" class="form-group required" ng-class="{'has-error':OPFILEForm.DESCRIPTION.$invalid && OPFILEForm.DESCRIPTION.$dirty}" style="margin:0;padding:0">
+                                            <label class="col-md-3 control-label req" for="DESCRIPTION">Description:</label>
+                                            <div class="col-md-6">
+                                                <textarea class="form-control" id="DESCRIPTION" type="text" rows="3" placeholder="Description" ng-model="aFile.DESCRIPTION" required />
+                                            </div>
+                                        </div>
+
+                                        <!-- This is where Other ends, rest is for Photo -->
+                                        <!--Photo Direction (photo)-->
+                                        <div ng-if="aFile.FILETYPE_ID === 1" class="form-group" style="margin:0;padding:0;padding-top:5px;">
+                                            <label class="col-md-3 control-label" for="PHOTO_DIRECTION">Photo Direction:</label>
+                                            <div class="col-md-6">
+                                                <input class="form-control" id="PHOTO_DIRECTION" name="PHOTO_DIRECTION" ng-model="aFile.PHOTO_DIRECTION" type="text" />
+                                            </div>
+                                        </div>
+
+                                        <!-- Photo Latitude (photo)-->
+                                        <div ng-if="aFile.FILETYPE_ID === 1" class="form-group" style="margin:0;padding:0">
+                                            <label class="col-md-3 control-label" for="LATITUDE_DD">Photo Latitude <br /> (if different):</label>
+                                            <div class="col-md-6">
+                                                <input class="form-control" ng-keypress="isNum($event)" name="LATITUDE_DD" id="LATITUDE_DD" ng-model="aFile.LATITUDE_DD"
+                                                       type="text" />
+                                            </div>
+                                        </div>
+
+                                        <!--Photo Longitude (photo)-->
+                                        <div ng-if="aFile.FILETYPE_ID === 1" class="form-group" style="margin:0;padding:0">
+                                            <label class="col-md-3 control-label" for="LONGITUDE_DD">Photo Longitude <br /> (if different):</label>
+                                            <div class="col-md-6">
+                                                <input class="form-control" ng-keypress="isNum($event)" id="LONGITUDE_DD" name="LONGITUDE_DD" ng-model="aFile.LONGITUDE_DD"
+                                                       type="text" />
+                                            </div>
+                                        </div>
+
+                                        <div ng-if="aFile.FILETYPE_ID === 1" class="form-group" style="margin:0;padding:0">
+                                            <label class="col-md-3 control-label" for="Caption">Preview Caption:</button></label>
+                                            <div class="col-md-6">
+                                                <span>
+                                                    Photo of {{aFile.DESCRIPTION || ' (Description HERE) '}} at {{thisOPsite.SITE_DESCRIPTION}}, {{thisOPsite.COUNTY}}, {{thisOPsite.STATE}}, {{aFile.PHOTO_DATE | date: 'MM/dd/yyyy' || ' Date taken HERE '}}. Photograph by {{aSource.FULLNAME || ' Source Name HERE ' }}, {{agencyNameForCap || ' Agency HERE '}}.
+                                                </span>
+                                            </div>
+                                        </div>
+
+                                        <div ng-show="aFile.FILE_ID !== undefined && aFile.FILETYPE_ID !== 8" class="form-group" style="margin:0;padding:0">
+                                            <label class="col-md-3 control-label">Associated File:</label>
+                                            <div class="col-md-6">
+                                                <a target="_blank" class="btn btn-primary" ng-href="{{serverURL}}/Files/{{aFile.FILE_ID}}/Item">Download File</a>
+                                                <img ng-if="aFile.FILETYPE_ID === 1" style="height:80px;" ng-src="{{serverURL}}/Files/{{aFile.FILE_ID}}/Item" />
+                                            </div>
+                                        </div>
+
+                                        <div ng-show="!fileIsUploading">
+                                            <button class="btn btn-primary" ng-if="aFile.FILE_ID != undefined" ng-click="saveFile(OPFILEForm.$valid)">Save File</button>
+                                            <button class="btn btn-danger" ng-if="aFile.FILE_ID != undefined" ng-click="deleteFile()">Delete File</button>
+                                            <button class="btn btn-primary" ng-if="aFile.FILE_ID == undefined" ng-click="createFile(OPFILEForm.$valid)">Create File</button>
+                                            <button class="btn btn-warning" type="button" ng-click="cancelFile()">Close/Cancel File</button>
+                                        </div>
+                                        <div ng-show="fileIsUploading"><img src="images/fileUpload.gif" /></div>
+
+                                    </fieldset>
+                                </form>
+                            </div>
+                        </div>
+                    </uib-accordion-group>
+                </div>
+            </uib-accordion>
+        </div><!-- end edit view -->
     </div> <!-- end modal-body -->
     <br clear="all" />
     <div class="modal-footer">
         <div class="form-group">
             <div class="col-md-12">
-                <button ng-show="OP.OBJECTIVE_POINT_ID != undefined" ng-disabled="showFileForm" class="btn btn-danger" ng-click="deleteOP(OPForm.$valid)"><span>Delete Datum Location</span></button>                                <span>
+                <button ng-disabled="showFileForm" ng-show="OP.OBJECTIVE_POINT_ID !== undefined" class="btn btn-danger" ng-click="deleteOP(OPEditForm.$valid)"><span>Delete Datum Location</span></button>
                     <button type="button" class="btn btn-warning" ng-disabled="showFileForm" ng-click="cancel()"><span>Cancel/Close</span></button>
             </div>
         </div>
@@ -1094,7 +1396,7 @@
     <div class="modal-body">
         <div ng-if="createOReditHWM == 'create'">
             <form class="form-horizontal" name="HWMForm">
-                <fieldset>                    
+                <fieldset>
                     <!-- Waterbody: -->
                     <div class="form-group">
                         <label class="col-md-4 control-label" for="WATERBODY">Waterbody:</label>
@@ -1232,12 +1534,13 @@
                     <div class="form-group">
                         <label class="col-md-4 control-label" for="LATITUDE_DD">Latitude:</label>
                         <div class="col-md-6" ng-if="aHWM.decDegORdms == 'dd'">
-                            <input class="form-control" ng-keypress="isNum($event)" name="LATITUDE_DD" id="LATITUDE_DD" ng-model="aHWM.LATITUDE_DD" type="text" />
+                            <input class="form-control" ng-keypress="isNum($event)" name="LATITUDE_DD" id="LATITUDE_DD" ng-model="aHWM.LATITUDE_DD"
+                                   ng-model-options="{ updateOn: 'blur' }" ng-change="checkValue('dd')" type="text" />
                         </div>
                         <div class="col-md-6" ng-if="aHWM.decDegORdms == 'dms'">
                             <table>
                                 <tr>
-                                    <td><input class="form-control" ng-keypress="isNum($event)" name="Deg" ng-model="DMS.LADeg" type="text" /></td>
+                                    <td><input class="form-control" ng-keypress="isNum($event)" ng-model-options="{ updateOn: 'blur' }" ng-change="checkValue('dms')" id="LaDeg" name="Deg" ng-model="DMS.LADeg" type="text" /></td>
                                     <td>°</td>
                                     <td><input class="form-control" ng-keypress="isNum($event)" name="Min" ng-model="DMS.LAMin" type="text" /></td>
                                     <td>′</td>
@@ -1252,12 +1555,13 @@
                     <div class="form-group">
                         <label class="col-md-4 control-label" for="LONGITUDE_DD">Longitude:</label>
                         <div class="col-md-6" ng-if="aHWM.decDegORdms == 'dd'">
-                            <input class="form-control" ng-keypress="isNum($event)" id="longitude_dd" name="LONGITUDE_DD" ng-model="aHWM.LONGITUDE_DD" type="text" />
+                            <input class="form-control" ng-keypress="isNum($event)" id="longitude_dd" name="LONGITUDE_DD" ng-model="aHWM.LONGITUDE_DD"
+                                   ng-model-options="{ updateOn: 'blur' }" ng-change="checkValue('dd')" type="text" />
                         </div>
                         <div class="col-md-6" ng-if="aHWM.decDegORdms == 'dms'">
                             <table>
                                 <tr>
-                                    <td><input class="form-control" ng-keypress="isNum($event)" name="Deg" ng-model="DMS.LODeg" type="text" /></td>
+                                    <td><input class="form-control" ng-keypress="isNum($event)" name="Deg" ng-model-options="{ updateOn: 'blur' }" ng-change="checkValue('dms')" id="LoDeg" ng-model="DMS.LODeg" type="text" /></td>
                                     <td>°</td>
                                     <td><input class="form-control" ng-keypress="isNum($event)" name="Min" ng-model="DMS.LOMin" type="text" /></td>
                                     <td>′</td>
@@ -1422,7 +1726,7 @@
                         </div>
                     </div>
 
-                    
+
                     <!-- form submit button -->
                     <div class="form-group">
                         <div class="col-md-12 text-center">
@@ -1604,12 +1908,13 @@
                                 <div class="col-md-6"><span ng-show="view.HWMval == 'detail'">{{aHWM.LATITUDE_DD}}</span></div>
                                 <span ng-show="view.HWMval == 'edit'">
                                     <div class="col-md-6" ng-if="hwmCopy.decDegORdms == 'dd'">
-                                        <input class="form-control" ng-keypress="isNum($event)" name="LATITUDE_DD" id="LATITUDE_DD" ng-model="hwmCopy.LATITUDE_DD" type="text" />
+                                        <input class="form-control" ng-keypress="isNum($event)" name="LATITUDE_DD" id="LATITUDE_DD" ng-model="hwmCopy.LATITUDE_DD"
+                                               ng-model-options="{ updateOn: 'blur' }" ng-change="checkValue('dd')" type="text" />
                                     </div>
                                     <div class="col-md-6" ng-if="hwmCopy.decDegORdms == 'dms'">
                                         <table>
                                             <tr>
-                                                <td><input class="form-control" ng-keypress="isNum($event)" name="Deg" ng-model="DMS.LADeg" type="text" /></td>
+                                                <td><input class="form-control" ng-keypress="isNum($event)" ng-model-options="{ updateOn: 'blur' }" ng-change="checkValue('dms')" id="LaDeg" name="Deg" ng-model="DMS.LADeg" type="text" /></td>
                                                 <td>°</td>
                                                 <td><input class="form-control" ng-keypress="isNum($event)" name="Min" ng-model="DMS.LAMin" type="text" /></td>
                                                 <td>′</td>
@@ -1625,24 +1930,25 @@
                             <div class="form-group">
                                 <label class="col-md-4 control-label" for="LONGITUDE_DD">Longitude:</label>
                                 <div class="col-md-6"><span ng-show="view.HWMval == 'detail'">{{aHWM.LONGITUDE_DD}}</span></div>
-                                    <span ng-show="view.HWMval == 'edit'">
-                                        <div class="col-md-6" ng-if="hwmCopy.decDegORdms == 'dd'">
-                                            <input class="form-control" ng-keypress="isNum($event)" id="longitude_dd" name="LONGITUDE_DD" ng-model="hwmCopy.LONGITUDE_DD" type="text" />
-                                        </div>
-                                        <div class="col-md-6" ng-if="hwmCopy.decDegORdms == 'dms'">
-                                            <table>
-                                                <tr>
-                                                    <td><input class="form-control" ng-keypress="isNum($event)" name="Deg" ng-model="DMS.LODeg" type="text" /></td>
-                                                    <td>°</td>
-                                                    <td><input class="form-control" ng-keypress="isNum($event)" name="Min" ng-model="DMS.LOMin" type="text" /></td>
-                                                    <td>′</td>
-                                                    <td><input class="form-control" ng-keypress="isNum($event)" name="Sec" ng-model="DMS.LOSec" type="text" /></td>
-                                                    <td>″</td>
-                                                </tr>
-                                            </table>
-                                        </div>
-                                    </span>
-                                </div>
+                                <span ng-show="view.HWMval == 'edit'">
+                                    <div class="col-md-6" ng-if="hwmCopy.decDegORdms == 'dd'">
+                                        <input class="form-control" ng-keypress="isNum($event)" id="longitude_dd" name="LONGITUDE_DD" ng-model="hwmCopy.LONGITUDE_DD"
+                                               ng-model-options="{ updateOn: 'blur' }" ng-change="checkValue('dd')" type="text" />
+                                    </div>
+                                    <div class="col-md-6" ng-if="hwmCopy.decDegORdms == 'dms'">
+                                        <table>
+                                            <tr>
+                                                <td><input class="form-control" ng-keypress="isNum($event)" ng-model-options="{ updateOn: 'blur' }" ng-change="checkValue('dms')" id="LoDeg" name="Deg" ng-model="DMS.LODeg" type="text" /></td>
+                                                <td>°</td>
+                                                <td><input class="form-control" ng-keypress="isNum($event)" name="Min" ng-model="DMS.LOMin" type="text" /></td>
+                                                <td>′</td>
+                                                <td><input class="form-control" ng-keypress="isNum($event)" name="Sec" ng-model="DMS.LOSec" type="text" /></td>
+                                                <td>″</td>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                </span>
+                            </div>
 
                             <!-- Horizontal Datum:* -->
                             <div class="form-group required" ng-class="{'has-error':HWMEditForm.HDATUM_ID.$invalid && HWMEditForm.HDATUM_ID.$dirty && view.HWMval =='edit'}">
@@ -2025,7 +2331,7 @@
     <div class="modal-footer">
         <div class="form-group">
             <div class="col-md-12">
-                <button ng-disabled="showFileForm" class="btn btn-danger" ng-click="deleteHWM(HWMForm.$valid)"><span>Delete</span></button>
+                <button ng-show="aHWM.HWM_ID !== undefined" ng-disabled="showFileForm" class="btn btn-danger" ng-click="deleteHWM(HWMEditForm.$valid)"><span>Delete</span></button>
                 <button type="button" class="btn btn-warning" ng-disabled="showFileForm" ng-click="cancel()"><span>Cancel/Close</span></button>
             </div>
         </div>
@@ -2975,7 +3281,9 @@
                                         <a target="_blank" title="Download file" ng-href="{{serverURL}}/Files/{{aFile.FILE_ID}}/Item">
                                             <span class="glyphicon glyphicon-download"></span>
                                         </a>
-                                        <!--<a target="_blank" class="btn btn-primary" ng-href="{{serverURL}}/Files/{{aFile.FILE_ID}}/Item">Download File</a>-->
+                                        !--<a target=
+                                        "_blank" class="btn btn-primary" ng-href="{{serverURL}}/Files/{{aFile.FILE_ID}}/Item">Download File</a>-->
+                                        <img ng-if="aF
                                         <img ng-if="aFile.FILETYPE_ID === 1" style="height:80px;" ng-src="{{serverURL}}/Files/{{aFile.FILE_ID}}/Item" />
                                     </div>
                                 </div>

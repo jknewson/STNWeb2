@@ -7,6 +7,7 @@
             //defaults for radio buttons
             //dropdowns
             $scope.serverURL = SERVER_URL;
+            $scope.view = { OPval: 'detail' };
             $scope.fileIsUploading = false; //Loading...    
             $scope.dl = { dlOpen: true, dlFileOpen: false };//accordions
             $scope.OPTypeList = allDropdowns[0];
@@ -229,12 +230,13 @@
 
             if (thisOP != "empty") {
                 $scope.opModalHeader = "Datum Location Information";
+                $scope.createOReditOP = 'edit';
                 //#region existing OP
                 $scope.OP = angular.copy(thisOP); //set a copy so list view doesnt change if they cancel from here after making changes
                 //formatted as date for datepicker
                 $scope.OP.DATE_ESTABLISHED = makeAdate($scope.OP.DATE_ESTABLISHED);
                 //check if VDATUM_ID == 0, if so make undefined
-                if ($scope.OP.VDATUM_ID == 0) delete $scope.OP.VDATUM_ID;
+                if ($scope.OP.VDATUM_ID === 0) delete $scope.OP.VDATUM_ID;
 
                 if ($scope.OP.DATE_RECOVERED !== null)
                     $scope.OP.DATE_RECOVERED = makeAdate($scope.OP.DATE_RECOVERED);
@@ -242,10 +244,18 @@
                 if (thisOPControls.length > 0) {
                     $scope.addedIdentifiers = thisOPControls;
                     $scope.showControlIDinput = true;
-                }               
+                }
+                $scope.OP.opType = $scope.OP.OP_TYPE_ID > 0 ? $scope.OPTypeList.filter(function (t) { return t.OBJECTIVE_POINT_TYPE_ID == $scope.OP.OP_TYPE_ID; })[0].OP_TYPE : '';
+                $scope.OP.quality = $scope.OP.OP_QUALITY_ID > 0 ? $scope.OPQualityList.filter(function (q) { return q.OP_QUALITY_ID == $scope.OP.OP_QUALITY_ID; })[0].QUALITY : '';
+                $scope.OP.hdatum = $scope.OP.HDATUM_ID > 0 ? $scope.HDList.filter(function (hd) { return hd.DATUM_ID == $scope.OP.HDATUM_ID; })[0].DATUM_NAME : '';
+                $scope.OP.hCollectMethod = $scope.OP.HCOLLECT_METHOD_ID > 0 ? $scope.HCollectMethodList.filter(function (hc) { return hc.HCOLLECT_METHOD_ID == $scope.OP.HCOLLECT_METHOD_ID; })[0].HCOLLECT_METHOD : '';
+                $scope.OP.vDatum = $scope.OP.VDATUM_ID > 0 ? $scope.VDatumList.filter(function (vd) { return vd.DATUM_ID == $scope.OP.VDATUM_ID; })[0].DATUM_NAME : '';
+                $scope.OP.vCollectMethod = $scope.OP.VCOLLECT_METHOD_ID > 0 ? $scope.VCollectMethodList.filter(function (vc) { return vc.VCOLLECT_METHOD_ID == $scope.OP.VCOLLECT_METHOD_ID; })[0].VCOLLECT_METHOD : '';
+
                 //#endregion 
             } else {
                 $scope.opModalHeader = "Create new Datum Location";
+                $scope.createOReditOP = 'create';
                 //#region new OP 
                 $scope.OP.LATITUDE_DD = opSite.LATITUDE_DD;
                 $scope.OP.LONGITUDE_DD = opSite.LONGITUDE_DD;
@@ -262,8 +272,14 @@
 
             //want to add identifier
             $scope.addNewIdentifier = function () {
-                $scope.addedIdentifiers.push({ OBJECTIVE_POINT_ID: $scope.OP.OBJECTIVE_POINT_ID, IDENTIFIER: "", IDENTIFIER_TYPE: "" });
+                if ($scope.createOReditOP == 'edit') 
+                    $scope.addedIdentifiersCopy.push({ OBJECTIVE_POINT_ID: $scope.OP.OBJECTIVE_POINT_ID, IDENTIFIER: "", IDENTIFIER_TYPE: "" });
+                else 
+                    $scope.addedIdentifiers.push({ IDENTIFIER: "", IDENTIFIER_TYPE: "" });
+
                 $scope.showControlIDinput = true;
+                
+
             };
 
             //#region Datepicker
@@ -321,31 +337,61 @@
 
             //they changed radio button for dms dec deg
             $scope.latLongChange = function () {
-                if ($scope.OP.decDegORdms == "dd") {
-                    //they clicked Dec Deg..
-                    if ($scope.DMS.LADeg !== undefined) {
-                        //convert what's here for each lat and long
-                        $scope.OP.LATITUDE_DD = azimuth($scope.DMS.LADeg, $scope.DMS.LAMin, $scope.DMS.LASec);
-                        $scope.OP.LONGITUDE_DD = azimuth($scope.DMS.LODeg, $scope.DMS.LOMin, $scope.DMS.LOSec);
-                        //clear
-                        $scope.DMS = {};
+                if ($scope.createOReditOP == 'edit') {
+                    if ($scope.opCopy.decDegORdms == "dd") {
+                        //they clicked Dec Deg..
+                        if ($scope.DMS.LADeg !== undefined) {
+                            //convert what's here for each lat and long
+                            $scope.opCopy.LATITUDE_DD = azimuth($scope.DMS.LADeg, $scope.DMS.LAMin, $scope.DMS.LASec);
+                            $scope.opCopy.LONGITUDE_DD = azimuth($scope.DMS.LODeg, $scope.DMS.LOMin, $scope.DMS.LOSec);
+                            //clear
+                            $scope.DMS = {};
+                        }
+                    } else {
+                        //they clicked dms (convert lat/long to dms)
+                        if ($scope.opCopy.LATITUDE_DD !== undefined) {
+                            var latDMS = (deg_to_dms($scope.opCopy.LATITUDE_DD)).toString();
+                            var ladDMSarray = latDMS.split(':');
+                            $scope.DMS.LADeg = ladDMSarray[0];
+                            $scope.DMS.LAMin = ladDMSarray[1];
+                            $scope.DMS.LASec = ladDMSarray[2];
+
+                            var longDMS = deg_to_dms($scope.opCopy.LONGITUDE_DD);
+                            var longDMSarray = longDMS.split(':');
+                            $scope.DMS.LODeg = longDMSarray[0] * -1;
+                            $scope.DMS.LOMin = longDMSarray[1];
+                            $scope.DMS.LOSec = longDMSarray[2];
+                            //clear
+                            $scope.opCopy.LATITUDE_DD = undefined; $scope.opCopy.LONGITUDE_DD = undefined;
+                        }
                     }
                 } else {
-                    //they clicked dms (convert lat/long to dms)
-                    if ($scope.OP.LATITUDE_DD !== undefined) {
-                        var latDMS = (deg_to_dms($scope.OP.LATITUDE_DD)).toString();
-                        var ladDMSarray = latDMS.split(':');
-                        $scope.DMS.LADeg = ladDMSarray[0];
-                        $scope.DMS.LAMin = ladDMSarray[1];
-                        $scope.DMS.LASec = ladDMSarray[2];
+                    if ($scope.OP.decDegORdms == "dd") {
+                        //they clicked Dec Deg..
+                        if ($scope.DMS.LADeg !== undefined) {
+                            //convert what's here for each lat and long
+                            $scope.OP.LATITUDE_DD = azimuth($scope.DMS.LADeg, $scope.DMS.LAMin, $scope.DMS.LASec);
+                            $scope.OP.LONGITUDE_DD = azimuth($scope.DMS.LODeg, $scope.DMS.LOMin, $scope.DMS.LOSec);
+                            //clear
+                            $scope.DMS = {};
+                        }
+                    } else {
+                        //they clicked dms (convert lat/long to dms)
+                        if ($scope.OP.LATITUDE_DD !== undefined) {
+                            var latDMS = (deg_to_dms($scope.OP.LATITUDE_DD)).toString();
+                            var ladDMSarray = latDMS.split(':');
+                            $scope.DMS.LADeg = ladDMSarray[0];
+                            $scope.DMS.LAMin = ladDMSarray[1];
+                            $scope.DMS.LASec = ladDMSarray[2];
 
-                        var longDMS = deg_to_dms($scope.OP.LONGITUDE_DD);
-                        var longDMSarray = longDMS.split(':');
-                        $scope.DMS.LODeg = longDMSarray[0] * -1;
-                        $scope.DMS.LOMin = longDMSarray[1];
-                        $scope.DMS.LOSec = longDMSarray[2];
-                        //clear
-                        $scope.OP.LATITUDE_DD = undefined; $scope.OP.LONGITUDE_DD = undefined;
+                            var longDMS = deg_to_dms($scope.OP.LONGITUDE_DD);
+                            var longDMSarray = longDMS.split(':');
+                            $scope.DMS.LODeg = longDMSarray[0] * -1;
+                            $scope.DMS.LOMin = longDMSarray[1];
+                            $scope.DMS.LOSec = longDMSarray[2];
+                            //clear
+                            $scope.OP.LATITUDE_DD = undefined; $scope.OP.LONGITUDE_DD = undefined;
+                        }
                     }
                 }
             };
@@ -433,12 +479,12 @@
             //X was clicked next to existing Control Identifier to have it removed, store in remove array for Save()
             $scope.RemoveID = function (opControl) {
                 //only add to remove list if it's an existing one to DELETE
-                var i = $scope.addedIdentifiers.indexOf(opControl);
+                var i = $scope.addedIdentifiersCopy.indexOf(opControl);
                 if (opControl.OP_CONTROL_IDENTIFIER_ID !== undefined) {
                     $scope.removeOPCarray.push(opControl);
-                    $scope.addedIdentifiers.splice(i, 1);
+                    $scope.addedIdentifiersCopy.splice(i, 1);
                 } else {
-                    $scope.addedIdentifiers.splice(i, 1);
+                    $scope.addedIdentifiersCopy.splice(i, 1);
                 }
             };
 
@@ -447,17 +493,23 @@
                 if (valid) {
                     $http.defaults.headers.common.Authorization = 'Basic ' + $cookies.get('STNCreds');
                     $http.defaults.headers.common.Accept = 'application/json';
-
+                    if ($scope.DMS.LADeg !== undefined) $scope.opCopy.LATITUDE_DD = azimuth($scope.DMS.LADeg, $scope.DMS.LAMin, $scope.DMS.LASec);
+                    if ($scope.DMS.LODeg !== undefined) $scope.opCopy.LONGITUDE_DD = azimuth($scope.DMS.LODeg, $scope.DMS.LOMin, $scope.DMS.LOSec);
                     var updatedOP = {};
                     //if there's an OP_CONTROL_IDENTIFIER_ID, PUT .. else POST
-                    if ($scope.addedIdentifiers.length > 0) {
-                        for (var i = 0; i < $scope.addedIdentifiers.length; i++) {
-                            if ($scope.addedIdentifiers[i].OP_CONTROL_IDENTIFIER_ID !== undefined) {
-                                //existing: PUT
-                                OP_CONTROL_IDENTIFIER.update({ id: $scope.addedIdentifiers[i].OP_CONTROL_IDENTIFIER_ID }, $scope.addedIdentifiers[i]).$promise;
+                    if ($scope.addedIdentifiersCopy.length > 0) {
+                        for (var i = 0; i < $scope.addedIdentifiersCopy.length; i++) {
+                            if ($scope.addedIdentifiersCopy[i].OP_CONTROL_IDENTIFIER_ID !== undefined) {
+                                //existing: PUTvar ind = $scope.chosenHWMList.map(function (hwm) { return hwm.HWM_ID; }).indexOf(aHWM.HWM_ID); //not working:: $scope.chosenHWMList.indexOf(aHWM);
+                                var existIndex = $scope.addedIdentifiers.map(function (i) { return i.OP_CONTROL_IDENTIFIER_ID; }).indexOf($scope.addedIdentifiersCopy[i].OP_CONTROL_IDENTIFIER_ID);
+                                OP_CONTROL_IDENTIFIER.update({ id: $scope.addedIdentifiersCopy[i].OP_CONTROL_IDENTIFIER_ID }, $scope.addedIdentifiersCopy[i]).$promise.then(function (response){
+                                    $scope.addedIdentifiers[existIndex] = response;
+                                });
                             } else {
                                 //post each one
-                                OBJECTIVE_POINT.createOPControlID({ id: $scope.OP.OBJECTIVE_POINT_ID }, $scope.addedIdentifiers[i]).$promise;
+                                OBJECTIVE_POINT.createOPControlID({ id: $scope.OP.OBJECTIVE_POINT_ID }, $scope.addedIdentifiersCopy[i]).$promise.then(function (response){
+                                    $scope.addedIdentifiers.push(response);
+                                });
                             }
                         }//end foreach addedIdentifier
                     }//end if there's addedidentifiers
@@ -465,26 +517,37 @@
                     //if there's any in removeOPCarray, DELETE those
                     if ($scope.removeOPCarray.length > 0) {
                         for (var r = 0; r < $scope.removeOPCarray.length; r++) {
-                            OP_CONTROL_IDENTIFIER.delete({ id: $scope.removeOPCarray[r].OP_CONTROL_IDENTIFIER_ID }).$promise;
+                            var deIndex = $scope.addedIdentifiers.map(function (ri) { return ri.OP_CONTROL_IDENTIFIER_ID; }).indexOf($scope.removeOPCarray[r].OP_CONTROL_IDENTIFIER_ID);
+                            OP_CONTROL_IDENTIFIER.delete({ id: $scope.removeOPCarray[r].OP_CONTROL_IDENTIFIER_ID }).$promise.then(function () {
+                                $scope.addedIdentifiers.splice(deIndex,1);
+                            });
                         }//end foreach removeOPCarray
                     }//end if there's removeOPCs
 
                     //look at OP.FTorMETER ("ft"), OP.FTorCM ("ft"), and OP.decDegORdms ("dd"), make sure site_ID is on there and send it to trim before PUT                
-                    formatDefaults($scope.OP); //$scope.OP.FTorMETER, FTorCM, decDegORdms
-                    var OPtoPOST = trimOP($scope.OP);
-                    OPtoPOST.OBJECTIVE_POINT_ID = $scope.OP.OBJECTIVE_POINT_ID;                    
+                    formatDefaults($scope.opCopy); //$scope.OP.FTorMETER, FTorCM, decDegORdms
+                    var OPtoPOST = trimOP($scope.opCopy);
+                    OPtoPOST.OBJECTIVE_POINT_ID = $scope.opCopy.OBJECTIVE_POINT_ID;
                     //$http.defaults.headers.common['X-HTTP-Method-Override'] = 'PUT';
                     OBJECTIVE_POINT.update({ id: OPtoPOST.OBJECTIVE_POINT_ID }, OPtoPOST, function success(response) {
                         toastr.success("Datum Location updated");
-                        updatedOP = response;
+                        $scope.OP = response; thisOP = response;
+                        $scope.OP.DATE_ESTABLISHED = makeAdate($scope.OP.DATE_ESTABLISHED);
+                        if ($scope.OP.DATE_RECOVERED !== null)
+                            $scope.OP.DATE_RECOVERED = makeAdate($scope.OP.DATE_RECOVERED);
+                        $scope.OP.opType = $scope.OP.OP_TYPE_ID > 0 ? $scope.OPTypeList.filter(function (t) { return t.OBJECTIVE_POINT_TYPE_ID == $scope.OP.OP_TYPE_ID; })[0].OP_TYPE : '';
+                        $scope.OP.quality = $scope.OP.OP_QUALITY_ID > 0 ? $scope.OPQualityList.filter(function (q) { return q.OP_QUALITY_ID == $scope.OP.OP_QUALITY_ID; })[0].QUALITY : '';
+                        $scope.OP.hdatum = $scope.OP.HDATUM_ID > 0 ? $scope.HDList.filter(function (hd) { return hd.DATUM_ID == $scope.OP.HDATUM_ID; })[0].DATUM_NAME : '';
+                        $scope.OP.hCollectMethod = $scope.OP.HCOLLECT_METHOD_ID > 0 ? $scope.HCollectMethodList.filter(function (hc) { return hc.HCOLLECT_METHOD_ID == $scope.OP.HCOLLECT_METHOD_ID; })[0].HCOLLECT_METHOD : '';
+                        $scope.OP.vDatum = $scope.OP.VDATUM_ID > 0 ? $scope.VDatumList.filter(function (vd) { return vd.DATUM_ID == $scope.OP.VDATUM_ID; })[0].DATUM_NAME : '';
+                        $scope.OP.vCollectMethod = $scope.OP.VCOLLECT_METHOD_ID > 0 ? $scope.VCollectMethodList.filter(function (vc) { return vc.VCOLLECT_METHOD_ID == $scope.OP.VCOLLECT_METHOD_ID; })[0].VCOLLECT_METHOD : '';
+                        $scope.opCopy = {};
+                        $scope.addedIdentifiersCopy = []; $scope.view.OPval = 'detail';
                         //    delete $http.defaults.headers.common['X-HTTP-Method-Override'];
                     }, function error(errorResponse) {
                         toastr.error("Error updating Datum Location: " + errorResponse.statusText);
-                    }).$promise.then(function () {
-                        var sendBack = [updatedOP, 'updated'];
-                        $uibModalInstance.close(sendBack);
-                    });
-                }
+                    }).$promise;
+                }//end valid
             }; //end Save
 
             //delete this OP from the SITE
@@ -593,15 +656,27 @@
                     }
                 } else {
                     //check the latitude/longitude
-                    if ($scope.aSite.LATITUDE_DD < 0 || $scope.aSite.LATITUDE_DD > 73) {
+                    var op = $scope.view.OPval == 'edit' ? $scope.opCopy : $scope.OP;
+                    if (op.LATITUDE_DD < 0 || op.LATITUDE_DD > 73) {
                         openLatModal('latlong');
                     }
-                    if ($scope.aSite.LONGITUDE_DD < -175 || $scope.aSite.LONGITUDE_DD > -60) {
+                    if (op.LONGITUDE_DD < -175 || op.LONGITUDE_DD > -60) {
                         openLongModal('latlong');
                     }
                 }
             };
 
+            //edit button clicked. make copy of hwm 
+            $scope.wannaEditOP = function () {
+                $scope.view.OPval = 'edit';
+                $scope.opCopy = angular.copy($scope.OP);
+                $scope.opCopy.decDegORdms = 'dd';
+                $scope.addedIdentifiersCopy = angular.copy($scope.addedIdentifiers);
+            };
+            $scope.cancelOPEdit = function () {
+                $scope.view.OPval = 'detail';
+                $scope.opCopy = [];               
+            };
         }]);//end OPmodalCtrl
 
 })();

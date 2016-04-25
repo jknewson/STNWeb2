@@ -243,7 +243,7 @@
                 .state("members", {
                     url: "/Members",
                     abstract: true,
-                    templateUrl: "component/member/memberHolderView.html",
+                    template: "<div ui-view></div>",
                     controller: "memberCtrl",
                     authenticate: true,
                     resolve: {
@@ -292,7 +292,7 @@
                 .state("events", {
                     url: "/Events",
                     abstract: true,
-                    templateUrl: "component/event/eventHolderView.html",
+                    template: "<div ui-view></div>",
                     controller: "eventCtrl",
                     authenticate: true,
                     resolve: {
@@ -349,7 +349,7 @@
                 .state("resources", {
                     url: "/Resources",
                     abstract: true,
-                    templateUrl: "component/resources/resourcesHolderView.html",
+                    template: "<div ui-view></div>",
                     controller: "resourcesCtrl",
                     authenticate: true,
                     resolve: {

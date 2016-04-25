@@ -24,7 +24,6 @@
     <Content Include="src\component\event\eventCtrl.js" />
     <Content Include="src\component\event\eventInfoCtrl.js" />
     <Content Include="src\component\event\eventSessionCtrl.js" />
-    <Content Include="src\component\event\eventHolderView.html" />
     <Content Include="src\component\event\eventInfo.html" />
     <Content Include="src\component\event\eventSessionModalCtrl.js" />
     <Content Include="src\component\event\eventsList.html" />
@@ -49,7 +48,6 @@
     <Content Include="src\component\map\MapSensorProposeController.js" />
     <Content Include="src\component\map\MapSiteInfoController.js" />
     <Content Include="src\component\member\memberCtrl.js" />
-    <Content Include="src\component\member\memberHolderView.html" />
     <Content Include="src\component\member\memberInfo.html" />
     <Content Include="src\component\member\memberInfoCtrl.js" />
     <Content Include="src\component\member\membersList.html" />
@@ -91,7 +89,6 @@
     <Content Include="src\component\resources\objectivePointQuality.html" />
     <Content Include="src\component\resources\objectivePointType.html" />
     <Content Include="src\component\resources\resourcesCtrl.js" />
-    <Content Include="src\component\resources\resourcesHolderView.html" />
     <Content Include="src\component\resources\resourcesList.html" />
     <Content Include="src\component\resources\sensorBrand.html" />
     <Content Include="src\component\resources\sensorType.html" />
