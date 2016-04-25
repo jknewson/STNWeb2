@@ -677,6 +677,8 @@
                 $scope.view.OPval = 'detail';
                 $scope.opCopy = [];               
             };
+
+            
         }]);//end OPmodalCtrl
 
 })();
