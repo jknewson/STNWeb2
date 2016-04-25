@@ -53,7 +53,6 @@
                 $scope.datepickrs[which] = true;
             };
 
-            
             //convert deg min sec to dec degrees
             var azimuth = function (deg, min, sec) {
                 var azi = 0;
@@ -84,36 +83,125 @@
             };
 
             //they changed radio button for dms dec deg
-            $scope.latLongChange = function () {
-                if ($scope.hwmCopy.decDegORdms == "dd") {
-                    //they clicked Dec Deg..
-                    if ($scope.DMS.LADeg !== undefined) {
-                        //convert what's here for each lat and long
-                        $scope.hwmCopy.LATITUDE_DD = azimuth($scope.DMS.LADeg, $scope.DMS.LAMin, $scope.DMS.LASec);
-                        $scope.hwmCopy.LONGITUDE_DD = azimuth($scope.DMS.LODeg, $scope.DMS.LOMin, $scope.DMS.LOSec);
-                        //clear
-                        $scope.DMS = {};
+            $scope.latLongChange = function () {                
+                if ($scope.createOReditHWM == 'edit') {
+                    if ($scope.hwmCopy.decDegORdms == "dd") {
+                        //they clicked Dec Deg..
+                        if ($scope.DMS.LADeg !== undefined) {
+                            //convert what's here for each lat and long
+                            $scope.hwmCopy.LATITUDE_DD = azimuth($scope.DMS.LADeg, $scope.DMS.LAMin, $scope.DMS.LASec);
+                            $scope.hwmCopy.LONGITUDE_DD = azimuth($scope.DMS.LODeg, $scope.DMS.LOMin, $scope.DMS.LOSec);
+                            //clear
+                            $scope.DMS = {};
+                        }
+                    } else {
+                        //they clicked dms (convert lat/long to dms)
+                        if ($scope.hwmCopy.LATITUDE_DD !== undefined) {
+                            var latDMS = (deg_to_dms($scope.hwmCopy.LATITUDE_DD)).toString();
+                            var ladDMSarray = latDMS.split(':');
+                            $scope.DMS.LADeg = ladDMSarray[0];
+                            $scope.DMS.LAMin = ladDMSarray[1];
+                            $scope.DMS.LASec = ladDMSarray[2];
+
+                            var longDMS = deg_to_dms($scope.hwmCopy.LONGITUDE_DD);
+                            var longDMSarray = longDMS.split(':');
+                            $scope.DMS.LODeg = longDMSarray[0] * -1;
+                            $scope.DMS.LOMin = longDMSarray[1];
+                            $scope.DMS.LOSec = longDMSarray[2];
+                            //clear
+                            $scope.hwmCopy.LATITUDE_DD = undefined; $scope.hwmCopy.LONGITUDE_DD = undefined;
+                        }
                     }
                 } else {
-                    //they clicked dms (convert lat/long to dms)
-                    if ($scope.hwmCopy.LATITUDE_DD !== undefined) {
-                        var latDMS = (deg_to_dms($scope.hwmCopy.LATITUDE_DD)).toString();
-                        var ladDMSarray = latDMS.split(':');
-                        $scope.DMS.LADeg = ladDMSarray[0];
-                        $scope.DMS.LAMin = ladDMSarray[1];
-                        $scope.DMS.LASec = ladDMSarray[2];
+                    if ($scope.aHWM.decDegORdms == "dd") {
+                        //they clicked Dec Deg..
+                        if ($scope.DMS.LADeg !== undefined) {
+                            //convert what's here for each lat and long
+                            $scope.aHWM.LATITUDE_DD = azimuth($scope.DMS.LADeg, $scope.DMS.LAMin, $scope.DMS.LASec);
+                            $scope.aHWM.LONGITUDE_DD = azimuth($scope.DMS.LODeg, $scope.DMS.LOMin, $scope.DMS.LOSec);
+                            //clear
+                            $scope.DMS = {};
+                        }
+                    } else {
+                        //they clicked dms (convert lat/long to dms)
+                        if ($scope.aHWM.LATITUDE_DD !== undefined) {
+                            var latDMS = (deg_to_dms($scope.aHWM.LATITUDE_DD)).toString();
+                            var ladDMSarray = latDMS.split(':');
+                            $scope.DMS.LADeg = ladDMSarray[0];
+                            $scope.DMS.LAMin = ladDMSarray[1];
+                            $scope.DMS.LASec = ladDMSarray[2];
 
-                        var longDMS = deg_to_dms($scope.hwmCopy.LONGITUDE_DD);
-                        var longDMSarray = longDMS.split(':');
-                        $scope.DMS.LODeg = longDMSarray[0] * -1;
-                        $scope.DMS.LOMin = longDMSarray[1];
-                        $scope.DMS.LOSec = longDMSarray[2];
-                        //clear
-                        $scope.hwmCopy.LATITUDE_DD = undefined; $scope.hwmCopy.LONGITUDE_DD = undefined;
+                            var longDMS = deg_to_dms($scope.aHWM.LONGITUDE_DD);
+                            var longDMSarray = longDMS.split(':');
+                            $scope.DMS.LODeg = longDMSarray[0] * -1;
+                            $scope.DMS.LOMin = longDMSarray[1];
+                            $scope.DMS.LOSec = longDMSarray[2];
+                            //clear
+                            $scope.aHWM.LATITUDE_DD = undefined; $scope.aHWM.LONGITUDE_DD = undefined;
+                        }
                     }
                 }
             };
 
+            //lat modal 
+            var openLatModal = function (w) {
+                var latModal = $uibModal.open({
+                    template: '<div class="modal-header"><h3 class="modal-title">Error</h3></div>' +
+                        '<div class="modal-body"><p>The Latitude must be between 0 and 73.0</p></div>' +
+                        '<div class="modal-footer"><button class="btn btn-primary" ng-enter="ok()" ng-click="ok()">OK</button></div>',
+                    controller: ['$scope', '$uibModalInstance', function ($scope, $uibModalInstance) {
+                        $scope.ok = function () {
+                            $uibModalInstance.close();
+                        };
+                    }],
+                    size: 'sm'
+                });
+                latModal.result.then(function (fieldFocus) {
+                    if (w == 'latlong') $("#LATITUDE_DD").focus();
+                    else $("#LaDeg").focus();
+                });
+            };
+
+            //long modal
+            var openLongModal = function (w) {
+                var longModal = $uibModal.open({
+                    template: '<div class="modal-header"><h3 class="modal-title">Error</h3></div>' +
+                        '<div class="modal-body"><p>The Longitude must be between -175.0 and -60.0</p></div>' +
+                        '<div class="modal-footer"><button class="btn btn-primary" ng-enter="ok()" ng-click="ok()">OK</button></div>',
+                    controller: ['$scope', '$uibModalInstance', function ($scope, $uibModalInstance) {
+                        $scope.ok = function () {
+                            $uibModalInstance.close();
+                        };
+                    }],
+                    size: 'sm'
+                });
+                longModal.result.then(function (fieldFocus) {
+                    if (w == 'latlong') $("#LONGITUDE_DD").focus();
+                    else $("#LoDeg").focus();
+                });
+            };
+
+            //make sure lat/long are right number range
+            $scope.checkValue = function (d) {
+                if (d == 'dms') {
+                    //check the degree value
+                    if ($scope.DMS.LADeg < 0 || $scope.DMS.LADeg > 73) {
+                        openLatModal('dms');
+                    }
+                    if ($scope.DMS.LODeg < -175 || $scope.DMS.LODeg > -60) {
+                        openLongModal('dms');
+                    }
+                } else {
+                    //check the latitude/longitude
+                    var h = $scope.view.HWMval == 'edit' ? $scope.hwmCopy : $scope.aHWM;
+                    if (h.LATITUDE_DD < 0 || h.LATITUDE_DD > 73) {
+                        openLatModal('latlong');
+                    }
+                    if (h.LONGITUDE_DD < -175 || h.LONGITUDE_DD > -60) {
+                        openLongModal('latlong');
+                    }
+                }
+            };
             //  lat/long =is number
             $scope.isNum = function (evt) {
                 var theEvent = evt || window.event;
@@ -159,19 +247,12 @@
                 //get this hwm's event name
                 $scope.EventName = $scope.aHWM.EVENT_ID > 0 ? $scope.eventList.filter(function (e) { return e.EVENT_ID == $scope.aHWM.EVENT_ID; })[0].EVENT_NAME : 'None provided';
                 //date formatting
-                $scope.aHWM.FLAG_DATE = makeAdate($scope.aHWM.FLAG_DATE);
-                //is it approved?
-                if (hwmApproval !== undefined) {
-                    $scope.ApprovalInfo.approvalDate = new Date(hwmApproval.APPROVAL_DATE); //include note that it's displayed in their local time but stored in UTC
-                    $scope.ApprovalInfo.Member = allMembers.filter(function (amem) { return amem.MEMBER_ID == hwmApproval.MEMBER_ID; })[0];
-                    
-                }
+                $scope.aHWM.FLAG_DATE = makeAdate($scope.aHWM.FLAG_DATE);                
                 //if this is surveyed, date format and get survey member's name
                 if ($scope.aHWM.SURVEY_DATE !== null) {
                     $scope.aHWM.SURVEY_DATE = makeAdate($scope.aHWM.SURVEY_DATE);
                     $scope.SurveyMember = allMembers.filter(function (m) { return m.MEMBER_ID == $scope.aHWM.SURVEY_MEMBER_ID; })[0];
                 }
-
                 //get flagging member's name
                 $scope.FlagMember = allMembers.filter(function (m) { return m.MEMBER_ID == $scope.aHWM.FLAG_MEMBER_ID; })[0];
                 //#endregion existing HWM
@@ -205,6 +286,8 @@
             $scope.create = function (valid) {
                 if (valid) {
                     var createdHWM = {};
+                    if ($scope.DMS.LADeg !== undefined) $scope.aHWM.LATITUDE_DD = azimuth($scope.DMS.LADeg, $scope.DMS.LAMin, $scope.DMS.LASec);
+                    if ($scope.DMS.LODeg !== undefined) $scope.aHWM.LONGITUDE_DD = azimuth($scope.DMS.LODeg, $scope.DMS.LOMin, $scope.DMS.LOSec);
                     //if they entered a survey date or elevation, then set survey member as the flag member (flagging and surveying at same time
                     if ($scope.aHWM.SURVEY_DATE !== undefined && $scope.aHWM.SURVEY_DATE !== null)
                         $scope.aHWM.SURVEY_MEMBER_ID = $scope.FLAG_MEMBER_ID;
@@ -353,6 +436,22 @@
                         $scope.aHWM.hCollectMethod = $scope.aHWM.HCOLLECT_METHOD_ID > 0 ? $scope.hCollMList.filter(function (hc) { return hc.HCOLLECT_METHOD_ID == $scope.aHWM.HCOLLECT_METHOD_ID; })[0].HCOLLECT_METHOD : '';
                         $scope.aHWM.vDatum = $scope.aHWM.VDATUM_ID > 0 ? $scope.VDatumsList.filter(function (vd) { return vd.DATUM_ID == $scope.aHWM.VDATUM_ID; })[0].DATUM_NAME : '';
                         $scope.aHWM.vCollectMethod = $scope.aHWM.VCOLLECT_METHOD_ID > 0 ? $scope.vCollMList.filter(function (vc) { return vc.VCOLLECT_METHOD_ID == $scope.aHWM.VCOLLECT_METHOD_ID; })[0].VCOLLECT_METHOD : '';
+                        $scope.aHWM.FLAG_DATE = makeAdate($scope.aHWM.FLAG_DATE);
+                        //is it approved?
+                        if (hwmApproval !== undefined) {
+                            $scope.ApprovalInfo.approvalDate = new Date(hwmApproval.APPROVAL_DATE); //include note that it's displayed in their local time but stored in UTC
+                            $scope.ApprovalInfo.Member = allMembers.filter(function (amem) { return amem.MEMBER_ID == hwmApproval.MEMBER_ID; })[0];
+
+                        }
+                        //if this is surveyed, date format and get survey member's name
+                        if ($scope.aHWM.SURVEY_DATE !== null) {
+                            $scope.aHWM.SURVEY_DATE = makeAdate($scope.aHWM.SURVEY_DATE);
+                            $scope.SurveyMember = allMembers.filter(function (m) { return m.MEMBER_ID == $scope.aHWM.SURVEY_MEMBER_ID; })[0];
+                        }
+
+                        //get flagging member's name
+                        $scope.FlagMember = allMembers.filter(function (m) { return m.MEMBER_ID == $scope.aHWM.FLAG_MEMBER_ID; })[0];
+
                         $scope.hwmCopy = {};
                         $scope.view.HWMval = 'detail';
                         //var sendBack = [updatedHWM, 'updated'];
@@ -410,8 +509,9 @@
 
             //edit button clicked. make copy of hwm 
             $scope.wannaEditHWM = function () {
-                $scope.view.HWMval = 'edit';
+                $scope.view.HWMval = 'edit'; 
                 $scope.hwmCopy = angular.copy($scope.aHWM);
+                $scope.hwmCopy.decDegORdms = 'dd';
             };
             $scope.cancelHWMEdit = function () {
                 $scope.view.HWMval = 'detail';

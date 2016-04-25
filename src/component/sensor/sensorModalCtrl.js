@@ -396,6 +396,7 @@
                 } else {
                     //creating a nwis file
                     $scope.NWISFile = {
+                        FILE_URL: 'http://waterdata.usgs.gov/nwis/uv?site_no=' + $scope.thisSensorSite.USGS_SID,  // if [fill in if not here.. TODO...&begin_date=20160413&end_date=20160419 (event start/end)
                         FILE_DATE: new Date(),
                         FILETYPE_ID: 2,
                         FileType: 'Data',
