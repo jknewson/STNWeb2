@@ -4,8 +4,8 @@
     var ModalControllers = angular.module('ModalControllers');
 
     //deploy new or proposed sensor, edit deployed modal
-    ModalControllers.controller('sensorModalCtrl', ['$scope', '$rootScope', '$timeout', '$cookies', '$http', '$uibModalInstance', '$uibModal', 'SERVER_URL', 'allDropdowns', 'agencyList', 'Site_Files', 'allDepTypes', 'thisSensor', 'SensorSite', 'siteOPs', 'allMembers', 'INSTRUMENT', 'INSTRUMENT_STATUS', 'DATA_FILE', 'FILE', 'SOURCE','OP_MEASURE',
-        function ($scope, $rootScope, $timeout, $cookies, $http, $uibModalInstance, $uibModal, SERVER_URL, allDropdowns, agencyList, Site_Files, allDepTypes, thisSensor, SensorSite, siteOPs, allMembers, INSTRUMENT, INSTRUMENT_STATUS, DATA_FILE, FILE, SOURCE, OP_MEASURE) {
+    ModalControllers.controller('sensorModalCtrl', ['$scope', '$rootScope', '$timeout', '$cookies', '$http', '$sce', '$uibModalInstance', '$uibModal', 'SERVER_URL', 'allDropdowns', 'agencyList', 'Site_Files', 'allDepTypes', 'thisSensor', 'SensorSite', 'siteOPs', 'allMembers', 'INSTRUMENT', 'INSTRUMENT_STATUS', 'DATA_FILE', 'FILE', 'SOURCE','OP_MEASURE',
+        function ($scope, $rootScope, $timeout, $cookies, $http, $sce, $uibModalInstance, $uibModal, SERVER_URL, allDropdowns, agencyList, Site_Files, allDepTypes, thisSensor, SensorSite, siteOPs, allMembers, INSTRUMENT, INSTRUMENT_STATUS, DATA_FILE, FILE, SOURCE, OP_MEASURE) {
            //dropdowns [0]allSensorTypes, [1]allSensorBrands, [2]allHousingTypes, [3]allSensDeps, [4]allEvents      
            $scope.sensorTypeList = allDropdowns[0];
            $scope.sensorBrandList = allDropdowns[1];
@@ -33,6 +33,7 @@
            $scope.IntervalType = {}; //holder for minute/second radio buttons
            $scope.whichButton = ""; //holder for save/deploy button at end .. 'deploy' if proposed->deployed, and for deploying new or save if editing existing
            $scope.serverURL = SERVER_URL;
+           $scope.nwisHeaderTip = $sce.trustAsHtml('Connect your transmitting sensor with NWIS via <em>Station ID for USGS gage</em> from the Site details.');
            $scope.view = { DEPval: 'detail', RETval: 'detail' };
            $scope.sensorDataNWIS = false; //is this a rain gage, met station, or rdg sensor -- if so, data file must be created pointing to nwis (we don't store actual file, just metadata with link)
            $scope.s = { depOpen: true, sFileOpen: false, NWISFileOpen: false};

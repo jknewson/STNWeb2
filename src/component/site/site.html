@@ -835,27 +835,34 @@
                     <!-- Date Established: -->
                     <div class="form-group required" ng-class="{'has-error':OPForm.DATE_ESTABLISHED.$invalid && OPForm.DATE_ESTABLISHED.$dirty}">
                         <label class="col-md-4 control-label req" for="DATE_ESTABLISHED">Date Established:</label>
-                        <div class="col-md-3 input-group" style="padding-right:14px;padding-left:14px">
-                            <input class="form-control dateInputStyle" type="date" name="de" uib-datepicker-popup="MM/dd/yyyy" show-weeks="false" is-open="datepickrs.de" ng-model="OP.DATE_ESTABLISHED" required />
-                            <span class="input-group-btn">
-                                <button class="btn btn-default" ng-click="open($event, 'de')">
-                                    <i class="glyphicon glyphicon-calendar" />
-                                </button>
-                            </span>
+                        <div class="col-md-6">
+                            <div class="col-md-6 input-group">
+                                <input class="form-control dateInputStyle" type="date" name="de" uib-datepicker-popup="MM/dd/yyyy" show-weeks="false" is-open="datepickrs.de" ng-model="OP.DATE_ESTABLISHED" required />
+                                <span class="input-group-btn">
+                                    <button class="btn btn-default" ng-click="open($event, 'de')">
+                                        <i class="glyphicon glyphicon-calendar" />
+                                    </button>
+                                </span>
+                            </div>
                         </div>
                     </div>
 
                     <!-- Date Recovered: -->
                     <div class="form-group">
                         <label class="col-md-4 control-label" for="DATE_RECOVERED">Date Recovered:</label>
-                        <div class="col-md-3 input-group" style="padding-right:14px;padding-left:14px">
-                            <input show-weeks="false" class="form-control dateInputStyle" type="date" name="dr" uib-datepicker-popup="MM/dd/yyyy" is-open="datepickrs.dr" ng-model="OP.DATE_RECOVERED" />
-                            <span class="input-group-btn">
-                                <button class="btn btn-default" ng-click="open($event, 'dr')">
-                                    <i class="glyphicon glyphicon-calendar" />
-                                </button>
-                            </span>
+                        <div class="col-md-6">
+                            <div class="col-md-6 input-group">
+                                <input show-weeks="false" class="form-control dateInputStyle" type="date" name="dr" uib-datepicker-popup="MM/dd/yyyy" is-open="datepickrs.dr" ng-model="OP.DATE_RECOVERED" />
+                                <span class="input-group-btn">
+                                    <button class="btn btn-default" ng-click="open($event, 'dr')">
+                                        <i class="glyphicon glyphicon-calendar" />
+                                    </button>
+                                </span>
+                            </div>
                         </div>
+                        <button type="button" class="col-md-1 borderLess pull-left" tooltip-placement="bottom" tooltip-append-to-body="false" uib-tooltip="Enter the date the location was recently found in good condition.">
+                            <span class="glyphicon glyphicon-question-sign"></span>
+                        </button>
                     </div>
                     <!--create button-->
                     <div class="form-group">
@@ -1155,30 +1162,38 @@
                             <!-- Date Established: -->
                             <div class="form-group required" ng-class="{'has-error':OPEditForm.DATE_ESTABLISHED.$invalid && OPEditForm.DATE_ESTABLISHED.$dirty && view.OPval =='edit'}">
                                 <label class="col-md-4 control-label req" for="DATE_ESTABLISHED">Date Established:</label>
-                                <div class="col-md-3 input-group" style="padding-right:14px;padding-left:14px">
-                                    <span ng-show="view.OPval == 'detail'">{{OP.DATE_ESTABLISHED | date: 'MM/dd/yyyy' || '---'}}</span>
-                                    <input ng-show="view.OPval == 'edit'" class="form-control dateInputStyle" type="date" name="de" uib-datepicker-popup="MM/dd/yyyy" show-weeks="false" is-open="datepickrs.de" ng-model="opCopy.DATE_ESTABLISHED" required />
-                                    <span ng-show="view.OPval == 'edit'" class="input-group-btn">
-                                        <button class="btn btn-default" ng-click="open($event, 'de')">
-                                            <i class="glyphicon glyphicon-calendar" />
-                                        </button>
-                                    </span>
+                                <div class="col-md-6">
+                                    <div class="col-md-6 input-group">
+                                        <span ng-show="view.OPval == 'detail'">{{OP.DATE_ESTABLISHED | date: 'MM/dd/yyyy' || '---'}}</span>
+                                        <input ng-show="view.OPval == 'edit'" class="form-control dateInputStyle" type="date" name="de" uib-datepicker-popup="MM/dd/yyyy" show-weeks="false" is-open="datepickrs.de" ng-model="opCopy.DATE_ESTABLISHED" required />
+                                        <span ng-show="view.OPval == 'edit'" class="input-group-btn">
+                                            <button class="btn btn-default" ng-click="open($event, 'de')">
+                                                <i class="glyphicon glyphicon-calendar" />
+                                            </button>
+                                        </span>
+                                    </div>
                                 </div>
                             </div>
 
                             <!-- Date Recovered: -->
                             <div class="form-group">
                                 <label class="col-md-4 control-label" for="DATE_RECOVERED">Date Recovered:</label>
-                                <div class="col-md-3 input-group" style="padding-right:14px;padding-left:14px">
-                                    <span ng-show="view.OPval == 'detail'">{{OP.DATE_RECOVERED | date: 'MM/dd/yyyy' || '---'}}</span>
-                                    <input ng-show="view.OPval == 'edit'" show-weeks="false" class="form-control dateInputStyle" type="date" name="dr" uib-datepicker-popup="MM/dd/yyyy" is-open="datepickrs.dr" ng-model="opCopy.DATE_RECOVERED" />
-                                    <span ng-show="view.OPval == 'edit'" class="input-group-btn">
-                                        <button class="btn btn-default" ng-click="open($event, 'dr')">
-                                            <i class="glyphicon glyphicon-calendar" />
-                                        </button>
-                                    </span>
+                                <div class="col-md-6">
+                                    <div class="col-md-6 input-group">
+                                        <span ng-show="view.OPval == 'detail'">{{OP.DATE_RECOVERED | date: 'MM/dd/yyyy' || '---'}}</span>
+                                        <input ng-show="view.OPval == 'edit'" show-weeks="false" class="form-control dateInputStyle" type="date" name="dr" uib-datepicker-popup="MM/dd/yyyy" is-open="datepickrs.dr" ng-model="opCopy.DATE_RECOVERED" />
+                                        <span ng-show="view.OPval == 'edit'" class="input-group-btn">
+                                            <button class="btn btn-default" ng-click="open($event, 'dr')">
+                                                <i class="glyphicon glyphicon-calendar" />
+                                            </button>
+                                        </span>
+                                    </div>
                                 </div>
+                                <button ng-show="view.OPval == 'edit'" type="button" class="col-md-1 borderLess pull-left" tooltip-placement="bottom" tooltip-append-to-body="false" uib-tooltip="Enter the date the location was recently found in good condition.">
+                                    <span class="glyphicon glyphicon-question-sign"></span>
+                                </button>
                             </div>
+
                         </fieldset>
                     </form>
                 </uib-accordion-group>
@@ -1255,6 +1270,9 @@
                                             <div class="col-md-6">
                                                 <input class="form-control" name="FILE_URL" ng-model="aFile.FILE_URL" type="text" />
                                             </div>
+                                            <button type="button" class="col-md-1 borderLess pull-left" tooltip-placement="bottom" tooltip-append-to-body="false" uib-tooltip="Please link to persistent URLs or digital object identifier (doi) urls.">
+                                                <span class="glyphicon glyphicon-question-sign"></span>
+                                            </button>
                                         </div>
 
                                         <!--Source Name (photo)-->
@@ -1316,6 +1334,9 @@
                                             <div class="col-md-6">
                                                 <textarea class="form-control" id="DESCRIPTION" type="text" rows="3" placeholder="Description" ng-model="aFile.DESCRIPTION" required />
                                             </div>
+                                            <button ng-show="aFile.FILETYPE_ID == 1" type="button" class="col-md-1 borderLess pull-left" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Populates in Photo caption below.">
+                                                <span class="glyphicon glyphicon-question-sign"></span>
+                                            </button>
                                         </div>
 
                                         <!-- This is where Other ends, rest is for Photo -->
@@ -1619,7 +1640,7 @@
                     </div>
 
                     <!-- Surveyed Date: -->
-                    <div class="form-group" ng-class="{'has-error':HWMForm.SURVEY_DATE.$invalid && HWMForm.SURVEY_DATE.$dirty}">
+                    <div class="form-group">
                         <label class="col-md-4 control-label" for="SURVEY_DATE">Surveyed Date:</label>
                         <div class="col-md-3">
                             <div class="col-md-3 input-group">
@@ -1640,7 +1661,7 @@
                     <div class="form-group" ng-class="{'required': aHWM.SURVEY_DATE}">
                         <label class="col-md-4 control-label" ng-class="{'req': aHWM.SURVEY_DATE}" for="ELEV_FT">Surveyed Elevation (ft):</label>
                         <div class="col-md-6">
-                            <input class="form-control" ng-keypress="isNum($event)" name="ELEV_FT" ng-model="aHWM.ELEV_FT" type="text" ng-required='aHWM.SURVEY_DATE' />
+                            <input class="form-control" ng-keypress="isNum($event)" name="ELEV_FT" ng-model="aHWM.ELEV_FT" type="text" ng-required="aHWM.SURVEY_DATE" />
                         </div>
                     </div>
 
@@ -2021,12 +2042,15 @@
                             </div>
 
                             <!-- Surveyed Elevation (ft): -->
-                            <div class="form-group" ng-class="{'required': aHWM.SURVEY_DATE}">
-                                <label class="col-md-4 control-label" ng-class="{'req': aHWM.SURVEY_DATE}" for="ELEV_FT">Surveyed Elevation (ft):</label>
+                            <div class="form-group" ng-class="{'required': hwmCopy.SURVEY_DATE}">
+                                <label class="col-md-4 control-label" ng-class="{'req': hwmCopy.SURVEY_DATE}" for="ELEV_FT">Surveyed Elevation (ft):</label>
                                 <div class="col-md-6">
                                     <span ng-show="view.HWMval == 'detail'">{{aHWM.ELEV_FT || '---'}}</span>
                                     <input ng-show="view.HWMval == 'edit'" class="form-control" ng-keypress="isNum($event)" name="ELEV_FT" ng-model="hwmCopy.ELEV_FT" type="text" ng-required='hwmCopy.SURVEY_DATE' />
                                 </div>
+                                <button ng-show="view.HWMval == 'edit' && hwmCopy.SURVEY_DATE" type="button" class="col-md-2 borderLess" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Elevation required if survey date is populated.">
+                                    <span class="glyphicon glyphicon-question-sign"></span>
+                                </button>
                             </div>
 
                             <!-- Vertical Datum: -->
@@ -2207,6 +2231,9 @@
                                             <div class="col-md-6">
                                                 <input class="form-control" name="FILE_URL" ng-model="aFile.FILE_URL" type="text" />
                                             </div>
+                                            <button type="button" class="col-md-1 borderLess pull-left" tooltip-placement="bottom" tooltip-append-to-body="false" uib-tooltip="Please link to persistent URLs or digital object identifier (doi) urls.">
+                                                <span class="glyphicon glyphicon-question-sign"></span>
+                                            </button>
                                         </div>
 
                                         <!--Source Name (photo)-->
@@ -2268,6 +2295,9 @@
                                             <div class="col-md-6">
                                                 <textarea class="form-control" id="DESCRIPTION" type="text" rows="3" placeholder="Description" ng-model="aFile.DESCRIPTION" required />
                                             </div>
+                                            <button ng-show="aFile.FILETYPE_ID == 1" type="button" class="col-md-1 borderLess pull-left" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Populates in Photo caption below.">
+                                                <span class="glyphicon glyphicon-question-sign"></span>
+                                            </button>
                                         </div>
 
                                         <!-- This is where Other ends, rest is for Photo -->
@@ -2585,7 +2615,7 @@
                 </div>
 
                 <!-- Interval: -->
-                <div class="form-group" style="margin-bottom:0">
+                <div style="margin-bottom:0">
                     <label class="col-md-3 control-label" for="INTERVAL">Interval:</label>
                     <div class="col-md-6">
                         <input class="form-control" ng-keypress="isNum($event)" name="INTERVAL" ng-model="aSensor.INTERVAL" type="text" />
@@ -2623,7 +2653,7 @@
                             <option value=""></option>
                         </select>
                     </div>
-                    <button type="button" class="borderLess" tooltip-placement="right" uib-tooltip="Date/Time will be stored in UTC.">
+                    <button type="button" class="borderLess" tooltip-placement="right" tooltip-append-to-body="false" uib-tooltip="Date/Time will be stored in UTC.">
                         <span class="glyphicon glyphicon-question-sign"></span>
                     </button>
                 </div>
@@ -3114,6 +3144,9 @@
                                     <div class="col-md-6">
                                         <input class="form-control" name="FILE_URL" ng-model="aFile.FILE_URL" type="text" />
                                     </div>
+                                    <button type="button" class="col-md-1 borderLess pull-left" tooltip-placement="bottom" tooltip-append-to-body="false" uib-tooltip="Please link to persistent URLs or digital object identifier (doi) urls.">
+                                        <span class="glyphicon glyphicon-question-sign"></span>
+                                    </button>
                                 </div>
                                 <!--Data Processed by (Data) -->
                                 <div ng-if="aFile.FILETYPE_ID === 2" class="form-group" style="margin:0;padding:0">
@@ -3194,6 +3227,9 @@
                                     <div class="col-md-6">
                                         <textarea class="form-control" id="DESCRIPTION" type="text" rows="3" placeholder="Description" ng-model="aFile.DESCRIPTION" required />
                                     </div>
+                                    <button ng-show="aFile.FILETYPE_ID == 1" type="button" class="col-md-1 borderLess pull-left" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Populates in Photo caption below.">
+                                        <span class="glyphicon glyphicon-question-sign"></span>
+                                    </button>
                                 </div>
 
                                 <!-- Good Data Start Time* (data) -->
@@ -3204,6 +3240,9 @@
                                                         hidden-time="false" hidden-date="false" show-spinners="true" date-opened="datepickrs.dfgs" date-ng-click="open($event, 'dfgs')" required>
                                         </datetimepicker>
                                     </div>
+                                    <button style="margin-top:4%" type="button" class="col-md-1 borderLess pull-left" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Used by the processing scripts to clip irrelavent data.">
+                                        <span class="glyphicon glyphicon-question-sign"></span>
+                                    </button>
                                 </div>
 
                                 <!-- Good Data End Time* (data)-->
@@ -3214,6 +3253,9 @@
                                                         hidden-time="false" hidden-date="false" show-spinners="true" date-opened="datepickrs.dfge" date-ng-click="open($event, 'dfge')" required>
                                         </datetimepicker>
                                     </div>
+                                    <button style="margin-top:4%" type="button" class="col-md-1 borderLess pull-left" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Used by the processing scripts to clip irrelavent data.">
+                                        <span class="glyphicon glyphicon-question-sign"></span>
+                                    </button>
                                 </div>
 
                                 <!-- Timezone*: -->
@@ -3224,7 +3266,7 @@
                                             <option value=""></option>
                                         </select>
                                     </div>
-                                    <button type="button" class="borderLess pull-left" tooltip-placement="right" tooltip-append-to-body="false" uib-tooltip="Date/Time will be stored in UTC.">
+                                    <button type="button" class="col-md-1 borderLess pull-left" tooltip-placement="right" tooltip-append-to-body="false" uib-tooltip="Date/Time will be stored in UTC.">
                                         <span class="glyphicon glyphicon-question-sign"></span>
                                     </button>
                                 </div>
@@ -3307,6 +3349,9 @@
                     <uib-accordion-heading>
                         <i style="margin-right:10px" class="pull-left glyphicon" ng-class="{'glyphicon-chevron-down': s.NWISFileOpen, 'glyphicon-chevron-right': !s.NWISFileOpen}"></i>
                         <span ng-class="{'redText':showNWISFileForm}">NWIS Connection</span>
+                        <button type="button" class="col-md-1 borderLess pull-right" tooltip-placement="left" tooltip-append-to-body="false" uib-tooltip-html="nwisHeaderTip">
+                            <span class="glyphicon glyphicon-question-sign"></span>
+                        </button>
                     </uib-accordion-heading>
                     <div class="col-md-12">
                         <div class="col-md-5"><h4>NWIS metadata for sensor</h4></div>
@@ -3348,6 +3393,9 @@
                                         <div class="col-md-6">
                                             <input class="form-control" name="FILE_URL" ng-model="NWISFile.FILE_URL" type="text" />
                                         </div>
+                                        <button type="button" class="col-md-1 borderLess pull-left" tooltip-placement="bottom" tooltip-append-to-body="false" uib-tooltip="Auto generated from USGS Station ID. Correct if necessary.">
+                                            <span class="glyphicon glyphicon-question-sign"></span>
+                                        </button>
                                     </div>
 
                                     <!--Data Processed by -->
@@ -3399,6 +3447,9 @@
                                                             hidden-time="false" hidden-date="false" show-spinners="true" date-opened="datepickrs.dfgs" date-ng-click="open($event, 'dfgs')" required>
                                             </datetimepicker>
                                         </div>
+                                        <button style="margin-top:4%" type="button" class="col-md-1 borderLess pull-left" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Used by the processing scripts to clip irrelavent data.">
+                                            <span class="glyphicon glyphicon-question-sign"></span>
+                                        </button>
                                     </div>
 
                                     <!-- Good Data End Time* (data)-->
@@ -3409,6 +3460,9 @@
                                                             hidden-time="false" hidden-date="false" show-spinners="true" date-opened="datepickrs.dfge" date-ng-click="open($event, 'dfge')" required>
                                             </datetimepicker>
                                         </div>
+                                        <button style="margin-top:4%" type="button" class="col-md-1 borderLess pull-left" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Used by the processing scripts to clip irrelavent data.">
+                                            <span class="glyphicon glyphicon-question-sign"></span>
+                                        </button>
                                     </div>
 
                                     <!-- Timezone*: -->
@@ -3419,7 +3473,7 @@
                                                 <option value=""></option>
                                             </select>
                                         </div>
-                                        <button type="button" class="borderLess pull-left" tooltip-placement="right" tooltip-append-to-body="false" uib-tooltip="Date/Time will be stored in UTC.">
+                                        <button type="button" class="col-md-1 borderLess pull-left" tooltip-placement="right" tooltip-append-to-body="false" uib-tooltip="Date/Time will be stored in UTC.">
                                             <span class="glyphicon glyphicon-question-sign"></span>
                                         </button>
                                     </div>
@@ -4420,6 +4474,9 @@
                                     <div class="col-md-6">
                                         <input class="form-control" name="FILE_URL" ng-model="aFile.FILE_URL" type="text" />
                                     </div>
+                                    <button type="button" class="col-md-1 borderLess pull-left" tooltip-placement="bottom" tooltip-append-to-body="false" uib-tooltip="Please link to persistent URLs or digital object identifier (doi) urls.">
+                                        <span class="glyphicon glyphicon-question-sign"></span>
+                                    </button>
                                 </div>
                                 <!--Data Processed by (Data) -->
                                 <div ng-if="aFile.FILETYPE_ID === 2" class="form-group" style="margin:0;padding:0">
@@ -4500,6 +4557,9 @@
                                     <div class="col-md-6">
                                         <textarea class="form-control" id="DESCRIPTION" type="text" rows="3" placeholder="Description" ng-model="aFile.DESCRIPTION" required />
                                     </div>
+                                    <button ng-show="aFile.FILETYPE_ID == 1" type="button" class="col-md-1 borderLess pull-left" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Populates in Photo caption below.">
+                                        <span class="glyphicon glyphicon-question-sign"></span>
+                                    </button>
                                 </div>
 
                                 <!-- Good Data Start Time* (data) -->
@@ -4510,6 +4570,9 @@
                                                         hidden-time="false" hidden-date="false" show-spinners="true" date-opened="datepickrs.dfgs" date-ng-click="open($event, 'dfgs')" required>
                                         </datetimepicker>
                                     </div>
+                                    <button type="button" style="margin-top:4%" class="col-md-1 borderLess pull-left" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Used by the processing scripts to clip irrelavent data.">
+                                        <span class="glyphicon glyphicon-question-sign"></span>
+                                    </button>
                                 </div>
 
                                 <!-- Good Data End Time* (data)-->
@@ -4520,6 +4583,9 @@
                                                         hidden-time="false" hidden-date="false" show-spinners="true" date-opened="datepickrs.dfge" date-ng-click="open($event, 'dfge')" required>
                                         </datetimepicker>
                                     </div>
+                                    <button type="button" style="margin-top:4%" class="col-md-1 borderLess pull-left" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Used by the processing scripts to clip irrelavent data.">
+                                        <span class="glyphicon glyphicon-question-sign"></span>
+                                    </button>
                                 </div>
 
                                 <!-- Timezone*: -->
@@ -4530,7 +4596,7 @@
                                             <option value=""></option>
                                         </select>
                                     </div>
-                                    <button type="button" class="borderLess pull-left" tooltip-placement="right" tooltip-append-to-body="true" uib-tooltip="Date/Time will be stored in UTC.">
+                                    <button type="button" class="col-md-1 borderLess pull-left" tooltip-placement="right" tooltip-append-to-body="false" uib-tooltip="Date/Time will be stored in UTC.">
                                         <span class="glyphicon glyphicon-question-sign"></span>
                                     </button>
                                 </div>
@@ -4627,6 +4693,9 @@
                     <uib-accordion-heading>
                         <i style="margin-right:10px" class="pull-left glyphicon" ng-class="{'glyphicon-chevron-down': s.NWISFileOpen, 'glyphicon-chevron-right': !s.NWISFileOpen}"></i>
                         <span ng-class="{'redText':showNWISFileForm}">NWIS Data Connection</span>
+                        <button type="button" class="col-md-1 borderLess pull-right" tooltip-placement="left" tooltip-append-to-body="false" uib-tooltip-html="nwisHeaderTip">
+                            <span class="glyphicon glyphicon-question-sign"></span>
+                        </button>
                     </uib-accordion-heading>
                     <div class="col-md-12">
                         <div class="col-md-5"><h4>NWIS metadata for sensor</h4></div>
@@ -4668,6 +4737,9 @@
                                         <div class="col-md-6">
                                             <input class="form-control" name="FILE_URL" ng-model="NWISFile.FILE_URL" type="text" />
                                         </div>
+                                        <button type="button" class="col-md-1 borderLess pull-left" tooltip-placement="bottom" tooltip-append-to-body="false" uib-tooltip="Auto generated from USGS Station ID. Correct if necessary.">
+                                            <span class="glyphicon glyphicon-question-sign"></span>
+                                        </button>
                                     </div>
 
                                     <!--Data Processed by -->
@@ -4719,6 +4791,9 @@
                                                             hidden-time="false" hidden-date="false" show-spinners="true" date-opened="datepickrs.dfgs" date-ng-click="open($event, 'dfgs')" required>
                                             </datetimepicker>
                                         </div>
+                                        <button type="button" class="col-md-1 borderLess pull-left" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Used by the processing scripts to clip irrelavent data.">
+                                            <span class="glyphicon glyphicon-question-sign"></span>
+                                        </button>
                                     </div>
 
                                     <!-- Good Data End Time* (data)-->
@@ -4729,6 +4804,9 @@
                                                             hidden-time="false" hidden-date="false" show-spinners="true" date-opened="datepickrs.dfge" date-ng-click="open($event, 'dfge')" required>
                                             </datetimepicker>
                                         </div>
+                                        <button type="button" class="col-md-1 borderLess pull-left" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Used by the processing scripts to clip irrelavent data.">
+                                            <span class="glyphicon glyphicon-question-sign"></span>
+                                        </button>
                                     </div>
 
                                     <!-- Timezone*: -->
@@ -4815,6 +4893,9 @@
                     <div class="col-md-6">
                         <input class="form-control" name="FILE_URL" ng-model="aFile.FILE_URL" type="text" />
                     </div>
+                    <button type="button" class="col-md-1 borderLess pull-left" tooltip-placement="bottom" tooltip-append-to-body="false" uib-tooltip="Please link to persistent URLs or digital object identifier (doi) urls.">
+                        <span class="glyphicon glyphicon-question-sign"></span>
+                    </button>
                 </div>
 
                 <!--Data Processed by (Data)-->
@@ -4896,6 +4977,9 @@
                     <div class="col-md-6">
                         <textarea class="form-control" id="DESCRIPTION" type="text" rows="3" placeholder="Description" ng-model="aFile.DESCRIPTION" required />
                     </div>
+                    <button ng-show="aFile.FILETYPE_ID == 1" type="button" class="col-md-1 borderLess pull-left" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Populates in Photo caption below.">
+                        <span class="glyphicon glyphicon-question-sign"></span>
+                    </button>
                 </div>
 
                 <!-- Good Data Start Time* (data) -->
@@ -4906,6 +4990,9 @@
                                         hidden-time="false" hidden-date="false" show-spinners="true" date-opened="datepickrs.dfgs" date-ng-click="open($event, 'dfgs')" required>
                         </datetimepicker>
                     </div>
+                    <button type="button" class="col-md-1 borderLess pull-left" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Used by the processing scripts to clip irrelavent data.">
+                        <span class="glyphicon glyphicon-question-sign"></span>
+                    </button>
                 </div>
 
                 <!-- Good Data End Time* (data) -->
@@ -4916,6 +5003,9 @@
                                         hidden-time="false" hidden-date="false" show-spinners="true" date-opened="datepickrs.dfge" date-ng-click="open($event, 'dfge')" required>
                         </datetimepicker>
                     </div>
+                    <button type="button" class="col-md-1 borderLess pull-left" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Used by the processing scripts to clip irrelavent data.">
+                        <span class="glyphicon glyphicon-question-sign"></span>
+                    </button>
                 </div>
 
                 <!-- Timezone*:-->
@@ -5046,6 +5136,9 @@
                         <span ng-show="view.FILEval == 'detail'">{{aFile.FILE_URL || '---'}}</span>
                         <input ng-show="view.FILEval == 'edit'" class="form-control" name="FILE_URL" ng-model="fileCopy.FILE_URL" type="text" />
                     </div>
+                    <button ng-show="view.FILEval == 'edit'" type="button" class="col-md-1 borderLess pull-left" tooltip-placement="bottom" tooltip-append-to-body="false" uib-tooltip="Please link to persistent URLs or digital object identifier (doi) urls.">
+                        <span class="glyphicon glyphicon-question-sign"></span>
+                    </button>
                 </div>
 
                 <!--Data Processed by (Data)-->
@@ -5145,6 +5238,9 @@
                                         hidden-time="false" hidden-date="false" show-spinners="true" date-opened="datepickrs.dfgs" date-ng-click="open($event, 'dfgs')" required>
                         </datetimepicker>
                     </div>
+                    <button ng-show="view.FILEval == 'edit'" type="button" class="col-md-1 borderLess pull-left" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Used by the processing scripts to clip irrelavent data.">
+                        <span class="glyphicon glyphicon-question-sign"></span>
+                    </button>
                 </div>
 
                 <!-- Good Data End Time* (data) -->
@@ -5156,6 +5252,9 @@
                                         hidden-time="false" hidden-date="false" show-spinners="true" date-opened="datepickrs.dfge" date-ng-click="open($event, 'dfge')" required>
                         </datetimepicker>
                     </div>
+                    <button ng-show="view.FILEval == 'edit'" type="button" class="col-md-1 borderLess pull-left" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Used by the processing scripts to clip irrelavent data.">
+                        <span class="glyphicon glyphicon-question-sign"></span>
+                    </button>
                 </div>
 
                 <!-- Timezone*:-->
@@ -5167,7 +5266,7 @@
                             <option value=""></option>
                         </select>
                     </div>
-                    <button ng-show="view.FILEval == 'edit'" type="button" class="borderLess pull-left" tooltip-placement="right" tooltip-append-to-body="true" uib-tooltip="Date/Time will be stored in UTC.">
+                    <button ng-show="view.FILEval == 'edit'" type="button" class="col-md-1 borderLess pull-left" tooltip-placement="right" tooltip-append-to-body="false" uib-tooltip="Date/Time will be stored in UTC.">
                         <span class="glyphicon glyphicon-question-sign"></span>
                     </button>
                 </div>
@@ -5290,7 +5389,7 @@
                         HWM {{h.HWM_ID}} - {{h.ELEV_FT || '--'}} ft
                     </span>
                     <button type="button" class="borderLess" tooltip-placement="top" uib-tooltip="Show Details" ng-click="showHWMDetails(h)"><span class="glyphicon glyphicon-info-sign"></span></button>
-                    <button ng-if ="h.ELEV_FT" type="button" class="borderLess" tooltip-placement="top" uib-tooltip="Set as Primary" ng-click="primaryHWM(h)"><span class="glyphicon glyphicon-check"></span></button>
+                    <button ng-if="h.ELEV_FT" type="button" class="borderLess" tooltip-placement="top" uib-tooltip="Set as Primary" ng-click="primaryHWM(h)"><span class="glyphicon glyphicon-check"></span></button>
                     <button ng-if="!h.ELEV_FT" type="button" class="borderLess" tooltip-placement="top" uib-tooltip="Incomplete" ng-click="showIncompleteHWMInfo()"><span class="glyphicon glyphicon-alert"></span></button>
                 </div>
                 <!-- Sensor list -->
@@ -5424,19 +5523,22 @@
                     </div>
                 </div>
                 <!--</div>
-                </div>
-                </div>-->
+            </div>
+            </div>-->
                 <!-- End SENSORs and HWMs used for Peak -->
 
 
                 <br clear="all" />
 
-                <!-- Location Description: -->
+                <!-- Peak Calculation Notes: -->
                 <div class="form-group">
                     <label class="col-md-4 control-label" for="CALC_NOTES">Peak Calculation Notes:</label>
                     <div class="col-md-5">
                         <textarea class="form-control" name="CALC_NOTES" type=" text" rows="3" placeholder="Please document the reason this Peak was chosen for this event." ng-model="aPeak.CALC_NOTES" />
                     </div>
+                    <button type="button" class="col-md-2 borderLess" tooltip-placement="top" uib-tooltip="Please document the reason this Peak was chosen for this event.">
+                        <span class="glyphicon glyphicon-question-sign"></span>
+                    </button>
                 </div>
                 <br clear="all" />
 
@@ -5489,7 +5591,7 @@
                             <option value=""></option>
                         </select>
                     </div>
-                    <button type="button" class="borderLess" tooltip-placement="right" uib-tooltip="Date/Time will be stored in UTC.">
+                    <button type="button" class="col-md-2 borderLess" tooltip-placement="top" uib-tooltip="Date/Time will be stored in UTC.">
                         <span class="glyphicon glyphicon-question-sign"></span>
                     </button>
                 </div>
@@ -5508,14 +5610,17 @@
                 </div>
 
                 <!-- Vertical Datum: -->
-                <div class="form-group">
-                    <label class="col-md-4 control-label" for="VDATUM_ID">Vertical Datum:</label>
+                <div class="form-group" ng-class="{'required': aPeak.PEAK_STAGE}">
+                    <label class="col-md-4 control-label" ng-class="{'req': aPeak.PEAK_STAGE}" for="VDATUM_ID">Vertical Datum:</label>
                     <div class="col-md-5">
                         <select class="form-control" name="VDATUM_ID" ng-model="aPeak.VDATUM_ID"
-                                ng-options="vd.DATUM_ID as vd.DATUM_ABBREVIATION for vd in VDatumsList">
+                                ng-options="vd.DATUM_ID as vd.DATUM_ABBREVIATION for vd in VDatumsList" ng-required="aPeak.PEAK_STAGE">
                             <option value=""></option>
                         </select>
                     </div>
+                    <button ng-show="aPeak.PEAK_STAGE" type="button" class="col-md-2 borderLess" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Vertical Datum is required if Peak Stage Elevation is populated.">
+                        <span class="glyphicon glyphicon-question-sign"></span>
+                    </button>
                 </div>
 
                 <!-- Height Above Ground (ft)-->
@@ -5531,51 +5636,60 @@
                     </div>
                 </div>
 
-                <!-- Peak Discharge-->
-                <div class="form-group">
-                    <label class="col-md-4 control-label" for="PEAK_DISCHARGE">Peak Discharge:</label>
-                    <div class="col-md-5">
-                        <input class="form-control" ng-keypress="isNum($event)" name="PEAK_DISCHARGE" ng-model="aPeak.PEAK_DISCHARGE" type="text" />
-                    </div>
-                    <div class="col-md-1">
-                        <span tooltip-placement="right" uib-tooltip="Peak Discharge Estimated?">
-                            <input type="checkbox" name="IS_PEAK_DISCHARGE_ESTIMATED" ng-model="aPeak.IS_PEAK_DISCHARGE_ESTIMATED" ng-true-value="1" ng-false-value="0" />
-                        </span>
+                <div class="panel panel-default">
+                    <div class="panel-body">
+                        <div class="col-md-8 col-md-offset-4">
+                            These fields shall be filled out pursuant to sw13.01
+                            <br />
+                            Click this <a target="_blank" href="http://water.usgs.gov/admin/memo/SW/sw13.01.pdf">link</a> for more information.
+                        </div>
+                        <br clear="all"/>
+                        <!-- Peak Discharge-->
+                        <div class="form-group">
+                            <label class="col-md-4 control-label" for="PEAK_DISCHARGE">Peak Discharge:</label>
+                            <div class="col-md-5">
+                                <input class="form-control" ng-keypress="isNum($event)" name="PEAK_DISCHARGE" ng-model="aPeak.PEAK_DISCHARGE" type="text" />
+                            </div>
+                            <div class="col-md-1">
+                                <span tooltip-placement="right" uib-tooltip="Peak Discharge Estimated?">
+                                    <input type="checkbox" name="IS_PEAK_DISCHARGE_ESTIMATED" ng-model="aPeak.IS_PEAK_DISCHARGE_ESTIMATED" ng-true-value="1" ng-false-value="0" />
+                                </span>
+                            </div>
+                        </div>
+
+                        <!--AEP: -->
+                        <div class="form-group">
+                            <label class="col-md-4 control-label" for="AEP">AEP:</label>
+                            <div class="col-md-5">
+                                <input class="form-control" ng-keypress="isNum($event)" name="AEP" ng-model="aPeak.AEP" type="text" />
+                            </div>
+                        </div>
+
+                        <!--AEP Confidence Interval (lower limit): -->
+                        <div class="form-group">
+                            <label class="col-md-4 control-label" for="AEP_LOWCI">AEP Confidence Interval<br />(lower limit):</label>
+                            <div class="col-md-5">
+                                <input class="form-control" ng-keypress="isNum($event)" name="AEP_LOWCI" ng-model="aPeak.AEP_LOWCI" type="text" />
+                            </div>
+                        </div>
+
+                        <!--AEP Confidence Interval (upper limit): -->
+                        <div class="form-group">
+                            <label class="col-md-4 control-label" for="AEP_UPPERCI">AEP Confidence Interval<br />(upper limit):</label>
+                            <div class="col-md-5">
+                                <input class="form-control" ng-keypress="isNum($event)" name="AEP_UPPERCI" ng-model="aPeak.AEP_UPPERCI" type="text" />
+                            </div>
+                        </div>
+
+                        <!--AEP Confidence Interval (percentage of limits): -->
+                        <div class="form-group">
+                            <label class="col-md-4 control-label" for="AEP_RANGE">AEP Confidence Interval<br />(percentage of limits):</label>
+                            <div class="col-md-5">
+                                <input class="form-control" ng-keypress="isNum($event)" name="AEP_RANGE" ng-model="aPeak.AEP_RANGE" type="text" />
+                            </div>
+                        </div>
                     </div>
                 </div>
-
-                <!--AEP: -->
-                <div class="form-group">
-                    <label class="col-md-4 control-label" for="AEP">AEP:</label>
-                    <div class="col-md-5">
-                        <input class="form-control" ng-keypress="isNum($event)" name="AEP" ng-model="aPeak.AEP" type="text" />
-                    </div>
-                </div>
-
-                <!--AEP Confidence Interval (lower limit): -->
-                <div class="form-group">
-                    <label class="col-md-4 control-label" for="AEP_LOWCI">AEP Confidence Interval<br />(lower limit):</label>
-                    <div class="col-md-5">
-                        <input class="form-control" ng-keypress="isNum($event)" name="AEP_LOWCI" ng-model="aPeak.AEP_LOWCI" type="text" />
-                    </div>
-                </div>
-
-                <!--AEP Confidence Interval (upper limit): -->
-                <div class="form-group">
-                    <label class="col-md-4 control-label" for="AEP_UPPERCI">AEP Confidence Interval<br />(upper limit):</label>
-                    <div class="col-md-5">
-                        <input class="form-control" ng-keypress="isNum($event)" name="AEP_UPPERCI" ng-model="aPeak.AEP_UPPERCI" type="text" />
-                    </div>
-                </div>
-
-                <!--AEP Confidence Interval (percentage of limits): -->
-                <div class="form-group">
-                    <label class="col-md-4 control-label" for="AEP_RANGE">AEP Confidence Interval<br />(percentage of limits):</label>
-                    <div class="col-md-5">
-                        <input class="form-control" ng-keypress="isNum($event)" name="AEP_RANGE" ng-model="aPeak.AEP_RANGE" type="text" />
-                    </div>
-                </div>
-
 
 
             </div><!-- end modal-body-->
