@@ -112,30 +112,6 @@
                     </div>
                 </div>
 
-                <!--populate button*-->
-                <div class="form-group required" ng-if="aSite.SITE_ID == undefined">
-                    <label class="col-md-4 control-label" for="POPULATEBTN">Click here to populate address fields:</label>
-                    <div class="col-md-7">
-                        <button type="button" ng-click="getAddress()" class="btn btn-primary">Verify Location</button>
-                    </div>
-                </div>
-
-                <!-- map showing lat/long location-->
-                <div class="col-md-7 col-md-offset-3" style="height:300px;display:table;" ng-show="showMap">
-                    <div><label>There are: {{closeSites.length}} sites nearby.</label></div>
-                    <p ng-if="closeSites.length > 0">
-                        <span>To use one of these sites (shown as blue dot) instead, click on the site name.</span>
-                        <ul style="max-height:50px;overflow:auto;">
-                            <li ng-repeat="s in closeSites" style="list-style:none">
-                                <a ui-sref="site.dashboard({id: s.SITE_ID})" ng-click="$dismiss()">{{s.SITE_NO}}</a>
-                            </li>
-                        </ul>
-                    </p>
-                    <div class="panel panel-primary" style="height:inherit">
-                        <leaflet lf-center="mapCenter" width="100%" height="100%" markers="mapMarkers"></leaflet>
-                    </div>
-                </div>
-                <br clear="all" />
                 <!--Horizontal Datum*-->
                 <div class="form-group required" ng-class="{'has-error':siteForm.HDATUM_ID.$invalid && siteForm.HDATUM_ID.$dirty}">
                     <label class="col-md-4 control-label req" for="HDATUM_ID">Horizontal Datum:</label>
@@ -158,51 +134,82 @@
                     </div>
                 </div>
 
-                <!--Address-->
+                <!--populate button*-->
                 <div class="form-group">
-                    <label class="col-md-4 control-label" for="ADDRESS">Address:</label>
-                    <div class="col-md-7">
-                        <input class="form-control" name="ADDRESS" ng-model="aSite.ADDRESS" type="text" />
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">Location Information</h3>
+                        </div>
+                        <div class="panel-body">
+                            <div class="form-group required" ng-if="aSite.SITE_ID == undefined">
+                                <label class="col-md-4 control-label" for="POPULATEBTN">Click here to populate location fields:</label>
+                                <div class="col-md-7">
+                                    <button type="button" ng-click="getAddress()" class="btn btn-primary">Verify Location</button>
+                                </div>
+                            </div>
+
+                            <!-- map showing lat/long location-->
+                            <div class="col-md-7 col-md-offset-3" style="height:300px;display:table;" ng-show="showMap">
+                                <div><label>There are: {{closeSites.length}} sites nearby.</label></div>
+                                <p ng-if="closeSites.length > 0">
+                                    <span>To use one of these sites (shown as blue dot) instead, click on the site name.</span>
+                                    <ul style="max-height:50px;overflow:auto;">
+                                        <li ng-repeat="s in closeSites" style="list-style:none">
+                                            <a ui-sref="site.dashboard({id: s.SITE_ID})" ng-click="$dismiss()">{{s.SITE_NO}}</a>
+                                        </li>
+                                    </ul>
+                                </p>
+                                <p>Click and drag the point to relocate this site (all related fields will update).</p>
+                                <div class="panel panel-primary" style="height:inherit">
+                                    <leaflet lf-center="mapCenter" width="100%" height="100%" markers="mapMarkers"></leaflet>
+                                </div>
+                            </div>
+                            <br clear="all" />
+                            <!--Address-->
+                            <div class="form-group">
+                                <label class="col-md-4 control-label" for="ADDRESS">Address:</label>
+                                <div class="col-md-7">
+                                    <input class="form-control" name="ADDRESS" ng-model="aSite.ADDRESS" type="text" />
+                                </div>
+                            </div>
+                            <!--City-->
+                            <div class="form-group">
+                                <label class="col-md-4 control-label" for="CITY">City:</label>
+                                <div class="col-md-7">
+                                    <input class="form-control" name="CITY" ng-model="aSite.CITY" type="text" />
+                                </div>
+                            </div>
+                            <!--State*-->
+                            <div class="form-group required" ng-class="{'has-error':siteForm.STATE.$invalid && siteForm.STATE.$dirty}">
+                                <label class="col-md-4 control-label req" for="STATE">State:</label>
+                                <div class="col-md-7">
+                                    <select class="form-control" name="STATE" ng-model="aSite.STATE" ng-change="updateCountyList(aSite.STATE)"
+                                            ng-options="state.STATE_ABBREV as state.STATE_NAME for state in StateList" required>
+                                        <option value=""></option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <!--Zip-->
+                            <div class="form-group">
+                                <label class="col-md-4 control-label" for="ZIP">Zip:</label>
+                                <div class="col-md-7">
+                                    <input class="form-control" name="ZIP" ng-model="aSite.ZIP" type="text" ui-mask="{{'99999'}}" />
+                                </div>
+                            </div>
+
+                            <!--County*-->
+                            <div class="form-group required" ng-class="{'has-error':siteForm.COUNTY.$invalid && siteForm.COUNTY.$dirty}">
+                                <label class="col-md-4 control-label req" for="COUNTY">County:</label>
+                                <div class="col-md-7">
+                                    <select class="form-control" name="COUNTY" ng-model="aSite.COUNTY" ng-options="c.COUNTY_NAME as c.COUNTY_NAME for c in stateCountyList" required>
+                                        <option value=""></option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
-
-                <!--City-->
-                <div class="form-group">
-                    <label class="col-md-4 control-label" for="CITY">City:</label>
-                    <div class="col-md-7">
-                        <input class="form-control" name="CITY" ng-model="aSite.CITY" type="text" />
-                    </div>
-                </div>
-
-                <!--State*-->
-                <div class="form-group required" ng-class="{'has-error':siteForm.STATE.$invalid && siteForm.STATE.$dirty}">
-                    <label class="col-md-4 control-label req" for="STATE">State:</label>
-                    <div class="col-md-7">
-                        <select class="form-control" name="STATE" ng-model="aSite.STATE" ng-change="updateCountyList(aSite.STATE)"
-                                ng-options="state.STATE_ABBREV as state.STATE_NAME for state in StateList" required>
-                            <option value=""></option>
-                        </select>
-                    </div>
-                </div>
-
-                <!--Zip-->
-                <div class="form-group">
-                    <label class="col-md-4 control-label" for="ZIP">Zip:</label>
-                    <div class="col-md-7">
-                        <input class="form-control" name="ZIP" ng-model="aSite.ZIP" type="text" ui-mask="{{'99999'}}" />
-                    </div>
-                </div>
-
-                <!--County*-->
-                <div class="form-group required" ng-class="{'has-error':siteForm.COUNTY.$invalid && siteForm.COUNTY.$dirty}">
-                    <label class="col-md-4 control-label req" for="COUNTY">County:</label>
-                    <div class="col-md-7">
-                        <select class="form-control" name="COUNTY" ng-model="aSite.COUNTY" ng-options="c.COUNTY_NAME as c.COUNTY_NAME for c in stateCountyList" required>
-                            <option value=""></option>
-                        </select>
-                    </div>
-                </div>
-
                 <!--Waterbody*-->
                 <div class="form-group required" ng-class="{'has-error':siteForm.WATERBODY.$invalid && siteForm.WATERBODY.$dirty}">
                     <label class="col-md-4 control-label req" for="WATERBODY">Waterbody:</label>
@@ -428,6 +435,13 @@
                                     <input class="form-control" id="LOTITLE" name="TITLE" ng-model="landowner.TITLE" type="text" />
                                 </div>
                             </div>
+
+                            <div>
+                                <label class="col-md-4 control-label"></label>
+                                <div class="col-md-7">
+                                    <input type="checkbox" ng-model="useSiteAddress" ng-click="useAddressforLO()" /><span style="padding-left:8px">Address same as Site address</span>
+                                </div>
+                            </div>
                             <!--Address:-->
                             <div class="form-group">
                                 <label class="col-md-4 control-label" for="ADDRESS">Address:</label>
@@ -484,8 +498,8 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
-                </div>
+                            </div>
+                        </div>
                 <br clear="all" />
                 <!--end Landowner contact area-->
                 <!--Access Permission Granted-->
@@ -1038,7 +1052,7 @@
             <fieldset>
                 <!-- Waterbody: -->
                 <div class="form-group">
-                    <label class="col-md-3 control-label" for="WATERBODY">Waterbody:</label>
+                    <label class="col-md-4 control-label" for="WATERBODY">Waterbody:</label>
                     <div class="col-md-6">
                         <input class="form-control" name="WATERBODY" ng-model="aHWM.WATERBODY" type="text" />
                     </div>
@@ -1046,7 +1060,7 @@
 
                 <!-- Event: -->
                 <div class="form-group" ng-class="{'has-error':HWMForm.EVENT_ID.$invalid && HWMForm.EVENT_ID.$dirty}">
-                    <label class="col-md-3 control-label" for="EVENT_ID">Event:</label>
+                    <label class="col-md-4 control-label" for="EVENT_ID">Event:</label>
                     <div class="col-md-6">
                         <div class="col-md-8">{{EventName}}</div>
                         <div class="col-md-3" ng-show="userRole == 'Admin' && aHWM.HWM_ID != undefined">
@@ -1058,7 +1072,7 @@
                 <!--Event dropdown for admin -->
                 <div ng-show="showEventDD">
                     <div class="form-group">
-                        <label class="col-md-3 control-label">Events:</label>
+                        <label class="col-md-4 control-label">Events:</label>
                         <div class="col-md-6">
                             <select class="form-control" name="EVENT_ID" ng-model="adminChanged.EVENT_ID" ng-change="ChangeEvent()"
                                     ng-options="e.EVENT_ID as (e.EVENT_NAME + ' --- ' + (e.EVENT_START_DATE | date: 'MM/dd/yyyy') + ' to ' + ((e.EVENT_END_DATE || '-Not Set-') | date: 'MM/dd/yyyy'))  for e in eventList | orderBy: '-EVENT_START_DATE'"
@@ -1070,7 +1084,7 @@
 
                 <!-- HWM Type:* -->
                 <div class="form-group required" ng-class="{'has-error':HWMForm.HWM_TYPE_ID.$invalid && HWMForm.HWM_TYPE_ID.$dirty}">
-                    <label class="col-md-3 control-label req" for="HWM_TYPE_ID">HWM Type:</label>
+                    <label class="col-md-4 control-label req" for="HWM_TYPE_ID">HWM Type:</label>
                     <div class="col-md-6">
                         <select class="form-control" name="HWM_TYPE_ID" ng-model="aHWM.HWM_TYPE_ID"
                                 ng-options="htype.HWM_TYPE_ID as htype.HWM_TYPE for htype in hwmTypeList" required>
@@ -1079,9 +1093,20 @@
                     </div>
                 </div>
 
+                <!-- Marker: -->
+                <div class="form-group">
+                    <label class="col-md-4 control-label" for="MARKER_ID">Marker:</label>
+                    <div class="col-md-6">
+                        <select class="form-control" name="MARKER_ID" ng-model="aHWM.MARKER_ID"
+                                ng-options="vd.MARKER_ID as vd.MARKER1 for vd in markerList">
+                            <option value=""></option>
+                        </select>
+                    </div>
+                </div>
+
                 <!-- HWM Environment:* -->
                 <div class="form-group required" ng-class="{'has-error':HWMForm.HWM_ENVIRONMENT.$invalid && HWMForm.HWM_ENVIRONMENT.$dirty}">
-                    <label class="col-md-3 control-label req">HWM Environment:</label>
+                    <label class="col-md-4 control-label req">HWM Environment:</label>
                     <div class="col-md-6">
                         <label class="radio-inline">
                             <input type="radio" name="HWM_ENVIRONMENT" ng-model="aHWM.HWM_ENVIRONMENT" value="Coastal" />Coastal
@@ -1094,7 +1119,7 @@
 
                 <!-- Breakdown of categories -->
                 <div class="form-group">
-                    <label class="col-md-3"></label>
+                    <label class="col-md-4"></label>
                     <div class="col-md-6">
                         <table>
                             <tr><td style="text-align: center;width: 81px">0.05</td><td style="text-align: center;width: 81px">0.02</td><td style="text-align: left;width: 81px">Excellent</td></tr>
@@ -1109,7 +1134,7 @@
 
                 <!-- HWM Quality:* -->
                 <div class="form-group required" ng-class="{'has-error':HWMForm.HWM_QUALITY_ID.$invalid && HWMForm.HWM_QUALITY_ID.$dirty}">
-                    <label class="col-md-3 control-label req">HWM Quality:</label>
+                    <label class="col-md-4 control-label req">HWM Quality:</label>
                     <div class="col-md-6">
                         <select class="form-control" name="HWM_QUALITY_ID" ng-model="aHWM.HWM_QUALITY_ID"
                                 ng-options="hqual.HWM_QUALITY_ID as hqual.HWM_QUALITY for hqual in hwmQualList" required>
@@ -1120,7 +1145,7 @@
 
                 <!-- Bank: -->
                 <div class="form-group">
-                    <label class="col-md-3 control-label">Bank:</label>
+                    <label class="col-md-4 control-label">Bank:</label>
                     <div class="col-md-6">
                         <label class="radio-inline">
                             <input type="radio" name="BANK" ng-model="aHWM.BANK" value="Left" />Left
@@ -1136,7 +1161,7 @@
 
                 <!-- Location Description: -->
                 <div class="form-group">
-                    <label class="col-md-3 control-label" for="HWM_LOCATIONDESCRIPTION">Location Description:</label>
+                    <label class="col-md-4 control-label" for="HWM_LOCATIONDESCRIPTION">Location Description:</label>
                     <div class="col-md-6">
                         <textarea class="form-control" name="HWM_LOCATIONDESCRIPTION" type=" text" rows="3" ng-model="aHWM.HWM_LOCATIONDESCRIPTION" />
                     </div>
@@ -1144,7 +1169,7 @@
 
                 <!-- dec deg or dms: -->
                 <div class="form-group">
-                    <label class="col-md-3 control-label"></label>
+                    <label class="col-md-4 control-label"></label>
                     <div class="col-md-6">
                         <label class="radio-inline">
                             <input type="radio" name="decDegORdms" ng-change="latLongChange()" ng-model="aHWM.decDegORdms" value="dd" /> Dec Deg
@@ -1157,7 +1182,7 @@
 
                 <!-- Latitude: -->
                 <div class="form-group">
-                    <label class="col-md-3 control-label" for="LATITUDE_DD">Latitude:</label>
+                    <label class="col-md-4 control-label" for="LATITUDE_DD">Latitude:</label>
                     <div class="col-md-6" ng-if="aHWM.decDegORdms == 'dd'">
                         <input class="form-control" ng-keypress="isNum($event)" name="LATITUDE_DD" id="LATITUDE_DD" ng-model="aHWM.LATITUDE_DD" type="text" />
                     </div>
@@ -1177,7 +1202,7 @@
 
                 <!-- Longitude: -->
                 <div class="form-group">
-                    <label class="col-md-3 control-label" for="LONGITUDE_DD">Longitude:</label>
+                    <label class="col-md-4 control-label" for="LONGITUDE_DD">Longitude:</label>
                     <div class="col-md-6" ng-if="aHWM.decDegORdms == 'dd'">
                         <input class="form-control" ng-keypress="isNum($event)" id="longitude_dd" name="LONGITUDE_DD" ng-model="aHWM.LONGITUDE_DD" type="text" />
                     </div>
@@ -1197,7 +1222,7 @@
 
                 <!-- Horizontal Datum:* -->
                 <div class="form-group required" ng-class="{'has-error':HWMForm.HDATUM_ID.$invalid && HWMForm.HDATUM_ID.$dirty}">
-                    <label class="col-md-3 control-label req">Horizontal Datum:</label>
+                    <label class="col-md-4 control-label req">Horizontal Datum:</label>
                     <div class="col-md-6">
                         <select class="form-control" name="HDATUM_ID" ng-model="aHWM.HDATUM_ID"
                                 ng-options="hd.DATUM_ID as hd.DATUM_NAME for hd in HDatumsList" required>
@@ -1208,7 +1233,7 @@
 
                 <!-- Horizontal Collection Method: * -->
                 <div class="form-group required" ng-class="{'has-error':HWMForm.HCOLLECT_METHOD_ID.$invalid && HWMForm.HCOLLECT_METHOD_ID.$dirty}">
-                    <label class="col-md-3 control-label req">Horizontal Collection Method:</label>
+                    <label class="col-md-4 control-label req">Horizontal Collection Method:</label>
                     <div class="col-md-6">
                         <select class="form-control" name="HCOLLECT_METHOD_ID" ng-model="aHWM.HCOLLECT_METHOD_ID"
                                 ng-options="hcm.HCOLLECT_METHOD_ID as hcm.HCOLLECT_METHOD for hcm in hCollMList" required>
@@ -1216,37 +1241,18 @@
                         </select>
                     </div>
                 </div>
-
-                <!-- Surveyed Elevation (ft): -->
-                <div class="form-group">
-                    <label class="col-md-3 control-label" for="ELEV_FT">Surveyed Elevation (ft):</label>
-                    <div class="col-md-6">
-                        <input class="form-control" ng-keypress="isNum($event)" name="ELEV_FT" ng-model="aHWM.ELEV_FT" type="text" />
-                    </div>
-                </div>
-
-                <!-- Vertical Datum: -->
-                <div class="form-group">
-                    <label class="col-md-3 control-label" for="VDATUM_ID">Vertical Datum:</label>
-                    <div class="col-md-6">
-                        <select class="form-control" name="VDATUM_ID" ng-model="aHWM.VDATUM_ID"
-                                ng-options="vd.DATUM_ID as vd.DATUM_NAME for vd in VDatumsList">
-                            <option value=""></option>
-                        </select>
-                    </div>
-                </div>
-
+    
                 <!-- Height above ground (ft): -->
                 <div class="form-group">
-                    <label class="col-md-3 control-label" for="HEIGHT_ABOVE_GND">Height above ground (ft):</label>
+                    <label class="col-md-4 control-label" for="HEIGHT_ABOVE_GND">Height above ground (ft):</label>
                     <div class="col-md-6">
                         <input class="form-control" ng-keypress="isNum($event)" name="HEIGHT_ABOVE_GND" ng-model="aHWM.HEIGHT_ABOVE_GND" type="text" />
                     </div>
                 </div>
 
-                <!-- Flagged Date: * -->
+                <!-- Flag/Found Date: * -->
                 <div class="form-group required" ng-class="{'has-error':HWMForm.FLAG_DATE.$invalid && HWMForm.FLAG_DATE.$dirty}">
-                    <label class="col-md-3 control-label req" for="FLAG_DATE">Flagged Date:</label>
+                    <label class="col-md-4 control-label req" for="FLAG_DATE">Flag/Found Date:</label>
                     <div class="col-md-3 input-group" style="padding-right:14px;padding-left:14px">
                         <input disabled="disabled" show-weeks="false" class="form-control" id="FLAG_DATE" name="fd" type="text" uib-datepicker-popup="MMM dd, yyyy"
                                is-open="datepickrs.fd" ng-model="aHWM.FLAG_DATE" required />
@@ -1260,7 +1266,7 @@
 
                 <!-- Surveyed Date: -->
                 <div class="form-group" ng-class="{'has-error':HWMForm.SURVEY_DATE.$invalid && HWMForm.SURVEY_DATE.$dirty}">
-                    <label class="col-md-3 control-label" for="SURVEY_DATE">Surveyed Date:</label>
+                    <label class="col-md-4 control-label" for="SURVEY_DATE">Surveyed Date:</label>
                     <div class="col-md-3 input-group" style="padding-right:14px;padding-left:14px">
                         <input disabled="disabled" show-weeks="false" class="form-control" id="SURVEY_DATE" name="sd" type="text" uib-datepicker-popup="MMM dd, yyyy"
                                is-open="datepickrs.sd" ng-model="aHWM.SURVEY_DATE" />
@@ -1272,9 +1278,28 @@
                     </div>
                 </div>
 
+                <!-- Surveyed Elevation (ft): -->
+                <div class="form-group">
+                    <label class="col-md-4 control-label" for="ELEV_FT">Surveyed Elevation (ft):</label>
+                    <div class="col-md-6">
+                        <input class="form-control" ng-keypress="isNum($event)" name="ELEV_FT" ng-model="aHWM.ELEV_FT" type="text" />
+                    </div>
+                </div>
+
+                <!-- Vertical Datum: -->
+                <div class="form-group">
+                    <label class="col-md-4 control-label" for="VDATUM_ID">Vertical Datum:</label>
+                    <div class="col-md-6">
+                        <select class="form-control" name="VDATUM_ID" ng-model="aHWM.VDATUM_ID"
+                                ng-options="vd.DATUM_ID as vd.DATUM_NAME for vd in VDatumsList">
+                            <option value=""></option>
+                        </select>
+                    </div>
+                </div>
+
                 <!-- Vertical Collection Method: -->
                 <div class="form-group">
-                    <label class="col-md-3 control-label" for="VDATUM_ID">Vertical Collection Method:</label>
+                    <label class="col-md-4 control-label" for="VDATUM_ID">Vertical Collection Method:</label>
                     <div class="col-md-6">
                         <select class="form-control" name="VCOLLECT_METHOD_ID" ng-model="aHWM.VCOLLECT_METHOD_ID"
                                 ng-options="vcm.VCOLLECT_METHOD_ID as vcm.VCOLLECT_METHOD for vcm in vCollMList">
@@ -1282,29 +1307,41 @@
                         </select>
                     </div>
                 </div>
-
-                <!-- Marker: -->
-                <div class="form-group">
-                    <label class="col-md-3 control-label" for="MARKER_ID">Marker:</label>
+          
+                <!-- Ft or CM radios: -->
+                <div class="form-group" style="margin-bottom: 0;padding-bottom: 0">
+                    <label class="col-md-4 control-label"></label>
                     <div class="col-md-6">
-                        <select class="form-control" name="MARKER_ID" ng-model="aHWM.MARKER_ID"
-                                ng-options="vd.MARKER_ID as vd.MARKER1 for vd in markerList">
-                            <option value=""></option>
-                        </select>
+                        <label class="radio-inline">
+                            <input type="radio" name="FTorCM" ng-model="FTorCM" value="ft" /> +/- ft
+                        </label>
+                        <label class="radio-inline">
+                            <input type="radio" name="FTorCM" ng-model="FTorCM" value="cm" /> +/- cm
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Uncertainty: -->
+                <div class="form-group">
+                    <label class="col-md-4 control-label" for="UNCERTAINTY">Uncertainty:</label>
+                    <div class="col-md-6">
+                        <div class="col-md-12" style="margin-bottom:5px;padding-left:0">
+                            <div class="col-md-3" style="padding-left: 0;"><input class="form-control" ng-keypress="isNum($event)" ng-model="aHWM.UNCERTAINTY" type="text" /></div>
+                        </div>
                     </div>
                 </div>
 
                 <!-- Notes: -->
                 <div class="form-group">
-                    <label class="col-md-3 control-label" for="HWM_NOTES">Notes:</label>
+                    <label class="col-md-4 control-label" for="HWM_NOTES">Notes:</label>
                     <div class="col-md-6">
                         <textarea class="form-control" name="HWM_NOTES" type=" text" rows="3" ng-model="aHWM.HWM_NOTES" />
                     </div>
                 </div>
 
-                <!-- Stillwater Location? -->
+                <!-- Tranquil/Stillwater HWM -->
                 <div class="form-group">
-                    <label class="col-md-3 control-label">Stillwater Location?:</label>
+                    <label class="col-md-4 control-label">Tranquil/Stillwater HWM:</label>
                     <div class="col-md-6">
                         <label class="radio-inline">
                             <input type="radio" name="STILLWATER" ng-model="aHWM.STILLWATER" value="1" />Yes
@@ -1317,7 +1354,7 @@
 
                 <!-- Flagging Member: -->
                 <div class="form-group">
-                    <label class="col-md-3 control-label" for="FLAG_TEAM_ID">Flagging Member:</label>
+                    <label class="col-md-4 control-label" for="FLAG_TEAM_ID">Flagging Member:</label>
                     <div class="col-md-6">
                         <span>{{FlagMember.FNAME}} {{FlagMember.LNAME}}</span>
                     </div>
@@ -1325,7 +1362,7 @@
 
                 <!-- Survey Member: -->
                 <div class="form-group" ng-show="aHWM.SURVEY_TEAM_ID">
-                    <label class="col-md-3 control-label" for="SURVEY_TEAM_ID">Survey Member:</label>
+                    <label class="col-md-4 control-label" for="SURVEY_TEAM_ID">Survey Member:</label>
                     <div class="col-md-6">
                         <span>{{SurveyMember.FNAME}} {{SurveyMember.LNAME}}</span>
                     </div>
@@ -1333,7 +1370,7 @@
 
                 <!-- Approval info -->
                 <div class="form-group">
-                    <label class="col-md-3 control-label" for="APPROVAL_ID">Approval Info:</label>
+                    <label class="col-md-4 control-label" for="APPROVAL_ID">Approval Info:</label>
                     <div class="col-md-6">
                         <span>Approved By:</span><span ng-if="ApprovalInfo.Member"> {{ApprovalInfo.Member.FNAME || '---'}} {{ApprovalInfo.Member.LNAME || '---'}}</span><br />
                         <span>On:</span><span ng-if="ApprovalInfo.approvalDate"> {{ApprovalInfo.approvalDate | date: 'MM/dd/yyyy hh:mm a' || '---'}}</span>
@@ -1631,108 +1668,106 @@
                 </div>
 
                 <!-- -------------------------- START TAPEDOWN SECTION --------------------------------  -->
-                <!--Add Tapedown button-->
-                <div ng-if="OPsPresent" class="form-group">
-                    <label class="col-md-3 control-label" for="TAPEDOWNBTN">Tape Down:</label>
-                    <div class="col-md-6">
-                        <button type="button" ng-click="showTapedownPart()" class="btn btn-primary">Show/Hide Tape Down Information</button>
-                    </div>
-                </div>
-                <div ng-if="!OPsPresent" class="form-group">
-                    <label class="col-md-3 control-label" for="TAPEDOWNBTN">Tape Down:</label>
-                    <div class="col-md-6">
-                        <span>No Datum Locations added to this site for tapedown</span>
-                    </div>
-                </div>
-
-                <!--start add tapedown area -->
-                <div ng-if="addTapedown">
-                    <hr />
-                    <div class="form-group">
-                        <label class="col-md-3 control-label">Datum Location(s):</label>
-                        <div class="col-md-6">
-                            <div isteven-multi-select
-                                 input-model="OPsForTapeDown"
-                                 output-model="OPMeasure"
-                                 button-label="NAME"
-                                 item-label="NAME"
-                                 on-item-click="OPchosen(data)"
-                                 tick-property="selected"
-                                 helper-elements="filter">
-
-                            </div>
-                        </div>
-                    </div>
-
-                    <br clear="all" />
-                    <div ng-show="tapeDownTable.length > 0">
-                        <div class="pull-right col-md-6"><em>Note: these are not used for any calculations but are to facilitate field activities</em></div>
-                        <table class="table table-condensed">
-                            <thead>
-                                <tr>
-                                    <th>Datum Location</th>
-                                    <th>Elevation</th>
-                                    <th class="col-md-2">Offset Correction</th>
-                                    <th class="col-md-2">Water Surface</th>
-                                    <th class="col-md-2">Ground Surface</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr ng-repeat="t in tapeDownTable">
-                                    <td>{{t.OP_NAME}}<input type="hidden" ng-model="t.OBJECTIVE_TYPE_ID" /><input type="hidden" ng-model="t.OP_MEASUREMENTS_ID" /></td>
-                                    <td>
-                                        {{t.elevation}} {{t.Vdatum}}
-                                    </td>
-                                    <td><input class="form-control" ng-keypress="isNum($event)" ng-model="t.OFFSET_CORRECTION" /></td>
-                                    <td><input class="form-control" ng-keypress="isNum($event)" ng-model="t.WATER_SURFACE" /></td>
-                                    <td><input class="form-control" ng-keypress="isnum($event)" ng-model="t.GROUND_SURFACE" /></td>
-                                </tr>
-                            </tbody>
-                        </table>
-                        <!-- Sensor status fields for tapedown -->
-                        <div class="col-md-6">
-                            <div class="form-group" style="margin-bottom:0">
-                                <label class="col-md-6 control-label" for="SENSOR_ELEVATION">Sensor Elevation:</label>
-                                <div class="col-md-6">
-                                    <input class="form-control" ng-keypress="isNum($event)" name="SENSOR_ELEVATION" ng-model="aSensStatus.SENSOR_ELEVATION" type="text" />
-                                </div>
-                            </div>
-
-                            <div class="form-group" style="margin-bottom:0">
-                                <label class="col-md-6 control-label" for="WS_ELEVATION">Water Surface Elevation:</label>
-                                <div class="col-md-6">
-                                    <input class="form-control" ng-keypress="isNum($event)" name="WS_ELEVATION" ng-model="aSensStatus.WS_ELEVATION" type="text" />
-                                </div>
-                            </div>
-
-                            <div class="form-group" style="margin-bottom:0">
-                                <label class="col-md-6 control-label" for="GS_ELEVATION">Ground Elevation:</label>
-                                <div class="col-md-6">
-                                    <input class="form-control" ng-keypress="isNum($event)" name="GS_ELEVATION" ng-model="aSensStatus.GS_ELEVATION" type="text" />
-                                </div>
-                            </div>
-
+                <uib-accordion close-others="false">
+                    <uib-accordion-group is-open="tapedownOpen">
+                        <uib-accordion-heading>
+                            <i style="margin-right:10px" class="pull-left glyphicon" ng-class="{'glyphicon-chevron-down': tapedownOpen, 'glyphicon-chevron-right': !tapedownOpen}"></i>
+                            <span>Tape Down Information</span>
+                        </uib-accordion-heading>
+                        <!--Add Tapedown button-->
+                        <div ng-if="OPsPresent" class="form-group">
                             <div class="form-group">
-                                <label class="col-md-6 control-label req" for="VDATUM_ID">In feet above:</label>
+                                <label class="col-md-3 control-label">Datum Location(s):</label>
                                 <div class="col-md-6">
-                                    <select class="form-control" id="VDATUM_ID" name="VDATUM_ID" ng-model="aSensStatus.VDATUM_ID"
-                                            ng-options="vd.DATUM_ID as vd.DATUM_ABBREVIATION for vd in vertDatumList">
-                                        <option value=""></option>
-                                    </select>
+                                    <div isteven-multi-select
+                                         input-model="OPsForTapeDown"
+                                         output-model="OPMeasure"
+                                         button-label="NAME"
+                                         item-label="NAME"
+                                         on-item-click="OPchosen(data)"
+                                         tick-property="selected"
+                                         helper-elements="filter">
+                                    </div>
                                 </div>
                             </div>
-                            <div class="pull-left col-md-12"><em>Note: these elevations are used in the sensor processing and the final products</em></div>
+                        </div><!-- end if OPsArePresent-->
+                        <div ng-if="!OPsPresent" class="form-group">
+                            <label class="col-md-3 control-label" for="TAPEDOWNBTN">Tape Down:</label>
+                            <div class="col-md-6">
+                                <span>No Datum Locations have been added to this site yet to use for a tape down</span>
+                            </div>
                         </div>
 
-                        <!-- area for D3 vertical ruler
-                        <div class="col-md-6">
-                            <bars-chart elevation-data="myData"></bars-chart>
-                        </div> -->
-                    </div>
-                    <br clear="all" />
-                    <hr />
-                </div>
+                        <!--start add tapedown area -->
+                        <br clear="all" />
+                        <div ng-show="tapeDownTable.length > 0">
+                            <div class="pull-right col-md-6"><em>Note: these are not used for any calculations but are to facilitate field activities</em></div>
+                            <table class="table table-condensed">
+                                <thead>
+                                    <tr>
+                                        <th>Datum Location</th>
+                                        <th>Elevation</th>
+                                        <th class="col-md-2">Offset Correction</th>
+                                        <th class="col-md-2">Water Surface</th>
+                                        <th class="col-md-2">Ground Surface</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr ng-repeat="t in tapeDownTable">
+                                        <td>{{t.OP_NAME}}<input type="hidden" ng-model="t.OBJECTIVE_TYPE_ID" /><input type="hidden" ng-model="t.OP_MEASUREMENTS_ID" /></td>
+                                        <td>
+                                            {{t.elevation}} {{t.Vdatum}}
+                                        </td>
+                                        <td><input class="form-control" ng-keypress="isNum($event)" ng-model="t.OFFSET_CORRECTION" /></td>
+                                        <td><input class="form-control" ng-keypress="isNum($event)" ng-model="t.WATER_SURFACE" /></td>
+                                        <td><input class="form-control" ng-keypress="isnum($event)" ng-model="t.GROUND_SURFACE" /></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <!-- Sensor status fields for tapedown -->
+                            <div class="col-md-6">
+                                <div class="form-group" style="margin-bottom:0">
+                                    <label class="col-md-6 control-label" for="SENSOR_ELEVATION">Sensor Elevation:</label>
+                                    <div class="col-md-6">
+                                        <input class="form-control" ng-keypress="isNum($event)" name="SENSOR_ELEVATION" ng-model="aSensStatus.SENSOR_ELEVATION" type="text" />
+                                    </div>
+                                </div>
 
+                                <div class="form-group" style="margin-bottom:0">
+                                    <label class="col-md-6 control-label" for="WS_ELEVATION">Water Surface Elevation:</label>
+                                    <div class="col-md-6">
+                                        <input class="form-control" ng-keypress="isNum($event)" name="WS_ELEVATION" ng-model="aSensStatus.WS_ELEVATION" type="text" />
+                                    </div>
+                                </div>
+
+                                <div class="form-group" style="margin-bottom:0">
+                                    <label class="col-md-6 control-label" for="GS_ELEVATION">Ground Elevation:</label>
+                                    <div class="col-md-6">
+                                        <input class="form-control" ng-keypress="isNum($event)" name="GS_ELEVATION" ng-model="aSensStatus.GS_ELEVATION" type="text" />
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="col-md-6 control-label req" for="VDATUM_ID">In feet above:</label>
+                                    <div class="col-md-6">
+                                        <select class="form-control" id="VDATUM_ID" name="VDATUM_ID" ng-model="aSensStatus.VDATUM_ID"
+                                                ng-options="vd.DATUM_ID as vd.DATUM_ABBREVIATION for vd in vertDatumList">
+                                            <option value=""></option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="pull-left col-md-12"><em>Note: these elevations are used in the sensor processing and the final products</em></div>
+                            </div>
+
+                            <!-- area for D3 vertical ruler
+                    <div class="col-md-6">
+                        <bars-chart elevation-data="myData"></bars-chart>
+                    </div> -->
+                        </div>
+                        <br clear="all" />
+                    </uib-accordion-group>
+                </uib-accordion>
+                
                 <!-- -------------------------- END TAPEDOWN SECTION --------------------------------  -->
                 <!-- Vented (only if Sensor Type is Pressure Transducer)-->
                 <div ng-show="aSensor.SENSOR_TYPE_ID == 1">
@@ -1834,7 +1869,7 @@
                         <span><button ng-if="whichButton == 'deploy' || whichButton == 'deployP'" class="btn btn-primary" ng-click="deploy(SensorForm.$valid)"><span>Deploy</span></button></span>
                         <span><button ng-show="whichButton == 'edit'" class="btn btn-primary" ng-disabled="showFileForm" ng-click="save(SensorForm.$valid)"><span>Save</span></button></span>
                         <span><button ng-show="whichButton == 'edit'" class="btn btn-danger" ng-disabled="showFileForm" ng-click="deleteS(SensorForm.$valid)"><span>Delete</span></button></span>
-                        <span><button type="button" class="btn btn-warning" ng-disabled="showFileForm" ng-click="cancel()"><span>Cancel</span></button></span>
+                        <span><button type="button" class="btn btn-warning" ng-disabled="showFileForm" ng-click="cancel()"><span>Cancel / Close</span></button></span>
                     </div>
                 </div>
             </fieldset>
@@ -1949,7 +1984,7 @@
                         <div ng-if="aFile.FILETYPE_ID === 1 || aFile.FILETYPE_ID > 2" class="form-group required" ng-class="{'has-error':DepSenFILEForm.AGENCY_ID.$invalid && DepSenFILEForm.AGENCY_ID.$dirty}" style="margin:0;padding:0">
                             <label class="col-md-4 control-label req" for="FILETYPE_ID">Source Agency:</label>
                             <div class="col-md-6">
-                                <select class="form-control" name="AGENCY_ID" ng-model="aSource.AGENCY_ID"
+                                <select class="form-control" name="AGENCY_ID" ng-model="aSource.AGENCY_ID" ng-change="updateAgencyForCaption()"
                                         ng-options="a.AGENCY_ID as a.AGENCY_NAME for a in agencies" required>
                                     <option value=""></option>
                                 </select>
@@ -2068,8 +2103,11 @@
                             <label class="col-md-4 control-label" for="Caption">Preview Caption:</button></label>
                             <div class="col-md-6">
                                 <span>
-                                    Photo of {{aFile.DESCRIPTION || ' (Description HERE) '}} at {{thisSensorSite.SITE_DESCRIPTION}}, {{thisSensorSite.COUNTY}}, {{thisSensorSite.STATE}}, {{aSource.SOURCE_DATE | date: 'MM/dd/yyyy' || ' Date taken HERE '}}. Photograph by {{aSource.FULLNAME || ' Source Name HERE ' }}, {{(agencies | filter :{AGENCY_ID: aSource.AGENCY_ID})[0].AGENCY_NAME || ' Agency HERE '}}.
+                                    Photo of {{aFile.DESCRIPTION || ' (Description HERE) '}} at {{thisSensorSite.SITE_DESCRIPTION}}, {{thisSensorSite.COUNTY}}, {{thisSensorSite.STATE}}, {{aSource.SOURCE_DATE | date: 'MM/dd/yyyy' || ' Date taken HERE '}}. Photograph by {{aSource.FULLNAME || ' Source Name HERE ' }}, {{agencyNameForCap || ' Agency HERE '}}.
                                 </span>
+                                <!--<span>
+                                    Photo of {{aFile.DESCRIPTION || ' (Description HERE) '}} at {{thisSensorSite.SITE_DESCRIPTION}}, {{thisSensorSite.COUNTY}}, {{thisSensorSite.STATE}}, {{aSource.SOURCE_DATE | date: 'MM/dd/yyyy' || ' Date taken HERE '}}. Photograph by {{aSource.FULLNAME || ' Source Name HERE ' }}, {{(agencies | filter :{AGENCY_ID: aSource.AGENCY_ID})[0].AGENCY_NAME || ' Agency HERE '}}.
+                                </span>-->
                             </div>
                         </div>
 
@@ -2283,106 +2321,100 @@
                 </div>
 
                 <!-- -------------------------- START TAPEDOWN SECTION --------------------------------  -->
-                <!--Add Tapedown button-->
-                <div ng-if="OPsPresent" class="form-group">
-                    <label class="col-md-3 control-label" for="TAPEDOWNBTN">Tape Down:</label>
-                    <div class="col-md-6">
-                        <button type="button" ng-click="showTapedownPart()" class="btn btn-primary">Show/Hide Tape Down Information</button>
-                    </div>
-                </div>
-                <div ng-if="!OPsPresent" class="form-group">
-                    <label class="col-md-3 control-label" for="TAPEDOWNBTN">Tape Down:</label>
-                    <div class="col-md-6">
-                        <span>No Datum Locations added to this site for tapedown</span>
-                    </div>
-                </div>
-                <!--start add tapedown area -->
-                <div ng-if="addTapedown">
-                    <hr />
-                    <div class="form-group">
-                        <label class="col-md-3 control-label">Datum Location(s):</label>
-                        <div class="col-md-6">
-                            <div isteven-multi-select
-                                 input-model="OPsForTapeDown"
-                                 output-model="OPMeasure"
-                                 button-label="NAME"
-                                 item-label="NAME"
-                                 on-item-click="OPchosen(data)"
-                                 tick-property="selected"
-                                 helper-elements="filter">
-
+                <uib-accordion close-others="false">
+                    <uib-accordion-group is-open="tapedownOpen">
+                        <uib-accordion-heading>
+                            <i style="margin-right:10px" class="pull-left glyphicon" ng-class="{'glyphicon-chevron-down': tapedownOpen, 'glyphicon-chevron-right': !tapedownOpen}"></i>
+                            <span>Tape Down Information</span>
+                        </uib-accordion-heading>
+                        <!--Add Tapedown button-->
+                        <div ng-if="OPsPresent" class="form-group">
+                            <label class="col-md-3 control-label" for="TAPEDOWNBTN">Datum Location(s):</label>
+                            <div class="col-md-6">
+                                <div isteven-multi-select
+                                     input-model="OPsForTapeDown"
+                                     container="body"
+                                     output-model="OPMeasure"
+                                     button-label="NAME"
+                                     item-label="NAME"
+                                     on-item-click="OPchosen(data)"
+                                     tick-property="selected"
+                                     helper-elements="filter">
+                                </div>
+                            </div>
+                        </div><!-- end if OPsArePresent-->
+                        <div ng-if="!OPsPresent" class="form-group">
+                            <label class="col-md-3 control-label" for="TAPEDOWNBTN">Tape Down:</label>
+                            <div class="col-md-6">
+                                <span>No Datum Locations have been added to this site yet to use for a tape down</span>
                             </div>
                         </div>
-                    </div>
-
-                    <br clear="all" />
-                    <div ng-show="tapeDownTable.length > 0">
-                        <div class="pull-right col-md-6"><em>Note: these are not used for any calculations but are to facilitate field activities</em></div>
-                        <table class="table table-condensed">
-                            <thead>
-                                <tr>
-                                    <th>Datum Location</th>
-                                    <th>Elevation</th>
-                                    <th class="col-md-2">Offset Correction</th>
-                                    <th class="col-md-2">Water Surface</th>
-                                    <th class="col-md-2">Ground Surface</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr ng-repeat="t in tapeDownTable">
-                                    <td>{{t.OP_NAME}}<input type="hidden" ng-model="t.OBJECTIVE_TYPE_ID" /><input type="hidden" ng-model="t.OP_MEASUREMENTS_ID" /></td>
-                                    <td>
-                                        {{t.elevation}} {{t.Vdatum}}
-                                    </td>
-                                    <td><input class="form-control" ng-keypress="isNum($event)" ng-model="t.OFFSET_CORRECTION" /></td>
-                                    <td><input class="form-control" ng-keypress="isNum($event)" ng-model="t.WATER_SURFACE" /></td>
-                                    <td><input class="form-control" ng-keypress="isnum($event)" ng-model="t.GROUND_SURFACE" /></td>
-                                </tr>
-                            </tbody>
-                        </table>
-
-                        <!-- Sensor status fields for tapedown -->
-                        <div class="col-md-6">
-                            <div class="form-group" style="margin-bottom:0">
-                                <label class="col-md-6 control-label" for="SENSOR_ELEVATION">Sensor Elevation:</label>
-                                <div class="col-md-6">
-                                    <input class="form-control" ng-keypress="isNum($event)" name="SENSOR_ELEVATION" ng-model="aRetrieval.SENSOR_ELEVATION" type="text" />
+                        <!--start add tapedown area -->
+                        <br clear="all" />
+                        <div ng-show="tapeDownTable.length > 0">
+                            <div class="pull-right col-md-6"><em>Note: these are not used for any calculations but are to facilitate field activities</em></div>
+                            <table class="table table-condensed">
+                                <thead>
+                                    <tr>
+                                        <th>Datum Location</th>
+                                        <th>Elevation</th>
+                                        <th class="col-md-2">Offset Correction</th>
+                                        <th class="col-md-2">Water Surface</th>
+                                        <th class="col-md-2">Ground Surface</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr ng-repeat="t in tapeDownTable">
+                                        <td>{{t.OP_NAME}}<input type="hidden" ng-model="t.OBJECTIVE_TYPE_ID" /><input type="hidden" ng-model="t.OP_MEASUREMENTS_ID" /></td>
+                                        <td>
+                                            {{t.elevation}} {{t.Vdatum}}
+                                        </td>
+                                        <td><input class="form-control" ng-keypress="isNum($event)" ng-model="t.OFFSET_CORRECTION" /></td>
+                                        <td><input class="form-control" ng-keypress="isNum($event)" ng-model="t.WATER_SURFACE" /></td>
+                                        <td><input class="form-control" ng-keypress="isnum($event)" ng-model="t.GROUND_SURFACE" /></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <!-- Sensor status fields for tapedown -->
+                            <div class="col-md-6">
+                                <div class="form-group" style="margin-bottom:0">
+                                    <label class="col-md-6 control-label" for="SENSOR_ELEVATION">Sensor Elevation:</label>
+                                    <div class="col-md-6">
+                                        <input class="form-control" ng-keypress="isNum($event)" name="SENSOR_ELEVATION" ng-model="aRetrieval.SENSOR_ELEVATION" type="text" />
+                                    </div>
                                 </div>
-                            </div>
 
-                            <div class="form-group" style="margin-bottom:0">
-                                <label class="col-md-6 control-label" for="WS_ELEVATION">Water Surface Elevation:</label>
-                                <div class="col-md-6">
-                                    <input class="form-control" ng-keypress="isNum($event)" name="WS_ELEVATION" ng-model="aRetrieval.WS_ELEVATION" type="text" />
+                                <div class="form-group" style="margin-bottom:0">
+                                    <label class="col-md-6 control-label" for="WS_ELEVATION">Water Surface Elevation:</label>
+                                    <div class="col-md-6">
+                                        <input class="form-control" ng-keypress="isNum($event)" name="WS_ELEVATION" ng-model="aRetrieval.WS_ELEVATION" type="text" />
+                                    </div>
                                 </div>
-                            </div>
 
-                            <div class="form-group" style="margin-bottom:0">
-                                <label class="col-md-6 control-label" for="GS_ELEVATION">Ground Elevation:</label>
-                                <div class="col-md-6">
-                                    <input class="form-control" ng-keypress="isNum($event)" name="GS_ELEVATION" ng-model="aRetrieval.GS_ELEVATION" type="text" />
+                                <div class="form-group" style="margin-bottom:0">
+                                    <label class="col-md-6 control-label" for="GS_ELEVATION">Ground Elevation:</label>
+                                    <div class="col-md-6">
+                                        <input class="form-control" ng-keypress="isNum($event)" name="GS_ELEVATION" ng-model="aRetrieval.GS_ELEVATION" type="text" />
+                                    </div>
                                 </div>
-                            </div>
 
-                            <div class="form-group">
-                                <label class="col-md-6 control-label req" for="VDATUM_ID">In feet above:</label>
-                                <div class="col-md-6">
-                                    <select class="form-control" id="VDATUM_ID" name="VDATUM_ID" ng-model="aRetrieval.VDATUM_ID"
-                                            ng-options="vd.DATUM_ID as vd.DATUM_ABBREVIATION for vd in vertDatumList">
-                                        <option value=""></option>
-                                    </select>
+                                <div class="form-group">
+                                    <label class="col-md-6 control-label req" for="VDATUM_ID">In feet above:</label>
+                                    <div class="col-md-6">
+                                        <select class="form-control" id="VDATUM_ID" name="VDATUM_ID" ng-model="aRetrieval.VDATUM_ID"
+                                                ng-options="vd.DATUM_ID as vd.DATUM_ABBREVIATION for vd in vertDatumList">
+                                            <option value=""></option>
+                                        </select>
+                                    </div>
                                 </div>
+                                <div class="pull-left col-md-12"><em>Note: these elevations are used in the sensor processing and the final products</em></div>
                             </div>
-                            <div class="pull-left col-md-12"><em>Note: these elevations are used in the sensor processing and the final products</em></div>
                         </div>
-                        <hr />
-                    </div>
+                        <br clear="all" />
+                    </uib-accordion-group>
+                </uib-accordion>
 
-                    <!-- -------------------------- END TAPEDOWN SECTION --------------------------------  -->
-
-                </div>
-                <br clear="all" />
-
+                <!-- -------------------------- END TAPEDOWN SECTION --------------------------------  -->
                 <!-- Retrieve Member: -->
                 <div class="form-group required">
                     <label class="col-md-3 control-label">Retrieve Member:</label>
@@ -2606,7 +2638,7 @@
                             <label class="col-md-3 col-md-offset-1 control-label">In feet above:</label>
                             <div class="col-md-6">
                                 <div ng-show="view.DEPval == 'detail'">
-                                    {{DeployedSensorStat.VDatum}}
+                                    {{DeployedSensorStat.vdatumName}}
                                 </div>
                                 <div ng-show="view.DEPval == 'edit'">
                                     <select class="form-control" id="VDATUM_ID" name="VDATUM_ID" ng-model="depStuffCopy[1].VDATUM_ID"
@@ -2931,7 +2963,7 @@
                             <label class="col-md-3 col-md-offset-1 control-label">In feet above:</label>
                             <div class="col-md-6">
                                 <div ng-show="view.RETval == 'detail'">
-                                    {{RetrievedSensorStat.VDatum}}
+                                    {{RetrievedSensorStat.vdatumName}}
                                 </div>
                                 <div ng-show="view.RETval == 'edit'">
                                     <select class="form-control" id="VDATUM_ID" name="VDATUM_ID" ng-model="retStuffCopy[1].VDATUM_ID"

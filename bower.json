@@ -46,7 +46,7 @@
     "angular-busy": "^4.1.3",
     "Leaflet.label": "^0.2.1",
     "leaflet-geosearch": "L.GeoSearch#^1.1.0",
-    "wim_angular": "https://github.com/USGS-WiM/wim_angular.git"
+    "wim_angular": "https://github.com/USGS-WiM/wim_angular.git#master"
   },
   "devDependencies": {
     "angular-mocks": "^1.2.23",
@@ -74,17 +74,18 @@
     },
     "wim_angular": {
       "main": [
-        "dist/src/directives/wimLegend.js",
-        "dist/src/Directives/directives.module.js",
-        "dist/src/Services/Helpers/RequestTransform.js",
-        "dist/src/Services/Helpers/RequestInfo.js",
-        "dist/src/Events/EventManager.js",
-        "dist/src/Events/Delegate.js",
-        "dist/src/Events/EventArgs.js",
-        "dist/src/Events/EventHandler.js",
-        "dist/src/Services/service.module.js",
-        "dist/src/Services/HTTPServiceBase.js",
-        "dist/src/wim_ang.js"
+        "dist/Directives/wimLegend.js",
+        "dist/Directives/directives.module.js",
+        "dist/Events/EventManager.js",
+        "dist/Events/Delegate.js",
+        "dist/Events/EventArgs.js",
+        "dist/Events/EventHandler.js",
+        "dist/Services/Helpers/RequestTransform.js",
+        "dist/Services/Helpers/RequestInfo.js",
+        "dist/Services/service.module.js",
+        "dist/Services/HTTPServiceBase.js",
+        "dist/css/wimLegend.css"
+
       ]
     }
   }
