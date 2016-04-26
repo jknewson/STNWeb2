@@ -197,6 +197,7 @@
 /* ! to show / hide the checkbox layer above */
 .multiSelect .show {
     display: block !important;
+    position: fixed;
 }
 
 /* item labels */

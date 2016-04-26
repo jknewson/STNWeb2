@@ -4,8 +4,8 @@
 
     var STNControllers = angular.module('STNControllers');
 
-    STNControllers.controller('fileCtrl', ['$scope', '$cookies', '$location', '$state', '$http', 'SERVER_URL', 'Site_Files', 'HWM_Service', 'Instrument_Service', '$uibModal', '$filter', '$timeout', 'thisSite', 'thisSiteFiles', 'allFileTypes', 'allAgencies', 'thisSiteSensors', 'thisSiteHWMs', 'FILE', 'DATA_FILE', 'MEMBER', 'SOURCE',
-        function ($scope, $cookies, $location, $state, $http, SERVER_URL, Site_Files, HWM_Service, Instrument_Service, $uibModal, $filter, $timeout, thisSite, thisSiteFiles, allFileTypes, allAgencies, thisSiteSensors, thisSiteHWMs, FILE, DATA_FILE, MEMBER, SOURCE) {
+    STNControllers.controller('fileCtrl', ['$scope', '$cookies', '$location', '$state', '$http', 'SERVER_URL', 'Site_Files', 'HWM_Service', 'Instrument_Service', '$uibModal', '$filter', '$timeout', 'thisSite', 'thisSiteFiles', 'allFileTypes', 'allAgencies', 'thisSiteSensors', 'thisSiteOPs', 'thisSiteHWMs', 'FILE', 'DATA_FILE', 'MEMBER', 'SOURCE',
+        function ($scope, $cookies, $location, $state, $http, SERVER_URL, Site_Files, HWM_Service, Instrument_Service, $uibModal, $filter, $timeout, thisSite, thisSiteFiles, allFileTypes, allAgencies, thisSiteSensors, thisSiteOPs, thisSiteHWMs, FILE, DATA_FILE, MEMBER, SOURCE) {
             if ($cookies.get('STNCreds') === undefined || $cookies.get('STNCreds') === "") {
                 $scope.auth = false;
                 $location.path('/login');
@@ -24,9 +24,12 @@
                     }
                     if (thisSiteFiles[sf].INSTRUMENT_ID > 0 && thisSiteFiles[sf].INSTRUMENT_ID !== null) {
                         whatKindaFile = "Sensor File";
+                        var thisIns = thisSiteSensors.filter(function (s) { return s.Instrument.INSTRUMENT_ID == thisSiteFiles[sf].INSTRUMENT_ID; })[0];
+                        thisSiteFiles[sf].typeName = thisIns.Instrument.SERIAL_NUMBER;
                     }
                     if (thisSiteFiles[sf].OBJECTIVE_POINT_ID > 0 && thisSiteFiles[sf].OBJECTIVE_POINT_ID !== null) {
                         whatKindaFile = "Objective Point File";
+                        thisSiteFiles[sf].typeName = thisSiteOPs.filter(function (op) { return op.OBJECTIVE_POINT_ID == thisSiteFiles[sf].OBJECTIVE_POINT_ID; })[0].NAME;
                     }
                     if (whatKindaFile === '') whatKindaFile = "Site File";
                     thisSiteFiles[sf].fileBelongsTo = whatKindaFile;

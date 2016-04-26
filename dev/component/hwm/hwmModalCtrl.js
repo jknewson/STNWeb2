@@ -183,6 +183,7 @@
             }
             //radio button defaults
             $scope.aHWM.decDegORdms = 'dd';
+            $scope.FTorCM = 'ft';
 
             $scope.create = function () {
                 if (this.HWMForm.$valid) {
@@ -190,6 +191,12 @@
                     //if they entered a survey date or elevation, then set survey member as the flag member (flagging and surveying at same time
                     if ($scope.aHWM.SURVEY_DATE !== undefined && $scope.aHWM.SURVEY_DATE !== null)
                         $scope.aHWM.SURVEY_TEAM_ID = $scope.FLAG_TEAM_ID;
+
+                    if ($scope.FTorCM == "cm") {
+                        $scope.FTorCM = 'ft';
+                        if ($scope.aHWM.UNCERTAINTY !== undefined)
+                            $scope.aHWM.UNCERTAINTY = $scope.aHWM.UNCERTAINTY / 30.48;
+                    }
 
                     if ($scope.aHWM.ELEV_FT !== undefined && $scope.aHWM.ELEV_FT !== null) {
                         //make sure they added the survey date if they added an elevation
@@ -294,6 +301,12 @@
                     //if they added a survey date, apply survey member as logged in member
                     if ($scope.aHWM.SURVEY_DATE !== undefined)
                         $scope.aHWM.SURVEY_TEAM_ID = $cookies.get('mID');
+
+                    if ($scope.FTorCM == "cm") {
+                        $scope.FTorCM = 'ft';
+                        if ($scope.aHWM.UNCERTAINTY !== undefined)
+                            $scope.aHWM.UNCERTAINTY = $scope.aHWM.UNCERTAINTY / 30.48;
+                    }
 
                     if ($scope.aHWM.ELEV_FT !== undefined && $scope.aHWM.ELEV_FT !== null) {
                         //make sure they added the survey date if they added an elevation

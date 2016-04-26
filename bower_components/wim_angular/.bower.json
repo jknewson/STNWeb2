@@ -7,7 +7,7 @@
   "description": "angular library for wim apps",
   "license": "MIT",
   "main": [
-    "dist/src/**/.*"
+    "dist/**/.*"
   ],
   "ignore": [
     "*",
@@ -15,13 +15,13 @@
     "!dist/**/*",
     "_references.*"
   ],
-  "_release": "063ec173d1",
+  "_release": "1388a74789",
   "_resolution": {
     "type": "branch",
     "branch": "master",
-    "commit": "063ec173d17a9c009ebaf2e14eaf62db5a795f8a"
+    "commit": "1388a7478968e4bb44cae3c7f4f78a04e7ac3ca2"
   },
   "_source": "https://github.com/USGS-WiM/wim_angular.git",
-  "_target": "*",
+  "_target": "master",
   "_originalSource": "https://github.com/USGS-WiM/wim_angular.git"
 }

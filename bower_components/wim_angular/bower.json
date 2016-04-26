@@ -1,6 +1,6 @@
 {
     "name": "wim_angular",
-    "version": "0.0.0",
+    "version": "1.0.2",
     "homepage": "https://github.com/jknewson/wim_angular",
     "authors": [
         "jknewson <jknewson@usgs.gov>"
@@ -8,7 +8,7 @@
     "description": "angular library for wim apps",
     "license": "MIT",
     "main": [ 
-        "dist/src/**/.*"
+        "dist/**/.*"
     ],
   "ignore": [
     "*",
