@@ -63,11 +63,12 @@
                                 $scope.SiteObjectivePoints.push(createdOP[0]);
                                 $scope.opCount.total = $scope.SiteObjectivePoints.length;
                             }
-                            if (createdOP[1] == 'updated') {
+                            if (createdOP[1] === undefined) {
                                 //this is from edit -- refresh page?
-                                var indexClicked = $scope.SiteObjectivePoints.indexOf(OPclicked);
-                                $scope.SiteObjectivePoints[indexClicked] = createdOP[0];
-                            }
+                                //update the list
+                                var iClicked = $scope.SiteObjectivePoints.indexOf(OPclicked);
+                                $scope.SiteObjectivePoints[iClicked] = createdOP;
+                            }                            
                             if (createdOP[1] == 'deleted') {
                                 var indexClicked1 = $scope.SiteObjectivePoints.indexOf(OPclicked);
                                 $scope.SiteObjectivePoints.splice(indexClicked1, 1);

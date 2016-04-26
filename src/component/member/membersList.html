@@ -1,6 +1,6 @@
 ﻿<div class="">
     <h3>Accounts</h3>
-    <div ng-show="loggedInUser.Role == 'Admin'"><a ui-sref="members.MemberInfo({id:0})"><i class="glyphicon glyphicon-plus"></i>Create New Member</a></div>
+    <div ng-show="loggedInUser.Role !== 'Field'"><a ui-sref="members.MemberInfo({id:0})"><i class="glyphicon glyphicon-plus"></i>Create New Member</a></div>
     <script>
             var sortingOrder = 'Name';
     </script>

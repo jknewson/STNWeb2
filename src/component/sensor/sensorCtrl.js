@@ -25,6 +25,7 @@
                 $scope.sensDepTypes = allSensDeps;
                 $scope.showProposed = false; //they want to add a proposed sensor, open options
                 $scope.SiteSensors = thisSiteSensors;
+                Instrument_Service.setAllSiteSensors($scope.SiteSensors);
                 //to pass to the sensor modals for sensor files
                 var SensFileTypes = allFileTypes.filter(function (sft) {
                     //Photo (1), Data (2), Historic (3), Field Sheets (4), Level Notes (5), Other (7), Link (8), Sketch (10)
@@ -155,9 +156,10 @@
                     var passAllLists = [allSensorTypes, allSensorBrands, allHousingTypes, allSensDeps, allEvents, SensFileTypes, allVertDatums];
                     var indexClicked = $scope.SiteSensors.indexOf(sensorClicked);
                     $rootScope.stateIsLoading.showLoading = true;// loading..// $(".page-loading").removeClass("hidden"); //loading...
-                
+                    
+                    //if this is a create, show the sensormodal.html, if looking at deployed sensor, go to the depsensormodal.html
                     var modalInstance = $uibModal.open({
-                        templateUrl: 'Sensormodal.html',
+                        templateUrl: sensorClicked === 0 || sensorClicked.InstrumentStats[0].STATUS_TYPE_ID === 4 ? 'Sensormodal.html' : 'DepSensormodal.html',
                         controller: 'sensorModalCtrl',
                         size: 'lg',
                         backdrop: 'static',
@@ -202,11 +204,11 @@
                             $scope.sensorCount.total = $scope.SiteSensors.length;
                             Instrument_Service.setAllSiteSensors($scope.SiteSensors);
                         }
-                        if (createdSensor[1] == 'edit') {
+                        if (createdSensor[1] === undefined) {
                             //this is from edit -- refresh page?
-                            $scope.SiteSensors[i] = createdSensor[0];
-                            thisSiteSensors[si] = createdSensor[0];
-                            Instrument_Service.setAllSiteSensors($scope.SiteSensors);
+                            //update the list
+                            $scope.SiteSensors[indexClicked] = createdSensor[0];
+                            $rootScope.stateIsLoading.showLoading = false;// loading..
                         }
                         if (createdSensor[1] == 'deleted') {
                             $scope.SiteSensors.splice(i, 1);
