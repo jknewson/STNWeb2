@@ -35,7 +35,7 @@
     //        }
     //    };
     //}]);nitAdvancedSearchbox
-    //try this one Monday::: 
+    //try this one Monday:::
     //http://www.ng-newsletter.com/posts/d3-on-angular.html
     STNControllers.directive('barsChart',['$parse', function ($parse) {
         var directiveDefinitionObject = {
@@ -44,7 +44,7 @@
             //this is important, we don't want to overwrite our directive declaration in the HTML mark-up
             replace: false,
             scope: {
-                data: '=elevationData'                
+                data: '=elevationData'
             },
             link: function (scope, element, attrs) {
                 //converting all data passed thru into an array
@@ -75,11 +75,8 @@
                 searchTerm: '='
             },
             replace: true,
-            template: '<div class="col-md-4"><div><label class="radio-inline"><input type="radio" name="SearchBy" ng-model="searchBy.val" value="bySiteId" />ID</label>' +
-                '<label class="radio-inline"><input type="radio" name="SearchBy" ng-model="searchBy.val" value="bySiteNo" />Number</label><label class="radio-inline">' +
-                '<input type="radio" name="SearchBy" ng-model="searchBy.val" value="bySiteName" />Name</label></div><div class="input-group">' +
-                '<input type="text" ng-model="searchTerm" ng-enter="IndexSearchSites()" placeholder="Search Sites..." /><button class="borderLess" ng-click="IndexSearchSites()">' +
-                '<i class="glyphicon glyphicon-search"></i></button></div></div>',
+            template: '<div class="searchnav"><div class="searchby"><b>Search By:</b><div class="searchbyoption"><input type="radio" name="SearchBy" ng-model="searchBy.val" value="bySiteId" />ID</div><!----><div class="searchbyoption"><input type="radio" name="SearchBy" ng-model="searchBy.val" value="bySiteNo" />Number</div><!----><div class="searchbyoption"><input type="radio" name="SearchBy" ng-model="searchBy.val" value="bySiteName" />Name</div></div><!----><div class="search-input"><input ng-focus="goSearch" type="text" ng-model="searchTerm" ng-enter="IndexSearchSites()" placeholder="Search Sites..." /><!----><button class="borderLess" ng-click="IndexSearchSites()">Search <i class="ion-search"></i></button></div></div>',
+
             controller: [
                 '$scope', '$state', 'SITE', '$uibModal',
                 function ($scope, $state, SITE, $uibModal) {
