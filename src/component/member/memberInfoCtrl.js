@@ -3,8 +3,8 @@
 
     var SettingsControllers = angular.module('SettingsControllers');
 
-    SettingsControllers.controller('memberInfoCtrl', ['$scope', '$cookies', '$location', '$http', '$uibModal', '$stateParams', '$filter', 'MEMBER', 'thisMember', 
-        function ($scope, $cookies, $location, $http, $uibModal, $stateParams, $filter, MEMBER, thisMember) {
+    SettingsControllers.controller('memberInfoCtrl', ['$scope', '$cookies', '$location', '$http', '$uibModal', '$stateParams', '$filter', '$sce', 'MEMBER', 'thisMember', 
+        function ($scope, $cookies, $location, $http, $uibModal, $stateParams, $filter, $sce, MEMBER, thisMember) {
             if ($cookies.get('STNCreds') === undefined || $cookies.get('STNCreds') === "") {
                 $scope.auth = false;
                 $location.path('/login');
@@ -12,7 +12,7 @@
                 //all things both new and existing member page will need
                 $scope.aMember = {}; //holder for member (either coming in for edit, or being created for post
                 $scope.matchingUsers = true;
-
+                $scope.usernameTooltip = $sce.trustAsHtml('Active Directory user ID. ie: \'mpeppler\' not \'mpeppler@usgs.gov\'.');
                 //#region DELETE Member click
                 $scope.DeleteMember = function (mem) {
                     //modal

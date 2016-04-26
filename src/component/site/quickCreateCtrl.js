@@ -4,10 +4,10 @@
 
     var STNControllers = angular.module('STNControllers');
 
-    STNControllers.controller('quickCreateCtrl', ['$scope', '$rootScope', '$cookies', '$location', '$state', '$http', '$uibModal', '$filter', 'whichQuick', 'allHorDatums',
+    STNControllers.controller('quickCreateCtrl', ['$scope', '$rootScope', '$cookies', '$location', '$state', '$http', '$uibModal', '$filter', '$sce', 'whichQuick', 'allHorDatums',
         'allHorCollMethods', 'allStates', 'allCounties', 'allOPTypes', 'allVertDatums', 'allVertColMethods', 'allOPQualities', 'allHWMTypes', 'allHWMQualities', 'allMarkers',
         'allEvents', 'allSensorTypes', 'allSensorBrands', 'allDeployTypes', 'allHousingTypes', 'allSensDeps', 'SITE', 'OBJECTIVE_POINT', 'HWM', 'MEMBER', 'INSTRUMENT', 'INSTRUMENT_STATUS', 'OP_MEASURE',
-        function ($scope, $rootScope, $cookies, $location, $state, $http, $uibModal, $filter, whichQuick, allHorDatums, allHorCollMethods, allStates, allCounties, allOPTypes,
+        function ($scope, $rootScope, $cookies, $location, $state, $http, $uibModal, $filter, $sce, whichQuick, allHorDatums, allHorCollMethods, allStates, allCounties, allOPTypes,
             allVertDatums, allVertColMethods, allOPQualities, allHWMTypes, allHWMQualities, allMarkers, allEvents, allSensorTypes, allSensorBrands, allDeployTypes, allHousingTypes, allSensDeps,
             SITE, OBJECTIVE_POINT, HWM, MEMBER, INSTRUMENT, INSTRUMENT_STATUS, OP_MEASURE) {
             if ($cookies.get('STNCreds') === undefined || $cookies.get('STNCreds') === "") {
@@ -16,6 +16,7 @@
             } else {
                 //global vars
                 $scope.CreateWhat = whichQuick;
+                $scope.htmlDescriptionTip = $sce.trustAsHtml('Required by NWIS. Can be listed as <em>\'unknown\'</em> or <em>\'Atlantic Ocean\'</em>');
                 $http.defaults.headers.common.Authorization = 'Basic ' + $cookies.get('STNCreds');
                 $http.defaults.headers.common.Accept = 'application/json';
                 MEMBER.query({ id: $cookies.get('mID') }).$promise.then(function (response) {
@@ -288,42 +289,56 @@
                     $scope.stateCountyList = []; delete $scope.aSite.ZIP;
                     if ($scope.DMS.LADeg !== undefined) $scope.aSite.LATITUDE_DD = azimuth($scope.DMS.LADeg, $scope.DMS.LAMin, $scope.DMS.LASec);
                     if ($scope.DMS.LODeg !== undefined) $scope.aSite.LONGITUDE_DD = azimuth($scope.DMS.LODeg, $scope.DMS.LOMin, $scope.DMS.LOSec);
-                    $rootScope.stateIsLoading.showLoading = true; //loading...
-                    var geocoder = new google.maps.Geocoder(); //reverse address lookup
-                    var latlng = new google.maps.LatLng($scope.aSite.LATITUDE_DD, $scope.aSite.LONGITUDE_DD);
-                    geocoder.geocode({ 'latLng': latlng }, function (results, status) {
-                        if (status == google.maps.GeocoderStatus.OK) {
-                            //parse the results out into components ('street_number', 'route', 'locality', 'administrative_area_level_2', 'administrative_area_level_1', 'postal_code'
-                            var address_components = results[0].address_components;
-                            var components = {};
-                            $.each(address_components, function (k, v1) {
-                                $.each(v1.types, function (k2, v2) {
-                                    components[v2] = v1.long_name;
+                    if ($scope.aSite.LATITUDE_DD !== undefined && $scope.aSite.LONGITUDE_DD !== undefined) {
+                        $rootScope.stateIsLoading.showLoading = true; //loading...
+                        var geocoder = new google.maps.Geocoder(); //reverse address lookup
+                        var latlng = new google.maps.LatLng($scope.aSite.LATITUDE_DD, $scope.aSite.LONGITUDE_DD);
+                        geocoder.geocode({ 'latLng': latlng }, function (results, status) {
+                            if (status == google.maps.GeocoderStatus.OK) {
+                                //parse the results out into components ('street_number', 'route', 'locality', 'administrative_area_level_2', 'administrative_area_level_1', 'postal_code'
+                                var address_components = results[0].address_components;
+                                var components = {};
+                                $.each(address_components, function (k, v1) {
+                                    $.each(v1.types, function (k2, v2) {
+                                        components[v2] = v1.long_name;
+                                    });
                                 });
-                            });
 
-                            $scope.aSite.ADDRESS = components.street_number !== undefined ? components.street_number + " " + components.route : components.route;
-                            $scope.aSite.CITY = components.locality;
+                                $scope.aSite.ADDRESS = components.street_number !== undefined ? components.street_number + " " + components.route : components.route;
+                                $scope.aSite.CITY = components.locality;
 
-                            var thisState = $scope.stateList.filter(function (s) { return s.STATE_NAME == components.administrative_area_level_1; })[0];
-                            if (thisState !== undefined) {
-                                $scope.aSite.STATE = thisState.STATE_ABBREV;
-                                $scope.stateCountyList = $scope.allCountyList.filter(function (c) { return c.STATE_ID == thisState.STATE_ID; });
-                                $scope.aSite.COUNTY = components.administrative_area_level_2;
-                                $scope.aSite.ZIP = components.postal_code;                                
-                                $rootScope.stateIsLoading.showLoading = false;// loading..
-                                $scope.$apply();
+                                var thisState = $scope.stateList.filter(function (s) { return s.STATE_NAME == components.administrative_area_level_1; })[0];
+                                if (thisState !== undefined) {
+                                    $scope.aSite.STATE = thisState.STATE_ABBREV;
+                                    $scope.stateCountyList = $scope.allCountyList.filter(function (c) { return c.STATE_ID == thisState.STATE_ID; });
+                                    $scope.aSite.COUNTY = components.administrative_area_level_2;
+                                    $scope.aSite.ZIP = components.postal_code;
+                                    $rootScope.stateIsLoading.showLoading = false;// loading..
+                                    $scope.$apply();
+                                } else {
+                                    $rootScope.stateIsLoading.showLoading = false;// loading..
+                                    toastr.error("The Latitude/Longitude did not return a location within the U.S.");
+                                }
                             } else {
                                 $rootScope.stateIsLoading.showLoading = false;// loading..
-                                toastr.error("The Latitude/Longitude did not return a location within the U.S.");
+                                toastr.error("There was an error getting address. Please try again.");
                             }
-                        } else {
-                            $rootScope.stateIsLoading.showLoading = false;// loading..
-                            toastr.error("There was an error getting address. Please try again.");
-                        }
-                       
-                    });
-                    // 
+
+                        });
+                    } else {
+                        //they did not type a lat/long first...
+                        var emptyLatLongModal = $uibModal.open({
+                            template: '<div class="modal-header"><h3 class="modal-title">Error</h3></div>' +
+                                '<div class="modal-body"><p>Please provide a Latitude and Longitude before clicking Verify Location</p></div>' +
+                                '<div class="modal-footer"><button class="btn btn-primary" ng-enter="ok()" ng-click="ok()">OK</button></div>',
+                            controller: ['$scope', '$uibModalInstance', function ($scope, $uibModalInstance) {
+                                $scope.ok = function () {
+                                    $uibModalInstance.close();
+                                };
+                            }],
+                            size: 'sm'
+                        });
+                    }
                 };//end getAddress()
 
                 //#endregion lat/long stuff
@@ -372,6 +387,18 @@
                     return OBJ_PT;
                 };
 
+                //X was clicked next to existing Control Identifier to have it removed, store in remove array for Save()
+                $scope.RemoveID = function (opControl) {
+                    //only add to remove list if it's an existing one to DELETE
+                    var i = $scope.addedIdentifiers.indexOf(opControl);
+                    if (opControl.OP_CONTROL_IDENTIFIER_ID !== undefined) {
+                        $scope.removeOPCarray.push(opControl);
+                        $scope.addedIdentifiers.splice(i, 1);
+                    } else {
+                        $scope.addedIdentifiers.splice(i, 1);
+                    }
+                };
+
                 //fix default radios and lat/long
                 var formatDefaults = function (theOP) {
                     //$scope.OP.FTorMETER needs to be 'ft'. if 'meter' ==convert value to ft 
@@ -385,9 +412,9 @@
                         $scope.aOP.UNCERTAINTY = $scope.aOP.UNCERTAINTY / 30.48;
                     }
                 };
-
+                $scope.tapedown = { Open: false };
                 //sensor section, clicked Show/Hide Tape down information
-                var showNeedOPfirstModal = function () {
+                var showNeedOPfirstModal = function () {                    
                     var needOPModal = $uibModal.open({
                         template: '<div class="modal-header"><h3 class="modal-title">No Datum Location</h3></div>' +
                             '<div class="modal-body"><p>In order to add tape down information, please populate the Datum Location section above first.</p>' +
@@ -395,70 +422,67 @@
                             '<div class="modal-footer"><button class="btn btn-primary" ng-enter="ok()" ng-click="ok()">OK</button></div>',
                         controller: ['$scope', '$uibModalInstance', function ($scope, $uibModalInstance) {
                             $scope.ok = function () {
-                                $uibModalInstance.dismiss();
+                                $uibModalInstance.close();
                             };
                         }],
                         size: 'sm'
                     });
+                    needOPModal.result.then(function () {
+                        $scope.tapedown.Open = false;
+                    });
                 };
                 $scope.tapeDownTable = []; //holder for the op if they choose it from the dropdown for tape down
-                $scope.OPchosen = function (opChosen) {
-                    //var opI = $scope.OPsForTapeDown.map(function (o) { return o.OBJECTIVE_POINT_ID; }).indexOf(opChosen.OBJECTIVE_POINT_ID);
-                    if (opChosen.selected) {
-                        //they picked an OP to use for tapedown
-                        $scope.OPMeasure = {};
-                        $scope.OPMeasure.OP_NAME = opChosen.NAME;
-                        $scope.OPMeasure.elevation = opChosen.ELEV_FT;
-                        $scope.OPMeasure.Vdatum = $scope.vertDatumList.filter(function (vd) { return vd.DATUM_ID == opChosen.VDATUM_ID; })[0].DATUM_ABBREVIATION;
-                        $scope.tapeDownTable.push($scope.OPMeasure);                        
-                    } else {
-                        //they unchecked the op to remove
-                        //ask them are they sure?
-                        var removeOPMeas = $uibModal.open({
-                            backdrop: 'static',
-                            keyboard: false,
-                            template: '<div class="modal-header"><h3 class="modal-title">Remove OP Measure</h3></div>' +
-                                '<div class="modal-body"><p>Are you sure you want to remove this OP Measurement from this sensor?</p></div>' +
-                                '<div class="modal-footer"><button class="btn btn-primary" ng-enter="ok()" ng-click="ok()">OK</button><button class="btn btn-primary" ng-click="cancel()">Cancel</button></div>',
-                            controller: ['$scope', '$uibModalInstance', function ($scope, $uibModalInstance) {
-                                $scope.ok = function () {
-                                    $uibModalInstance.close('remove');
-                                };
-                                $scope.cancel = function () {
-                                    $uibModalInstance.close('cancel');
-                                };
-                            }],
-                            size: 'sm'
-                        });
-                        removeOPMeas.result.then(function (yesOrNo) {
-                            if (yesOrNo == 'remove') {
-                                //remove it
-                                $scope.tapeDownTable.splice(0, 1);
-                                $scope.OPsForTapeDown = [];
-                                $scope.OPMeasure = {}; $scope.addTapedown = false;
-                                $scope.aSensStatus.SENSOR_ELEVATION = ''; $scope.aSensStatus.WS_ELEVATION = ''; $scope.aSensStatus.GS_ELEVATION = ''; $scope.aSensStatus.VDATUM_ID = '';
-                            } else {
-                                //never mind, make it selected again
-                                $scope.OPsForTapeDown[0].selected = true;
-                            }
-                        });
-                    }
+                $scope.removeOP = function () {                    
+                    //they unchecked the op to remove
+                    var removeOPMeas = $uibModal.open({
+                        backdrop: 'static',
+                        keyboard: false,
+                        template: '<div class="modal-header"><h3 class="modal-title">Remove OP Measure</h3></div>' +
+                            '<div class="modal-body"><p>Are you sure you don\'t want to add this OP Measurement to this quick sensor?</p></div>' +
+                            '<div class="modal-footer"><button class="btn btn-primary" ng-enter="ok()" ng-click="ok()">Yes</button><button class="btn btn-primary" ng-click="cancel()">Cancel</button></div>',
+                        controller: ['$scope', '$uibModalInstance', function ($scope, $uibModalInstance) {
+                            $scope.ok = function () {
+                                $uibModalInstance.close('remove');
+                            };
+                            $scope.cancel = function () {
+                                $uibModalInstance.close('cancel');
+                            };
+                        }],
+                        size: 'sm'
+                    });
+                    removeOPMeas.result.then(function (yesOrNo) {
+                        if (yesOrNo == 'remove') {
+                            $scope.tapedown.Open = false;
+                            //remove it
+                            $scope.tapeDownTable.splice(0, 1);
+                            $scope.OPsForTapeDown = [];
+                            $scope.OPMeasure = {}; $scope.addTapedown = false;
+                            $scope.aSensStatus.SENSOR_ELEVATION = ''; $scope.aSensStatus.WS_ELEVATION = ''; $scope.aSensStatus.GS_ELEVATION = ''; $scope.aSensStatus.VDATUM_ID = '';
+                        }
+                    });
                 };
-                $scope.addTapedown = false; //toggle tapedown section
+                $scope.addTapedown = false; //toggle tapedown section                
                 $scope.OPsForTapeDown = []; //will hold OP they add in op accordion.. get this when they click the button and show modal if they haven't populated it yet.
-                $scope.showTapedownPart = function () {
-                    if ($scope.addTapedown) {
-                        //they are closing it. clear inputs and close
-                        $scope.addTapedown = false;
-                    } else {
+                $scope.showTapedownPart = function () {                    
+                    if ($scope.tapeDownTable.length < 1) {
                         //they are opening to add tape down information
                         if ($scope.aOP.NAME !== undefined && $scope.aOP.ELEV_FT !== undefined && $scope.aOP.VDATUM_ID !== undefined) {
+                            $scope.OPMeasure = {};
+                            $scope.OPMeasure.OP_NAME = $scope.aOP.NAME;
+                            $scope.OPMeasure.elevation = $scope.aOP.ELEV_FT;
+                            $scope.OPMeasure.Vdatum = $scope.vertDatumList.filter(function (vd) { return vd.DATUM_ID == $scope.aOP.VDATUM_ID; })[0].DATUM_ABBREVIATION;
+                            $scope.tapeDownTable.push($scope.OPMeasure);
+
                             $scope.OPsForTapeDown.push($scope.aOP);
-                            $scope.addTapedown = true;
+                            $scope.addTapedown = true; $scope.tapedown.Open = true;
+                            $scope.aSensStatus.VDATUM_ID = $scope.aOP.VDATUM_ID;
                         } else {
-                            showNeedOPfirstModal();
-                        }                       
+                            showNeedOPfirstModal(); 
+                        }
+                    } else {
+                        $scope.addTapedown = true; $scope.tapedown.Open = true;
                     }
+                    
                 };
                 $scope.siteErrors = false; $scope.opErrors = false; $scope.hwmErrors = false; 
                 $scope.create = function () {
@@ -533,15 +557,12 @@
                                         INSTRUMENT_STATUS.save($scope.aSensStatus).$promise.then(function (statResponse) {
                                             //added tape downs?
                                             if ($scope.tapeDownTable.length > 0) {
-                                                for (var t = 0; t < $scope.tapeDownTable.length; t++) {
-                                                    var thisTape = $scope.tapeDownTable[t];
-                                                    thisTape.INSTRUMENT_STATUS_ID = statResponse.INSTRUMENT_STATUS_ID;
-                                                    thisTape.OBJECTIVE_POINT_ID = createdOP.OBJECTIVE_POINT_ID;
-                                                    ///POST IT///
-                                                    OP_MEASURE.addInstStatMeasure({ instrumentStatusId: statResponse.INSTRUMENT_STATUS_ID }, thisTape).$promise;
-                                                }
+                                                var thisTape = $scope.tapeDownTable[0];
+                                                thisTape.INSTRUMENT_STATUS_ID = statResponse.INSTRUMENT_STATUS_ID;
+                                                thisTape.OBJECTIVE_POINT_ID = createdOP.OBJECTIVE_POINT_ID;
+                                                ///POST IT///
+                                                OP_MEASURE.addInstStatMeasure({ instrumentStatusId: statResponse.INSTRUMENT_STATUS_ID }, thisTape).$promise;                                                
                                             }
-
                                             toastr.success("Quick Sensor created");
                                             $rootScope.stateIsLoading.showLoading = false;// loading..
                                             $location.path('/Site/' + createdSiteID + '/SiteDashboard').replace();//.notify(false);
