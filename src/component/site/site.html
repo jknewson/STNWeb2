@@ -64,15 +64,15 @@
                 </div>
 
                 <!-- dec deg or dms: -->
-                <div class="form-group">
+                <div>
                     <label class="col-md-4 control-label"></label>
                     <div class="col-md-7">
-                        <label class="radio-inline">
+                        <span class="radio-inline">
                             <input type="radio" name="decDegORdms" ng-model="aSite.decDegORdms" ng-change="latLongChange()" value="dd" /> Dec Deg
-                        </label>
-                        <label class="radio-inline">
+                        </span>
+                        <span class="radio-inline">
                             <input type="radio" name="decDegORdms" ng-model="aSite.decDegORdms" ng-change="latLongChange()" value="dms" /> DMS
-                        </label>
+                        </span>
                     </div>
                 </div>
 
@@ -397,12 +397,12 @@
                 <div class="form-group sensorInfo" ng-class="{darkClass:disableSensorParts}">
                     <label class="col-md-4 control-label" for="IS_PERMANENT_HOUSING_INSTALLED">Permanent Sensor Housing Installed?</label>
                     <div class="col-md-7">
-                        <label class="radio-inline">
+                        <span class="radio-inline">
                             <input ng-disabled="disableSensorParts" type="radio" name="IS_PERMANENT_HOUSING_INSTALLED" ng-model="aSite.IS_PERMANENT_HOUSING_INSTALLED" value="Yes"> Yes
-                        </label>
-                        <label class="radio-inline">
+                        </span>
+                        <span class="radio-inline">
                             <input ng-disabled="disableSensorParts" type="radio" name="IS_PERMANENT_HOUSING_INSTALLED" ng-model="aSite.IS_PERMANENT_HOUSING_INSTALLED" value="No"> No
-                        </label>
+                        </span>
                     </div>
                 </div>
 
@@ -541,15 +541,15 @@
                 <div class="form-group">
                     <label class="col-md-4 control-label" for="ACCESS_GRANTED">Access Permission Granted:</label>
                     <div class="col-md-7">
-                        <label class="radio-inline">
+                        <span class="radio-inline">
                             <input type="radio" name="ACCESS_GRANTED" ng-model="aSite.ACCESS_GRANTED" value="Yes"> Yes
-                        </label>
-                        <label class="radio-inline">
+                        </span>
+                        <span class="radio-inline">
                             <input type="radio" name="ACCESS_GRANTED" ng-model="aSite.ACCESS_GRANTED" value="No"> No
-                        </label>
-                        <label class="radio-inline">
+                        </span>
+                        <span class="radio-inline">
                             <input type="radio" name="ACCESS_GRANTED" ng-model="aSite.ACCESS_GRANTED" value="Not Needed"> Not Needed
-                        </label>
+                        </span>
                     </div>
                 </div>
 
@@ -645,12 +645,12 @@
                                     <input type="hidden" name="OP_CONTROL_IDENTIFIER_ID" ng-model="id.OP_CONTROL_IDENTIFIER_ID" />
                                     <input type="hidden" name="OBJECTIVE_POINT_ID" ng-model="id.OBJECTIVE_POINT_ID" />
 
-                                    <label class="radio-inline">
+                                    <span class="radio-inline">
                                         <input type="radio" name="IDENTIFIER_TYPE{{$index}}" ng-model="id.IDENTIFIER_TYPE" value="PID" /> PID
-                                    </label>
-                                    <label class="radio-inline">
+                                    </span>
+                                    <span class="radio-inline">
                                         <input type="radio" name="IDENTIFIER_TYPE{{$index}}" ng-model="id.IDENTIFIER_TYPE" value="Other" /> Other
-                                    </label>
+                                    </span>
                                     <div class="buttons pull-right">
                                         <button class="btn borderLess" ng-click="RemoveID(id)">
                                             <i class="glyphicon glyphicon-remove"></i>
@@ -662,15 +662,15 @@
                     </div>
 
                     <!-- dec deg or dms: -->
-                    <div class="form-group" style="margin-bottom: 0;padding-bottom: 0">
+                    <div>
                         <label class="col-md-4 control-label"></label>
                         <div class="col-md-6">
-                            <label class="radio-inline">
+                            <span class="radio-inline">
                                 <input type="radio" name="decDegORdms" ng-change="latLongChange()" ng-model="OP.decDegORdms" value="dd" /> Dec Deg
-                            </label>
-                            <label class="radio-inline">
+                            </span>
+                            <span class="radio-inline">
                                 <input type="radio" name="decDegORdms" ng-change="latLongChange()" ng-model="OP.decDegORdms" value="dms" /> DMS
-                            </label>
+                            </span>
                         </div>
                     </div>
 
@@ -739,15 +739,15 @@
                     </div>
 
                     <!-- Ft or Meter radios: -->
-                    <div class="form-group" style="margin-bottom: 0;padding-bottom: 0">
+                    <div>
                         <label class="col-md-4 control-label"></label>
                         <div class="col-md-6">
-                            <label class="radio-inline">
+                            <span class="radio-inline">
                                 <input type="radio" name="FTorMETER" ng-model="OP.FTorMETER" value="ft" /> ft
-                            </label>
-                            <label class="radio-inline">
+                            </span>
+                            <span class="radio-inline">
                                 <input type="radio" name="FTorMETER" ng-model="OP.FTorMETER" value="meter" /> meter
-                            </label>
+                            </span>
                         </div>
                     </div>
 
@@ -782,15 +782,15 @@
                     </div>
 
                     <!-- Ft or CM radios: -->
-                    <div class="form-group" style="margin-bottom: 0;padding-bottom: 0">
+                    <div>
                         <label class="col-md-4 control-label"></label>
                         <div class="col-md-6">
-                            <label class="radio-inline">
+                            <span class="radio-inline">
                                 <input type="radio" name="FTorCM" ng-model="OP.FTorCM" value="ft" /> +/- ft
-                            </label>
-                            <label class="radio-inline">
+                            </span>
+                            <span class="radio-inline">
                                 <input type="radio" name="FTorCM" ng-model="OP.FTorCM" value="cm" /> +/- cm
-                            </label>
+                            </span>
                         </div>
                     </div>
 
@@ -951,16 +951,16 @@
                                     <div ng-show="view.OPval == 'edit'">
                                         <div ng-repeat="idC in addedIdentifiersCopy">
                                             <div class="col-md-12" style="margin-bottom:5px">
-                                                <div class="col-md-7"><input class="form-control" name="OPControl" ng-model="idC.IDENTIFIER" type="text" /></div>
+                                                <div class="col-md-6"><input class="form-control" name="OPControl" ng-model="idC.IDENTIFIER" type="text" /></div>
                                                 <input type="hidden" name="OP_CONTROL_IDENTIFIER_ID" ng-model="idC.OP_CONTROL_IDENTIFIER_ID" />
                                                 <input type="hidden" name="OBJECTIVE_POINT_ID" ng-model="idC.OBJECTIVE_POINT_ID" />
 
-                                                <label class="radio-inline">
+                                                <span class="radio-inline">
                                                     <input type="radio" name="IDENTIFIER_TYPE{{$index}}" ng-model="idC.IDENTIFIER_TYPE" value="PID" /> PID
-                                                </label>
-                                                <label class="radio-inline">
+                                                </span>
+                                                <span class="radio-inline">
                                                     <input type="radio" name="IDENTIFIER_TYPE{{$index}}" ng-model="idC.IDENTIFIER_TYPE" value="Other" /> Other
-                                                </label>
+                                                </span>
                                                 <div class="buttons pull-right">
                                                     <button class="btn borderLess" ng-click="RemoveID(idC)">
                                                         <i class="glyphicon glyphicon-remove"></i>
@@ -973,15 +973,15 @@
                             </div>
 
                             <!-- dec deg or dms: -->
-                            <div class="form-group" ng-show="view.OPval == 'edit'" style="margin-bottom: 0;padding-bottom: 0">
+                            <div ng-show="view.OPval == 'edit'">
                                 <label class="col-md-4 control-label"></label>
                                 <div class="col-md-6">
-                                    <label class="radio-inline">
+                                    <span class="radio-inline">
                                         <input type="radio" name="decDegORdms" ng-change="latLongChange()" ng-model="opCopy.decDegORdms" value="dd" /> Dec Deg
-                                    </label>
-                                    <label class="radio-inline">
+                                    </span>
+                                    <span class="radio-inline">
                                         <input type="radio" name="decDegORdms" ng-change="latLongChange()" ng-model="opCopy.decDegORdms" value="dms" /> DMS
-                                    </label>
+                                    </span>
                                 </div>
                             </div>
 
@@ -1058,15 +1058,15 @@
                             </div>
 
                             <!-- Ft or Meter radios: -->
-                            <div ng-show="view.OPval == 'edit'" class="form-group" style="margin-bottom: 0;padding-bottom: 0">
+                            <div ng-show="view.OPval == 'edit'">
                                 <label class="col-md-4 control-label"></label>
                                 <div class="col-md-6">
-                                    <label class="radio-inline">
+                                    <span class="radio-inline">
                                         <input type="radio" name="FTorMETER" ng-model="opCopy.FTorMETER" value="ft" /> ft
-                                    </label>
-                                    <label class="radio-inline">
+                                    </span>
+                                    <span class="radio-inline">
                                         <input type="radio" name="FTorMETER" ng-model="opCopy.FTorMETER" value="meter" /> meter
-                                    </label>
+                                    </span>
                                 </div>
                             </div>
 
@@ -1104,15 +1104,15 @@
                             </div>
 
                             <!-- Ft or CM radios: -->
-                            <div ng-show="view.OPval == 'edit'" class="form-group" style="margin-bottom: 0;padding-bottom: 0">
+                            <div ng-show="view.OPval == 'edit'">
                                 <label class="col-md-4 control-label"></label>
                                 <div class="col-md-6">
-                                    <label class="radio-inline">
+                                    <span class="radio-inline">
                                         <input type="radio" name="FTorCM" ng-model="opCopy.FTorCM" value="ft" /> +/- ft
-                                    </label>
-                                    <label class="radio-inline">
+                                    </span>
+                                    <span class="radio-inline">
                                         <input type="radio" name="FTorCM" ng-model="opCopy.FTorCM" value="cm" /> +/- cm
-                                    </label>
+                                    </span>
                                 </div>
                             </div>
 
@@ -1479,12 +1479,12 @@
                     <div class="form-group required" ng-class="{'has-error':HWMForm.HWM_ENVIRONMENT.$invalid && HWMForm.HWM_ENVIRONMENT.$dirty}">
                         <label class="col-md-4 control-label req">HWM Environment:</label>
                         <div class="col-md-6">
-                            <label class="radio-inline">
+                            <span class="radio-inline">
                                 <input type="radio" name="HWM_ENVIRONMENT" ng-model="aHWM.HWM_ENVIRONMENT" value="Coastal" />Coastal
-                            </label>
-                            <label class="radio-inline">
+                            </span>
+                            <span class="radio-inline">
                                 <input type="radio" name="HWM_ENVIRONMENT" ng-model="aHWM.HWM_ENVIRONMENT" value="Riverine" />Riverine
-                            </label>
+                            </span>
                         </div>
                     </div>
 
@@ -1518,15 +1518,15 @@
                     <div class="form-group">
                         <label class="col-md-4 control-label">Bank:</label>
                         <div class="col-md-6">
-                            <label class="radio-inline">
+                            <span class="radio-inline">
                                 <input type="radio" name="BANK" ng-model="aHWM.BANK" value="Left" />Left
-                            </label>
-                            <label class="radio-inline">
+                            </span>
+                            <span class="radio-inline">
                                 <input type="radio" name="BANK" ng-model="aHWM.BANK" value="Right" />Right
-                            </label>
-                            <label class="radio-inline">
+                            </span>
+                            <span class="radio-inline">
                                 <input type="radio" name="BANK" ng-model="aHWM.BANK" value="N/A" />N/A
-                            </label>
+                            </span>
                         </div>
                     </div>
 
@@ -1542,15 +1542,15 @@
                     </div>
 
                     <!-- dec deg or dms: -->
-                    <div class="form-group">
+                    <div>
                         <label class="col-md-4 control-label"></label>
                         <div class="col-md-6">
-                            <label class="radio-inline">
+                            <span class="radio-inline">
                                 <input type="radio" name="decDegORdms" ng-change="latLongChange()" ng-model="aHWM.decDegORdms" value="dd" /> Dec Deg
-                            </label>
-                            <label class="radio-inline">
+                            </span>
+                            <span class="radio-inline">
                                 <input type="radio" name="decDegORdms" ng-change="latLongChange()" ng-model="aHWM.decDegORdms" value="dms" /> DMS
-                            </label>
+                            </span>
                         </div>
                     </div>
 
@@ -1688,15 +1688,15 @@
                     </div>
 
                     <!-- Ft or CM radios: -->
-                    <div class="form-group" style="margin-bottom: 0;padding-bottom: 0">
+                    <div>
                         <label class="col-md-4 control-label"></label>
                         <div class="col-md-6">
-                            <label class="radio-inline">
+                            <span class="radio-inline">
                                 <input type="radio" name="FTorCM" ng-model="FTorCM" value="ft" /> +/- ft
-                            </label>
-                            <label class="radio-inline">
+                            </span>
+                            <span class="radio-inline">
                                 <input type="radio" name="FTorCM" ng-model="FTorCM" value="cm" /> +/- cm
-                            </label>
+                            </span>
                         </div>
                     </div>
 
@@ -1722,12 +1722,12 @@
                     <div class="form-group">
                         <label class="col-md-4 control-label">Tranquil/Stillwater HWM:</label>
                         <div class="col-md-6">
-                            <label class="radio-inline">
+                            <span class="radio-inline">
                                 <input type="radio" name="STILLWATER" ng-model="aHWM.STILLWATER" value="1" />Yes
-                            </label>
-                            <label class="radio-inline">
+                            </span>
+                            <span class="radio-inline">
                                 <input type="radio" name="STILLWATER" ng-model="aHWM.STILLWATER" value="0" />No
-                            </label>
+                            </span>
                         </div>
                         <button type="button" class="col-md-1 borderLess pull-left" tooltip-placement="bottom" tooltip-append-to-body="false" uib-tooltip="Tranquil-Water HWMs preferred over Rapid-Water HWMs. Refer to T&M 3-A24 for details.">
                             <span class="glyphicon glyphicon-question-sign"></span>
@@ -1845,12 +1845,12 @@
                                 <div class="col-md-6">
                                     <span ng-show="view.HWMval == 'detail'">{{aHWM.HWM_ENVIRONMENT || '---'}}</span>
                                     <span ng-show="view.HWMval == 'edit'">
-                                        <label class="radio-inline">
+                                        <span class="radio-inline">
                                             <input type="radio" name="HWM_ENVIRONMENT" ng-model="hwmCopy.HWM_ENVIRONMENT" value="Coastal" />Coastal
-                                        </label>
-                                        <label class="radio-inline">
+                                        </span>
+                                        <span class="radio-inline">
                                             <input type="radio" name="HWM_ENVIRONMENT" ng-model="hwmCopy.HWM_ENVIRONMENT" value="Riverine" />Riverine
-                                        </label>
+                                        </span>
                                     </span>
                                 </div>
                             </div>
@@ -1888,15 +1888,15 @@
                                 <div class="col-md-6">
                                     <span ng-show="view.HWMval == 'detail'">{{aHWM.BANK || '---'}}</span>
                                     <span ng-show="view.HWMval == 'edit'">
-                                        <label class="radio-inline">
+                                        <span class="radio-inline">
                                             <input type="radio" name="BANK" ng-model="hwmCopy.BANK" value="Left" />Left
-                                        </label>
-                                        <label class="radio-inline">
+                                        </span>
+                                        <span class="radio-inline">
                                             <input type="radio" name="BANK" ng-model="hwmCopy.BANK" value="Right" />Right
-                                        </label>
-                                        <label class="radio-inline">
+                                        </span>
+                                        <span class="radio-inline">
                                             <input type="radio" name="BANK" ng-model="hwmCopy.BANK" value="N/A" />N/A
-                                        </label>
+                                        </span>
                                     </span>
                                 </div>
                             </div>
@@ -1914,15 +1914,15 @@
                             </div>
 
                             <!-- dec deg or dms: -->
-                            <div class="form-group" ng-show="view.HWMval == 'edit'">
+                            <div ng-show="view.HWMval == 'edit'">
                                 <label class="col-md-4 control-label"></label>
                                 <div class="col-md-6">
-                                    <label class="radio-inline">
+                                    <span class="radio-inline">
                                         <input type="radio" name="decDegORdms" ng-change="latLongChange()" ng-model="hwmCopy.decDegORdms" value="dd" /> Dec Deg
-                                    </label>
-                                    <label class="radio-inline">
+                                    </span>
+                                    <span class="radio-inline">
                                         <input type="radio" name="decDegORdms" ng-change="latLongChange()" ng-model="hwmCopy.decDegORdms" value="dms" /> DMS
-                                    </label>
+                                    </span>
                                 </div>
                             </div>
 
@@ -2078,15 +2078,15 @@
                             </div>
 
                             <!-- Ft or CM radios: -->
-                            <div ng-show="view.HWMval == 'edit'" class="form-group" style="margin-bottom: 0;padding-bottom: 0">
+                            <div ng-show="view.HWMval == 'edit'">
                                 <label class="col-md-4 control-label"></label>
                                 <div class="col-md-6">
-                                    <label class="radio-inline">
+                                    <span class="radio-inline">
                                         <input type="radio" name="FTorCM" ng-model="FTorCM" value="ft" /> +/- ft
-                                    </label>
-                                    <label class="radio-inline">
+                                    </span>
+                                    <span class="radio-inline">
                                         <input type="radio" name="FTorCM" ng-model="FTorCM" value="cm" /> +/- cm
-                                    </label>
+                                    </span>
                                 </div>
                             </div>
 
@@ -2116,12 +2116,12 @@
                                 <div class="col-md-6">
                                     <span ng-show="view.HWMval == 'detail'">{{aHWM.Tranquil || '---'}}</span>
                                     <span ng-show="view.HWMval == 'edit'">
-                                        <label class="radio-inline">
+                                        <span class="radio-inline">
                                             <input type="radio" name="STILLWATER" ng-model="hwmCopy.STILLWATER" value="1" />Yes
-                                        </label>
-                                        <label class="radio-inline">
+                                        </span>
+                                        <span class="radio-inline">
                                             <input type="radio" name="STILLWATER" ng-model="hwmCopy.STILLWATER" value="0" />No
-                                        </label>
+                                        </span>
                                     </span>
                                 </div>
                                 <button ng-show="view.HWMval == 'edit'" type="button" class="col-md-1 borderLess pull-left" tooltip-placement="bottom" tooltip-append-to-body="false" uib-tooltip="Tranquil-Water HWMs preferred over Rapid-Water HWMs. Refer to T&M 3-A24 for details.">
@@ -2568,9 +2568,9 @@
                             </div>
 
                             <!-- area for D3 vertical ruler
-                            <div class="col-md-6">
-                                <bars-chart elevation-data="myData"></bars-chart>
-                            </div> -->
+                    <div class="col-md-6">
+                        <bars-chart elevation-data="myData"></bars-chart>
+                    </div> -->
                         </div>
                         <br clear="all" />
                     </uib-accordion-group>
@@ -2582,12 +2582,12 @@
                     <div class="form-group">
                         <label class="col-md-3 control-label">Vented:</label>
                         <div class="col-md-6">
-                            <label class="radio-inline">
+                            <span class="radio-inline">
                                 <input type="radio" name="VENTED" ng-model="aSensor.VENTED" value="Yes" />Yes
-                            </label>
-                            <label class="radio-inline">
+                            </span>
+                            <span class="radio-inline">
                                 <input type="radio" name="VENTED" ng-model="aSensor.VENTED" value="No" />No
-                            </label>
+                            </span>
                         </div>
                     </div>
                 </div>
@@ -2615,23 +2615,24 @@
                 </div>
 
                 <!-- Interval: -->
-                <div style="margin-bottom:0">
+                <div>
+                    <label class="col-md-3 control-label"></label>
+                    <div class="col-md-6">
+                        <span class="radio-inline">
+                            <input type="radio" name="intervalType" ng-model="IntervalType.type" value="Minutes" />Minutes
+                        </span>
+                        <span class="radio-inline">
+                            <input type="radio" name="intervalType" ng-model="IntervalType.type" value="Seconds" />Seconds
+                        </span>
+                    </div>
+                </div><br clear="all" />
+                <div class="form-group">
                     <label class="col-md-3 control-label" for="INTERVAL">Interval:</label>
                     <div class="col-md-6">
                         <input class="form-control" ng-keypress="isNum($event)" name="INTERVAL" ng-model="aSensor.INTERVAL" type="text" />
                     </div>
                 </div>
-                <div class="form-group">
-                    <label class="col-md-3 control-label"></label>
-                    <div class="col-md-6">
-                        <label class="radio-inline">
-                            <input type="radio" name="intervalType" ng-model="IntervalType.type" value="Minutes" />Minutes
-                        </label>
-                        <label class="radio-inline">
-                            <input type="radio" name="intervalType" ng-model="IntervalType.type" value="Seconds" />Seconds
-                        </label>
-                    </div>
-                </div>
+             
 
                 <!-- Deploy Time: * -->
                 <div class="form-group required" ng-class="{'has-error':SensorForm.TIME_STAMP.$invalid && SensorForm.TIME_STAMP.$dirty}">
@@ -2970,12 +2971,12 @@
                                 <div class="col-md-6">
                                     <span ng-show="view.DEPval == 'detail'">{{aSensor.VENTED || '---'}}</span>
                                     <span ng-show="view.DEPval == 'edit'">
-                                        <label class="radio-inline">
+                                        <span class="radio-inline">
                                             <input type="radio" name="VENTED" ng-model="depStuffCopy[0].VENTED" value="Yes" />Yes
-                                        </label>
-                                        <label class="radio-inline">
+                                        </span>
+                                        <span class="radio-inline">
                                             <input type="radio" name="VENTED" ng-model="depStuffCopy[0].VENTED" value="No" />No
-                                        </label>
+                                        </span>
                                     </span>
                                 </div>
                             </div>
@@ -3006,6 +3007,17 @@
                         </div>
 
                         <!-- Interval: -->
+                        <div class="form-group" ng-show="view.DEPval == 'edit'">
+                            <label class="col-md-3 control-label"></label>
+                            <div class="col-md-6 col-md-offset-1" style="padding-top:5px;">
+                                <span class="radio-inline">
+                                    <input type="radio" name="intervalType" ng-model="IntervalType.type" value="Minutes" />Minutes
+                                </span>
+                                <span class="radio-inline">
+                                    <input type="radio" name="intervalType" ng-model="IntervalType.type" value="Seconds" />Seconds
+                                </span>
+                            </div>
+                        </div>
                         <div class="form-group">
                             <label class="col-md-3 col-md-offset-1 control-label">Interval:</label>
                             <div class="col-md-6">
@@ -3013,17 +3025,7 @@
                                 <input ng-show="view.DEPval == 'edit'" class="form-control" ng-keypress="isNum($event)" name="INTERVAL" ng-model="depStuffCopy[0].INTERVAL" type="text" />
                             </div>
                         </div>
-                        <div class="form-group" ng-show="view.DEPval == 'edit'">
-                            <label class="col-md-3 control-label"></label>
-                            <div class="col-md-6 col-md-offset-1">
-                                <label class="radio-inline">
-                                    <input type="radio" name="intervalType" ng-model="IntervalType.type" value="Minutes" />Minutes
-                                </label>
-                                <label class="radio-inline">
-                                    <input type="radio" name="intervalType" ng-model="IntervalType.type" value="Seconds" />Seconds
-                                </label>
-                            </div>
-                        </div>
+
 
                         <!-- Deploy Date*: -->
                         <div class="form-group required" ng-class="{'has-error':editDeployedForm.TIME_STAMP.$invalid && editDeployedForm.TIME_STAMP.$dirty && view.DEPval =='edit'}">
