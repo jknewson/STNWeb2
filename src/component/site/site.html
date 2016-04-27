@@ -1776,8 +1776,8 @@
                                     <span><button ng-show="view.HWMval == 'detail'" type="button" class="btn btn-primary" ng-click="wannaEditHWM()"><span>Edit HWM</span></button></span>
                                     <span><button ng-show="view.HWMval == 'edit'" class="btn btn-primary" ng-click="save(HWMEditForm.$valid)"><span>Save</span></button></span>
                                     <span><button ng-show="view.HWMval == 'edit'" type="button" class=" btn btn-primary" ng-click="cancelHWMEdit()"><span>Cancel</span></button></span>
-                                    <span><button ng-show="(ApprovalInfo.approvalDate == undefined && (userRole == 'Admin' || userRole == 'Manager'))" class="btn btn-primary" ng-click="approveHWM(HWMEditForm.$valid)"><span>Approve</span></button></span>
-                                    <span><button ng-show="(ApprovalInfo.approvalDate != undefined && (userRole == 'Admin' || userRole == 'Manager'))" class="btn btn-primary" ng-click="unApproveHWM(HWMEditForm.$valid)"><span>UnApprove</span></button></span>
+                                    <span><button type="button" ng-show="((ApprovalInfo.approvalDate == undefined && view.HWMval == 'detail') && (userRole == 'Admin' || userRole == 'Manager'))" class="btn btn-primary" ng-click="approveHWM()"><span>Approve</span></button></span>
+                                    <span><button type="button" ng-show="((ApprovalInfo.approvalDate != undefined && view.HWMval == 'detail') && (userRole == 'Admin' || userRole == 'Manager'))" class="btn btn-primary" ng-click="unApproveHWM()"><span>UnApprove</span></button></span>
                                 </div>
                             </div>
 

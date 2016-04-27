@@ -319,78 +319,73 @@
             };//end create()
 
             //approve this hwm (if admin or manager)
-            $scope.approveHWM = function (valid) {
-                if (valid) {
-                    //this is valid, show modal to confirm they want to approve it
-                    var thisHWM = $scope.aHWM;
-                    var approveModal = $uibModal.open({
-                        template: "<div class='modal-header'><h3 class='modal-title'>Approve HWM</h3></div>" +
-                            "<div class='modal-body'><p>Are you ready to approve this HWM?</p><p>The surveyed elevation is {{approveHWM.ELEV_FT || '---'}}</p><p>The height above ground is {{approveHWM.HEIGHT_ABOVE_GND || '---'}}</p></div>" +
-                            "<div class='modal-footer'><button class='btn btn-primary' ng-click='approveIt()'>Approve</button><button class='btn btn-warning' ng-click='cancel()'>Cancel</button></div>",
-                        controller: ['$scope', '$uibModalInstance', function ($scope, $uibModalInstance) {
-                            $scope.approveHWM = thisHWM;
-                            $scope.cancel = function () {
-                                $uibModalInstance.dismiss('cancel');
-                            };
-                            $scope.approveIt = function () {
-                                //delete the site and all things 
-                                $uibModalInstance.close(thisHWM);
-                            };
-                        }],
-                        size: 'sm'
+            $scope.approveHWM = function () {
+                //this is valid, show modal to confirm they want to approve it
+                var thisHWM = $scope.aHWM;
+                var approveModal = $uibModal.open({
+                    template: "<div class='modal-header'><h3 class='modal-title'>Approve HWM</h3></div>" +
+                        "<div class='modal-body'><p>Are you ready to approve this HWM?</p><p>The surveyed elevation is {{approveHWM.ELEV_FT || '---'}}</p><p>The height above ground is {{approveHWM.HEIGHT_ABOVE_GND || '---'}}</p></div>" +
+                        "<div class='modal-footer'><button class='btn btn-primary' ng-click='approveIt()'>Approve</button><button class='btn btn-warning' ng-click='cancel()'>Cancel</button></div>",
+                    controller: ['$scope', '$uibModalInstance', function ($scope, $uibModalInstance) {
+                        $scope.approveHWM = thisHWM;
+                        $scope.cancel = function () {
+                            $uibModalInstance.dismiss('cancel');
+                        };
+                        $scope.approveIt = function () {
+                            $uibModalInstance.close(thisHWM);
+                        };
+                    }],
+                    size: 'sm'
+                });
+                approveModal.result.then(function (h) {
+                    $http.defaults.headers.common.Authorization = 'Basic ' + $cookies.get('STNCreds');
+                    HWM.approveHWM({ id: h.HWM_ID }).$promise.then(function (approvalResponse) {
+                        h.APPROVAL_ID = approvalResponse.APPROVAL_ID;
+                        toastr.success("HWM Approved");
+                        $scope.ApprovalInfo.approvalDate = new Date(approvalResponse.APPROVAL_DATE); //include note that it's displayed in their local time but stored in UTC
+                        $scope.ApprovalInfo.Member = allMembers.filter(function (amem) { return amem.MEMBER_ID == approvalResponse.MEMBER_ID; })[0];
+                        //var sendBack = [h, 'updated'];
+                        //$uibModalInstance.close(sendBack);
+                    }, function error(errorResponse) {
+                        toastr.error("Error: " + errorResponse.statusText);
                     });
-                    approveModal.result.then(function (h) {
-                        $http.defaults.headers.common.Authorization = 'Basic ' + $cookies.get('STNCreds');
-                        HWM.approveHWM({ id: h.HWM_ID }).$promise.then(function (approvalResponse) {
-                            h.APPROVAL_ID = approvalResponse.APPROVAL_ID;
-                            toastr.success("HWM Approved");
-                            $scope.ApprovalInfo.approvalDate = new Date(approvalResponse.APPROVAL_DATE); //include note that it's displayed in their local time but stored in UTC
-                            $scope.ApprovalInfo.Member = allMembers.filter(function (amem) { return amem.MEMBER_ID == approvalResponse.MEMBER_ID; })[0];
-                            //var sendBack = [h, 'updated'];
-                            //$uibModalInstance.close(sendBack);
-                        }, function error(errorResponse) {
-                            toastr.error("Error: " + errorResponse.statusText);
-                        });
-                    }, function () {
-                        //logic for cancel
-                    });//end modal
-                }
+                }, function () {
+                    //logic for cancel
+                });//end modal
             };
             //approve this hwm (if admin or manager)
-            $scope.unApproveHWM = function (valid) {
-                if (valid) {
-                    //this is valid, show modal to confirm they want to approve it
-                    var thisHWM = $scope.aHWM;
-                    var unapproveModal = $uibModal.open({
-                        template: "<div class='modal-header'><h3 class='modal-title'>Remove Approval</h3></div>" +
-                            "<div class='modal-body'><p>Are you sure you wan to unapprove this HWM?</p></div>" +
-                            "<div class='modal-footer'><button class='btn btn-primary' ng-click='unApproveIt()'>Unapprove</button><button class='btn btn-warning' ng-click='cancel()'>Cancel</button></div>",
-                        controller: ['$scope', '$uibModalInstance', function ($scope, $uibModalInstance) {
-                            $scope.approveHWM = thisHWM;
-                            $scope.cancel = function () {
-                                $uibModalInstance.dismiss('cancel');
-                            };
-                            $scope.unApproveIt = function () {
-                                //delete the site and all things 
-                                $uibModalInstance.close(thisHWM);
-                            };
-                        }],
-                        size: 'sm'
+            $scope.unApproveHWM = function () {
+                //this is valid, show modal to confirm they want to approve it
+                var thisHWM = $scope.aHWM;
+                var unapproveModal = $uibModal.open({
+                    template: "<div class='modal-header'><h3 class='modal-title'>Remove Approval</h3></div>" +
+                        "<div class='modal-body'><p>Are you sure you wan to unapprove this HWM?</p></div>" +
+                        "<div class='modal-footer'><button class='btn btn-primary' ng-click='unApproveIt()'>Unapprove</button><button class='btn btn-warning' ng-click='cancel()'>Cancel</button></div>",
+                    controller: ['$scope', '$uibModalInstance', function ($scope, $uibModalInstance) {
+                        $scope.approveHWM = thisHWM;
+                        $scope.cancel = function () {
+                            $uibModalInstance.dismiss('cancel');
+                        };
+                        $scope.unApproveIt = function () {
+                            $uibModalInstance.close(thisHWM);
+                        };
+                    }],
+                    size: 'sm'
+                });
+                unapproveModal.result.then(function (h) {
+                    $http.defaults.headers.common.Authorization = 'Basic ' + $cookies.get('STNCreds');
+                    HWM.unApproveHWM({ id: h.HWM_ID }).$promise.then(function () {
+                        h.APPROVAL_ID = null;
+                        toastr.success("HWM Unapproved");
+                        $scope.ApprovalInfo = {};
+                        //var sendBack = [h, 'updated'];
+                        //$uibModalInstance.close(sendBack);
+                    }, function error(errorResponse) {
+                        toastr.error("Error: " + errorResponse.statusText);
                     });
-                    unapproveModal.result.then(function (h) {
-                        $http.defaults.headers.common.Authorization = 'Basic ' + $cookies.get('STNCreds');
-                        HWM.unApproveHWM({ id: h.HWM_ID }).$promise.then(function () {
-                            h.APPROVAL_ID = null;
-                            toastr.success("HWM Unapproved");
-                            var sendBack = [h, 'updated'];
-                            $uibModalInstance.close(sendBack);
-                        }, function error(errorResponse) {
-                            toastr.error("Error: " + errorResponse.statusText);
-                        });
-                    }, function () {
-                        //logic for cancel
-                    });//end modal
-                }
+                }, function () {
+                    //logic for cancel
+                });//end modal
             };
             
             //save aHWM

@@ -451,11 +451,11 @@
                     }
                 }
                 // "what?" version ... http://jsperf.com/diacritics/12
-                function removeDiacritics(str) {
+                var removeDiacritics = function (str) {
                     return str.replace(/[^\u0000-\u007E]/g, function (a) {
                         return diacriticsMap[a] || a;
                     });
-                }
+                };
                 //#endregion
 
                 // watch for the session event to change and update

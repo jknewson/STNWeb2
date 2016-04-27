@@ -1910,7 +1910,7 @@
                             $scope.datafile.COLLECT_DATE = new Date($scope.datafile.COLLECT_DATE);
                             $scope.datafile.GOOD_START = getDateTimeParts($scope.datafile.GOOD_START);
                             $scope.datafile.GOOD_END = getDateTimeParts($scope.datafile.GOOD_END);
-                            if (df.APPROVAL_ID !== undefined && df.APPROVAL_ID !== null && df.APPROVAL_ID <= 0) {
+                            if (df.APPROVAL_ID !== undefined && df.APPROVAL_ID !== null && df.APPROVAL_ID >= 1) {
                                 DATA_FILE.getDFApproval({ id: df.DATA_FILE_ID }, function success(approvalResponse) {
                                     $scope.ApprovalInfo.approvalDate = new Date(approvalResponse.APPROVAL_DATE); //include note that it's displayed in their local time but stored in UTC
                                     $scope.ApprovalInfo.Member = allMembers.filter(function (amem) { return amem.MEMBER_ID == approvalResponse.MEMBER_ID; })[0];
