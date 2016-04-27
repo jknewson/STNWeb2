@@ -2854,7 +2854,7 @@
                                                  item-label="NAME"
                                                  on-item-click="OPchosen(data)"
                                                  tick-property="selected"
-                                                 helper-elements="filter">
+                                                 helper-elements="">
                                             </div>
                                         </div>
                                     </div>
@@ -2902,8 +2902,8 @@
 
                         <!--sensor stat tapedown parts-->
                         <div ng-if="OPsPresent" class="form-group">
-                            <label class="col-md-3 col-md-offset-1 control-label">Sensor Elevation:</label>
-                            <div class="col-md-6">
+                            <label class="col-md-4 col-md-offset-1 control-label">Sensor Elevation:</label>
+                            <div class="col-md-4">
                                 <div ng-show="view.DEPval == 'detail'">
                                     {{aSensStatus.SENSOR_ELEVATION || '--'}}
                                 </div>
@@ -2917,8 +2917,8 @@
                         </div>
 
                         <div ng-if="OPsPresent" class="form-group">
-                            <label class="col-md-3 col-md-offset-1 control-label">Water Surface Elevation:</label>
-                            <div class="col-md-6">
+                            <label class="col-md-4 col-md-offset-1 control-label">Water Surface Elevation:</label>
+                            <div class="col-md-4">
                                 <div ng-show="view.DEPval == 'detail'">
                                     {{aSensStatus.WS_ELEVATION || '--'}}
                                 </div>
@@ -2932,8 +2932,8 @@
                         </div>
 
                         <div ng-if="OPsPresent" class="form-group">
-                            <label class="col-md-3 col-md-offset-1 control-label">Ground Elevation:</label>
-                            <div class="col-md-6">
+                            <label class="col-md-4 col-md-offset-1 control-label">Ground Elevation:</label>
+                            <div class="col-md-4">
                                 <div ng-show="view.DEPval == 'detail'">
                                     {{aSensStatus.GS_ELEVATION || '--'}}
                                 </div>
@@ -2947,8 +2947,8 @@
                         </div>
 
                         <div ng-if="OPsPresent" class="form-group">
-                            <label class="col-md-3 col-md-offset-1 control-label">In feet above:</label>
-                            <div class="col-md-6">
+                            <label class="col-md-4 col-md-offset-1 control-label">In feet above:</label>
+                            <div class="col-md-4">
                                 <div ng-show="view.DEPval == 'detail'">
                                     {{aSensStatus.vdatumName}}
                                 </div>
