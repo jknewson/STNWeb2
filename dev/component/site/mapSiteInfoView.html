@@ -2,7 +2,7 @@
 <uib-accordion close-others="false">
     <uib-accordion-group is-open="status.siteOpen">
         <uib-accordion-heading>
-            <span>Site Info </span><span class="label label-primary siteLabel" ng-if="aSite.SITE_ID != null"> <b>Site {{aSite.SITE_ID}}</b></span>
+            <span>Site Info </span><span class="label label-primary siteLabel button" ng-if="aSite.SITE_NO != null" ng-click="goToSiteDashboard()"> <b>{{aSite.SITE_NO}}</b></span>
             <i class="acc-heading-icon" ng-class="{'ion-arrow-down-b': status.siteOpen, 'ion-arrow-right-b': !status.siteOpen}"></i>
         </uib-accordion-heading>
         <div ng-if="aSite.SITE_ID == undefined">Click a site to see info</div>
