@@ -450,17 +450,17 @@
                         <div class="panel-heading">Land Owner Information</div>
                         <div class="panel-body">
                             <!--First Name:-->
-                            <div class="form-group">
-                                <label class="col-md-4 control-label" for="FNAME">First Name:</label>
+                            <div class="form-group required">
+                                <label class="col-md-4 control-label req" for="FNAME">First Name:</label>
                                 <div class="col-md-7">
-                                    <input class="form-control" id="LOFNAME" name="FNAME" ng-model="landowner.FNAME" type="text" />
+                                    <input class="form-control" id="LOFNAME" name="FNAME" ng-model="landowner.FNAME" type="text" required />
                                 </div>
                             </div>
                             <!--Last Name:-->
-                            <div class="form-group">
-                                <label class="col-md-4 control-label" for="LNAME">Last Name:</label>
+                            <div class="form-group required">
+                                <label class="col-md-4 control-label req" for="LNAME">Last Name:</label>
                                 <div class="col-md-7">
-                                    <input class="form-control" id="LOLNAME" name="LNAME" ng-model="landowner.LNAME" type="text" />
+                                    <input class="form-control" id="LOLNAME" name="LNAME" ng-model="landowner.LNAME" type="text" required />
                                 </div>
                             </div>
                             <!--Affiliation/Title:-->
@@ -3689,7 +3689,7 @@
                             <option value=""></option>
                         </select>
                     </div>
-                    <button type="button" class="borderLess" tooltip-placement="right" tooltip-append-to-body="true" uib-tooltip="Date/Time will be stored in UTC.">
+                    <button type="button" class="borderLess" tooltip-placement="right" tooltip-append-to-body="false" uib-tooltip="Date/Time will be stored in UTC.">
                         <span class="glyphicon glyphicon-question-sign"></span>
                     </button>
                 </div>
@@ -4240,7 +4240,7 @@
                                     <option value=""></option>
                                 </select>
                             </div>
-                            <button ng-show="view.RETval == 'edit'" type="button" class="borderLess pull-left" tooltip-placement="right" tooltip-append-to-body="true" uib-tooltip="Date/Time will be stored in UTC.">
+                            <button ng-show="view.RETval == 'edit'" type="button" class="borderLess pull-left" tooltip-placement="right" tooltip-append-to-body="false" uib-tooltip="Date/Time will be stored in UTC.">
                                 <span class="glyphicon glyphicon-question-sign"></span>
                             </button>
                         </div>
@@ -4817,7 +4817,7 @@
                                                 <option value=""></option>
                                             </select>
                                         </div>
-                                        <button type="button" class="borderLess pull-left" tooltip-placement="right" tooltip-append-to-body="true" uib-tooltip="Date/Time will be stored in UTC.">
+                                        <button type="button" class="borderLess pull-left" tooltip-placement="right" tooltip-append-to-body="false" uib-tooltip="Date/Time will be stored in UTC.">
                                             <span class="glyphicon glyphicon-question-sign"></span>
                                         </button>
                                     </div>
@@ -5016,7 +5016,7 @@
                             <option value=""></option>
                         </select>
                     </div>
-                    <button type="button" class="borderLess pull-left" tooltip-placement="right" tooltip-append-to-body="true" uib-tooltip="Date/Time will be stored in UTC.">
+                    <button type="button" class="borderLess pull-left" tooltip-placement="right" tooltip-append-to-body="false" uib-tooltip="Date/Time will be stored in UTC.">
                         <span class="glyphicon glyphicon-question-sign"></span>
                     </button>
                 </div>
