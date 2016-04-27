@@ -14,6 +14,11 @@
                 $scope.aSite.LATITUDE_DD = parseFloat($scope.aSite.LATITUDE_DD.toFixed(6));
                 $scope.aSite.LONGITUDE_DD = parseFloat($scope.aSite.LONGITUDE_DD.toFixed(6));
             });
+
+            $scope.goToSiteDashboard = function () {
+                $state.go('site.dashboard', { id: $scope.aSite.SITE_ID });
+            };
+            
             
         }]);//end controller function
 })();
