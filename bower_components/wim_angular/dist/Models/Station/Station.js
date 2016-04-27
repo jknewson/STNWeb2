@@ -1,27 +1,8 @@
-//------------------------------------------------------------------------------
-//----- Station ---------------------------------------------------------------
-//------------------------------------------------------------------------------
 var __extends = (this && this.__extends) || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
     function __() { this.constructor = d; }
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
-//-------1---------2---------3---------4---------5---------6---------7---------8
-//       01234567890123456789012345678901234567890123456789012345678901234567890
-//-------+---------+---------+---------+---------+---------+---------+---------+
-// copyright:   2014 WiM - USGS
-//    authors:  Jeremy K. Newson USGS Wisconsin Internet Mapping
-//             
-// 
-//   purpose:  Represents the FDCTM model
-//          
-//discussion:
-//
-//Comments
-//09.14.2014 jkn - Created
-//Imports"
-///<reference path="../TimeSeries/Timeseries.ts"/>
-// Class
 var StreamStats;
 (function (StreamStats) {
     var Models;
@@ -29,7 +10,6 @@ var StreamStats;
         var Station;
         (function (Station_1) {
             var Station = (function () {
-                // Constructor
                 function Station(id) {
                     this.StationID = id;
                     this.URL = "http://waterdata.usgs.gov/nwis/inventory?agency_code=USGS&site_no=" + id;
@@ -46,11 +26,10 @@ var StreamStats;
                     return rg;
                 };
                 return Station;
-            }());
+            })();
             Station_1.Station = Station;
             var CorrelatedStation = (function (_super) {
                 __extends(CorrelatedStation, _super);
-                // Constructor
                 function CorrelatedStation(id) {
                     _super.call(this, id);
                 }
@@ -63,9 +42,9 @@ var StreamStats;
                     return rg;
                 };
                 return CorrelatedStation;
-            }(Station));
+            })(Station);
             Station_1.CorrelatedStation = CorrelatedStation;
         })(Station = Models.Station || (Models.Station = {}));
     })(Models = StreamStats.Models || (StreamStats.Models = {}));
-})(StreamStats || (StreamStats = {})); //end module
+})(StreamStats || (StreamStats = {}));
 //# sourceMappingURL=Station.js.map

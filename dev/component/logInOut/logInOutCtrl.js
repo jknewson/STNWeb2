@@ -30,6 +30,7 @@
             $scope.serverURL = SERVER_URL;
             $scope.submit = function () {
                 //$scope.sub = true;
+                $rootScope.stateIsLoading.showLoading = true;// loading..
                 var postData = {
                     "username": $scope.username,
                     "password": $scope.password
@@ -75,16 +76,16 @@
                             if ($rootScope.returnToState !== undefined) {
                                 $state.go($rootScope.returnToState, {id: $rootScope.returnToStateParams});
                             } else {
-                                $state.go('map');
-                               
-                               
+                                $state.go('map');                                    
                             }
                         }
                         else {
+                            $rootScope.stateIsLoading.showLoading = false;// loading..
                             $scope.error = "Login Failed";
                         }
                     },
                     function error(errorResponse) {
+                        $rootScope.stateIsLoading.showLoading = false;// loading..
                         //modal for error
                         var modalInstance = $uibModal.open({
                             template: '<div class="modal-header"><h3 class="modal-title">Error</h3></div>' +

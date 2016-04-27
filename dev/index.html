@@ -35,7 +35,6 @@
     <link rel="stylesheet" href="css/ng-tags-input.min.css">
     <link rel="stylesheet" href="css/select.css">
     <link rel="stylesheet" href="css/stn.css">
-    <link rel="stylesheet" href="http://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
     <!-- endinject -->
     <!-- bower:js -->
     <script src="bower_components/jquery.js"></script>
@@ -114,12 +113,12 @@
     <script src="component/objectivePoint/objectivePointCtrl.js"></script>
     <script src="component/member/memberInfoCtrl.js"></script>
     <script src="component/member/memberCtrl.js"></script>
+    <script src="component/main/mainCtrl.js"></script>
     <script src="component/map/MapSiteInfoController.js"></script>
     <script src="component/map/MapSensorProposeController.js"></script>
     <script src="component/map/MapPeaksController.js"></script>
     <script src="component/map/MapFiltersController.js"></script>
     <script src="component/map/mapCtrl.js"></script>
-    <script src="component/main/mainCtrl.js"></script>
     <script src="component/logInOut/LogInOutCtrl.js"></script>
     <script src="component/hwm/quickHWMCtrl.js"></script>
     <script src="component/hwm/hwmModalCtrl.js"></script>
@@ -142,9 +141,16 @@
     <!-- endinject -->
 
 
+
     <!--<script src="app.js"></script>-->
     <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?v=3.exp"></script>
     <script src="//d3js.org/d3.v3.min.js" charset="utf-8"></script>
+
+    <!-- Not working in Bower -->
+    <link rel="stylesheet" href="http://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+    <script src="bower_components/angular-ui-router.js"></script>
+
+
 
 </head>
 
@@ -152,11 +158,16 @@
 
     <!--HEADER START navCtrl-->
     <div ng-controller="mainCtrl" class="app-nav">
+        <h2 class="testing-alert"><b>TESTING ONLY! DATA WILL BE OVERRIDDEN FOLLOWING TESTING PHASE</b></h2>
         <h1 class="nav-header">Short-Term Network<span ng-if="thisPage"> - {{thisPage}}</span></h1><!--
 
-        --><div class="nav-session" ng-show="isAuth.val">
-                <b ng-if="sessionTeam || sessionEvent">{{sessionTeam}} <span ng-if="sessionTeam && sessionEvent">|</span> {{sessionEvent}}</b>
-                <button ng-controller="eventSessionCtrl" class="btn-wim btn-sm btn-white" ng-click="openEventModal()">Choose Event</button>
+        --><button ng-show="isAuth.val" ng-controller="eventSessionCtrl" class="btn-wim btn-sm btn-white nav-change-session" ng-click="openEventModal()">
+            <span ng-show="!sessionEvent">Choose Event</span>
+            <span ng-show="sessionEvent">Change Event</span>
+        </button><!--
+        --><div ng-show="isAuth.val"  class="nav-session-label" ng-if="sessionTeam || sessionEvent">
+            <span ng-if="sessionTeam">{{sessionTeam}}<br></span>
+            <span ng-if="sessionEvent">{{sessionEvent}}</span>
         </div>
 
         <div class="nav-userctrl" ng-show="isAuth.val">
@@ -239,8 +250,8 @@
                 <div class="form-group">
                     <label class="col-md-5 control-label">Events created on or after:</label>
                     <div class="col-md-6 input-group" style="padding-right:14px;padding-left:14px">
-                        <input class="form-control" name="ed" type="text" uib-datepicker-popup="MMM dd, yyyy" is-open="datepickrs.ed"
-                               show-weeks="false" disabled="disabled" ng-model="event.DATE" placeholder="No filter" />
+                        <input class="form-control dateInputStyle" name="ed" type="date" uib-datepicker-popup="MM/dd/yyyy" is-open="datepickrs.ed"
+                               show-weeks="false" ng-model="event.DATE" placeholder="No filter" />
                         <span class="input-group-btn">
                             <button class="btn btn-default" ng-click="open($event, 'ed')">
                                 <i class="glyphicon glyphicon-calendar" />

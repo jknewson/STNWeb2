@@ -1,33 +1,34 @@
-﻿<div class="jumbotron mapJumbotron">
+<div class="map-page-wrapper">
 
-    <div class="container mapContainer">
 
         <!--<h3 class="col-md-12"ng-if="createSiteModeActive"><span class="label label-warning">CREATE SITE MODE ACTIVE</span></h3>-->
-        <div class="col-md-4">
+        <div class="map-leftside">
             <!--<div ui-view="mapFilters"></div>-->
-            <div class="mapCreateSiteButtonsDiv">
-                <button ng-class="createSiteModeActive ? 'btn btn-danger' : 'btn btn-primary'" ng-click="createSiteModeActive = !createSiteModeActive">{{createSiteButtonText}}</button>
-                <button ng-class="'btn btn-warning'" ng-if="createSiteModeActive" ng-click="createSiteFromMap()">Create new site at dot location</button>
-            </div><br>
+
+            <button class="btn-wim btn-purple btn-longtext" ng-show="!createSiteModeActive" ng-click="createSiteModeActive = !createSiteModeActive">{{createSiteButtonText}}</button>
+            <button ng-class="'btn-wim btn-green btn-longtext'" ng-if="createSiteModeActive" ng-click="createSiteFromMap()">Create new site at dot location</button>
+            <!-- <small class="cancel-create" ng-show="createSiteModeActive" ng-click="createSiteModeActive = !createSiteModeActive"><b>Cancel</b></small> -->
+            <!-- <small class="cancel-create nohover" ng-show="!createSiteModeActive">&nbsp;</small> -->
+
             <div ui-view="mapSiteInfo"></div>
             <div ui-view="mapPeaksView"></div>
             <div ui-view="mapSensorPropose"></div>
 
-        </div>
+        </div><!--
 
-        <div class="col-md-8">
-           
+        --><div class="map-rightside">
+
             <!--<h3>Map currently displaying sites for <b>{{sessionEvent}}</b></h3>-->
 
-                <div class="createSiteModeActive createSiteModeActiveTop col-md-12" ng-if="createSiteModeActive"><span >CREATE SITE MODE</span></div>
+                <div class="createSiteModeActive createSiteModeActiveTop" ng-show="createSiteModeActive">CREATE SITE MODE <b ng-click="createSiteModeActive = !createSiteModeActive">Exit</b></div>
 
                 <div cg-busy="{promise:sitesPromise,message:'Loading Sites...'}">
-                    <leaflet ng-style="mapStyle" markers-watch-options="markersWatchOptions" controls="controls" bounds="bounds" paths="paths"  lf-center="mapCenter" markers="markers" layers="layers" event-broadcast="events" width="100%" height="800px">
+                    <leaflet ng-style="mapStyle" markers-watch-options="markersWatchOptions" controls="controls" bounds="bounds" paths="paths"  lf-center="mapCenter" markers="markers" layers="layers" event-broadcast="events" width="100%" height="700px">
                         <wim-legend stop-event="click"></wim-legend>
                     </leaflet>
                 </div>
 
-                <div class="createSiteModeActive createSiteModeActiveBottom col-md-12" ng-if="createSiteModeActive"><span >CREATE SITE MODE</span></div><br>
+                <!-- <div class="createSiteModeActive createSiteModeActiveBottom" ng-if="createSiteModeActive">CREATE SITE MODE</div> -->
 
                 <!--<div class="mapCreateSiteButtonsDiv">-->
                     <!--<button ng-class="createSiteModeActive ? 'btn btn-danger' : 'btn btn-primary'" ng-click="createSiteModeActive = !createSiteModeActive">{{createSiteButtonText}}</button>-->
@@ -41,7 +42,6 @@
         </div>
 
 
-    </div>
 </div>
 
 <!-- notice text below map -->
@@ -56,11 +56,3 @@
 </div>
 
 <div ui-view="test"></div>
-
-
-
-
-
-
-
-
