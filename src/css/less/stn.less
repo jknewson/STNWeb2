@@ -10,6 +10,21 @@ body{
 }
 
 
+// DO NOT NEED AFTER TESTING...
+.testing-alert{
+    position: absolute;
+    box-sizing: border-box;
+    padding: 2px;
+    text-align: center;
+    font-size: 7pt;
+    letter-spacing: 1px;
+    font-family: @montserrat;
+    color: fade(#F5D02A, 99%);
+    top: 0; left: 0;
+    margin: 0 auto;
+    font-weight: 900;
+}
+
 
 // Universal element styles
 *{
@@ -275,16 +290,31 @@ select{
         vertical-align: middle;
     }
 
-    .nav-session{
+    .nav-change-session{
         display: inline-block;
         vertical-align: middle;
+        width: auto;
         box-sizing: border-box;
-        button{
-            height: 47px;
-            background-color: #FFF;
-            padding: 0 15px;
-            border-radius: 0;
-        }
+        height: 47px;
+        background-color: #FFF;
+        padding: 0 15px;
+        border-radius: 0;
+    }
+
+    .nav-session-label{
+        display: inline-flex;
+        flex-direction: column;
+        justify-content: center;
+        height: 47px;
+        vertical-align: top;
+        box-sizing: border-box;
+        color: @white;
+        padding: 10px 0px 10px 25px;
+        font-family: @montserrat;
+        font-weight: 900;
+        font-size: 8pt;
+        letter-spacing: 1px;
+        text-transform: uppercase;
     }
 
     .nav-userctrl{

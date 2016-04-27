@@ -1,26 +1,18 @@
-﻿
-<div class="container">
-    <div class="row row-centered">
-        <div class="col-md-2 col-centered">
-            <div style="height:120px;text-align:center" class="panel panel-default center-block">
-                <a href="" ng-click="changeView('members.MembersList')">
-                    <img alt="Members" src="images/Members1.png" style="margin-top:8px" /><br />Members
-                </a>
-            </div>
-        </div>
-        <div class="col-md-2 col-centered">
-            <div style="height:120px;text-align:center" class="panel panel-default center-block">
-                <a href="" ng-click="changeView('events.EventsList')">
-                    <img alt="Events" src="images/Events1.png" /><br />Events
-                </a>
-            </div>
-        </div>
-        <div class="col-md-2 col-centered">
-            <div style="height:120px;text-align:center" class="panel panel-default center-block">
-                <a href="" ng-click="changeView('resources.ResourcesList')">
-                    <img alt="Resources" src="images/Tables1.png" /><br />Resources
-                </a>
-            </div>
-        </div>
-    </div>
+<div class="page-padding">
+
+
+        <a class="settings-thumb" ng-click="changeView('members.MembersList')">
+            <i class="ion-ios-people"></i>
+            <h1>Members</h1>
+        </a><!--
+        --><a class="settings-thumb" ng-click="changeView('events.EventsList')">
+            <i class="ion-ios-calendar-outline"></i>
+            <h1>Events</h1>
+        </a><!--
+        --><a class="settings-thumb" ng-click="changeView('resources.ResourcesList')">
+            <i class="ion-ios-paper-outline"></i>
+            <h1>Resources</h1>
+        </a>
+
+
 </div>
