@@ -1,10 +1,3 @@
-//------------------------------------------------------------------------------
-//----- Model ------------------------------------------------------------------
-//------------------------------------------------------------------------------
-///<reference path="../Parameter.ts"/>
-///<reference path="../Point.ts"/>
-///<reference path="../TimeSeries/TimeSeries.ts"/>
-///<reference path="../Station/Station.ts"/>
 var ModelType;
 (function (ModelType) {
     ModelType[ModelType["UNDEFINED"] = 0] = "UNDEFINED";
@@ -19,7 +12,6 @@ var StreamStats;
         var Scenario;
         (function (Scenario_1) {
             var SimpleModel = (function () {
-                // Constructor
                 function SimpleModel(m, mt, d) {
                     if (m === void 0) { m = ""; }
                     if (mt === void 0) { mt = ModelType.UNDEFINED; }
@@ -27,13 +19,13 @@ var StreamStats;
                     this.Model = m;
                     this.ModelType = mt;
                     this.Description = d;
-                } //end constructor
+                }
                 SimpleModel.FromJSON = function (jsn) {
                     var model = jsn.hasOwnProperty("ModelType") ? jsn["ModelType"] : "";
                     var type = jsn.hasOwnProperty("ModelType") ? this.ModelTypeFromString(jsn["ModelType"]) : ModelType.UNDEFINED;
                     var description = jsn.hasOwnProperty("Description") ? jsn["Description"] : "";
                     return new Scenario(model, type, description);
-                }; //end FromJSON
+                };
                 SimpleModel.ModelTypeFromString = function (m) {
                     switch (m) {
                         case "PRMS":
@@ -44,14 +36,12 @@ var StreamStats;
                             return ModelType.SIMILAR;
                         default:
                             return ModelType.UNDEFINED;
-                    } //end switch
-                }; //end ModelTypeFromString
+                    }
+                };
                 return SimpleModel;
-            }());
+            })();
             Scenario_1.SimpleModel = SimpleModel;
-            // Class
             var Scenario = (function () {
-                // Constructor
                 function Scenario(m, mt, d) {
                     if (m === void 0) { m = ""; }
                     if (mt === void 0) { mt = ModelType.UNDEFINED; }
@@ -67,8 +57,7 @@ var StreamStats;
                     this.SelectedReferenceGage = new Models.Station("------");
                     this.ReferenceGageList = [];
                     this.HasRegions = false;
-                } //end constructor
-                //Methods
+                }
                 Scenario.prototype.SetReferenceGage = function (gage) {
                     this.SelectedReferenceGage(gage);
                 };
@@ -82,7 +71,6 @@ var StreamStats;
                 };
                 Scenario.prototype.GetNWISReferenceStation = function (RegionID) {
                     var _this = this;
-                    //loads the referance stations from NWIS
                     var url = configuration.appSettings['NWISurl'].format(RegionID);
                     $.ajax({
                         type: "GET",
@@ -124,17 +112,15 @@ var StreamStats;
                         if (this.Parameters[i].code.toLowerCase() === p['code'].toLowerCase()) {
                             this.Parameters[i].value = p['value'];
                             break;
-                        } //endif
-                    } //next n
+                        }
+                    }
                 };
                 Scenario.prototype.LoadExecuteResults = function (jsn) {
-                    //LocalStorageOp.LocalStorage(StorageType.APPEND, "nss." + this.Model, jsn);
                     this.EstimatedFlow = jsn.hasOwnProperty("EstimatedFlow") ? TimeSeries.FromJSON(jsn["EstimatedFlow"]) : null;
                     this.EstimatedStation = jsn.hasOwnProperty("ReferanceGage") ? Models.Station.FromJSON(jsn["ReferanceGage"]) : null;
                 };
                 Scenario.prototype.GetParameters = function (URL) {
                     var _this = this;
-                    //get parameters from service       
                     $.ajax({
                         type: "GET",
                         url: URL,
@@ -150,7 +136,6 @@ var StreamStats;
                     var url = configuration.appSettings['ScenarioService'].format(this.Model, this.RegionID);
                     var sd = this.StartDate;
                     var ed = this.EndDate;
-                    //this.Notification(new Notification("Executing " + this.ModelType.toString() + " model. Please wait....", null, null, ActionType.SHOW));
                     $.ajax({
                         type: "POST",
                         url: url,
@@ -163,36 +148,26 @@ var StreamStats;
                         complete: function (c) { return _this.onComplete(); }
                     });
                 };
-                //http request handlers
                 Scenario.prototype.onError = function (err) {
                     var errorMsg = "Error computing flow report";
                     errorMsg = err.hasOwnProperty("responseText") && err["responseText"] != "" ? err["responseText"] : errorMsg;
-                    //this.Notification(new Notification(errorMsg, NotificationType.ERROR, null, ActionType.HIDE));
                 };
                 Scenario.prototype.onComplete = function () {
-                    //TODO add cleanup code.
-                    //TODO change MSG Obj to Notification so subscribed objects can inform to turn on/off notifications
                     var cleanup = "";
                 };
-                //Helper Methods
                 Scenario.prototype.loadReferenceStationResults = function (xml) {
                     if (this.ReferenceGageList.length != 0)
                         this.ReferenceGageList.removeAll();
                     var single_sites = xml.getElementsByTagName("sites");
-                    //loop over single sites object
                     if (single_sites.length == 1) {
                         var markers = single_sites[0].getElementsByTagName("site");
-                        // it's possible to have an XML tag but with no markers
                         if (markers.length == 0) {
                             return;
                         }
                         else {
-                            // loop through the marker elements
                             var nmarkers = 0;
                             while (nmarkers < markers.length) {
-                                //increment marker loop
                                 nmarkers++;
-                                //make sure there is a marker
                                 if (markers[nmarkers]) {
                                     var siteno = markers[nmarkers].getAttribute("sno");
                                     var stat = new Models.Station(siteno);
@@ -230,12 +205,12 @@ var StreamStats;
                             return undefined;
                         default:
                             return value;
-                    } //end switch
+                    }
                 };
                 return Scenario;
-            }());
-            Scenario_1.Scenario = Scenario; //end class
+            })();
+            Scenario_1.Scenario = Scenario;
         })(Scenario = Models.Scenario || (Models.Scenario = {}));
     })(Models = StreamStats.Models || (StreamStats.Models = {}));
-})(StreamStats || (StreamStats = {})); //end module
+})(StreamStats || (StreamStats = {}));
 //# sourceMappingURL=Scenario.js.map

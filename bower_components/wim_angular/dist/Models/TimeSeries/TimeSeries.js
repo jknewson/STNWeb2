@@ -1,20 +1,3 @@
-//------------------------------------------------------------------------------
-//----- Timeseries ---------------------------------------------------------------
-//------------------------------------------------------------------------------
-//-------1---------2---------3---------4---------5---------6---------7---------8
-//       01234567890123456789012345678901234567890123456789012345678901234567890
-//-------+---------+---------+---------+---------+---------+---------+---------+
-// copyright:   2014 WiM - USGS
-//    authors:  Jeremy K. Newson USGS Wisconsin Internet Mapping
-//             
-// 
-//   purpose:  Represents the FDCTM model
-//          
-//discussion:
-//
-//Comments
-//09.14.2014 jkn - Created
-//Imports"
 var WiM;
 (function (WiM) {
     var Models;
@@ -22,7 +5,6 @@ var WiM;
         var TimeSeries;
         (function (TimeSeries_1) {
             var TimeSeries = (function () {
-                // Constructor
                 function TimeSeries() {
                 }
                 TimeSeries.FromJSON = function (jsn) {
@@ -43,7 +25,7 @@ var WiM;
                     return ts;
                 };
                 return TimeSeries;
-            }());
+            })();
             var TimeSeriesObservation = (function () {
                 function TimeSeriesObservation(d, v, c) {
                     this.Date = d;
@@ -57,8 +39,8 @@ var WiM;
                     return new TimeSeriesObservation(date, value, dc);
                 };
                 return TimeSeriesObservation;
-            }()); //end class
+            })();
         })(TimeSeries = Models.TimeSeries || (Models.TimeSeries = {}));
     })(Models = WiM.Models || (WiM.Models = {}));
-})(WiM || (WiM = {})); //end module
+})(WiM || (WiM = {}));
 //# sourceMappingURL=TimeSeries.js.map

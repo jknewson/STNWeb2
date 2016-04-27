@@ -91,7 +91,7 @@ module WiM.Directives {
             this.layerType = ltype;
         }
     }
-    class wimLegendController extends Services.HTTPServiceBase implements IwimLegendController {
+    class wimLegendController extends WiM.Services.HTTPServiceBase implements IwimLegendController {
         //Properties
         //-+-+-+-+-+-+-+-+-+-+-+-
         private safeApply: any;
@@ -101,13 +101,13 @@ module WiM.Directives {
         public overlays: IwimLegendLayerGroup;
         public baselayers: IwimLegendLayerGroup;
         public applicationLayer: IwimLegendLayerGroup;
-        public eventManager: Event.IEventManager;
+        public eventManager: WiM.Event.IEventManager;
 
 
         //Constructor
         //-+-+-+-+-+-+-+-+-+-+-+-
         static $inject = ['$scope', '$http', 'leafletData', 'WiM.Event.EventManager'];
-        constructor($scope: IwimLegendControllerScope, $http: ng.IHttpService, leafletData: any, eventManager: Event.IEventManager)  {
+        constructor($scope: IwimLegendControllerScope, $http: ng.IHttpService, leafletData: any, eventManager: WiM.Event.IEventManager)  {
             super($http, '');
             $scope.vm = this;
             this.eventManager = eventManager;
@@ -131,20 +131,46 @@ module WiM.Directives {
         //Methods  
         //-+-+-+-+-+-+-+-+-+-+-+-
         public initOverlays(mlyr: any): void  {
-            if (mlyr.type != "agsDynamic") return;
-            //getsublayers
-            var url = mlyr.url + "/legend?f=pjson";
-            var request: Services.Helpers.RequestInfo = new Services.Helpers.RequestInfo(url, true);
-            this.Execute(request).then(
-                (response: any) => {
-                    //console.log(response.data);
+            if (mlyr.type == "agsDynamic") {
+                // if (mlyr.type != "agsDynamic")
+                //     return;
+                var url = mlyr.url + "/legend?f=pjson";
+                var request = new WiM.Services.Helpers.RequestInfo(url, true);
+                this.Execute(request).then(function (response) {
                     if (response.data.layers.length > 0) {
                         mlyr.isOpen = true;
-                        mlyr.layerArray = response.data.layers;                      
+                        mlyr.layerArray = [];
+                        var visibleLayers = mlyr.layerOptions.layers;
+                        for (i = 0; i < visibleLayers.length; i++) {
+                            for (j = 0; j < response.data.layers.length; j++) {
+                                if (visibleLayers[i] == response.data.layers[j].layerId) {
+                                    mlyr.layerArray.push(response.data.layers[j]);
+                                }
+                            }
+                        }
                     }
-                }, (error) => {
-
+                }, function (error) {
                 });
+            }
+
+            if (mlyr.type == "agsFeature") {
+                var url = mlyr.url.slice(0, -2) + "/legend?f=pjson";
+                var layerId =  mlyr.url.substr(mlyr.url.length - 1);
+                var request = new WiM.Services.Helpers.RequestInfo(url, true);
+                this.Execute(request).then(function (response) {
+                    if (response.data.layers.length > 0) {
+                        mlyr.isOpen = true;
+                        mlyr.layerArray = [];
+                        for (k = 0; k < response.data.layers.length; k++) {
+                            if (layerId == response.data.layers[k].layerId) {
+                                mlyr.layerArray.push(response.data.layers[k]);
+                            }
+                        }
+
+                    }
+                }, function (error) {
+                });
+            }
         }
         
         public changeBaseLayer(key: any, evt: any): void
@@ -240,10 +266,10 @@ module WiM.Directives {
         '        <button class="close-legend" ng-click="vm.layerControlExpanded = false; $event.stopPropagation();">Close Legend</button>' +
         '        <div class="list-group">' +
         '            <!-- baselayers -->' +
-        '            <a ng-class="!vm.baselayers.isOpen  ? \' list-group-item-active wimLegend-list-group-item-active\': \'list-group-item wimLegend-list-group-item\'" ng-click="vm.baselayers.isOpen=(vm.baselayers.isOpen) ? false : true;">' +
-        '                Base Maps' +
+        '            <div ng-class="!vm.baselayers.isOpen  ? \' list-group-item-active wimLegend-list-group-item-active\': \'list-group-item wimLegend-list-group-item\'" ng-click="vm.baselayers.isOpen=(vm.baselayers.isOpen) ? false : true;">' +
+        '                <label>Base Maps</label>' +
         '                <i ng-class="!vm.baselayers.isOpen ? \'fa fa-chevron-up pull-right\': \'fa fa-chevron-down pull-right\'"></i>' +
-        '            </a> ' +
+        '            </div> ' +
         '            <div ng-hide="vm.baselayers.isOpen" class="list-group-body wimLegend-list-group-body">' +
         '                <div class="sitebar-item" ng-repeat="(key, layer) in vm.baselayers.layergroup">' +
         '                    <input type="radio" id="baselayerRadio{{$id}}" ng-checked="$parent.vm.baselayers.selectedlayerName === key.toString()" ng-value="key.toString()" /><label for="baselayerRadio{{$id}}" ng-click="vm.changeBaseLayer(key, $event)">{{layer.name}}</label>' +
@@ -272,7 +298,7 @@ module WiM.Directives {
         '                    <i ng-class="!layer.isOpen ? \'fa fa-chevron-up pull-right\': \'fa fa-chevron-down pull-right\'" ng-click="layer.isOpen=(layer.isOpen) ? false : true;"></i>' +
         '                </div>' +
         '                <div ng-hide="layer.isOpen">' +
-        '                    <div class="legendGroup" ng-if="layer.type == \'agsDynamic\'">' +
+        '                    <div class="legendGroup" ng-if="layer.type == \'agsDynamic\' || layer.type == \'agsFeature\'">' +
         '                        <div ng-repeat="lyr in layer.layerArray ">' +
         '                            <label>{{lyr.layerName}}</label>' +
         '                            <div ng-repeat="leg in lyr.legend ">' +

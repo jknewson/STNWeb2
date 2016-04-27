@@ -44,7 +44,7 @@ var WiM;
                 var headers = {
                     "Authorization": "Basic " + btoa(user + '/token:' + token)
                 };
-                var request = new WiM.Services.Helpers.RequestInfo(url, true, WiM.Services.Helpers.methodType.POST, 'json', data, headers);
+                var request = new WiM.Services.Helpers.RequestInfo(url, true, Services.Helpers.methodType.POST, 'json', data, headers);
                 this.Execute(request).then(function (response) {
                     alert("Your request has been submitted.  Your request will be addressed as soon as possible");
                     _this.SupportTicketData = new SupportTicketData();

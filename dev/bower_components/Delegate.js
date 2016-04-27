@@ -23,7 +23,7 @@ var WiM;
                 }
             };
             return Delegate;
-        })();
+        }());
         Event.Delegate = Delegate;
     })(Event = WiM.Event || (WiM.Event = {}));
 })(WiM || (WiM = {}));

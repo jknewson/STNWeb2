@@ -1,27 +1,8 @@
-//------------------------------------------------------------------------------
-//----- FDCTM ---------------------------------------------------------------
-//------------------------------------------------------------------------------
 var __extends = (this && this.__extends) || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
     function __() { this.constructor = d; }
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
-//-------1---------2---------3---------4---------5---------6---------7---------8
-//       01234567890123456789012345678901234567890123456789012345678901234567890
-//-------+---------+---------+---------+---------+---------+---------+---------+
-// copyright:   2014 WiM - USGS
-//    authors:  Jeremy K. Newson USGS Wisconsin Internet Mapping
-//             
-// 
-//   purpose:  Represents the FlowAnywhere model
-//          
-//discussion:
-//
-//Comments
-//08.14.2014 jkn - Created
-//Imports"
-///<reference path="../Scenario.ts"/>
-// Class
 var StreamStats;
 (function (StreamStats) {
     var Models;
@@ -32,7 +13,6 @@ var StreamStats;
             (function (Similar) {
                 var FlowAnywhere = (function (_super) {
                     __extends(FlowAnywhere, _super);
-                    //Constructor
                     function FlowAnywhere(regionID, d, loadParameters) {
                         if (loadParameters === void 0) { loadParameters = true; }
                         _super.call(this, "FLA", ModelType.SIMILAR, d);
@@ -41,21 +21,11 @@ var StreamStats;
                         this.SelectedRegion = null;
                         this.RegionList = [];
                         if (loadParameters) {
-                            //this.SelectedRegion.subscribe(x=> this.GetParameters(configuration.appSettings['RegressionService'] + '/' + this.Model + '/def?state=' + this.RegionID + "&region=" + this.SelectedRegion()))
                             this.loadRegionList(configuration.appSettings['RegressionService'] + '/' + this.Model + '/def?state=' + this.RegionID);
                         }
-                        //this.Equation = ko.pureComputed({
-                        //    owner: this,
-                        //    read: () => {
-                        //        var eq: string = "\\[Q_u = " + this.Const1 + "{DA_u \\over DA_r}^{" + this.Const2 + "}Q_r^{" + this.Const3 + "}\\]";
-                        //        return eq;
-                        //    }
-                        //});
-                    } //end constructor
-                    //Override Methods
+                    }
                     FlowAnywhere.prototype.GetReferenceStation = function (pnt) {
                         var _this = this;
-                        // loads the referance stations
                         var url = configuration.appSettings["FlowAnywhereRefGage"].format(pnt.ToEsriString(), pnt.wkid);
                         $.ajax({
                             type: "GET",
@@ -78,7 +48,6 @@ var StreamStats;
                             return true;
                         }
                         catch (e) {
-                            //this.Notification(new Notification("Can not execute at this time. Check model parameters... ", NotificationType.WARNING));
                             return false;
                         }
                     };
@@ -106,14 +75,10 @@ var StreamStats;
                     };
                     FlowAnywhere.prototype.LoadExecuteResults = function (jsn) {
                         _super.prototype.LoadExecuteResults.call(this, jsn);
-                        //if (jsn.hasOwnProperty("ExceedanceProbabilities")) this.loadProbabilites(jsn["ExceedanceProbabilities"]);
-                        //this.Notification(new Notification("Model finished...", null, null, ActionType.HIDE));
                         this.ReportReady(true);
                     };
-                    //Helper Methods
                     FlowAnywhere.prototype.loadRegionList = function (URL) {
                         var _this = this;
-                        //get parameters from service       
                         $.ajax({
                             type: "GET",
                             url: URL,
@@ -134,7 +99,6 @@ var StreamStats;
                         var sID = attr.hasOwnProperty("reference_gages.site_id") ? attr["reference_gages.site_id"] : null;
                         var sName = attr.hasOwnProperty("reference_gages.site_name") ? attr["reference_gages.site_name"] : null;
                         attr.hasOwnProperty("regions_local.Region_Agg") ? this.SelectedRegion(attr["regions_local.Region_Agg"]) : this.SelectedRegion(1);
-                        //this.Notification(new Notification("Region " + this.SelectedRegion() + " selected as FlowAnywhere model region"));
                         if (sID == null)
                             return;
                         if (this.ReferenceGageList().length != 0)
@@ -143,7 +107,6 @@ var StreamStats;
                         RefGage.Name = sName;
                         this.ReferenceGageList.push(RefGage);
                         this.SelectedReferenceGage(this.ReferenceGageList()[0]);
-                        //this.Notification(new Notification("Station " + this.SelectedReferenceGage().StationID + " selected as FlowAnywhere model reference gage"));
                     };
                     FlowAnywhere.prototype.Replacer = function () {
                         return {
@@ -155,7 +118,7 @@ var StreamStats;
                         };
                     };
                     return FlowAnywhere;
-                }(Scenario.Scenario));
+                })(Scenario.Scenario);
             })(Similar = Scenario.Similar || (Scenario.Similar = {}));
         })(Scenario = Models.Scenario || (Models.Scenario = {}));
     })(Models = StreamStats.Models || (StreamStats.Models = {}));
