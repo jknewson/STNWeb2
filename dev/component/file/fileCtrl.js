@@ -132,7 +132,7 @@
 
                     //modal allFileTypes, thisFile, allMembers, agencyList, fileSite,
                     var modalInstance = $uibModal.open({
-                        templateUrl: 'FILEmodal.html',
+                        templateUrl: FileClicked !== 0 ? 'FILEmodal.html' : 'FileCreateModal.html',
                         controller: 'siteFileModalCtrl',
                         size: 'lg',
                         backdrop: 'static',
@@ -192,9 +192,9 @@
                             $scope.SiteFiles.push(createdFile[0]);
                             Site_Files.setAllSiteFiles($scope.SiteFiles);//, $scope.siteHWMs, $scope.siteSensors);
                         }
-                        if (createdFile[1] == 'updated') {
+                        if (createdFile[1] === undefined) {
                             //this is from edit -- refresh page?
-                            $scope.SiteFiles[SindexClicked] = createdFile[0];
+                            $scope.SiteFiles[SindexClicked] = createdFile;
                             Site_Files.setAllSiteFiles($scope.SiteFiles);//, $scope.siteHWMs, $scope.siteSensors);
                         }
                         if (createdFile[1] == 'deleted') {

@@ -14,6 +14,7 @@
                 $scope.hwmCount = { total: thisSiteHWMs.length };
 
                 $scope.SiteHWMs = thisSiteHWMs;
+                HWM_Service.setAllSiteHWMs($scope.SiteHWMs);
                 // watch for the session event to change and update
                 $scope.$watch(function () { return $cookies.get('SessionEventName'); }, function (newValue) {
                     $scope.sessionEventName = newValue !== undefined ? newValue : "All Events";
@@ -76,13 +77,14 @@
                             $scope.SiteHWMs.push(createdHWM[0]);
                             HWM_Service.setAllSiteHWMs($scope.SiteHWMs);
                             $scope.hwmCount.total = $scope.SiteHWMs.length;
-                            }
-                        if (createdHWM[1]== 'updated') {
-                                //this is from edit -- refresh page?
+                        }
+                        if (createdHWM[1] === undefined) {
+                            //this is from edit -- refresh page?
+                            //update the list
                             var indexClicked = $scope.SiteHWMs.indexOf(HWMclicked);
-                            $scope.SiteHWMs[indexClicked] = createdHWM[0];
+                            $scope.SiteHWMs[indexClicked] = createdHWM;
                             HWM_Service.setAllSiteHWMs($scope.SiteHWMs);
-                            }
+                        }
                         if (createdHWM[1]== 'deleted') {
                             var indexClicked1 = $scope.SiteHWMs.indexOf(HWMclicked);
                             $scope.SiteHWMs.splice(indexClicked1, 1);

@@ -54,8 +54,8 @@
         <div>
             <label class="col-md-1 pull-left">Date:</label>
             <div class="col-md-3 input-group pull-left" style="padding-left:15px;padding-right:15px;">
-                <input type="text" datepicker-append-to-body="true" class="form-control" id="THIS_DATE" disabled="disabled"
-                       name="td" show-weeks="false" uib-datepicker-popup="MMMM dd, yyyy" is-open="datepickrs.td" ng-model="THIS_DATE.date" />
+                <input type="date" datepicker-append-to-body="true" class="form-control dateInputStyle" id="THIS_DATE" name="td" show-weeks="false" 
+                       uib-datepicker-popup="MM/dd/yyyy" is-open="datepickrs.td" ng-model="THIS_DATE.date" />
                 <span class="input-group-btn">
                     <button class="btn btn-default" ng-click="open($event, 'td')">
                         <i class="glyphicon glyphicon-calendar" />
