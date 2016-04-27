@@ -15,11 +15,11 @@
     "!dist/**/*",
     "_references.*"
   ],
-  "_release": "1388a74789",
+  "_release": "64ae7ad7a0",
   "_resolution": {
     "type": "branch",
     "branch": "master",
-    "commit": "1388a7478968e4bb44cae3c7f4f78a04e7ac3ca2"
+    "commit": "64ae7ad7a039743c40b8d12781db566fb9abd15f"
   },
   "_source": "https://github.com/USGS-WiM/wim_angular.git",
   "_target": "master",

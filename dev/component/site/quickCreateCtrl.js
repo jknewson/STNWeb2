@@ -479,7 +479,7 @@
                             if ($scope.CreateWhat == 'HWM') {
                                 $scope.aHWM.SITE_ID = createdSiteID; $scope.aHWM.WATERBODY = response.WATERBODY; $scope.aHWM.LATITUDE_DD = response.LATITUDE_DD;
                                 $scope.aHWM.LONGITUDE_DD = response.LONGITUDE_DD; $scope.aHWM.HCOLLECT_METHOD_ID = response.HCOLLECT_METHOD_ID;
-                                $scope.aHWM.HDATUM_ID = response.HDATUM_ID; $scope.aHWM.FLAG_TEAM_ID = response.MEMBER_ID; $scope.aHWM.EVENT_ID = $cookies.get('SessionEventID');
+                                $scope.aHWM.HDATUM_ID = response.HDATUM_ID; $scope.aHWM.FLAG_MEMBER_ID = response.MEMBER_ID; $scope.aHWM.EVENT_ID = $cookies.get('SessionEventID');
                             }
                             //OP stuff POST
                             var createdOP = {};
@@ -501,14 +501,14 @@
                                     var createdHWM = {};
                                     //if they entered a survey date or elevation, then set survey member as the flag member (flagging and surveying at same time
                                     if ($scope.aHWM.SURVEY_DATE !== undefined)
-                                        $scope.aHWM.SURVEY_TEAM_ID = $scope.aHWM.FLAG_TEAM_ID;
+                                        $scope.aHWM.SURVEY_MEMBER_ID = $scope.aHWM.FLAG_MEMBER_ID;
 
                                     if ($scope.aHWM.ELEV_FT !== undefined) {
                                         //make sure they added the survey date if they added an elevation
                                         if ($scope.aHWM.SURVEY_DATE === undefined)
                                             $scope.aHWM.SURVEY_DATE = makeAdate("");
 
-                                        $scope.aHWM.SURVEY_TEAM_ID = $scope.aHWM.FLAG_TEAM_ID;
+                                        $scope.aHWM.SURVEY_MEMBER_ID = $scope.aHWM.FLAG_MEMBER_ID;
                                     }
                                     HWM.save($scope.aHWM).$promise.then(function (response) {
                                         toastr.success("Quick HWM created");

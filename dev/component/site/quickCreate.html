@@ -391,7 +391,7 @@
                         <div class="form-group required" ng-class="{'has-error':quickForm.quick.DATE_ESTABLISHED.$invalid && quickForm.quick.DATE_ESTABLISHED.$dirty}">
                             <label class="col-md-4 control-label req" for="DATE_ESTABLISHED">Date Established:</label>
                             <div class="col-md-6 input-group" style="padding-right:14px;padding-left:14px">
-                                <input disabled="disabled" class="form-control" id="OP_DATE_ESTABLISHED" name="de" type="text" uib-datepicker-popup="MMM dd, yyyy" datepicker-append-to-body="true"
+                                <input class="form-control dateInputStyle" id="OP_DATE_ESTABLISHED" name="de" type="date" uib-datepicker-popup="MM/dd/yyyy" datepicker-append-to-body="true"
                                        show-weeks="false" is-open="datepickrs.de" ng-model="aOP.DATE_ESTABLISHED" required />
                                 <span class="input-group-btn">
                                     <button class="btn btn-default" ng-click="open($event, 'de')">
@@ -528,7 +528,7 @@
                         <div class="form-group required" ng-class="{'has-error':quickForm.quick.FLAG_DATE.$invalid && quickForm.quick.FLAG_DATE.$dirty}">
                             <label class="col-md-4 control-label req" for="FLAG_DATE">Flagged Date:</label>
                             <div class="col-md-6 input-group" style="padding-right:14px;padding-left:14px">
-                                <input disabled="disabled" class="form-control" id="FLAG_DATE" name="fd" type="text" uib-datepicker-popup="MMM dd, yyyy"
+                                <input class="form-control dateInputStyle" id="FLAG_DATE" name="fd" type="date" uib-datepicker-popup="MM/dd/yyyy"
                                        show-weeks="false" is-open="datepickrs.fd" ng-model="aHWM.FLAG_DATE" required />
                                 <span class="input-group-btn">
                                     <button class="btn btn-default" ng-click="open($event, 'fd')">
@@ -542,7 +542,7 @@
                         <div class="form-group">
                             <label class="col-md-4 control-label" for="SURVEY_DATE">Surveyed Date:</label>
                             <div class="col-md-6 input-group" style="padding-right:14px;padding-left:14px">
-                                <input disabled="disabled" class="form-control" id="SURVEY_DATE" name="sd" type="text" uib-datepicker-popup="MMM dd, yyyy"
+                                <input class="form-control dateInputStyle" id="SURVEY_DATE" name="sd" type="date" uib-datepicker-popup="MM/dd/yyyy"
                                        is-open="datepickrs.sd" show-weeks="false" ng-model="aHWM.SURVEY_DATE" />
                                 <span class="input-group-btn">
                                     <button class="btn btn-default" ng-click="open($event, 'sd')">

@@ -2,8 +2,8 @@
 <uib-accordion close-others="false">
     <uib-accordion-group is-open="status.siteOpen">
         <uib-accordion-heading>
+            <i style="margin-right:10px" class="pull-left glyphicon" ng-class="{'glyphicon-chevron-down': status.siteOpen, 'glyphicon-chevron-right': !status.siteOpen}"></i>
             <span>Site Info </span><span class="label label-primary siteLabel" ng-if="aSite.SITE_ID != null"> <b>Site {{aSite.SITE_ID}}</b></span>
-            <i class="acc-heading-icon" ng-class="{'ion-arrow-down-b': status.siteOpen, 'ion-arrow-right-b': !status.siteOpen}"></i>
         </uib-accordion-heading>
         <div ng-if="aSite.SITE_ID == undefined">Click a site to see info</div>
         <div ng-if="aSite.SITE_ID != undefined">

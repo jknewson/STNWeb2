@@ -54,7 +54,7 @@
             <label class="col-md-3 control-label req" for="ROLE">Role:</label>
             <div class="col-md-3">
                 <select ng-show="aMember.MEMBER_ID == undefined" class=" form-control" id="ROLE" name="ROLE_ID" ng-model="aMember.ROLE_ID"
-                        ng-options="r.ROLE_ID as r.ROLE_NAME for r in roleList | orderBy: 'ROLE_NAME'" ng-model-options="{ updateOn: 'blur' }" ng-change="SaveOnBlur(accountForm.$valid)"
+                        ng-options="r.ROLE_ID as r.ROLE_NAME for r in roleList | orderBy: 'ROLE_ID'" ng-model-options="{ updateOn: 'blur' }" ng-change="SaveOnBlur(accountForm.$valid)"
                         required>
                     <option value="">Select Role</option>
                 </select>

@@ -1,8 +1,8 @@
 <uib-accordion close-others="false">
     <uib-accordion-group is-open="status.sensorOpen">
         <uib-accordion-heading>
+            <i style="margin-right:10px" class="pull-left glyphicon" ng-class="{'glyphicon-chevron-down': status.sensorOpen, 'glyphicon-chevron-right': !status.sensorOpen}"></i>
             <span ng-click="getProposedSensors()">Proposed Sensors</span>
-            <i class="acc-heading-icon" ng-class="{'ion-arrow-down-b': status.siteOpen, 'ion-arrow-right-b': !status.siteOpen}"></i>
         </uib-accordion-heading>
         <div ng-if="thisSite.SITE_ID !== undefined">
             <!-- proposed sensors here -->

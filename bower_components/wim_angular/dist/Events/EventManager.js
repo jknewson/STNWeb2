@@ -15,7 +15,7 @@ var WiM;
                 configurable: true
             });
             return Event;
-        })();
+        }());
         var EventManager = (function () {
             function EventManager() {
                 this._eventList = {};
@@ -43,7 +43,7 @@ var WiM;
                 this._eventList[EventName].onChanged.unsubscribe(handler);
             };
             return EventManager;
-        })();
+        }());
         factory.$inject = [];
         function factory() {
             return new EventManager();
