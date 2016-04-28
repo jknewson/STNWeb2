@@ -3277,12 +3277,12 @@
                                 <div ng-if="aFile.FILETYPE_ID === 2" class="form-group" style="margin:0;padding:0">
                                     <label class="col-md-4 control-label">Elevation:</label>
                                     <div class="col-md-6">
-                                        <label class="radio-inline">
+                                        <span class="radio-inline">
                                             <input type="radio" name="ELEVATION_STATUS" ng-model="datafile.ELEVATION_STATUS" value="Final" />Final
-                                        </label>
-                                        <label class="radio-inline">
+                                        </span>
+                                        <span class="radio-inline">
                                             <input type="radio" name="ELEVATION_STATUS" ng-model="datafile.ELEVATION_STATUS" value="Arbitrary" />Arbitrary
-                                        </label>
+                                        </span>
                                     </div>
                                 </div>
 
@@ -3484,12 +3484,12 @@
                                     <div class="form-group" style="margin:0;padding:0">
                                         <label class="col-md-4 control-label">Elevation:</label>
                                         <div class="col-md-6">
-                                            <label class="radio-inline">
+                                            <span class="radio-inline">
                                                 <input type="radio" name="ELEVATION_STATUS" ng-model="NWISDF.ELEVATION_STATUS" value="Final" />Final
-                                            </label>
-                                            <label class="radio-inline">
+                                            </span>
+                                            <span class="radio-inline">
                                                 <input type="radio" name="ELEVATION_STATUS" ng-model="NWISDF.ELEVATION_STATUS" value="Arbitrary" />Arbitrary
-                                            </label>
+                                            </span>
                                         </div>
                                     </div>
 
@@ -3835,13 +3835,13 @@
                     <fieldset>
                         <!-- Event: -->
                         <div class="form-group">
-                            <label class="col-md-3 col-md-offset-1 control-label">Event:</label>
+                            <label class="col-md-4 col-md-offset-1 control-label">Event:</label>
                             <div class="col-md-6">{{EventName}}</div>
                         </div>
 
                         <!-- Sensor Type*: -->
                         <div class="form-group required">
-                            <label class="col-md-3 col-md-offset-1 req control-label">Sensor Type:</label>
+                            <label class="col-md-4 col-md-offset-1 req control-label">Sensor Type:</label>
                             <div class="col-md-6">
                                 <span ng-show="view.DEPval == 'detail'">{{sensor.Sensor_Type || '---'}}</span>
                                 <select ng-show="view.DEPval == 'edit'" class="form-control" name="SENSOR_TYPE_ID" ng-model="depStuffCopy[0].SENSOR_TYPE_ID"
@@ -3853,7 +3853,7 @@
 
                         <!-- Sensor Brand*: -->
                         <div class="form-group required">
-                            <label class="col-md-3 col-md-offset-1 req control-label">Sensor Brand:</label>
+                            <label class="col-md-4 col-md-offset-1 req control-label">Sensor Brand:</label>
                             <div class="col-md-6">
                                 <span ng-show="view.DEPval == 'detail'">{{sensor.Sensor_Brand || '---'}}</span>
                                 <select ng-show="view.DEPval == 'edit'" class="form-control" name="SENSOR_BRAND_ID" ng-model="depStuffCopy[0].SENSOR_BRAND_ID"
@@ -3865,7 +3865,7 @@
 
                         <!-- Serial Number*: -->
                         <div class="form-group required">
-                            <label class="col-md-3 col-md-offset-1 req control-label">Serial Number:</label>
+                            <label class="col-md-4 col-md-offset-1 req control-label">Serial Number:</label>
                             <div class="col-md-6">
                                 <span ng-show="view.DEPval =='detail'">{{sensor.SERIAL_NUMBER || '---'}}</span>
                                 <input ng-show="view.DEPval =='edit'" class="form-control" name="SERIAL_NUMBER" ng-model="depStuffCopy[0].SERIAL_NUMBER" type="text" required />
@@ -3877,7 +3877,7 @@
 
                         <!-- Housing Serial Number: -->
                         <div class="form-group">
-                            <label class="col-md-3 col-md-offset-1 control-label">Housing Serial Number:</label>
+                            <label class="col-md-4 col-md-offset-1 control-label">Housing Serial Number:</label>
                             <div class="col-md-6">
                                 <span ng-show="view.DEPval == 'detail'">{{sensor.HOUSING_SERIAL_NUMBER || '---'}}</span>
                                 <input ng-show="view.DEPval == 'edit'" class="form-control" name="HOUSING_SERIAL_NUMBER" ng-model="depStuffCopy[0].HOUSING_SERIAL_NUMBER" type="text" />
@@ -3889,7 +3889,7 @@
 
                         <!-- Housing Types: -->
                         <div class="form-group">
-                            <label class="col-md-3 col-md-offset-1 control-label">Housing Types:</label>
+                            <label class="col-md-4 col-md-offset-1 control-label">Housing Types:</label>
                             <div class="col-md-6">
                                 <span ng-show="view.DEPval == 'detail'">{{sensor.Housing_Type || '---'}}</span>
                                 <select ng-show="view.DEPval == 'edit'" class="form-control" id="HOUSING_TYPE_ID" name="HOUSING_TYPE_ID" ng-model="depStuffCopy[0].HOUSING_TYPE_ID"
@@ -3900,7 +3900,7 @@
                         </div>
                         <br clear="all" /><hr />
                         <div class="form-group">
-                            <label class="col-md-3 col-md-offset-1 control-label">Tapedowns:</label>
+                            <label class="col-md-4 col-md-offset-1 control-label">Tapedowns:</label>
                             <div class="col-md-6">
                                 <div ng-show="view.DEPval == 'detail'">
                                     <div ng-show="DEPtapeDownTable.length > 0">
@@ -3990,7 +3990,7 @@
 
                         <!--sensor stat tapedown parts-->
                         <div ng-if="OPsPresent" class="form-group">
-                            <label class="col-md-3 col-md-offset-1 control-label">Sensor Elevation:</label>
+                            <label class="col-md-4 col-md-offset-1 control-label">Sensor Elevation:</label>
                             <div class="col-md-6">
                                 <div ng-show="view.DEPval == 'detail'">
                                     {{DeployedSensorStat.SENSOR_ELEVATION || '--'}}
@@ -4005,7 +4005,7 @@
                         </div>
 
                         <div ng-if="OPsPresent" class="form-group">
-                            <label class="col-md-3 col-md-offset-1 control-label">Water Surface Elevation:</label>
+                            <label class="col-md-4 col-md-offset-1 control-label">Water Surface Elevation:</label>
                             <div class="col-md-6">
                                 <div ng-show="view.DEPval == 'detail'">
                                     {{DeployedSensorStat.WS_ELEVATION || '--'}}
@@ -4020,7 +4020,7 @@
                         </div>
 
                         <div ng-if="OPsPresent" class="form-group">
-                            <label class="col-md-3 col-md-offset-1 control-label">Ground Elevation:</label>
+                            <label class="col-md-4 col-md-offset-1 control-label">Ground Elevation:</label>
                             <div class="col-md-6">
                                 <div ng-show="view.DEPval == 'detail'">
                                     {{DeployedSensorStat.GS_ELEVATION || '--'}}
@@ -4035,7 +4035,7 @@
                         </div>
 
                         <div ng-if="OPsPresent" class="form-group">
-                            <label class="col-md-3 col-md-offset-1 control-label">In feet above:</label>
+                            <label class="col-md-4 col-md-offset-1 control-label">In feet above:</label>
                             <div class="col-md-6">
                                 <div ng-show="view.DEPval == 'detail'">
                                     {{DeployedSensorStat.vdatumName}}
@@ -4052,16 +4052,16 @@
                         <!-- Vented (only if Sensor Type is Pressure Transducer)-->
                         <div ng-show="sensor.SENSOR_TYPE_ID == 1 || depStuffCopy[0].SENSOR_TYPE_ID == 1">
                             <div class="form-group">
-                                <label class="col-md-3 col-md-offset-1 control-label">Vented:</label>
+                                <label class="col-md-4 col-md-offset-1 control-label">Vented:</label>
                                 <div class="col-md-6">
                                     <span ng-show="view.DEPval == 'detail'">{{sensor.VENTED || '---'}}</span>
                                     <span ng-show="view.DEPval == 'edit'">
-                                        <label class="radio-inline">
+                                        <span class="radio-inline">
                                             <input type="radio" name="VENTED" ng-model="depStuffCopy[0].VENTED" value="Yes" />Yes
-                                        </label>
-                                        <label class="radio-inline">
+                                        </span>
+                                        <span class="radio-inline">
                                             <input type="radio" name="VENTED" ng-model="depStuffCopy[0].VENTED" value="No" />No
-                                        </label>
+                                        </span>
                                     </span>
                                 </div>
                             </div>
@@ -4069,7 +4069,7 @@
 
                         <!-- Deployment Type: -->
                         <div class="form-group">
-                            <label class="col-md-3 col-md-offset-1 control-label">Deployment Type:</label>
+                            <label class="col-md-4 col-md-offset-1 control-label">Deployment Type:</label>
                             <div class="col-md-6">
                                 <span ng-show="view.DEPval == 'detail'">{{sensor.Deployment_Type || '---'}}</span>
                                 <select ng-show="view.DEPval == 'edit'" class="form-control" id="DEPLOYMENT_TYPE_ID" name="DEPLOYMENT_TYPE_ID" ng-model="depStuffCopy[0].DEPLOYMENT_TYPE_ID"
@@ -4081,7 +4081,7 @@
 
                         <!-- Location Description: -->
                         <div class="form-group">
-                            <label class="col-md-3 col-md-offset-1 control-label">Location Description:</label>
+                            <label class="col-md-4 col-md-offset-1 control-label">Location Description:</label>
                             <div class="col-md-6">
                                 <span ng-show="view.DEPval == 'detail'">{{sensor.LOCATION_DESCRIPTION || '---'}}</span>
                                 <textarea ng-show="view.DEPval == 'edit'" class="form-control" id="LOCATION_DESCRIPTION" name="LOCATION_DESCRIPTION" type=" text" rows="3" ng-model="depStuffCopy[0].LOCATION_DESCRIPTION" />
@@ -4092,28 +4092,29 @@
                         </div>
 
                         <!-- Interval: -->
+                        <div class="form-group" ng-show="view.DEPval == 'edit'">
+                            <label class="col-md-4 control-label"></label>
+                            <div class="col-md-6 col-md-offset-1" style="padding-top:5px;">
+                                <span class="radio-inline">
+                                    <input type="radio" name="intervalType" ng-model="IntervalType.type" value="Minutes" />Minutes
+                                </span>
+                                <span class="radio-inline">
+                                    <input type="radio" name="intervalType" ng-model="IntervalType.type" value="Seconds" />Seconds
+                                </span>
+                            </div>
+                        </div>
                         <div class="form-group">
-                            <label class="col-md-3 col-md-offset-1 control-label">Interval:</label>
+                            <label class="col-md-4 col-md-offset-1 control-label">Interval:</label>
                             <div class="col-md-6">
                                 <span ng-show="view.DEPval == 'detail'">{{sensor.INTERVAL || '---'}} <span ng-if='sensor.INTERVAL'>seconds</span></span>
                                 <input ng-show="view.DEPval == 'edit'" class="form-control" ng-keypress="isNum($event)" name="INTERVAL" ng-model="depStuffCopy[0].INTERVAL" type="text" />
                             </div>
                         </div>
-                        <div class="form-group" ng-show="view.DEPval == 'edit'">
-                            <label class="col-md-3 control-label"></label>
-                            <div class="col-md-6 col-md-offset-1">
-                                <label class="radio-inline">
-                                    <input type="radio" name="intervalType" ng-model="IntervalType.type" value="Minutes" />Minutes
-                                </label>
-                                <label class="radio-inline">
-                                    <input type="radio" name="intervalType" ng-model="IntervalType.type" value="Seconds" />Seconds
-                                </label>
-                            </div>
-                        </div>
+
 
                         <!-- Deploy Date*: -->
                         <div class="form-group required">
-                            <label class="col-md-3 col-md-offset-1 control-label" ng-class="{topPad: view.DEPval == 'edit'}">Deploy Date:</label>
+                            <label class="col-md-4 col-md-offset-1 control-label" ng-class="{topPad: view.DEPval == 'edit'}">Deploy Date:</label>
                             <div class="col-md-6">
                                 <span ng-show="view.DEPval == 'detail'">{{DeployedSensorStat.TIME_STAMP | date: 'MM/dd/yyyy hh:mm a'}}</span>
                                 <datetimepicker ng-show="view.DEPval == 'edit'" hour-step="1" minute-step="1" ng-model="depStuffCopy[1].TIME_STAMP" show-meridian="true"
@@ -4125,7 +4126,7 @@
 
                         <!-- Deploy timezone*:-->
                         <div class="form-group required">
-                            <label class="col-md-3 col-md-offset-1 req control-label">Time Zone:</label>
+                            <label class="col-md-4 col-md-offset-1 req control-label">Time Zone:</label>
                             <div class="col-md-6">
                                 <span ng-show="view.DEPval == 'detail'">{{DeployedSensorStat.TIME_ZONE}}</span>
 
@@ -4141,7 +4142,7 @@
 
                         <!-- Note: -->
                         <div class="form-group">
-                            <label class="col-md-3 col-md-offset-1 control-label">Note:</label>
+                            <label class="col-md-4 col-md-offset-1 control-label">Note:</label>
                             <div class="col-md-6">
                                 <span ng-show="view.DEPval == 'detail'">{{DeployedSensorStat.NOTES || '---'}}</span>
                                 <textarea ng-show="view.DEPval == 'edit'" class="form-control" name="NOTES" type="text" rows="3" ng-model="depStuffCopy[1].NOTES" />
@@ -4150,7 +4151,7 @@
 
                         <!-- Deploy Member: -->
                         <div class="form-group">
-                            <label class="col-md-3 col-md-offset-1 control-label">Deploy Member:</label>
+                            <label class="col-md-4 col-md-offset-1 control-label">Deploy Member:</label>
                             <div class="col-md-6">{{Deployer.FNAME}} {{Deployer.LNAME}}</div>
                         </div>
 
@@ -4187,7 +4188,7 @@
                     <fieldset>
                         <!-- Status Type:* -->
                         <div class="form-group required">
-                            <label class="col-md-3 col-md-offset-1 control-label req">Status:</label>
+                            <label class="col-md-4 col-md-offset-1 control-label req">Status:</label>
                             <div class="col-md-6">
                                 <span ng-show="view.RETval == 'detail'">{{RetrievedSensorStat.Status || '---'}}</span>
                                 <select ng-show="view.RETval == 'edit'" class="form-control" name="STATUS_TYPE_ID" ng-model="retStuffCopy[1].STATUS_TYPE_ID"
@@ -4199,7 +4200,7 @@
 
                         <!-- Collection Condition:* -->
                         <div class="form-group required">
-                            <label class="col-md-3 col-md-offset-1 control-label req" for="INST_COLLECTION_ID">Collection Conditions:</label>
+                            <label class="col-md-4 col-md-offset-1 control-label req" for="INST_COLLECTION_ID">Collection Conditions:</label>
                             <div class="col-md-6">
                                 <span ng-show="view.RETval == 'detail'">{{sensor.Inst_Collection || '---'}}</span>
                                 <select ng-show="view.RETval == 'edit'" class="form-control" name="INST_COLLECTION_ID" ng-model="retStuffCopy[0].INST_COLLECTION_ID"
@@ -4211,7 +4212,7 @@
 
                         <!-- Note: -->
                         <div class="form-group">
-                            <label class="col-md-3 col-md-offset-1 control-label" for="NOTES">Note:</label>
+                            <label class="col-md-4 col-md-offset-1 control-label" for="NOTES">Note:</label>
                             <div class="col-md-6">
                                 <span ng-show="view.RETval == 'detail'">{{RetrievedSensorStat.NOTES || '---'}}</span>
                                 <textarea ng-show="view.RETval == 'edit'" class="form-control" name="NOTES" type="text" rows="3" ng-model="retStuffCopy[1].NOTES" />
@@ -4221,7 +4222,7 @@
 
                         <!-- Retrieve Time: * -->
                         <div class="form-group required">
-                            <label class="col-md-3 col-md-offset-1 control-label" ng-class="{topPad: view.RETval == 'edit'}">Retrieve Date:</label>
+                            <label class="col-md-4 col-md-offset-1 control-label" ng-class="{topPad: view.RETval == 'edit'}">Retrieve Date:</label>
                             <div class="col-md-6">
                                 <span ng-show="view.RETval == 'detail'">{{RetrievedSensorStat.TIME_STAMP | date: 'MM/dd/yyyy hh:mm a'}}</span>
                                 <datetimepicker ng-show="view.RETval == 'edit'" hour-step="1" minute-step="1" ng-model="retStuffCopy[1].TIME_STAMP" show-meridian="true"
@@ -4233,7 +4234,7 @@
 
                         <!-- Timezone*:-->
                         <div class="form-group required">
-                            <label class="col-md-3 col-md-offset-1 req control-label">Time Zone:</label>
+                            <label class="col-md-4 col-md-offset-1 req control-label">Time Zone:</label>
                             <div class="col-md-6">
                                 <span ng-show="view.RETval == 'detail'">{{RetrievedSensorStat.TIME_ZONE}}</span>
 
@@ -4248,7 +4249,7 @@
                         </div>
                         <br clear="all" /><hr />
                         <div class="form-group">
-                            <label class="col-md-3 col-md-offset-1 control-label">Tapedowns:</label>
+                            <label class="col-md-4 col-md-offset-1 control-label">Tapedowns:</label>
                             <div class="col-md-6">
                                 <div ng-show="view.RETval == 'detail'">
                                     <div ng-show="RETtapeDownTable.length > 0">
@@ -4327,7 +4328,7 @@
                         <br clear="all" />
                         <!--sensor stat tapedown parts-->
                         <div ng-if="OPsPresent" class="form-group">
-                            <label class="col-md-3 col-md-offset-1 control-label">Sensor Elevation:</label>
+                            <label class="col-md-4 col-md-offset-1 control-label">Sensor Elevation:</label>
                             <div class="col-md-6">
                                 <div ng-show="view.RETval == 'detail'">
                                     {{RetrievedSensorStat.SENSOR_ELEVATION || '--'}}
@@ -4339,7 +4340,7 @@
                         </div>
 
                         <div ng-if="OPsPresent" class="form-group">
-                            <label class="col-md-3 col-md-offset-1 control-label">Water Surface Elevation:</label>
+                            <label class="col-md-4 col-md-offset-1 control-label">Water Surface Elevation:</label>
                             <div class="col-md-6">
                                 <div ng-show="view.RETval == 'detail'">
                                     {{RetrievedSensorStat.WS_ELEVATION || '--'}}
@@ -4351,7 +4352,7 @@
                         </div>
 
                         <div ng-if="OPsPresent" class="form-group">
-                            <label class="col-md-3 col-md-offset-1 control-label">Ground Elevation:</label>
+                            <label class="col-md-4 col-md-offset-1 control-label">Ground Elevation:</label>
                             <div class="col-md-6">
                                 <div ng-show="view.RETval == 'detail'">
                                     {{RetrievedSensorStat.GS_ELEVATION || '--'}}
@@ -4363,7 +4364,7 @@
                         </div>
 
                         <div ng-if="OPsPresent" class="form-group">
-                            <label class="col-md-3 col-md-offset-1 control-label">In feet above:</label>
+                            <label class="col-md-4 col-md-offset-1 control-label">In feet above:</label>
                             <div class="col-md-6">
                                 <div ng-show="view.RETval == 'detail'">
                                     {{RetrievedSensorStat.vdatumName}}
@@ -4380,7 +4381,7 @@
 
                         <!-- Retrieve Member: -->
                         <div class="form-group required">
-                            <label class="col-md-3 col-md-offset-1 control-label">Member:</label>
+                            <label class="col-md-4 col-md-offset-1 control-label">Member:</label>
                             <div class="col-md-6">{{Retriever.FNAME}} {{Retriever.LNAME}}</div>
                         </div>
 
@@ -4607,12 +4608,12 @@
                                 <div ng-if="aFile.FILETYPE_ID === 2" class="form-group" style="margin:0;padding:0">
                                     <label class="col-md-4 control-label">Elevation:</label>
                                     <div class="col-md-6">
-                                        <label class="radio-inline">
+                                        <span class="radio-inline">
                                             <input type="radio" name="ELEVATION_STATUS" ng-model="datafile.ELEVATION_STATUS" value="Final" />Final
-                                        </label>
-                                        <label class="radio-inline">
+                                        </span>
+                                        <span class="radio-inline">
                                             <input type="radio" name="ELEVATION_STATUS" ng-model="datafile.ELEVATION_STATUS" value="Arbitrary" />Arbitrary
-                                        </label>
+                                        </span>
                                     </div>
                                 </div>
 
@@ -4828,12 +4829,12 @@
                                     <div class="form-group" style="margin:0;padding:0">
                                         <label class="col-md-4 control-label">Elevation:</label>
                                         <div class="col-md-6">
-                                            <label class="radio-inline">
+                                            <span class="radio-inline">
                                                 <input type="radio" name="ELEVATION_STATUS" ng-model="NWISDF.ELEVATION_STATUS" value="Final" />Final
-                                            </label>
-                                            <label class="radio-inline">
+                                            </span>
+                                            <span class="radio-inline">
                                                 <input type="radio" name="ELEVATION_STATUS" ng-model="NWISDF.ELEVATION_STATUS" value="Arbitrary" />Arbitrary
-                                            </label>
+                                            </span>
                                         </div>
                                     </div>
 
@@ -5026,12 +5027,12 @@
                 <div ng-if="aFile.FILETYPE_ID === 2" class="form-group">
                     <label class="col-md-3 control-label">Elevation:</label>
                     <div class="col-md-6">
-                        <label class="radio-inline">
+                        <span class="radio-inline">
                             <input type="radio" name="ELEVATION_STATUS" ng-model="datafile.ELEVATION_STATUS" value="Final" />Final
-                        </label>
-                        <label class="radio-inline">
+                        </span>
+                        <span class="radio-inline">
                             <input type="radio" name="ELEVATION_STATUS" ng-model="datafile.ELEVATION_STATUS" value="Arbitrary" />Arbitrary
-                        </label>
+                        </span>
                     </div>
                 </div>
 
@@ -5277,12 +5278,12 @@
                     <div class="col-md-6">
                         <span ng-show="view.FILEval == 'detail'">{{datafile.ELEVATION_STATUS || '---'}}</span>
                         <span ng-show="view.FILEval == 'edit'">
-                            <label class="radio-inline">
+                            <span class="radio-inline">
                                 <input type="radio" name="ELEVATION_STATUS" ng-model="dfCopy.ELEVATION_STATUS" value="Final" />Final
-                            </label>
-                            <label class="radio-inline">
+                            </span>
+                            <span class="radio-inline">
                                 <input type="radio" name="ELEVATION_STATUS" ng-model="dfCopy.ELEVATION_STATUS" value="Arbitrary" />Arbitrary
-                            </label>
+                            </span>
                         </span>
                     </div>
                 </div>
