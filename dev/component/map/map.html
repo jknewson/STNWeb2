@@ -1,7 +1,4 @@
 <div class="map-page-wrapper">
-
-
-        <!--<h3 class="col-md-12"ng-if="createSiteModeActive"><span class="label label-warning">CREATE SITE MODE ACTIVE</span></h3>-->
         <div class="map-leftside">
             <!--<div ui-view="mapFilters"></div>-->
 
@@ -14,11 +11,16 @@
             <div ui-view="mapPeaksView"></div>
             <div ui-view="mapSensorPropose"></div>
 
+            <div style="padding:5px;margin-bottom:10px">
+                <span style="font-size:large;">Important usage notes and instructions</span>
+                <div style="margin:5px">
+                    <p>{{message}}</p>
+                </div>
+            </div>
+
         </div><!--
 
         --><div class="map-rightside">
-
-            <!--<h3>Map currently displaying sites for <b>{{sessionEvent}}</b></h3>-->
 
                 <div class="createSiteModeActive createSiteModeActiveTop" ng-show="createSiteModeActive">CREATE SITE MODE <b ng-click="createSiteModeActive = !createSiteModeActive">Exit</b></div>
 
@@ -27,7 +29,6 @@
                         <wim-legend stop-event="click"></wim-legend>
                     </leaflet>
                 </div>
-
                 <!-- <div class="createSiteModeActive createSiteModeActiveBottom" ng-if="createSiteModeActive">CREATE SITE MODE</div> -->
 
                 <!--<div class="mapCreateSiteButtonsDiv">-->
@@ -36,23 +37,6 @@
                 <!--</div><br>-->
 
                <div ui-view="mapFilters"></div>
-
-
-                <!--<br>Sites JSON: {{sites}}-->
         </div>
-
-
 </div>
 
-<!-- notice text below map -->
-<div style="border:red 1px solid;padding:5px;margin-bottom:10px">
-    <span style="font-family:'BryantBold';font-size:large;">Important usage notes and instructions</span>
-    <div style="margin:5px">
-        <p>
-            {{message}}
-
-        </p>
-    </div>
-</div>
-
-<div ui-view="test"></div>

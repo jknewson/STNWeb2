@@ -18,7 +18,5 @@
             $scope.goToSiteDashboard = function () {
                 $state.go('site.dashboard', { id: $scope.aSite.SITE_ID });
             };
-            
-            
         }]);//end controller function
 })();
