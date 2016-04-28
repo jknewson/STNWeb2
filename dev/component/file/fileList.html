@@ -85,7 +85,7 @@
 
         <!-- Photo Carousel -->
         <br clear="all" />
-        <div ng-if="SiteFiles.length > 0" style="height:140px;">
+        <div ng-if="SiteFiles.length > 0" style="height:140px;" title="Click image for preview.">
             <uib-carousel interval="4000">
                 <uib-slide ng-repeat="f in SiteFiles | where:{FILETYPE_ID: 1}">
                     <img ng-click="showImageModal(f.FILE_ID)" ng-src="{{serverURL}}/Files/{{f.FILE_ID}}/Item" />

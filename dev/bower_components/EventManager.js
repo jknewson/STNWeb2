@@ -1,7 +1,7 @@
 var WiM;
 (function (WiM) {
     var Event;
-    (function (Event_1) {
+    (function (event) {
         'use strict';
         var Event = (function () {
             function Event(delegate) {
@@ -22,7 +22,7 @@ var WiM;
             }
             EventManager.prototype.AddEvent = function (EventName) {
                 if (!this._eventList.hasOwnProperty(EventName))
-                    this._eventList[EventName] = new Event(new Event_1.Delegate());
+                    this._eventList[EventName] = new Event(new event.Delegate());
             };
             EventManager.prototype.SubscribeToEvent = function (EventName, handler) {
                 if (!this._eventList.hasOwnProperty(EventName)) {
@@ -32,7 +32,7 @@ var WiM;
             };
             EventManager.prototype.RaiseEvent = function (EventName, sender, args) {
                 if (sender === void 0) { sender = null; }
-                if (args === void 0) { args = Event_1.EventArgs.Empty; }
+                if (args === void 0) { args = event.EventArgs.Empty; }
                 if (!this._eventList.hasOwnProperty(EventName))
                     return;
                 this._eventList[EventName].onChanged.raise(sender, args);
