@@ -893,11 +893,15 @@
                                 </div>
                             </div>
 
-                            <!-- Type: -->
-                            <div class="form-group required" ng-class="{'has-error':OPEditForm.OP_TYPE_ID.$invalid && OPEditForm.OP_TYPE_ID.$dirty && view.OPval =='edit'}">
+                            <!-- Type: (Detail) -->
+                            <div ng-if="view.OPval == 'detail'" class="col-md-12">
+                                <div class="col-md-4"><label>Type:</label></div>
+                                <div class="col-md-6"><span>{{OP.opType || '---'}}</span></div>
+                            </div>
+                            <!-- Type: (Edit)-->
+                            <div ng-if="view.OPval == 'edit'" class="form-group required" ng-class="{'has-error':OPEditForm.OP_TYPE_ID.$invalid && OPEditForm.OP_TYPE_ID.$dirty && view.OPval =='edit'}">
                                 <label class="col-md-4 control-label req" for="OP_TYPE_ID">Type:</label>
                                 <div class="col-md-6">
-                                    <span ng-show="view.OPval == 'detail'">{{OP.opType || '---'}}</span>
                                     <select ng-show="view.OPval == 'edit'" class="form-control" name="OP_TYPE_ID" ng-model="opCopy.OP_TYPE_ID"
                                             ng-options="opt.OBJECTIVE_POINT_TYPE_ID as opt.OP_TYPE for opt in OPTypeList" required>
                                         <option value=""></option>
@@ -905,50 +909,61 @@
                                 </div>
                             </div>
 
-                            <!-- Name: -->
-                            <div class="form-group required" ng-class="{'has-error':OPEditForm.NAME.$invalid && OPEditForm.NAME.$dirty && view.OPval =='edit'}">
+                            <!-- Name: (Detail) -->
+                            <div ng-if="view.OPval == 'detail'" class="col-md-12">
+                                <div class="col-md-4"><label>Name:</label></div>
+                                <div class="col-md-6"><span>{{OP.NAME || '---'}}</span></div>
+                            </div>
+                            <!-- Name: (Edit)-->
+                            <div ng-if="view.OPval == 'edit'" class="form-group required" ng-class="{'has-error':OPEditForm.NAME.$invalid && OPEditForm.NAME.$dirty && view.OPval =='edit'}">
                                 <label class="col-md-4 control-label req" for="NAME">Name:</label>
                                 <div class="col-md-6">
-                                    <span ng-show="view.OPval == 'detail'">{{OP.NAME || '---'}}</span>
                                     <input ng-show="view.OPval == 'edit'" class="form-control" name="NAME" ng-model="opCopy.NAME" type="text" required />
                                 </div>
                             </div>
 
-                            <!-- Description: -->
-                            <div class="form-group required" ng-class="{'has-error':OPEditForm.DESCRIPTION.$invalid && OPEditForm.DESCRIPTION.$dirty && view.OPval =='edit'}">
+                            <!-- Description: (Detail) -->
+                            <div ng-if="view.OPval == 'detail'" class="col-md-12">
+                                <div class="col-md-4"><label>Description:</label></div>
+                                <div class="col-md-6"><span>{{OP.DESCRIPTION || '---'}}</span></div>
+                            </div>
+                            <!-- Description: (Edit) -->
+                            <div ng-if="view.OPval == 'edit'" class="form-group required" ng-class="{'has-error':OPEditForm.DESCRIPTION.$invalid && OPEditForm.DESCRIPTION.$dirty && view.OPval =='edit'}">
                                 <label class="col-md-4 control-label req" for="DESCRIPTION">Description:</label>
                                 <div class="col-md-6">
-                                    <span ng-show="view.OPval == 'detail'">{{OP.DESCRIPTION || '---'}}</span>
-                                    <textarea ng-show="view.OPval == 'edit'" class="form-control" name="DESCRIPTION" type=" text" rows="3" ng-model="opCopy.DESCRIPTION" required />
+                                    <textarea class="form-control" name="DESCRIPTION" type=" text" rows="3" ng-model="opCopy.DESCRIPTION" required />
                                 </div>
-                                <button ng-show="view.OPval == 'edit'" type="button" class="col-md-1 borderLess pull-left" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip-html="htmlDescriptionTip">
+                                <button type="button" class="col-md-1 borderLess pull-left" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip-html="htmlDescriptionTip">
                                     <span class="glyphicon glyphicon-question-sign"></span>
                                 </button>
                             </div>
 
+                            <!-- Control Identifier input: (Details) -->
+                            <div class="col-md-12" ng-if="showControlIDinput && view.OPval == 'detail'">
+                                <div class="col-md-4"><label><span>Control Identifier:</span></label></div>
+                                <div class="col-md-6">
+                                    <div ng-repeat="id in addedIdentifiers">
+                                        <div style="margin-bottom:5px">
+                                            <div class="col-md-7"><span>-- {{id.IDENTIFIER}}, {{id.IDENTIFIER_TYPE}}</span></div>
+                                        </div><br />
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Control Identifier input: (Edit) -->
                             <!-- Control Identifier add button -->
-                            <div ng-show="view.OPval == 'edit'" class="form-group">
+                            <div ng-if="view.OPval == 'edit'" class="form-group">
                                 <label class="col-md-4 control-label" for="CONTROL">Control Identifier:</label>
                                 <div class="col-md-6">
                                     <button type="button" class="btn btn-default" ng-click="addNewIdentifier()">Add New Identifier</button>
                                 </div>
-                                <button ng-show="view.OPval == 'edit'" type="button" class="col-md-1 borderLess pull-left" tooltip-placement="bottom" tooltip-append-to-body="false" uib-tooltip="National Geodetic Survey permanent identifier. See: ngs.noaa.gov/NGSDataExplorer/ for more information.">
+                                <button type="button" class="col-md-1 borderLess pull-left" tooltip-placement="bottom" tooltip-append-to-body="false" uib-tooltip="National Geodetic Survey permanent identifier. See: ngs.noaa.gov/NGSDataExplorer/ for more information.">
                                     <span class="glyphicon glyphicon-question-sign"></span>
                                 </button>
                             </div>
-
-                            <!-- Control Identifier input: -->
-                            <div class="form-group" ng-show="showControlIDinput">
-                                <label class="col-md-4 control-label"><span ng-show="view.OPval == 'detail'">Control Identifier:</span></label>
+                            <div class="form-group" ng-if="showControlIDinput && view.OPval == 'edit'">
+                                <label class="col-md-4 control-label"></label>
                                 <div class="col-md-6">
-                                    <div ng-show="view.OPval == 'detail'">
-                                        <div ng-repeat="id in addedIdentifiers">
-                                            <div class="col-md-12" style="margin-bottom:5px">
-                                                <div class="col-md-7"><span>{{id.IDENTIFIER}}, {{id.IDENTIFIER_TYPE}}</span></div>
-                                            </div><br />
-                                        </div>
-                                    </div> <!-- end detail -->
-                                    <div ng-show="view.OPval == 'edit'">
+                                    <div>
                                         <div ng-repeat="idC in addedIdentifiersCopy">
                                             <div class="col-md-12" style="margin-bottom:5px">
                                                 <div class="col-md-6"><input class="form-control" name="OPControl" ng-model="idC.IDENTIFIER" type="text" /></div>
@@ -968,12 +983,12 @@
                                                 </div>
                                             </div><br />
                                         </div> <!-- end repeat -->
-                                    </div><!-- end edit -->
+                                    </div>
                                 </div>
                             </div>
 
                             <!-- dec deg or dms: -->
-                            <div ng-show="view.OPval == 'edit'">
+                            <div ng-if="view.OPval == 'edit'">
                                 <label class="col-md-4 control-label"></label>
                                 <div class="col-md-6">
                                     <span class="radio-inline">
@@ -984,73 +999,85 @@
                                     </span>
                                 </div>
                             </div>
+                            <!-- Latitude: (Details) -->
+                            <div ng-if="view.OPval == 'detail'" class="col-md-12">
+                                <div class="col-md-4"><label>Latitude:</label></div>
+                                <div class="col-md-6"><span>{{OP.LATITUDE_DD}}</span></div>
 
-                            <!-- Latitude: -->
-                            <div class="form-group">
+                            </div>
+                            <!-- Latitude: (edit) -->
+                            <div ng-if="view.OPval == 'edit'" class="form-group">
                                 <label class="col-md-4 control-label" for="LATITUDE_DD">Latitude:</label>
-                                <div class="col-md-6"><span ng-show="view.OPval == 'detail'">{{OP.LATITUDE_DD}}</span></div>
-                                <span ng-show="view.OPval == 'edit'">
-                                    <div class="col-md-6" ng-if="opCopy.decDegORdms == 'dd'">
-                                        <input class="form-control" ng-keypress="isNum($event)" name="LATITUDE_DD" id="LATITUDE_DD" ng-model="opCopy.LATITUDE_DD"
-                                               ng-model-options="{ updateOn: 'blur' }" ng-change="checkValue('dd')" type="text" />
-                                    </div>
-                                    <div class="col-md-6" ng-if="opCopy.decDegORdms == 'dms'">
-                                        <table>
-                                            <tr>
-                                                <td><input class="form-control" ng-keypress="isNum($event)" ng-model-options="{ updateOn: 'blur' }" ng-change="checkValue('dms')" id="LaDeg" name="Deg" ng-model="DMS.LADeg" type="text" /></td>
-                                                <td>°</td>
-                                                <td><input class="form-control" ng-keypress="isNum($event)" name="Min" ng-model="DMS.LAMin" type="text" /></td>
-                                                <td>′</td>
-                                                <td><input class="form-control" ng-keypress="isNum($event)" name="Sec" ng-model="DMS.LASec" type="text" /></td>
-                                                <td>″</td>
-                                            </tr>
-                                        </table>
-                                    </div>
-                                </span>
+                                <div class="col-md-6" ng-if="opCopy.decDegORdms == 'dd'">
+                                    <input class="form-control" ng-keypress="isNum($event)" name="LATITUDE_DD" id="LATITUDE_DD" ng-model="opCopy.LATITUDE_DD"
+                                           ng-model-options="{ updateOn: 'blur' }" ng-change="checkValue('dd')" type="text" />
+                                </div>
+                                <div class="col-md-6" ng-if="opCopy.decDegORdms == 'dms'">
+                                    <table>
+                                        <tr>
+                                            <td><input class="form-control" ng-keypress="isNum($event)" ng-model-options="{ updateOn: 'blur' }" ng-change="checkValue('dms')" id="LaDeg" name="Deg" ng-model="DMS.LADeg" type="text" /></td>
+                                            <td>°</td>
+                                            <td><input class="form-control" ng-keypress="isNum($event)" name="Min" ng-model="DMS.LAMin" type="text" /></td>
+                                            <td>′</td>
+                                            <td><input class="form-control" ng-keypress="isNum($event)" name="Sec" ng-model="DMS.LASec" type="text" /></td>
+                                            <td>″</td>
+                                        </tr>
+                                    </table>
+                                </div>
                             </div>
 
-                            <!-- Longitude: -->
-                            <div class="form-group">
+                            <!-- Longitude: (Details) -->
+                            <div ng-if="view.OPval == 'detail'" class="col-md-12">
+                                <div class="col-md-4"><label>Longitude:</label></div>
+                                <div class="col-md-6"><span>{{OP.LONGITUDE_DD}}</span></div>
+                            </div>
+                            <!-- Longitude: (Edit) -->
+                            <div ng-if="view.OPval == 'edit'" class="form-group">
                                 <label class="col-md-4 control-label" for="LONGITUDE_DD">Longitude:</label>
-                                <div class="col-md-6"><span ng-show="view.OPval == 'detail'">{{OP.LONGITUDE_DD}}</span></div>
-                                <span ng-show="view.OPval == 'edit'">
-                                    <div class="col-md-6" ng-if="opCopy.decDegORdms == 'dd'">
-                                        <input class="form-control" ng-keypress="isNum($event)" id="LONGITUDE_DD" name="LONGITUDE_DD" ng-model="opCopy.LONGITUDE_DD"
-                                               ng-model-options="{ updateOn: 'blur' }" ng-change="checkValue('dd')" type="text" />
-                                    </div>
-                                    <div class="col-md-6" ng-if="opCopy.decDegORdms == 'dms'">
-                                        <table>
-                                            <tr>
-                                                <td><input class="form-control" ng-keypress="isNum($event)" ng-model-options="{ updateOn: 'blur' }" ng-change="checkValue('dms')" id="LoDeg" name="Deg" ng-model="DMS.LODeg" type="text" /></td>
-                                                <td>°</td>
-                                                <td><input class="form-control" ng-keypress="isNum($event)" name="Min" ng-model="DMS.LOMin" type="text" /></td>
-                                                <td>′</td>
-                                                <td><input class="form-control" ng-keypress="isNum($event)" name="Sec" ng-model="DMS.LOSec" type="text" /></td>
-                                                <td>″</td>
-                                            </tr>
-                                        </table>
-                                    </div>
-                                </span>
+                                <div class="col-md-6" ng-if="opCopy.decDegORdms == 'dd'">
+                                    <input class="form-control" ng-keypress="isNum($event)" id="LONGITUDE_DD" name="LONGITUDE_DD" ng-model="opCopy.LONGITUDE_DD"
+                                           ng-model-options="{ updateOn: 'blur' }" ng-change="checkValue('dd')" type="text" />
+                                </div>
+                                <div class="col-md-6" ng-if="opCopy.decDegORdms == 'dms'">
+                                    <table>
+                                        <tr>
+                                            <td><input class="form-control" ng-keypress="isNum($event)" ng-model-options="{ updateOn: 'blur' }" ng-change="checkValue('dms')" id="LoDeg" name="Deg" ng-model="DMS.LODeg" type="text" /></td>
+                                            <td>°</td>
+                                            <td><input class="form-control" ng-keypress="isNum($event)" name="Min" ng-model="DMS.LOMin" type="text" /></td>
+                                            <td>′</td>
+                                            <td><input class="form-control" ng-keypress="isNum($event)" name="Sec" ng-model="DMS.LOSec" type="text" /></td>
+                                            <td>″</td>
+                                        </tr>
+                                    </table>
+                                </div>
                             </div>
 
-                            <!-- Horizontal Datum: -->
-                            <div class="form-group">
+                            <!-- Horizontal Datum: (Details) -->
+                            <div ng-if="view.OPval == 'detail'" class="col-md-12">
+                                <div class="col-md-4"><label>Horizontal Datum:</label></div>
+                                <div class="col-md-6"><span>{{OP.hdatum || '---'}}</span></div>
+                            </div>
+                            <!-- Horizontal Datum: (edit) -->
+                            <div class="form-group" ng-if="view.OPval == 'edit'">
                                 <label class="col-md-4 control-label" for="HDATUM_ID">Horizontal Datum:</label>
                                 <div class="col-md-6">
-                                    <span ng-show="view.OPval == 'detail'">{{OP.hdatum || '---'}}</span>
-                                    <select ng-show="view.OPval == 'edit'" class="form-control" name="HDATUM_ID" ng-model="opCopy.HDATUM_ID"
+                                    <select class="form-control" name="HDATUM_ID" ng-model="opCopy.HDATUM_ID"
                                             ng-options="hd.DATUM_ID as hd.DATUM_NAME for hd in HDList">
                                         <option value=""></option>
                                     </select>
                                 </div>
                             </div>
 
-                            <!-- Horizontal Collection Method: -->
-                            <div class="form-group">
+                            <!-- Horizontal Collection Method: (Details) -->
+                            <div ng-if="view.OPval == 'detail'" class="col-md-12">
+                                <div class="col-md-4"><label>Horizontal Collection Method:</label></div>
+                                <div class="col-md-6"><span>{{OP.hCollectMethod || '---'}}</span></div>
+                            </div>
+                            <!-- Horizontal Collection Method: (edit) -->
+                            <div ng-if="view.OPval == 'edit'" class="form-group">
                                 <label class="col-md-4 control-label" for="HCOLLECT_METHOD_ID">Horizontal Collection Method:</label>
                                 <div class="col-md-6">
-                                    <span ng-show="view.OPval == 'detail'">{{OP.hCollectMethod || '---'}}</span>
-                                    <select ng-show="view.OPval == 'edit'" class="form-control" name="HCOLLECT_METHOD_ID" ng-model="opCopy.HCOLLECT_METHOD_ID"
+                                    <select class="form-control" name="HCOLLECT_METHOD_ID" ng-model="opCopy.HCOLLECT_METHOD_ID"
                                             ng-options="hcm.HCOLLECT_METHOD_ID as hcm.HCOLLECT_METHOD for hcm in HCollectMethodList">
                                         <option value=""></option>
                                     </select>
@@ -1070,33 +1097,45 @@
                                 </div>
                             </div>
 
-                            <!-- Elevation: -->
-                            <div class="form-group">
+                            <!-- Elevation: (Details) -->
+                            <div class="col-md-12" ng-if="view.OPval == 'detail'">
+                                <div class="col-md-4"><label>Elevation:</label></div>
+                                <div class="col-md-6"><span>{{OP.ELEV_FT || '---'}}<span ng-if="OP.ELEV_FT"> ft.</span></span></div>
+                            </div>
+                            <!-- Elevation: (edit)-->
+                            <div class="form-group" ng-if="view.OPval == 'edit'">
                                 <label class="col-md-4 control-label" for="ELEV_FT">Elevation:</label>
                                 <div class="col-md-6">
-                                    <span ng-show="view.OPval == 'detail'">{{OP.ELEV_FT || '---'}}<span ng-if="OP.ELEV_FT"> ft.</span></span>
                                     <input ng-show="view.OPval == 'edit'" class="form-control" ng-keypress="isNum($event)" name="ELEV_FT" ng-model="opCopy.ELEV_FT" type="text" />
                                 </div>
                             </div>
 
-                            <!--  Vertical Datum: -->
-                            <div class="form-group required" ng-class="{'has-error':OPEditForm.VDATUM_ID.$invalid && OPEditForm.VDATUM_ID.$dirty && view.OPval =='edit'}">
+                            <!--  Vertical Datum:(Details) -->
+                            <div class="col-md-12" ng-if="view.OPval == 'detail'">
+                                <div class="col-md-4"><label>Vertical Datum:</label></div>
+                                <div class="col-md-6"><span>{{OP.vDatum || '---'}}</span></div>
+                            </div>
+                            <!--  Vertical Datum:(edit) -->
+                            <div ng-if="view.OPval == 'edit'" class="form-group required" ng-class="{'has-error':OPEditForm.VDATUM_ID.$invalid && OPEditForm.VDATUM_ID.$dirty && view.OPval =='edit'}">
                                 <label class="col-md-4 control-label req" for="VDATUM_ID">Vertical Datum:</label>
                                 <div class="col-md-6">
-                                    <span ng-show="view.OPval == 'detail'">{{OP.vDatum || '---'}}</span>
-                                    <select ng-show="view.OPval == 'edit'" class="form-control" name="VDATUM_ID" ng-model="opCopy.VDATUM_ID"
+                                    <select class="form-control" name="VDATUM_ID" ng-model="opCopy.VDATUM_ID"
                                             ng-options="vd.DATUM_ID as vd.DATUM_NAME for vd in VDatumList" required>
                                         <option value=""></option>
                                     </select>
                                 </div>
                             </div>
 
-                            <!-- Vertical Collection Method: -->
-                            <div class="form-group">
+                            <!-- Vertical Collection Method: (details) -->
+                            <div class="col-md-12" ng-if="view.OPval == 'detail'">
+                                <div class="col-md-4"><label>Vertical Collection Method:</label></div>
+                                <div class="col-md-6"><span>{{OP.vCollectMethod || '---'}}</span></div>
+                            </div>
+                            <!-- Vertical Collection Method: (edit) -->
+                            <div ng-if="view.OPval == 'edit'" class="form-group">
                                 <label class="col-md-4 control-label" for="VCOLLECT_METHOD_ID">Vertical Collection Method:</label>
                                 <div class="col-md-6">
-                                    <span ng-show="view.OPval == 'detail'">{{OP.vCollectMethod || '---'}}</span>
-                                    <select ng-show="view.OPval == 'edit'" class="form-control" name="VCOLLECT_METHOD_ID" ng-model="opCopy.VCOLLECT_METHOD_ID"
+                                    <select class="form-control" name="VCOLLECT_METHOD_ID" ng-model="opCopy.VCOLLECT_METHOD_ID"
                                             ng-options="vcm.VCOLLECT_METHOD_ID as vcm.VCOLLECT_METHOD for vcm in VCollectMethodList">
                                         <option value=""></option>
                                     </select>
@@ -1116,57 +1155,76 @@
                                 </div>
                             </div>
 
-                            <!-- Uncertainty: -->
-                            <div class="form-group">
+                            <!-- Uncertainty: (details) -->
+                            <div class="col-md-12" ng-if="view.OPval == 'detail'">
+                                <div class="col-md-4"><label>Uncertainty:</label></div>
+                                <div class="col-md-6">
+                                    <div>{{OP.UNCERTAINTY || OP.UNQUANTIFIED == 1 ? 'Unquantified' : '---'}}</div>
+                                </div>
+                            </div>
+                            <!-- Uncertainty: (edit) -->
+                            <div class="form-group" ng-if="view.OPval == 'edit'">
                                 <label class="col-md-4 control-label" for="UNCERTAINTY">Uncertainty:</label>
                                 <div class="col-md-6">
-                                    <div ng-show="view.OPval == 'detail'">{{OP.UNCERTAINTY || OP.UNQUANTIFIED == 1 ? 'Unquantified' : '---'}}</div>
-                                    <div ng-show="view.OPval == 'edit'">
-                                        <div class="col-md-12" style="margin-bottom:5px;padding-left:0">
-                                            <div class="col-md-3" style="padding-left: 0;"><input class="form-control" ng-disabled="opCopy.UNQUANTIFIED==1" ng-keypress="isNum($event)" ng-model="opCopy.UNCERTAINTY" type="text" /></div>
-                                            <div class="col-md-2" style="text-decoration:underline">OR</span></div>
-                                            <div class="col-md-5">
-                                                <input type="checkbox" ng-model="opCopy.UNQUANTIFIED" ng-checked="opCopy.UNQUANTIFIED==1" ng-true-value="1" ng-false-value="0" ng-click="UnquantChecked()" />
-                                                <span style="margin-left:10px">Unquantified</span>
-                                            </div>
-                                            <button type="button" class="col-md-1 borderLess pull-left" tooltip-placement="bottom" tooltip-append-to-body="false" uib-tooltip="From GNSS or OPUS solution.">
-                                                <span class="glyphicon glyphicon-question-sign"></span>
-                                            </button>
-                                            <br />
+                                    <div class="col-md-12" style="margin-bottom:5px;padding-left:0">
+                                        <div class="col-md-3" style="padding-left: 0;"><input class="form-control" ng-disabled="opCopy.UNQUANTIFIED==1" ng-keypress="isNum($event)" ng-model="opCopy.UNCERTAINTY" type="text" /></div>
+                                        <div class="col-md-2" style="text-decoration:underline">OR</span></div>
+                                        <div class="col-md-5">
+                                            <input type="checkbox" ng-model="opCopy.UNQUANTIFIED" ng-checked="opCopy.UNQUANTIFIED==1" ng-true-value="1" ng-false-value="0" ng-click="UnquantChecked()" />
+                                            <span style="margin-left:10px">Unquantified</span>
                                         </div>
-                                    </div><!-- end edit -->
+                                        <button type="button" class="col-md-1 borderLess pull-left" tooltip-placement="bottom" tooltip-append-to-body="false" uib-tooltip="From GNSS or OPUS solution.">
+                                            <span class="glyphicon glyphicon-question-sign"></span>
+                                        </button>
+                                        <br />
+                                    </div>
                                 </div>
                             </div>
 
-                            <!-- Quality: -->
-                            <div class="form-group">
+                            <!-- Quality: (detail) -->
+                            <div class="col-md-12" ng-if="view.OPval == 'detail'">
+                                <div class="col-md-4"><label>Quality:</label></div>
+                                <div class="col-md-6"><span>{{OP.quality || '---'}}</span></div>
+                            </div>
+
+                            <!-- Quality: (edit)-->
+                            <div class="form-group" ng-if="view.OPval == 'edit'">
                                 <label class="col-md-4 control-label" for="OP_QUALITY_ID">Quality:</label>
                                 <div class="col-md-6">
-                                    <span ng-show="view.OPval == 'detail'">{{OP.quality || '---'}}</span>
-                                    <select ng-show="view.OPval == 'edit'" class="form-control" name="OP_QUALITY_ID" ng-model="opCopy.OP_QUALITY_ID"
+                                    <select class="form-control" name="OP_QUALITY_ID" ng-model="opCopy.OP_QUALITY_ID"
                                             ng-options="opq.OP_QUALITY_ID as opq.QUALITY for opq in OPQualityList">
                                         <option value=""></option>
                                     </select>
                                 </div>
                             </div>
 
-                            <!-- Objective Point Notes: -->
-                            <div class="form-group">
+                            <!-- Objective Point Notes: (detail) -->
+                            <div ng-if="view.OPval == 'detail'" class="col-md-12">
+                                <div class="col-md-4"><label>Datum Location Notes:</label></div>
+                                <div class="col-md-6"><span>{{OP.OP_NOTES || '---'}}</span></div>
+                            </div>
+                            <!-- Objective Point Notes: (edit) -->
+                            <div ng-if="view.OPval == 'edit'" class="form-group">
                                 <label class="col-md-4 control-label" for="OP_NOTES">Datum Location Notes:</label>
                                 <div class="col-md-6">
-                                    <span ng-show="view.OPval == 'detail'">{{OP.OP_NOTES || '---'}}</span>
-                                    <textarea ng-show="view.OPval == 'edit'" class="form-control" type="text" rows="3" ng-model="opCopy.OP_NOTES" />
+                                    <textarea class="form-control" type="text" rows="3" ng-model="opCopy.OP_NOTES" />
                                 </div>
                             </div>
 
-                            <!-- Date Established: -->
-                            <div class="form-group required" ng-class="{'has-error':OPEditForm.DATE_ESTABLISHED.$invalid && OPEditForm.DATE_ESTABLISHED.$dirty && view.OPval =='edit'}">
+                            <!-- Date Established: (detail) -->
+                            <div ng-if="view.OPval == 'detail'" class="col-md-12">
+                                <div class="col-md-4"><label>Date Established:</label></div>
+                                <div class="col-md-6">
+                                    <div class="col-md-6 input-group"><span>{{OP.DATE_ESTABLISHED | date: 'MM/dd/yyyy' || '---'}}</span></div>
+                                </div>
+                            </div>
+                            <!-- Date Established: (edit) -->
+                            <div ng-if="view.OPval == 'edit'" class="form-group required" ng-class="{'has-error':OPEditForm.DATE_ESTABLISHED.$invalid && OPEditForm.DATE_ESTABLISHED.$dirty && view.OPval =='edit'}">
                                 <label class="col-md-4 control-label req" for="DATE_ESTABLISHED">Date Established:</label>
                                 <div class="col-md-6">
                                     <div class="col-md-6 input-group">
-                                        <span ng-show="view.OPval == 'detail'">{{OP.DATE_ESTABLISHED | date: 'MM/dd/yyyy' || '---'}}</span>
-                                        <input ng-show="view.OPval == 'edit'" class="form-control dateInputStyle" type="date" name="de" uib-datepicker-popup="MM/dd/yyyy" show-weeks="false" is-open="datepickrs.de" ng-model="opCopy.DATE_ESTABLISHED" required />
-                                        <span ng-show="view.OPval == 'edit'" class="input-group-btn">
+                                        <input class="form-control dateInputStyle" type="date" name="de" uib-datepicker-popup="MM/dd/yyyy" show-weeks="false" is-open="datepickrs.de" ng-model="opCopy.DATE_ESTABLISHED" required />
+                                        <span class="input-group-btn">
                                             <button type="button" class="btn btn-default" ng-click="open($event, 'de')">
                                                 <i class="glyphicon glyphicon-calendar" />
                                             </button>
@@ -1175,25 +1233,30 @@
                                 </div>
                             </div>
 
-                            <!-- Date Recovered: -->
-                            <div class="form-group">
+                            <!-- Date Recovered: (detail) -->
+                            <div ng-if="view.OPval == 'detail'" class="col-md-12">
+                                <div class="col-md-4"><label>Date Recovered:</label></div>
+                                <div class="col-md-6">
+                                    <div class="col-md-6 input-group"><span>{{OP.DATE_RECOVERED | date: 'MM/dd/yyyy' || '---'}}</span></div>
+                                </div>
+                            </div>
+                            <!-- Date Recovered: (edit) -->
+                            <div ng-if="view.OPval == 'edit'" class="form-group">
                                 <label class="col-md-4 control-label" for="DATE_RECOVERED">Date Recovered:</label>
                                 <div class="col-md-6">
                                     <div class="col-md-6 input-group">
-                                        <span ng-show="view.OPval == 'detail'">{{OP.DATE_RECOVERED | date: 'MM/dd/yyyy' || '---'}}</span>
-                                        <input ng-show="view.OPval == 'edit'" show-weeks="false" class="form-control dateInputStyle" type="date" name="dr" uib-datepicker-popup="MM/dd/yyyy" is-open="datepickrs.dr" ng-model="opCopy.DATE_RECOVERED" />
-                                        <span ng-show="view.OPval == 'edit'" class="input-group-btn">
+                                        <input show-weeks="false" class="form-control dateInputStyle" type="date" name="dr" uib-datepicker-popup="MM/dd/yyyy" is-open="datepickrs.dr" ng-model="opCopy.DATE_RECOVERED" />
+                                        <span class="input-group-btn">
                                             <button type="button" class="btn btn-default" ng-click="open($event, 'dr')">
                                                 <i class="glyphicon glyphicon-calendar" />
                                             </button>
                                         </span>
                                     </div>
                                 </div>
-                                <button ng-show="view.OPval == 'edit'" type="button" class="col-md-1 borderLess pull-left" tooltip-placement="bottom" tooltip-append-to-body="false" uib-tooltip="Enter the date the location was recently found in good condition.">
+                                <button type="button" class="col-md-1 borderLess pull-left" tooltip-placement="bottom" tooltip-append-to-body="false" uib-tooltip="Enter the date the location was recently found in good condition.">
                                     <span class="glyphicon glyphicon-question-sign"></span>
                                 </button>
                             </div>
-
                         </fieldset>
                     </form>
                 </uib-accordion-group>
@@ -3396,7 +3459,7 @@
                                     <div class="form-group" style="margin:0;padding:0">
                                         <label class="col-md-4 control-label" for="FILE_URL">File URL:</label>
                                         <div class="col-md-6">
-                                            <input class="form-control" name="FILE_URL" ng-model="NWISFile.FILE_URL" type="text" />
+                                            <input class="form-control" name="FILE_URL" title="{{NWISFile.FILE_URL}}" ng-model="NWISFile.FILE_URL" type="text" />
                                         </div>
                                         <button type="button" class="col-md-1 borderLess pull-left" tooltip-placement="bottom" tooltip-append-to-body="false" uib-tooltip="Auto generated from USGS Station ID. Correct if necessary.">
                                             <span class="glyphicon glyphicon-question-sign"></span>
@@ -4745,7 +4808,7 @@
                                     <div class="form-group" style="margin:0;padding:0">
                                         <label class="col-md-4 control-label" for="FILE_URL">File URL:</label>
                                         <div class="col-md-6">
-                                            <input class="form-control" name="FILE_URL" ng-model="NWISFile.FILE_URL" type="text" />
+                                            <input class="form-control" name="FILE_URL" title="{{NWISFile.FILE_URL}}" ng-model="NWISFile.FILE_URL" type="text" />
                                         </div>
                                         <button type="button" class="col-md-1 borderLess pull-left" tooltip-placement="bottom" tooltip-append-to-body="false" uib-tooltip="Auto generated from USGS Station ID. Correct if necessary.">
                                             <span class="glyphicon glyphicon-question-sign"></span>
@@ -5105,7 +5168,7 @@
 <!-- MODAL for FILE details/edit-->
 <script type="text/ng-template" id="FILEmodal.html">
     <div class="modal-header">
-        <h3 class="modal-title">{{whoseFile}}<button class="close" type="button" ng-click="cancel()" aria-hidden="true" style="color:gray;">&times;</button></h3>
+        <h3 class="modal-title">{{whoseFile}} <span ng-if="aFile.IS_NWIS == 1">(NWIS Connection datafile)</span><button class="close" type="button" ng-click="cancel()" aria-hidden="true" style="color:gray;">&times;</button></h3>
     </div>
     <form class="form-horizontal" name="FILEForm">
         <fieldset>
@@ -5115,7 +5178,7 @@
                         <span><button ng-show="view.FILEval == 'detail'" type="button" class="btn btn-primary" ng-click="wannaEditFILE()"><span>Edit File</span></button></span>
                         <span><button ng-show="view.FILEval == 'edit'" class="btn btn-primary" ng-click="save(FILEForm.$valid)"><span>Save</span></button></span>
                         <span>
-                            <button type="button" ng-show="(datafile.DATA_FILE_ID != undefined && (view.FILEval == 'detail' && ApprovalInfo.approvalDate == undefined) && (userRole == 'Admin' || userRole == 'Manager'))"
+                            <button type="button" ng-show="(datafile.DATA_FILE_ID != undefined && aFile.IS_NWIS !== 1 && view.FILEval == 'detail' && ApprovalInfo.approvalDate == undefined && (userRole == 'Admin' || userRole == 'Manager'))"
                                     class="btn btn-primary" ng-click="approveDF()">
                                 <span>Approve</span>
                             </button>
@@ -5154,7 +5217,7 @@
 
                 <!-- photo file upload fileType==1-->  <!-- all other file upload fileType > 2-->    <!--data file upload fileType==2 (NOT DEALT WITH IN THIS MODAL -- only in Sensor Modals) -->
                 <!--File URL (link)-->
-                <div ng-if="aFile.FILETYPE_ID === 8 || fileCopy.FILETYPE_ID === 8" class="form-group">
+                <div ng-if="(aFile.FILETYPE_ID === 8 || fileCopy.FILETYPE_ID === 8) || (aFile.IS_NWIS === 1 || fileCopy.IS_NWIS === 1)" class="form-group">
                     <label class="col-md-4 control-label" for="FILE_URL">File URL:</label>
                     <div class="col-md-6">
                         <span ng-show="view.FILEval == 'detail'">{{aFile.FILE_URL || '---'}}</span>
@@ -5255,7 +5318,8 @@
 
                 <!-- Good Data Start Time* (data) -->
                 <div ng-if="aFile.FILETYPE_ID === 2 || fileCopy.FILETYPE_ID === 2" class="form-group required" ng-class="{'has-error':FILEForm.GOOD_START.$invalid && FILEForm.GOOD_START.$dirty && view.FILEval =='edit'}">
-                    <label class="col-md-4 control-label req" style="padding-top:4em;" for="GOOD_START">Good Data Start Time:</label>
+                    <label class="col-md-4 control-label req"  ng-if="view.FILEval == 'edit'" style="padding-top:4em;" for="GOOD_START">Good Data Start Time:</label>
+                    <label class="col-md-4 control-label req" ng-if="view.FILEval == 'detail'" for="GOOD_START">Good Data Start Time:</label>
                     <div class="col-md-6">
                         <span ng-show="view.FILEval == 'detail'">{{datafile.GOOD_START | date: 'MM/dd/yyyy hh:mm a' || '---'}}</span>
                         <datetimepicker ng-show="view.FILEval == 'edit'" ng-model="dfCopy.GOOD_START" show-meridian="true" date-format="MM/dd/yyyy" readonly-date="false" date-options="dateOptions"
@@ -5269,7 +5333,8 @@
 
                 <!-- Good Data End Time* (data) -->
                 <div ng-if="aFile.FILETYPE_ID === 2 || fileCopy.FILETYPE_ID === 2" class="form-group required" ng-class="{'has-error':FILEForm.GOOD_END.$invalid && FILEForm.GOOD_END.$dirty && view.FILEval =='edit'}">
-                    <label class="col-md-4 control-label req" style="padding-top:4em;" for="GOOD_END">Good Data End Time:</label>
+                    <label class="col-md-4 control-label req" ng-if="view.FILEval == 'edit'" style="padding-top:4em;" for="GOOD_END">Good Data End Time:</label>
+                    <label class="col-md-4 control-label req" ng-if="view.FILEval == 'detail'" for="GOOD_END">Good Data End Time:</label>
                     <div class="col-md-6">
                         <span ng-show="view.FILEval == 'detail'">{{datafile.GOOD_END | date: 'MM/dd/yyyy hh:mm a' || '---'}}</span>
                         <datetimepicker ng-show="view.FILEval == 'edit'" ng-model="dfCopy.GOOD_END" show-meridian="true" date-format="MM/dd/yyyy" readonly-date="false" date-options="dateOptions"
@@ -5310,7 +5375,7 @@
                 </div>
 
                 <!-- Approval info -->
-                <div class="form-group" ng-if="aFile.FILETYPE_ID === 2 && aFile.FILE_ID !== undefined">
+                <div class="form-group" ng-if="aFile.FILETYPE_ID === 2 && aFile.FILE_ID !== undefined && aFile.IS_NWIS !== 1">
                     <label class="col-md-4 control-label" for="APPROVAL_ID">Approval Info:</label>
                     <div class="col-md-6" ng-if="ApprovalInfo.Member !== undefined">
                         <span>Approved By:</span><span ng-if="ApprovalInfo.Member"> {{ApprovalInfo.Member.FNAME || '---'}} {{ApprovalInfo.Member.LNAME || '---'}}</span><br />
@@ -5358,7 +5423,7 @@
                     </div>
                 </div>
 
-                <div ng-if="(aFile.FILE_ID !== undefined && aFile.FILETYPE_ID !== 8) || (fileCopy.FILE_ID !== undefined && fileCopy.FILETYPE_ID !== 8)" class="form-group">
+                <div ng-if="(aFile.FILE_ID !== undefined && aFile.FILETYPE_ID !== 8 && aFile.IS_NWIS !== 1) || (fileCopy.FILE_ID !== undefined && fileCopy.FILETYPE_ID !== 8 && fileCopy.IS_NWIS !== 1)" class="form-group">
                     <label class="col-md-4 control-label">Associated File:</label>
                     <div class="col-md-6">
                         <span ng-show="view.FILEval == 'detail'">
