@@ -94,6 +94,8 @@
     <!-- inject:js -->
     <script src="component/STNCtrl.js"></script>
     <script src="shared/directives/STNDirectives.js"></script>
+    <script src="component/sensor/sensorModalCtrl.js"></script>
+    <script src="component/sensor/sensorCtrl.js"></script>
     <script src="component/siteSearch/siteSearchCtrl.js"></script>
     <script src="component/site/siteModalCtrl.js"></script>
     <script src="component/site/siteCtrl.js"></script>
@@ -110,7 +112,7 @@
     <script src="component/reporting/confirmReportModalCtrl.js"></script>
     <script src="component/peak/peakModalCtrl.js"></script>
     <script src="component/peak/peakCtrl.js"></script>
-    <script src="component/objectivePoint/ObjectivePointModalCtrl.js"></script>
+    <script src="component/objectivePoint/objectivePointModalCtrl.js"></script>
     <script src="component/objectivePoint/objectivePointCtrl.js"></script>
     <script src="component/member/memberInfoCtrl.js"></script>
     <script src="component/member/memberCtrl.js"></script>
@@ -120,19 +122,16 @@
     <script src="component/map/MapFiltersController.js"></script>
     <script src="component/map/mapCtrl.js"></script>
     <script src="component/main/mainCtrl.js"></script>
-    <script src="component/logInOut/LogInOutCtrl.js"></script>
-    <script src="component/hwm/quickHWMCtrl.js"></script>
+    <script src="component/logInOut/logInOutCtrl.js"></script>
     <script src="component/hwm/hwmModalCtrl.js"></script>
     <script src="component/hwm/hwmCtrl.js"></script>
-    <script src="component/home/homeCtrl.js"></script>
     <script src="component/help/helpCtrl.js"></script>
-    <script src="component/file/fileUploadCtrl.js"></script>
-    <script src="component/file/fileModalCtrl.js"></script>
-    <script src="component/file/fileCtrl.js"></script>
     <script src="component/event/eventSessionModalCtrl.js"></script>
     <script src="component/event/eventSessionCtrl.js"></script>
     <script src="component/event/eventInfoCtrl.js"></script>
     <script src="component/event/eventCtrl.js"></script>
+    <script src="component/file/fileModalCtrl.js"></script>
+    <script src="component/file/fileCtrl.js"></script>
     <script src="component/approval/approvalCtrl.js"></script>
     <script src="services/STNResource.js"></script>
     <script src="services/businessServices.js"></script>
@@ -160,52 +159,46 @@
     <!--HEADER START navCtrl-->
     <div ng-controller="mainCtrl" class="app-nav">
         <h2 class="testing-alert"><b>TESTING ONLY! DATA WILL BE OVERRIDDEN FOLLOWING TESTING PHASE</b></h2>
-        <h1 class="nav-header">Short-Term Network<span ng-if="thisPage"> - {{thisPage}}</span></h1><!--
+        <h1 class="nav-header">Short-Term Network<span ng-if="thisPage"> - {{thisPage}}</span></h1>
 
-        --><button ng-show="isAuth.val" ng-controller="eventSessionCtrl" class="btn-wim btn-sm btn-white nav-change-session" ng-click="openEventModal()">
+        <button type="button" ng-show="isAuth.val" ng-controller="eventSessionCtrl" class="btn-wim btn-sm btn-white nav-change-session" ng-click="openEventModal()">
             <span ng-show="!sessionEvent">Choose Event</span>
             <span ng-show="sessionEvent">Change Event</span>
-        </button><!--
-        --><div ng-show="isAuth.val"  class="nav-session-label" ng-if="sessionTeam || sessionEvent">
+        </button>
+        <div ng-show="isAuth.val"  class="nav-session-label" ng-if="sessionTeam || sessionEvent">
             <span ng-if="sessionTeam">{{sessionTeam}}<br></span>
             <span ng-if="sessionEvent">{{sessionEvent}}</span>
         </div>
 
         <div class="nav-userctrl" ng-show="isAuth.val">
             <span>Welcome, <a ui-sref="members.MemberInfo({id: userID})">{{usersName}}</a></span>
-            <button ng-controller="logoutCtrl" ng-click="logout()">LOG OFF</button>
+            <button type="button" ng-controller="logoutCtrl" ng-click="logout()">LOG OFF</button>
         </div>
 
 
         <div class="subnav" ng-show="isAuth.val">
+            <ul class="subnav-links">
+                <li><a ng-class="{active: activeMenu == 'map'}" ui-sref="map" ng-click="activeMenu = 'map'">Map</a></li>
+                <li><a ng-class="{active: activeMenu == 'approval'}" ui-sref="approval" ng-click="activeMenu = 'approval'">Approval</a></li>
+                <li><a ng-class="{active: activeMenu == 'sites'}"  ui-sref="siteSearch" ng-click="activeMenu = 'sites'">Sites</a></li>
+                <li><a ng-class="{active: activeMenu == 'report'}"  ui-sref="reporting.reportDash" ng-click="activeMenu = 'report'">Reporting</a></li>
+                <li><a ng-class="{active: activeMenu == 'settings'}"  ui-sref="settings" ng-click="activeMenu = 'settings'">Settings</a></li>
+            </ul>
+            <div class="subnav-right" uib-dropdown is-open="status.isopen">
+                <button type="button" ng-click="goSearch = !goSearch" class="btn-subnav">
+                    <span ng-show="!goSearch">Search <i class="ion-search"></i></span>
+                    <span ng-show="goSearch">Cancel <i class="ion-close"></i></span>
+                </button>
 
-
-
-                <ul class="subnav-links">
-                    <li><a ng-class="{active: activeMenu == 'map'}" ui-sref="map" ng-click="activeMenu = 'map'">Map</a></li><!--
-                    --><li><a ng-class="{active: activeMenu == 'approval'}" ui-sref="approval" ng-click="activeMenu = 'approval'">Approval</a></li><!--
-                    --><li><a ng-class="{active: activeMenu == 'sites'}"  ui-sref="siteSearch" ng-click="activeMenu = 'sites'">Sites</a></li><!--
-                    --><li><a ng-class="{active: activeMenu == 'report'}"  ui-sref="reporting.reportDash" ng-click="activeMenu = 'report'">Reporting</a></li><!--
-                    --><li><a ng-class="{active: activeMenu == 'settings'}"  ui-sref="settings" ng-click="activeMenu = 'settings'">Settings</a></li>
+                <button id="single-button" type="button" class="btn-subnav" uib-dropdown-toggle ng-disabled="disabled">
+                    Create <span ng-show="status.isopen" class="ion-arrow-up-b"></span><span ng-show="!status.isopen" class="ion-arrow-down-b"></span>
+                </button>
+                <ul class="dropdown-menu" role="menu" aria-labelledby="single-button">
+                    <li role="menuitem"><a ui-sref="site.dashboard({id: 0})">Site</a></li>
+                    <li role="menuitem"><a ui-sref="quickCreate({id:'HWM'})">Quick HWM</a></li>
+                    <li role="menuitem"><a ui-sref="quickCreate({id:'Sensor'})">Quick Sensor</a></li>
                 </ul>
-
-
-
-                <div class="subnav-right" uib-dropdown is-open="status.isopen">
-                    <button ng-click="goSearch = !goSearch" class="btn-subnav">
-                        <span ng-show="!goSearch">Search <i class="ion-search"></i></span>
-                        <span ng-show="goSearch">Cancel <i class="ion-close"></i></span>
-                    </button><!--
-
-                    --><button id="single-button" type="button" class="btn-subnav" uib-dropdown-toggle ng-disabled="disabled">
-                        Create <span ng-show="status.isopen" class="ion-arrow-up-b"></span><span ng-show="!status.isopen" class="ion-arrow-down-b"></span>
-                    </button>
-                    <ul class="dropdown-menu" role="menu" aria-labelledby="single-button">
-                        <li role="menuitem"><a ui-sref="site.dashboard({id: 0})">Site</a></li>
-                        <li role="menuitem"><a ui-sref="quickCreate({id:'HWM'})">Quick HWM</a></li>
-                        <li role="menuitem"><a ui-sref="quickCreate({id:'Sensor'})">Quick Sensor</a></li>
-                    </ul>
-                </div>
+            </div>
         </div>
 
         <site-search  ng-show="goSearch"/>
@@ -234,8 +227,8 @@
         <p>Are you sure you want to remove this {{what}}: <b>{{nameToRmv}}</b></p>
     </div>
     <div class="modal-footer">
-        <button class="btn btn-primary" ng-click="ok()">OK</button>
-        <button class="btn btn-warning" ng-click="cancel()">Cancel</button>
+        <button type="button" class="btn btn-primary" ng-click="ok()">OK</button>
+        <button type="button" class="btn btn-warning" ng-click="cancel()">Cancel</button>
     </div>
 </script>
 
@@ -254,7 +247,7 @@
                         <input class="form-control dateInputStyle" name="ed" type="date" uib-datepicker-popup="MM/dd/yyyy" is-open="datepickrs.ed"
                                show-weeks="false" ng-model="event.DATE" placeholder="No filter" />
                         <span class="input-group-btn">
-                            <button class="btn btn-default" ng-click="open($event, 'ed')">
+                            <button type="button" class="btn btn-default" ng-click="open($event, 'ed')">
                                 <i class="glyphicon glyphicon-calendar" />
                             </button>
                         </span>
@@ -300,9 +293,9 @@
         </form>
     </div>
     <div class="modal-footer">
-        <button class="btn btn-primary" ng-click="setEvent()">Set event</button>
-        <button class="btn btn-warning" ng-click="clearEvent()">Clear event</button>
-        <button class="btn btn-warning" ng-click="close()">Cancel</button>
+        <button type="button" class="btn btn-primary" ng-click="setEvent()">Set event</button>
+        <button type="button" class="btn btn-warning" ng-click="clearEvent()">Clear event</button>
+        <button type="button" class="btn btn-warning" ng-click="close()">Cancel</button>
     </div>
 
 </script>
@@ -316,8 +309,8 @@
         <p>Are you sure you want to save this Report without marking it complete?</p>
     </div>
     <div class="modal-footer">
-        <button class="btn btn-primary" ng-click="ok()">OK</button>
-        <button class="btn btn-warning" ng-click="cancel()">Cancel</button>
+        <button type="button" class="btn btn-primary" ng-click="ok()">OK</button>
+        <button type="button" class="btn btn-warning" ng-click="cancel()">Cancel</button>
     </div>
 </script>
 
@@ -341,7 +334,7 @@
         <br clear="all" />
     </div>
     <div class="modal-footer">
-        <button class="btn btn-primary" ng-click="ok()">OK</button>
+        <button type="button" class="btn btn-primary" ng-click="ok()">OK</button>
     </div>
 </script>
 
@@ -367,6 +360,6 @@
         <br clear="all" />
     </div>
     <div class="modal-footer">
-        <button class="btn btn-primary" ng-click="ok()">OK</button>
+        <button type="button" class="btn btn-primary" ng-click="ok()">OK</button>
     </div>
 </script>

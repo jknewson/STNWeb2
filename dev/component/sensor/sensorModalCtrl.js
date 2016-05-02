@@ -418,12 +418,11 @@
                 } //end new file
                 $scope.showNWISFileForm = true;
             };
-            //var postApprovalForNWISfile = function (newDF) {
-            //    var theApproval = {
-            //        MEMBER_ID: $scope.eventList.filter(function (ev) { return ev.EVENT_ID == $scope.aSensor.EVENT_ID; })[0].EVENT_COORDINATOR,
-
-            //    }
-            //}
+            var postApprovalForNWISfile = function (DFid) {
+                DATA_FILE.approveNWISDF({ id: DFid }).$promise.then(function (approvalResponse) {
+                    $scope.NWISFile.APPROVAL_ID = approvalResponse.APPROVAL_ID;
+                });
+            }
             $scope.createNWISFile = function (valid) {
                 if (valid) {
                     $http.defaults.headers.common.Authorization = 'Basic ' +$cookies.get('STNCreds');
@@ -444,12 +443,12 @@
                         $scope.NWISDF.GOOD_START = $scope.NWISDF.GOOD_START.toString().substring(0, si);
                         $scope.NWISDF.GOOD_END = $scope.NWISDF.GOOD_END.toString().substring(0, ei);
                     }
-                    $scope.NWISDF.APPROVAL_ID = 
+                   
                     DATA_FILE.save($scope.NWISDF).$promise.then(function (NdfResonse) {
                         //now create an approval with the event's coordinator and add the approval_id, put it, then post the file TODO ::: NEW ENDPOINT FOR THIS
-                        //postApprovalForNWISfile(NdfResonse);
                         //then POST file
                         $scope.NWISFile.DATA_FILE_ID = NdfResonse.DATA_FILE_ID;
+                        postApprovalForNWISfile(NdfResonse.DATA_FILE_ID); //process approval
                         //now POST File
                         FILE.save($scope.NWISFile).$promise.then(function (Fresponse) {
                             toastr.success("File Data saved");
@@ -1910,7 +1909,7 @@
                             $scope.datafile.COLLECT_DATE = new Date($scope.datafile.COLLECT_DATE);
                             $scope.datafile.GOOD_START = getDateTimeParts($scope.datafile.GOOD_START);
                             $scope.datafile.GOOD_END = getDateTimeParts($scope.datafile.GOOD_END);
-                            if (df.APPROVAL_ID !== undefined && df.APPROVAL_ID !== null && df.APPROVAL_ID <= 0) {
+                            if (df.APPROVAL_ID !== undefined && df.APPROVAL_ID !== null && df.APPROVAL_ID >= 1) {
                                 DATA_FILE.getDFApproval({ id: df.DATA_FILE_ID }, function success(approvalResponse) {
                                     $scope.ApprovalInfo.approvalDate = new Date(approvalResponse.APPROVAL_DATE); //include note that it's displayed in their local time but stored in UTC
                                     $scope.ApprovalInfo.Member = allMembers.filter(function (amem) { return amem.MEMBER_ID == approvalResponse.MEMBER_ID; })[0];
@@ -2158,75 +2157,72 @@
             };
 
             //approve this datafile (if admin or manager)
-            $scope.approveDF = function (valid) {
-                if (valid) {
-                    //this is valid, show modal to confirm they want to approve it
-                    var thisDF = $scope.datafile;
-                    var approveModal = $uibModal.open({
-                        template: "<div class='modal-header'><h3 class='modal-title'>Approve Data File</h3></div>" +
-                            "<div class='modal-body'><p>Are you ready to approve this Data File?</p></div>" +
-                            "<div class='modal-footer'><button class='btn btn-primary' ng-click='approveIt()'>Approve</button><button class='btn btn-warning' ng-click='cancel()'>Cancel</button></div>",
-                        controller: ['$scope', '$uibModalInstance', function ($scope, $uibModalInstance) {
-                            $scope.cancel = function () {
-                                $uibModalInstance.dismiss('cancel');
-                            };
-                            $scope.approveIt = function () {
-                                //delete the site and all things 
-                                $uibModalInstance.close(thisDF);
-                            };
-                        }],
-                        size: 'sm'
+            $scope.approveDF = function () {
+                //this is valid, show modal to confirm they want to approve it
+                var thisDF = $scope.datafile;
+                var approveModal = $uibModal.open({
+                    template: "<div class='modal-header'><h3 class='modal-title'>Approve Data File</h3></div>" +
+                        "<div class='modal-body'><p>Are you ready to approve this Data File?</p></div>" +
+                        "<div class='modal-footer'><button class='btn btn-primary' ng-click='approveIt()'>Approve</button><button class='btn btn-warning' ng-click='cancel()'>Cancel</button></div>",
+                    controller: ['$scope', '$uibModalInstance', function ($scope, $uibModalInstance) {
+                        $scope.cancel = function () {
+                            $uibModalInstance.dismiss('cancel');
+                        };
+                        $scope.approveIt = function () {
+                            //delete the site and all things 
+                            $uibModalInstance.close(thisDF);
+                        };
+                    }],
+                    size: 'sm'
+                });
+                approveModal.result.then(function (df) {
+                    $http.defaults.headers.common.Authorization = 'Basic ' + $cookies.get('STNCreds');
+                    DATA_FILE.approveDF({ id: df.DATA_FILE_ID }).$promise.then(function (approvalResponse) {
+                        df.APPROVAL_ID = approvalResponse.APPROVAL_ID;
+                        $scope.datafile = df;
+                        toastr.success("Data File Approved");
+                        $scope.ApprovalInfo.approvalDate = new Date(approvalResponse.APPROVAL_DATE); //include note that it's displayed in their local time but stored in UTC
+                        $scope.ApprovalInfo.Member = allMembers.filter(function (amem) { return amem.MEMBER_ID == approvalResponse.MEMBER_ID; })[0];
+                    }, function error(errorResponse) {
+                        toastr.error("Error: " + errorResponse.statusText);
                     });
-                    approveModal.result.then(function (df) {
-                        $http.defaults.headers.common.Authorization = 'Basic ' + $cookies.get('STNCreds');
-                        DATA_FILE.approveDF({ id: df.DATA_FILE_ID }).$promise.then(function (approvalResponse) {
-                            df.APPROVAL_ID = approvalResponse.APPROVAL_ID;
-                            $scope.datafile = df;
-                            toastr.success("Data File Approved");
-                            $scope.ApprovalInfo.approvalDate = new Date(approvalResponse.APPROVAL_DATE); //include note that it's displayed in their local time but stored in UTC
-                            $scope.ApprovalInfo.Member = allMembers.filter(function (amem) { return amem.MEMBER_ID == approvalResponse.MEMBER_ID; })[0];
-                        }, function error(errorResponse) {
-                            toastr.error("Error: " + errorResponse.statusText);
-                        });
-                    }, function () {
-                        //logic for cancel
-                    });//end modal
-                }
+                }, function () {
+                    //logic for cancel
+                });//end modal
             };
+            
             //approve this hwm (if admin or manager)
-            $scope.unApproveDF = function (valid) {
-                if (valid) {
-                    //this is valid, show modal to confirm they want to approve it
-                    var thisDF = $scope.datafile;
-                    var unapproveModal = $uibModal.open({
-                        template: "<div class='modal-header'><h3 class='modal-title'>Remove Approval</h3></div>" +
-                            "<div class='modal-body'><p>Are you sure you wan to unapprove this Data File?</p></div>" +
-                            "<div class='modal-footer'><button class='btn btn-primary' ng-click='unApproveIt()'>Unapprove</button><button class='btn btn-warning' ng-click='cancel()'>Cancel</button></div>",
-                        controller: ['$scope', '$uibModalInstance', function ($scope, $uibModalInstance) {
-                            $scope.cancel = function () {
-                                $uibModalInstance.dismiss('cancel');
-                            };
-                            $scope.unApproveIt = function () {
-                                //delete the site and all things 
-                                $uibModalInstance.close(thisDF);
-                            };
-                        }],
-                        size: 'sm'
+            $scope.unApproveDF = function () {
+                //this is valid, show modal to confirm they want to approve it
+                var thisDF = $scope.datafile;
+                var unapproveModal = $uibModal.open({
+                    template: "<div class='modal-header'><h3 class='modal-title'>Remove Approval</h3></div>" +
+                        "<div class='modal-body'><p>Are you sure you wan to unapprove this Data File?</p></div>" +
+                        "<div class='modal-footer'><button class='btn btn-primary' ng-click='unApproveIt()'>Unapprove</button><button class='btn btn-warning' ng-click='cancel()'>Cancel</button></div>",
+                    controller: ['$scope', '$uibModalInstance', function ($scope, $uibModalInstance) {
+                        $scope.cancel = function () {
+                            $uibModalInstance.dismiss('cancel');
+                        };
+                        $scope.unApproveIt = function () {
+                            //delete the site and all things 
+                            $uibModalInstance.close(thisDF);
+                        };
+                    }],
+                    size: 'sm'
+                });
+                unapproveModal.result.then(function (df) {
+                    $http.defaults.headers.common.Authorization = 'Basic ' + $cookies.get('STNCreds');
+                    DATA_FILE.unApproveDF({ id: df.DATA_FILE_ID }).$promise.then(function () {
+                        df.APPROVAL_ID = null;
+                        $scope.datafile = df;
+                        toastr.success("Data File Unapproved");
+                        $scope.ApprovalInfo = {};
+                    }, function error(errorResponse) {
+                        toastr.error("Error: " + errorResponse.statusText);
                     });
-                    unapproveModal.result.then(function (df) {
-                        $http.defaults.headers.common.Authorization = 'Basic ' + $cookies.get('STNCreds');
-                        DATA_FILE.unApproveDF({ id: df.DATA_FILE_ID }).$promise.then(function () {
-                            df.APPROVAL_ID = null;
-                            $scope.datafile = df;
-                            toastr.success("Data File Unapproved");
-                            $scope.ApprovalInfo = {};
-                        }, function error(errorResponse) {
-                            toastr.error("Error: " + errorResponse.statusText);
-                        });
-                    }, function () {
-                        //logic for cancel
-                    });//end modal
-                }
+                }, function () {
+                    //logic for cancel
+                });//end modal
             };
             //#endregion FILE STUFF
 
@@ -2286,6 +2282,11 @@
                 } //end new file
                 $scope.showNWISFileForm = true;
             };
+            var postApprovalForNWISfile = function (DFid) {
+                DATA_FILE.approveNWISDF({ id: df.DATA_FILE_ID }).$promise.then(function (approvalResponse) {
+                    $scope.NWISFile.APPROVAL_ID = approvalResponse.APPROVAL_ID;
+                });
+            }
             $scope.createNWISFile = function (valid) {
                 if (valid) {
                     $http.defaults.headers.common.Authorization = 'Basic ' +$cookies.get('STNCreds');
@@ -2309,6 +2310,7 @@
                     DATA_FILE.save($scope.NWISDF).$promise.then(function (NdfResonse) {
                         //then POST fileParts (Services populate PATH)
                         $scope.NWISFile.DATA_FILE_ID = NdfResonse.DATA_FILE_ID;
+                        postApprovalForNWISfile(NdfResonse.DATA_FILE_ID); //process approval
                         //now POST File
                         FILE.save($scope.NWISFile).$promise.then(function (Fresponse) {
                             toastr.success("File Data saved");

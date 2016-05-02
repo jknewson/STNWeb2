@@ -43,6 +43,10 @@
                         $scope.siteHWMs = HWM_Service.getAllSiteHWMs(); $scope.siteSensors = Instrument_Service.getAllSiteSensors();
                         //now go about updating the FileList
                         $scope.SiteFiles = sitefiles.filter(function (h) { return h.fileBelongsTo == 'Site File' || h.fileBelongsTo == 'Objective Point File'; });  //keep all site and op files
+                        angular.forEach($scope.SiteFiles, function (sf){
+                            if (sf.fileBelongsTo == 'Objective Point File')
+                                sf.typeName =  thisSiteOPs.filter(function (op) { return op.OBJECTIVE_POINT_ID == sf.OBJECTIVE_POINT_ID; })[0].NAME;                            
+                        });
                         var hwmFiles = sitefiles.filter(function (sfiles) { return sfiles.fileBelongsTo == 'HWM File'; });
                         var sensFiles = sitefiles.filter(function (sfi) { return sfi.INSTRUMENT_ID > 0 && sfi.INSTRUMENT_ID !== null; });
                         //only show files for this event (go through hwm files and match eventid
@@ -55,8 +59,10 @@
                         //only show files for this event (go through sensor files and match eventid
                         for (var sf = 0; sf < sensFiles.length; sf++) {
                             for (var inst = 0; inst < $scope.siteSensors.length; inst++) {
-                                if (sensFiles[sf].INSTRUMENT_ID == $scope.siteSensors[inst].Instrument.INSTRUMENT_ID && $scope.siteSensors[inst].Instrument.EVENT_ID == $cookies.get('SessionEventID'))
+                                if (sensFiles[sf].INSTRUMENT_ID == $scope.siteSensors[inst].Instrument.INSTRUMENT_ID && $scope.siteSensors[inst].Instrument.EVENT_ID == $cookies.get('SessionEventID')) {
+                                    sensFiles[sf].typeName = $scope.siteSensors[inst].Instrument.SERIAL_NUMBER;
                                     $scope.SiteFiles.push(sensFiles[sf]);
+                                }
                             }
                         }                        
                     }//end if SessionEventID !== undefined
@@ -70,6 +76,10 @@
                         $scope.siteHWMs = HWM_Service.getAllSiteHWMs(); $scope.siteSensors = Instrument_Service.getAllSiteSensors();
                         //keep all site & OP Files, filter HWM, Instrument (DF files use Instrument event)
                         $scope.SiteFiles = Site_Files.getAllSiteFiles().filter(function (h) { return h.fileBelongsTo == 'Site File' || h.fileBelongsTo == 'Objective Point File'; });  //keep all site and op files
+                        angular.forEach($scope.SiteFiles, function (sf) {
+                            if (sf.fileBelongsTo == 'Objective Point File')
+                                sf.typeName = thisSiteOPs.filter(function (op) { return op.OBJECTIVE_POINT_ID == sf.OBJECTIVE_POINT_ID; })[0].NAME;
+                        });
                         var hwmFiles = Site_Files.getAllSiteFiles().filter(function (sfiles) { return sfiles.fileBelongsTo == 'HWM File'; }); 
                         var sensFiles = Site_Files.getAllSiteFiles().filter(function (sfi) { return sfi.INSTRUMENT_ID > 0 && sfi.INSTRUMENT_ID !== null; });
                         //only show files for this event (go through hwm files and match eventid
@@ -82,8 +92,10 @@
                         //only show files for this event (go through sensor files and match eventid
                         for (var sf = 0; sf < sensFiles.length; sf++) {
                             for (var inst = 0; inst < $scope.siteSensors.length; inst++) {
-                                if (sensFiles[sf].INSTRUMENT_ID == $scope.siteSensors[inst].Instrument.INSTRUMENT_ID && $scope.siteSensors[inst].Instrument.EVENT_ID == $cookies.get('SessionEventID'))
+                                if (sensFiles[sf].INSTRUMENT_ID == $scope.siteSensors[inst].Instrument.INSTRUMENT_ID && $scope.siteSensors[inst].Instrument.EVENT_ID == $cookies.get('SessionEventID')) {
+                                    sensFiles[sf].typeName = $scope.siteSensors[inst].Instrument.SERIAL_NUMBER;
                                     $scope.SiteFiles.push(sensFiles[sf]);
+                                }
                             }
                         }                                       
                     } else {

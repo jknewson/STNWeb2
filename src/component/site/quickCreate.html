@@ -26,12 +26,12 @@
                         <div>
                             <label class="col-md-4 control-label"></label>
                             <div class="col-md-7">
-                                <label class="radio-inline">
+                                <span class="radio-inline">
                                     <input type="radio" name="decDegORdms" ng-model="decDegORdms.val" ng-change="latLongChange()" value="dd" /> Dec Deg
-                                </label>
-                                <label class="radio-inline">
+                                </span>
+                                <span class="radio-inline">
                                     <input type="radio" name="decDegORdms" ng-model="decDegORdms.val" ng-change="latLongChange()" value="dms" /> DMS
-                                </label>
+                                </span>
                             </div>
                         </div>
 
@@ -126,15 +126,15 @@
                         <div class="form-group">
                             <label class="col-md-4 control-label" for="ACCESS_GRANTED">Access Permission Granted:</label>
                             <div class="col-md-7" style="margin-top:14px">
-                                <label class="radio-inline">
+                                <span class="radio-inline">
                                     <input type="radio" name="ACCESS_GRANTED" ng-model="aSite.ACCESS_GRANTED" value="Yes"> Yes
-                                </label>
-                                <label class="radio-inline">
+                                </span>
+                                <span class="radio-inline">
                                     <input type="radio" name="ACCESS_GRANTED" ng-model="aSite.ACCESS_GRANTED" value="No"> No
-                                </label>
-                                <label class="radio-inline">
+                                </span>
+                                <span class="radio-inline">
                                     <input type="radio" name="ACCESS_GRANTED" ng-model="aSite.ACCESS_GRANTED" value="Not Needed"> Not Needed
-                                </label>
+                                </span>
                             </div>
                         </div>
                     </div><!--end first column-->
@@ -142,7 +142,7 @@
                     <div class="col-md-6">
                         <!--populate button*-->
                         <div class="form-group">
-                            <div class="panel panel-default">                                
+                            <div class="panel panel-default">
                                 <div class="panel-body">
                                     <div class="form-group">
                                         <label class="col-md-4 control-label" for="POPULATEBTN">Click to populate address fields:</label>
@@ -302,12 +302,12 @@
                                         <div class="col-md-6"><input class="form-control" id="OPControl" name="OPControl" ng-model="id.IDENTIFIER" type="text" /></div>
                                         <input type="hidden" name="OP_CONTROL_IDENTIFIER_ID" ng-model="id.OP_CONTROL_IDENTIFIER_ID" />
                                         <input type="hidden" name="OBJECTIVE_POINT_ID" ng-model="id.OBJECTIVE_POINT_ID" />
-                                        <label class="radio-inline">
+                                        <span class="radio-inline">
                                             <input type="radio" name="IDENTIFIER_TYPE{{$index}}" ng-model="id.IDENTIFIER_TYPE" value="PID" /> PID
-                                        </label>
-                                        <label class="radio-inline">
+                                        </span>
+                                        <span class="radio-inline">
                                             <input type="radio" name="IDENTIFIER_TYPE{{$index}}" ng-model="id.IDENTIFIER_TYPE" value="Other" /> Other
-                                        </label>
+                                        </span>
                                         <div class="buttons pull-right">
                                             <button type="button" class="btn borderLess" ng-click="RemoveID(id)">
                                                 <i class="glyphicon glyphicon-remove"></i>
@@ -322,12 +322,12 @@
                         <div>
                             <label class="col-md-4 control-label"></label>
                             <div class="col-md-7">
-                                <label class="radio-inline">
+                                <span class="radio-inline">
                                     <input type="radio" name="FTorMETER" ng-model="FTorMETER" value="ft" /> ft
-                                </label>
-                                <label class="radio-inline">
+                                </span>
+                                <span class="radio-inline">
                                     <input type="radio" name="FTorMETER" ng-model="FTorMETER" value="meter" /> meter
-                                </label>
+                                </span>
                             </div>
                         </div>
 
@@ -376,12 +376,12 @@
                         <div>
                             <label class="col-md-4 control-label"></label>
                             <div class="col-md-7">
-                                <label class="radio-inline">
+                                <span class="radio-inline">
                                     <input type="radio" name="FTorCM" ng-model="FTorCM" value="ft" /> +/- ft
-                                </label>
-                                <label class="radio-inline">
+                                </span>
+                                <span class="radio-inline">
                                     <input type="radio" name="FTorCM" ng-model="FTorCM" value="cm" /> +/- cm
-                                </label>
+                                </span>
                             </div>
                         </div>
 
@@ -476,12 +476,12 @@
                             <div class="form-group required" style="padding-bottom:0;margin-bottom:0" ng-class="{'has-error':quickForm.quick.HWM_ENVIRONMENT.$invalid && quickForm.quick.HWM_ENVIRONMENT.$dirty}">
                                 <label class="col-md-4 control-label req">HWM Environment:</label>
                                 <div class="col-md-7">
-                                    <label class="radio-inline">
+                                    <span class="radio-inline">
                                         <input type="radio" id="C_HWM_ENVIRONMENT" name="HWM_ENVIRONMENT" ng-model="aHWM.HWM_ENVIRONMENT" value="Coastal" />Coastal
-                                    </label>
-                                    <label class="radio-inline">
+                                    </span>
+                                    <span class="radio-inline">
                                         <input type="radio" id="R_HWM_ENVIRONMENT" name="HWM_ENVIRONMENT" ng-model="aHWM.HWM_ENVIRONMENT" value="Riverine" />Riverine
-                                    </label>
+                                    </span>
                                 </div>
                             </div>
 
@@ -515,15 +515,15 @@
                             <div class="form-group">
                                 <label class="col-md-4 control-label">Bank:</label>
                                 <div class="col-md-7">
-                                    <label class="radio-inline">
+                                    <span class="radio-inline">
                                         <input type="radio" name="BANK" ng-model="aHWM.BANK" value="Left" />Left
-                                    </label>
-                                    <label class="radio-inline">
+                                    </span>
+                                    <span class="radio-inline">
                                         <input type="radio" name="BANK" ng-model="aHWM.BANK" value="Right" />Right
-                                    </label>
-                                    <label class="radio-inline">
+                                    </span>
+                                    <span class="radio-inline">
                                         <input type="radio" name="BANK" ng-model="aHWM.BANK" value="N/A" />N/A
-                                    </label>
+                                    </span>
                                 </div>
                             </div>
 
@@ -615,12 +615,12 @@
                             <div>
                                 <label class="col-md-4 control-label"></label>
                                 <div class="col-md-7">
-                                    <label class="radio-inline">
+                                    <span class="radio-inline">
                                         <input type="radio" name="FTorCM" ng-model="FTorCM" value="ft" /> +/- ft
-                                    </label>
-                                    <label class="radio-inline">
+                                    </span>
+                                    <span class="radio-inline">
                                         <input type="radio" name="FTorCM" ng-model="FTorCM" value="cm" /> +/- cm
-                                    </label>
+                                    </span>
                                 </div>
                             </div>
 
@@ -646,12 +646,12 @@
                             <div class="form-group">
                                 <label class="col-md-4 control-label">Tranquil/Stillwater HWM:</label>
                                 <div class="col-md-7">
-                                    <label class="radio-inline">
+                                    <span class="radio-inline">
                                         <input type="radio" name="STILLWATER" ng-model="aHWM.STILLWATER" value="1" />Yes
-                                    </label>
-                                    <label class="radio-inline">
+                                    </span>
+                                    <span class="radio-inline">
                                         <input type="radio" name="STILLWATER" ng-model="aHWM.STILLWATER" value="0" />No
-                                    </label>
+                                    </span>
                                 </div>
                                 <button type="button" class="col-md-1 borderLess pull-left" tooltip-placement="left" tooltip-append-to-body="false" uib-tooltip="Tranquil-Water HWMs preferred over Rapid-Water HWMs. Refer to T&M 3-A24 for details.">
                                     <span class="glyphicon glyphicon-question-sign"></span>
@@ -731,7 +731,7 @@
                                 </div>
                             </div>
                             <!-- -------------------------- START TAPEDOWN SECTION --------------------------------  -->
-                            
+
                             <uib-accordion close-others="false">
                                 <uib-accordion-group is-open="tapedown.Open">
                                     <uib-accordion-heading>
@@ -742,13 +742,14 @@
                                         </button>
                                     </uib-accordion-heading>
                                     <!-- Add Tapedown button  ng-if="addTapedown"-->
-                                    <div>                                        
+                                    <div>
                                         <br clear="all" />
                                         <div ng-show="tapeDownTable.length > 0">
                                             <div class="pull-right col-md-6"><em>Note: these are not used for any calculations but are to facilitate field activities</em></div>
                                             <table class="table table-condensed">
                                                 <thead>
-                                                    <tr><th></th>
+                                                    <tr>
+                                                        <th></th>
                                                         <th>Datum Location</th>
                                                         <th>Elevation</th>
                                                         <th class="col-md-2">
@@ -831,12 +832,12 @@
                                 <div class="form-group">
                                     <label class="col-md-4 control-label">Vented:</label>
                                     <div class="col-md-7">
-                                        <label class="radio-inline">
+                                        <span class="radio-inline">
                                             <input type="radio" name="VENTED" ng-model="aSensor.VENTED" value="Yes" />Yes
-                                        </label>
-                                        <label class="radio-inline">
+                                        </span>
+                                        <span class="radio-inline">
                                             <input type="radio" name="VENTED" ng-model="aSensor.VENTED" value="No" />No
-                                        </label>
+                                        </span>
                                     </div>
                                 </div>
                             </div>
@@ -864,23 +865,24 @@
                             </div>
 
                             <!-- Interval: -->
+                            <div>
+                                <label class="col-md-4 control-label"></label>
+                                <div class="col-md-7">
+                                    <span class="radio-inline">
+                                        <input type="radio" name="intervalType" ng-model="IntervalType.type" value="Minutes" />Minutes
+                                    </span>
+                                    <span class="radio-inline">
+                                        <input type="radio" name="intervalType" ng-model="IntervalType.type" value="Seconds" />Seconds
+                                    </span>
+                                </div>
+                            </div>
                             <div class="form-group" style="margin-bottom:0;padding-bottom:0">
                                 <label class="col-md-4 control-label" for="INTERVAL">Interval:</label>
                                 <div class="col-md-7">
                                     <input class="form-control" ng-keypress="isNum($event)" name="INTERVAL" ng-model="aSensor.INTERVAL" type="text" />
                                 </div>
                             </div>
-                            <div class="form-group">
-                                <label class="col-md-4 control-label"></label>
-                                <div class="col-md-7">
-                                    <label class="radio-inline">
-                                        <input type="radio" name="intervalType" ng-model="IntervalType.type" value="Minutes" />Minutes
-                                    </label>
-                                    <label class="radio-inline">
-                                        <input type="radio" name="intervalType" ng-model="IntervalType.type" value="Seconds" />Seconds
-                                    </label>
-                                </div>
-                            </div>
+
 
                             <!-- Deploy Time: * -->
                             <div class="form-group required" ng-class="{'has-error':quickForm.quick.TIME_STAMP.$invalid && quickForm.quick.TIME_STAMP.$dirty}">

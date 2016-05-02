@@ -3,8 +3,8 @@
 
     var SettingsControllers = angular.module('SettingsControllers');
 
-    SettingsControllers.controller('memberInfoCtrl', ['$scope', '$cookies', '$location', '$http', '$uibModal', '$stateParams', '$filter', '$sce', 'MEMBER', 'thisMember', 
-        function ($scope, $cookies, $location, $http, $uibModal, $stateParams, $filter, $sce, MEMBER, thisMember) {
+    SettingsControllers.controller('memberInfoCtrl', ['$scope', '$cookies', '$location', '$http', '$uibModal', '$stateParams', '$filter', '$sce', 'allRoles', 'MEMBER', 'thisMember', 
+        function ($scope, $cookies, $location, $http, $uibModal, $stateParams, $filter, $sce, allRoles, MEMBER, thisMember) {
             if ($cookies.get('STNCreds') === undefined || $cookies.get('STNCreds') === "") {
                 $scope.auth = false;
                 $location.path('/login');
@@ -40,7 +40,7 @@
                             delMem.MEMBER_ID = nameToRemove.MEMBER_ID;
                             delMem.Name = nameToRemove.FNAME + " " + nameToRemove.LNAME;
                             var ag = $scope.agencyList.filter(function (a) { return a.AGENCY_ID == nameToRemove.AGENCY_ID; })[0];
-                            var ro = $scope.roleList.filter(function (r) { return r.ROLE_ID == nameToRemove.ROLE_ID; })[0];
+                            var ro = allRoles.filter(function (r) { return r.ROLE_ID == nameToRemove.ROLE_ID; })[0];
                             delMem.Agency = ag.AGENCY_NAME;
                             delMem.Role = ro.ROLE_NAME;
                             $scope.memberList.splice($scope.memberList.indexOf(delMem), 1);
@@ -68,7 +68,7 @@
                     $scope.matchingUsers = $stateParams.id == $scope.loggedInUser.ID ? true : false;
 
                     $scope.aMember = thisMember;
-                    $scope.aMember.Role = $scope.roleList.filter(function (r) { return r.ROLE_ID == $scope.aMember.ROLE_ID; })[0].ROLE_NAME;
+                    $scope.aMember.Role = allRoles.filter(function (r) { return r.ROLE_ID == $scope.aMember.ROLE_ID; })[0].ROLE_NAME;
                     $scope.changePass = false;
 
                     //change to the user made, put it .. fired on each blur after change made to field
@@ -177,7 +177,7 @@
                                 nm.MEMBER_ID = response.MEMBER_ID;
                                 nm.Name = response.FNAME + " " + response.LNAME;
                                 var ag = $scope.agencyList.filter(function (a) { return a.AGENCY_ID == response.AGENCY_ID; })[0];
-                                var ro = $scope.roleList.filter(function (r) { return r.ROLE_ID == response.ROLE_ID; })[0];
+                                var ro = allRoles.filter(function (r) { return r.ROLE_ID == response.ROLE_ID; })[0];
                                 nm.Agency = ag.AGENCY_NAME;
                                 nm.Role = ro.ROLE_NAME;
                                 $scope.memberList.push(nm);

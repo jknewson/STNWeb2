@@ -64,15 +64,15 @@
                 </div>
 
                 <!-- dec deg or dms: -->
-                <div class="form-group">
+                <div>
                     <label class="col-md-4 control-label"></label>
                     <div class="col-md-7">
-                        <label class="radio-inline">
+                        <span class="radio-inline">
                             <input type="radio" name="decDegORdms" ng-model="aSite.decDegORdms" ng-change="latLongChange()" value="dd" /> Dec Deg
-                        </label>
-                        <label class="radio-inline">
+                        </span>
+                        <span class="radio-inline">
                             <input type="radio" name="decDegORdms" ng-model="aSite.decDegORdms" ng-change="latLongChange()" value="dms" /> DMS
-                        </label>
+                        </span>
                     </div>
                 </div>
 
@@ -397,12 +397,12 @@
                 <div class="form-group sensorInfo" ng-class="{darkClass:disableSensorParts}">
                     <label class="col-md-4 control-label" for="IS_PERMANENT_HOUSING_INSTALLED">Permanent Sensor Housing Installed?</label>
                     <div class="col-md-7">
-                        <label class="radio-inline">
+                        <span class="radio-inline">
                             <input ng-disabled="disableSensorParts" type="radio" name="IS_PERMANENT_HOUSING_INSTALLED" ng-model="aSite.IS_PERMANENT_HOUSING_INSTALLED" value="Yes"> Yes
-                        </label>
-                        <label class="radio-inline">
+                        </span>
+                        <span class="radio-inline">
                             <input ng-disabled="disableSensorParts" type="radio" name="IS_PERMANENT_HOUSING_INSTALLED" ng-model="aSite.IS_PERMANENT_HOUSING_INSTALLED" value="No"> No
-                        </label>
+                        </span>
                     </div>
                 </div>
 
@@ -541,15 +541,15 @@
                 <div class="form-group">
                     <label class="col-md-4 control-label" for="ACCESS_GRANTED">Access Permission Granted:</label>
                     <div class="col-md-7">
-                        <label class="radio-inline">
+                        <span class="radio-inline">
                             <input type="radio" name="ACCESS_GRANTED" ng-model="aSite.ACCESS_GRANTED" value="Yes"> Yes
-                        </label>
-                        <label class="radio-inline">
+                        </span>
+                        <span class="radio-inline">
                             <input type="radio" name="ACCESS_GRANTED" ng-model="aSite.ACCESS_GRANTED" value="No"> No
-                        </label>
-                        <label class="radio-inline">
+                        </span>
+                        <span class="radio-inline">
                             <input type="radio" name="ACCESS_GRANTED" ng-model="aSite.ACCESS_GRANTED" value="Not Needed"> Not Needed
-                        </label>
+                        </span>
                     </div>
                 </div>
 
@@ -645,14 +645,14 @@
                                     <input type="hidden" name="OP_CONTROL_IDENTIFIER_ID" ng-model="id.OP_CONTROL_IDENTIFIER_ID" />
                                     <input type="hidden" name="OBJECTIVE_POINT_ID" ng-model="id.OBJECTIVE_POINT_ID" />
 
-                                    <label class="radio-inline">
+                                    <span class="radio-inline">
                                         <input type="radio" name="IDENTIFIER_TYPE{{$index}}" ng-model="id.IDENTIFIER_TYPE" value="PID" /> PID
-                                    </label>
-                                    <label class="radio-inline">
+                                    </span>
+                                    <span class="radio-inline">
                                         <input type="radio" name="IDENTIFIER_TYPE{{$index}}" ng-model="id.IDENTIFIER_TYPE" value="Other" /> Other
-                                    </label>
+                                    </span>
                                     <div class="buttons pull-right">
-                                        <button class="btn borderLess" ng-click="RemoveID(id)">
+                                        <button class="btn borderLess" ng-click="RemoveID(id)" type="button">
                                             <i class="glyphicon glyphicon-remove"></i>
                                         </button>
                                     </div>
@@ -662,15 +662,15 @@
                     </div>
 
                     <!-- dec deg or dms: -->
-                    <div class="form-group" style="margin-bottom: 0;padding-bottom: 0">
+                    <div>
                         <label class="col-md-4 control-label"></label>
                         <div class="col-md-6">
-                            <label class="radio-inline">
+                            <span class="radio-inline">
                                 <input type="radio" name="decDegORdms" ng-change="latLongChange()" ng-model="OP.decDegORdms" value="dd" /> Dec Deg
-                            </label>
-                            <label class="radio-inline">
+                            </span>
+                            <span class="radio-inline">
                                 <input type="radio" name="decDegORdms" ng-change="latLongChange()" ng-model="OP.decDegORdms" value="dms" /> DMS
-                            </label>
+                            </span>
                         </div>
                     </div>
 
@@ -739,15 +739,15 @@
                     </div>
 
                     <!-- Ft or Meter radios: -->
-                    <div class="form-group" style="margin-bottom: 0;padding-bottom: 0">
+                    <div>
                         <label class="col-md-4 control-label"></label>
                         <div class="col-md-6">
-                            <label class="radio-inline">
+                            <span class="radio-inline">
                                 <input type="radio" name="FTorMETER" ng-model="OP.FTorMETER" value="ft" /> ft
-                            </label>
-                            <label class="radio-inline">
+                            </span>
+                            <span class="radio-inline">
                                 <input type="radio" name="FTorMETER" ng-model="OP.FTorMETER" value="meter" /> meter
-                            </label>
+                            </span>
                         </div>
                     </div>
 
@@ -782,15 +782,15 @@
                     </div>
 
                     <!-- Ft or CM radios: -->
-                    <div class="form-group" style="margin-bottom: 0;padding-bottom: 0">
+                    <div>
                         <label class="col-md-4 control-label"></label>
                         <div class="col-md-6">
-                            <label class="radio-inline">
+                            <span class="radio-inline">
                                 <input type="radio" name="FTorCM" ng-model="OP.FTorCM" value="ft" /> +/- ft
-                            </label>
-                            <label class="radio-inline">
+                            </span>
+                            <span class="radio-inline">
                                 <input type="radio" name="FTorCM" ng-model="OP.FTorCM" value="cm" /> +/- cm
-                            </label>
+                            </span>
                         </div>
                     </div>
 
@@ -839,7 +839,7 @@
                             <div class="col-md-6 input-group">
                                 <input class="form-control dateInputStyle" type="date" name="de" uib-datepicker-popup="MM/dd/yyyy" show-weeks="false" is-open="datepickrs.de" ng-model="OP.DATE_ESTABLISHED" required />
                                 <span class="input-group-btn">
-                                    <button class="btn btn-default" ng-click="open($event, 'de')">
+                                    <button type="button" class="btn btn-default" ng-click="open($event, 'de')">
                                         <i class="glyphicon glyphicon-calendar" />
                                     </button>
                                 </span>
@@ -854,7 +854,7 @@
                             <div class="col-md-6 input-group">
                                 <input show-weeks="false" class="form-control dateInputStyle" type="date" name="dr" uib-datepicker-popup="MM/dd/yyyy" is-open="datepickrs.dr" ng-model="OP.DATE_RECOVERED" />
                                 <span class="input-group-btn">
-                                    <button class="btn btn-default" ng-click="open($event, 'dr')">
+                                    <button type="button" class="btn btn-default" ng-click="open($event, 'dr')">
                                         <i class="glyphicon glyphicon-calendar" />
                                     </button>
                                 </span>
@@ -951,18 +951,18 @@
                                     <div ng-show="view.OPval == 'edit'">
                                         <div ng-repeat="idC in addedIdentifiersCopy">
                                             <div class="col-md-12" style="margin-bottom:5px">
-                                                <div class="col-md-7"><input class="form-control" name="OPControl" ng-model="idC.IDENTIFIER" type="text" /></div>
+                                                <div class="col-md-6"><input class="form-control" name="OPControl" ng-model="idC.IDENTIFIER" type="text" /></div>
                                                 <input type="hidden" name="OP_CONTROL_IDENTIFIER_ID" ng-model="idC.OP_CONTROL_IDENTIFIER_ID" />
                                                 <input type="hidden" name="OBJECTIVE_POINT_ID" ng-model="idC.OBJECTIVE_POINT_ID" />
 
-                                                <label class="radio-inline">
+                                                <span class="radio-inline">
                                                     <input type="radio" name="IDENTIFIER_TYPE{{$index}}" ng-model="idC.IDENTIFIER_TYPE" value="PID" /> PID
-                                                </label>
-                                                <label class="radio-inline">
+                                                </span>
+                                                <span class="radio-inline">
                                                     <input type="radio" name="IDENTIFIER_TYPE{{$index}}" ng-model="idC.IDENTIFIER_TYPE" value="Other" /> Other
-                                                </label>
+                                                </span>
                                                 <div class="buttons pull-right">
-                                                    <button class="btn borderLess" ng-click="RemoveID(idC)">
+                                                    <button type="button" class="btn borderLess" ng-click="RemoveID(idC)">
                                                         <i class="glyphicon glyphicon-remove"></i>
                                                     </button>
                                                 </div>
@@ -973,15 +973,15 @@
                             </div>
 
                             <!-- dec deg or dms: -->
-                            <div class="form-group" ng-show="view.OPval == 'edit'" style="margin-bottom: 0;padding-bottom: 0">
+                            <div ng-show="view.OPval == 'edit'">
                                 <label class="col-md-4 control-label"></label>
                                 <div class="col-md-6">
-                                    <label class="radio-inline">
+                                    <span class="radio-inline">
                                         <input type="radio" name="decDegORdms" ng-change="latLongChange()" ng-model="opCopy.decDegORdms" value="dd" /> Dec Deg
-                                    </label>
-                                    <label class="radio-inline">
+                                    </span>
+                                    <span class="radio-inline">
                                         <input type="radio" name="decDegORdms" ng-change="latLongChange()" ng-model="opCopy.decDegORdms" value="dms" /> DMS
-                                    </label>
+                                    </span>
                                 </div>
                             </div>
 
@@ -1058,15 +1058,15 @@
                             </div>
 
                             <!-- Ft or Meter radios: -->
-                            <div ng-show="view.OPval == 'edit'" class="form-group" style="margin-bottom: 0;padding-bottom: 0">
+                            <div ng-show="view.OPval == 'edit'">
                                 <label class="col-md-4 control-label"></label>
                                 <div class="col-md-6">
-                                    <label class="radio-inline">
+                                    <span class="radio-inline">
                                         <input type="radio" name="FTorMETER" ng-model="opCopy.FTorMETER" value="ft" /> ft
-                                    </label>
-                                    <label class="radio-inline">
+                                    </span>
+                                    <span class="radio-inline">
                                         <input type="radio" name="FTorMETER" ng-model="opCopy.FTorMETER" value="meter" /> meter
-                                    </label>
+                                    </span>
                                 </div>
                             </div>
 
@@ -1104,15 +1104,15 @@
                             </div>
 
                             <!-- Ft or CM radios: -->
-                            <div ng-show="view.OPval == 'edit'" class="form-group" style="margin-bottom: 0;padding-bottom: 0">
+                            <div ng-show="view.OPval == 'edit'">
                                 <label class="col-md-4 control-label"></label>
                                 <div class="col-md-6">
-                                    <label class="radio-inline">
+                                    <span class="radio-inline">
                                         <input type="radio" name="FTorCM" ng-model="opCopy.FTorCM" value="ft" /> +/- ft
-                                    </label>
-                                    <label class="radio-inline">
+                                    </span>
+                                    <span class="radio-inline">
                                         <input type="radio" name="FTorCM" ng-model="opCopy.FTorCM" value="cm" /> +/- cm
-                                    </label>
+                                    </span>
                                 </div>
                             </div>
 
@@ -1167,7 +1167,7 @@
                                         <span ng-show="view.OPval == 'detail'">{{OP.DATE_ESTABLISHED | date: 'MM/dd/yyyy' || '---'}}</span>
                                         <input ng-show="view.OPval == 'edit'" class="form-control dateInputStyle" type="date" name="de" uib-datepicker-popup="MM/dd/yyyy" show-weeks="false" is-open="datepickrs.de" ng-model="opCopy.DATE_ESTABLISHED" required />
                                         <span ng-show="view.OPval == 'edit'" class="input-group-btn">
-                                            <button class="btn btn-default" ng-click="open($event, 'de')">
+                                            <button type="button" class="btn btn-default" ng-click="open($event, 'de')">
                                                 <i class="glyphicon glyphicon-calendar" />
                                             </button>
                                         </span>
@@ -1183,7 +1183,7 @@
                                         <span ng-show="view.OPval == 'detail'">{{OP.DATE_RECOVERED | date: 'MM/dd/yyyy' || '---'}}</span>
                                         <input ng-show="view.OPval == 'edit'" show-weeks="false" class="form-control dateInputStyle" type="date" name="dr" uib-datepicker-popup="MM/dd/yyyy" is-open="datepickrs.dr" ng-model="opCopy.DATE_RECOVERED" />
                                         <span ng-show="view.OPval == 'edit'" class="input-group-btn">
-                                            <button class="btn btn-default" ng-click="open($event, 'dr')">
+                                            <button type="button" class="btn btn-default" ng-click="open($event, 'dr')">
                                                 <i class="glyphicon glyphicon-calendar" />
                                             </button>
                                         </span>
@@ -1308,7 +1308,7 @@
                                             <div class="col-md-3 input-group" style="padding-right:14px;padding-left:14px">
                                                 <input class="form-control dateInputStyle" type="date" name="sd" uib-datepicker-popup="MM/dd/yyyy" show-weeks="false" is-open="datepickrs.sd" ng-model="aFile.PHOTO_DATE" required />
                                                 <span class="input-group-btn">
-                                                    <button class="btn btn-default" ng-click="open($event, 'sd')">
+                                                    <button type="button" class="btn btn-default" ng-click="open($event, 'sd')">
                                                         <i class="glyphicon glyphicon-calendar" />
                                                     </button>
                                                 </span>
@@ -1321,7 +1321,7 @@
                                             <div class="col-md-3 input-group" style="padding-right:14px;padding-left:14px">
                                                 <input class="form-control dateInputStyle" type="date" name="fd" uib-datepicker-popup="MM/dd/yyyy" show-weeks="false" is-open="datepickrs.fd" ng-model="aFile.FILE_DATE" required />
                                                 <span class="input-group-btn">
-                                                    <button class="btn btn-default" ng-click="open($event, 'fd')">
+                                                    <button type="button" class="btn btn-default" ng-click="open($event, 'fd')">
                                                         <i class="glyphicon glyphicon-calendar" />
                                                     </button>
                                                 </span>
@@ -1378,16 +1378,18 @@
                                         <div ng-show="aFile.FILE_ID !== undefined && aFile.FILETYPE_ID !== 8" class="form-group" style="margin:0;padding:0">
                                             <label class="col-md-3 control-label">Associated File:</label>
                                             <div class="col-md-6">
-                                                <a target="_blank" class="btn btn-primary" ng-href="{{serverURL}}/Files/{{aFile.FILE_ID}}/Item">Download File</a>
+                                                <a target="_blank" title="Download File" ng-href="{{serverURL}}/Files/{{aFile.FILE_ID}}/Item">
+                                                    <span class="glyphicon glyphicon-download"></span>
+                                                </a>
                                                 <img ng-if="aFile.FILETYPE_ID === 1" style="height:80px;" ng-src="{{serverURL}}/Files/{{aFile.FILE_ID}}/Item" />
                                             </div>
                                         </div>
 
                                         <div ng-show="!fileIsUploading">
                                             <button class="btn btn-primary" ng-if="aFile.FILE_ID != undefined" ng-click="saveFile(OPFILEForm.$valid)">Save File</button>
-                                            <button class="btn btn-danger" ng-if="aFile.FILE_ID != undefined" ng-click="deleteFile()">Delete File</button>
+                                            <button type="button" class="btn btn-danger" ng-if="aFile.FILE_ID != undefined" ng-click="deleteFile()">Delete File</button>
                                             <button class="btn btn-primary" ng-if="aFile.FILE_ID == undefined" ng-click="createFile(OPFILEForm.$valid)">Create File</button>
-                                            <button class="btn btn-warning" type="button" ng-click="cancelFile()">Close/Cancel File</button>
+                                            <button type="button" class="btn btn-warning" type="button" ng-click="cancelFile()">Close/Cancel File</button>
                                         </div>
                                         <div ng-show="fileIsUploading"><img src="images/fileUpload.gif" /></div>
 
@@ -1404,8 +1406,8 @@
     <div class="modal-footer">
         <div class="form-group">
             <div class="col-md-12">
-                <button ng-disabled="showFileForm" ng-show="OP.OBJECTIVE_POINT_ID !== undefined" class="btn btn-danger" ng-click="deleteOP(OPEditForm.$valid)"><span>Delete Datum Location</span></button>
-                    <button type="button" class="btn btn-warning" ng-disabled="showFileForm" ng-click="cancel()"><span>Cancel/Close</span></button>
+                <button ng-disabled="showFileForm" type="button" ng-show="OP.OBJECTIVE_POINT_ID !== undefined" class="btn btn-danger" ng-click="deleteOP(OPEditForm.$valid)"><span>Delete Datum Location</span></button>
+                <button type="button" class="btn btn-warning" ng-disabled="showFileForm" ng-click="cancel()"><span>Cancel/Close</span></button>
             </div>
         </div>
     </div> <!-- end modal-footer -->
@@ -1479,12 +1481,12 @@
                     <div class="form-group required" ng-class="{'has-error':HWMForm.HWM_ENVIRONMENT.$invalid && HWMForm.HWM_ENVIRONMENT.$dirty}">
                         <label class="col-md-4 control-label req">HWM Environment:</label>
                         <div class="col-md-6">
-                            <label class="radio-inline">
+                            <span class="radio-inline">
                                 <input type="radio" name="HWM_ENVIRONMENT" ng-model="aHWM.HWM_ENVIRONMENT" value="Coastal" />Coastal
-                            </label>
-                            <label class="radio-inline">
+                            </span>
+                            <span class="radio-inline">
                                 <input type="radio" name="HWM_ENVIRONMENT" ng-model="aHWM.HWM_ENVIRONMENT" value="Riverine" />Riverine
-                            </label>
+                            </span>
                         </div>
                     </div>
 
@@ -1518,15 +1520,15 @@
                     <div class="form-group">
                         <label class="col-md-4 control-label">Bank:</label>
                         <div class="col-md-6">
-                            <label class="radio-inline">
+                            <span class="radio-inline">
                                 <input type="radio" name="BANK" ng-model="aHWM.BANK" value="Left" />Left
-                            </label>
-                            <label class="radio-inline">
+                            </span>
+                            <span class="radio-inline">
                                 <input type="radio" name="BANK" ng-model="aHWM.BANK" value="Right" />Right
-                            </label>
-                            <label class="radio-inline">
+                            </span>
+                            <span class="radio-inline">
                                 <input type="radio" name="BANK" ng-model="aHWM.BANK" value="N/A" />N/A
-                            </label>
+                            </span>
                         </div>
                     </div>
 
@@ -1542,15 +1544,15 @@
                     </div>
 
                     <!-- dec deg or dms: -->
-                    <div class="form-group">
+                    <div>
                         <label class="col-md-4 control-label"></label>
                         <div class="col-md-6">
-                            <label class="radio-inline">
+                            <span class="radio-inline">
                                 <input type="radio" name="decDegORdms" ng-change="latLongChange()" ng-model="aHWM.decDegORdms" value="dd" /> Dec Deg
-                            </label>
-                            <label class="radio-inline">
+                            </span>
+                            <span class="radio-inline">
                                 <input type="radio" name="decDegORdms" ng-change="latLongChange()" ng-model="aHWM.decDegORdms" value="dms" /> DMS
-                            </label>
+                            </span>
                         </div>
                     </div>
 
@@ -1632,7 +1634,7 @@
                         <div class="col-md-3 input-group" style="padding-right:14px;padding-left:14px">
                             <input show-weeks="false" class="form-control dateInputStyle" type="date" id="FLAG_DATE" name="fd" uib-datepicker-popup="MM/dd/yyyy" is-open="datepickrs.fd" ng-model="aHWM.FLAG_DATE" required />
                             <span class="input-group-btn">
-                                <button class="btn btn-default" ng-click="open($event, 'fd')">
+                                <button type="button" class="btn btn-default" ng-click="open($event, 'fd')">
                                     <i class="glyphicon glyphicon-calendar" />
                                 </button>
                             </span>
@@ -1646,7 +1648,7 @@
                             <div class="col-md-3 input-group">
                                 <input show-weeks="false" class="form-control dateInputStyle" type="date" id="SURVEY_DATE" name="sd" uib-datepicker-popup="MM/dd/yyyy" is-open="datepickrs.sd" ng-model="aHWM.SURVEY_DATE" />
                                 <span class="input-group-btn">
-                                    <button class="btn btn-default" ng-click="open($event, 'sd')">
+                                    <button type="button" class="btn btn-default" ng-click="open($event, 'sd')">
                                         <i class="glyphicon glyphicon-calendar" />
                                     </button>
                                 </span>
@@ -1688,15 +1690,15 @@
                     </div>
 
                     <!-- Ft or CM radios: -->
-                    <div class="form-group" style="margin-bottom: 0;padding-bottom: 0">
+                    <div>
                         <label class="col-md-4 control-label"></label>
                         <div class="col-md-6">
-                            <label class="radio-inline">
+                            <span class="radio-inline">
                                 <input type="radio" name="FTorCM" ng-model="FTorCM" value="ft" /> +/- ft
-                            </label>
-                            <label class="radio-inline">
+                            </span>
+                            <span class="radio-inline">
                                 <input type="radio" name="FTorCM" ng-model="FTorCM" value="cm" /> +/- cm
-                            </label>
+                            </span>
                         </div>
                     </div>
 
@@ -1722,12 +1724,12 @@
                     <div class="form-group">
                         <label class="col-md-4 control-label">Tranquil/Stillwater HWM:</label>
                         <div class="col-md-6">
-                            <label class="radio-inline">
+                            <span class="radio-inline">
                                 <input type="radio" name="STILLWATER" ng-model="aHWM.STILLWATER" value="1" />Yes
-                            </label>
-                            <label class="radio-inline">
+                            </span>
+                            <span class="radio-inline">
                                 <input type="radio" name="STILLWATER" ng-model="aHWM.STILLWATER" value="0" />No
-                            </label>
+                            </span>
                         </div>
                         <button type="button" class="col-md-1 borderLess pull-left" tooltip-placement="bottom" tooltip-append-to-body="false" uib-tooltip="Tranquil-Water HWMs preferred over Rapid-Water HWMs. Refer to T&M 3-A24 for details.">
                             <span class="glyphicon glyphicon-question-sign"></span>
@@ -1775,9 +1777,9 @@
                                 <div class="col-md-12">
                                     <span><button ng-show="view.HWMval == 'detail'" type="button" class="btn btn-primary" ng-click="wannaEditHWM()"><span>Edit HWM</span></button></span>
                                     <span><button ng-show="view.HWMval == 'edit'" class="btn btn-primary" ng-click="save(HWMEditForm.$valid)"><span>Save</span></button></span>
-                                    <span><button ng-show="view.HWMval == 'edit'" type="button" class=" btn btn-primary" ng-click="cancelHWMEdit()"><span>Cancel</span></button></span>
-                                    <span><button ng-show="(ApprovalInfo.approvalDate == undefined && (userRole == 'Admin' || userRole == 'Manager'))" class="btn btn-primary" ng-click="approveHWM(HWMEditForm.$valid)"><span>Approve</span></button></span>
-                                    <span><button ng-show="(ApprovalInfo.approvalDate != undefined && (userRole == 'Admin' || userRole == 'Manager'))" class="btn btn-primary" ng-click="unApproveHWM(HWMEditForm.$valid)"><span>UnApprove</span></button></span>
+                                    <span><button type="button" ng-show="view.HWMval == 'edit'" type="button" class=" btn btn-primary" ng-click="cancelHWMEdit()"><span>Cancel</span></button></span>
+                                    <span><button type="button" ng-show="((ApprovalInfo.approvalDate == undefined && view.HWMval == 'detail') && (userRole == 'Admin' || userRole == 'Manager'))" class="btn btn-primary" ng-click="approveHWM()"><span>Approve</span></button></span>
+                                    <span><button type="button" ng-show="((ApprovalInfo.approvalDate != undefined && view.HWMval == 'detail') && (userRole == 'Admin' || userRole == 'Manager'))" class="btn btn-primary" ng-click="unApproveHWM()"><span>UnApprove</span></button></span>
                                 </div>
                             </div>
 
@@ -1845,12 +1847,12 @@
                                 <div class="col-md-6">
                                     <span ng-show="view.HWMval == 'detail'">{{aHWM.HWM_ENVIRONMENT || '---'}}</span>
                                     <span ng-show="view.HWMval == 'edit'">
-                                        <label class="radio-inline">
+                                        <span class="radio-inline">
                                             <input type="radio" name="HWM_ENVIRONMENT" ng-model="hwmCopy.HWM_ENVIRONMENT" value="Coastal" />Coastal
-                                        </label>
-                                        <label class="radio-inline">
+                                        </span>
+                                        <span class="radio-inline">
                                             <input type="radio" name="HWM_ENVIRONMENT" ng-model="hwmCopy.HWM_ENVIRONMENT" value="Riverine" />Riverine
-                                        </label>
+                                        </span>
                                     </span>
                                 </div>
                             </div>
@@ -1888,15 +1890,15 @@
                                 <div class="col-md-6">
                                     <span ng-show="view.HWMval == 'detail'">{{aHWM.BANK || '---'}}</span>
                                     <span ng-show="view.HWMval == 'edit'">
-                                        <label class="radio-inline">
+                                        <span class="radio-inline">
                                             <input type="radio" name="BANK" ng-model="hwmCopy.BANK" value="Left" />Left
-                                        </label>
-                                        <label class="radio-inline">
+                                        </span>
+                                        <span class="radio-inline">
                                             <input type="radio" name="BANK" ng-model="hwmCopy.BANK" value="Right" />Right
-                                        </label>
-                                        <label class="radio-inline">
+                                        </span>
+                                        <span class="radio-inline">
                                             <input type="radio" name="BANK" ng-model="hwmCopy.BANK" value="N/A" />N/A
-                                        </label>
+                                        </span>
                                     </span>
                                 </div>
                             </div>
@@ -1914,15 +1916,15 @@
                             </div>
 
                             <!-- dec deg or dms: -->
-                            <div class="form-group" ng-show="view.HWMval == 'edit'">
+                            <div ng-show="view.HWMval == 'edit'">
                                 <label class="col-md-4 control-label"></label>
                                 <div class="col-md-6">
-                                    <label class="radio-inline">
+                                    <span class="radio-inline">
                                         <input type="radio" name="decDegORdms" ng-change="latLongChange()" ng-model="hwmCopy.decDegORdms" value="dd" /> Dec Deg
-                                    </label>
-                                    <label class="radio-inline">
+                                    </span>
+                                    <span class="radio-inline">
                                         <input type="radio" name="decDegORdms" ng-change="latLongChange()" ng-model="hwmCopy.decDegORdms" value="dms" /> DMS
-                                    </label>
+                                    </span>
                                 </div>
                             </div>
 
@@ -2015,7 +2017,7 @@
                                     <input ng-show="view.HWMval == 'edit'" show-weeks="false" class="form-control dateInputStyle" type="date" id="FLAG_DATE" name="fd" uib-datepicker-popup="MM/dd/yyyy"
                                            is-open="datepickrs.fd" ng-model="hwmCopy.FLAG_DATE" required />
                                     <span ng-show="view.HWMval == 'edit'" class="input-group-btn">
-                                        <button class="btn btn-default" ng-click="open($event, 'fd')">
+                                        <button class="btn btn-default" ng-click="open($event, 'fd')" type="button">
                                             <i class="glyphicon glyphicon-calendar" />
                                         </button>
                                     </span>
@@ -2030,7 +2032,7 @@
                                     <div ng-show="view.HWMval == 'edit'" class="col-md-3 input-group">
                                         <input show-weeks="false" class="form-control dateInputStyle" type="date" id="SURVEY_DATE" name="sd" uib-datepicker-popup="MM/dd/yyyy" is-open="datepickrs.sd" ng-model="hwmCopy.SURVEY_DATE" />
                                         <span class="input-group-btn">
-                                            <button class="btn btn-default" ng-click="open($event, 'sd')">
+                                            <button class="btn btn-default" ng-click="open($event, 'sd')" type="button">
                                                 <i class="glyphicon glyphicon-calendar" />
                                             </button>
                                         </span>
@@ -2078,15 +2080,15 @@
                             </div>
 
                             <!-- Ft or CM radios: -->
-                            <div ng-show="view.HWMval == 'edit'" class="form-group" style="margin-bottom: 0;padding-bottom: 0">
+                            <div ng-show="view.HWMval == 'edit'">
                                 <label class="col-md-4 control-label"></label>
                                 <div class="col-md-6">
-                                    <label class="radio-inline">
+                                    <span class="radio-inline">
                                         <input type="radio" name="FTorCM" ng-model="FTorCM" value="ft" /> +/- ft
-                                    </label>
-                                    <label class="radio-inline">
+                                    </span>
+                                    <span class="radio-inline">
                                         <input type="radio" name="FTorCM" ng-model="FTorCM" value="cm" /> +/- cm
-                                    </label>
+                                    </span>
                                 </div>
                             </div>
 
@@ -2116,15 +2118,15 @@
                                 <div class="col-md-6">
                                     <span ng-show="view.HWMval == 'detail'">{{aHWM.Tranquil || '---'}}</span>
                                     <span ng-show="view.HWMval == 'edit'">
-                                        <label class="radio-inline">
+                                        <span class="radio-inline">
                                             <input type="radio" name="STILLWATER" ng-model="hwmCopy.STILLWATER" value="1" />Yes
-                                        </label>
-                                        <label class="radio-inline">
+                                        </span>
+                                        <span class="radio-inline">
                                             <input type="radio" name="STILLWATER" ng-model="hwmCopy.STILLWATER" value="0" />No
-                                        </label>
+                                        </span>
                                     </span>
                                 </div>
-                                <button ng-show="view.HWMval == 'edit'" type="button" class="col-md-1 borderLess pull-left" tooltip-placement="bottom" tooltip-append-to-body="false" uib-tooltip="Tranquil-Water HWMs preferred over Rapid-Water HWMs. Refer to T&M 3-A24 for details.">
+                                <button type="button" ng-show="view.HWMval == 'edit'" type="button" class="col-md-1 borderLess pull-left" tooltip-placement="bottom" tooltip-append-to-body="false" uib-tooltip="Tranquil-Water HWMs preferred over Rapid-Water HWMs. Refer to T&M 3-A24 for details.">
                                     <span class="glyphicon glyphicon-question-sign"></span>
                                 </button>
                             </div>
@@ -2269,7 +2271,7 @@
                                             <div class="col-md-3 input-group" style="padding-right:14px;padding-left:14px">
                                                 <input class="form-control dateInputStyle" type="date" name="sd" uib-datepicker-popup="MM/dd/yyyy" show-weeks="false" is-open="datepickrs.sd" ng-model="aFile.PHOTO_DATE" required />
                                                 <span class="input-group-btn">
-                                                    <button class="btn btn-default" ng-click="open($event, 'sd')">
+                                                    <button type="button" class="btn btn-default" ng-click="open($event, 'sd')">
                                                         <i class="glyphicon glyphicon-calendar" />
                                                     </button>
                                                 </span>
@@ -2282,7 +2284,7 @@
                                             <div class="col-md-3 input-group" style="padding-right:14px;padding-left:14px">
                                                 <input class="form-control dateInputStyle" type="date" name="fd" uib-datepicker-popup="MM/dd/yyyy" show-weeks="false" is-open="datepickrs.fd" ng-model="aFile.FILE_DATE" required />
                                                 <span class="input-group-btn">
-                                                    <button class="btn btn-default" ng-click="open($event, 'fd')">
+                                                    <button type="button" class="btn btn-default" ng-click="open($event, 'fd')">
                                                         <i class="glyphicon glyphicon-calendar" />
                                                     </button>
                                                 </span>
@@ -2295,7 +2297,7 @@
                                             <div class="col-md-6">
                                                 <textarea class="form-control" id="DESCRIPTION" type="text" rows="3" placeholder="Description" ng-model="aFile.DESCRIPTION" required />
                                             </div>
-                                            <button ng-show="aFile.FILETYPE_ID == 1" type="button" class="col-md-1 borderLess pull-left" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Populates in Photo caption below.">
+                                            <button type="button" ng-show="aFile.FILETYPE_ID == 1" type="button" class="col-md-1 borderLess pull-left" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Populates in Photo caption below.">
                                                 <span class="glyphicon glyphicon-question-sign"></span>
                                             </button>
                                         </div>
@@ -2339,15 +2341,17 @@
                                         <div ng-if="aFile.FILE_ID !== undefined && aFile.FILETYPE_ID !== 8" class="form-group" style="margin:0;padding:0">
                                             <label class="col-md-3 control-label">Associated File:</label>
                                             <div class="col-md-6">
-                                                <a target="_blank" class="btn btn-primary" ng-href="{{serverURL}}/Files/{{aFile.FILE_ID}}/Item">Download File</a>
+                                                <a target="_blank" title="Download File" ng-href="{{serverURL}}/Files/{{aFile.FILE_ID}}/Item">
+                                                    <span class="glyphicon glyphicon-download"></span>
+                                                </a>
                                                 <img ng-if="aFile.FILETYPE_ID === 1" style="height:80px;" ng-src="{{serverURL}}/Files/{{aFile.FILE_ID}}/Item" />
                                             </div>
                                         </div>
                                         <div ng-show="!HWMfileIsUploading">
                                             <button class="btn btn-primary" ng-if="aFile.FILE_ID != undefined" ng-click="saveFile(HWMFILEForm.$valid)">Save File</button>
-                                            <button class="btn btn-danger" ng-if="aFile.FILE_ID != undefined" ng-click="deleteFile()">Delete File</button>
+                                            <button type="button" class="btn btn-danger" ng-if="aFile.FILE_ID != undefined" ng-click="deleteFile()">Delete File</button>
                                             <button class="btn btn-primary" ng-if="aFile.FILE_ID == undefined" ng-click="createFile(HWMFILEForm.$valid)">Create File</button>
-                                            <button class="btn btn-warning" type="button" ng-click="cancelFile()">Close/Cancel File</button>
+                                            <button type="button" class="btn btn-warning" type="button" ng-click="cancelFile()">Close/Cancel File</button>
                                         </div>
                                         <div ng-show="HWMfileIsUploading"><img src="images/fileUpload.gif" /></div>
                                     </fieldset>
@@ -2364,7 +2368,7 @@
     <div class="modal-footer">
         <div class="form-group">
             <div class="col-md-12">
-                <button ng-show="aHWM.HWM_ID !== undefined" ng-disabled="showFileForm" class="btn btn-danger" ng-click="deleteHWM(HWMEditForm.$valid)"><span>Delete</span></button>
+                <button type="button" ng-show="aHWM.HWM_ID !== undefined" ng-disabled="showFileForm" class="btn btn-danger" ng-click="deleteHWM(HWMEditForm.$valid)"><span>Delete</span></button>
                 <button type="button" class="btn btn-warning" ng-disabled="showFileForm" ng-click="cancel()"><span>Cancel/Close</span></button>
             </div>
         </div>
@@ -2568,9 +2572,9 @@
                             </div>
 
                             <!-- area for D3 vertical ruler
-                            <div class="col-md-6">
-                                <bars-chart elevation-data="myData"></bars-chart>
-                            </div> -->
+                    <div class="col-md-6">
+                        <bars-chart elevation-data="myData"></bars-chart>
+                    </div> -->
                         </div>
                         <br clear="all" />
                     </uib-accordion-group>
@@ -2582,12 +2586,12 @@
                     <div class="form-group">
                         <label class="col-md-3 control-label">Vented:</label>
                         <div class="col-md-6">
-                            <label class="radio-inline">
+                            <span class="radio-inline">
                                 <input type="radio" name="VENTED" ng-model="aSensor.VENTED" value="Yes" />Yes
-                            </label>
-                            <label class="radio-inline">
+                            </span>
+                            <span class="radio-inline">
                                 <input type="radio" name="VENTED" ng-model="aSensor.VENTED" value="No" />No
-                            </label>
+                            </span>
                         </div>
                     </div>
                 </div>
@@ -2615,23 +2619,24 @@
                 </div>
 
                 <!-- Interval: -->
-                <div style="margin-bottom:0">
+                <div>
+                    <label class="col-md-3 control-label"></label>
+                    <div class="col-md-6">
+                        <span class="radio-inline">
+                            <input type="radio" name="intervalType" ng-model="IntervalType.type" value="Minutes" />Minutes
+                        </span>
+                        <span class="radio-inline">
+                            <input type="radio" name="intervalType" ng-model="IntervalType.type" value="Seconds" />Seconds
+                        </span>
+                    </div>
+                </div><br clear="all" />
+                <div class="form-group">
                     <label class="col-md-3 control-label" for="INTERVAL">Interval:</label>
                     <div class="col-md-6">
                         <input class="form-control" ng-keypress="isNum($event)" name="INTERVAL" ng-model="aSensor.INTERVAL" type="text" />
                     </div>
                 </div>
-                <div class="form-group">
-                    <label class="col-md-3 control-label"></label>
-                    <div class="col-md-6">
-                        <label class="radio-inline">
-                            <input type="radio" name="intervalType" ng-model="IntervalType.type" value="Minutes" />Minutes
-                        </label>
-                        <label class="radio-inline">
-                            <input type="radio" name="intervalType" ng-model="IntervalType.type" value="Seconds" />Seconds
-                        </label>
-                    </div>
-                </div>
+             
 
                 <!-- Deploy Time: * -->
                 <div class="form-group required" ng-class="{'has-error':SensorForm.TIME_STAMP.$invalid && SensorForm.TIME_STAMP.$dirty}">
@@ -2722,7 +2727,7 @@
                                     </button>
                                 </span>
                                 <span>
-                                    <button ng-show="view.DEPval == 'edit'" type="button" class=" btn btn-primary" ng-click="cancelDepEdit()">
+                                    <button ng-show="view.DEPval == 'edit'" type="button" class="btn btn-primary" ng-click="cancelDepEdit()">
                                         <span>Cancel</span>
                                     </button>
                                 </span>
@@ -2854,7 +2859,7 @@
                                                  item-label="NAME"
                                                  on-item-click="OPchosen(data)"
                                                  tick-property="selected"
-                                                 helper-elements="filter">
+                                                 helper-elements="">
                                             </div>
                                         </div>
                                     </div>
@@ -2902,8 +2907,8 @@
 
                         <!--sensor stat tapedown parts-->
                         <div ng-if="OPsPresent" class="form-group">
-                            <label class="col-md-3 col-md-offset-1 control-label">Sensor Elevation:</label>
-                            <div class="col-md-6">
+                            <label class="col-md-4 col-md-offset-1 control-label">Sensor Elevation:</label>
+                            <div class="col-md-4">
                                 <div ng-show="view.DEPval == 'detail'">
                                     {{aSensStatus.SENSOR_ELEVATION || '--'}}
                                 </div>
@@ -2917,8 +2922,8 @@
                         </div>
 
                         <div ng-if="OPsPresent" class="form-group">
-                            <label class="col-md-3 col-md-offset-1 control-label">Water Surface Elevation:</label>
-                            <div class="col-md-6">
+                            <label class="col-md-4 col-md-offset-1 control-label">Water Surface Elevation:</label>
+                            <div class="col-md-4">
                                 <div ng-show="view.DEPval == 'detail'">
                                     {{aSensStatus.WS_ELEVATION || '--'}}
                                 </div>
@@ -2932,8 +2937,8 @@
                         </div>
 
                         <div ng-if="OPsPresent" class="form-group">
-                            <label class="col-md-3 col-md-offset-1 control-label">Ground Elevation:</label>
-                            <div class="col-md-6">
+                            <label class="col-md-4 col-md-offset-1 control-label">Ground Elevation:</label>
+                            <div class="col-md-4">
                                 <div ng-show="view.DEPval == 'detail'">
                                     {{aSensStatus.GS_ELEVATION || '--'}}
                                 </div>
@@ -2947,8 +2952,8 @@
                         </div>
 
                         <div ng-if="OPsPresent" class="form-group">
-                            <label class="col-md-3 col-md-offset-1 control-label">In feet above:</label>
-                            <div class="col-md-6">
+                            <label class="col-md-4 col-md-offset-1 control-label">In feet above:</label>
+                            <div class="col-md-4">
                                 <div ng-show="view.DEPval == 'detail'">
                                     {{aSensStatus.vdatumName}}
                                 </div>
@@ -2970,12 +2975,12 @@
                                 <div class="col-md-6">
                                     <span ng-show="view.DEPval == 'detail'">{{aSensor.VENTED || '---'}}</span>
                                     <span ng-show="view.DEPval == 'edit'">
-                                        <label class="radio-inline">
+                                        <span class="radio-inline">
                                             <input type="radio" name="VENTED" ng-model="depStuffCopy[0].VENTED" value="Yes" />Yes
-                                        </label>
-                                        <label class="radio-inline">
+                                        </span>
+                                        <span class="radio-inline">
                                             <input type="radio" name="VENTED" ng-model="depStuffCopy[0].VENTED" value="No" />No
-                                        </label>
+                                        </span>
                                     </span>
                                 </div>
                             </div>
@@ -3006,6 +3011,17 @@
                         </div>
 
                         <!-- Interval: -->
+                        <div class="form-group" ng-show="view.DEPval == 'edit'">
+                            <label class="col-md-3 control-label"></label>
+                            <div class="col-md-6 col-md-offset-1" style="padding-top:5px;">
+                                <span class="radio-inline">
+                                    <input type="radio" name="intervalType" ng-model="IntervalType.type" value="Minutes" />Minutes
+                                </span>
+                                <span class="radio-inline">
+                                    <input type="radio" name="intervalType" ng-model="IntervalType.type" value="Seconds" />Seconds
+                                </span>
+                            </div>
+                        </div>
                         <div class="form-group">
                             <label class="col-md-3 col-md-offset-1 control-label">Interval:</label>
                             <div class="col-md-6">
@@ -3013,17 +3029,7 @@
                                 <input ng-show="view.DEPval == 'edit'" class="form-control" ng-keypress="isNum($event)" name="INTERVAL" ng-model="depStuffCopy[0].INTERVAL" type="text" />
                             </div>
                         </div>
-                        <div class="form-group" ng-show="view.DEPval == 'edit'">
-                            <label class="col-md-3 control-label"></label>
-                            <div class="col-md-6 col-md-offset-1">
-                                <label class="radio-inline">
-                                    <input type="radio" name="intervalType" ng-model="IntervalType.type" value="Minutes" />Minutes
-                                </label>
-                                <label class="radio-inline">
-                                    <input type="radio" name="intervalType" ng-model="IntervalType.type" value="Seconds" />Seconds
-                                </label>
-                            </div>
-                        </div>
+
 
                         <!-- Deploy Date*: -->
                         <div class="form-group required" ng-class="{'has-error':editDeployedForm.TIME_STAMP.$invalid && editDeployedForm.TIME_STAMP.$dirty && view.DEPval =='edit'}">
@@ -3275,12 +3281,12 @@
                                 <div ng-if="aFile.FILETYPE_ID === 2" class="form-group" style="margin:0;padding:0">
                                     <label class="col-md-4 control-label">Elevation:</label>
                                     <div class="col-md-6">
-                                        <label class="radio-inline">
+                                        <span class="radio-inline">
                                             <input type="radio" name="ELEVATION_STATUS" ng-model="datafile.ELEVATION_STATUS" value="Final" />Final
-                                        </label>
-                                        <label class="radio-inline">
+                                        </span>
+                                        <span class="radio-inline">
                                             <input type="radio" name="ELEVATION_STATUS" ng-model="datafile.ELEVATION_STATUS" value="Arbitrary" />Arbitrary
-                                        </label>
+                                        </span>
                                     </div>
                                 </div>
 
@@ -3326,13 +3332,12 @@
                                         <a target="_blank" title="Download file" ng-href="{{serverURL}}/Files/{{aFile.FILE_ID}}/Item">
                                             <span class="glyphicon glyphicon-download"></span>
                                         </a>
-                                        <!--<a target="_blank" class="btn btn-primary" ng-href="{{serverURL}}/Files/{{aFile.FILE_ID}}/Item">Download File</a>-->                                        
                                         <img ng-if="aFile.FILETYPE_ID === 1" style="height:80px;" ng-src="{{serverURL}}/Files/{{aFile.FILE_ID}}/Item" />
                                     </div>
                                 </div>
                                 <div ng-show="!fullSenfileIsUploading">
                                     <button class="btn btn-primary" ng-if="aFile.FILE_ID != undefined" ng-click="saveFile(DepSenFILEForm.$valid)">Save File</button>
-                                    <button class="btn btn-danger" ng-if="aFile.FILE_ID != undefined" ng-click="deleteFile()">Delete File</button>
+                                    <button type="button" class="btn btn-danger" ng-if="aFile.FILE_ID != undefined" ng-click="deleteFile()">Delete File</button>
                                     <button class="btn btn-primary" ng-if="aFile.FILE_ID == undefined" ng-click="createFile(DepSenFILEForm.$valid)">Create File</button>
                                     <button class="btn btn-warning" type="button" ng-click="cancelFile()">Close/Cancel File</button>
                                 </div>
@@ -3482,17 +3487,17 @@
                                     <div class="form-group" style="margin:0;padding:0">
                                         <label class="col-md-4 control-label">Elevation:</label>
                                         <div class="col-md-6">
-                                            <label class="radio-inline">
+                                            <span class="radio-inline">
                                                 <input type="radio" name="ELEVATION_STATUS" ng-model="NWISDF.ELEVATION_STATUS" value="Final" />Final
-                                            </label>
-                                            <label class="radio-inline">
+                                            </span>
+                                            <span class="radio-inline">
                                                 <input type="radio" name="ELEVATION_STATUS" ng-model="NWISDF.ELEVATION_STATUS" value="Arbitrary" />Arbitrary
-                                            </label>
+                                            </span>
                                         </div>
                                     </div>
 
                                     <button class="btn btn-primary" ng-if="NWISFile.FILE_ID != undefined" ng-click="saveNWISFile(NWISSenFILEForm.$valid)">Save NWIS File Info</button>
-                                    <button class="btn btn-danger" ng-if="NWISFile.FILE_ID != undefined" ng-click="deleteNWISFile()">Delete NWIS File Info</button>
+                                    <button type="button" class="btn btn-danger" ng-if="NWISFile.FILE_ID != undefined" ng-click="deleteNWISFile()">Delete NWIS File Info</button>
                                     <button class="btn btn-primary" ng-if="NWISFile.FILE_ID == undefined" ng-click="createNWISFile(NWISSenFILEForm.$valid)">Create NWIS File Info</button>
                                     <button class="btn btn-warning" type="button" ng-click="cancelNWISFile()">Close/Cancel NWIS File Info</button>
                                 </fieldset>
@@ -3833,13 +3838,13 @@
                     <fieldset>
                         <!-- Event: -->
                         <div class="form-group">
-                            <label class="col-md-3 col-md-offset-1 control-label">Event:</label>
+                            <label class="col-md-4 col-md-offset-1 control-label">Event:</label>
                             <div class="col-md-6">{{EventName}}</div>
                         </div>
 
                         <!-- Sensor Type*: -->
                         <div class="form-group required">
-                            <label class="col-md-3 col-md-offset-1 req control-label">Sensor Type:</label>
+                            <label class="col-md-4 col-md-offset-1 req control-label">Sensor Type:</label>
                             <div class="col-md-6">
                                 <span ng-show="view.DEPval == 'detail'">{{sensor.Sensor_Type || '---'}}</span>
                                 <select ng-show="view.DEPval == 'edit'" class="form-control" name="SENSOR_TYPE_ID" ng-model="depStuffCopy[0].SENSOR_TYPE_ID"
@@ -3851,7 +3856,7 @@
 
                         <!-- Sensor Brand*: -->
                         <div class="form-group required">
-                            <label class="col-md-3 col-md-offset-1 req control-label">Sensor Brand:</label>
+                            <label class="col-md-4 col-md-offset-1 req control-label">Sensor Brand:</label>
                             <div class="col-md-6">
                                 <span ng-show="view.DEPval == 'detail'">{{sensor.Sensor_Brand || '---'}}</span>
                                 <select ng-show="view.DEPval == 'edit'" class="form-control" name="SENSOR_BRAND_ID" ng-model="depStuffCopy[0].SENSOR_BRAND_ID"
@@ -3863,7 +3868,7 @@
 
                         <!-- Serial Number*: -->
                         <div class="form-group required">
-                            <label class="col-md-3 col-md-offset-1 req control-label">Serial Number:</label>
+                            <label class="col-md-4 col-md-offset-1 req control-label">Serial Number:</label>
                             <div class="col-md-6">
                                 <span ng-show="view.DEPval =='detail'">{{sensor.SERIAL_NUMBER || '---'}}</span>
                                 <input ng-show="view.DEPval =='edit'" class="form-control" name="SERIAL_NUMBER" ng-model="depStuffCopy[0].SERIAL_NUMBER" type="text" required />
@@ -3875,7 +3880,7 @@
 
                         <!-- Housing Serial Number: -->
                         <div class="form-group">
-                            <label class="col-md-3 col-md-offset-1 control-label">Housing Serial Number:</label>
+                            <label class="col-md-4 col-md-offset-1 control-label">Housing Serial Number:</label>
                             <div class="col-md-6">
                                 <span ng-show="view.DEPval == 'detail'">{{sensor.HOUSING_SERIAL_NUMBER || '---'}}</span>
                                 <input ng-show="view.DEPval == 'edit'" class="form-control" name="HOUSING_SERIAL_NUMBER" ng-model="depStuffCopy[0].HOUSING_SERIAL_NUMBER" type="text" />
@@ -3887,7 +3892,7 @@
 
                         <!-- Housing Types: -->
                         <div class="form-group">
-                            <label class="col-md-3 col-md-offset-1 control-label">Housing Types:</label>
+                            <label class="col-md-4 col-md-offset-1 control-label">Housing Types:</label>
                             <div class="col-md-6">
                                 <span ng-show="view.DEPval == 'detail'">{{sensor.Housing_Type || '---'}}</span>
                                 <select ng-show="view.DEPval == 'edit'" class="form-control" id="HOUSING_TYPE_ID" name="HOUSING_TYPE_ID" ng-model="depStuffCopy[0].HOUSING_TYPE_ID"
@@ -3898,7 +3903,7 @@
                         </div>
                         <br clear="all" /><hr />
                         <div class="form-group">
-                            <label class="col-md-3 col-md-offset-1 control-label">Tapedowns:</label>
+                            <label class="col-md-4 col-md-offset-1 control-label">Tapedowns:</label>
                             <div class="col-md-6">
                                 <div ng-show="view.DEPval == 'detail'">
                                     <div ng-show="DEPtapeDownTable.length > 0">
@@ -3988,7 +3993,7 @@
 
                         <!--sensor stat tapedown parts-->
                         <div ng-if="OPsPresent" class="form-group">
-                            <label class="col-md-3 col-md-offset-1 control-label">Sensor Elevation:</label>
+                            <label class="col-md-4 col-md-offset-1 control-label">Sensor Elevation:</label>
                             <div class="col-md-6">
                                 <div ng-show="view.DEPval == 'detail'">
                                     {{DeployedSensorStat.SENSOR_ELEVATION || '--'}}
@@ -4003,7 +4008,7 @@
                         </div>
 
                         <div ng-if="OPsPresent" class="form-group">
-                            <label class="col-md-3 col-md-offset-1 control-label">Water Surface Elevation:</label>
+                            <label class="col-md-4 col-md-offset-1 control-label">Water Surface Elevation:</label>
                             <div class="col-md-6">
                                 <div ng-show="view.DEPval == 'detail'">
                                     {{DeployedSensorStat.WS_ELEVATION || '--'}}
@@ -4018,7 +4023,7 @@
                         </div>
 
                         <div ng-if="OPsPresent" class="form-group">
-                            <label class="col-md-3 col-md-offset-1 control-label">Ground Elevation:</label>
+                            <label class="col-md-4 col-md-offset-1 control-label">Ground Elevation:</label>
                             <div class="col-md-6">
                                 <div ng-show="view.DEPval == 'detail'">
                                     {{DeployedSensorStat.GS_ELEVATION || '--'}}
@@ -4033,7 +4038,7 @@
                         </div>
 
                         <div ng-if="OPsPresent" class="form-group">
-                            <label class="col-md-3 col-md-offset-1 control-label">In feet above:</label>
+                            <label class="col-md-4 col-md-offset-1 control-label">In feet above:</label>
                             <div class="col-md-6">
                                 <div ng-show="view.DEPval == 'detail'">
                                     {{DeployedSensorStat.vdatumName}}
@@ -4050,16 +4055,16 @@
                         <!-- Vented (only if Sensor Type is Pressure Transducer)-->
                         <div ng-show="sensor.SENSOR_TYPE_ID == 1 || depStuffCopy[0].SENSOR_TYPE_ID == 1">
                             <div class="form-group">
-                                <label class="col-md-3 col-md-offset-1 control-label">Vented:</label>
+                                <label class="col-md-4 col-md-offset-1 control-label">Vented:</label>
                                 <div class="col-md-6">
                                     <span ng-show="view.DEPval == 'detail'">{{sensor.VENTED || '---'}}</span>
                                     <span ng-show="view.DEPval == 'edit'">
-                                        <label class="radio-inline">
+                                        <span class="radio-inline">
                                             <input type="radio" name="VENTED" ng-model="depStuffCopy[0].VENTED" value="Yes" />Yes
-                                        </label>
-                                        <label class="radio-inline">
+                                        </span>
+                                        <span class="radio-inline">
                                             <input type="radio" name="VENTED" ng-model="depStuffCopy[0].VENTED" value="No" />No
-                                        </label>
+                                        </span>
                                     </span>
                                 </div>
                             </div>
@@ -4067,7 +4072,7 @@
 
                         <!-- Deployment Type: -->
                         <div class="form-group">
-                            <label class="col-md-3 col-md-offset-1 control-label">Deployment Type:</label>
+                            <label class="col-md-4 col-md-offset-1 control-label">Deployment Type:</label>
                             <div class="col-md-6">
                                 <span ng-show="view.DEPval == 'detail'">{{sensor.Deployment_Type || '---'}}</span>
                                 <select ng-show="view.DEPval == 'edit'" class="form-control" id="DEPLOYMENT_TYPE_ID" name="DEPLOYMENT_TYPE_ID" ng-model="depStuffCopy[0].DEPLOYMENT_TYPE_ID"
@@ -4079,7 +4084,7 @@
 
                         <!-- Location Description: -->
                         <div class="form-group">
-                            <label class="col-md-3 col-md-offset-1 control-label">Location Description:</label>
+                            <label class="col-md-4 col-md-offset-1 control-label">Location Description:</label>
                             <div class="col-md-6">
                                 <span ng-show="view.DEPval == 'detail'">{{sensor.LOCATION_DESCRIPTION || '---'}}</span>
                                 <textarea ng-show="view.DEPval == 'edit'" class="form-control" id="LOCATION_DESCRIPTION" name="LOCATION_DESCRIPTION" type=" text" rows="3" ng-model="depStuffCopy[0].LOCATION_DESCRIPTION" />
@@ -4090,28 +4095,29 @@
                         </div>
 
                         <!-- Interval: -->
+                        <div class="form-group" ng-show="view.DEPval == 'edit'">
+                            <label class="col-md-4 control-label"></label>
+                            <div class="col-md-6 col-md-offset-1" style="padding-top:5px;">
+                                <span class="radio-inline">
+                                    <input type="radio" name="intervalType" ng-model="IntervalType.type" value="Minutes" />Minutes
+                                </span>
+                                <span class="radio-inline">
+                                    <input type="radio" name="intervalType" ng-model="IntervalType.type" value="Seconds" />Seconds
+                                </span>
+                            </div>
+                        </div>
                         <div class="form-group">
-                            <label class="col-md-3 col-md-offset-1 control-label">Interval:</label>
+                            <label class="col-md-4 col-md-offset-1 control-label">Interval:</label>
                             <div class="col-md-6">
                                 <span ng-show="view.DEPval == 'detail'">{{sensor.INTERVAL || '---'}} <span ng-if='sensor.INTERVAL'>seconds</span></span>
                                 <input ng-show="view.DEPval == 'edit'" class="form-control" ng-keypress="isNum($event)" name="INTERVAL" ng-model="depStuffCopy[0].INTERVAL" type="text" />
                             </div>
                         </div>
-                        <div class="form-group" ng-show="view.DEPval == 'edit'">
-                            <label class="col-md-3 control-label"></label>
-                            <div class="col-md-6 col-md-offset-1">
-                                <label class="radio-inline">
-                                    <input type="radio" name="intervalType" ng-model="IntervalType.type" value="Minutes" />Minutes
-                                </label>
-                                <label class="radio-inline">
-                                    <input type="radio" name="intervalType" ng-model="IntervalType.type" value="Seconds" />Seconds
-                                </label>
-                            </div>
-                        </div>
+
 
                         <!-- Deploy Date*: -->
                         <div class="form-group required">
-                            <label class="col-md-3 col-md-offset-1 control-label" ng-class="{topPad: view.DEPval == 'edit'}">Deploy Date:</label>
+                            <label class="col-md-4 col-md-offset-1 control-label" ng-class="{topPad: view.DEPval == 'edit'}">Deploy Date:</label>
                             <div class="col-md-6">
                                 <span ng-show="view.DEPval == 'detail'">{{DeployedSensorStat.TIME_STAMP | date: 'MM/dd/yyyy hh:mm a'}}</span>
                                 <datetimepicker ng-show="view.DEPval == 'edit'" hour-step="1" minute-step="1" ng-model="depStuffCopy[1].TIME_STAMP" show-meridian="true"
@@ -4123,7 +4129,7 @@
 
                         <!-- Deploy timezone*:-->
                         <div class="form-group required">
-                            <label class="col-md-3 col-md-offset-1 req control-label">Time Zone:</label>
+                            <label class="col-md-4 col-md-offset-1 req control-label">Time Zone:</label>
                             <div class="col-md-6">
                                 <span ng-show="view.DEPval == 'detail'">{{DeployedSensorStat.TIME_ZONE}}</span>
 
@@ -4139,7 +4145,7 @@
 
                         <!-- Note: -->
                         <div class="form-group">
-                            <label class="col-md-3 col-md-offset-1 control-label">Note:</label>
+                            <label class="col-md-4 col-md-offset-1 control-label">Note:</label>
                             <div class="col-md-6">
                                 <span ng-show="view.DEPval == 'detail'">{{DeployedSensorStat.NOTES || '---'}}</span>
                                 <textarea ng-show="view.DEPval == 'edit'" class="form-control" name="NOTES" type="text" rows="3" ng-model="depStuffCopy[1].NOTES" />
@@ -4148,7 +4154,7 @@
 
                         <!-- Deploy Member: -->
                         <div class="form-group">
-                            <label class="col-md-3 col-md-offset-1 control-label">Deploy Member:</label>
+                            <label class="col-md-4 col-md-offset-1 control-label">Deploy Member:</label>
                             <div class="col-md-6">{{Deployer.FNAME}} {{Deployer.LNAME}}</div>
                         </div>
 
@@ -4185,7 +4191,7 @@
                     <fieldset>
                         <!-- Status Type:* -->
                         <div class="form-group required">
-                            <label class="col-md-3 col-md-offset-1 control-label req">Status:</label>
+                            <label class="col-md-4 col-md-offset-1 control-label req">Status:</label>
                             <div class="col-md-6">
                                 <span ng-show="view.RETval == 'detail'">{{RetrievedSensorStat.Status || '---'}}</span>
                                 <select ng-show="view.RETval == 'edit'" class="form-control" name="STATUS_TYPE_ID" ng-model="retStuffCopy[1].STATUS_TYPE_ID"
@@ -4197,7 +4203,7 @@
 
                         <!-- Collection Condition:* -->
                         <div class="form-group required">
-                            <label class="col-md-3 col-md-offset-1 control-label req" for="INST_COLLECTION_ID">Collection Conditions:</label>
+                            <label class="col-md-4 col-md-offset-1 control-label req" for="INST_COLLECTION_ID">Collection Conditions:</label>
                             <div class="col-md-6">
                                 <span ng-show="view.RETval == 'detail'">{{sensor.Inst_Collection || '---'}}</span>
                                 <select ng-show="view.RETval == 'edit'" class="form-control" name="INST_COLLECTION_ID" ng-model="retStuffCopy[0].INST_COLLECTION_ID"
@@ -4209,7 +4215,7 @@
 
                         <!-- Note: -->
                         <div class="form-group">
-                            <label class="col-md-3 col-md-offset-1 control-label" for="NOTES">Note:</label>
+                            <label class="col-md-4 col-md-offset-1 control-label" for="NOTES">Note:</label>
                             <div class="col-md-6">
                                 <span ng-show="view.RETval == 'detail'">{{RetrievedSensorStat.NOTES || '---'}}</span>
                                 <textarea ng-show="view.RETval == 'edit'" class="form-control" name="NOTES" type="text" rows="3" ng-model="retStuffCopy[1].NOTES" />
@@ -4219,7 +4225,7 @@
 
                         <!-- Retrieve Time: * -->
                         <div class="form-group required">
-                            <label class="col-md-3 col-md-offset-1 control-label" ng-class="{topPad: view.RETval == 'edit'}">Retrieve Date:</label>
+                            <label class="col-md-4 col-md-offset-1 control-label" ng-class="{topPad: view.RETval == 'edit'}">Retrieve Date:</label>
                             <div class="col-md-6">
                                 <span ng-show="view.RETval == 'detail'">{{RetrievedSensorStat.TIME_STAMP | date: 'MM/dd/yyyy hh:mm a'}}</span>
                                 <datetimepicker ng-show="view.RETval == 'edit'" hour-step="1" minute-step="1" ng-model="retStuffCopy[1].TIME_STAMP" show-meridian="true"
@@ -4231,7 +4237,7 @@
 
                         <!-- Timezone*:-->
                         <div class="form-group required">
-                            <label class="col-md-3 col-md-offset-1 req control-label">Time Zone:</label>
+                            <label class="col-md-4 col-md-offset-1 req control-label">Time Zone:</label>
                             <div class="col-md-6">
                                 <span ng-show="view.RETval == 'detail'">{{RetrievedSensorStat.TIME_ZONE}}</span>
 
@@ -4246,7 +4252,7 @@
                         </div>
                         <br clear="all" /><hr />
                         <div class="form-group">
-                            <label class="col-md-3 col-md-offset-1 control-label">Tapedowns:</label>
+                            <label class="col-md-4 col-md-offset-1 control-label">Tapedowns:</label>
                             <div class="col-md-6">
                                 <div ng-show="view.RETval == 'detail'">
                                     <div ng-show="RETtapeDownTable.length > 0">
@@ -4325,7 +4331,7 @@
                         <br clear="all" />
                         <!--sensor stat tapedown parts-->
                         <div ng-if="OPsPresent" class="form-group">
-                            <label class="col-md-3 col-md-offset-1 control-label">Sensor Elevation:</label>
+                            <label class="col-md-4 col-md-offset-1 control-label">Sensor Elevation:</label>
                             <div class="col-md-6">
                                 <div ng-show="view.RETval == 'detail'">
                                     {{RetrievedSensorStat.SENSOR_ELEVATION || '--'}}
@@ -4337,7 +4343,7 @@
                         </div>
 
                         <div ng-if="OPsPresent" class="form-group">
-                            <label class="col-md-3 col-md-offset-1 control-label">Water Surface Elevation:</label>
+                            <label class="col-md-4 col-md-offset-1 control-label">Water Surface Elevation:</label>
                             <div class="col-md-6">
                                 <div ng-show="view.RETval == 'detail'">
                                     {{RetrievedSensorStat.WS_ELEVATION || '--'}}
@@ -4349,7 +4355,7 @@
                         </div>
 
                         <div ng-if="OPsPresent" class="form-group">
-                            <label class="col-md-3 col-md-offset-1 control-label">Ground Elevation:</label>
+                            <label class="col-md-4 col-md-offset-1 control-label">Ground Elevation:</label>
                             <div class="col-md-6">
                                 <div ng-show="view.RETval == 'detail'">
                                     {{RetrievedSensorStat.GS_ELEVATION || '--'}}
@@ -4361,7 +4367,7 @@
                         </div>
 
                         <div ng-if="OPsPresent" class="form-group">
-                            <label class="col-md-3 col-md-offset-1 control-label">In feet above:</label>
+                            <label class="col-md-4 col-md-offset-1 control-label">In feet above:</label>
                             <div class="col-md-6">
                                 <div ng-show="view.RETval == 'detail'">
                                     {{RetrievedSensorStat.vdatumName}}
@@ -4378,7 +4384,7 @@
 
                         <!-- Retrieve Member: -->
                         <div class="form-group required">
-                            <label class="col-md-3 col-md-offset-1 control-label">Member:</label>
+                            <label class="col-md-4 col-md-offset-1 control-label">Member:</label>
                             <div class="col-md-6">{{Retriever.FNAME}} {{Retriever.LNAME}}</div>
                         </div>
 
@@ -4605,12 +4611,12 @@
                                 <div ng-if="aFile.FILETYPE_ID === 2" class="form-group" style="margin:0;padding:0">
                                     <label class="col-md-4 control-label">Elevation:</label>
                                     <div class="col-md-6">
-                                        <label class="radio-inline">
+                                        <span class="radio-inline">
                                             <input type="radio" name="ELEVATION_STATUS" ng-model="datafile.ELEVATION_STATUS" value="Final" />Final
-                                        </label>
-                                        <label class="radio-inline">
+                                        </span>
+                                        <span class="radio-inline">
                                             <input type="radio" name="ELEVATION_STATUS" ng-model="datafile.ELEVATION_STATUS" value="Arbitrary" />Arbitrary
-                                        </label>
+                                        </span>
                                     </div>
                                 </div>
 
@@ -4672,11 +4678,15 @@
                                 </div>
                                 <div ng-show="!fullSenfileIsUploading">
                                     <button class="btn btn-primary" ng-if="aFile.FILE_ID != undefined" ng-click="saveFile(DepSenFILEForm.$valid)">Save File</button>
-
-                                    <button ng-show="(datafile.DATA_FILE_ID != undefined && ApprovalInfo.approvalDate == undefined) && (userRole == 'Admin' || userRole == 'Manager')" class="btn btn-primary" ng-click="approveDF(DepSenFILEForm.$valid)"><span>Approve</span></button>
-                                    <button ng-show="(datafile.DATA_FILE_ID != undefined && ApprovalInfo.approvalDate != undefined) && (userRole == 'Admin' || userRole == 'Manager')" class="btn btn-primary" ng-click="unApproveDF(DepSenFILEForm.$valid)"><span>UnApprove</span></button>
-
-                                    <button class="btn btn-danger" ng-if="aFile.FILE_ID != undefined" ng-click="deleteFile()">Delete File</button>
+                                    <button type="button" ng-show="(datafile.DATA_FILE_ID != undefined && ApprovalInfo.approvalDate == undefined) && (userRole == 'Admin' || userRole == 'Manager')"
+                                            class="btn btn-primary" ng-click="approveDF(DepSenFILEForm.$valid)">
+                                        <span>Approve</span>
+                                    </button>
+                                    <button type="button" ng-show="(datafile.DATA_FILE_ID != undefined && ApprovalInfo.approvalDate != undefined) && (userRole == 'Admin' || userRole == 'Manager')"
+                                            class="btn btn-primary" ng-click="unApproveDF(DepSenFILEForm.$valid)">
+                                        <span>UnApprove</span>
+                                    </button>
+                                    <button type="button" class="btn btn-danger" ng-if="aFile.FILE_ID != undefined" ng-click="deleteFile()">Delete File</button>
                                     <button class="btn btn-primary" ng-if="aFile.FILE_ID == undefined" ng-click="createFile(DepSenFILEForm.$valid)">Create File</button>
                                     <button class="btn btn-warning" type="button" ng-click="cancelFile()">Close/Cancel File</button>
                                 </div>
@@ -4826,17 +4836,17 @@
                                     <div class="form-group" style="margin:0;padding:0">
                                         <label class="col-md-4 control-label">Elevation:</label>
                                         <div class="col-md-6">
-                                            <label class="radio-inline">
+                                            <span class="radio-inline">
                                                 <input type="radio" name="ELEVATION_STATUS" ng-model="NWISDF.ELEVATION_STATUS" value="Final" />Final
-                                            </label>
-                                            <label class="radio-inline">
+                                            </span>
+                                            <span class="radio-inline">
                                                 <input type="radio" name="ELEVATION_STATUS" ng-model="NWISDF.ELEVATION_STATUS" value="Arbitrary" />Arbitrary
-                                            </label>
+                                            </span>
                                         </div>
                                     </div>
 
                                     <button class="btn btn-primary" ng-if="NWISFile.FILE_ID != undefined" ng-click="saveNWISFile(NWISSenFILEForm.$valid)">Save NWIS File Info</button>
-                                    <button class="btn btn-danger" ng-if="NWISFile.FILE_ID != undefined" ng-click="deleteNWISFile()">Delete NWIS File Info</button>
+                                    <button class="btn btn-danger" ng-if="NWISFile.FILE_ID != undefined" type="button" ng-click="deleteNWISFile()">Delete NWIS File Info</button>
                                     <button class="btn btn-primary" ng-if="NWISFile.FILE_ID == undefined" ng-click="createNWISFile(NWISSenFILEForm.$valid)">Create NWIS File Info</button>
                                     <button class="btn btn-warning" type="button" ng-click="cancelNWISFile()">Close/Cancel NWIS File Info</button>
                                 </fieldset>
@@ -4850,7 +4860,7 @@
     <div class="modal-footer">
         <div class="form-group">
             <div class="col-md-12">
-                <span><button class="btn btn-danger" ng-disabled="showFileForm || showNWISFileForm" ng-click="deleteS()"><span>Delete Sensor</span></button></span>
+                <span><button type="button" class="btn btn-danger" ng-disabled="showFileForm || showNWISFileForm" ng-click="deleteS()"><span>Delete Sensor</span></button></span>
                 <span><button type="button" ng-disabled="showFileForm || showNWISFileForm" class="btn btn-warning" ng-click="cancel()"><span>Close</span></button></span>
             </div>
         </div>
@@ -5024,12 +5034,12 @@
                 <div ng-if="aFile.FILETYPE_ID === 2" class="form-group">
                     <label class="col-md-3 control-label">Elevation:</label>
                     <div class="col-md-6">
-                        <label class="radio-inline">
+                        <span class="radio-inline">
                             <input type="radio" name="ELEVATION_STATUS" ng-model="datafile.ELEVATION_STATUS" value="Final" />Final
-                        </label>
-                        <label class="radio-inline">
+                        </span>
+                        <span class="radio-inline">
                             <input type="radio" name="ELEVATION_STATUS" ng-model="datafile.ELEVATION_STATUS" value="Arbitrary" />Arbitrary
-                        </label>
+                        </span>
                     </div>
                 </div>
 
@@ -5069,7 +5079,9 @@
                 <div ng-if="aFile.FILE_ID !== undefined && aFile.FILETYPE_ID !== 8" class="form-group">
                     <label class="col-md-3 control-label">Associated File:</label>
                     <div class="col-md-6">
-                        <a target="_blank" class="btn btn-primary" ng-href="{{serverURL}}/Files/{{aFile.FILE_ID}}/Item">Download File</a>
+                        <a target="_blank" title="Download File" ng-href="{{serverURL}}/Files/{{aFile.FILE_ID}}/Item">
+                            <span class="glyphicon glyphicon-download"></span>
+                        </a>
                         <img ng-if="aFile.FILETYPE_ID === 1" style="height:80px;" ng-src="{{serverURL}}/Files/{{aFile.FILE_ID}}/Item" />
                     </div>
                 </div>
@@ -5102,13 +5114,25 @@
                     <div class="col-md-12">
                         <span><button ng-show="view.FILEval == 'detail'" type="button" class="btn btn-primary" ng-click="wannaEditFILE()"><span>Edit File</span></button></span>
                         <span><button ng-show="view.FILEval == 'edit'" class="btn btn-primary" ng-click="save(FILEForm.$valid)"><span>Save</span></button></span>
+                        <span>
+                            <button type="button" ng-show="(datafile.DATA_FILE_ID != undefined && (view.FILEval == 'detail' && ApprovalInfo.approvalDate == undefined) && (userRole == 'Admin' || userRole == 'Manager'))"
+                                    class="btn btn-primary" ng-click="approveDF()">
+                                <span>Approve</span>
+                            </button>
+                        </span>
+                        <span>
+                            <button type="button" ng-show="(datafile.DATA_FILE_ID != undefined && (view.FILEval == 'detail' && ApprovalInfo.approvalDate != undefined) && (userRole == 'Admin' || userRole == 'Manager'))"
+                                    class="btn btn-primary" ng-click="unApproveDF()">
+                                <span>UnApprove</span>
+                            </button>
+                        </span>
                         <span><button ng-show="view.FILEval == 'edit'" type="button" class=" btn btn-primary" ng-click="cancelFILEEdit()"><span>Cancel</span></button></span>
                     </div>
                 </div>
 
                 <!--File Type*-->
                 <div class="form-group required" ng-class="{'has-error':FILEForm.FILETYPE_ID.$invalid && FILEForm.FILETYPE_ID.$dirty && view.FILEval =='edit'}">
-                    <label class="col-md-3 control-label req" for="FILETYPE_ID">File Type:</label>
+                    <label class="col-md-4 control-label req" for="FILETYPE_ID">File Type:</label>
                     <div class="col-md-6">
                         <span ng-show="view.FILEval == 'detail'">{{aFile.fileType || '---'}}</span>
                         <select ng-show="view.FILEval == 'edit'" class="form-control" name="FILETYPE_ID" ng-model="fileCopy.FILETYPE_ID" ng-change="updateAgencyForCaption()" ng-options="ft.FILETYPE_ID as ft.FILETYPE for ft in fileTypes" required>
@@ -5119,7 +5143,7 @@
 
                 <!--Upload Single Image with validations*-->
                 <div ng-if="aFile.FILE_ID === undefined && aFile.FILETYPE_ID !== 8" class="form-group required">
-                    <label class="col-md-3 control-label" for="FILE">Upload File:</label>
+                    <label class="col-md-4 control-label" for="FILE">Upload File:</label>
                     <div class="col-md-9">
                         <input type="file" max="500000" file-model="aFile.File" />
                         <img ngf-thumbnail="aFile.File" style="height:60px" class="thumbnail">
@@ -5131,7 +5155,7 @@
                 <!-- photo file upload fileType==1-->  <!-- all other file upload fileType > 2-->    <!--data file upload fileType==2 (NOT DEALT WITH IN THIS MODAL -- only in Sensor Modals) -->
                 <!--File URL (link)-->
                 <div ng-if="aFile.FILETYPE_ID === 8 || fileCopy.FILETYPE_ID === 8" class="form-group">
-                    <label class="col-md-3 control-label" for="FILE_URL">File URL:</label>
+                    <label class="col-md-4 control-label" for="FILE_URL">File URL:</label>
                     <div class="col-md-6">
                         <span ng-show="view.FILEval == 'detail'">{{aFile.FILE_URL || '---'}}</span>
                         <input ng-show="view.FILEval == 'edit'" class="form-control" name="FILE_URL" ng-model="fileCopy.FILE_URL" type="text" />
@@ -5143,7 +5167,7 @@
 
                 <!--Data Processed by (Data)-->
                 <div ng-if="aFile.FILETYPE_ID === 2 || fileCopy.FILETYPE_ID === 2" class="form-group">
-                    <label class="col-md-3 control-label" for="PROCESSOR_ID">Data Process By:</label>
+                    <label class="col-md-4 control-label" for="PROCESSOR_ID">Data Process By:</label>
                     <div class="col-md-6">
                         {{processor}}
                     </div>
@@ -5151,7 +5175,7 @@
 
                 <!-- Date Collected/Processed* (data) -->
                 <div ng-if="aFile.FILETYPE_ID === 2 || fileCopy.FILETYPE_ID === 2" class="form-group required" ng-class="{'has-error':FILEForm.COLLECT_DATE.$invalid && FILEForm.COLLECT_DATE.$dirty && view.FILEval =='edit'}">
-                    <label class="col-md-3 control-label req" for="COLLECT_DATE">Date Collected/Processed:</label>
+                    <label class="col-md-4 control-label req" for="COLLECT_DATE">Date Collected/Processed:</label>
                     <div class="col-md-3 input-group" style="padding-right:14px;padding-left:14px">
                         <span ng-show="view.FILEval == 'detail'">{{datafile.COLLECT_DATE | date: 'MM/dd/yyyy' || '---'}}</span>
                         <input ng-show="view.FILEval == 'edit'" class="form-control dateInputStyle" type="date" name="dfcd" uib-datepicker-popup="MM/dd/yyyy" show-weeks="false" is-open="datepickrs.dfcd" ng-model="dfCopy.COLLECT_DATE" required />
@@ -5165,7 +5189,7 @@
 
                 <!--Source Name (all other)-->
                 <div class="form-group required" ng-if="aFile.FILETYPE_ID === 1 || fileCopy.FILETYPE_ID === 1" ng-class="{'has-error':FILEForm.FULLNAME.$invalid && FILEForm.FULLNAME.$dirty && view.FILEval =='edit'}">
-                    <label class="col-md-3 control-label req" for="SOURCE_ID">Source Photographer:</label>
+                    <label class="col-md-4 control-label req" for="SOURCE_ID">Source Photographer:</label>
                     <div class="col-md-6">
                         <span ng-show="view.FILEval == 'detail'">{{aSource.FULLNAME || '---'}}</span>
                         <input ng-show="view.FILEval == 'edit'" class="form-control" name="FULLNAME" ng-model="sourceCopy.FULLNAME" type="text" required />
@@ -5173,7 +5197,7 @@
                 </div>
 
                 <div class="form-group required" ng-if="aFile.FILETYPE_ID  > 2 || fileCopy.FILETYPE_ID  > 2" ng-class="{'has-error':FILEForm.FULLNAME.$invalid && FILEForm.FULLNAME.$dirty && view.FILEval =='edit'}">
-                    <label class="col-md-3 control-label req" for="SOURCE_ID">Source Name:</label>
+                    <label class="col-md-4 control-label req" for="SOURCE_ID">Source Name:</label>
                     <div class="col-md-6">
                         <span ng-show="view.FILEval == 'detail'">{{aSource.FULLNAME || '---'}}</span>
                         <input ng-show="view.FILEval == 'edit'" class="form-control" name="FULLNAME" ng-model="sourceCopy.FULLNAME" type="text" required />
@@ -5182,7 +5206,7 @@
 
                 <!--Source Agency* (photo, allOther)-->
                 <div ng-if="(aFile.FILETYPE_ID === 1 || aFile.FILETYPE_ID > 2) || (fileCopy.FILETYPE_ID === 1 || fileCopy.FILETYPE_ID > 2)" class="form-group required" ng-class="{'has-error':FILEForm.AGENCY_ID.$invalid && FILEForm.AGENCY_ID.$dirty && view.FILEval =='edit'}">
-                    <label class="col-md-3 control-label req" for="AGENCY_ID">Source Agency:</label>
+                    <label class="col-md-4 control-label req" for="AGENCY_ID">Source Agency:</label>
                     <div class="col-md-6">
                         <span ng-show="view.FILEval == 'detail'">{{aSource.agencyName || '---'}}</span>
                         <select ng-show="view.FILEval == 'edit'" class="form-control" name="AGENCY_ID" ng-model="sourceCopy.AGENCY_ID" ng-change="updateAgencyForCaption()"
@@ -5194,7 +5218,7 @@
 
                 <!-- Photo Date* (photo) -->
                 <div ng-if="aFile.FILETYPE_ID === 1 || fileCopy.FILETYPE_ID === 1" class="form-group required" ng-class="{'has-error':FILEForm.PHOTO_DATE.$invalid && FILEForm.PHOTO_DATE.$dirty && view.FILEval =='edit'}">
-                    <label class="col-md-3 control-label req" for="PHOTO_DATE">Photo Date:</label>
+                    <label class="col-md-4 control-label req" for="PHOTO_DATE">Photo Date:</label>
                     <div class="col-md-3 input-group" style="padding-right:14px;padding-left:14px">
                         <span ng-show="view.FILEval == 'detail'">{{aFile.PHOTO_DATE | date: 'MM/dd/yyyy' || '---'}}</span>
                         <input ng-show="view.FILEval == 'edit'" class="form-control dateInputStyle" type="date" name="sd" uib-datepicker-popup="MM/dd/yyyy" show-weeks="false" is-open="datepickrs.sd" ng-model="fileCopy.PHOTO_DATE" required />
@@ -5208,7 +5232,7 @@
 
                 <!-- Date Uploaded* (photo, data, allother) -->
                 <div ng-if="aFile.FILETYPE_ID > 0 || fileCopy.FILETYPE_ID > 0" class="form-group required" ng-class="{'has-error':FILEForm.FILE_DATE.$invalid && FILEForm.FILE_DATE.$dirty && view.FILEval =='edit'}">
-                    <label class="col-md-3 control-label req" for="FILE_DATE">Date Uploaded:</label>
+                    <label class="col-md-4 control-label req" for="FILE_DATE">Date Uploaded:</label>
                     <div class="col-md-3 input-group" style="padding-right:14px;padding-left:14px">
                         <span ng-show="view.FILEval == 'detail'">{{aFile.FILE_DATE | date: 'MM/dd/yyyy' || '---'}}</span>
                         <input ng-show="view.FILEval == 'edit'" class="form-control dateInputStyle" type="date" name="fd" uib-datepicker-popup="MM/dd/yyyy" show-weeks="false" is-open="datepickrs.fd" ng-model="fileCopy.FILE_DATE" required />
@@ -5222,7 +5246,7 @@
 
                 <!--Description*(photo, data, allother)-->
                 <div ng-if="aFile.FILETYPE_ID > 0 || fileCopy.FILETYPE_ID > 0" class="form-group required" ng-class="{'has-error':FILEForm.DESCRIPTION.$invalid && FILEForm.DESCRIPTION.$dirty && view.FILEval =='edit'}">
-                    <label class="col-md-3 control-label req" for="DESCRIPTION">Description:</label>
+                    <label class="col-md-4 control-label req" for="DESCRIPTION">Description:</label>
                     <div class="col-md-6">
                         <span ng-show="view.FILEval == 'detail'">{{aFile.DESCRIPTION || '---'}}</span>
                         <textarea ng-show="view.FILEval == 'edit'" class="form-control" id="DESCRIPTION" type="text" rows="3" placeholder="Description" ng-model="fileCopy.DESCRIPTION" required />
@@ -5231,35 +5255,35 @@
 
                 <!-- Good Data Start Time* (data) -->
                 <div ng-if="aFile.FILETYPE_ID === 2 || fileCopy.FILETYPE_ID === 2" class="form-group required" ng-class="{'has-error':FILEForm.GOOD_START.$invalid && FILEForm.GOOD_START.$dirty && view.FILEval =='edit'}">
-                    <label class="col-md-3 control-label req" for="GOOD_START">Good Data Start Time:</label>
+                    <label class="col-md-4 control-label req" style="padding-top:4em;" for="GOOD_START">Good Data Start Time:</label>
                     <div class="col-md-6">
                         <span ng-show="view.FILEval == 'detail'">{{datafile.GOOD_START | date: 'MM/dd/yyyy hh:mm a' || '---'}}</span>
                         <datetimepicker ng-show="view.FILEval == 'edit'" ng-model="dfCopy.GOOD_START" show-meridian="true" date-format="MM/dd/yyyy" readonly-date="false" date-options="dateOptions"
                                         hidden-time="false" hidden-date="false" show-spinners="true" date-opened="datepickrs.dfgs" date-ng-click="open($event, 'dfgs')" required>
                         </datetimepicker>
                     </div>
-                    <button ng-show="view.FILEval == 'edit'" type="button" class="col-md-1 borderLess pull-left" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Used by the processing scripts to clip irrelavent data.">
+                    <button style="padding-top:4em;" ng-show="view.FILEval == 'edit'" type="button" class="col-md-1 borderLess pull-left" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Used by the processing scripts to clip irrelavent data.">
                         <span class="glyphicon glyphicon-question-sign"></span>
                     </button>
                 </div>
 
                 <!-- Good Data End Time* (data) -->
                 <div ng-if="aFile.FILETYPE_ID === 2 || fileCopy.FILETYPE_ID === 2" class="form-group required" ng-class="{'has-error':FILEForm.GOOD_END.$invalid && FILEForm.GOOD_END.$dirty && view.FILEval =='edit'}">
-                    <label class="col-md-3 control-label req" for="GOOD_END">Good Data End Time:</label>
+                    <label class="col-md-4 control-label req" style="padding-top:4em;" for="GOOD_END">Good Data End Time:</label>
                     <div class="col-md-6">
                         <span ng-show="view.FILEval == 'detail'">{{datafile.GOOD_END | date: 'MM/dd/yyyy hh:mm a' || '---'}}</span>
                         <datetimepicker ng-show="view.FILEval == 'edit'" ng-model="dfCopy.GOOD_END" show-meridian="true" date-format="MM/dd/yyyy" readonly-date="false" date-options="dateOptions"
                                         hidden-time="false" hidden-date="false" show-spinners="true" date-opened="datepickrs.dfge" date-ng-click="open($event, 'dfge')" required>
                         </datetimepicker>
                     </div>
-                    <button ng-show="view.FILEval == 'edit'" type="button" class="col-md-1 borderLess pull-left" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Used by the processing scripts to clip irrelavent data.">
+                    <button style="padding-top:4em;" ng-show="view.FILEval == 'edit'" type="button" class="col-md-1 borderLess pull-left" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Used by the processing scripts to clip irrelavent data.">
                         <span class="glyphicon glyphicon-question-sign"></span>
                     </button>
                 </div>
 
                 <!-- Timezone*:-->
                 <div ng-if="aFile.FILETYPE_ID === 2 || fileCopy.FILETYPE_ID === 2" class="form-group required">
-                    <label class="col-md-3 control-label req">Time Zone:</label>
+                    <label class="col-md-4 control-label req">Time Zone:</label>
                     <div class="col-md-6">
                         <span ng-show="view.FILEval == 'detail'">{{datafile.TIME_ZONE}}</span>
                         <select ng-show="view.FILEval == 'edit'" class="form-control" name="TIME_ZONE" ng-model="dfCopy.TIME_ZONE" ng-options="vcm for vcm in timeZoneList" required>
@@ -5271,23 +5295,36 @@
                     </button>
                 </div>
                 <div ng-if="aFile.FILETYPE_ID === 2 || fileCopy.FILETYPE_ID === 2" class="form-group">
-                    <label class="col-md-3 control-label">Elevation:</label>
+                    <label class="col-md-4 control-label">Elevation:</label>
                     <div class="col-md-6">
                         <span ng-show="view.FILEval == 'detail'">{{datafile.ELEVATION_STATUS || '---'}}</span>
                         <span ng-show="view.FILEval == 'edit'">
-                            <label class="radio-inline">
+                            <span class="radio-inline">
                                 <input type="radio" name="ELEVATION_STATUS" ng-model="dfCopy.ELEVATION_STATUS" value="Final" />Final
-                            </label>
-                            <label class="radio-inline">
+                            </span>
+                            <span class="radio-inline">
                                 <input type="radio" name="ELEVATION_STATUS" ng-model="dfCopy.ELEVATION_STATUS" value="Arbitrary" />Arbitrary
-                            </label>
+                            </span>
                         </span>
                     </div>
                 </div>
+
+                <!-- Approval info -->
+                <div class="form-group" ng-if="aFile.FILETYPE_ID === 2 && aFile.FILE_ID !== undefined">
+                    <label class="col-md-4 control-label" for="APPROVAL_ID">Approval Info:</label>
+                    <div class="col-md-6" ng-if="ApprovalInfo.Member !== undefined">
+                        <span>Approved By:</span><span ng-if="ApprovalInfo.Member"> {{ApprovalInfo.Member.FNAME || '---'}} {{ApprovalInfo.Member.LNAME || '---'}}</span><br />
+                        <span>On:</span><span ng-if="ApprovalInfo.approvalDate"> {{ApprovalInfo.approvalDate | date: 'MM/dd/yyyy hh:mm a' || '---'}}</span>
+                        <button ng-if="ApprovalInfo.approvalDate" type="button" class="borderLess" tooltip-placement="right" uib-tooltip="Time displayed as local, stored in UTC.">
+                            <span class="glyphicon glyphicon-question-sign"></span>
+                        </button>
+                    </div>
+                </div>
+
                 <!-- This is where Other ends, rest is for Photo -->
                 <!--Photo Direction (photo)-->
                 <div ng-if="aFile.FILETYPE_ID === 1 || fileCopy.FILETYPE_ID === 1" class="form-group">
-                    <label class="col-md-3 control-label" for="PHOTO_DIRECTION">Photo Direction:</label>
+                    <label class="col-md-4 control-label" for="PHOTO_DIRECTION">Photo Direction:</label>
                     <div class="col-md-6">
                         <span ng-show="view.FILEval == 'detail'">{{aFile.PHOTO_DIRECTION || '---'}}</span>
                         <input ng-show="view.FILEval == 'edit'" class="form-control" id="PHOTO_DIRECTION" name="PHOTO_DIRECTION" ng-model="fileCopy.PHOTO_DIRECTION" type="text" />
@@ -5295,7 +5332,7 @@
                 </div>
                 <!-- Photo Latitude (photo)-->
                 <div ng-if="aFile.FILETYPE_ID === 1 || fileCopy.FILETYPE_ID === 1" class="form-group">
-                    <label class="col-md-3 control-label" for="LATITUDE_DD">Photo Latitude <br /> (if different):</label>
+                    <label class="col-md-4 control-label" for="LATITUDE_DD">Photo Latitude <br /> (if different):</label>
                     <div class="col-md-6">
                         <span ng-show="view.FILEval == 'detail'">{{aFile.LATITUDE_DD || '---'}}</span>
                         <input ng-show="view.FILEval == 'edit'" class="form-control" ng-keypress="isNum($event)" name="LATITUDE_DD" id="LATITUDE_DD" ng-model="fileCopy.LATITUDE_DD" type="text" />
@@ -5303,14 +5340,14 @@
                 </div>
                 <!--Photo Longitude (photo)-->
                 <div ng-if="aFile.FILETYPE_ID === 1 || fileCopy.FILETYPE_ID === 1" class="form-group">
-                    <label class="col-md-3 control-label" for="LONGITUDE_DD">Photo Longitude <br /> (if different):</label>
+                    <label class="col-md-4 control-label" for="LONGITUDE_DD">Photo Longitude <br /> (if different):</label>
                     <div class="col-md-6">
                         <span ng-show="view.FILEval == 'detail'">{{aFile.LONGITUDE_DD || '---'}}</span>
                         <input ng-show="view.FILEval == 'edit'" class="form-control" ng-keypress="isNum($event)" id="LONGITUDE_DD" name="LONGITUDE_DD" ng-model="fileCopy.LONGITUDE_DD" type="text" />
                     </div>
                 </div>
                 <div ng-if="aFile.FILETYPE_ID === 1 || fileCopy.FILETYPE_ID === 1" class="form-group">
-                    <label class="col-md-3 control-label" for="Caption">Preview Caption:</button></label>
+                    <label class="col-md-4 control-label" for="Caption">Preview Caption:</button></label>
                     <div class="col-md-6">
                         <span ng-show="view.FILEval == 'detail'">
                             Photo of {{aFile.DESCRIPTION || '(Description HERE)'}} at {{theSite.SITE_DESCRIPTION}}, {{theSite.COUNTY}}, {{theSite.STATE}}, {{aFile.PHOTO_DATE | date: 'MM/dd/yyyy' || ' Date taken HERE '}}. Photograph by {{aSource.FULLNAME || ' Source Name HERE ' }}, {{agencyNameForCap || ' Agency HERE '}}.
@@ -5322,14 +5359,18 @@
                 </div>
 
                 <div ng-if="(aFile.FILE_ID !== undefined && aFile.FILETYPE_ID !== 8) || (fileCopy.FILE_ID !== undefined && fileCopy.FILETYPE_ID !== 8)" class="form-group">
-                    <label class="col-md-3 control-label">Associated File:</label>
+                    <label class="col-md-4 control-label">Associated File:</label>
                     <div class="col-md-6">
                         <span ng-show="view.FILEval == 'detail'">
-                            <a target="_blank" class="btn btn-primary" ng-href="{{serverURL}}/Files/{{aFile.FILE_ID}}/Item">Download File</a>
+                            <a target="_blank" title="Download File" ng-href="{{serverURL}}/Files/{{aFile.FILE_ID}}/Item">
+                                <span class="glyphicon glyphicon-download"></span>
+                            </a>
                             <img ng-if="aFile.FILETYPE_ID === 1" style="height:80px;" ng-src="{{serverURL}}/Files/{{aFile.FILE_ID}}/Item" />
                         </span>
                         <span ng-show="view.FILEval == 'edit'">
-                            <a target="_blank" class="btn btn-primary" ng-href="{{serverURL}}/Files/{{fileCopy.FILE_ID}}/Item">Download File</a>
+                            <a target="_blank" title="Download File" ng-href="{{serverURL}}/Files/{{fileCopy.FILE_ID}}/Item">
+                                <span class="glyphicon glyphicon-download"></span>
+                            </a>
                             <img ng-if="fileCopy.FILETYPE_ID === 1" style="height:80px;" ng-src="{{serverURL}}/Files/{{fileCopy.FILE_ID}}/Item" />
                         </span>
                     </div>
@@ -5343,7 +5384,7 @@
 
             <div class="modal-footer">
                 <div ng-show="!sFileIsUploading">
-                    <button class="btn btn-danger" ng-if="aFile.FILE_ID != undefined" ng-click="deleteFile()">Delete</button>
+                    <button type="button" class="btn btn-danger" ng-if="aFile.FILE_ID != undefined" ng-click="deleteFile()">Delete</button>
                     <button class="btn btn-warning" type="button" ng-click="cancel()">Close/Cancel</button>
                 </div>
                 <div ng-show="sFileIsUploading"><img src="images/fileUpload.gif" /></div>
@@ -5696,8 +5737,8 @@
             <div class="modal-footer">
                 <button class="btn btn-primary" ng-if="aPeak.PEAK_SUMMARY_ID != undefined" ng-click="savePeak(peakForm.$valid)">Save</button>
                 <button class="btn btn-primary" ng-if="aPeak.PEAK_SUMMARY_ID == undefined" ng-click="createPeak(peakForm.$valid)">Create</button>
-                <button class="btn btn-danger" ng-if="loggedInRole == 'Admin' && aPeak.PEAK_SUMMARY_ID !== undefined" ng-click="deletePeak()">Delete</button>
-                <button class="btn btn-warning" type="button" ng-click="cancel()">Cancel</button>
+                <button type="button" class="btn btn-danger" ng-if="loggedInRole == 'Admin' && aPeak.PEAK_SUMMARY_ID !== undefined" ng-click="deletePeak()">Delete</button>
+                <button type="button" class="btn btn-warning" ng-click="cancel()">Cancel</button>
             </div>
         </fieldset>
     </form>

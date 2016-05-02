@@ -129,7 +129,7 @@
                 Password:
             </label>
             <div class="col-md-3">
-                <button ng-show="!changePass" ng-click="changeMyPassBtn($event)">
+                <button ng-show="!changePass" type="button" ng-click="changeMyPassBtn($event)">
                     Change Password
                 </button>
                 <!--START new password inputs-->
@@ -159,13 +159,13 @@
                     <div class="form-group">
                         <div class="col-md-12" style="margin-top:7px">
                             <span>
-                                <button class="btn btn-primary" ng-disabled="accountForm.NPASSWORD.$error.passwordValidate || accountForm.CPASSWORD.$error.passwordValidate || accountForm.CPASSWORD.$error.passwordMismatch"
+                                <button type="button" class="btn btn-primary" ng-disabled="accountForm.NPASSWORD.$error.passwordValidate || accountForm.CPASSWORD.$error.passwordValidate || accountForm.CPASSWORD.$error.passwordMismatch"
                                         ng-click="ChangePassword()">
                                     Change Password
                                 </button>
                             </span>
                             <span>
-                                <button class="btn btn-primary"
+                                <button type="button" class="btn btn-primary"
                                         style="margin-right:10px"
                                         ng-click="DontChangePass()">
                                     Never mind
