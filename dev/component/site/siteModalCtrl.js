@@ -308,7 +308,7 @@
                     var emptyLatLongModal = $uibModal.open({
                         template: '<div class="modal-header"><h3 class="modal-title">Error</h3></div>' +
                             '<div class="modal-body"><p>Please provide a Latitude and Longitude before clicking Verify Location</p></div>' +
-                            '<div class="modal-footer"><button class="btn btn-primary" ng-enter="ok()" ng-click="ok()">OK</button></div>',
+                            '<div class="modal-footer"><button type="button" class="btn btn-primary" ng-enter="ok()" ng-click="ok()">OK</button></div>',
                         controller: ['$scope', '$uibModalInstance', function ($scope, $uibModalInstance) {
                             $scope.ok = function () {
                                 $uibModalInstance.close();
@@ -352,7 +352,7 @@
                 var latModal = $uibModal.open({
                     template: '<div class="modal-header"><h3 class="modal-title">Error</h3></div>' +
                         '<div class="modal-body"><p>The Latitude must be between 0 and 73.0</p></div>' +
-                        '<div class="modal-footer"><button class="btn btn-primary" ng-enter="ok()" ng-click="ok()">OK</button></div>',
+                        '<div class="modal-footer"><button type="button" class="btn btn-primary" ng-enter="ok()" ng-click="ok()">OK</button></div>',
                     controller: ['$scope', '$uibModalInstance', function ($scope, $uibModalInstance) {
                         $scope.ok = function () {
                             $uibModalInstance.close();
@@ -371,7 +371,7 @@
                 var longModal = $uibModal.open({
                     template: '<div class="modal-header"><h3 class="modal-title">Error</h3></div>' +
                         '<div class="modal-body"><p>The Longitude must be between -175.0 and -60.0</p></div>' +
-                        '<div class="modal-footer"><button class="btn btn-primary" ng-enter="ok()" ng-click="ok()">OK</button></div>',
+                        '<div class="modal-footer"><button type="button" class="btn btn-primary" ng-enter="ok()" ng-click="ok()">OK</button></div>',
                     controller: ['$scope', '$uibModalInstance', function ($scope, $uibModalInstance) {
                         $scope.ok = function () {
                             $uibModalInstance.close();
@@ -886,7 +886,7 @@
                 var dSiteModal = $uibModal.open({
                     template: '<div class="modal-header"><h3 class="modal-title">Delete Site</h3></div>' +
                         '<div class="modal-body"><p>Are you sure you want to delete site {{siteNo}}? Doing so will remove all OPs, HWMs, Sensors and Files associated with it.</p></div>' +
-                        '<div class="modal-footer"><button class="btn btn-danger" ng-click="deleteIt()">Delete</button><button class="btn btn-primary" ng-click="ok()">Cancel</button></div>',
+                        '<div class="modal-footer"><button type="button" class="btn btn-danger" ng-click="deleteIt()">Delete</button><button type="button" class="btn btn-primary" ng-click="ok()">Cancel</button></div>',
                     controller: ['$scope', '$uibModalInstance', function ($scope, $uibModalInstance) {
                         $scope.siteNo = thisSite.SITE_NO;
                         $scope.ok = function () {

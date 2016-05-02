@@ -75,7 +75,7 @@
                 searchTerm: '='
             },
             replace: true,
-            template: '<div class="searchnav"><div class="searchby"><b>Search By:</b><div class="searchbyoption"><input type="radio" name="SearchBy" ng-model="searchBy.val" value="bySiteId" />ID</div><!----><div class="searchbyoption"><input type="radio" name="SearchBy" ng-model="searchBy.val" value="bySiteNo" />Number</div><!----><div class="searchbyoption"><input type="radio" name="SearchBy" ng-model="searchBy.val" value="bySiteName" />Name</div></div><!----><div class="search-input"><input ng-focus="goSearch" type="text" ng-model="searchTerm" ng-enter="IndexSearchSites()" placeholder="Search Sites..." /><!----><button class="borderLess" ng-click="IndexSearchSites()">Search <i class="ion-search"></i></button></div></div>',
+            template: '<div class="searchnav"><div class="searchby"><b>Search By:</b><div class="searchbyoption"><input type="radio" name="SearchBy" ng-model="searchBy.val" value="bySiteId" />ID</div><!----><div class="searchbyoption"><input type="radio" name="SearchBy" ng-model="searchBy.val" value="bySiteNo" />Number</div><!----><div class="searchbyoption"><input type="radio" name="SearchBy" ng-model="searchBy.val" value="bySiteName" />Name</div></div><!----><div class="search-input"><input ng-focus="goSearch" type="text" ng-model="searchTerm" ng-enter="IndexSearchSites()" placeholder="Search Sites..." /><!----><button type="button" class="borderLess" ng-click="IndexSearchSites()">Search <i class="ion-search"></i></button></div></div>',
 
             controller: [
                 '$scope', '$state', 'SITE', '$uibModal',
@@ -114,7 +114,7 @@
                             var errorModal = $uibModal.open({
                                 template: '<div class="modal-header"><h3 class="modal-title">Error</h3></div>' +
                                     '<div class="modal-body"><p>No site found. For more site search options, go to the Sites navigation tab to search for sites.</p></div>' +
-                                    '<div class="modal-footer"><button class="btn btn-primary" ng-click="ok()">OK</button></div>',
+                                    '<div class="modal-footer"><button type="button" class="btn btn-primary" ng-click="ok()">OK</button></div>',
                                 controller: ['$scope', '$uibModalInstance', function ($scope, $uibModalInstance) {
                                     $scope.ok = function () {
                                         $uibModalInstance.close();

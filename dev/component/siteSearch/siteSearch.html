@@ -10,10 +10,9 @@
         <div class="form-item item-20">
             <label for="EVENT_ID">Events:</label>
             <div class="form-item-value">{{sessionEvent}}</div>
-        </div><!--
-
-
-        --><div class="form-item item-20">
+        </div>
+        
+        <div class="form-item item-20">
             <label for="EVENT_ID">States:</label>
             <div isteven-multi-select
                  input-model="states"
@@ -26,54 +25,52 @@
                  helper-elements="filter">
 
             </div>
-        </div><!--
-
-
-        --><div class="form-item item-20">
+        </div>
+        
+        <div class="form-item item-20">
             <label for="EVENT_ID">Sensor Types:</label>
             <select id="SENSOR_TYPE_ID" name="SENSOR_TYPE_ID" ng-model="Chosen.sensor"
                     ng-options="s.SENSOR_TYPE_ID as s.SENSOR for s in senTypes | orderBy: 'SENSOR'">
                 <option value=""></option>
             </select>
-        </div><!--
-
-
-        --><div class="form-item item-20">
+        </div>
+        
+        <div class="form-item item-20">
             <label for="EVENT_ID">Network Names:</label>
             <select id="NETWORK_NAME_ID" name="NETWORK_NAME_ID" ng-model="Chosen.network"
                     ng-options="n.NETWORK_NAME_ID as n.NAME for n in netNames | orderBy: 'NAME'">
                 <option value=""></option>
             </select>
-        </div><!--
+        </div>
 
 
-        --><div class="form-item item-20">
+        <div class="form-item item-20">
             <div class="checkbox-inline">
                 <input type="checkbox" ng-model="checkboxModel.hwmOnly" ng-true-value="'1'" ng-false-value="'0'" />
                 <label for="EVENT_ID">HWM Only Sites</label>
-            </div><!--
-            --><div class="checkbox-inline">
+            </div>
+            <div class="checkbox-inline">
                 <input type="checkbox" ng-model="checkboxModel.senOnly" ng-true-value="'1'" ng-false-value="'0'" />
                 <label for="EVENT_ID">Sensor Only Sites</label>
-            </div><!--
-            --><div class="checkbox-inline">
+            </div>
+            <div class="checkbox-inline">
                 <input type="checkbox" ng-model="checkboxModel.rdgOnly" ng-true-value="'1'" ng-false-value="'0'" />
                 <label for="EVENT_ID">RDG Only Sites</label>
-            </div><!--
-            --><div class="checkbox-inline">
+            </div>
+            <div class="checkbox-inline">
                 <input type="checkbox" ng-model="checkboxModel.opDefined" ng-true-value="'1'" ng-false-value="'0'" />
                 <label for="EVENT_ID">Has OP Defined</label>
             </div>
-        </div><!--
+        </div>
 
 
-        --><div class="form-item item-25">
-            <button class="btn-wim btn-blue" ng-click="searchSites()">Search</button>
-        </div><!--
+        <div class="form-item item-25">
+            <button type="button" class="btn-wim btn-blue" ng-click="searchSites()">Search</button>
+        </div>
 
 
-        --><div class="form-item item-25">
-            <button class="btn-wim btn-purple" ng-click="clearFilters()">Clear Filters</button>
+        <div class="form-item item-25">
+            <button type="button" class="btn-wim btn-purple" ng-click="clearFilters()">Clear Filters</button>
         </div>
 
 
@@ -123,11 +120,9 @@
             </tbody>
         </table>
 
-
         <div ng-show="siteList.length == 0">
             <span>No Sites returned from query.</span>
         </div>
     </div>
-
 
 </div>

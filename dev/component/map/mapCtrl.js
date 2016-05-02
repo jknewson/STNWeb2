@@ -28,7 +28,6 @@
                     }
                 });
 
-
                 var icons = {
                     stn: {
                         type: 'div',
