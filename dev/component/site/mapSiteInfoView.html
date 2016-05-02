@@ -5,6 +5,7 @@
             <span>Site Info </span><span class="label label-primary siteLabel button" ng-if="aSite.SITE_NO != null" ng-click="goToSiteDashboard()"> <b>{{aSite.SITE_NO}}</b></span>
             <i class="acc-heading-icon" ng-class="{'ion-arrow-down-b': status.siteOpen, 'ion-arrow-right-b': !status.siteOpen}"></i>
         </uib-accordion-heading>
+
         <div ng-if="aSite.SITE_ID == undefined">Click a site to see info</div>
         <div ng-if="aSite.SITE_ID != undefined">
 
