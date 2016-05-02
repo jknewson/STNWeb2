@@ -2,8 +2,8 @@
     'use strict';
     var STNControllers = angular.module('STNControllers');
 
-    STNControllers.controller('MapController', ['$scope', '$http', '$rootScope', '$cookies', '$location', 'SITE', 'Map_Site', 'leafletMarkerEvents', 'leafletBoundsHelpers', 'leafletData', '$state',
-        function ($scope, $http, $rootScope, $cookies, $location, SITE, Map_Site,leafletMarkerEvents, leafletBoundsHelpers, leafletData, $state) {
+    STNControllers.controller('MapController', ['$scope', '$http', '$rootScope', '$cookies', '$location', 'SITE', 'Map_Site', 'leafletMarkerEvents', 'leafletBoundsHelpers', 'leafletData', '$state', 'spinnerService',
+        function ($scope, $http, $rootScope, $cookies, $location, SITE, Map_Site,leafletMarkerEvents, leafletBoundsHelpers, leafletData, $state, spinnerService) {
             if ($cookies.get('STNCreds') === undefined || $cookies.get('STNCreds') === "") {
                 $scope.auth = false;
                 $location.path('/login');
@@ -204,8 +204,6 @@
                         $scope.paths = {};
                         $scope.pathsObj.circleMarker.latlngs = {lat: args.model.lat, lng: args.model.lng};
                         $scope.paths['circleMarker'] = $scope.pathsObj['circleMarker'];
-                        console.log("wut");
-
                     };
                     addShape();
                 });
@@ -230,6 +228,7 @@
                         $scope.sessionEvent = $cookies.get('SessionEventName') !== null && $cookies.get('SessionEventName') !== undefined ? $cookies.get('SessionEventName') : "All Events";
                         var evID = newValue;
                         //below gets sites using $http.get
+                        spinnerService.show("mapSpinner");
                         $scope.selectedMarkerNum = 0;
                         $scope.paths = {};
                         //bloew gets sites using simple angular $http service
@@ -240,6 +239,7 @@
                            Event: evID
                         },
                         function success(response) {
+                            spinnerService.hide("mapSpinner");
                             onSiteComplete(response);
                         }, function error(errorResponse) {
                                 $scope.error = "Could not fetch sites";
@@ -438,7 +438,7 @@
                                 visible: false
                             },
                             shadedrelief: {
-                                name: "ShadedRelief",
+                                name: "Shaded Relief",
                                 type: "agsBase",
                                 layer: "ShadedRelief",
                                 visible: false

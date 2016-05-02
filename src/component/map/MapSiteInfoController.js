@@ -5,10 +5,10 @@
     'use strict';
     var STNControllers = angular.module('STNControllers');
 
-    STNControllers.controller('MapSiteInfoController', ['$scope', '$http', '$rootScope', '$cookies', '$location', 'SITE', 'leafletMarkerEvents', 'leafletBoundsHelpers', '$state',
-        function ($scope, $http, $rootScope, $cookies, $location, SITE,  leafletMarkerEvents, leafletBoundsHelpers, $state) {
+    STNControllers.controller('MapSiteInfoController', ['$scope', '$http', '$rootScope', '$cookies', '$location', 'SITE', 'leafletMarkerEvents', 'leafletBoundsHelpers', '$state', 'spinnerService',
+        function ($scope, $http, $rootScope, $cookies, $location, SITE,  leafletMarkerEvents, leafletBoundsHelpers, $state, spinnerService) {
             $scope.status = { siteOpen: true }; //accordion for siteInfo
-            $rootScope.$on('mapSiteClick', function (event, siteParts) {
+            $rootScope.$on('mapSiteClickResults', function (event, siteParts) {
                 $scope.aSite = siteParts[0];
                 //only 6 decimal places for lat/long
                 $scope.aSite.LATITUDE_DD = parseFloat($scope.aSite.LATITUDE_DD.toFixed(6));

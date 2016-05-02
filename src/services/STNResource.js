@@ -356,7 +356,7 @@
                     MapSiteParts.push(response);
                     SITE.getSitePeaks({ id: siteId }).$promise.then(function (pResponse) {
                         MapSiteParts.push(pResponse);
-                        $rootScope.$broadcast('mapSiteClick', MapSiteParts);
+                        $rootScope.$broadcast('mapSiteClickResults', MapSiteParts);
                         //$rootScope.stateIsLoading.showLoading = false;
                     });
                 });                
