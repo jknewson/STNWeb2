@@ -22,7 +22,9 @@
                         $scope.selectedMarkerNum = 0;
                         onSiteComplete(filteredSitesArray);
                     } else {
-                        alert("Your filter returned no results.");
+                        //toastr.options({"positionClass": "toast-bottom-right"});
+                        toastr.options.positionClass = "toast-bottom-right";
+                        toastr.warning("Your filter returned no results.", "Map Filters");
                     }
                 });
 
