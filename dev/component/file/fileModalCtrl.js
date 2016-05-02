@@ -6,6 +6,7 @@
         function ($scope, $cookies, $http, $uibModalInstance, $uibModal, SERVER_URL, fileTypeList, thisFile, allMembers, fileSource, dataFile, agencyList, fileSite, FILE, SOURCE, DATA_FILE) {
             //dropdowns
             $scope.serverURL = SERVER_URL;
+            $scope.userRole = $cookies.get('usersRole');
             $scope.view = { FILEval: 'detail' };
             $scope.sFileIsUploading = false; //Loading...    
             $scope.fileTypes = fileTypeList;
@@ -76,11 +77,20 @@
                     $scope.agencyNameForCap = $scope.aSource.agencyName;
                 }
                 if (dataFile !== undefined) {
+                    $scope.ApprovalInfo = {};
                     $scope.datafile = dataFile;
                     $scope.datafile.COLLECT_DATE = new Date($scope.datafile.COLLECT_DATE); //date for validity of form on put
                     $scope.datafile.GOOD_START = getDateTimeParts($scope.datafile.GOOD_START); //date for validity of form on put
                     $scope.datafile.GOOD_END = getDateTimeParts($scope.datafile.GOOD_END); //date for validity of form on put
                     $scope.timeZoneList = ['UTC', 'PST', 'MST', 'CST', 'EST'];
+                    if ($scope.datafile.APPROVAL_ID !== undefined && $scope.datafile.APPROVAL_ID !== null && $scope.datafile.APPROVAL_ID >= 1) {
+                        DATA_FILE.getDFApproval({ id: $scope.datafile.DATA_FILE_ID }, function success(approvalResponse) {
+                            $scope.ApprovalInfo.approvalDate = new Date(approvalResponse.APPROVAL_DATE); //include note that it's displayed in their local time but stored in UTC
+                            $scope.ApprovalInfo.Member = allMembers.filter(function (amem) { return amem.MEMBER_ID == approvalResponse.MEMBER_ID; })[0];
+                        }, function error(errorResponse) {
+                            toastr.error("Error getting data file approval information");
+                        });
+                    }
                     var aProcessor = $scope.datafile.PROCESSOR_ID !== null ? allMembers.filter(function (amem) { return amem.MEMBER_ID == $scope.datafile.PROCESSOR_ID; })[0] : {};
                     $scope.processor = aProcessor.FNAME !== undefined ? aProcessor.FNAME + ' ' + aProcessor.LNAME : '';
                 }
@@ -287,7 +297,74 @@
                 $scope.dfCopy = {};
                 $scope.sourceCopy = {};
             };
-
+            //approve this datafile (if admin or manager)
+            $scope.approveDF = function () {
+                //this is valid, show modal to confirm they want to approve it
+                var thisDF = $scope.datafile;
+                var approveModal = $uibModal.open({
+                    template: "<div class='modal-header'><h3 class='modal-title'>Approve Data File</h3></div>" +
+                        "<div class='modal-body'><p>Are you ready to approve this Data File?</p></div>" +
+                        "<div class='modal-footer'><button class='btn btn-primary' ng-click='approveIt()'>Approve</button><button class='btn btn-warning' ng-click='cancel()'>Cancel</button></div>",
+                    controller: ['$scope', '$uibModalInstance', function ($scope, $uibModalInstance) {
+                        $scope.cancel = function () {
+                            $uibModalInstance.dismiss('cancel');
+                        };
+                        $scope.approveIt = function () {
+                            //delete the site and all things 
+                            $uibModalInstance.close(thisDF);
+                        };
+                    }],
+                    size: 'sm'
+                });
+                approveModal.result.then(function (df) {
+                    $http.defaults.headers.common.Authorization = 'Basic ' + $cookies.get('STNCreds');
+                    DATA_FILE.approveDF({ id: df.DATA_FILE_ID }).$promise.then(function (approvalResponse) {
+                        df.APPROVAL_ID = approvalResponse.APPROVAL_ID;
+                        $scope.datafile = df;
+                        toastr.success("Data File Approved");
+                        $scope.ApprovalInfo.approvalDate = new Date(approvalResponse.APPROVAL_DATE); //include note that it's displayed in their local time but stored in UTC
+                        $scope.ApprovalInfo.Member = allMembers.filter(function (amem) { return amem.MEMBER_ID == approvalResponse.MEMBER_ID; })[0];
+                    }, function error(errorResponse) {
+                        toastr.error("Error: " + errorResponse.statusText);
+                    });
+                }, function () {
+                    //logic for cancel
+                });//end modal
+            };
+            
+            //approve this hwm (if admin or manager)
+            $scope.unApproveDF = function () {
+                //this is valid, show modal to confirm they want to approve it
+                var thisDF = $scope.datafile;
+                var unapproveModal = $uibModal.open({
+                    template: "<div class='modal-header'><h3 class='modal-title'>Remove Approval</h3></div>" +
+                        "<div class='modal-body'><p>Are you sure you wan to unapprove this Data File?</p></div>" +
+                        "<div class='modal-footer'><button class='btn btn-primary' ng-click='unApproveIt()'>Unapprove</button><button class='btn btn-warning' ng-click='cancel()'>Cancel</button></div>",
+                    controller: ['$scope', '$uibModalInstance', function ($scope, $uibModalInstance) {
+                        $scope.cancel = function () {
+                            $uibModalInstance.dismiss('cancel');
+                        };
+                        $scope.unApproveIt = function () {
+                            //delete the site and all things 
+                            $uibModalInstance.close(thisDF);
+                        };
+                    }],
+                    size: 'sm'
+                });
+                unapproveModal.result.then(function (df) {
+                    $http.defaults.headers.common.Authorization = 'Basic ' + $cookies.get('STNCreds');
+                    DATA_FILE.unApproveDF({ id: df.DATA_FILE_ID }).$promise.then(function () {
+                        df.APPROVAL_ID = null;
+                        $scope.datafile = df;
+                        toastr.success("Data File Unapproved");
+                        $scope.ApprovalInfo = {};
+                    }, function error(errorResponse) {
+                        toastr.error("Error: " + errorResponse.statusText);
+                    });
+                }, function () {
+                    //logic for cancel
+                });//end modal
+            };
         }]);//end fileModalCtrl
 
 })();
