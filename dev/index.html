@@ -58,6 +58,7 @@
     <script src="bower_components/angular-input-modified.js"></script>
     <script src="bower_components/angular-resource.js"></script>
     <script src="bower_components/angular-route.js"></script>
+    <script src="bower_components/angular-spinners.min.js"></script>
     <script src="bower_components/angular-ui-router.js"></script>
     <script src="bower_components/bootstrap-table.js"></script>
     <script src="bower_components/bootstrap.js"></script>
@@ -97,10 +98,10 @@
     <script src="component/site/siteModalCtrl.js"></script>
     <script src="component/site/siteCtrl.js"></script>
     <script src="component/site/quickCreateCtrl.js"></script>
-    <script src="component/sensor/sensorModalCtrl.js"></script>
-    <script src="component/sensor/sensorCtrl.js"></script>
     <script src="component/settings/settingsCtrl.js"></script>
     <script src="component/resources/resourcesCtrl.js"></script>
+    <script src="component/sensor/sensorModalCtrl.js"></script>
+    <script src="component/sensor/sensorCtrl.js"></script>
     <script src="component/reporting/submitReportCtrl.js"></script>
     <script src="component/reporting/reportModalCtrl.js"></script>
     <script src="component/reporting/reportingDashboardCtrl.js"></script>
@@ -215,8 +216,8 @@
 
 
     <div ng-class="{'hidden': !stateIsLoading.showLoading}" class="page-loading">
-        <div id="loading">
-            <div id="loadingcontent"><p id="loadingspinner" style=""><img src="images/loading1.gif" /></p></div>
+        <div class="loading">
+            <div class="loadingcontent"><p class="loadingspinner" style=""><img src="images/loading1.gif" /></p></div>
         </div>
     </div>
 

@@ -5,8 +5,8 @@
     'use strict';
     var STNControllers = angular.module('STNControllers');
 
-    STNControllers.controller('MapFiltersController', ['$scope', '$http', '$rootScope', '$cookies', '$location', 'SITE', 'Map_Filter', '$state',  'stateList', 'sensorTypes', 'networkNames',
-        function ($scope, $http, $rootScope, $cookies, $location, SITE, Map_Filter, $state, stateList, sensorTypes, networkNames) {
+    STNControllers.controller('MapFiltersController', ['$scope', '$http', '$rootScope', '$cookies', '$location', 'SITE', 'Map_Filter', '$state',  'stateList', 'sensorTypes', 'networkNames', 'spinnerService',
+        function ($scope, $http, $rootScope, $cookies, $location, SITE, Map_Filter, $state, stateList, sensorTypes, networkNames, spinnerService) {
             $scope.status = { siteOpen: true }; //accordion for siteInfo
 
             $scope.states = stateList;
@@ -23,9 +23,9 @@
             };
 
             $scope.searchSites = function () {
-                $rootScope.stateIsLoading.showLoading = true; // loading..
+                //$rootScope.stateIsLoading.showLoading = true; // loading..
                 //store search in case they leave and click back
-
+                spinnerService.show("mapSpinner");
                 var stateString = $scope.chosenStates.join();
                 $scope.siteResponse = false;
                 $scope.siteList = [];
@@ -53,7 +53,8 @@
                     function success(response) {
                         // $scope.siteList = response;
                         // $scope.siteResponse = true;
-                        $rootScope.stateIsLoading.showLoading = false; // loading..
+                        spinnerService.hide("mapSpinner");
+                        //$rootScope.stateIsLoading.showLoading = false; // loading..
                         Map_Filter.setFilteredSites(response);
 
                     }, function error(errorResponse) {
@@ -77,6 +78,7 @@
 
             //clear the filter choices (start over)
             $scope.clearFilters = function () {
+                spinnerService.show("mapSpinner");
                 $scope.checkboxModel = {
                     hwmOnly: 0,
                     senOnly: 0,
@@ -85,12 +87,21 @@
                 };
                 $scope.Chosen = {};
                 $scope.chosenStates = [];
-
                 angular.forEach($scope.states, function (st) {
                     st.selected = false;
                 });
-            };
+                var evID = $cookies.get('SessionEventID') !== null && $cookies.get('SessionEventID') !== undefined ? $cookies.get('SessionEventID') : 0;
+                SITE.getAll({
+                        Event: evID
+                },
+                function success(response) {
+                    //spinnerService.hide("mapSpinner");
+                    Map_Filter.setFilteredSites(response);
+                    spinnerService.hide("mapSpinner");
+                }, function error(errorResponse) {
 
+                });
+            };
 
             // $rootScope.$on('mapSiteClick', function (event, siteParts) {
             //     $scope.aSite = siteParts[0];
