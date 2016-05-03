@@ -1,0 +1,12 @@
+﻿<uib-accordion close-others="false">
+    <uib-accordion-group is-open="status.mapOpen">
+        <uib-accordion-heading>
+            <i style="margin-right:10px" class="pull-left glyphicon" ng-class="{'glyphicon-chevron-down': status.mapOpen, 'glyphicon-chevron-right': !status.mapOpen}"></i>
+            <span>Map</span>
+            <!--<a ui-sref="map" title="Go to this Site on the Map tab."><i class="pull-right glyphicon glyphicon-globe"></i></a>-->
+        </uib-accordion-heading>
+
+        <div>{{mapStuff}}</div>
+
+    </uib-accordion-group>
+</uib-accordion>

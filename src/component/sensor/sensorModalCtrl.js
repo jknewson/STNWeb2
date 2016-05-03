@@ -420,9 +420,9 @@
             };
             var postApprovalForNWISfile = function (DFid) {
                 DATA_FILE.approveNWISDF({ id: DFid }).$promise.then(function (approvalResponse) {
-                    $scope.NWISFile.APPROVAL_ID = approvalResponse.APPROVAL_ID;
+                    $scope.NWISDF.APPROVAL_ID = approvalResponse.APPROVAL_ID;
                 });
-            }
+            };
             $scope.createNWISFile = function (valid) {
                 if (valid) {
                     $http.defaults.headers.common.Authorization = 'Basic ' +$cookies.get('STNCreds');
@@ -447,7 +447,7 @@
                     DATA_FILE.save($scope.NWISDF).$promise.then(function (NdfResonse) {
                         //now create an approval with the event's coordinator and add the approval_id, put it, then post the file TODO ::: NEW ENDPOINT FOR THIS
                         //then POST file
-                        $scope.NWISFile.DATA_FILE_ID = NdfResonse.DATA_FILE_ID;
+                        $scope.NWISDF.DATA_FILE_ID = NdfResonse.DATA_FILE_ID;
                         postApprovalForNWISfile(NdfResonse.DATA_FILE_ID); //process approval
                         //now POST File
                         FILE.save($scope.NWISFile).$promise.then(function (Fresponse) {
@@ -2264,6 +2264,7 @@
                     $scope.NWISFile = {
                         FILE_DATE: new Date(),
                         FILETYPE_ID: 2,
+                        FILE_URL: 'http://waterdata.usgs.gov/nwis/uv?site_no=' + $scope.thisSensorSite.USGS_SID,  // if [fill in if not here.. TODO...&begin_date=20160413&end_date=20160419 (event start/end)
                         FileType: 'Data',                        
                         SITE_ID: $scope.sensor.SITE_ID,                        
                         DATA_FILE_ID: 0,
@@ -2286,7 +2287,7 @@
                 DATA_FILE.approveNWISDF({ id: df.DATA_FILE_ID }).$promise.then(function (approvalResponse) {
                     $scope.NWISFile.APPROVAL_ID = approvalResponse.APPROVAL_ID;
                 });
-            }
+            };
             $scope.createNWISFile = function (valid) {
                 if (valid) {
                     $http.defaults.headers.common.Authorization = 'Basic ' +$cookies.get('STNCreds');
