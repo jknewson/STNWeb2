@@ -107,6 +107,8 @@
     <Content Include="src\component\site\site.html" />
     <Content Include="src\component\site\siteCtrl.js" />
     <Content Include="src\component\site\siteInfoView.html" />
+    <Content Include="src\component\site\siteMapCtrl.js" />
+    <Content Include="src\component\site\siteMapView.html" />
     <Content Include="src\component\site\siteModalCtrl.js" />
     <Content Include="src\component\STNCtrl.js" />
     <Content Include="src\css\app.css" />
