@@ -2,9 +2,11 @@
 <div class="col-md-12">
     <div ui-view="siteNo"></div>
 </div>
-
-<!-- Site with map above it -->
 <div class="col-md-8">
+    <div ui-view="aMap"></div>
+</div>
+<!-- Site with map above it -->
+<div class=" col-md-8">
     <div ui-view="aSite"></div>
 </div>
 
@@ -29,6 +31,7 @@
         background-repeat: no-repeat;
         background-position: center;
     }
+
     .redText {
         color: red;
     }
@@ -1495,7 +1498,7 @@
                     </div>
 
                     <!-- Event: -->
-                    <div class="form-group" ng-class="{'has-error':HWMForm.EVENT_ID.$invalid && HWMForm.EVENT_ID.$dirty}">
+                    <div class="form-group">
                         <label class="col-md-4 control-label" for="EVENT_ID">Event:</label>
                         <div class="col-md-6">
                             <div class="col-md-8">{{EventName}}</div>
@@ -1846,22 +1849,30 @@
                                 </div>
                             </div>
 
-                            <!-- Waterbody: -->
-                            <div class="form-group">
+                            <!-- Waterbody: (details) -->
+                            <div class="col-md-12" ng-if="view.HWMval== 'detail'">
+                                <div class="col-md-4"><label>Waterbody:</label></div>
+                                <div class="col-md-6"><span>{{aHWM.WATERBODY || '---'}}</span></div>
+                            </div>
+                            <!-- Waterbody: (edit) -->
+                            <div class="form-group" ng-if="view.HWMval== 'edit'">
                                 <label class="col-md-4 control-label" for="WATERBODY">Waterbody:</label>
                                 <div class="col-md-6">
-                                    <span ng-show="view.HWMval =='detail'">{{aHWM.WATERBODY || '---'}}</span>
-                                    <input ng-show="view.HWMval =='edit'" class="form-control" name="WATERBODY" ng-model="aHWM.WATERBODY" type="text" />
+                                    <input class="form-control" name="WATERBODY" ng-model="aHWM.WATERBODY" type="text" />
                                 </div>
                             </div>
 
-                            <!-- Event: -->
-                            <div class="form-group" ng-class="{'has-error':HWMEditForm.EVENT_ID.$invalid && HWMEditForm.EVENT_ID.$dirty && view.HWMval =='edit'}">
+                            <!-- Event:  (details)-->
+                            <div class="col-md-12" ng-if="view.HWMval== 'detail'">
+                                <div class="col-md-4"><label>Event:</label></div>
+                                <div class="col-md-6"><span>{{EventName}}</span></div>
+                            </div>
+                            <!-- Event: (edit) -->
+                            <div class="form-group" ng-if="view.HWMval== 'edit'" ng-class="{'has-error':HWMEditForm.EVENT_ID.$invalid && HWMEditForm.EVENT_ID.$dirty}">
                                 <label class="col-md-4 control-label">Event:</label>
                                 <div class="col-md-6">
-                                    <span ng-show="view.HWMval == 'detail'">{{EventName}}</span>
-                                    <div ng-show="view.HWMval == 'edit'" class="col-md-8">{{EventName}}</div>
-                                    <div class="col-md-3" ng-show="userRole == 'Admin' && view.HWMval == 'edit'">
+                                    <div class="col-md-8">{{EventName}}</div>
+                                    <div class="col-md-3" ng-show="userRole == 'Admin'">
                                         <button type="button" ng-click="showChangeEventDD()" class="btn btn-primary">Change Event</button>
                                     </div>
                                 </div>
@@ -1880,42 +1891,51 @@
                                 </div>
                             </div>
 
-                            <!-- HWM Type:* -->
-                            <div class="form-group required" ng-class="{'has-error':HWMEditForm.HWM_TYPE_ID.$invalid && HWMEditForm.HWM_TYPE_ID.$dirty && view.HWMval =='edit'}">
+                            <!-- HWM Type:*  (details)-->
+                            <div class="col-md-12" ng-if="view.HWMval== 'detail'">
+                                <div class="col-md-4"><label>HWM Type:</label></div>
+                                <div class="col-md-6"><span>{{aHWM.HWM_Type || '---'}}</span></div>
+                            </div>
+                            <!-- HWM Type:* (edit) -->
+                            <div class="form-group required" ng-if="view.HWMval== 'edit'" ng-class="{'has-error':HWMEditForm.HWM_TYPE_ID.$invalid && HWMEditForm.HWM_TYPE_ID.$dirty}">
                                 <label class="col-md-4 control-label req" for="HWM_TYPE_ID">HWM Type:</label>
                                 <div class="col-md-6">
-                                    <span ng-show="view.HWMval == 'detail'">{{aHWM.HWM_Type || '---'}}</span>
-                                    <select ng-show="view.HWMval == 'edit'" class="form-control" name="HWM_TYPE_ID" ng-model="hwmCopy.HWM_TYPE_ID"
-                                            ng-options="htype.HWM_TYPE_ID as htype.HWM_TYPE for htype in hwmTypeList" required>
+                                    <select class="form-control" name="HWM_TYPE_ID" ng-model="hwmCopy.HWM_TYPE_ID" ng-options="htype.HWM_TYPE_ID as htype.HWM_TYPE for htype in hwmTypeList" required>
                                         <option value=""></option>
                                     </select>
                                 </div>
                             </div>
 
-                            <!-- Marker: -->
-                            <div class="form-group">
+                            <!-- Marker: (details) -->
+                            <div class="col-md-12" ng-if="view.HWMval== 'detail'">
+                                <div class="col-md-4"><label>Marker:</label></div>
+                                <div class="col-md-6"><span>{{aHWM.Marker || '---'}}</span></div>
+                            </div>
+                            <!-- Marker: (edit) -->
+                            <div class="form-group" ng-if="view.HWMval== 'edit'">
                                 <label class="col-md-4 control-label" for="MARKER_ID">Marker:</label>
                                 <div class="col-md-6">
-                                    <span ng-show="view.HWMval == 'detail'">{{aHWM.Marker || '---'}}</span>
-                                    <select ng-show="view.HWMval == 'edit'" class="form-control" name="MARKER_ID" ng-model="hwmCopy.MARKER_ID"
+                                    <select class="form-control" name="MARKER_ID" ng-model="hwmCopy.MARKER_ID"
                                             ng-options="vd.MARKER_ID as vd.MARKER1 for vd in markerList">
                                         <option value=""></option>
                                     </select>
                                 </div>
                             </div>
 
-                            <!-- HWM Environment:* -->
-                            <div class="form-group required" ng-class="{'has-error':HWMEditForm.HWM_ENVIRONMENT.$invalid && HWMEditForm.HWM_ENVIRONMENT.$dirty && view.HWMval =='edit'}">
+                            <!-- HWM Environment:* (details) -->
+                            <div class="col-md-12" ng-if="view.HWMval== 'detail'">
+                                <div class="col-md-4"><label>HWM Environment:</label></div>
+                                <div class="col-md-6"><span>{{aHWM.HWM_ENVIRONMENT || '---'}}</span></div>
+                            </div>
+                            <!-- HWM Environment:* (edit) -->
+                            <div class="form-group required" ng-class="{'has-error':HWMEditForm.HWM_ENVIRONMENT.$invalid && HWMEditForm.HWM_ENVIRONMENT.$dirty}" ng-if="view.HWMval== 'edit'">
                                 <label class="col-md-4 control-label req">HWM Environment:</label>
                                 <div class="col-md-6">
-                                    <span ng-show="view.HWMval == 'detail'">{{aHWM.HWM_ENVIRONMENT || '---'}}</span>
-                                    <span ng-show="view.HWMval == 'edit'">
-                                        <span class="radio-inline">
-                                            <input type="radio" name="HWM_ENVIRONMENT" ng-model="hwmCopy.HWM_ENVIRONMENT" value="Coastal" />Coastal
-                                        </span>
-                                        <span class="radio-inline">
-                                            <input type="radio" name="HWM_ENVIRONMENT" ng-model="hwmCopy.HWM_ENVIRONMENT" value="Riverine" />Riverine
-                                        </span>
+                                    <span class="radio-inline">
+                                        <input type="radio" name="HWM_ENVIRONMENT" ng-model="hwmCopy.HWM_ENVIRONMENT" value="Coastal" />Coastal
+                                    </span>
+                                    <span class="radio-inline">
+                                        <input type="radio" name="HWM_ENVIRONMENT" ng-model="hwmCopy.HWM_ENVIRONMENT" value="Riverine" />Riverine
                                     </span>
                                 </div>
                             </div>
@@ -1935,45 +1955,54 @@
                                 </div>
                             </div>
 
-                            <!-- HWM Quality:* -->
-                            <div class="form-group required" ng-class="{'has-error':HWMEditForm.HWM_QUALITY_ID.$invalid && HWMEditForm.HWM_QUALITY_ID.$dirty && view.HWMval =='edit'}">
+                            <!-- HWM Quality:* (details) -->
+                            <div class="col-md-12" ng-if="view.HWMval== 'detail'">
+                                <div class="col-md-4"><label>HWM Quality:</label></div>
+                                <div class="col-md-6"><span>{{aHWM.Quality || '---'}}</span></div>
+                            </div>
+                            <!-- HWM Quality:* (edit) -->
+                            <div class="form-group required" ng-class="{'has-error':HWMEditForm.HWM_QUALITY_ID.$invalid && HWMEditForm.HWM_QUALITY_ID.$dirty}" ng-if="view.HWMval== 'edit'">
                                 <label class="col-md-4 control-label req">HWM Quality:</label>
                                 <div class="col-md-6">
-                                    <span ng-show="view.HWMval == 'detail'">{{aHWM.Quality || '---'}}</span>
-                                    <select ng-show="view.HWMval == 'edit'" class=" form-control" name="HWM_QUALITY_ID" ng-model="hwmCopy.HWM_QUALITY_ID"
-                                            ng-options="hqual.HWM_QUALITY_ID as hqual.HWM_QUALITY for hqual in hwmQualList" required>
+                                    <select class=" form-control" name="HWM_QUALITY_ID" ng-model="hwmCopy.HWM_QUALITY_ID" ng-options="hqual.HWM_QUALITY_ID as hqual.HWM_QUALITY for hqual in hwmQualList" required>
                                         <option value=""></option>
                                     </select>
                                 </div>
                             </div>
 
-                            <!-- Bank: -->
-                            <div class="form-group">
+                            <!-- Bank: (details) -->
+                            <div class="col-md-12" ng-if="view.HWMval== 'detail'">
+                                <div class="col-md-4"><label>Bank:</label></div>
+                                <div class="col-md-6"><span>{{aHWM.BANK || '---'}}</span></div>
+                            </div>
+                            <!-- Bank: (edit) -->
+                            <div class="form-group" ng-if="view.HWMval== 'edit'">
                                 <label class="col-md-4 control-label">Bank:</label>
                                 <div class="col-md-6">
-                                    <span ng-show="view.HWMval == 'detail'">{{aHWM.BANK || '---'}}</span>
-                                    <span ng-show="view.HWMval == 'edit'">
-                                        <span class="radio-inline">
-                                            <input type="radio" name="BANK" ng-model="hwmCopy.BANK" value="Left" />Left
-                                        </span>
-                                        <span class="radio-inline">
-                                            <input type="radio" name="BANK" ng-model="hwmCopy.BANK" value="Right" />Right
-                                        </span>
-                                        <span class="radio-inline">
-                                            <input type="radio" name="BANK" ng-model="hwmCopy.BANK" value="N/A" />N/A
-                                        </span>
+                                    <span class="radio-inline">
+                                        <input type="radio" name="BANK" ng-model="hwmCopy.BANK" value="Left" />Left
+                                    </span>
+                                    <span class="radio-inline">
+                                        <input type="radio" name="BANK" ng-model="hwmCopy.BANK" value="Right" />Right
+                                    </span>
+                                    <span class="radio-inline">
+                                        <input type="radio" name="BANK" ng-model="hwmCopy.BANK" value="N/A" />N/A
                                     </span>
                                 </div>
                             </div>
 
-                            <!-- Location Description: -->
-                            <div class="form-group">
+                            <!-- Location Description: (details) -->
+                            <div class="col-md-12" ng-if="view.HWMval== 'detail'">
+                                <div class="col-md-4"><label>Location Description:</label></div>
+                                <div class="col-md-6"><span>{{aHWM.HWM_LOCATIONDESCRIPTION || '---'}}</span></div>
+                            </div>
+                            <!-- Location Description: (edit) -->
+                            <div class="form-group" ng-if="view.HWMval== 'edit'">
                                 <label class="col-md-4 control-label" for="HWM_LOCATIONDESCRIPTION">Location Description:</label>
                                 <div class="col-md-6">
-                                    <span ng-show="view.HWMval == 'detail'">{{aHWM.HWM_LOCATIONDESCRIPTION || '---'}}</span>
-                                    <textarea ng-show="view.HWMval == 'edit'" class="form-control" name="HWM_LOCATIONDESCRIPTION" type=" text" rows="3" ng-model="hwmCopy.HWM_LOCATIONDESCRIPTION" />
+                                    <textarea class="form-control" name="HWM_LOCATIONDESCRIPTION" type=" text" rows="3" ng-model="hwmCopy.HWM_LOCATIONDESCRIPTION" />
                                 </div>
-                                <button ng-show="view.HWMval == 'edit'" type="button" class="col-md-1 borderLess pull-left" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Please be specific so someone else can find this sensor later. This field is public.">
+                                <button type="button" class="col-md-1 borderLess pull-left" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Please be specific so someone else can find this sensor later. This field is public.">
                                     <span class="glyphicon glyphicon-question-sign"></span>
                                 </button>
                             </div>
@@ -1991,95 +2020,115 @@
                                 </div>
                             </div>
 
-                            <!-- Latitude: -->
-                            <div class="form-group">
+                            <!-- Latitude: (details) -->
+                            <div class="col-md-12" ng-if="view.HWMval== 'detail'">
+                                <div class="col-md-4"><label>Latitude:</label></div>
+                                <div class="col-md-6"><span>{{aHWM.LATITUDE_DD}}</span></div>
+                            </div>
+                            <!-- Latitude: (edit) -->
+                            <div class="form-group" ng-if="view.HWMval== 'edit'">
                                 <label class="col-md-4 control-label" for="LATITUDE_DD">Latitude:</label>
-                                <div class="col-md-6"><span ng-show="view.HWMval == 'detail'">{{aHWM.LATITUDE_DD}}</span></div>
-                                <span ng-show="view.HWMval == 'edit'">
-                                    <div class="col-md-6" ng-if="hwmCopy.decDegORdms == 'dd'">
-                                        <input class="form-control" ng-keypress="isNum($event)" name="LATITUDE_DD" id="LATITUDE_DD" ng-model="hwmCopy.LATITUDE_DD"
-                                               ng-model-options="{ updateOn: 'blur' }" ng-change="checkValue('dd')" type="text" />
-                                    </div>
-                                    <div class="col-md-6" ng-if="hwmCopy.decDegORdms == 'dms'">
-                                        <table>
-                                            <tr>
-                                                <td><input class="form-control" ng-keypress="isNum($event)" ng-model-options="{ updateOn: 'blur' }" ng-change="checkValue('dms')" id="LaDeg" name="Deg" ng-model="DMS.LADeg" type="text" /></td>
-                                                <td>°</td>
-                                                <td><input class="form-control" ng-keypress="isNum($event)" name="Min" ng-model="DMS.LAMin" type="text" /></td>
-                                                <td>′</td>
-                                                <td><input class="form-control" ng-keypress="isNum($event)" name="Sec" ng-model="DMS.LASec" type="text" /></td>
-                                                <td>″</td>
-                                            </tr>
-                                        </table>
-                                    </div>
-                                </span>
+                                <div class="col-md-6" ng-if="hwmCopy.decDegORdms == 'dd'">
+                                    <input class="form-control" ng-keypress="isNum($event)" name="LATITUDE_DD" id="LATITUDE_DD" ng-model="hwmCopy.LATITUDE_DD"
+                                           ng-model-options="{ updateOn: 'blur' }" ng-change="checkValue('dd')" type="text" />
+                                </div>
+                                <div class="col-md-6" ng-if="hwmCopy.decDegORdms == 'dms'">
+                                    <table>
+                                        <tr>
+                                            <td><input class="form-control" ng-keypress="isNum($event)" ng-model-options="{ updateOn: 'blur' }" ng-change="checkValue('dms')" id="LaDeg" name="Deg" ng-model="DMS.LADeg" type="text" /></td>
+                                            <td>°</td>
+                                            <td><input class="form-control" ng-keypress="isNum($event)" name="Min" ng-model="DMS.LAMin" type="text" /></td>
+                                            <td>′</td>
+                                            <td><input class="form-control" ng-keypress="isNum($event)" name="Sec" ng-model="DMS.LASec" type="text" /></td>
+                                            <td>″</td>
+                                        </tr>
+                                    </table>
+                                </div>
                             </div>
 
-                            <!-- Longitude: -->
-                            <div class="form-group">
+                            <!-- Longitude: (details) -->
+                            <div class="col-md-12" ng-if="view.HWMval== 'detail'">
+                                <div class="col-md-4"><label>Longitude:</label></div>
+                                <div class="col-md-6"><span>{{aHWM.LONGITUDE_DD}}</span></div>
+                            </div>
+                            <!-- Longitude:  (edit)-->
+                            <div class="form-group" ng-if="view.HWMval== 'edit'">
                                 <label class="col-md-4 control-label" for="LONGITUDE_DD">Longitude:</label>
-                                <div class="col-md-6"><span ng-show="view.HWMval == 'detail'">{{aHWM.LONGITUDE_DD}}</span></div>
-                                <span ng-show="view.HWMval == 'edit'">
-                                    <div class="col-md-6" ng-if="hwmCopy.decDegORdms == 'dd'">
-                                        <input class="form-control" ng-keypress="isNum($event)" id="longitude_dd" name="LONGITUDE_DD" ng-model="hwmCopy.LONGITUDE_DD"
-                                               ng-model-options="{ updateOn: 'blur' }" ng-change="checkValue('dd')" type="text" />
-                                    </div>
-                                    <div class="col-md-6" ng-if="hwmCopy.decDegORdms == 'dms'">
-                                        <table>
-                                            <tr>
-                                                <td><input class="form-control" ng-keypress="isNum($event)" ng-model-options="{ updateOn: 'blur' }" ng-change="checkValue('dms')" id="LoDeg" name="Deg" ng-model="DMS.LODeg" type="text" /></td>
-                                                <td>°</td>
-                                                <td><input class="form-control" ng-keypress="isNum($event)" name="Min" ng-model="DMS.LOMin" type="text" /></td>
-                                                <td>′</td>
-                                                <td><input class="form-control" ng-keypress="isNum($event)" name="Sec" ng-model="DMS.LOSec" type="text" /></td>
-                                                <td>″</td>
-                                            </tr>
-                                        </table>
-                                    </div>
-                                </span>
+                                <div class="col-md-6" ng-if="hwmCopy.decDegORdms == 'dd'">
+                                    <input class="form-control" ng-keypress="isNum($event)" id="longitude_dd" name="LONGITUDE_DD" ng-model="hwmCopy.LONGITUDE_DD"
+                                           ng-model-options="{ updateOn: 'blur' }" ng-change="checkValue('dd')" type="text" />
+                                </div>
+                                <div class="col-md-6" ng-if="hwmCopy.decDegORdms == 'dms'">
+                                    <table>
+                                        <tr>
+                                            <td><input class="form-control" ng-keypress="isNum($event)" ng-model-options="{ updateOn: 'blur' }" ng-change="checkValue('dms')" id="LoDeg" name="Deg" ng-model="DMS.LODeg" type="text" /></td>
+                                            <td>°</td>
+                                            <td><input class="form-control" ng-keypress="isNum($event)" name="Min" ng-model="DMS.LOMin" type="text" /></td>
+                                            <td>′</td>
+                                            <td><input class="form-control" ng-keypress="isNum($event)" name="Sec" ng-model="DMS.LOSec" type="text" /></td>
+                                            <td>″</td>
+                                        </tr>
+                                    </table>
+                                </div>
                             </div>
 
-                            <!-- Horizontal Datum:* -->
-                            <div class="form-group required" ng-class="{'has-error':HWMEditForm.HDATUM_ID.$invalid && HWMEditForm.HDATUM_ID.$dirty && view.HWMval =='edit'}">
+                            <!-- Horizontal Datum:* (details) -->
+                            <div class="col-md-12" ng-if="view.HWMval== 'detail'">
+                                <div class="col-md-4"><label>Horizontal Datum:</label></div>
+                                <div class="col-md-6"><span>{{aHWM.hdatum || '---'}}</span></div>
+                            </div>
+                            <!-- Horizontal Datum:*  (edit)-->
+                            <div class="form-group required" ng-class="{'has-error':HWMEditForm.HDATUM_ID.$invalid && HWMEditForm.HDATUM_ID.$dirty}" ng-if="view.HWMval== 'edit'">
                                 <label class="col-md-4 control-label req">Horizontal Datum:</label>
                                 <div class="col-md-6">
-                                    <span ng-show="view.HWMval == 'detail'">{{aHWM.hdatum || '---'}}</span>
-                                    <select ng-show="view.HWMval == 'edit'" class="form-control" name="HDATUM_ID" ng-model="hwmCopy.HDATUM_ID"
-                                            ng-options="hd.DATUM_ID as hd.DATUM_NAME for hd in HDatumsList" required>
+                                    <select class="form-control" name="HDATUM_ID" ng-model="hwmCopy.HDATUM_ID" ng-options="hd.DATUM_ID as hd.DATUM_NAME for hd in HDatumsList" required>
                                         <option value=""></option>
                                     </select>
                                 </div>
                             </div>
 
-                            <!-- Horizontal Collection Method: * -->
-                            <div class="form-group required" ng-class="{'has-error':HWMEditForm.HCOLLECT_METHOD_ID.$invalid && HWMEditForm.HCOLLECT_METHOD_ID.$dirty && view.HWMval =='edit'}">
+                            <!-- Horizontal Collection Method: * (details) -->
+                            <div class="col-md-12" ng-if="view.HWMval== 'detail'">
+                                <div class="col-md-4"><label>Horizontal Collection Method:</label></div>
+                                <div class="col-md-6"><span>{{aHWM.hCollectMethod || '---'}}</span></div>
+                            </div>
+                            <!-- Horizontal Collection Method: * (edit) -->
+                            <div class="form-group required" ng-class="{'has-error':HWMEditForm.HCOLLECT_METHOD_ID.$invalid && HWMEditForm.HCOLLECT_METHOD_ID.$dirty}" ng-if="view.HWMval== 'edit'">
                                 <label class="col-md-4 control-label req">Horizontal Collection Method:</label>
                                 <div class="col-md-6">
-                                    <span ng-show="view.HWMval == 'detail'">{{aHWM.hCollectMethod || '---'}}</span>
-                                    <select ng-show="view.HWMval == 'edit'" class="form-control" name="HCOLLECT_METHOD_ID" ng-model="hwmCopy.HCOLLECT_METHOD_ID"
-                                            ng-options="hcm.HCOLLECT_METHOD_ID as hcm.HCOLLECT_METHOD for hcm in hCollMList" required>
+                                    <select class="form-control" name="HCOLLECT_METHOD_ID" ng-model="hwmCopy.HCOLLECT_METHOD_ID" ng-options="hcm.HCOLLECT_METHOD_ID as hcm.HCOLLECT_METHOD for hcm in hCollMList" required>
                                         <option value=""></option>
                                     </select>
                                 </div>
                             </div>
 
-                            <!-- Height above ground (ft): -->
-                            <div class="form-group">
+                            <!-- Height above ground (ft):  (details)-->
+                            <div class="col-md-12" ng-if="view.HWMval== 'detail'">
+                                <div class="col-md-4"><label>Height above ground (ft):</label></div>
+                                <div class="col-md-6"><span>{{aHWM.HEIGHT_ABOVE_GND || '---'}}</span></div>
+                            </div>
+                            <!-- Height above ground (ft): (edit) -->
+                            <div class="form-group" ng-if="view.HWMval== 'edit'">
                                 <label class="col-md-4 control-label" for="HEIGHT_ABOVE_GND">Height above ground (ft):</label>
                                 <div class="col-md-6">
-                                    <span ng-show="view.HWMval == 'detail'">{{aHWM.HEIGHT_ABOVE_GND || '---'}}</span>
-                                    <input ng-show="view.HWMval == 'edit'" class="form-control" ng-keypress="isNum($event)" name="HEIGHT_ABOVE_GND" ng-model="hwmCopy.HEIGHT_ABOVE_GND" type="text" />
+                                    <input class="form-control" ng-keypress="isNum($event)" name="HEIGHT_ABOVE_GND" ng-model="hwmCopy.HEIGHT_ABOVE_GND" type="text" />
                                 </div>
                             </div>
 
-                            <!-- Flag/Found Date: * -->
-                            <div class="form-group required" ng-class="{'has-error':HWMEditForm.FLAG_DATE.$invalid && HWMEditForm.FLAG_DATE.$dirty && view.HWMval =='edit'}">
+                            <!-- Flag/Found Date: * (details) -->
+                            <div class="col-md-12" ng-if="view.HWMval== 'detail'">
+                                <div class="col-md-4"><label>Flag/Found Date:</label></div>
+                                <div class="col-md-3 input-group" style="padding-right:14px;padding-left:14px">
+                                    <span>{{aHWM.FLAG_DATE | date: 'MM/dd/yyyy'}}</span>
+                                </div>
+                            </div>
+                            <!-- Flag/Found Date: * (edit) -->
+                            <div class="form-group required" ng-class="{'has-error':HWMEditForm.FLAG_DATE.$invalid && HWMEditForm.FLAG_DATE.$dirty}" ng-if="view.HWMval== 'edit'">
                                 <label class="col-md-4 control-label req" for="FLAG_DATE">Flag/Found Date:</label>
                                 <div class="col-md-3 input-group" style="padding-right:14px;padding-left:14px">
-                                    <span ng-show="view.HWMval == 'detail'">{{aHWM.FLAG_DATE | date: 'MM/dd/yyyy'}}</span>
-                                    <input ng-show="view.HWMval == 'edit'" show-weeks="false" class="form-control dateInputStyle" type="date" id="FLAG_DATE" name="fd" uib-datepicker-popup="MM/dd/yyyy"
+                                    <input show-weeks="false" class="form-control dateInputStyle" type="date" id="FLAG_DATE" name="fd" uib-datepicker-popup="MM/dd/yyyy"
                                            is-open="datepickrs.fd" ng-model="hwmCopy.FLAG_DATE" required />
-                                    <span ng-show="view.HWMval == 'edit'" class="input-group-btn">
+                                    <span class="input-group-btn">
                                         <button class="btn btn-default" ng-click="open($event, 'fd')" type="button">
                                             <i class="glyphicon glyphicon-calendar" />
                                         </button>
@@ -2087,12 +2136,18 @@
                                 </div>
                             </div>
 
-                            <!-- Surveyed Date: -->
-                            <div class="form-group" ng-class="{'has-error':HWMEditForm.SURVEY_DATE.$invalid && HWMEditForm.SURVEY_DATE.$dirty && view.HWMval =='edit'}">
+                            <!-- Surveyed Date: (details) -->
+                            <div class="col-md-12" ng-if="view.HWMval== 'detail'">
+                                <div class="col-md-4"><label>Surveyed Date:</label></div>
+                                <div class="col-md-3">
+                                    <span>{{aHWM.SURVEY_DATE | date: 'MM/dd/yyyy' || '---'}}</span>
+                                </div>
+                            </div>
+                            <!-- Surveyed Date: (edit) -->
+                            <div class="form-group" ng-class="{'has-error':HWMEditForm.SURVEY_DATE.$invalid && HWMEditForm.SURVEY_DATE.$dirty}" ng-if="view.HWMval== 'edit'">
                                 <label class="col-md-4 control-label" for="SURVEY_DATE">Surveyed Date:</label>
                                 <div class="col-md-3">
-                                    <span ng-show="view.HWMval == 'detail'">{{aHWM.SURVEY_DATE | date: 'MM/dd/yyyy' || '---'}}</span>
-                                    <div ng-show="view.HWMval == 'edit'" class="col-md-3 input-group">
+                                    <div class="col-md-3 input-group">
                                         <input show-weeks="false" class="form-control dateInputStyle" type="date" id="SURVEY_DATE" name="sd" uib-datepicker-popup="MM/dd/yyyy" is-open="datepickrs.sd" ng-model="hwmCopy.SURVEY_DATE" />
                                         <span class="input-group-btn">
                                             <button class="btn btn-default" ng-click="open($event, 'sd')" type="button">
@@ -2101,42 +2156,52 @@
                                         </span>
                                     </div>
                                 </div>
-                                <button ng-show="view.HWMval == 'edit'" type="button" class="col-md-3 borderLess pull-right" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Elevation required below if survey date is populated.">
+                                <button type="button" class="col-md-3 borderLess pull-right" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Elevation required below if survey date is populated.">
                                     <span class="glyphicon glyphicon-question-sign"></span>
                                 </button>
                             </div>
 
-                            <!-- Surveyed Elevation (ft): -->
-                            <div class="form-group" ng-class="{'required': hwmCopy.SURVEY_DATE}">
+                            <!-- Surveyed Elevation (ft): (details) -->
+                            <div class="col-md-12" ng-if="view.HWMval== 'detail'">
+                                <div class="col-md-4"><label>Surveyed Elevation (ft):</label></div>
+                                <div class="col-md-6"><span>{{aHWM.ELEV_FT || '---'}}</span></div>
+                            </div>
+                            <!-- Surveyed Elevation (ft): (edit) -->
+                            <div class="form-group" ng-class="{'required': hwmCopy.SURVEY_DATE}" ng-if="view.HWMval== 'edit'">
                                 <label class="col-md-4 control-label" ng-class="{'req': hwmCopy.SURVEY_DATE}" for="ELEV_FT">Surveyed Elevation (ft):</label>
                                 <div class="col-md-6">
-                                    <span ng-show="view.HWMval == 'detail'">{{aHWM.ELEV_FT || '---'}}</span>
-                                    <input ng-show="view.HWMval == 'edit'" class="form-control" ng-keypress="isNum($event)" name="ELEV_FT" ng-model="hwmCopy.ELEV_FT" type="text" ng-required='hwmCopy.SURVEY_DATE' />
+                                    <input class="form-control" ng-keypress="isNum($event)" name="ELEV_FT" ng-model="hwmCopy.ELEV_FT" type="text" ng-required='hwmCopy.SURVEY_DATE' />
                                 </div>
-                                <button ng-show="view.HWMval == 'edit' && hwmCopy.SURVEY_DATE" type="button" class="col-md-2 borderLess" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Elevation required if survey date is populated.">
+                                <button ng-show="hwmCopy.SURVEY_DATE" type="button" class="col-md-2 borderLess" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Elevation required if survey date is populated.">
                                     <span class="glyphicon glyphicon-question-sign"></span>
                                 </button>
                             </div>
 
-                            <!-- Vertical Datum: -->
-                            <div class="form-group">
+                            <!-- Vertical Datum: (details) -->
+                            <div class="col-md-12" ng-if="view.HWMval== 'detail'">
+                                <div class="col-md-4"><label>Vertical Datum:</label></div>
+                                <div class="col-md-6"><span>{{aHWM.vDatum || '---'}}</span></div>
+                            </div>
+                            <!-- Vertical Datum: (edit) -->
+                            <div class="form-group" ng-if="view.HWMval== 'edit'">
                                 <label class="col-md-4 control-label" for="VDATUM_ID">Vertical Datum:</label>
                                 <div class="col-md-6">
-                                    <span ng-show="view.HWMval == 'detail'">{{aHWM.vDatum || '---'}}</span>
-                                    <select ng-show="view.HWMval == 'edit'" class="form-control" name="VDATUM_ID" ng-model="hwmCopy.VDATUM_ID"
-                                            ng-options="vd.DATUM_ID as vd.DATUM_NAME for vd in VDatumsList">
+                                    <select class="form-control" name="VDATUM_ID" ng-model="hwmCopy.VDATUM_ID" ng-options="vd.DATUM_ID as vd.DATUM_NAME for vd in VDatumsList">
                                         <option value=""></option>
                                     </select>
                                 </div>
                             </div>
 
-                            <!-- Vertical Collection Method: -->
-                            <div class="form-group">
+                            <!-- Vertical Collection Method: (details) -->
+                            <div class="col-md-12" ng-if="view.HWMval== 'detail'">
+                                <div class="col-md-4"><label>Vertical Collection Method:</label></div>
+                                <div class="col-md-6"><span>{{aHWM.vCollectMethod || '---'}}</span></div>
+                            </div>
+                            <!-- Vertical Collection Method: (edit) -->
+                            <div class="form-group" ng-if="view.HWMval== 'edit'">
                                 <label class="col-md-4 control-label" for="VDATUM_ID">Vertical Collection Method:</label>
                                 <div class="col-md-6">
-                                    <span ng-show="view.HWMval == 'detail'">{{aHWM.vCollectMethod || '---'}}</span>
-                                    <select ng-show="view.HWMval == 'edit'" class="form-control" name="VCOLLECT_METHOD_ID" ng-model="hwmCopy.VCOLLECT_METHOD_ID"
-                                            ng-options="vcm.VCOLLECT_METHOD_ID as vcm.VCOLLECT_METHOD for vcm in vCollMList">
+                                    <select class="form-control" name="VCOLLECT_METHOD_ID" ng-model="hwmCopy.VCOLLECT_METHOD_ID" ng-options="vcm.VCOLLECT_METHOD_ID as vcm.VCOLLECT_METHOD for vcm in vCollMList">
                                         <option value=""></option>
                                     </select>
                                 </div>
@@ -2155,62 +2220,82 @@
                                 </div>
                             </div>
 
-                            <!-- Uncertainty: -->
-                            <div class="form-group">
+                            <!-- Uncertainty: (details) -->
+                            <div class="col-md-12" ng-if="view.HWMval== 'detail'">
+                                <div class="col-md-4"><label>Uncertainty:</label></div>
+                                <div class="col-md-6"><span>{{aHWM.UNCERTAINTY || '---'}}<span ng-show="aHWM.UNCERTAINTY"> ft.</span></span></div>
+                            </div>
+                            <!-- Uncertainty: (edit) -->
+                            <div class="form-group" ng-if="view.HWMval== 'edit'">
                                 <label class="col-md-4 control-label" for="UNCERTAINTY">Uncertainty:</label>
                                 <div class="col-md-6">
-                                    <span ng-show="view.HWMval == 'detail'">{{aHWM.UNCERTAINTY || '---'}}<span ng-show="aHWM.UNCERTAINTY"> ft.</span></span>
-                                    <div ng-show="view.HWMval == 'edit'" class="col-md-12" style="margin-bottom:5px;padding-left:0">
+                                    <div class="col-md-12" style="margin-bottom:5px;padding-left:0">
                                         <div class="col-md-3" style="padding-left: 0;"><input class="form-control" ng-keypress="isNum($event)" ng-model="hwmCopy.UNCERTAINTY" type="text" /></div>
                                     </div>
                                 </div>
                             </div>
 
-                            <!-- Notes: -->
-                            <div class="form-group">
+                            <!-- Notes: (details) -->
+                            <div class="col-md-12" ng-if="view.HWMval== 'detail'">
+                                <div class="col-md-4"><label>Notes:</label></div>
+                                <div class="col-md-6"><span>{{aHWM.HWM_NOTES || '---'}}</span></div>
+                            </div>
+                            <!-- Notes: (edit) -->
+                            <div class="form-group" ng-if="view.HWMval== 'edit'">
                                 <label class="col-md-4 control-label" for="HWM_NOTES">Notes:</label>
                                 <div class="col-md-6">
-                                    <span ng-show="view.HWMval == 'detail'">{{aHWM.HWM_NOTES || '---'}}</span>
-                                    <textarea ng-show="view.HWMval == 'edit'" class="form-control" name="HWM_NOTES" type=" text" rows="3" ng-model="hwmCopy.HWM_NOTES" />
+                                    <textarea class="form-control" name="HWM_NOTES" type=" text" rows="3" ng-model="hwmCopy.HWM_NOTES" />
                                 </div>
                             </div>
 
-                            <!-- Tranquil/Stillwater HWM -->
-                            <div class="form-group">
+                            <!-- Tranquil/Stillwater HWM (details) -->
+                            <div class="col-md-12" ng-if="view.HWMval== 'detail'">
+                                <div class="col-md-4"><label>Tranquil/Stillwater HWM:</label></div>
+                                <div class="col-md-6"><span>{{aHWM.Tranquil || '---'}}</span></div>
+                            </div>
+                            <!-- Tranquil/Stillwater HWM (edit) -->
+                            <div class="form-group" ng-if="view.HWMval== 'edit'">
                                 <label class="col-md-4 control-label">Tranquil/Stillwater HWM:</label>
                                 <div class="col-md-6">
-                                    <span ng-show="view.HWMval == 'detail'">{{aHWM.Tranquil || '---'}}</span>
-                                    <span ng-show="view.HWMval == 'edit'">
-                                        <span class="radio-inline">
-                                            <input type="radio" name="STILLWATER" ng-model="hwmCopy.STILLWATER" value="1" />Yes
-                                        </span>
-                                        <span class="radio-inline">
-                                            <input type="radio" name="STILLWATER" ng-model="hwmCopy.STILLWATER" value="0" />No
-                                        </span>
+                                    <span class="radio-inline">
+                                        <input type="radio" name="STILLWATER" ng-model="hwmCopy.STILLWATER" value="1" />Yes
+                                    </span>
+                                    <span class="radio-inline">
+                                        <input type="radio" name="STILLWATER" ng-model="hwmCopy.STILLWATER" value="0" />No
                                     </span>
                                 </div>
-                                <button type="button" ng-show="view.HWMval == 'edit'" type="button" class="col-md-1 borderLess pull-left" tooltip-placement="bottom" tooltip-append-to-body="false" uib-tooltip="Tranquil-Water HWMs preferred over Rapid-Water HWMs. Refer to T&M 3-A24 for details.">
+                                <button type="button" type="button" class="col-md-1 borderLess pull-left" tooltip-placement="bottom" tooltip-append-to-body="false" uib-tooltip="Tranquil-Water HWMs preferred over Rapid-Water HWMs. Refer to T&M 3-A24 for details.">
                                     <span class="glyphicon glyphicon-question-sign"></span>
                                 </button>
                             </div>
 
-                            <!-- Flagging Member: -->
-                            <div class="form-group">
+                            <!-- Flagging Member: (detail) -->
+                            <div class="col-md-12" ng-if="view.HWMval== 'detail'">
+                                <div class="col-md-4"><label>Flagging Member:</label></div>
+                                <div class="col-md-6"><span>{{FlagMember.FNAME}} {{FlagMember.LNAME}}</span></div>
+                            </div>
+                            <!-- Flagging Member: (edit) -->
+                            <div class="form-group" ng-if="view.HWMval== 'edit'">
                                 <label class="col-md-4 control-label" for="FLAG_MEMBER_ID">Flagging Member:</label>
                                 <div class="col-md-6">
                                     <span>{{FlagMember.FNAME}} {{FlagMember.LNAME}}</span>
                                 </div>
                             </div>
 
-                            <!-- Survey Member: -->
-                            <div class="form-group" ng-show="SurveyMember.FNAME">
+                            <!-- Survey Member: (detail)-->
+                            <div class="form-group" ng-show="SurveyMember.FNAME && view.hwmval == 'detail'">
+                                <div class=" col-md-4"><label>Survey Member:</label></div>
+                                <div class="col-md-6"><span>{{SurveyMember.FNAME}} {{SurveyMember.LNAME}}</span></div>
+                            </div>
+                            <!-- Survey Member: (edit) -->
+                            <div class="form-group" ng-show="SurveyMember.FNAME && view.HWMval == 'edit'">
                                 <label class="col-md-4 control-label" for="SURVEY_MEMBER_ID">Survey Member:</label>
                                 <div class="col-md-6">
                                     <span>{{SurveyMember.FNAME}} {{SurveyMember.LNAME}}</span>
                                 </div>
                             </div>
 
-                            <!-- Approval info -->
+                            <!-- Approval info (detail) -->
                             <div class="form-group" ng-show="ApprovalInfo.Member !==undefined">
                                 <label class="col-md-4 control-label" for="APPROVAL_ID">Approval Info:</label>
                                 <div class="col-md-6">
@@ -2635,9 +2720,9 @@
                             </div>
 
                             <!-- area for D3 vertical ruler
-                    <div class="col-md-6">
-                        <bars-chart elevation-data="myData"></bars-chart>
-                    </div> -->
+                            <div class="col-md-6">
+                                <bars-chart elevation-data="myData"></bars-chart>
+                            </div> -->
                         </div>
                         <br clear="all" />
                     </uib-accordion-group>
@@ -2699,7 +2784,7 @@
                         <input class="form-control" ng-keypress="isNum($event)" name="INTERVAL" ng-model="aSensor.INTERVAL" type="text" />
                     </div>
                 </div>
-             
+
 
                 <!-- Deploy Time: * -->
                 <div class="form-group required" ng-class="{'has-error':SensorForm.TIME_STAMP.$invalid && SensorForm.TIME_STAMP.$dirty}">
@@ -5318,7 +5403,7 @@
 
                 <!-- Good Data Start Time* (data) -->
                 <div ng-if="aFile.FILETYPE_ID === 2 || fileCopy.FILETYPE_ID === 2" class="form-group required" ng-class="{'has-error':FILEForm.GOOD_START.$invalid && FILEForm.GOOD_START.$dirty && view.FILEval =='edit'}">
-                    <label class="col-md-4 control-label req"  ng-if="view.FILEval == 'edit'" style="padding-top:4em;" for="GOOD_START">Good Data Start Time:</label>
+                    <label class="col-md-4 control-label req" ng-if="view.FILEval == 'edit'" style="padding-top:4em;" for="GOOD_START">Good Data Start Time:</label>
                     <label class="col-md-4 control-label req" ng-if="view.FILEval == 'detail'" for="GOOD_START">Good Data Start Time:</label>
                     <div class="col-md-6">
                         <span ng-show="view.FILEval == 'detail'">{{datafile.GOOD_START | date: 'MM/dd/yyyy hh:mm a' || '---'}}</span>
@@ -5629,8 +5714,8 @@
                     </div>
                 </div>
                 <!--</div>
-            </div>
-            </div>-->
+                </div>
+                </div>-->
                 <!-- End SENSORs and HWMs used for Peak -->
 
 
@@ -5749,7 +5834,7 @@
                             <br />
                             Click this <a target="_blank" href="http://water.usgs.gov/admin/memo/SW/sw13.01.pdf">link</a> for more information.
                         </div>
-                        <br clear="all"/>
+                        <br clear="all" />
                         <!-- Peak Discharge-->
                         <div class="form-group">
                             <label class="col-md-4 control-label" for="PEAK_DISCHARGE">Peak Discharge:</label>

@@ -835,6 +835,10 @@
                             }],
                             template: '<div><h2 style="margin-top:0">Site {{SiteNo}} - For {{sessionEvent}}</h2></div><hr />' 
                         },
+                        'aMap': {
+                            controller: 'siteMapCtrl',
+                            templateUrl: 'component/site/siteMapView.html'
+                        },
                         'aSite': {
                             controller: 'siteCtrl',
                             templateUrl: 'component/site/siteInfoView.html'
