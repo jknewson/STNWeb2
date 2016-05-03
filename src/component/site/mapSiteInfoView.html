@@ -6,6 +6,12 @@
             <i class="acc-heading-icon" ng-class="{'ion-arrow-down-b': status.siteOpen, 'ion-arrow-right-b': !status.siteOpen}"></i>
         </uib-accordion-heading>
 
+            <spinner name="siteInfoSpinner">
+                <div class="loading">
+                    <div class="loadingcontent"><p class="loadingspinner" style=""><img src="images/loading1.gif" /></p></div>
+                </div>
+            </spinner>
+
         <div ng-if="aSite.SITE_ID == undefined">Click a site to see info</div>
         <div ng-if="aSite.SITE_ID != undefined">
 

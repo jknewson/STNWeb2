@@ -1,7 +1,7 @@
 var WiM;
 (function (WiM) {
     var Event;
-    (function (event) {
+    (function (Event_1) {
         'use strict';
         var Event = (function () {
             function Event(delegate) {
@@ -15,14 +15,14 @@ var WiM;
                 configurable: true
             });
             return Event;
-        }());
+        })();
         var EventManager = (function () {
             function EventManager() {
                 this._eventList = {};
             }
             EventManager.prototype.AddEvent = function (EventName) {
                 if (!this._eventList.hasOwnProperty(EventName))
-                    this._eventList[EventName] = new Event(new event.Delegate());
+                    this._eventList[EventName] = new Event(new Event_1.Delegate());
             };
             EventManager.prototype.SubscribeToEvent = function (EventName, handler) {
                 if (!this._eventList.hasOwnProperty(EventName)) {
@@ -32,7 +32,7 @@ var WiM;
             };
             EventManager.prototype.RaiseEvent = function (EventName, sender, args) {
                 if (sender === void 0) { sender = null; }
-                if (args === void 0) { args = event.EventArgs.Empty; }
+                if (args === void 0) { args = Event_1.EventArgs.Empty; }
                 if (!this._eventList.hasOwnProperty(EventName))
                     return;
                 this._eventList[EventName].onChanged.raise(sender, args);
@@ -43,7 +43,7 @@ var WiM;
                 this._eventList[EventName].onChanged.unsubscribe(handler);
             };
             return EventManager;
-        }());
+        })();
         factory.$inject = [];
         function factory() {
             return new EventManager();

@@ -176,6 +176,8 @@
                 $scope.selectedMarkerNum = 0;
                 ////this shows how to grab the Site ID in args.model.SITE_ID
                 $scope.$on('leafletDirectiveMarker.click', function (event, args) {
+                    
+                    spinnerService.show("siteInfoSpinner");
 
                     $scope.markers[$scope.selectedMarkerNum].icon = icons.stn;
                     delete $scope.markers[$scope.selectedMarkerNum].label;
