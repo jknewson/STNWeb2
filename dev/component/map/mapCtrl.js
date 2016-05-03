@@ -484,7 +484,7 @@
                             ahps : {
                                 name: "AHPS Gages",
                                 type: "agsFeature",
-                                url : "http://gis.srh.noaa.gov/arcgis/rest/services/ahps_gauges/MapServer/0",
+                                url : "http://idpgis.ncep.noaa.gov/arcgis/rest/services/NWS_Observations/ahps_riv_gauges/MapServer/0",
                                 visible: false,
                                 layerOptions : {
                                     //layers: [0],
@@ -503,20 +503,20 @@
                                     }
                                 }
                             },
-                            // radar : {
-                            //     name: "Weather Radar",
-                            //     type: "agsDynamic",
-                            //     url : "http://gis.srh.noaa.gov/arcgis/rest/services/RIDGERadar/MapServer",
-                            //     visible: false,
-                            //     layerOptions : {
-                            //         layers: [0],
-                            //         opacity: 1
-                            //     }
-                            // },
+                            radar : {
+                                name: "Weather Radar",
+                                type: "agsDynamic",
+                                url : "http://idpgis.ncep.noaa.gov/arcgis/rest/services/NWS_Observations/radar_base_reflectivity/MapServer",
+                                visible: false,
+                                layerOptions : {
+                                    layers: [0],
+                                    opacity: 1
+                                }
+                            },
                             watchWarn : {
                                 name: "NWS Watches & Warnings",
                                 type: "agsDynamic",
-                                url : "http://gis.srh.noaa.gov/arcgis/rest/services/watchWarn/MapServer",
+                                url : "http://idpgis.ncep.noaa.gov/arcgis/rest/services/NWS_Forecasts_Guidance_Warnings/watch_warn_adv/MapServer",
                                 visible: false,
                                 layerOptions : {
                                     layers: [1],
