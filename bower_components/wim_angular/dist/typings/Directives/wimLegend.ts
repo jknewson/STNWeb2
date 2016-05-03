@@ -136,19 +136,23 @@ module WiM.Directives {
                 //     return;
                 var url = mlyr.url + "/legend?f=pjson";
                 var request = new WiM.Services.Helpers.RequestInfo(url, true);
-                this.Execute(request).then(function (response) {
+                this.Execute(request).then((response: any) => {
                     if (response.data.layers.length > 0) {
                         mlyr.isOpen = true;
                         mlyr.layerArray = [];
-                        var visibleLayers = mlyr.layerOptions.layers;
-                        for (i = 0; i < visibleLayers.length; i++) {
-                            for (j = 0; j < response.data.layers.length; j++) {
-                                if (visibleLayers[i] == response.data.layers[j].layerId) {
-                                    mlyr.layerArray.push(response.data.layers[j]);
-                                }
-                            }
-                        }
-                    }
+                        if (mlyr.layerOptions.layers) {
+                            var visibleLayers = mlyr.layerOptions.layers;
+                            for (var i = 0; i < visibleLayers.length; i++) {
+                                for (var j = 0; j < response.data.layers.length; j++) {
+                                    if (visibleLayers[i] == response.data.layers[j].layerId) {
+                                        mlyr.layerArray.push(response.data.layers[j]);
+                                    }//end if
+                                }//next
+                            }//next
+                        } else {
+                            mlyr.layerArray = response.data.layers;
+                        }//end if
+                    }//end if
                 }, function (error) {
                 });
             }
@@ -157,11 +161,11 @@ module WiM.Directives {
                 var url = mlyr.url.slice(0, -2) + "/legend?f=pjson";
                 var layerId =  mlyr.url.substr(mlyr.url.length - 1);
                 var request = new WiM.Services.Helpers.RequestInfo(url, true);
-                this.Execute(request).then(function (response) {
+                this.Execute(request).then((response:any)=> {
                     if (response.data.layers.length > 0) {
                         mlyr.isOpen = true;
                         mlyr.layerArray = [];
-                        for (k = 0; k < response.data.layers.length; k++) {
+                        for (var k = 0; k < response.data.layers.length; k++) {
                             if (layerId == response.data.layers[k].layerId) {
                                 mlyr.layerArray.push(response.data.layers[k]);
                             }

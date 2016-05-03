@@ -47,7 +47,10 @@
     "Leaflet.label": "^0.2.1",
     "leaflet-geosearch": "L.GeoSearch#^1.1.0",
     "wim_angular": "https://github.com/USGS-WiM/wim_angular.git#master",
-    "angular-spinners": "^3.1.2"
+    "angular-spinners": "^3.1.2",
+    "ng-tags-input": "^3.0.0",
+    "bootstrap-multiselect": "^0.9.13",
+    "ui-select": "angular-ui-select#^0.16.1"
   },
   "devDependencies": {
     "angular-mocks": "^1.2.23",
@@ -60,6 +63,13 @@
     "font-awesome": "^4.6.1"
   },
   "overrides": {
+    "bootstrap": {
+      "main": [
+        "dist/css/bootstrap.css",
+        "dist/css/bootstrap-theme.css",
+        "dist/js/bootstrap.js"
+      ]
+    },
     "leaflet-geosearch": {
       "main": [
         "src/js/l.control.geosearch.js",

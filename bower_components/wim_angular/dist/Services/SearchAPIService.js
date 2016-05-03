@@ -124,7 +124,7 @@ var WiM;
                 this.config.state = '';
             };
             return SearchAPIService;
-        })(HTTPServiceBase);
+        })(Services.HTTPServiceBase);
         factory.$inject = ['$http', '$q', 'WiM.Event.EventManager'];
         function factory($http, $q, eventManager) {
             return new SearchAPIService($http, $q, eventManager);

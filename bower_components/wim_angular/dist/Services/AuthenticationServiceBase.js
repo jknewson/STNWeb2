@@ -16,7 +16,7 @@ var WiM;
             }
             AuthenticationServiceAgent.prototype.SetBasicAuthentication = function (uri, password) {
                 var request;
-                request = new Helpers.RequestInfo(uri);
+                request = new Services.Helpers.RequestInfo(uri);
                 var authdata;
                 try {
                     authdata = btoa(this.User.username + ":" + password);
@@ -32,7 +32,7 @@ var WiM;
             AuthenticationServiceAgent.prototype.SetTokenAuthentication = function (uri, password) {
                 var _this = this;
                 try {
-                    var request = new Helpers.RequestInfo(uri);
+                    var request = new Services.Helpers.RequestInfo(uri);
                     return this.Execute(request)
                         .then(function (response) {
                         _this.$http.defaults.headers.common['Authorization'] = 'token ' + response.data;
@@ -81,7 +81,7 @@ var WiM;
                 }
             };
             return AuthenticationServiceAgent;
-        })(HTTPServiceBase);
+        })(Services.HTTPServiceBase);
         Services.AuthenticationServiceAgent = AuthenticationServiceAgent;
     })(Services = WiM.Services || (WiM.Services = {}));
 })(WiM || (WiM = {}));
