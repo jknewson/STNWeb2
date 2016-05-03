@@ -837,7 +837,14 @@
                         },
                         'aMap': {
                             controller: 'siteMapCtrl',
-                            templateUrl: 'component/site/siteMapView.html'
+                            templateUrl: 'component/site/siteMapView.html',
+                            resolve: {
+                                siteId: function (thisSite) {
+                                    if (thisSite !== undefined) {
+                                        return thisSite.SITE_ID;
+                                    }
+                                }
+                            }
                         },
                         'aSite': {
                             controller: 'siteCtrl',
