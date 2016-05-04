@@ -8,13 +8,13 @@
 
         <form name="siteSearchForm">
             <div class="form-group col-md-6">
-                <label class="col-md-4 control-label" for="EVENT_ID">Events:</label>
+                <label class="col-md-4 control-label">Events:</label>
                 <div class="col-md-6">{{sessionEvent}}
                 </div>
             </div>
 
             <div class="form-group col-md-6">
-                <label class="col-md-4 control-label" for="EVENT_ID">States:</label>
+                <label class="col-md-4 control-label">States:</label>
                 <div class="col-md-6">
                     <div isteven-multi-select
                          input-model="states"
@@ -33,7 +33,7 @@
             <br />
 
             <div class="form-group col-md-6">
-                <label class="col-md-4 control-label" for="EVENT_ID">Sensor Types:</label>
+                <label class="col-md-4 control-label">Sensor Types:</label>
                 <div class="col-md-6">
                     <select class="form-control" id="SENSOR_TYPE_ID" name="SENSOR_TYPE_ID" ng-model="Chosen.sensor"
                             ng-options="s.SENSOR_TYPE_ID as s.SENSOR for s in senTypes | orderBy: 'SENSOR'">
@@ -43,7 +43,7 @@
             </div>
 
             <div class="form-group col-md-6">
-                <label class="col-md-4 control-label" for="EVENT_ID">Network Names:</label>
+                <label class="col-md-4 control-label">Network Names:</label>
                 <div class="col-md-6">
                     <select class="form-control" id="NETWORK_NAME_ID" name="NETWORK_NAME_ID" ng-model="Chosen.network"
                             ng-options="n.NETWORK_NAME_ID as n.NAME for n in netNames | orderBy: 'NAME'">
@@ -56,28 +56,28 @@
 
             <div>
                 <div class="form-group col-md-3">
-                    <label class="col-md-7 control-label" for="EVENT_ID">HWM Only Sites:</label>
+                    <label class="col-md-7 control-label">HWM Only Sites:</label>
                     <div class="col-md-1">
                         <input type="checkbox" ng-model="checkboxModel.hwmOnly" ng-true-value="'1'" ng-false-value="'0'" />
                     </div>
                 </div>
 
                 <div class="form-group col-md-3">
-                    <label class="col-md-8 control-label" for="EVENT_ID">Sensor Only Sites:</label>
+                    <label class="col-md-8 control-label">Sensor Only Sites:</label>
                     <div class="col-md-1">
                         <input type="checkbox" ng-model="checkboxModel.senOnly" ng-true-value="'1'" ng-false-value="'0'" />
                     </div>
                 </div>
 
                 <div class="form-group col-md-3">
-                    <label class="col-md-7 control-label" for="EVENT_ID">RDG Only Sites:</label>
+                    <label class="col-md-7 control-label">RDG Only Sites:</label>
                     <div class="col-md-1">
                         <input type="checkbox" ng-model="checkboxModel.rdgOnly" ng-true-value="'1'" ng-false-value="'0'" />
                     </div>
                 </div>
 
                 <div class="form-group col-md-3">
-                    <label class="col-md-7 control-label" for="EVENT_ID">Has OP Defined:</label>
+                    <label class="col-md-7 control-label">Has OP Defined:</label>
                     <div class="col-md-1">
                         <input type="checkbox" ng-model="checkboxModel.opDefined" ng-true-value="'1'" ng-false-value="'0'" />
                     </div>
