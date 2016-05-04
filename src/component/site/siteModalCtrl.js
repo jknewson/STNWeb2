@@ -913,5 +913,6 @@
                 });//end modal
             };
 
+            $rootScope.stateIsLoading.showLoading = false;// loading..
         }]);
 })();
