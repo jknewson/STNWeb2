@@ -8,7 +8,7 @@
     STNControllers.controller('MapSensorProposeController', ['$scope', '$http', '$timeout', '$rootScope', '$cookies', '$location', 'SITE', 'INSTRUMENT', 'INSTRUMENT_STATUS', 'allDeployTypes', 'allSensDeps', 'leafletMarkerEvents', 'leafletBoundsHelpers', '$state',
         function ($scope, $http, $timeout, $rootScope, $cookies, $location, SITE, INSTRUMENT, INSTRUMENT_STATUS, allDeployTypes, allSensDeps, leafletMarkerEvents, leafletBoundsHelpers, $state) {
             //when a site is  clicked, this will be triggered from service to let this controller know about it
-            $rootScope.$on('mapSiteClick', function (event, siteParts) {
+            $rootScope.$on('mapSiteClickResults', function (event, siteParts) {
                 $scope.thisSite = siteParts[0]; //here's the site they clicked
                 $scope.status.sensorOpen = false; //make sure the proposed sensor accordion is closed so they have to open and trigger the get
                 $scope.ProposedSensors4Site = []; //make sure this is clear in case they are clicking on one site after another

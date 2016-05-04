@@ -677,7 +677,7 @@
                 $scope.view.OPval = 'detail';
                 $scope.opCopy = [];               
             };
-
+            $rootScope.stateIsLoading.showLoading = false;// loading..
             
         }]);//end OPmodalCtrl
 

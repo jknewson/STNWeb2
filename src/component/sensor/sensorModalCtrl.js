@@ -1004,6 +1004,7 @@
                    //end if thisSiteHousings != undefined
                    });
                }
+               $rootScope.stateIsLoading.showLoading = false;// loading..
                //#endregion existing Sensor
            } else {
                //#region Deploying new Sensor
@@ -1015,7 +1016,8 @@
                $scope.aSensStatus.TIME_ZONE = DeptimeParts[1]; //will be converted to utc on post/put          
                $scope.aSensStatus.MEMBER_ID = $cookies.get('mID'); // member logged in is deploying it
                $scope.EventName = $cookies.get('SessionEventName');
-               $scope.Deployer = $scope.LoggedInMember;           
+               $scope.Deployer = $scope.LoggedInMember;
+               $rootScope.stateIsLoading.showLoading = false;// loading..
                //#endregion new Sensor
            }
 
@@ -1278,11 +1280,12 @@
                     } //end retr date is correct
                 }//end if valid
             };//end retrieveS
+            $rootScope.stateIsLoading.showLoading = false;
         }]);//end sensorRetrievalModalCtrl
 
     // view/edit retrieved sensor (deployed included here) modal
-    ModalControllers.controller('fullSensorModalCtrl', ['$scope', '$filter', '$timeout', '$cookies', '$http', '$uibModalInstance', '$uibModal', 'SERVER_URL', 'allDepDropdowns', 'agencyList', 'Site_Files', 'allStatusTypes', 'allInstCollCond', 'allEvents', 'allDepTypes', 'thisSensor', 'SensorSite', 'siteOPs', 'allMembers', 'INSTRUMENT', 'INSTRUMENT_STATUS', 'DATA_FILE', 'FILE', 'SOURCE', 'OP_MEASURE',
-        function ($scope, $filter, $timeout, $cookies, $http, $uibModalInstance, $uibModal, SERVER_URL, allDepDropdowns, agencyList, Site_Files, allStatusTypes, allInstCollCond, allEvents, allDepTypes, thisSensor, SensorSite, siteOPs, allMembers, INSTRUMENT, INSTRUMENT_STATUS, DATA_FILE, FILE, SOURCE, OP_MEASURE) {
+    ModalControllers.controller('fullSensorModalCtrl', ['$scope', '$rootScope', '$filter', '$timeout', '$cookies', '$http', '$uibModalInstance', '$uibModal', 'SERVER_URL', 'allDepDropdowns', 'agencyList', 'Site_Files', 'allStatusTypes', 'allInstCollCond', 'allEvents', 'allDepTypes', 'thisSensor', 'SensorSite', 'siteOPs', 'allMembers', 'INSTRUMENT', 'INSTRUMENT_STATUS', 'DATA_FILE', 'FILE', 'SOURCE', 'OP_MEASURE',
+        function ($scope, $rootScope, $filter, $timeout, $cookies, $http, $uibModalInstance, $uibModal, SERVER_URL, allDepDropdowns, agencyList, Site_Files, allStatusTypes, allInstCollCond, allEvents, allDepTypes, thisSensor, SensorSite, siteOPs, allMembers, INSTRUMENT, INSTRUMENT_STATUS, DATA_FILE, FILE, SOURCE, OP_MEASURE) {
             /*allSensorTypes, allSensorBrands, allHousingTypes, allSensDeps*/
             $scope.serverURL = SERVER_URL;
             $scope.fullSenfileIsUploading = false; //Loading...   
@@ -2397,6 +2400,6 @@
                 $scope.showNWISFileForm = false;
             };
             //#endregion
-
-    }]);//end fullSensorModalCtrl
+            $rootScope.stateIsLoading.showLoading = false;
+        }]);//end fullSensorModalCtrl
 })();
