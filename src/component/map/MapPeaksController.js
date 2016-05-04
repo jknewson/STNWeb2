@@ -7,7 +7,7 @@
 
     STNControllers.controller('MapPeaksController', ['$scope', '$rootScope', '$http', '$cookies', '$location', 'leafletMarkerEvents', 'leafletBoundsHelpers', '$state',
         function ($scope, $rootScope, $http, $cookies, $location, leafletMarkerEvents, leafletBoundsHelpers, $state) {
-            $rootScope.$on('mapSiteClick', function (event, siteParts) {
+            $rootScope.$on('mapSiteClickResults', function (event, siteParts) {
                 $scope.sitePeaks = [];
                 var allSitePeaks = siteParts[1];
                 for (var p = 0; p < allSitePeaks.length; p++) {
