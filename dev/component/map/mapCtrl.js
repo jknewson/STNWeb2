@@ -238,8 +238,8 @@
                         //                     .then(onSiteComplete, onError);
                         //below gets sites using the SITE 'factory'
                         $scope.sitesPromise = SITE.getAll({
-                           Event: evID
-                        },
+                                Event: evID
+                            },
                         function success(response) {
                             spinnerService.hide("mapSpinner");
                             onSiteComplete(response);

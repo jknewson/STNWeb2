@@ -839,9 +839,9 @@
                             controller: 'siteMapCtrl',
                             templateUrl: 'component/site/siteMapView.html',
                             resolve: {
-                                siteId: function (thisSite) {
+                                aSite: function (thisSite) {
                                     if (thisSite !== undefined) {
-                                        return thisSite.SITE_ID;
+                                        return thisSite;
                                     }
                                 }
                             }
