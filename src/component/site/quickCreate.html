@@ -935,19 +935,13 @@
             <!--submit and cancel buttons-->
             <div class="form-group">
                 <div class="col-md-4 col-md-offset-2">
-                    <span>
-                        <button class="btn btn-primary" style="width:80px;margin-right:10px" ng-click="create(quickForm.quick.$valid)">
-                            <span>Create</span>
-                        </button>
-                    </span>
-                    <span>
-                        <button class="btn btn-warning" back-button><span>Cancel</span></button>
-                    </span>
+                    <button class="btn btn-primary" style="width:80px;margin-right:10px" ng-click="create(quickForm.quick.$valid)">
+                        <span>Create</span>
+                    </button>
                 </div>
             </div>
         </fieldset>
     </form>
-
 </div>
 
 <div ng-if="!sessionEventExists">Please choose a Session Event in the upper right corner before creating a Quick {{CreateWhat}}.</div>

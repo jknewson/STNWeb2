@@ -3739,38 +3739,41 @@
                 <label>Deployed Sensor Information</label>
 
                 <!-- Event: -->
-                <div>
-                    <label class="col-md-4 col-md-offset-1">Event:</label>
+                <div class="col-md-12">
+                    <div class="col-md-4 col-md-offset-1"><label>Event:</label></div>
                     <div class="col-md-6">{{EventName}}</div>
                 </div>
                 <!-- Sensor Type: -->
-                <div>
-                    <label class="col-md-4 col-md-offset-1">Sensor Type:</label>
+                <div class="col-md-12">
+                    <div class="col-md-4 col-md-offset-1"><label>Sensor Type:</label></div>
                     <div class="col-md-6">{{aSensor.Sensor_Type || '---'}}</div>
                 </div>
                 <!-- Sensor Brand: -->
-                <div>
-                    <label class="col-md-4 col-md-offset-1">Sensor Brand:</label>
+                <div class="col-md-12">
+                    <div class="col-md-4 col-md-offset-1"><label>Sensor Brand:</label></div>
                     <div class="col-md-6">{{aSensor.Sensor_Brand || '---'}}</div>
                 </div>
                 <!-- Serial Number: -->
-                <div>
-                    <label class="col-md-4 col-md-offset-1">Serial Number:</label>
+                <div class="col-md-12">
+                    <div class="col-md-4 col-md-offset-1"><label>Serial Number:</label></div>
                     <div class="col-md-6">{{aSensor.SERIAL_NUMBER || '---'}}</div>
                 </div>
                 <!-- Housing Serial Number: -->
-                <div>
-                    <label class="col-md-4 col-md-offset-1">Housing Serial Number:</label>
+                <div class="col-md-12">
+                    <div class="col-md-4 col-md-offset-1"><label>Housing Serial Number:</label></div>
                     <div class="col-md-6">{{aSensor.HOUSING_SERIAL_NUMBER || '---'}}</div>
                 </div>
                 <!-- Housing Types: -->
-                <div>
-                    <label class="col-md-4 col-md-offset-1">Housing Types:</label>
+                <div class="col-md-12">
+                    <div class="col-md-4 col-md-offset-1"><label>Housing Types:</label></div>
                     <div class="col-md-6">{{aSensor.Housing_Type || '---'}}</div>
                 </div>
+
                 <!--Tapedowns-->
-                <div ng-show="DEPtapeDownTable.length > 0">
-                    <label class="col-md-4 col-md-offset-1">Tapedowns:</label>
+                <div class="col-md-12" ng-show="DEPtapeDownTable.length > 0">
+                    <hr class="col-md-9 col-md-offset-1" />
+
+                    <div class="col-md-4 col-md-offset-1"><label>Tapedowns:</label></div>
                     <div class="col-md-8 col-md-offset-1">
                         <table class="table table-condensed">
                             <thead>
@@ -3793,60 +3796,58 @@
                             </tbody>
                         </table>
                     </div>
-                    <div>
-                        <label class="col-md-4 col-md-offset-1">Sensor Elevation:</label>
+                    <div class="col-md-12">
+                        <div class="col-md-4 col-md-offset-1"><label>Sensor Elevation:</label></div>
                         <div class="col-md-6">{{depSensStatus.SENSOR_ELEVATION || '---'}}</div>
                     </div>
-                    <div>
-                        <label class="col-md-4 col-md-offset-1">Water Surface Elevation:</label>
+                    <div class="col-md-12">
+                        <div class="col-md-4 col-md-offset-1"><label>Water Surface Elevation:</label></div>
                         <div class="col-md-6">{{depSensStatus.WS_ELEVATION || '---'}}</div>
                     </div>
-                    <div>
-                        <label class="col-md-4 col-md-offset-1">Ground Elevation:</label>
+                    <div class="col-md-12">
+                        <div class="col-md-4 col-md-offset-1"><label>Ground Elevation:</label></div>
                         <div class="col-md-6">{{depSensStatus.GS_ELEVATION || '---'}}</div>
                     </div>
-                    <div>
-                        <label class="col-md-4 col-md-offset-1">In feet above:</label>
+                    <div class="col-md-12">
+                        <div class="col-md-4 col-md-offset-1"><label>In feet above:</label></div>
                         <div class="col-md-6">{{depSensStatus.VDatum || '---'}}</div>
                     </div>
+                    <hr class="col-md-9 col-md-offset-1" />
+                </div>                
 
-                </div>
-                <br clear="all" />
                 <!-- Vented (only if Sensor Type is Pressure Transducer)-->
-                <div ng-show="aSensor.SENSOR_TYPE_ID == 1">
-                    <div>
-                        <label class="col-md-4 col-md-offset-1">Vented:</label>
-                        <div class="col-md-6">{{aSensor.VENTED ||  '---'}}</div>
-                    </div>
+                <div class="col-md-12" ng-show="aSensor.SENSOR_TYPE_ID == 1">
+                    <div class="col-md-4 col-md-offset-1"><label>Vented:</label></div>
+                    <div class="col-md-6">{{aSensor.VENTED ||  '---'}}</div>
                 </div>
                 <!-- Deployment Type: -->
-                <div>
-                    <label class="col-md-4 col-md-offset-1">Deployment Type:</label>
+                <div class="col-md-12">
+                    <div class="col-md-4 col-md-offset-1"><label>Deployment Type:</label></div>
                     <div class="col-md-6">{{aSensor.Deployment_Type || '---'}}</div>
                 </div>
                 <!-- Location Description: -->
-                <div>
-                    <label class="col-md-4 col-md-offset-1">Location Description:</label>
+                <div class="col-md-12">
+                    <div class="col-md-4 col-md-offset-1"><label>Location Description:</label></div>
                     <div class="col-md-6">{{aSensor.LOCATION_DESCRIPTION || '---'}}</div>
                 </div>
                 <!-- Interval: -->
-                <div>
-                    <label class="col-md-4 col-md-offset-1">Interval:</label>
+                <div class="col-md-12">
+                    <div class="col-md-4 col-md-offset-1"><label>Interval:</label></div>
                     <div class="col-md-6">{{aSensor.INTERVAL || '---'}} <span ng-show='aSensor.INTERVAL'>seconds</span></div>
                 </div>
                 <!-- Deploy Date: -->
-                <div>
-                    <label class="col-md-4 col-md-offset-1">Deploy Date and Time:</label>
+                <div class="col-md-12">
+                    <div class="col-md-4 col-md-offset-1"><label>Deploy Date and Time:</label></div>
                     <div class="col-md-6">{{depSensStatus.TIME_STAMP | date: 'MM/dd/yyyy hh:mm a' }} {{depSensStatus.TIME_ZONE}}</div>
                 </div>
                 <!-- Note: -->
-                <div>
-                    <label class="col-md-4 col-md-offset-1">Note:</label>
+                <div class="col-md-12">
+                    <div class="col-md-4 col-md-offset-1"><label>Note:</label></div>
                     <div class="col-md-6">{{depSensStatus.NOTES || '---'}}</div>
                 </div>
                 <!-- Deploy Member: -->
-                <div>
-                    <label class="col-md-4 col-md-offset-1">Deploy Member:</label>
+                <div class="col-md-12">
+                    <div class="col-md-4 col-md-offset-1"><label>Deploy Member:</label></div>
                     <div class="col-md-6">{{Deployer.FNAME}} {{Deployer.LNAME}}</div>
                 </div>
                 <br clear="all" />
