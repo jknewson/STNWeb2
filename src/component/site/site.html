@@ -3022,10 +3022,14 @@
                         </div><!--end details for Tapedowns-->
                         <div class="form-group" ng-if="view.DEPval == 'edit'">
                             <label class="col-md-3 col-md-offset-1 control-label">Tapedowns:</label>
-                            <div class="col-md-6">
+                            <div class="col-md-6"></div>
+                            <button type="button" class="col-md-1 borderLess pull-left" tooltip-placement="left" tooltip-append-to-body="false" uib-tooltip="These elevations and tape down data are used for both field activities and final products. Please pay attention to how your data is entered.">
+                                <span class="glyphicon glyphicon-question-sign"></span>
+                            </button>
+                            <div class="col-md-12">
                                 <!--start add tapedown area -->
-                                <div ng-if="OPsPresent" class="form-group">
-                                    <label class="col-md-6 control-label">Datum Locations:</label>
+                                <div ng-if="OPsPresent" class="col-md-8 pull-right">
+                                    <label class="col-md-4 control-label">Datum Locations:</label>
                                     <div class="col-md-6">
                                         <div isteven-multi-select
                                              input-model="OPsForTapeDown"
@@ -3040,6 +3044,7 @@
                                 </div>
                                 <div ng-if="!OPsPresent"><span>No Datum Locations added to this site for tapedown</span></div>
                                 <br clear="all" />
+                                <div ng-if="OPsPresent" class="pull-right"><em>Note: these are not used for any calculations but are to facilitate field activities</em></div>
                                 <div ng-show="depTapeCopy.length > 0">
                                     <table class="table">
                                         <thead>
@@ -3053,8 +3058,8 @@
                                                     </button>
                                                     <br />Correction
                                                 </th>
-                                                <th class="col-sm-1">Water Surface</th>
-                                                <th class="col-sm-1">Ground Surface</th>
+                                                <th class="col-sm-2">Water Surface</th>
+                                                <th class="col-sm-2">Ground Surface</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -3071,9 +3076,7 @@
                                     </table>
                                 </div>
                             </div>
-                            <button type="button" class="col-md-1 borderLess pull-left" tooltip-placement="left" tooltip-append-to-body="false" uib-tooltip="These elevations and tape down data are used for both field activities and final products. Please pay attention to how your data is entered.">
-                                <span class="glyphicon glyphicon-question-sign"></span>
-                            </button>
+                            
                         </div><!--end formgroup for Tapedowns-->
 
                         <br clear="all" />
@@ -3142,7 +3145,7 @@
                                 </select>
                             </div>
                         </div>
-                        <div class="col-md-12"><em>Note: these elevations are used in the sensor processing and the final products</em></div>
+                        <div ng-if="OPsPresent && view.DEPval == 'edit'" class="col-md-12"><em>Note: these elevations are used in the sensor processing and the final products</em></div>
                         <br clear="all" /><hr />
 
                         <!-- Vented (only if Sensor Type is Pressure Transducer) (detail)-->
@@ -4173,10 +4176,14 @@
                         <!-- tapedown (edit)-->
                         <div class="form-group" ng-if="view.DEPval == 'edit'">
                             <label class="col-md-4 col-md-offset-1 control-label">Tapedowns:</label>
-                            <div class="col-md-6">
+                            <div class="col-md-6"></div>
+                            <button type="button" class="col-md-1 borderLess pull-left" tooltip-placement="left" tooltip-append-to-body="false" uib-tooltip="These elevations and tape down data are used for both field activities and final products. Please pay attention to how your data is entered.">
+                                <span class="glyphicon glyphicon-question-sign"></span>
+                            </button>
+                            <div class="col-md-12">
                                 <!--start add tapedown area -->
-                                <div ng-if="OPsPresent" class="form-group">
-                                    <label class="col-md-6 control-label">Datum Locations:</label>
+                                <div ng-if="OPsPresent" class="col-md-8 pull-right">
+                                    <label class="col-md-4 control-label">Datum Locations:</label>
                                     <div class="col-md-6">
                                         <div isteven-multi-select
                                              input-model="DEPOPsForTapeDown"
@@ -4191,21 +4198,22 @@
                                 </div>
                                 <div ng-if="!OPsPresent"><span>No Datum Locations added to this site for tapedown</span></div>
                                 <br clear="all" />
+                                <div ng-if="OPsPresent" class="pull-right"><em>Note: these are not used for any calculations but are to facilitate field activities</em></div>
                                 <div ng-show="depTapeCopy.length > 0">
                                     <table class="table">
                                         <thead>
                                             <tr>
-                                                <td>Datum Location</td>
-                                                <td>Elevation</td>
-                                                <td class="col-sm-3">
+                                                <th>Datum Location</th>
+                                                <th>Elevation</th>
+                                                <th class="col-sm-3">
                                                     Offset
                                                     <button type="button" class="borderLess" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="From the datum location to the sensor orifice.">
                                                         <span class="glyphicon glyphicon-question-sign"></span>
                                                     </button>
                                                     <br />Correction
-                                                </td>
-                                                <td class="col-sm-1">Water Surface</td>
-                                                <td class="col-sm-1">Ground Surface</td>
+                                                </th>
+                                                <th class="col-sm-2">Water Surface</th>
+                                                <th class="col-sm-2">Ground Surface</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -4222,9 +4230,7 @@
                                     </table>
                                 </div>
                             </div>
-                            <button type="button" class="col-md-1 borderLess pull-left" tooltip-placement="left" tooltip-append-to-body="false" uib-tooltip="These elevations and tape down data are used for both field activities and final products. Please pay attention to how your data is entered.">
-                                <span class="glyphicon glyphicon-question-sign"></span>
-                            </button>
+
                         </div><!--end formgroup for Tapedowns-->
                         <br clear="all" />
 
@@ -4292,7 +4298,7 @@
                                 </select>
                             </div>
                         </div>
-
+                        <div ng-if="OPsPresent && view.DEPval == 'edit'" class="col-md-12"><em>Note: these elevations are used in the sensor processing and the final products</em></div>
                         <br clear="all" /><hr />
 
                         <!-- Vented (only if Sensor Type is Pressure Transducer) (detail)-->
@@ -4576,9 +4582,13 @@
                         <!-- tapedown (edit)-->
                         <div class="form-group" ng-if="view.RETval == 'edit'">
                             <label class="col-md-4 col-md-offset-1 control-label">Tapedowns:</label>
-                            <div class="col-md-6">
-                                <div ng-if="OPsPresent" class="form-group">
-                                    <label class="col-md-6 control-label">Datum Locations:</label>
+                            <div class="col-md-6"></div>
+                            <button type="button" class="col-md-1 borderLess pull-left" tooltip-placement="left" tooltip-append-to-body="false" uib-tooltip="These elevations and tape down data are used for both field activities and final products. Please pay attention to how your data is entered.">
+                                <span class="glyphicon glyphicon-question-sign"></span>
+                            </button>
+                            <div class="col-md-12">
+                                <div ng-if="OPsPresent" class="col-md-8 pull-right">
+                                    <label class="col-md-4 control-label">Datum Locations:</label>
                                     <div class="col-md-6">
                                         <div isteven-multi-select
                                              input-model="RETOPsForTapeDown"
@@ -4593,21 +4603,22 @@
                                 </div>
                                 <div ng-if="!OPsPresent"><span>No Datum Locations added to this site for tapedown</span></div>
                                 <br clear="all" />
+                                <div ng-if="OPsPresent" class="pull-right"><em>Note: these are not used for any calculations but are to facilitate field activities</em></div>
                                 <div ng-show="retTapeCopy.length > 0">
                                     <table class="table">
                                         <thead>
                                             <tr>
-                                                <td>Datum Location</td>
-                                                <td>Elevation</td>
-                                                <td class="col-sm-3">
+                                                <th>Datum Location</th>
+                                                <th>Elevation</th>
+                                                <th class="col-sm-3">
                                                     Offset
                                                     <button type="button" class="borderLess" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="From the datum location to the sensor orifice.">
                                                         <span class="glyphicon glyphicon-question-sign"></span>
                                                     </button>
                                                     <br />Correction
-                                                </td>
-                                                <td class="col-sm-1">Water Surface</td>
-                                                <td class="col-sm-1">Ground Surface</td>
+                                                </th>
+                                                <th class="col-sm-2">Water Surface</th>
+                                                <th class="col-sm-2">Ground Surface</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -4682,6 +4693,7 @@
                                 </select>
                             </div>
                         </div>
+                        <div ng-if="OPsPresent && view.RETval == 'edit'" class="col-md-12"><em>Note: these elevations are used in the sensor processing and the final products</em></div>
                         <br clear="all" /><hr />
 
                         <!-- Retrieve Member: (detail) -->
