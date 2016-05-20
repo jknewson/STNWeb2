@@ -38,14 +38,14 @@
                $scope.eventList = [];
                for (var x = 0; x < allEvents.length; x++) {
                    var E = {};
-                   E.EVENT_ID = allEvents[x].EVENT_ID;
-                   E.Name = allEvents[x].EVENT_NAME;
-                   E.Type = $scope.eventTypeList.filter(function (a) { return a.EVENT_TYPE_ID == allEvents[x].EVENT_TYPE_ID; })[0].TYPE;
-                   E.Status = $scope.eventStatList.filter(function (r) { return r.EVENT_STATUS_ID == allEvents[x].EVENT_STATUS_ID; })[0].STATUS;
-                   var coord = $scope.eventCoordList.filter(function (c) { return c.MEMBER_ID == allEvents[x].EVENT_COORDINATOR; })[0];
-                   E.StartDate = allEvents[x].EVENT_START_DATE;
-                   E.EndDate = allEvents[x].EVENT_END_DATE;
-                   E.Coord = coord !== undefined ? coord.FNAME + " " + coord.LNAME : "";
+                   E.event_id = allEvents[x].event_id;
+                   E.Name = allEvents[x].event_name;
+                   E.Type = $scope.eventTypeList.filter(function (a) { return a.event_type_id == allEvents[x].event_type_id; })[0].type;
+                   E.Status = $scope.eventStatList.filter(function (r) { return r.event_status_id == allEvents[x].event_status_id; })[0].status;
+                   var coord = $scope.eventCoordList.filter(function (c) { return c.member_id == allEvents[x].even_coordinator; })[0];
+                   E.StartDate = allEvents[x].event_start_date;
+                   E.EndDate = allEvents[x].event_end_date;
+                   E.Coord = coord !== undefined ? coord.fname + " " + coord.lname : "";
 
                    $scope.eventList.push(E);
                }

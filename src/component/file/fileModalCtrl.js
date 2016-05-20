@@ -41,11 +41,11 @@
 
             $scope.updateAgencyForCaption = function () {
                 if ($scope.createOReditFile == 'create') {
-                    if ($scope.aFile.FILETYPE_ID == 1)
-                        $scope.agencyNameForCap = $scope.agencies.filter(function (a) { return a.AGENCY_ID == $scope.aSource.AGENCY_ID; })[0].AGENCY_NAME;
+                    if ($scope.aFile.filetype_id == 1)
+                        $scope.agencyNameForCap = $scope.agencies.filter(function (a) { return a.agency_id == $scope.aSource.agency_id; })[0].agency_name;
                 } else {
-                    if ($scope.fileCopy.FILETYPE_ID == 1)
-                        $scope.agencyNameForCap = $scope.agencies.filter(function (a) { return a.AGENCY_ID == $scope.sourceCopy.AGENCY_ID; })[0].AGENCY_NAME;
+                    if ($scope.fileCopy.filetype_id == 1)
+                        $scope.agencyNameForCap = $scope.agencies.filter(function (a) { return a.agency_id == $scope.sourceCopy.agency_id; })[0].agency_name;
                 }
             };
             //formatting date and time properly for chrome and ff
@@ -65,44 +65,44 @@
                 $scope.whoseFile = thisFile.fileBelongsTo;
                 if ($scope.whoseFile == 'Objective Point File') $scope.whoseFile = 'Datum Location File';
                 $scope.aFile = thisFile;
-                $scope.aFile.fileType = fileTypeList.filter(function (ft) { return ft.FILETYPE_ID == $scope.aFile.FILETYPE_ID; })[0].FILETYPE;
+                $scope.aFile.fileType = fileTypeList.filter(function (ft) { return ft.filetype_id == $scope.aFile.filetype_id; })[0].filetype;
                 
-                $scope.aFile.FILE_DATE = new Date($scope.aFile.FILE_DATE); //date for validity of form on PUT
-                if ($scope.aFile.PHOTO_DATE !== undefined) $scope.aFile.PHOTO_DATE = new Date($scope.aFile.PHOTO_DATE); //date for validity of form on PUT
+                $scope.aFile.file_date = new Date($scope.aFile.file_date); //date for validity of form on PUT
+                if ($scope.aFile.photo_date !== undefined) $scope.aFile.photo_date = new Date($scope.aFile.photo_date); //date for validity of form on PUT
                 if (fileSource !== undefined)  {
                     $scope.aSource = fileSource;
-                    $scope.aSource.FULLNAME = $scope.aSource.SOURCE_NAME;
-                    $scope.aSource.agencyName = $scope.agencies.filter(function (a) { return a.AGENCY_ID == $scope.aSource.AGENCY_ID; })[0].AGENCY_NAME;                    
+                    $scope.aSource.FULLname = $scope.aSource.source_name;
+                    $scope.aSource.agencyName = $scope.agencies.filter(function (a) { return a.agency_id == $scope.aSource.agency_id; })[0].agency_name;
                     //add agency name to photo caption
                     $scope.agencyNameForCap = $scope.aSource.agencyName;
                 }
                 if (dataFile !== undefined) {
                     $scope.ApprovalInfo = {};
                     $scope.datafile = dataFile;
-                    $scope.datafile.COLLECT_DATE = new Date($scope.datafile.COLLECT_DATE); //date for validity of form on put
-                    $scope.datafile.GOOD_START = getDateTimeParts($scope.datafile.GOOD_START); //date for validity of form on put
-                    $scope.datafile.GOOD_END = getDateTimeParts($scope.datafile.GOOD_END); //date for validity of form on put
+                    $scope.datafile.collect_date = new Date($scope.datafile.collect_date); //date for validity of form on put
+                    $scope.datafile.good_start = getDateTimeParts($scope.datafile.good_start); //date for validity of form on put
+                    $scope.datafile.good_end = getDateTimeParts($scope.datafile.good_end); //date for validity of form on put
                     $scope.timeZoneList = ['UTC', 'PST', 'MST', 'CST', 'EST'];
-                    if ($scope.datafile.APPROVAL_ID !== undefined && $scope.datafile.APPROVAL_ID !== null && $scope.datafile.APPROVAL_ID >= 1) {
-                        DATA_FILE.getDFApproval({ id: $scope.datafile.DATA_FILE_ID }, function success(approvalResponse) {
-                            $scope.ApprovalInfo.approvalDate = new Date(approvalResponse.APPROVAL_DATE); //include note that it's displayed in their local time but stored in UTC
-                            $scope.ApprovalInfo.Member = allMembers.filter(function (amem) { return amem.MEMBER_ID == approvalResponse.MEMBER_ID; })[0];
+                    if ($scope.datafile.approval_id !== undefined && $scope.datafile.approval_id !== null && $scope.datafile.approval_id >= 1) {
+                        DATA_FILE.getDFApproval({ id: $scope.datafile.data_file_id }, function success(approvalResponse) {
+                            $scope.ApprovalInfo.approvalDate = new Date(approvalResponse.approval_date); //include note that it's displayed in their local time but stored in UTC
+                            $scope.ApprovalInfo.Member = allMembers.filter(function (amem) { return amem.member_id == approvalResponse.member_id; })[0];
                         }, function error(errorResponse) {
                             toastr.error("Error getting data file approval information");
                         });
                     }
-                    var aProcessor = $scope.datafile.PROCESSOR_ID !== null ? allMembers.filter(function (amem) { return amem.MEMBER_ID == $scope.datafile.PROCESSOR_ID; })[0] : {};
-                    $scope.processor = aProcessor.FNAME !== undefined ? aProcessor.FNAME + ' ' + aProcessor.LNAME : '';
+                    var aProcessor = $scope.datafile.processor_id !== null ? allMembers.filter(function (amem) { return amem.member_id == $scope.datafile.processor_id; })[0] : {};
+                    $scope.processor = aProcessor.fname !== undefined ? aProcessor.fname + ' ' + aProcessor.lname : '';
                 }
             } else {
                 //create file
                 $scope.whoseFile = "Site File";
                 $scope.createOReditFile = 'create';
-                $scope.aFile.FILE_DATE = new Date();
-                $scope.aFile.PHOTO_DATE = new Date();
-                $scope.aSource = allMembers.filter(function (m) { return m.MEMBER_ID == $cookies.get('mID'); })[0];
-                $scope.aSource.FULLNAME = $scope.aSource.FNAME + " " + $scope.aSource.LNAME;
-                $scope.agencyNameForCap = $scope.agencies.filter(function (a) { return a.AGENCY_ID == $scope.aSource.AGENCY_ID; })[0].AGENCY_NAME;
+                $scope.aFile.file_date = new Date();
+                $scope.aFile.photo_date = new Date();
+                $scope.aSource = allMembers.filter(function (m) { return m.member_id == $cookies.get('mID'); })[0];
+                $scope.aSource.FULLname = $scope.aSource.fname + " " + $scope.aSource.lname;
+                $scope.agencyNameForCap = $scope.agencies.filter(function (a) { return a.agency_id == $scope.aSource.agency_id; })[0].agency_name;
             }
 
             $scope.cancel = function () {
@@ -117,22 +117,22 @@
                     $scope.sFileIsUploading = true;
                     $http.defaults.headers.common.Authorization = 'Basic ' + $cookies.get('STNCreds');
                     $http.defaults.headers.common.Accept = 'application/json';
-                    //post source first to get SOURCE_ID
-                    var theSource = { SOURCE_NAME: $scope.aSource.FULLNAME, AGENCY_ID: $scope.aSource.AGENCY_ID};
+                    //post source first to get source_id
+                    var theSource = { source_name: $scope.aSource.FULLname, agency_id: $scope.aSource.agency_id };
                     //now POST SOURCE, 
                     SOURCE.save(theSource).$promise.then(function (response) {
-                        if ($scope.aFile.FILETYPE_ID !== 8) {
+                        if ($scope.aFile.filetype_id !== 8) {
                             //then POST fileParts (Services populate PATH)
                             var fileParts = {
                                 FileEntity: {
-                                    FILETYPE_ID: $scope.aFile.FILETYPE_ID,
-                                    FILE_URL: $scope.aFile.FILE_URL,
-                                    FILE_DATE: $scope.aFile.FILE_DATE,
-                                    PHOTO_DATE: $scope.aFile.PHOTO_DATE,
-                                    DESCRIPTION: $scope.aFile.DESCRIPTION,
-                                    SITE_ID: $scope.theSite.SITE_ID,
-                                    SOURCE_ID: response.SOURCE_ID,
-                                    PHOTO_DIRECTION: $scope.aFile.PHOTO_DIRECTION
+                                    filetype_id: $scope.aFile.filetype_id,
+                                    file_url: $scope.aFile.file_url,
+                                    file_date: $scope.aFile.file_date,
+                                    photo_date: $scope.aFile.photo_date,
+                                    description: $scope.aFile.description,
+                                    site_id: $scope.theSite.site_id,
+                                    source_id: response.source_id,
+                                    photo_direction: $scope.aFile.photo_direction
                                 },
                                 File: $scope.aFile.File
                             };
@@ -155,7 +155,7 @@
                             });
                         } else {
                             //this is a link
-                            $scope.aFile.SITE_ID = $scope.theSite.SITE_ID; $scope.aFile.SOURCE_ID = response.SOURCE_ID;
+                            $scope.aFile.site_id = $scope.theSite.site_id; $scope.aFile.source_id = response.source_id;
                             FILE.save($scope.aFile).$promise.then(function (fresponse) {
                                 toastr.success("File Uploaded");
                                 fresponse.fileBelongsTo = "Site File";
@@ -185,19 +185,19 @@
                     var whatkind = $scope.aFile.fileBelongsTo;
                     $http.defaults.headers.common.Authorization = 'Basic ' + $cookies.get('STNCreds');
                     $http.defaults.headers.common.Accept = 'application/json';
-                    if ($scope.sourceCopy.SOURCE_ID !== undefined) {
-                        $scope.sourceCopy.SOURCE_NAME = $scope.sourceCopy.FULLNAME;
-                        SOURCE.update({ id: $scope.sourceCopy.SOURCE_ID }, $scope.sourceCopy).$promise.then(function (sResponse) {
+                    if ($scope.sourceCopy.source_id !== undefined) {
+                        $scope.sourceCopy.source_name = $scope.sourceCopy.FULLname;
+                        SOURCE.update({ id: $scope.sourceCopy.source_id }, $scope.sourceCopy).$promise.then(function (sResponse) {
                             $scope.aSource = sResponse;
-                            $scope.aSource.FULLNAME = $scope.aSource.SOURCE_NAME;
-                            $scope.aSource.agencyName = $scope.agencies.filter(function (a) { return a.AGENCY_ID == $scope.aSource.AGENCY_ID; })[0].AGENCY_NAME;
-                            FILE.update({ id: $scope.fileCopy.FILE_ID }, $scope.fileCopy).$promise.then(function (fileResponse) {
+                            $scope.aSource.FULLname = $scope.aSource.source_name;
+                            $scope.aSource.agencyName = $scope.agencies.filter(function (a) { return a.agency_id == $scope.aSource.agency_id; })[0].agency_name;
+                            FILE.update({ id: $scope.fileCopy.file_id }, $scope.fileCopy).$promise.then(function (fileResponse) {
                                 toastr.success("File Updated");
                                 fileResponse.fileBelongsTo = whatkind;
                                 $scope.aFile = fileResponse;
-                                $scope.aFile.fileType = fileTypeList.filter(function (ft) { return ft.FILETYPE_ID == $scope.aFile.FILETYPE_ID; })[0].FILETYPE;
-                                $scope.aFile.FILE_DATE = new Date($scope.aFile.FILE_DATE); //date for validity of form on PUT
-                                if ($scope.aFile.PHOTO_DATE !== undefined) $scope.aFile.PHOTO_DATE = new Date($scope.aFile.PHOTO_DATE); //date for validity of form on PUT
+                                $scope.aFile.fileType = fileTypeList.filter(function (ft) { return ft.filetype_id == $scope.aFile.filetype_id; })[0].filetype;
+                                $scope.aFile.file_date = new Date($scope.aFile.file_date); //date for validity of form on PUT
+                                if ($scope.aFile.photo_date !== undefined) $scope.aFile.photo_date = new Date($scope.aFile.photo_date); //date for validity of form on PUT
                                 $scope.fileCopy = {}; $scope.sourceCopy = {};
                                 $scope.view.FILEval = 'detail';
                                 $scope.sFileIsUploading = false;                                                                
@@ -212,35 +212,35 @@
                     } else {
                         //data file
                         //check timezone and make sure date stays utc
-                        if ($scope.dfCopy.TIME_ZONE != "UTC") {
+                        if ($scope.dfCopy.time_zone != "UTC") {
                             //convert it
-                            var utcStartDateTime = new Date($scope.dfCopy.GOOD_START).toUTCString();
-                            var utcEndDateTime = new Date($scope.dfCopy.GOOD_END).toUTCString();
-                            $scope.dfCopy.GOOD_START = utcStartDateTime;
-                            $scope.dfCopy.GOOD_END = utcEndDateTime;
-                            $scope.dfCopy.TIME_ZONE = 'UTC';
+                            var utcStartDateTime = new Date($scope.dfCopy.good_start).toUTCString();
+                            var utcEndDateTime = new Date($scope.dfCopy.good_end).toUTCString();
+                            $scope.dfCopy.good_start = utcStartDateTime;
+                            $scope.dfCopy.good_end = utcEndDateTime;
+                            $scope.dfCopy.time_zone = 'UTC';
                         } else {
                             //make sure 'GMT' is tacked on so it doesn't try to add hrs to make the already utc a utc in db
-                            var si = $scope.dfCopy.GOOD_START.toString().indexOf('GMT') + 3;
-                            var ei = $scope.dfCopy.GOOD_END.toString().indexOf('GMT') + 3;
-                            $scope.dfCopy.GOOD_START = $scope.dfCopy.GOOD_START.toString().substring(0, si);
-                            $scope.dfCopy.GOOD_END = $scope.dfCopy.GOOD_END.toString().substring(0, ei);
+                            var si = $scope.dfCopy.good_start.toString().indexOf('GMT') + 3;
+                            var ei = $scope.dfCopy.good_end.toString().indexOf('GMT') + 3;
+                            $scope.dfCopy.good_start = $scope.dfCopy.good_start.toString().substring(0, si);
+                            $scope.dfCopy.good_end = $scope.dfCopy.good_end.toString().substring(0, ei);
                         }
 
-                        DATA_FILE.update({ id: $scope.dfCopy.DATA_FILE_ID }, $scope.dfCopy).$promise.then(function (dfResponse) {
+                        DATA_FILE.update({ id: $scope.dfCopy.data_file_id }, $scope.dfCopy).$promise.then(function (dfResponse) {
                             $scope.datafile = dfResponse;
-                            $scope.datafile.COLLECT_DATE = new Date($scope.datafile.COLLECT_DATE); //date for validity of form on put
-                            $scope.datafile.GOOD_START = getDateTimeParts($scope.datafile.GOOD_START); //date for validity of form on put
-                            $scope.datafile.GOOD_END = getDateTimeParts($scope.datafile.GOOD_END); //date for validity of form on put
-                            var aProcessor = $scope.datafile.PROCESSOR_ID !== null ? allMembers.filter(function (amem) { return amem.MEMBER_ID == $scope.datafile.PROCESSOR_ID; })[0] : {};
-                            $scope.processor = aProcessor.FNAME !== undefined ? aProcessor.FNAME + ' ' + aProcessor.LNAME : '';
-                            FILE.update({ id: $scope.fileCopy.FILE_ID }, $scope.fileCopy).$promise.then(function (fileResponse) {
+                            $scope.datafile.collect_date = new Date($scope.datafile.collect_date); //date for validity of form on put
+                            $scope.datafile.good_start = getDateTimeParts($scope.datafile.good_start); //date for validity of form on put
+                            $scope.datafile.good_end = getDateTimeParts($scope.datafile.good_end); //date for validity of form on put
+                            var aProcessor = $scope.datafile.processor_id !== null ? allMembers.filter(function (amem) { return amem.member_id == $scope.datafile.processor_id; })[0] : {};
+                            $scope.processor = aProcessor.fname !== undefined ? aProcessor.fname + ' ' + aProcessor.lname : '';
+                            FILE.update({ id: $scope.fileCopy.file_id }, $scope.fileCopy).$promise.then(function (fileResponse) {
                                 toastr.success("File Updated");
                                 fileResponse.fileBelongsTo = whatkind;
                                 $scope.aFile = fileResponse;
-                                $scope.aFile.fileType = fileTypeList.filter(function (ft) { return ft.FILETYPE_ID == $scope.aFile.FILETYPE_ID; })[0].FILETYPE;
-                                $scope.aFile.FILE_DATE = new Date($scope.aFile.FILE_DATE); //date for validity of form on PUT
-                                if ($scope.aFile.PHOTO_DATE !== undefined) $scope.aFile.PHOTO_DATE = new Date($scope.aFile.PHOTO_DATE); //date for validity of form on PUT
+                                $scope.aFile.fileType = fileTypeList.filter(function (ft) { return ft.filetype_id == $scope.aFile.filetype_id; })[0].filetype;
+                                $scope.aFile.file_date = new Date($scope.aFile.file_date); //date for validity of form on PUT
+                                if ($scope.aFile.photo_date !== undefined) $scope.aFile.photo_date = new Date($scope.aFile.photo_date); //date for validity of form on PUT
                                 $scope.fileCopy = {}; $scope.dfCopy = {};
                                 $scope.view.FILEval = 'detail';
                                 $scope.sFileIsUploading = false;
@@ -274,7 +274,7 @@
 
                 DeleteModalInstance.result.then(function (fileToRemove) {
                     $http.defaults.headers.common.Authorization = 'Basic ' + $cookies.get('STNCreds');
-                    FILE.delete({ id: fileToRemove.FILE_ID }).$promise.then(function () {
+                    FILE.delete({ id: fileToRemove.file_id }).$promise.then(function () {
                         toastr.success("File Removed");
                         var sendBack = ["de", 'deleted'];
                         $uibModalInstance.close(sendBack);
@@ -318,12 +318,12 @@
                 });
                 approveModal.result.then(function (df) {
                     $http.defaults.headers.common.Authorization = 'Basic ' + $cookies.get('STNCreds');
-                    DATA_FILE.approveDF({ id: df.DATA_FILE_ID }).$promise.then(function (approvalResponse) {
-                        df.APPROVAL_ID = approvalResponse.APPROVAL_ID;
+                    DATA_FILE.approveDF({ id: df.data_file_id }).$promise.then(function (approvalResponse) {
+                        df.approval_id = approvalResponse.approval_id;
                         $scope.datafile = df;
                         toastr.success("Data File Approved");
-                        $scope.ApprovalInfo.approvalDate = new Date(approvalResponse.APPROVAL_DATE); //include note that it's displayed in their local time but stored in UTC
-                        $scope.ApprovalInfo.Member = allMembers.filter(function (amem) { return amem.MEMBER_ID == approvalResponse.MEMBER_ID; })[0];
+                        $scope.ApprovalInfo.approvalDate = new Date(approvalResponse.approval_date); //include note that it's displayed in their local time but stored in UTC
+                        $scope.ApprovalInfo.Member = allMembers.filter(function (amem) { return amem.member_id == approvalResponse.member_id; })[0];
                     }, function error(errorResponse) {
                         toastr.error("Error: " + errorResponse.statusText);
                     });
@@ -353,8 +353,8 @@
                 });
                 unapproveModal.result.then(function (df) {
                     $http.defaults.headers.common.Authorization = 'Basic ' + $cookies.get('STNCreds');
-                    DATA_FILE.unApproveDF({ id: df.DATA_FILE_ID }).$promise.then(function () {
-                        df.APPROVAL_ID = null;
+                    DATA_FILE.unApproveDF({ id: df.data_file_id }).$promise.then(function () {
+                        df.approval_id = null;
                         $scope.datafile = df;
                         toastr.success("Data File Unapproved");
                         $scope.ApprovalInfo = {};

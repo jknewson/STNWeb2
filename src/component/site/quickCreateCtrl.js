@@ -41,8 +41,8 @@
                 };//end makeAdate()
                 $scope.decDegORdms = {};
                 $scope.EventName = $cookies.get('SessionEventName');
-                $scope.aSite = { MEMBER_ID: $cookies.get('mID') };
-                $scope.aOP = {DATE_ESTABLISHED: makeAdate("")};
+                $scope.aSite = { member_id: $cookies.get('mID') };
+                $scope.aOP = {date_established: makeAdate("")};
                 
                 $scope.status = { siteOpen: true, opOpen: false, hwmOpen: false }; //accordion for parts
                 $scope.removeOPCarray = []; //holder if they remove any OP controls
@@ -55,7 +55,7 @@
                 $scope.vertCollMethodList = allVertColMethods; $scope.opQualList = allOPQualities;
                 //hwm dropdowns
                 if (whichQuick == 'HWM') {
-                    $scope.aHWM = { HWM_ENVIRONMENT: 'Riverine', EVENT_ID: $cookies.get('SessionEventID'), BANK: 'N/A', FLAG_DATE: makeAdate(""), STILLWATER: 0, FLAG_MEMBER_ID: $cookies.get('mID') };
+                    $scope.aHWM = { hwm_environment: 'Riverine', event_id: $cookies.get('SessionEventID'), bank: 'N/A', flag_date: makeAdate(""), stillwater: 0, flag_member_id: $cookies.get('mID') };
                     $scope.hwmTypeList = allHWMTypes; $scope.hwmQualList = allHWMQualities; $scope.markerList = allMarkers;
                 }
                 //sensor dropdowns
@@ -89,25 +89,25 @@
                     $scope.depTypeList = allDeployTypes; //get fresh version so not messed up with the Temperature twice
                     $scope.houseTypeList = allHousingTypes;
                     $scope.timeZoneList = ['UTC', 'PST', 'MST', 'CST', 'EST'];
-                    $scope.aSensor = { EVENT_ID: $cookies.get('SessionEventID'),  };
-                    $scope.aSensStatus = {STATUS_TYPE_ID: 1, MEMBER_ID: $cookies.get('mID')};
+                    $scope.aSensor = { event_id: $cookies.get('SessionEventID'),  };
+                    $scope.aSensStatus = { status_type_id: 1, member_id: $cookies.get('mID') };
                     $scope.eventList = allEvents; $scope.sensorTypeList = allSensorTypes; $scope.sensorBrandList = allSensorBrands;
                     $scope.IntervalType = { type: 'Seconds' }; //default
                     //displaying date / time it user's timezone
                     var DeptimeParts = getTimeZoneStamp();
-                    $scope.aSensStatus.TIME_STAMP = DeptimeParts[0];
-                    $scope.aSensStatus.TIME_ZONE = DeptimeParts[1]; //will be converted to utc on post/put
+                    $scope.aSensStatus.time_stamp = DeptimeParts[0];
+                    $scope.aSensStatus.time_zone = DeptimeParts[1]; //will be converted to utc on post/put
                     //$scope.Deployer = $scope.loggedInMember;
 
                     //get deployment types for sensor type chosen
                     $scope.getDepTypes = function () {
                         $scope.filteredDeploymentTypes = [];
-                        var matchingSensDeplist = allSensDeps.filter(function (sd) { return sd.SENSOR_TYPE_ID == $scope.aSensor.SENSOR_TYPE_ID; });
+                        var matchingSensDeplist = allSensDeps.filter(function (sd) { return sd.sensor_type_id == $scope.aSensor.sensor_type_id; });
 
                         for (var y = 0; y < matchingSensDeplist.length; y++) {
                             for (var i = 0; i < $scope.depTypeList.length; i++) {
                                 //for each one, if projObjectives has this id, add 'selected:true' else add 'selected:false'
-                                if (matchingSensDeplist[y].DEPLOYMENT_TYPE_ID == $scope.depTypeList[i].DEPLOYMENT_TYPE_ID) {
+                                if (matchingSensDeplist[y].deployment_type_id == $scope.depTypeList[i].deployment_type_id) {
                                     $scope.filteredDeploymentTypes.push($scope.depTypeList[i]);
                                     i = $scope.depTypeList.length; //ensures it doesn't set it as false after setting it as true
                                 }
@@ -122,22 +122,22 @@
 
                 //want to add OP identifier
                 $scope.addNewIdentifier = function () {
-                    $scope.addedIdentifiers.push({ IDENTIFIER: "", IDENTIFIER_TYPE: "" });
+                    $scope.addedIdentifiers.push({ identifier: "", identifier_type: "" });
                     $scope.showControlIDinput = true;
                 };//end addNewIdentifier for OP
 
                 //is it UTC or local time..make sure it stays UTC
                 var dealWithTimeStampb4Send = function () {
                     //check and see if they are not using UTC
-                    if ($scope.aSensStatus.TIME_ZONE != "UTC") {
+                    if ($scope.aSensStatus.time_zone != "UTC") {
                         //convert it
-                        var utcDateTime = new Date($scope.aSensStatus.TIME_STAMP).toUTCString();
-                        $scope.aSensStatus.TIME_STAMP = utcDateTime;
-                        $scope.aSensStatus.TIME_ZONE = 'UTC';
+                        var utcDateTime = new Date($scope.aSensStatus.time_stamp).toUTCString();
+                        $scope.aSensStatus.time_stamp = utcDateTime;
+                        $scope.aSensStatus.time_zone = 'UTC';
                     } else {
                         //make sure 'GMT' is tacked on so it doesn't try to add hrs to make the already utc a utc in db
-                        var i = $scope.aSensStatus.TIME_STAMP.toString().indexOf('GMT') + 3;
-                        $scope.aSensStatus.TIME_STAMP = $scope.aSensStatus.TIME_STAMP.toString().substring(0, i);
+                        var i = $scope.aSensStatus.time_stamp.toString().indexOf('GMT') + 3;
+                        $scope.aSensStatus.time_stamp = $scope.aSensStatus.time_stamp.toString().substring(0, i);
                     }
                 };
 
@@ -191,20 +191,20 @@
                         //they clicked Dec Deg..
                         if ($scope.DMS.LADeg !== undefined) {
                             //convert what's here for each lat and long
-                            $scope.aSite.LATITUDE_DD = azimuth($scope.DMS.LADeg, $scope.DMS.LAMin, $scope.DMS.LASec);
-                            $scope.aSite.LONGITUDE_DD = azimuth($scope.DMS.LODeg, $scope.DMS.LOMin, $scope.DMS.LOSec);
+                            $scope.aSite.latitude_dd = azimuth($scope.DMS.LADeg, $scope.DMS.LAMin, $scope.DMS.LASec);
+                            $scope.aSite.longitude_dd = azimuth($scope.DMS.LODeg, $scope.DMS.LOMin, $scope.DMS.LOSec);
                             var test;
                         }
                     } else {
                         //they clicked dms (convert lat/long to dms)
-                        if ($scope.aSite.LATITUDE_DD !== undefined) {
-                            var latDMS = (deg_to_dms($scope.aSite.LATITUDE_DD)).toString();
+                        if ($scope.aSite.latitude_dd !== undefined) {
+                            var latDMS = (deg_to_dms($scope.aSite.latitude_dd)).toString();
                             var ladDMSarray = latDMS.split(':');
                             $scope.DMS.LADeg = ladDMSarray[0];
                             $scope.DMS.LAMin = ladDMSarray[1];
                             $scope.DMS.LASec = ladDMSarray[2];
                             
-                            var longDMS = deg_to_dms($scope.aSite.LONGITUDE_DD);
+                            var longDMS = deg_to_dms($scope.aSite.longitude_dd);
                             var longDMSarray = longDMS.split(':');
                             $scope.DMS.LODeg = longDMSarray[0] * -1;
                             $scope.DMS.LOMin = longDMSarray[1];
@@ -227,7 +227,7 @@
                         size: 'sm'
                     });
                     latModal.result.then(function (fieldFocus) {
-                        if (w == 'latlong') $("#SITE_LATITUDE_DD").focus();
+                        if (w == 'latlong') $("#SITE_latitude_dd").focus();
                         else $("#LaDeg").focus();
                     });
                 };
@@ -263,10 +263,10 @@
                         }
                     } else {
                         //check the latitude/longitude
-                        if ($scope.aSite.LATITUDE_DD < 0 || $scope.aSite.LATITUDE_DD > 73) {
+                        if ($scope.aSite.latitude_dd < 0 || $scope.aSite.latitude_dd > 73) {
                             openLatModal('latlong');
                         }
-                        if ($scope.aSite.LONGITUDE_DD < -175 || $scope.aSite.LONGITUDE_DD > -60) {
+                        if ($scope.aSite.longitude_dd < -175 || $scope.aSite.longitude_dd > -60) {
                             openLongModal('latlong');
                         }
                     }
@@ -285,14 +285,14 @@
                 //get address parts and existing sites 
                 $scope.getAddress = function () {
                     //clear them all first
-                    delete $scope.aSite.ADDRESS; delete $scope.aSite.CITY; delete $scope.aSite.STATE;
-                    $scope.stateCountyList = []; delete $scope.aSite.ZIP;
-                    if ($scope.DMS.LADeg !== undefined) $scope.aSite.LATITUDE_DD = azimuth($scope.DMS.LADeg, $scope.DMS.LAMin, $scope.DMS.LASec);
-                    if ($scope.DMS.LODeg !== undefined) $scope.aSite.LONGITUDE_DD = azimuth($scope.DMS.LODeg, $scope.DMS.LOMin, $scope.DMS.LOSec);
-                    if ($scope.aSite.LATITUDE_DD !== undefined && $scope.aSite.LONGITUDE_DD !== undefined) {
+                    delete $scope.aSite.address; delete $scope.aSite.city; delete $scope.aSite.state;
+                    $scope.stateCountyList = []; delete $scope.aSite.zip;
+                    if ($scope.DMS.LADeg !== undefined) $scope.aSite.latitude_dd = azimuth($scope.DMS.LADeg, $scope.DMS.LAMin, $scope.DMS.LASec);
+                    if ($scope.DMS.LODeg !== undefined) $scope.aSite.longitude_dd = azimuth($scope.DMS.LODeg, $scope.DMS.LOMin, $scope.DMS.LOSec);
+                    if ($scope.aSite.latitude_dd !== undefined && $scope.aSite.longitude_dd !== undefined) {
                         $rootScope.stateIsLoading.showLoading = true; //loading...
                         var geocoder = new google.maps.Geocoder(); //reverse address lookup
-                        var latlng = new google.maps.LatLng($scope.aSite.LATITUDE_DD, $scope.aSite.LONGITUDE_DD);
+                        var latlng = new google.maps.LatLng($scope.aSite.latitude_dd, $scope.aSite.longitude_dd);
                         geocoder.geocode({ 'latLng': latlng }, function (results, status) {
                             if (status == google.maps.GeocoderStatus.OK) {
                                 //parse the results out into components ('street_number', 'route', 'locality', 'administrative_area_level_2', 'administrative_area_level_1', 'postal_code'
@@ -306,19 +306,19 @@
 
                                 var thisState = undefined;
                                 if (components.country !== "United States") {
-                                    $scope.aSite.ADDRESS = components.route;
-                                    $scope.aSite.CITY = components.administrative_area_level_1;
-                                    thisState = $scope.StateList.filter(function (s) { return s.STATE_NAME == components.political; })[0];
+                                    $scope.aSite.address = components.route;
+                                    $scope.aSite.city = components.administrative_area_level_1;
+                                    thisState = $scope.StateList.filter(function (s) { return s.state_name == components.political; })[0];
                                 } else {
-                                    $scope.aSite.ADDRESS = components.street_number !== undefined ? components.street_number + " " + components.route : components.route;
-                                    $scope.aSite.CITY = components.locality;
-                                    thisState = $scope.StateList.filter(function (s) { return s.STATE_NAME == components.administrative_area_level_1; })[0];
+                                    $scope.aSite.address = components.street_number !== undefined ? components.street_number + " " + components.route : components.route;
+                                    $scope.aSite.city = components.locality;
+                                    thisState = $scope.StateList.filter(function (s) { return s.state_name == components.administrative_area_level_1; })[0];
                                 }//end this is in the US
                                 if (thisState !== undefined) {
-                                    $scope.aSite.STATE = thisState.STATE_ABBREV;
-                                    $scope.stateCountyList = $scope.allCountyList.filter(function (c) { return c.STATE_ID == thisState.STATE_ID; });
-                                    $scope.aSite.COUNTY = components.country !== "United States" ? removeDiacritics(components.administrative_area_level_1) + " Municipio" : components.administrative_area_level_2;
-                                    $scope.aSite.ZIP = components.postal_code;
+                                    $scope.aSite.state = thisState.state_abbrev;
+                                    $scope.stateCountyList = $scope.allCountyList.filter(function (c) { return c.state_id == thisState.state_id; });
+                                    $scope.aSite.county = components.country !== "United States" ? removeDiacritics(components.administrative_area_level_1) + " Municipio" : components.administrative_area_level_2;
+                                    $scope.aSite.zip = components.postal_code;
                                     $rootScope.stateIsLoading.showLoading = false;// loading..
                                     $scope.$apply();
                                 } else {
@@ -466,38 +466,38 @@
 
                 //when SITE.state changes, update county list
                 $scope.updateCountyList = function (s) {
-                    var thisState = $scope.stateList.filter(function (st) { return st.STATE_ABBREV == s; })[0];
-                    $scope.stateCountyList = $scope.allCountyList.filter(function (c) { return c.STATE_ID == thisState.STATE_ID; });
+                    var thisState = $scope.stateList.filter(function (st) { return st.state_abbrev == s; })[0];
+                    $scope.stateCountyList = $scope.allCountyList.filter(function (c) { return c.state_id == thisState.state_id; });
                 };//end updateCountyList() for Site
 
                 //make uncertainty cleared and disabled when 'unquantified' is checked
                 $scope.UnquantChecked = function () {
-                    if ($scope.aOP.UNQUANTIFIED == 1)
-                        $scope.aOP.UNCERTAINTY = null;
+                    if ($scope.aOP.unquantified == 1)
+                        $scope.aOP.uncertainty = null;
                 };//end unquantChecked() for op
 
                 //just need an OBJECTIVE_POINT object to post/put
                 var trimOP = function (op) {
                     var OBJ_PT = {
-                        OBJECTIVE_POINT_ID: op.OBJECTIVE_POINT_ID !== undefined ? op.OBJECTIVE_POINT_ID : 0,
-                        NAME: op.NAME,
-                        DESCRIPTION: op.DESCRIPTION,
-                        ELEV_FT: op.ELEV_FT !== undefined ? op.ELEV_FT : null,
-                        DATE_ESTABLISHED: op.DATE_ESTABLISHED,
-                        OP_IS_DESTROYED: op.OP_IS_DESTROYED !== undefined ? op.OP_IS_DESTROYED : 0,
-                        OP_NOTES: op.OP_NOTES !== undefined ? op.OP_NOTES : null,
-                        SITE_ID: op.SITE_ID,
-                        VDATUM_ID: op.VDATUM_ID !== undefined ? op.VDATUM_ID : 0,
-                        LATITUDE_DD: op.LATITUDE_DD,
-                        LONGITUDE_DD: op.LONGITUDE_DD,
-                        HDATUM_ID: op.HDATUM_ID !== undefined ? op.HDATUM_ID : 0,
-                        HCOLLECT_METHOD_ID: op.HCOLLECT_METHOD_ID !== undefined ? op.HCOLLECT_METHOD_ID : 0,
-                        VCOLLECT_METHOD_ID: op.VCOLLECT_METHOD_ID !== undefined ? op.VCOLLECT_METHOD_ID : 0,
-                        OP_TYPE_ID: op.OP_TYPE_ID,
-                        DATE_RECOVERED: op.DATE_RECOVERED !== undefined ? op.DATE_RECOVERED : null,
-                        UNCERTAINTY: op.UNCERTAINTY !== undefined ? op.UNCERTAINTY : null,
-                        UNQUANTIFIED: op.UNQUANTIFIED !== undefined ? op.UNQUANTIFIED : null,
-                        OP_QUALITY_ID: op.OP_QUALITY_ID !== undefined ? op.OP_QUALITY_ID : null,
+                        objective_point_id: op.objective_point_id !== undefined ? op.objective_point_id : 0,
+                        name: op.name,
+                        description: op.description,
+                        elev_ft: op.elev_ft !== undefined ? op.elev_ft : null,
+                        date_established: op.date_established,
+                        op_is_destroyed: op.op_is_destroyed !== undefined ? op.op_is_destroyed : 0,
+                        op_notes: op.op_notes !== undefined ? op.op_notes : null,
+                        site_id: op.site_id,
+                        vdatum_id: op.vdatum_id !== undefined ? op.vdatum_id : 0,
+                        latitude_dd: op.latitude_dd,
+                        longitude_dd: op.longitude_dd,
+                        hdatum_id: op.hdatum_id !== undefined ? op.hdatum_id : 0,
+                        hcollect_method_id: op.hcollect_method_id !== undefined ? op.hcollect_method_id : 0,
+                        vcollect_method_id: op.vcollect_method_id !== undefined ? op.vcollect_method_id : 0,
+                        op_type_id: op.op_type_id,
+                        date_recovered: op.date_recovered !== undefined ? op.date_recovered : null,
+                        uncertainty: op.uncertainty !== undefined ? op.uncertainty : null,
+                        unquantified: op.unquantified !== undefined ? op.unquantified : null,
+                        op_quality_id: op.op_quality_id !== undefined ? op.op_quality_id : null,
                     };
                     return OBJ_PT;
                 };
@@ -506,7 +506,7 @@
                 $scope.RemoveID = function (opControl) {
                     //only add to remove list if it's an existing one to DELETE
                     var i = $scope.addedIdentifiers.indexOf(opControl);
-                    if (opControl.OP_CONTROL_IDENTIFIER_ID !== undefined) {
+                    if (opControl.op_control_identifier_id !== undefined) {
                         $scope.removeOPCarray.push(opControl);
                         $scope.addedIdentifiers.splice(i, 1);
                     } else {
@@ -519,12 +519,12 @@
                     //$scope.OP.FTorMETER needs to be 'ft'. if 'meter' ==convert value to ft 
                     if (theOP.FTorMETER == "meter") {
                         $scope.aOP.FTorMETER = 'ft';
-                        $scope.aOP.ELEV_FT = $scope.aOP.ELEV_FT * 3.2808;
+                        $scope.aOP.elev_ft = $scope.aOP.elev_ft * 3.2808;
                     }
                     //$scope.OP.FTorCM needs to be 'ft'. if 'cm' ==convert value to ft 
                     if (theOP.FTorCM == "cm") {
                         $scope.aOP.FTorCM = 'ft';
-                        $scope.aOP.UNCERTAINTY = $scope.aOP.UNCERTAINTY / 30.48;
+                        $scope.aOP.uncertainty = $scope.aOP.uncertainty / 30.48;
                     }
                 };
                 $scope.tapedown = { Open: false };
@@ -572,7 +572,7 @@
                             $scope.tapeDownTable.splice(0, 1);
                             $scope.OPsForTapeDown = [];
                             $scope.OPMeasure = {}; $scope.addTapedown = false;
-                            $scope.aSensStatus.SENSOR_ELEVATION = ''; $scope.aSensStatus.WS_ELEVATION = ''; $scope.aSensStatus.GS_ELEVATION = ''; $scope.aSensStatus.VDATUM_ID = '';
+                            $scope.aSensStatus.sensor_elevation = ''; $scope.aSensStatus.ws_elevation = ''; $scope.aSensStatus.gs_elevation = ''; $scope.aSensStatus.vdatum_id = '';
                         }
                     });
                 };
@@ -581,16 +581,16 @@
                 $scope.showTapedownPart = function () {                    
                     if ($scope.tapeDownTable.length < 1) {
                         //they are opening to add tape down information
-                        if ($scope.aOP.NAME !== undefined && $scope.aOP.ELEV_FT !== undefined && $scope.aOP.VDATUM_ID !== undefined) {
+                        if ($scope.aOP.name !== undefined && $scope.aOP.elev_ft !== undefined && $scope.aOP.vdatum_id !== undefined) {
                             $scope.OPMeasure = {};
-                            $scope.OPMeasure.OP_NAME = $scope.aOP.NAME;
-                            $scope.OPMeasure.elevation = $scope.aOP.ELEV_FT;
-                            $scope.OPMeasure.Vdatum = $scope.vertDatumList.filter(function (vd) { return vd.DATUM_ID == $scope.aOP.VDATUM_ID; })[0].DATUM_ABBREVIATION;
+                            $scope.OPMeasure.op_name = $scope.aOP.name;
+                            $scope.OPMeasure.elevation = $scope.aOP.elev_ft;
+                            $scope.OPMeasure.Vdatum = $scope.vertDatumList.filter(function (vd) { return vd.datum_id == $scope.aOP.vdatum_id; })[0].datum_abbreviation;
                             $scope.tapeDownTable.push($scope.OPMeasure);
 
                             $scope.OPsForTapeDown.push($scope.aOP);
                             $scope.addTapedown = true; $scope.tapedown.Open = true;
-                            $scope.aSensStatus.VDATUM_ID = $scope.aOP.VDATUM_ID;
+                            $scope.aSensStatus.vdatum_id = $scope.aOP.vdatum_id;
                         } else {
                             showNeedOPfirstModal(); 
                         }
@@ -607,18 +607,18 @@
                         //site POST
                         $http.defaults.headers.common.Authorization = 'Basic ' + $cookies.get('STNCreds');
                         $http.defaults.headers.common.Accept = 'application/json';
-                        if ($scope.aSite.LATITUDE_DD === undefined) $scope.aSite.LATITUDE_DD = azimuth($scope.DMS.LADeg, $scope.DMS.LAMin, $scope.DMS.LASec);
-                        if ($scope.aSite.LONGITUDE_DD === undefined) $scope.aSite.LONGITUDE_DD = azimuth($scope.DMS.LODeg, $scope.DMS.LOMin, $scope.DMS.LOSec);
+                        if ($scope.aSite.latitude_dd === undefined) $scope.aSite.latitude_dd = azimuth($scope.DMS.LADeg, $scope.DMS.LAMin, $scope.DMS.LASec);
+                        if ($scope.aSite.longitude_dd === undefined) $scope.aSite.longitude_dd = azimuth($scope.DMS.LODeg, $scope.DMS.LOMin, $scope.DMS.LOSec);
                         var createdSiteID = 0;                        
                         //POST site
                         SITE.save($scope.aSite, function success(response) {
-                            createdSiteID = response.SITE_ID;
-                            $scope.aOP.SITE_ID = createdSiteID; $scope.aOP.LATITUDE_DD = response.LATITUDE_DD; $scope.aOP.LONGITUDE_DD = response.LONGITUDE_DD;
-                            $scope.aOP.HDATUM_ID = response.HDATUM_ID; $scope.aOP.HCOLLECT_METHOD_ID = response.HCOLLECT_METHOD_ID;
+                            createdSiteID = response.site_id;
+                            $scope.aOP.site_id = createdSiteID; $scope.aOP.latitude_dd = response.latitude_dd; $scope.aOP.longitude_dd = response.longitude_dd;
+                            $scope.aOP.hdatum_id = response.hdatum_id; $scope.aOP.hcollect_method_id = response.hcollect_method_id;
                             if ($scope.CreateWhat == 'HWM') {
-                                $scope.aHWM.SITE_ID = createdSiteID; $scope.aHWM.WATERBODY = response.WATERBODY; $scope.aHWM.LATITUDE_DD = response.LATITUDE_DD;
-                                $scope.aHWM.LONGITUDE_DD = response.LONGITUDE_DD; $scope.aHWM.HCOLLECT_METHOD_ID = response.HCOLLECT_METHOD_ID;
-                                $scope.aHWM.HDATUM_ID = response.HDATUM_ID; $scope.aHWM.FLAG_MEMBER_ID = response.MEMBER_ID; $scope.aHWM.EVENT_ID = $cookies.get('SessionEventID');
+                                $scope.aHWM.site_id = createdSiteID; $scope.aHWM.WATERBODY = response.WATERBODY; $scope.aHWM.latitude_dd = response.latitude_dd;
+                                $scope.aHWM.longitude_dd = response.longitude_dd; $scope.aHWM.hcollect_method_id = response.hcollect_method_id;
+                                $scope.aHWM.hdatum_id = response.hdatum_id; $scope.aHWM.flag_member_id = response.member_id; $scope.aHWM.event_id = $cookies.get('SessionEventID');
                             }
                             //OP stuff POST
                             var createdOP = {};
@@ -629,25 +629,25 @@
                             OBJECTIVE_POINT.save(OPtoPOST, function success(response) {
                                 createdOP = response;
                                 if ($scope.addedIdentifiers.length > 0) {
-                                    //post each one THIS WILL CHANGE SOON TO HAVE OBJECTIVE_POINT_ID already added and not sent along with it
+                                    //post each one THIS WILL CHANGE SOON TO HAVE objective_point_id already added and not sent along with it
                                     for (var opc = 0; opc < $scope.addedIdentifiers.length; opc++) {
-                                        $scope.addedIdentifiers[opc].OBJECTIVE_POINT_ID = response.OBJECTIVE_POINT_ID;
-                                        OBJECTIVE_POINT.createOPControlID({ id: response.OBJECTIVE_POINT_ID }, $scope.addedIdentifiers[opc]).$promise;
+                                        $scope.addedIdentifiers[opc].objective_point_id = response.objective_point_id;
+                                        OBJECTIVE_POINT.createOPControlID({ id: response.objective_point_id }, $scope.addedIdentifiers[opc]).$promise;
                                     }
                                 }
                                 //HWM stuff POST if HWM
                                 if ($scope.CreateWhat == 'HWM') {
                                     var createdHWM = {};
                                     //if they entered a survey date or elevation, then set survey member as the flag member (flagging and surveying at same time
-                                    if ($scope.aHWM.SURVEY_DATE !== undefined)
-                                        $scope.aHWM.SURVEY_MEMBER_ID = $scope.aHWM.FLAG_MEMBER_ID;
+                                    if ($scope.aHWM.survey_date !== undefined)
+                                        $scope.aHWM.survey_member_id = $scope.aHWM.flag_member_id;
 
-                                    if ($scope.aHWM.ELEV_FT !== undefined) {
+                                    if ($scope.aHWM.elev_ft !== undefined) {
                                         //make sure they added the survey date if they added an elevation
-                                        if ($scope.aHWM.SURVEY_DATE === undefined)
-                                            $scope.aHWM.SURVEY_DATE = makeAdate("");
+                                        if ($scope.aHWM.survey_date === undefined)
+                                            $scope.aHWM.survey_date = makeAdate("");
 
-                                        $scope.aHWM.SURVEY_MEMBER_ID = $scope.aHWM.FLAG_MEMBER_ID;
+                                        $scope.aHWM.survey_member_id = $scope.aHWM.flag_member_id;
                                     }
                                     HWM.save($scope.aHWM).$promise.then(function (response) {
                                         toastr.success("Quick HWM created");
@@ -659,24 +659,24 @@
                                 if ($scope.CreateWhat == 'Sensor') {
                                     var createdSensor = {}; var depSenStat = {};
                                     if ($scope.IntervalType.type == "Minutes")
-                                        $scope.aSensor.INTERVAL = $scope.aSensor.INTERVAL * 60;
+                                        $scope.aSensor.interval = $scope.aSensor.interval * 60;
 
-                                    $scope.aSensor.SITE_ID = createdSiteID;
+                                    $scope.aSensor.site_id = createdSiteID;
                                     dealWithTimeStampb4Send(); //UTC or local?
                                     $http.defaults.headers.common.Authorization = 'Basic ' + $cookies.get('STNCreds');
                                     $http.defaults.headers.common.Accept = 'application/json';
                                     INSTRUMENT.save($scope.aSensor).$promise.then(function (response) {
                                         //create instrumentstatus too 
                                         createdSensor = response;
-                                        $scope.aSensStatus.INSTRUMENT_ID = response.INSTRUMENT_ID;
+                                        $scope.aSensStatus.instrument_id = response.instrument_id;
                                         INSTRUMENT_STATUS.save($scope.aSensStatus).$promise.then(function (statResponse) {
                                             //added tape downs?
                                             if ($scope.tapeDownTable.length > 0) {
                                                 var thisTape = $scope.tapeDownTable[0];
-                                                thisTape.INSTRUMENT_STATUS_ID = statResponse.INSTRUMENT_STATUS_ID;
-                                                thisTape.OBJECTIVE_POINT_ID = createdOP.OBJECTIVE_POINT_ID;
+                                                thisTape.instrument_status_id = statResponse.instrument_status_id;
+                                                thisTape.objective_point_id = createdOP.objective_point_id;
                                                 ///POST IT///
-                                                OP_MEASURE.addInstStatMeasure({ instrumentStatusId: statResponse.INSTRUMENT_STATUS_ID }, thisTape).$promise;                                                
+                                                OP_MEASURE.addInstStatMeasure({ instrumentStatusId: statResponse.instrument_status_id }, thisTape).$promise;                                                
                                             }
                                             toastr.success("Quick Sensor created");
                                             $rootScope.stateIsLoading.showLoading = false;// loading..
@@ -696,13 +696,13 @@
 
                         angular.element("[name='" + theForm.$name + "']").find('.ng-invalid:visible:first').focus();
 
-                        if (theForm.SITE_DESCRIPTION.$invalid || theForm.LATITUDE_DD.$invalid || theForm.LONGITUDE_DD.$invalid || theForm.HDATUM_ID.$invalid || theForm.HCOLLECT_METHOD_ID.$invalid || theForm.WATERBODY.$invalid || theForm.STATE.$invalidv || theForm.COUNTY.$invalid) {
+                        if (theForm.site_description.$invalid || theForm.latitude_dd.$invalid || theForm.longitude_dd.$invalid || theForm.hdatum_id.$invalid || theForm.hcollect_method_id.$invalid || theForm.waterbody.$invalid || theForm.state.$invalidv || theForm.county.$invalid) {
                             $scope.siteErrors = true;
                         }
-                        if (theForm.OP_TYPE_ID.$invalid || theForm.NAME.$invalid || theForm.DESCRIPTION.$invalid || theForm.de.$invalid) {
+                        if (theForm.op_type_id.$invalid || theForm.name.$invalid || theForm.description.$invalid || theForm.de.$invalid) {
                             $scope.opErrors = true;
                         }
-                        if (theForm.HWM_TYPE_ID.$invalid || theForm.HWM_ENVIRONMENT.$invalid || theForm.HWM_QUALITY_ID.$invalid || theForm.fd.$invalid) {
+                        if (theForm.hwm_type_id.$invalid || theForm.hwm_environment.$invalid || theForm.hwm_quality_id.$invalid || theForm.fd.$invalid) {
                             $scope.hwmErrors = true;
                         }
                         toastr.error("Quick HWM not created.");

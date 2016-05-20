@@ -39,19 +39,19 @@
                 $http.defaults.headers.common.Authorization = 'Basic ' + btoa(up);
                 $http.defaults.headers.common.Accept = 'application/json';
 
-                Login.login({}, postData,
+                Login.login({}, 
                     function success(response) {
                         var user = response;
                         if (user !== undefined) {
                             //set user cookies (cred, username, name, role
-                            var usersNAME = user.FNAME + " " + user.LNAME;
+                            var usersNAME = user.fname + " " + user.lname;
                             var enc = btoa($scope.username.concat(":", $scope.password));
                             $cookies.put('STNCreds', enc);
                             $cookies.put('STNUsername', $scope.username);
                             $cookies.put('usersName', usersNAME);
-                            $cookies.put('mID', user.MEMBER_ID);
+                            $cookies.put('mID', user.member_id);
                             var roleName;
-                            switch (user.ROLE_ID) {
+                            switch (user.role_id) {
                                 case 1:
                                     roleName = "Admin";
                                     break;
@@ -72,7 +72,7 @@
 
                             $rootScope.isAuth.val = true;
                             $rootScope.usersName = usersNAME;
-                            $rootScope.userID = user.MEMBER_ID;
+                            $rootScope.userID = user.member_id;
                             if ($rootScope.returnToState !== undefined) {
                                 $state.go($rootScope.returnToState, {id: $rootScope.returnToStateParams});
                             } else {

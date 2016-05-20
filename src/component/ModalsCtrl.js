@@ -9,82 +9,82 @@
             //#region switch (long)
             switch (what) {
                 case "Member":
-                    $scope.nameToRmv = nameToRemove.FNAME + " " + nameToRemove.LNAME;
+                    $scope.nameToRmv = nameToRemove.fname + " " + nameToRemove.lname;
                     break;
                 case "Event":
-                    $scope.nameToRmv = nameToRemove.EVENT_NAME;
+                    $scope.nameToRmv = nameToRemove.event_name;
                     break;
                 case "Agency":
-                    $scope.nameToRmv = nameToRemove.AGENCY_NAME;
+                    $scope.nameToRmv = nameToRemove.agency_name;
                     break;
                 case "Contact Type":
-                    $scope.nameToRmv = nameToRemove.TYPE;
+                    $scope.nameToRmv = nameToRemove.type;
                     break;
                 case "Deployment Priority":
-                    $scope.nameToRmv = nameToRemove.PRIORITY_NAME;
+                    $scope.nameToRmv = nameToRemove.priority_name;
                     break;
                 case "Event Status":
-                    $scope.nameToRmv = nameToRemove.STATUS;
+                    $scope.nameToRmv = nameToRemove.status;
                     break;
                 case "File Type":
-                    $scope.nameToRmv = nameToRemove.FILETYPE;
+                    $scope.nameToRmv = nameToRemove.filetype;
                     break;
                 case "Horizontal Collection Method":
-                    $scope.nameToRmv = nameToRemove.HCOLLECT_METHOD;
+                    $scope.nameToRmv = nameToRemove.hcollect_method;
                     break;
                 case "Horizontal Datum":
-                    $scope.nameToRmv = nameToRemove.DATUM_NAME;
+                    $scope.nameToRmv = nameToRemove.datum_name;
                     break;
                 case "Housing Type":
-                    $scope.nameToRmv = nameToRemove.TYPE_NAME;
+                    $scope.nameToRmv = nameToRemove.type_name;
                     break;
                 case "HWM Quality":
-                    $scope.nameToRmv = nameToRemove.HWM_QUALITY;
+                    $scope.nameToRmv = nameToRemove.hwm_quality;
                     break;
                 case "HWM Type":
-                    $scope.nameToRmv = nameToRemove.HWM_TYPE;
+                    $scope.nameToRmv = nameToRemove.hwm_type;
                     break;
                 case "Instrument Collection Condition":
-                    $scope.nameToRmv = nameToRemove.CONDITION;
+                    $scope.nameToRmv = nameToRemove.condition;
                     break;
                 case "Marker":
-                    $scope.nameToRmv = nameToRemove.MARKER1;
+                    $scope.nameToRmv = nameToRemove.marker1;
                     break;
                 case "Network Name":
-                    $scope.nameToRmv = nameToRemove.NAME;
+                    $scope.nameToRmv = nameToRemove.name;
                     break;
                 case "Objective Point Quality":
-                    $scope.nameToRmv = nameToRemove.QUALITY;
+                    $scope.nameToRmv = nameToRemove.quality;
                     break;
                 case "Objective Point Type":
-                    $scope.nameToRmv = nameToRemove.OP_TYPE;
+                    $scope.nameToRmv = nameToRemove.op_type;
                     break;
                 case "Sensor Brand":
-                    $scope.nameToRmv = nameToRemove.BRAND_NAME;
+                    $scope.nameToRmv = nameToRemove.brand_name;
                     break;
                 case "Deployment Type":
-                    $scope.nameToRmv = nameToRemove.METHOD;
+                    $scope.nameToRmv = nameToRemove.method;
                     break;
                 case "Status Type":
-                    $scope.nameToRmv = nameToRemove.STATUS;
+                    $scope.nameToRmv = nameToRemove.status;
                     break;
                 case "Sensor Type":
-                    $scope.nameToRmv = nameToRemove.SENSOR;
+                    $scope.nameToRmv = nameToRemove.sensor;
                     break;
                 case "Network Type":
-                    $scope.nameToRmv = nameToRemove.NETWORK_TYPE_NAME;
+                    $scope.nameToRmv = nameToRemove.network_type_name;
                     break;
                 case "Vertical Collection Method":
-                    $scope.nameToRmv = nameToRemove.VCOLLECT_METHOD;
+                    $scope.nameToRmv = nameToRemove.vcollect_method;
                     break;
                 case "Vertical Datum":
-                    $scope.nameToRmv = nameToRemove.DATUM_ABBREVIATION;
+                    $scope.nameToRmv = nameToRemove.datum_abbreviation;
                     break;
                 case "Objective Point":
-                    $scope.nameToRmv = nameToRemove.NAME;
+                    $scope.nameToRmv = nameToRemove.name;
                     break;
                 case "HWM":
-                    var aDate = new Date(nameToRemove.FLAG_DATE);
+                    var aDate = new Date(nameToRemove.flag_date);
                     var year = aDate.getFullYear();
                     var month = aDate.getMonth();
                     var day = ('0' + aDate.getDate()).slice(-2);
@@ -94,15 +94,15 @@
                     $scope.nameToRmv = "Flagged on: " + dateWOtime;
                     break;
                 case "Sensor":
-                    $scope.nameToRmv = nameToRemove.Deployment_Type;
+                    $scope.nameToRmv = nameToRemove.deploymentType;
                     break;
                 case "File":
-                    var f = nameToRemove.PATH !== undefined || nameToRemove.PATH !== null ? nameToRemove.PATH : nameToRemove.FILE_URL;
-                    f = f !== null || f !== undefined ? f : nameToRemove.FILE_ID;
+                    var f = nameToRemove.path !== undefined || nameToRemove.path !== null ? nameToRemove.path : nameToRemove.file_url;
+                    f = f !== null || f !== undefined ? f : nameToRemove.file_id;
                     $scope.nameToRmv = f;
                     break;
                 case "Peak":
-                    $scope.nameToRmv = nameToRemove.PEAK_SUMMARY_ID;
+                    $scope.nameToRmv = nameToRemove.peak_summary_id;
                     break;
             }
             //#endregion

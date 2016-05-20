@@ -17,7 +17,7 @@
         </thead>
         <tbody>
             <tr ng-repeat="e in eventList | orderBy:sortingOrder:reverse">
-                <td><a ui-sref="events.EventInfo({id: e.EVENT_ID})">{{e.Name}}</a></td>
+                <td><a ui-sref="events.EventInfo({id: e.event_id})">{{e.Name}}</a></td>
                 <td>{{e.Type}}</td>
                 <td>{{e.Status}}</td>
                 <td>{{e.StartDate | date: "MM/dd/yyyy"}}</td>

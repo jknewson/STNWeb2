@@ -132,7 +132,7 @@
                             //reset search and go to the site dash
                             $scope.searchTerm = '';
                             $scope.searchBy = { val: 'bySiteNo' };
-                            $state.go('site.dashboard', { id: s.SITE_ID });
+                            $state.go('site.dashboard', { id: s.site_id });
                         }
                     };
                 }

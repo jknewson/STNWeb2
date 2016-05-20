@@ -2,24 +2,24 @@
 <form ng-show="matchingUsers || loggedInUser.Role == 'Admin'" class="form-horizontal" id="accountForm" name="accountForm">
     <fieldset>
         <legend>ACCOUNT INFORMATION</legend>
-        <div ng-if="(loggedInUser.Role == 'Admin' && aMember.MEMBER_ID != undefined) && !matchingUsers">
+        <div ng-if="(loggedInUser.Role == 'Admin' && aMember.member_id != undefined) && !matchingUsers">
             <button class="btn btn-danger" ng-click="DeleteMember(aMember)">Delete Member</button>
         </div>
         <!-- First Name -->
-        <div class="form-group required" ng-class="{'has-error':accountForm.FNAME.$invalid && accountForm.FNAME.$dirty}">
-            <label class="col-md-3 control-label req" for="FNAME">First Name:</label>
+        <div class="form-group required" ng-class="{'has-error':accountForm.fname.$invalid && accountForm.fname.$dirty}">
+            <label class="col-md-3 control-label req" for="fname">First Name:</label>
             <div class="col-md-3">
-                <input class="form-control" id="FNAME" name="FNAME" ng-model="aMember.FNAME"
+                <input class="form-control" id="fname" name="fname" ng-model="aMember.fname"
                        type="text" placeholder="First Name" ng-model-options="{ updateOn: 'blur' }" ng-change="SaveOnBlur(accountForm.$valid)"
                        required />
             </div>
         </div>
 
         <!-- Last Name -->
-        <div class="form-group required" ng-class="{'has-error':accountForm.LNAME.$invalid && accountForm.LNAME.$dirty}">
-            <label class="col-md-3 control-label req" for="LNAME">Last Name:</label>
+        <div class="form-group required" ng-class="{'has-error':accountForm.lname.$invalid && accountForm.lname.$dirty}">
+            <label class="col-md-3 control-label req" for="lname">Last Name:</label>
             <div class="col-md-3">
-                <input class="form-control" id="LNAME" name="LNAME" ng-model="aMember.LNAME"
+                <input class="form-control" id="lname" name="lname" ng-model="aMember.lname"
                        type="text" placeholder="Last Name" ng-model-options="{ updateOn: 'blur' }" ng-change="SaveOnBlur(accountForm.$valid)"
                        required />
             </div>
@@ -27,24 +27,24 @@
 
         <!-- Username-->
         <div class="form-group required">
-            <label class="col-md-3 control-label req" for="USERNAME">Username:</label>
+            <label class="col-md-3 control-label req" for="username">Username:</label>
             <div class="col-md-3">
-                <input ng-show="aMember.MEMBER_ID == undefined" class="form-control" id="USERNAME" name="USERNAME" ng-model="aMember.USERNAME"
+                <input ng-show="aMember.member_id == undefined" class="form-control" id="username" name="username" ng-model="aMember.username"
                        type="text" placeholder="User Name" ng-model-options="{ updateOn: 'blur' }" ng-change="SaveOnBlur(accountForm.$valid)"
                        required />
-                <span ng-show="aMember.MEMBER_ID != undefined">{{aMember.USERNAME}}</span>
+                <span ng-show="aMember.member_id != undefined">{{aMember.username}}</span>
             </div>&nbsp;
-            <button ng-show="aMember.MEMBER_ID == undefined" type="button" class="borderLess" tooltip-placement="top" tooltip-append-to-body="true" uib-tooltip-html="usernameTooltip">
+            <button ng-show="aMember.member_id == undefined" type="button" class="borderLess" tooltip-placement="top" tooltip-append-to-body="true" uib-tooltip-html="usernameTooltip">
                 <span class="glyphicon glyphicon-question-sign"></span>
             </button>
         </div>
 
         <!-- Agency -->
         <div class="form-group required">
-            <label class="col-md-3 control-label req" for="AGENCY_ID">Agency:</label>
+            <label class="col-md-3 control-label req" for="agency_id">Agency:</label>
             <div class="col-md-3">
-                <select class=" form-control" id="AGENCY" name="AGENCY_ID" ng-model="aMember.AGENCY_ID"
-                        ng-options="r.AGENCY_ID as r.AGENCY_NAME for r in agencyList | orderBy: 'AGENCY_NAME'" ng-model-options="{ updateOn: 'blur' }" ng-change="SaveOnBlur(accountForm.$valid)"
+                <select class=" form-control" id="AGENCY" name="agency_id" ng-model="aMember.agency_id"
+                        ng-options="r.agency_id as r.agency_name for r in agencyList | orderBy: 'agency_name'" ng-model-options="{ updateOn: 'blur' }" ng-change="SaveOnBlur(accountForm.$valid)"
                         required>
                     <option value="">Select Agency</option>
                 </select>
@@ -58,22 +58,22 @@
         <div class="form-group required">
             <label class="col-md-3 control-label req" for="ROLE">Role:</label>
             <div class="col-md-3">
-                <select ng-show="aMember.MEMBER_ID == undefined" class=" form-control" id="ROLE" name="ROLE_ID" ng-model="aMember.ROLE_ID"
-                        ng-options="r.ROLE_ID as r.ROLE_NAME for r in roleList | orderBy: 'ROLE_ID'" ng-model-options="{ updateOn: 'blur' }" ng-change="SaveOnBlur(accountForm.$valid)"
+                <select ng-show="aMember.member_id == undefined" class=" form-control" id="ROLE" name="role_id" ng-model="aMember.role_id"
+                        ng-options="r.role_id as r.role_name for r in roleList | orderBy: 'role_id'" ng-model-options="{ updateOn: 'blur' }" ng-change="SaveOnBlur(accountForm.$valid)"
                         required>
                     <option value="">Select Role</option>
                 </select>
-                <span ng-show="aMember.MEMBER_ID != undefined">{{aMember.Role}}</span>
+                <span ng-show="aMember.member_id != undefined">{{aMember.Role}}</span>
             </div>
         </div>
 
         <!-- Phone -->
         <div class="form-group required">
-            <label class="col-md-3 control-label req" for="PHONE">Phone:</label>
+            <label class="col-md-3 control-label req" for="phone">Phone:</label>
             <div class="col-md-3">
-                <input class="form-control" id="PHONE" name="PHONE"
+                <input class="form-control" id="phone" name="phone"
                        type="text" my-input-mask="{mask: '(999) 999-9999[ x99999]', greedy:false}"
-                       ng-model="aMember.PHONE" ng-model-options="{ updateOn: 'blur' }" ng-change="SaveOnBlur(accountForm.$valid)" required />
+                       ng-model="aMember.phone" ng-model-options="{ updateOn: 'blur' }" ng-change="SaveOnBlur(accountForm.$valid)" required />
             </div>&nbsp;
             <button type="button" class="borderLess" tooltip-placement="right" tooltip-append-to-body="true" uib-tooltip="Enter the member's phone number. To add an extension, immediately following the phone number type 'x' and then the extension number.">
                 <span class="glyphicon glyphicon-question-sign"></span>
@@ -82,9 +82,9 @@
 
         <!-- Email -->
         <div class="form-group required">
-            <label class="col-md-3 control-label req" for="EMAIL">Email:</label>
+            <label class="col-md-3 control-label req" for="email">Email:</label>
             <div class="col-md-3">
-                <input class="form-control" id="EMAIL" name="EMAIL" type="email" placeholder="" ng-model="aMember.EMAIL"
+                <input class="form-control" id="email" name="email" type="email" placeholder="" ng-model="aMember.email"
                        ng-model-options="{ updateOn: 'blur' }" ng-change="SaveOnBlur(accountForm.$valid)" required />
             </div>&nbsp;
             <button type="button" class="borderLess" tooltip-placement="right" tooltip-append-to-body="true" uib-tooltip="Enter the member's email address.">
@@ -103,20 +103,20 @@
 
         <!-- Emergency Contact Name -->
         <div class="form-group">
-            <label class="col-md-3 control-label" for="EMERGENCY_CONTACT_NAME">Emergency Contact Name:</label>
+            <label class="col-md-3 control-label" for="emergency_contact_name">Emergency Contact Name:</label>
             <div class="col-md-3">
-                <input class="form-control" id="EMERGENCY_CONTACT_NAME" name="EMERGENCY_CONTACT_NAME" type="text" placeholder="" ng-model="aMember.EMERGENCY_CONTACT_NAME"
+                <input class="form-control" id="emergency_contact_name" name="emergency_contact_name" type="text" placeholder="" ng-model="aMember.emergency_contact_name"
                        ng-model-options="{ updateOn: 'blur' }" ng-change="SaveOnBlur(accountForm.$valid)" />
             </div>
         </div>
 
         <!-- Emergency Contact phone -->
         <div class="form-group">
-            <label class="col-md-3 control-label" for="EMERGENCY_CONTACT_PHONE">Emergency Contact Phone:</label>
+            <label class="col-md-3 control-label" for="emergency_contact_phone">Emergency Contact Phone:</label>
             <div class="col-md-3">
-                <input class="form-control" id="EMERGENCY_CONTACT_PHONE" name="EMERGENCY_CONTACT_PHONE"
+                <input class="form-control" id="emergency_contact_phone" name="emergency_contact_phone"
                        type="text" my-input-mask="{mask: '(999) 999-9999[ x99999]', greedy:false}"
-                       ng-model="aMember.EMERGENCY_CONTACT_PHONE" ng-model-options="{ updateOn: 'blur' }" ng-change="SaveOnBlur(accountForm.$valid)" />
+                       ng-model="aMember.emergency_contact_phone" ng-model-options="{ updateOn: 'blur' }" ng-change="SaveOnBlur(accountForm.$valid)" />
             </div>&nbsp;
             <button type="button" class="borderLess" tooltip-placement="right" tooltip-append-to-body="true" uib-tooltip="Enter the emergency contact's phone number. To add an extension, immediately following the phone number type 'x' and then the extension number.">
                 <span class="glyphicon glyphicon-question-sign"></span>
@@ -124,7 +124,7 @@
         </div>
 
         <!-- start existing password change section -->
-        <div class="form-group" ng-hide="aMember.MEMBER_ID == undefined">
+        <div class="form-group" ng-hide="aMember.member_id == undefined">
             <label class=" col-md-3 control-label" for="Password">
                 Password:
             </label>
@@ -179,7 +179,7 @@
         </div>
         <!--end existing password change section-->
         <!-- start new member password  section -->
-        <div class="form-group required" ng-if="aMember.MEMBER_ID == undefined" ng-class="{'has-error':accountForm.NPASSWORD.$invalid && accountForm.NPASSWORD.$dirty}">
+        <div class="form-group required" ng-if="aMember.member_id == undefined" ng-class="{'has-error':accountForm.NPASSWORD.$invalid && accountForm.NPASSWORD.$dirty}">
             <label class="col-md-3 control-label" for="Password">New Password:</label>
             <div class="col-md-3">
                 <input class="form-control" ng-model="pass.newP" name="NPASSWORD" id="NPASSWORD" type="password" password-validate required />
@@ -189,7 +189,7 @@
                 <span class="glyphicon glyphicon-question-sign"></span>
             </button>
         </div>
-        <div class="form-group required" ng-if="aMember.MEMBER_ID == undefined" ng-class="{'has-error':accountForm.CPASSWORD.$invalid && accountForm.CPASSWORD.$dirty}">
+        <div class="form-group required" ng-if="aMember.member_id == undefined" ng-class="{'has-error':accountForm.CPASSWORD.$invalid && accountForm.CPASSWORD.$dirty}">
             <label class="col-md-3 control-label" for="Password">Confirm Password:</label>
             <div class="col-md-3">
                 <input class="form-control" id="CPASSWORD" name="CPASSWORD" type="password" placeholder="" password-validate same-as="pass.newP" ng-model="pass.confirmP" required />
@@ -201,7 +201,7 @@
         <div class="form-group">
             <div class="col-md-4 col-md-offset-2">
                 <span>
-                    <button ng-if="aMember.MEMBER_ID == undefined" class="btn btn-primary"
+                    <button ng-if="aMember.member_id == undefined" class="btn btn-primary"
                             style="width:80px;margin-right:10px"
                             ng-click="save(accountForm.$valid)">
                         <span>Create</span>
@@ -221,25 +221,25 @@
         <!-- Your Name -->
         <div class="form-group">
             <label class="col-md-3 control-label">Name:</label>
-            <div class="col-md-6"><span>{{aMember.FNAME}} {{aMember.LNAME}}</span></div>
+            <div class="col-md-6"><span>{{aMember.fname}} {{aMember.lname}}</span></div>
         </div>
 
         <!-- Username-->
         <div class="form-group">
             <label class="col-md-3 control-label">Username:</label>
-            <div class="col-md-6"><span>{{aMember.USERNAME}}</span></div>
+            <div class="col-md-6"><span>{{aMember.username}}</span></div>
         </div>
 
         <!-- Email -->
         <div class="form-group">
             <label class="col-md-3 control-label">Email:</label>
-            <div class="col-md-6"><span>{{aMember.EMAIL}}</span></div>
+            <div class="col-md-6"><span>{{aMember.email}}</span></div>
         </div>
 
         <!-- Phone -->
         <div class="form-group">
             <label class="col-md-3 control-label">Phone:</label>
-            <div class="col-md-6"><span>{{aMember.PHONE}}</span></div>
+            <div class="col-md-6"><span>{{aMember.phone}}</span></div>
         </div>
 
         <!-- Role-->

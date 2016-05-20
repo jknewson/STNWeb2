@@ -7,10 +7,10 @@
             </tr>
         </thead>
         <tbody>
-            <tr ng-repeat="sb in sensBrandList | orderBy: 'BRAND_NAME'">
+            <tr ng-repeat="sb in sensBrandList | orderBy: 'brand_name'">
                 <td style="white-space: nowrap">
                     <!-- form -->
-                    <form editable-form name="ESrowform" onaftersave="saveSensorBrand($data, sb.SENSOR_BRAND_ID)" ng-show="ESrowform.$visible" class="form-buttons form-inline" shown="inserted == sb">
+                    <form editable-form name="ESrowform" onaftersave="saveSensorBrand($data, sb.sensor_brand_id)" ng-show="ESrowform.$visible" class="form-buttons form-inline" shown="inserted == sb">
                         <button type="submit" ng-disabled="ESrowform.$waiting" class="btn btn-primary">
                             save
                         </button>
@@ -24,8 +24,8 @@
                     </div>
                 </td>
                 <td>
-                    <div style="display:none"><span editable-text="es.SENSOR_BRAND_ID" e-form="ESrowform" e-name="SENSOR_BRAND_ID">{{sb.SENSOR_BRAND_ID}}</span></div>
-                    <span editable-text="sb.BRAND_NAME" e-name="BRAND_NAME" e-form="ESrowform">{{ sb.BRAND_NAME || '' }}</span>
+                    <div style="display:none"><span editable-text="es.sensor_brand_id" e-form="ESrowform" e-name="sensor_brand_id">{{sb.sensor_brand_id}}</span></div>
+                    <span editable-text="sb.brand_name" e-name="brand_name" e-form="ESrowform">{{ sb.brand_name || '' }}</span>
                 </td>
             </tr>
         </tbody>
@@ -40,9 +40,9 @@
             <fieldset>
 
                 <div class="form-group required">
-                    <label class="col-md-3 control-label req" for="STATUS">Sensor Brand:</label>
+                    <label class="col-md-3 control-label req" for="brand_name">Sensor Brand:</label>
                     <div class="col-md-6">
-                        <input class="form-control" id="BRAND_NAME" name="BRAND_NAME" type="text" placeholder="" ng-model="newSB.BRAND_NAME" required />
+                        <input class="form-control" id="brand_name" name="brand_name" type="text" placeholder="" ng-model="newSB.brand_name" required />
                     </div>
                 </div>
 
@@ -66,18 +66,18 @@
 </div><!--end admin view-->
 <div ng-if="accountRole !='Admin'">
     <script>
-        var sortingOrder = 'BRAND_NAME';
+        var sortingOrder = 'brand_name';
     </script>
 
     <table class="table table-striped table-condensed">
         <thead>
             <tr>
-                <th class="BRAND_NAME">Sensor Brand&nbsp;<a ng-click="sort_by('BRAND_NAME')"><i class="glyphicon glyphicon-sort"></i></a></th>
+                <th class="brand_name">Sensor Brand&nbsp;<a ng-click="sort_by('brand_name')"><i class="glyphicon glyphicon-sort"></i></a></th>
             </tr>
         </thead>
         <tbody>
             <tr ng-repeat="sb in sensBrandList | orderBy:sortingOrder:reverse">
-                <td>{{ sb.BRAND_NAME || '' }}</td>
+                <td>{{ sb.brand_name || '' }}</td>
             </tr>
         </tbody>
     </table>

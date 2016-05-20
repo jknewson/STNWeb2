@@ -11,7 +11,7 @@
                 $scope.sitePeaks = [];
                 var allSitePeaks = siteParts[1];
                 for (var p = 0; p < allSitePeaks.length; p++) {
-                    if (allSitePeaks[p].EVENT_NAME == $cookies.get('SessionEventName'))
+                    if (allSitePeaks[p].event_name == $cookies.get('SessionEventName'))
                         $scope.sitePeaks.push(allSitePeaks[p]);
                 }
                 $scope.showPeaks = true;
