@@ -34,20 +34,20 @@
             };
             var addShape = function() {
                 $scope.paths = {};
-                $scope.pathsObj.circleMarker.latlngs = {lat: $scope.thisSite.LATITUDE_DD, lng: $scope.thisSite.LONGITUDE_DD};
+                $scope.pathsObj.circleMarker.latlngs = { lat: $scope.thisSite.latitude_dd, lng: $scope.thisSite.longitude_dd };
                 $scope.paths['circleMarker'] = $scope.pathsObj['circleMarker'];
             };
             addShape();
 
             $scope.markers.push({
-                lat: $scope.thisSite.LATITUDE_DD,
-                lng: $scope.thisSite.LONGITUDE_DD,
+                lat: $scope.thisSite.latitude_dd,
+                lng: $scope.thisSite.longitude_dd,
                 icon: icons.selected
             });
 
-            SITE.query({ Latitude: $scope.thisSite.LATITUDE_DD, Longitude: $scope.thisSite.LONGITUDE_DD, Buffer: 0.05 },
+            SITE.query({ Latitude: $scope.thisSite.latitude_dd, Longitude: $scope.thisSite.longitude_dd, Buffer: 0.05 },
                 function success(response) {
-                    $scope.closeSites = response.Sites;
+                    $scope.closeSites = response;
                     if ($scope.closeSites.length > 0) {
                         for (var i = 0; i < $scope.closeSites.length; i++) {
                             var a = $scope.closeSites[i];
@@ -65,8 +65,8 @@
 
             angular.extend($scope, {
                 mapCenter: {
-                    lat:  $scope.thisSite.LATITUDE_DD,
-                    lng:  $scope.thisSite.LONGITUDE_DD,
+                    lat: $scope.thisSite.latitude_dd,
+                    lng: $scope.thisSite.longitude_dd,
                     zoom: 16,
                     minZoom: 16
                 },

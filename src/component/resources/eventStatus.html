@@ -7,10 +7,10 @@
             </tr>
         </thead>
         <tbody>
-            <tr ng-repeat="es in eventStatList | orderBy: 'EVENT_STATUS_ID'">
+            <tr ng-repeat="es in eventStatList | orderBy: 'event_status_id'">
                 <td style="white-space: nowrap">
                     <!-- form -->
-                    <form editable-form name="ESrowform" onaftersave="saveEventStat($data, es.EVENT_STATUS_ID)" ng-show="ESrowform.$visible" class="form-buttons form-inline" shown="inserted == es">
+                    <form editable-form name="ESrowform" onaftersave="saveEventStat($data, es.event_status_id)" ng-show="ESrowform.$visible" class="form-buttons form-inline" shown="inserted == es">
                         <button type="submit" ng-disabled="ESrowform.$waiting" class="btn btn-primary">
                             save
                         </button>
@@ -24,8 +24,8 @@
                     </div>
                 </td>
                 <td>
-                    <div style="display:none"><span editable-text="es.EVENT_STATUS_ID" e-form="ESrowform" e-name="EVENT_STATUS_ID">{{es.EVENT_STATUS_ID}}</span></div>
-                    <span editable-text="es.STATUS" e-name="STATUS" e-form="ESrowform">{{ es.STATUS || '' }}</span>
+                    <div style="display:none"><span editable-text="es.event_status_id" e-form="ESrowform" e-name="event_status_id">{{es.event_status_id}}</span></div>
+                    <span editable-text="es.status" e-name="status" e-form="ESrowform">{{ es.status || '' }}</span>
                 </td>
             </tr>
         </tbody>
@@ -39,9 +39,9 @@
         <form class="form-horizontal" name="lookupForm.eventStatFm">
             <fieldset>
                 <div class="form-group required">
-                    <label class="col-md-3 control-label req" for="STATUS">Event Status:</label>
+                    <label class="col-md-3 control-label req" for="status">Event Status:</label>
                     <div class="col-md-6">
-                        <input class="form-control" id="STATUS" name="STATUS" type="text" placeholder="" ng-model="newES.STATUS" required />
+                        <input class="form-control" id="status" name="status" type="text" placeholder="" ng-model="newES.status" required />
                     </div>
                 </div>
 
@@ -63,18 +63,18 @@
 </div><!--end admin view-->
 <div ng-if="accountRole !='Admin'">
     <script>
-        var sortingOrder = 'STATUS';
+        var sortingOrder = 'status';
     </script>
 
     <table class="table table-striped table-condensed">
         <thead>
             <tr>
-                <th class="STATUS">Event Status&nbsp;<a ng-click="sort_by('STATUS')"><i class="glyphicon glyphicon-sort"></i></a></th>
+                <th class="status">Event Status&nbsp;<a ng-click="sort_by('status')"><i class="glyphicon glyphicon-sort"></i></a></th>
             </tr>
         </thead>
         <tbody>
             <tr ng-repeat="es in eventStatList | orderBy:sortingOrder:reverse">
-                <td>{{ es.STATUS || '' }}</td>
+                <td>{{ es.status || '' }}</td>
             </tr>
         </tbody>
     </table>

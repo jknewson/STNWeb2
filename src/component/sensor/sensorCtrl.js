@@ -15,12 +15,12 @@
                 var tempDepTypeID = 0;
                 //fix deployment types so that "Temperature" becomes 2 : Temperature (Met sensor)-SensorType:2 and Temperature (pressure transducer)-SensorType:1 -- just for proposed
                 for (var d = 0; d < $scope.deployTypeList.length; d++) {
-                    if ($scope.deployTypeList[d].METHOD === "Temperature") {
-                        tempDepTypeID = $scope.deployTypeList[d].DEPLOYMENT_TYPE_ID;
-                        $scope.deployTypeList[d].METHOD = "Temperature (Met sensor)";
+                    if ($scope.deployTypeList[d].method === "Temperature") {
+                        tempDepTypeID = $scope.deployTypeList[d].deployment_type_id;
+                        $scope.deployTypeList[d].method = "Temperature (Met sensor)";
                     }
                 }
-                $scope.deployTypeList.push({DEPLOYMENT_TYPE_ID: tempDepTypeID, METHOD: "Temperature (Pressure Transducer)" });
+                $scope.deployTypeList.push({ deployment_type_id: tempDepTypeID, method: "Temperature (Pressure Transducer)" });
 
                 $scope.sensDepTypes = allSensDeps;
                 $scope.showProposed = false; //they want to add a proposed sensor, open options
@@ -29,8 +29,8 @@
                 //to pass to the sensor modals for sensor files
                 var SensFileTypes = allFileTypes.filter(function (sft) {
                     //Photo (1), Data (2), Historic (3), Field Sheets (4), Level Notes (5), Other (7), Link (8), Sketch (10)
-                    return sft.FILETYPE === 'Photo' || sft.FILETYPE === 'Data' || sft.FILETYPE === 'Historic Citation' || sft.FILETYPE === 'Field Sheets' || sft.FILETYPE === 'Level Notes' ||
-                       sft.FILETYPE === 'Other' || sft.FILETYPE === 'Link' || sft.FILETYPE === 'Sketch';
+                    return sft.filetype === 'Photo' || sft.filetype === 'Data' || sft.filetype === 'Historic Citation' || sft.filetype === 'Field Sheets' || sft.filetype === 'Level Notes' ||
+                       sft.filetype === 'Other' || sft.filetype === 'Link' || sft.filetype === 'Sketch';
                 });
                 //show/hide proposed sensors to add
                 $scope.showHideProposed = function () {
@@ -43,19 +43,19 @@
                     for (var dt = 0; dt < $scope.deployTypeList.length; dt++) {
                         if ($scope.deployTypeList[dt].selected === true) {
                             var proposedToAdd = {}; var propStatToAdd = {};
-                            if ($scope.deployTypeList[dt].METHOD.substring(0, 4) == "Temp") {
+                            if ($scope.deployTypeList[dt].method.substring(0, 4) == "Temp") {
                                 //temperature proposed sensor
                                 proposedToAdd = {
-                                    DEPLOYMENT_TYPE_ID: $scope.deployTypeList[dt].DEPLOYMENT_TYPE_ID,
-                                    SITE_ID: thisSite.SITE_ID,
-                                    SENSOR_TYPE_ID: $scope.deployTypeList[dt].METHOD == "Temperature (Pressure Transducer)" ? 1 : 2,
+                                    deployment_type_id: $scope.deployTypeList[dt].deployment_type_id,
+                                    site_id: thisSite.site_id,
+                                    sensor_type_id: $scope.deployTypeList[dt].method == "Temperature (Pressure Transducer)" ? 1 : 2,
                                 };
                             } else {
                                 //any other type
                                 proposedToAdd = {
-                                    DEPLOYMENT_TYPE_ID: $scope.deployTypeList[dt].DEPLOYMENT_TYPE_ID,
-                                    SITE_ID: thisSite.SITE_ID,
-                                    SENSOR_TYPE_ID: $scope.sensDepTypes.filter(function (sdt) { return sdt.DEPLOYMENT_TYPE_ID == $scope.deployTypeList[dt].DEPLOYMENT_TYPE_ID; })[0].SENSOR_TYPE_ID,                                    
+                                    deployment_type_id: $scope.deployTypeList[dt].deployment_type_id,
+                                    site_id: thisSite.site_id,
+                                    sensor_type_id: $scope.sensDepTypes.filter(function (sdt) { return sdt.deployment_type_id == $scope.deployTypeList[dt].deployment_type_id; })[0].sensor_type_id,
                                 };
                             }
                             //now post it (Instrument first, then Instrument Status
@@ -64,16 +64,16 @@
 
                             INSTRUMENT.save(proposedToAdd).$promise.then(function (response) {
                                 var createdPropSensor = {
-                                    DEPLOYMENT_TYPE_ID: response.DEPLOYMENT_TYPE_ID,
-                                    SITE_ID: response.SITE_ID,
-                                    SENSOR_TYPE_ID: response.SENSOR_TYPE_ID,
-                                    INSTRUMENT_ID: response.INSTRUMENT_ID,
-                                    Deployment_Type: $scope.deployTypeList.filter(function (dtl) { return dtl.DEPLOYMENT_TYPE_ID == response.DEPLOYMENT_TYPE_ID;})[0].METHOD
+                                    deployment_type_id: response.deployment_type_id,
+                                    site_id: response.site_id,
+                                    sensor_type_id: response.sensor_type_id,
+                                    instrument_id: response.instrument_id,
+                                    deploymentType: $scope.deployTypeList.filter(function (dtl) { return dtl.deployment_type_id == response.deployment_type_id; })[0].method
                                 };
-                                propStatToAdd = { INSTRUMENT_ID: response.INSTRUMENT_ID, STATUS_TYPE_ID: 4, MEMBER_ID: $cookies.get('mID'), TIME_STAMP: Time_STAMP, TIME_ZONE: 'UTC', };
+                                propStatToAdd = { instrument_id: response.instrument_id, status_type_id: 4, member_id: $cookies.get('mID'), time_stamp: Time_STAMP, time_zone: 'UTC', };
 
                                 INSTRUMENT_STATUS.save(propStatToAdd).$promise.then(function (statResponse) {
-                                    propStatToAdd.Status = 'Proposed'; propStatToAdd.INSTRUMENT_STATUS_ID = statResponse.INSTRUMENT_STATUS_ID;
+                                    propStatToAdd.Status = 'Proposed'; propStatToAdd.instrument_status_id = statResponse.instrument_status_id;
                                     //statResponse.Status = 'Proposed';
                                     var instToPushToList = {
                                         Instrument: createdPropSensor,
@@ -120,7 +120,7 @@
                                 return allEvents;
                             },
                             siteOPs: function () {
-                                return SITE.getSiteOPs({ id: thisSite.SITE_ID }).$promise;
+                                return SITE.getSiteOPs({ id: thisSite.site_id }).$promise;
                             },
                             allMembers: function () {
                                 $http.defaults.headers.common.Authorization = 'Basic ' + $cookies.get('STNCreds');
@@ -159,7 +159,7 @@
                     
                     //if this is a create, show the sensormodal.html, if looking at deployed sensor, go to the depsensormodal.html
                     var modalInstance = $uibModal.open({
-                        templateUrl: sensorClicked === 0 || sensorClicked.InstrumentStats[0].STATUS_TYPE_ID === 4 ? 'Sensormodal.html' : 'DepSensormodal.html',
+                        templateUrl: sensorClicked === 0 || sensorClicked.InstrumentStats[0].status_type_id === 4 ? 'Sensormodal.html' : 'DepSensormodal.html',
                         controller: 'sensorModalCtrl',
                         size: 'lg',
                         backdrop: 'static',
@@ -179,7 +179,7 @@
                                 return thisSite;
                             },
                             siteOPs: function () {
-                                return SITE.getSiteOPs({ id: thisSite.SITE_ID }).$promise;
+                                return SITE.getSiteOPs({ id: thisSite.site_id }).$promise;
                             },
                             agencyList: function () {
                                 return allAgencies;
@@ -257,7 +257,7 @@
                                 return thisSite;
                             },
                             siteOPs: function () {
-                                return SITE.getSiteOPs({ id: thisSite.SITE_ID }).$promise;
+                                return SITE.getSiteOPs({ id: thisSite.site_id }).$promise;
                             },
                             agencyList: function () {
                                 return allAgencies;
@@ -282,7 +282,7 @@
                     $scope.sessionEventName = newValue !== undefined ? newValue : "All Events";
                     $scope.sessionEventExists = $scope.sessionEventName != "All Events" ? true : false;
                     if (newValue !== undefined) {
-                        $scope.SiteSensors = thisSiteSensors.filter(function (h) { return (h.Instrument.EVENT_ID == $cookies.get('SessionEventID')) || h.InstrumentStats[0].STATUS_TYPE_ID == 4; });
+                        $scope.SiteSensors = thisSiteSensors.filter(function (h) { return (h.Instrument.event_id == $cookies.get('SessionEventID')) || h.InstrumentStats[0].status_type_id == 4; });
                         $scope.sensorCount = { total: $scope.SiteSensors.length };
                     } else {
                         $scope.SiteSensors = thisSiteSensors;

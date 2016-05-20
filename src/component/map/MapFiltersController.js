@@ -5,8 +5,8 @@
     'use strict';
     var STNControllers = angular.module('STNControllers');
 
-    STNControllers.controller('MapFiltersController', ['$scope', '$http', '$rootScope', '$cookies', '$location', 'SITE', 'Map_Filter', '$state',  'stateList', 'sensorTypes', 'networkNames', 'spinnerService',
-        function ($scope, $http, $rootScope, $cookies, $location, SITE, Map_Filter, $state, stateList, sensorTypes, networkNames, spinnerService) {
+    STNControllers.controller('MapFiltersController', ['$scope', '$http', '$rootScope', '$cookies', '$location', 'SITE', 'EVENT', 'Map_Filter', '$state',  'stateList', 'sensorTypes', 'networkNames', 'spinnerService',
+        function ($scope, $http, $rootScope, $cookies, $location, SITE, EVENT, Map_Filter, $state, stateList, sensorTypes, networkNames, spinnerService) {
             $scope.status = { siteOpen: true }; //accordion for siteInfo
 
             $scope.states = stateList;
@@ -40,7 +40,7 @@
                     RDGOnly: $scope.checkboxModel.rdgOnly,
                     OPDefined: $scope.checkboxModel.opDefined
                 };
-                SITE.getAll({
+                SITE.getFilteredSites({
                         Event: evID,
                         State: stateString,
                         SensorType: $scope.Chosen.sensor,
@@ -66,10 +66,10 @@
             //add each state to an array to be joined in the GET
             $scope.stateClick = function (data) {
                 if (data.selected === true) {
-                    $scope.chosenStates.push(data.STATE_ABBREV);
+                    $scope.chosenStates.push(data.state_abbrev);
                 }
                 if (data.selected === false) {
-                    var ind = $scope.chosenStates.indexOf(data.STATE_ABBREV);
+                    var ind = $scope.chosenStates.indexOf(data.state_abbrev);
                     if (ind >= 0) {
                         $scope.chosenStates.splice(ind, 1);
                     }
@@ -91,9 +91,7 @@
                     st.selected = false;
                 });
                 var evID = $cookies.get('SessionEventID') !== null && $cookies.get('SessionEventID') !== undefined ? $cookies.get('SessionEventID') : 0;
-                SITE.getAll({
-                        Event: evID
-                },
+                $scope.sitesPromise = EVENT.getEventSites({id: evID},//SITE.getAll({ Event: evID },
                 function success(response) {
                     //spinnerService.hide("mapSpinner");
                     Map_Filter.setFilteredSites(response);
@@ -106,8 +104,8 @@
             // $rootScope.$on('mapSiteClick', function (event, siteParts) {
             //     $scope.aSite = siteParts[0];
             //     //only 6 decimal places for lat/long
-            //     $scope.aSite.LATITUDE_DD = parseFloat($scope.aSite.LATITUDE_DD.toFixed(6));
-            //     $scope.aSite.LONGITUDE_DD = parseFloat($scope.aSite.LONGITUDE_DD.toFixed(6));
+            //     $scope.aSite.latitude_dd = parseFloat($scope.aSite.latitude_dd.toFixed(6));
+            //     $scope.aSite.longitude_dd = parseFloat($scope.aSite.longitude_dd.toFixed(6));
             // });
 
         }]);//end controller function

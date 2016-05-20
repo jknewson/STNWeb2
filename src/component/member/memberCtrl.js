@@ -36,10 +36,10 @@
 
                 switch ($scope.loggedInUser.Role) {
                     case 'Admin':
-                        $scope.roleList = allRoles.filter(function (r) { return r.ROLE_ID <= 3; });
+                        $scope.roleList = allRoles.filter(function (r) { return r.role_id <= 3; });
                         break;
                     case 'Manager':
-                        $scope.roleList = allRoles.filter(function (r) { return r.ROLE_ID == 3; });
+                        $scope.roleList = allRoles.filter(function (r) { return r.role_id == 3; });
                         break;
                 }
 //                $scope.roleList = allRoles;
@@ -50,12 +50,12 @@
                     $scope.memberList = [];
                     for (var x = 0; x < response.length; x++) {
                         var M = {};
-                        M.MEMBER_ID = response[x].MEMBER_ID;
-                        M.Name = response[x].FNAME + " " + response[x].LNAME;
-                        var ag = $scope.agencyList.filter(function (a) { return a.AGENCY_ID == response[x].AGENCY_ID; })[0];
-                        var ro = allRoles.filter(function (r) { return r.ROLE_ID == response[x].ROLE_ID; })[0];
-                        M.Agency = ag.AGENCY_NAME;
-                        M.Role = ro.ROLE_NAME;
+                        M.member_id = response[x].member_id;
+                        M.Name = response[x].fname + " " + response[x].lname;
+                        var ag = $scope.agencyList.filter(function (a) { return a.agency_id == response[x].agency_id; })[0];
+                        var ro = allRoles.filter(function (r) { return r.role_id == response[x].role_id; })[0];
+                        M.Agency = ag.agency_name;
+                        M.Role = ro.role_name;
 
                         $scope.memberList.push(M);
                     }

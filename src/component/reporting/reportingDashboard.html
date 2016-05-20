@@ -14,14 +14,14 @@
 <uib-tabset id="bypassme">
     <uib-tab heading="Today">
         <div ng-show="todayRpts != undefined || todayRpts.length > 0">
-            <ul ng-repeat="(key, value) in todayRpts | groupBy: 'EVENT_NAME'">
+            <ul ng-repeat="(key, value) in todayRpts | groupBy: 'event_name'">
                 <label>{{key}}</label>
                 <li style="margin-bottom:5px" ng-repeat="r in value">
-                    {{r.STATE}}
+                    {{r.state}}
                     <button ng-click="ViewReport(r)" style="margin-left:10px;" class="btn btn-primary">View</button>
-                    <span ng-if="r.COMPLETE == 1">
+                    <span ng-if="r.complete == 1">
                         <button ng-click="getProjectAlertText(r)" class=" btn btn-primary">Project Alert</button>
-                    </span><span ng-if="r.COMPLETE == 0">
+                    </span><span ng-if="r.complete == 0">
                         <button class=" btn btn-primary" ng-click="CompleteThisReport(r)">Complete</button>
                     </span>
                 </li>
@@ -33,14 +33,14 @@
     </uib-tab>
     <uib-tab heading="Yesterday">
         <div ng-show="yesterdayRpts != undefined || yesterdayRpts.length > 0">
-            <ul ng-repeat="(key, value) in yesterdayRpts | groupBy: 'EVENT_NAME'">
+            <ul ng-repeat="(key, value) in yesterdayRpts | groupBy: 'event_name'">
                 <label>{{key}}</label>
                 <li style="margin-bottom:5px" ng-repeat="r in value">
-                    {{r.STATE}}
+                    {{r.state}}
                     <button ng-click="ViewReport(r)" style="margin-left:10px;" class="btn btn-primary">View</button>
-                    <span ng-if="r.COMPLETE == 1">
+                    <span ng-if="r.complete == 1">
                         <button ng-click="getProjectAlertText(r)" class=" btn btn-primary">Project Alert</button>
-                    </span><span ng-if="r.COMPLETE == 0">
+                    </span><span ng-if="r.complete == 0">
                         <button class=" btn btn-primary" ng-click="CompleteThisReport(r)">Complete</button>
                     </span>
                 </li>
@@ -66,14 +66,14 @@
             <br clear="all" />
             <div style="margin-top:10px;" ng-if="pickAdateReports">
                 <div ng-show="pickDateRpts != undefined">
-                    <ul ng-repeat="(key, value) in pickDateRpts | groupBy: 'EVENT_NAME'">
+                    <ul ng-repeat="(key, value) in pickDateRpts | groupBy: 'event_name'">
                         <label>{{key}}</label>
                         <li style="margin-bottom:5px" ng-repeat="r in value">
-                            {{r.STATE}}
+                            {{r.state}}
                             <button ng-click="ViewReport(r)" style="margin-left:10px;" class="btn btn-primary">View</button>
-                            <span ng-if="r.COMPLETE == 1">
+                            <span ng-if="r.complete == 1">
                                 <button ng-click="getProjectAlertText(r)" class=" btn btn-primary">Project Alert</button>
-                            </span><span ng-if="r.COMPLETE == 0">
+                            </span><span ng-if="r.complete == 0">
                                 <button class=" btn btn-primary" ng-click="CompleteThisReport(r)">Complete</button>
                             </span>
                         </li>

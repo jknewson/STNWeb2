@@ -35,14 +35,14 @@
                         //DELETE it
                         $http.defaults.headers.common.Authorization = 'Basic ' + $cookies.get('STNCreds');
 
-                        MEMBER.deleteMember({ id: nameToRemove.MEMBER_ID }, function success(response) {
+                        MEMBER.deleteMember({ id: nameToRemove.member_id }, function success(response) {
                             var delMem = {};
-                            delMem.MEMBER_ID = nameToRemove.MEMBER_ID;
-                            delMem.Name = nameToRemove.FNAME + " " + nameToRemove.LNAME;
-                            var ag = $scope.agencyList.filter(function (a) { return a.AGENCY_ID == nameToRemove.AGENCY_ID; })[0];
-                            var ro = allRoles.filter(function (r) { return r.ROLE_ID == nameToRemove.ROLE_ID; })[0];
-                            delMem.Agency = ag.AGENCY_NAME;
-                            delMem.Role = ro.ROLE_NAME;
+                            delMem.member_id = nameToRemove.member_id;
+                            delMem.Name = nameToRemove.fname + " " + nameToRemove.lname;
+                            var ag = $scope.agencyList.filter(function (a) { return a.agency_id == nameToRemove.agency_id; })[0];
+                            var ro = allRoles.filter(function (r) { return r.role_id == nameToRemove.role_id; })[0];
+                            delMem.Agency = ag.agency_name;
+                            delMem.Role = ro.role_name;
                             $scope.memberList.splice($scope.memberList.indexOf(delMem), 1);
                             toastr.success("Member Deleted");
                         }, function error(errorResponse) {
@@ -68,7 +68,7 @@
                     $scope.matchingUsers = $stateParams.id == $scope.loggedInUser.ID ? true : false;
 
                     $scope.aMember = thisMember;
-                    $scope.aMember.Role = allRoles.filter(function (r) { return r.ROLE_ID == $scope.aMember.ROLE_ID; })[0].ROLE_NAME;
+                    $scope.aMember.Role = allRoles.filter(function (r) { return r.role_id == $scope.aMember.role_id; })[0].role_name;
                     $scope.changePass = false;
 
                     //change to the user made, put it .. fired on each blur after change made to field
@@ -77,7 +77,7 @@
                             //ensure they don't delete required field values                        
                             $http.defaults.headers.common.Authorization = 'Basic ' + $cookies.get('STNCreds');
                             $http.defaults.headers.common.Accept = 'application/json';
-                            MEMBER.update({ id: $scope.aMember.MEMBER_ID }, $scope.aMember, function success(response) {
+                            MEMBER.update({ id: $scope.aMember.member_id }, $scope.aMember, function success(response) {
                                 toastr.success("Member Updated");
                             }, function error(errorResponse) {
                                 toastr.error("Error: " + errorResponse.statusText);
@@ -117,18 +117,18 @@
                                 size: 'sm'
                             });                        
                         } else {
-                            MEMBER.changePW({ username: $scope.aMember.USERNAME, newPass: $scope.pass.newP },
+                            MEMBER.changePW({ username: $scope.aMember.username, newPass: $scope.pass.newP },
                                 function success(response) {
                                     toastr.success("Password Updated");
                                     //update creds ONLY IF user logged in is == this updating member
-                                    if ($scope.aMember.MEMBER_ID == $scope.loggedInUser.MEMBER_ID) {
-                                        var enc = btoa($scope.aMember.USERNAME.concat(":", $scope.pass.newP));
+                                    if ($scope.aMember.member_id == $scope.loggedInUser.member_id) {
+                                        var enc = btoa($scope.aMember.username.concat(":", $scope.pass.newP));
                                         $cookies.put('STNCreds', enc);
-                                        $cookies.put('STNUsername', $scope.aMember.USERNAME);
+                                        $cookies.put('STNUsername', $scope.aMember.username);
                                         $cookies.put('usersName', $scope.loggedInUser.Name);
-                                        $cookies.put('mID', $scope.aMember.MEMBER_ID);
+                                        $cookies.put('mID', $scope.aMember.member_id);
                                         var roleName;
-                                        switch ($scope.aMember.ROLE_ID) {
+                                        switch ($scope.aMember.role_id) {
                                             case 1:
                                                 roleName = "Admin";
                                                 break;
@@ -174,12 +174,12 @@
                                 toastr.success("Member Created");
                                 //push this new member into the memberList
                                 var nm = {};
-                                nm.MEMBER_ID = response.MEMBER_ID;
-                                nm.Name = response.FNAME + " " + response.LNAME;
-                                var ag = $scope.agencyList.filter(function (a) { return a.AGENCY_ID == response.AGENCY_ID; })[0];
-                                var ro = allRoles.filter(function (r) { return r.ROLE_ID == response.ROLE_ID; })[0];
-                                nm.Agency = ag.AGENCY_NAME;
-                                nm.Role = ro.ROLE_NAME;
+                                nm.member_id = response.member_id;
+                                nm.Name = response.fname + " " + response.lname;
+                                var ag = $scope.agencyList.filter(function (a) { return a.agency_id == response.agency_id; })[0];
+                                var ro = allRoles.filter(function (r) { return r.role_id == response.role_id; })[0];
+                                nm.Agency = ag.agency_name;
+                                nm.Role = ro.role_name;
                                 $scope.memberList.push(nm);
                             }).$promise.then(function () {
                                 $location.path('/Members/MembersList').replace();

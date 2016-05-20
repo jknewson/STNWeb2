@@ -19,8 +19,8 @@
                     <div isteven-multi-select
                          input-model="states"
                          output-model="Chosen.state"
-                         button-label="STATE_NAME"
-                         item-label="STATE_NAME"
+                         button-label="state_name"
+                         item-label="state_name"
                          max-height="300px"
                          on-item-click="stateClick(data)"
                          tick-property="selected"
@@ -35,8 +35,8 @@
             <div class="form-group col-md-6">
                 <label class="col-md-4 control-label">Sensor Types:</label>
                 <div class="col-md-6">
-                    <select class="form-control" id="SENSOR_TYPE_ID" name="SENSOR_TYPE_ID" ng-model="Chosen.sensor"
-                            ng-options="s.SENSOR_TYPE_ID as s.SENSOR for s in senTypes | orderBy: 'SENSOR'">
+                    <select class="form-control" id="sensor_type_id" name="sensor_type_id" ng-model="Chosen.sensor"
+                            ng-options="s.sensor_type_id as s.sensor for s in senTypes | orderBy: 'sensor'">
                         <option value=""></option>
                     </select>
                 </div>
@@ -45,8 +45,8 @@
             <div class="form-group col-md-6">
                 <label class="col-md-4 control-label">Network Names:</label>
                 <div class="col-md-6">
-                    <select class="form-control" id="NETWORK_NAME_ID" name="NETWORK_NAME_ID" ng-model="Chosen.network"
-                            ng-options="n.NETWORK_NAME_ID as n.NAME for n in netNames | orderBy: 'NAME'">
+                    <select class="form-control" id="network_name_id" name="network_name_id" ng-model="Chosen.network"
+                            ng-options="n.network_name_id as n.name for n in netNames | orderBy: 'name'">
                         <option value=""></option>
                     </select>
                 </div>

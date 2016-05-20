@@ -7,10 +7,10 @@
             </tr>
         </thead>
         <tbody>
-            <tr ng-repeat="hwmq in hwmQualList | orderBy: 'HWM_QUALITY_ID'">
+            <tr ng-repeat="hwmq in hwmQualList | orderBy: 'hwm_quality_id'">
                 <td style="white-space: nowrap">
                     <!-- form -->
-                    <form editable-form name="HWMQrowform" onaftersave="saveHwmQuality($data, hwmq.HWM_QUALITY_ID)" ng-show="HWMQrowform.$visible" class="form-buttons form-inline" shown="inserted == hwmq">
+                    <form editable-form name="HWMQrowform" onaftersave="saveHwmQuality($data, hwmq.hwm_quality_id)" ng-show="HWMQrowform.$visible" class="form-buttons form-inline" shown="inserted == hwmq">
                         <button type="submit" ng-disabled="HWMQrowform.$waiting" class="btn btn-primary">
                             save
                         </button>
@@ -24,8 +24,8 @@
                     </div>
                 </td>
                 <td>
-                    <div style="display:none"><span editable-text="hwmq.HWM_QUALITY_ID" e-form="HWMQrowform" e-name="HWM_QUALITY_ID">{{hwmq.HWM_QUALITY_ID}}</span></div>
-                    <span editable-text="hwmq.HWM_QUALITY" e-name="HWM_QUALITY" e-form="HWMQrowform">{{ hwmq.HWM_QUALITY || '' }}</span>
+                    <div style="display:none"><span editable-text="hwmq.hwm_quality_id" e-form="HWMQrowform" e-name="hwm_quality_id">{{hwmq.hwm_quality_id}}</span></div>
+                    <span editable-text="hwmq.hwm_quality" e-name="hwm_quality" e-form="HWMQrowform">{{ hwmq.hwm_quality || '' }}</span>
                 </td>
             </tr>
         </tbody>
@@ -40,9 +40,9 @@
             <fieldset>
 
                 <div class="form-group required">
-                    <label class="col-md-3 control-label req" for="STATUS">HWM Quality:</label>
+                    <label class="col-md-3 control-label req" for="hwm_quality">HWM Quality:</label>
                     <div class="col-md-6">
-                        <input class="form-control" id="HWM_QUALITY" name="HWM_QUALITY" type="text" placeholder="" ng-model="newHWMQ.HWM_QUALITY" required />
+                        <input class="form-control" id="hwm_quality" name="hwm_quality" type="text" placeholder="" ng-model="newHWMQ.hwm_quality" required />
                     </div>
                 </div>
 
@@ -66,18 +66,18 @@
 </div><!--end admin view-->
 <div ng-if="accountRole !='Admin'">
     <script>
-        var sortingOrder = 'HWM_QUALITY';
+        var sortingOrder = 'hwm_quality';
     </script>
 
     <table class="table table-striped table-condensed">
         <thead>
             <tr>
-                <th class="HWM_QUALITY">HWM Quality&nbsp;<a ng-click="sort_by('HWM_QUALITY')"><i class="glyphicon glyphicon-sort"></i></a></th>
+                <th class="hwm_quality">HWM Quality&nbsp;<a ng-click="sort_by('hwm_quality')"><i class="glyphicon glyphicon-sort"></i></a></th>
             </tr>
         </thead>
         <tbody>
             <tr ng-repeat="hwmq in hwmQualList | orderBy:sortingOrder:reverse">
-                <td>{{ hwmq.HWM_QUALITY || '' }}</td>
+                <td>{{ hwmq.hwm_quality || '' }}</td>
             </tr>
         </tbody>
     </table>

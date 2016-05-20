@@ -2,8 +2,8 @@
     'use strict';
     var STNControllers = angular.module('STNControllers');
 
-    STNControllers.controller('MapController', ['$scope', '$http', '$rootScope', '$cookies', '$location', 'SITE', 'Map_Site', 'leafletMarkerEvents', 'leafletBoundsHelpers', 'leafletData', '$state', 'spinnerService',
-        function ($scope, $http, $rootScope, $cookies, $location, SITE, Map_Site,leafletMarkerEvents, leafletBoundsHelpers, leafletData, $state, spinnerService) {
+    STNControllers.controller('MapController', ['$scope', '$http', '$rootScope', '$cookies', '$location', 'SITE', 'EVENT', 'Map_Site', 'leafletMarkerEvents', 'leafletBoundsHelpers', 'leafletData', '$state', 'spinnerService',
+        function ($scope, $http, $rootScope, $cookies, $location, SITE, EVENT, Map_Site,leafletMarkerEvents, leafletBoundsHelpers, leafletData, $state, spinnerService) {
             if ($cookies.get('STNCreds') === undefined || $cookies.get('STNCreds') === "") {
                 $scope.auth = false;
                 $location.path('/login');
@@ -90,12 +90,12 @@
                 };
                 //creates the markers on the map after getting JSON from STN web services call
                 var onSiteComplete = function(response) {
-                    console.table(response);
+           //         console.table(response);
                     //sites array fo $http.get method
                     //var sitesArray = response.data.Sites;
                     //sitesArray for SITE factory method
                     var sitesArray = response;
-                    console.table(sitesArray);
+          //          console.table(sitesArray);
                     //$http.get method
                     //$scope.sites = response.data;
                     //SITE factory method
@@ -113,13 +113,13 @@
                             var a = sitesArray[i];
                             markers.push({
                                 layer:'stnSites',
-                                lat: a.latitude,
-                                lng: a.longitude,
-                                SITE_ID: a.SITE_ID,
+                                lat: a.latitude_dd,
+                                lng: a.longitude_dd,
+                                site_id: a.site_id,
                                 title: "STN Site",
                                 icon: icons.stn
                             });
-                            $scope.markersLatLngArray.push([a.latitude, a.longitude]);
+                            $scope.markersLatLngArray.push([a.latitude_dd, a.longitude_dd]);
                         }
 
                         controls.markers.create(markers ,$scope.markers);
@@ -144,7 +144,7 @@
                     //     //     layer:'stnSites',
                     //     //     lat: a.latitude,
                     //     //     lng: a.longitude,
-                    //     //     SITE_ID: a.SITE_ID,
+                    //     //     site_id: a.site_id,
                     //     //     title: "STN Site",
                     //     //     icon: icons.stn
                     //     // });
@@ -153,7 +153,7 @@
                     //         layer:'stnSites',
                     //         lat: a.latitude,
                     //         lng: a.longitude,
-                    //         SITE_ID: a.SITE_ID,
+                    //         site_id: a.site_id,
                     //         title: "STN Site",
                     //         icon: icons.stn
                     //     };
@@ -174,7 +174,7 @@
                 //stores the last selected marker index, so its icon and label can be reset as the first thing to happen after click
                 //var selectedMarkerNum = 0;
                 $scope.selectedMarkerNum = 0;
-                ////this shows how to grab the Site ID in args.model.SITE_ID
+                ////this shows how to grab the Site ID in args.model.site_id
                 $scope.$on('leafletDirectiveMarker.click', function (event, args) {
                     
                     spinnerService.show("siteInfoSpinner");
@@ -182,7 +182,7 @@
                     $scope.markers[$scope.selectedMarkerNum].icon = icons.stn;
                     delete $scope.markers[$scope.selectedMarkerNum].label;
 
-                    var  siteID = args.model.SITE_ID;
+                    var siteID = args.model.site_id;
                     //$rootScope.stateIsLoading.showLoading = true;// loading..
                     Map_Site.setMapSiteParts(siteID);
                     //gets array number of marker element
@@ -237,9 +237,7 @@
                         // $scope.sitesPromise = $http.get('https://stntest.wim.usgs.gov/STNServices2/Events/' + evID + '/Sites.json')
                         //                     .then(onSiteComplete, onError);
                         //below gets sites using the SITE 'factory'
-                        $scope.sitesPromise = SITE.getAll({
-                                Event: evID
-                            },
+                        $scope.sitesPromise = EVENT.getEventSites({id: evID},// SITE.getAll({  Event: evID},
                         function success(response) {
                             spinnerService.hide("mapSpinner");
                             onSiteComplete(response);
@@ -264,13 +262,13 @@
                         };
                         //returns the created site object, but not that useful
                         //var createdSite = $scope.markers.filter(function (obj) {
-                        //        return obj.SITE_ID === 'newSite';
+                        //        return obj.site_id === 'newSite';
                         //})[0];
                         $scope.markers.push({
                             layer: 'newSite',
                             lat: $scope.userCreatedSite.latitude,
                             lng: $scope.userCreatedSite.longitude,
-                            SITE_ID: 'newSite',
+                            site_id: 'newSite',
                             icon: icons.newSite,
                             message: "New draggable STN site",
                             draggable: true,
@@ -289,7 +287,7 @@
                 var removeUserCreatedSite = function () {
                     //returns created site index so it can be removed to make way for its replacement
                     var createdSiteIndex = $scope.markers.map(function(obj) {
-                        return obj.SITE_ID;
+                        return obj.site_id;
                     }).indexOf('newSite');
                     //splice created site from the markers array if it exists
                     if (createdSiteIndex > -1) {

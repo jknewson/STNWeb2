@@ -13,9 +13,9 @@
                         <th>Peak Datum</th>
                     </tr>
                     <tr ng-repeat="p in sitePeaks">
-                        <td>{{p.PEAK_DATE | date: 'MM/dd/yyyy hh:mm a'}} UTC</td>
-                        <td>{{p.PEAK_STAGE}}</td>
-                        <td>{{p.DATUM_NAME}}</td>
+                        <td>{{p.peak_date | date: 'MM/dd/yyyy hh:mm a'}} UTC</td>
+                        <td>{{p.peak_stage}}</td>
+                        <td>{{p.datum_name}}</td>
                     </tr>
                 </table>
             </div>

@@ -30,18 +30,18 @@
                             $http.defaults.headers.common.Authorization = 'Basic ' + $cookies.get('STNCreds');
                             $http.defaults.headers.common.Accept = 'application/json';
                             var member = {};
-                            MEMBER.query({ id: r.MEMBER_ID }, function success(response) {
+                            MEMBER.query({ id: r.member_id }, function success(response) {
                                 member.mem = response;
-                                var memberAgency = $scope.agencies.filter(function (a) { return a.AGENCY_ID == member.mem.AGENCY_ID; })[0];
-                                member.AGENCY_NAME = memberAgency.AGENCY_NAME;
-                                member.AGENCY_ADDRESS = memberAgency.ADDRESS + ", " + memberAgency.CITY + " " + memberAgency.STATE + " " + memberAgency.ZIP;
+                                var memberAgency = $scope.agencies.filter(function (a) { return a.agency_id == member.mem.agency_id; })[0];
+                                member.agency_name = memberAgency.agency_name;
+                                member.agency_address = memberAgency.address + ", " + memberAgency.city + " " + memberAgency.state + " " + memberAgency.zip;
                             }).$promise;
                             return member;
                         },
                         contacts: function () {
                             $http.defaults.headers.common.Authorization = 'Basic ' + $cookies.get('STNCreds');
                             $http.defaults.headers.common.Accept = 'application/json';
-                            return CONTACT.getContactModel({ ContactModelByReport: r.REPORTING_METRICS_ID }).$promise;
+                            return CONTACT.getContactModel({ ContactModelByReport: r.reporting_metrics_id }).$promise;
                         }
                     }
                 });
@@ -51,26 +51,26 @@
                 //end modal
             };//end ViewReport click
 
-            //function call to add EVENT_NAME to list of reports
+            //function call to add event_name to list of reports
             var formatReport = function (repList) {
                 var returnList = [];
                 for (var i = 0; i < repList.length; i++) {
                     var rep = repList[i];
-                    var event = $scope.events.filter(function (e) { return e.EVENT_ID == rep.EVENT_ID; })[0];
-                    rep.EVENT_NAME = event.EVENT_NAME;
+                    var event = $scope.events.filter(function (e) { return e.event_id == rep.event_id; })[0];
+                    rep.event_name = event.event_name;
                     returnList.push(rep);
                 }
                 return returnList;
             };
 
             var todayReports = $scope.reportsToDate.filter(function (todayrep) {
-                var reportDate = todayrep.REPORT_DATE.toString().substring(0, 10);
+                var reportDate = todayrep.report_date.toString().substring(0, 10);
                 return reportDate == $scope.today;
             });
             $scope.todayRpts = formatReport(todayReports);
 
             var yesterdayReports = $scope.reportsToDate.filter(function (yestrep) {
-                var reportDate = yestrep.REPORT_DATE.toString().substring(0, 10);
+                var reportDate = yestrep.report_date.toString().substring(0, 10);
                 return reportDate == $scope.yesterday;
             });
             $scope.yesterdayRpts = formatReport(yesterdayReports);
@@ -82,7 +82,7 @@
                     formatDate.setHours(0, 0, 0, 0);
                     formatDate = formatDate.toISOString().substr(0, 10);
                     var thisDateReports = $scope.reportsToDate.filter(function (tdate) {
-                        var reportDate = tdate.REPORT_DATE.toString().substring(0, 10);
+                        var reportDate = tdate.report_date.toString().substring(0, 10);
                         return reportDate == formatDate;
                     });
                     $scope.pickDateRpts = formatReport(thisDateReports);
@@ -96,18 +96,18 @@
             //complete the report button clicked -- send back to submit with report populated
             $scope.CompleteThisReport = function (rep) {
                 $scope.$parent.newReport = rep;
-               // $scope.$parent.newReport.REPORT_DATE = new Date(rep.REPORT_DATE); //keeps it valid
+               // $scope.$parent.newReport.report_date = new Date(rep.report_date); //keeps it valid
                 $scope.$parent.disabled = false;
                 $scope.$parent.needToComplete = true;
                 $http.defaults.headers.common.Authorization = 'Basic ' + $cookies.get('STNCreds');
                 $http.defaults.headers.common.Accept = 'application/json';
-                CONTACT.getContactModel({ ContactModelByReport: rep.REPORTING_METRICS_ID }, function success(response) {
+                CONTACT.getContactModel({ ContactModelByReport: rep.reporting_metrics_id }, function success(response) {
                     if (response.length >= 1) {
-                        $scope.$parent.DeployStaff = response.filter(function (d) { return d.TYPE == "Deployed Staff"; })[0];
-                        $scope.$parent.GenStaff = response.filter(function (d) { return d.TYPE == "General"; })[0];
-                        $scope.$parent.InlandStaff = response.filter(function (d) { return d.TYPE == "Inland Flood"; })[0];
-                        $scope.$parent.CoastStaff = response.filter(function (d) { return d.TYPE == "Coastal Flood"; })[0];
-                        $scope.$parent.WaterStaff = response.filter(function (d) { return d.TYPE == "Water Quality"; })[0];
+                        $scope.$parent.DeployStaff = response.filter(function (d) { return d.type == "Deployed Staff"; })[0];
+                        $scope.$parent.GenStaff = response.filter(function (d) { return d.type == "General"; })[0];
+                        $scope.$parent.InlandStaff = response.filter(function (d) { return d.type == "Inland Flood"; })[0];
+                        $scope.$parent.CoastStaff = response.filter(function (d) { return d.type == "Coastal Flood"; })[0];
+                        $scope.$parent.WaterStaff = response.filter(function (d) { return d.type == "Water Quality"; })[0];
                     } else {
                         $scope.$parent.DeployStaff = {}; $scope.$parent.GenStaff = {}; $scope.$parent.InlandStaff = {}; $scope.$parent.CoastStaff = {}; $scope.$parent.WaterStaff = {};
                     }
@@ -124,24 +124,24 @@
                 $scope.ProjectAlertParts = {};
                 $scope.ProjectAlertParts.Report = rep;
                 //2. total of YEST FIELDPERS
-                $scope.ProjectAlertParts.totYestFieldPers = rep.SW_YEST_FIELDPERS + rep.WQ_YEST_FIELDPERS;
+                $scope.ProjectAlertParts.totYestFieldPers = rep.sw_yest_fieldpers + rep.wq_yest_fieldpers;
                 //3. total of OFFICEPERS
-                $scope.ProjectAlertParts.totYestOfficPers = rep.SW_YEST_OFFICEPERS + rep.WQ_YEST_OFFICEPERS;
-                //4. total TOT_CHECK_MEAS+TOT_DISCHARGE_MEAS
-                $scope.ProjectAlertParts.measureCts = rep.TOT_CHECK_MEAS + rep.TOT_DISCHARGE_MEAS;
+                $scope.ProjectAlertParts.totYestOfficPers = rep.sw_yest_officepers + rep.wq_yest_officepers;
+                //4. total tot_check_meas+tot_discharge_meas
+                $scope.ProjectAlertParts.measureCts = rep.tot_check_meas + rep.tot_discharge_meas;
                 //5. total states responding (all reports with this event_id, count of each state)
-                var eventReports = $scope.reportsToDate.filter(function (r) { return r.EVENT_ID == rep.EVENT_ID; });
-                var test = $filter('countBy')(eventReports, 'STATE');
+                var eventReports = $scope.reportsToDate.filter(function (r) { return r.event_id == rep.event_id; });
+                var test = $filter('countBy')(eventReports, 'state');
                 $scope.ProjectAlertParts.stateCount = 0;
                 angular.forEach(test, function (er) {
                     $scope.ProjectAlertParts.stateCount++;
                 });
                 //6. this event
-                $scope.ProjectAlertParts.Event = $scope.events.filter(function (e) { return e.EVENT_ID == rep.EVENT_ID; })[0];
+                $scope.ProjectAlertParts.Event = $scope.events.filter(function (e) { return e.event_id == rep.event_id; })[0];
 
                 //modal
                 var modalInstance = $uibModal.open({
-                    templateUrl: $scope.ProjectAlertParts.Event.EVENT_TYPE_ID == 1 ? 'FloodPA.html' : 'HurricanePA.html',
+                    templateUrl: $scope.ProjectAlertParts.Event.event_type_id == 1 ? 'FloodPA.html' : 'HurricanePA.html',
                     controller: 'ProjAlertModalCtrl',
                     size: 'md',
                     windowClass: 'rep-dialog',

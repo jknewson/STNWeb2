@@ -6,15 +6,15 @@
             <div class="row">
                 <div class="col-md-12">
                     <label class="col-md-12">Date being reported:</label>
-                    <div class="col-md-6" style="padding-left:15px;padding-right:15px;"><span>{{REPORT_DATE}}</span></div>
+                    <div class="col-md-6" style="padding-left:15px;padding-right:15px;"><span>{{report_date}}</span></div>
                 </div>
                 <div class="col-md-12">
                     <label class="col-md-12">Event:</label>
-                    <div class="col-md-6"><span>{{EVENT_NAME}}</span></div>
+                    <div class="col-md-6"><span>{{event_name}}</span></div>
                 </div>
                 <div class="col-md-12">
                     <label class="col-md-12">State:</label>
-                    <div class="col-md-6"><span>{{STATE}}</span></div>
+                    <div class="col-md-6"><span>{{state}}</span></div>
                 </div>
             </div>
             <br />
@@ -34,8 +34,8 @@
                 <td colspan="2">
                     <span class="required">Employees not accounted for</span>
                 </td>
-                <td>{{SW_FIELDPERS_NOTACCT}}</td>
-                <td>{{WQ_FIELDPERS_NOTACCT}}</td>
+                <td>{{sw_fieldpers_notacct}}</td>
+                <td>{{wq_fieldpers_notacct}}</td>
             </tr>
             <tr>
                 <td rowspan="3">
@@ -44,22 +44,22 @@
                 <td>
                     <span class="required">Yesterday</span>
                 </td>
-                <td>{{SW_YEST_FIELDPERS}}</td>
-                <td>{{WQ_YEST_FIELDPERS}}</td>
+                <td>{{sw_yest_fieldpers}}</td>
+                <td>{{wq_yest_fieldpers}}</td>
             </tr>
             <tr>
                 <td>
                     <span class="required">Today</span>
                 </td>
-                <td>{{SW_TOD_FIELDPERS}}</td>
-                <td>{{WQ_TOD_FIELDPERS}}</td>
+                <td>{{sw_tod_fieldpers}}</td>
+                <td>{{wq_tod_fieldpers}}</td>
             </tr>
             <tr>
                 <td>
                     <span class="required">Tomorrow</span>
                 </td>
-                <td>{{SW_TMW_FIELDPERS}}</td>
-                <td>{{WQ_TMW_FIELDPERS}}</td>
+                <td>{{sw_tmw_fieldpers}}</td>
+                <td>{{wq_tmw_fieldpers}}</td>
             </tr>
             <tr>
                 <td rowspan="3">
@@ -68,22 +68,22 @@
                 <td>
                     <span class="required">Yesterday</span>
                 </td>
-                <td>{{SW_YEST_OFFICEPERS}}</td>
-                <td>{{WQ_YEST_OFFICEPERS}}</td>
+                <td>{{sw_yest_officepers}}</td>
+                <td>{{wq_yest_officepers}}</td>
             </tr>
             <tr>
                 <td>
                     <span class="required">Today</span>
                 </td>
-                <td>{{SW_TOD_OFFICEPERS}}</td>
-                <td>{{WQ_TOD_OFFICEPERS}}</td>
+                <td>{{sw_tod_officepers}}</td>
+                <td>{{wq_tod_officepers}}</td>
             </tr>
             <tr>
                 <td>
                     <span class="required">Tomorrow</span>
                 </td>
-                <td>{{SW_TMW_OFFICEPERS}}</td>
-                <td>{{WQ_TMW_OFFICEPERS}}</td>
+                <td>{{sw_tmw_officepers}}</td>
+                <td>{{wq_tmw_officepers}}</td>
             </tr>
             <tr>
                 <td rowspan="3">
@@ -92,22 +92,22 @@
                 <td>
                     <span class="required">Trucks & Cars</span>
                 </td>
-                <td>{{SW_AUTOS_DEPL}}</td>
-                <td>{{WQ_AUTOS_DEPL}}</td>
+                <td>{{sw_autos_depl}}</td>
+                <td>{{wq_autos_depl}}</td>
             </tr>
             <tr>
                 <td>
                     <span class="required">Boats</span>
                 </td>
-                <td>{{SW_BOATS_DEPL}}</td>
-                <td>{{WQ_BOATS_DEPL}}</td>
+                <td>{{sw_boats_depl}}</td>
+                <td>{{wq_boats_depl}}</td>
             </tr>
             <tr>
                 <td>
                     <span class="required">Other</span>
                 </td>
-                <td>{{SW_OTHER_DEPL}}</td>
-                <td>{{WQ_OTHER_DEPL}}</td>
+                <td>{{sw_other_depl}}</td>
+                <td>{{wq_other_depl}}</td>
             </tr>
         </table>
     </uib-accordion-group>
@@ -118,13 +118,13 @@
                 <td colspan="2" class="col-md-5">
                     <span class="required">Gage visits (cumulative)</span>
                 </td>
-                <td colspan="2" class="col-md-3">{{PLAN_DISCHARGE_MEAS}}</td>
+                <td colspan="2" class="col-md-3">{{gage_visit}}</td>
             </tr>
             <tr>
                 <td colspan="2">
                     <span class="required">Gages down at present</span>
                 </td>
-                <td colspan="2">{{PLAN_DISCHARGE_MEAS}}</td>
+                <td colspan="2">{{gage_down}}</td>
             </tr>
             <tr>
                 <td rowspan="2">
@@ -133,13 +133,13 @@
                 <td>
                     <span class="required">To date</span>
                 </td>
-                <td colspan="2">{{PLAN_DISCHARGE_MEAS}}</td>
+                <td colspan="2">{{tot_discharge_meas}}</td>
             </tr>
             <tr>
                 <td>
                     <span class="required">Planned</span>
                 </td>
-                <td colspan="2">{{PLAN_DISCHARGE_MEAS}}</td>
+                <td colspan="2">{{plan_discharge_meas}}</td>
             </tr>
             <tr>
                 <td rowspan="2">
@@ -149,9 +149,9 @@
                     <span class="required">To Date</span>
                 </td>
                 <td colspan="2">
-                    {{TOT_CHECK_MEAS}}
-                    <input class="form-control" id="chkMeasToDate" name="newReport.TOT_CHECK_MEAS"
-                           ng-model="newReport.TOT_CHECK_MEAS" type="text" numeric-only required />
+                    {{tot_check_meas}}
+                    <input class="form-control" id="chkMeasToDate" name="newReport.tot_check_meas"
+                           ng-model="newReport.tot_check_meas" type="text" numeric-only required />
                 </td>
             </tr>
             <tr>
@@ -159,9 +159,9 @@
                     <span class="required">Planned</span>
                 </td>
                 <td colspan="2">
-                    {{PLAN_CHECK_MEAS}}
-                    <input class="form-control" id="chkMeasPlanned" name="newReport.PLAN_CHECK_MEAS"
-                           ng-model="newReport.PLAN_CHECK_MEAS" type="text" numeric-only required />
+                    {{plan_check_meas}}
+                    <input class="form-control" id="chkMeasPlanned" name="newReport.plan_check_meas"
+                           ng-model="newReport.plan_check_meas" type="text" numeric-only required />
                 </td>
             </tr>
             <tr>
@@ -169,9 +169,9 @@
                     <span class="required">Indirect measurements planned</span>
                 </td>
                 <td colspan="2">
-                    {{PLAN_INDIRECT_MEAS}}
-                    <input class="form-control" id="indMeasPlan" name="newReport.PLAN_INDIRECT_MEAS"
-                           ng-model="newReport.PLAN_INDIRECT_MEAS" type="text" numeric-only required />
+                    {{plan_indirect_meas}}
+                    <input class="form-control" id="indMeasPlan" name="newReport.plan_indirect_meas"
+                           ng-model="newReport.plan_indirect_meas" type="text" numeric-only required />
                 </td>
             </tr>
             <tr>
@@ -179,9 +179,9 @@
                     <span class="required">Rating extensions</span>
                 </td>
                 <td colspan="2">
-                    {{}}
-                    <input class="form-control" id="rateExt" name="newReport.RATING_EXTENS"
-                           ng-model="newReport.RATING_EXTENS" type="text" numeric-only required />
+                    {{rating_extens}}
+                    <input class="form-control" id="rateExt" name="newReport.rating_extens"
+                           ng-model="newReport.rating_extens" type="text" numeric-only required />
                 </td>
             </tr>
             <tr>
@@ -189,9 +189,9 @@
                     <span class="required">Peaks of record on gages to date<br /> ( &#62; 20 years of record)</span>
                 </td>
                 <td colspan="2">
-                    {{}}
-                    <input class="form-control" id="peaks" name="newReport.GAGE_PEAK_RECORD"
-                           ng-model="newReport.GAGE_PEAK_RECORD" type="text" numeric-only required />
+                    {{gage_peak_record}}
+                    <input class="form-control" id="peaks" name="newReport.gage_peak_record"
+                           ng-model="newReport.gage_peak_record" type="text" numeric-only required />
                 </td>
             </tr>
             <tr>
@@ -202,8 +202,8 @@
                     <span class="required">Planned</span>
                 </td>
                 <td colspan="2">
-                    <input class="form-control" id="rdgPlanned" name="newReport.PLAN_RAPDEPL_GAGE"
-                           ng-model="newReport.PLAN_RAPDEPL_GAGE" type="text" numeric-only required />
+                    <input class="form-control" id="rdgPlanned" name="newReport.plan_rapdepl_gage"
+                           ng-model="newReport.plan_rapdepl_gage" type="text" numeric-only required />
                 </td>
             </tr>
             <tr>
@@ -211,8 +211,8 @@
                     <span>Deployed</span>
                 </td>
                 <td colspan="2">
-                    <input class="form-control" id="rdgDeployed" name="newReport.DEP_RAPDEPL_GAGE" readonly="readonly"
-                           ng-model="newReport.DEP_RAPDEPL_GAGE" type="text" numeric-only required />
+                    <input class="form-control" id="rdgDeployed" name="newReport.dep_rapdepl_gage" readonly="readonly"
+                           ng-model="newReport.dep_rapdepl_gage" type="text" numeric-only required />
                 </td>
             </tr>
             <tr>
@@ -220,8 +220,8 @@
                     <span>Recovered</span>
                 </td>
                 <td colspan="2">
-                    <input class="form-control" id="rdgRecovered" name="newReport.REC_RAPDEPL_GAGE" readonly="readonly"
-                           ng-model="newReport.REC_RAPDEPL_GAGE" type="text" numeric-only required />
+                    <input class="form-control" id="rdgRecovered" name="newReport.rec_rapdepl_gage" readonly="readonly"
+                           ng-model="newReport.rec_rapdepl_gage" type="text" numeric-only required />
                 </td>
             </tr>
             <tr>
@@ -229,8 +229,8 @@
                     <span>Lost</span>
                 </td>
                 <td colspan="2">
-                    <input class="form-control" id="rdgLost" name="newReport.LOST_RAPDEPL_GAGE" readonly="readonly"
-                           ng-model="newReport.LOST_RAPDEPL_GAGE" type="text" numeric-only required />
+                    <input class="form-control" id="rdgLost" name="newReport.lost_rapdepl_gage" readonly="readonly"
+                           ng-model="newReport.lost_rapdepl_gage" type="text" numeric-only required />
                 </td>
             </tr>
             <tr>
@@ -241,8 +241,8 @@
                     <span class="required">Planned</span>
                 </td>
                 <td colspan="2">
-                    <input class="form-control" id="wlsPlanned" name="newReport.PLAN_WTRLEV_SENSOR"
-                           ng-model="newReport.PLAN_WTRLEV_SENSOR" type="text" numeric-only required />
+                    <input class="form-control" id="wlsPlanned" name="newReport.plan_wtrlev_sensor"
+                           ng-model="newReport.plan_wtrlev_sensor" type="text" numeric-only required />
                 </td>
             </tr>
             <tr>
@@ -250,8 +250,8 @@
                     <span>Deployed</span>
                 </td>
                 <td colspan="2">
-                    <input class="form-control" id="wlsDeployed" name="newReport.DEP_WTRLEV_SENSOR" readonly="readonly"
-                           ng-model="newReport.DEP_WTRLEV_SENSOR" type="text" numeric-only required />
+                    <input class="form-control" id="wlsDeployed" name="newReport.dep_wtrlev_sensor" readonly="readonly"
+                           ng-model="newReport.dep_wtrlev_sensor" type="text" numeric-only required />
                 </td>
             </tr>
             <tr>
@@ -259,8 +259,8 @@
                     <span>Recovered</span>
                 </td>
                 <td colspan="2">
-                    <input class="form-control" id="wlsRecovered" name="newReport.REC_WTRLEV_SENSOR" readonly="readonly"
-                           ng-model="newReport.REC_WTRLEV_SENSOR" type="text" numeric-only required />
+                    <input class="form-control" id="wlsRecovered" name="newReport.rec_wtrlev_sensor" readonly="readonly"
+                           ng-model="newReport.rec_wtrlev_sensor" type="text" numeric-only required />
                 </td>
             </tr>
             <tr>
@@ -268,8 +268,8 @@
                     <span>Lost</span>
                 </td>
                 <td colspan="2">
-                    <input class="form-control" id="wlsLost" name="newReport.LOST_WTRLEV_SENSOR" readonly="readonly"
-                           ng-model="newReport.LOST_WTRLEV_SENSOR" type="text" numeric-only required />
+                    <input class="form-control" id="wlsLost" name="newReport.lost_wtrlev_sensor" readonly="readonly"
+                           ng-model="newReport.lost_wtrlev_sensor" type="text" numeric-only required />
                 </td>
             </tr>
             <tr>
@@ -280,8 +280,8 @@
                     <span class="required">Planned</span>
                 </td>
                 <td colspan="2">
-                    <input class="form-control" id="wsPlanned" name="newReport.PLAN_WV_SENS"
-                           ng-model="newReport.PLAN_WV_SENS" type="text" numeric-only required />
+                    <input class="form-control" id="wsPlanned" name="newReport.plan_wv_sens"
+                           ng-model="newReport.plan_wv_sens" type="text" numeric-only required />
                 </td>
             </tr>
             <tr>
@@ -289,8 +289,8 @@
                     <span>Deployed</span>
                 </td>
                 <td colspan="2">
-                    <input class="form-control" id="wsDeployed" name="newReport.DEP_WV_SENS" readonly="readonly"
-                           ng-model="newReport.DEP_WV_SENS" type="text" numeric-only required />
+                    <input class="form-control" id="wsDeployed" name="newReport.dep_wv_sens" readonly="readonly"
+                           ng-model="newReport.dep_wv_sens" type="text" numeric-only required />
                 </td>
             </tr>
             <tr>
@@ -298,8 +298,8 @@
                     <span>Recovered</span>
                 </td>
                 <td colspan="2">
-                    <input class="form-control" id="wsRecovered" name="newReport.REC_WV_SENS" readonly="readonly"
-                           ng-model="newReport.REC_WV_SENS" type="text" numeric-only required />
+                    <input class="form-control" id="wsRecovered" name="newReport.rec_wv_sens" readonly="readonly"
+                           ng-model="newReport.rec_wv_sens" type="text" numeric-only required />
                 </td>
             </tr>
             <tr>
@@ -307,8 +307,8 @@
                     <span>Lost</span>
                 </td>
                 <td colspan="2">
-                    <input class="form-control" id="wsLost" name="newReport.LOST_WV_SENS" readonly="readonly"
-                           ng-model="newReport.LOST_WV_SENS" type="text" numeric-only required />
+                    <input class="form-control" id="wsLost" name="newReport.lost_wv_sens" readonly="readonly"
+                           ng-model="newReport.lost_wv_sens" type="text" numeric-only required />
                 </td>
             </tr>
             <tr>
@@ -319,8 +319,8 @@
                     <span class="required">Planned</span>
                 </td>
                 <td colspan="2">
-                    <input class="form-control" id="barPlanned" name="newReport.PLAN_BAROMETRIC"
-                           ng-model="newReport.PLAN_BAROMETRIC" type="text" numeric-only required />
+                    <input class="form-control" id="barPlanned" name="newReport.plan_barometric"
+                           ng-model="newReport.plan_barometric" type="text" numeric-only required />
                 </td>
             </tr>
             <tr>
@@ -328,8 +328,8 @@
                     <span>Deployed</span>
                 </td>
                 <td colspan="2">
-                    <input class="form-control" id="barDeployed" name="newReport.DEP_BAROMETRIC" readonly="readonly"
-                           ng-model="newReport.DEP_BAROMETRIC" type="text" numeric-only required />
+                    <input class="form-control" id="barDeployed" name="newReport.dep_barometric" readonly="readonly"
+                           ng-model="newReport.dep_barometric" type="text" numeric-only required />
                 </td>
             </tr>
             <tr>
@@ -337,8 +337,8 @@
                     <span>Recovered</span>
                 </td>
                 <td colspan="2">
-                    <input class="form-control" id="barRecovered" name="newReport.REC_BAROMETRIC" readonly="readonly"
-                           ng-model="newReport.REC_BAROMETRIC" type="text" numeric-only required />
+                    <input class="form-control" id="barRecovered" name="newReport.rec_barometric" readonly="readonly"
+                           ng-model="newReport.rec_barometric" type="text" numeric-only required />
                 </td>
             </tr>
             <tr>
@@ -346,8 +346,8 @@
                     <span>Lost</span>
                 </td>
                 <td colspan="2">
-                    <input class="form-control" id="barLost" name="newReport.LOST_BAROMETRIC" readonly="readonly"
-                           ng-model="newReport.LOST_BAROMETRIC" type="text" numeric-only required />
+                    <input class="form-control" id="barLost" name="newReport.lost_barometric" readonly="readonly"
+                           ng-model="newReport.lost_barometric" type="text" numeric-only required />
                 </td>
             </tr>
             <tr>
@@ -358,8 +358,8 @@
                     <span class="required">Planned</span>
                 </td>
                 <td colspan="2">
-                    <input class="form-control" id="msPlanned" name="newReport.PLAN_METEOROLOGICAL"
-                           ng-model="newReport.PLAN_METEOROLOGICAL" type="text" numeric-only required />
+                    <input class="form-control" id="msPlanned" name="newReport.plan_meteorological"
+                           ng-model="newReport.plan_meteorological" type="text" numeric-only required />
                 </td>
             </tr>
             <tr>
@@ -367,8 +367,8 @@
                     <span>Deployed</span>
                 </td>
                 <td colspan="2">
-                    <input class="form-control" id="msDeployed" name="newReport.DEP_METEOROLOGICAL" readonly="readonly"
-                           ng-model="newReport.DEP_METEOROLOGICAL" type="text" numeric-only required />
+                    <input class="form-control" id="msDeployed" name="newReport.dep_meteorological" readonly="readonly"
+                           ng-model="newReport.dep_meteorological" type="text" numeric-only required />
                 </td>
             </tr>
             <tr>
@@ -376,8 +376,8 @@
                     <span>Recovered</span>
                 </td>
                 <td colspan="2">
-                    <input class="form-control" id="msRecovered" name="newReport.REC_METEOROLOGICAL" readonly="readonly"
-                           ng-model="newReport.REC_METEOROLOGICAL" type="text" numeric-only required />
+                    <input class="form-control" id="msRecovered" name="newReport.rec_meteorological" readonly="readonly"
+                           ng-model="newReport.rec_meteorological" type="text" numeric-only required />
                 </td>
             </tr>
             <tr>
@@ -385,8 +385,8 @@
                     <span>Lost</span>
                 </td>
                 <td colspan="2">
-                    <input class="form-control" id="msLost" name="newReport.LOST_METEOROLOGICAL" readonly="readonly"
-                           ng-model="newReport.LOST_METEOROLOGICAL" type="text" numeric-only required />
+                    <input class="form-control" id="msLost" name="newReport.lost_meteorological" readonly="readonly"
+                           ng-model="newReport.lost_meteorological" type="text" numeric-only required />
                 </td>
             </tr>
             <tr>
@@ -397,8 +397,8 @@
                     <span>Flagged</span>
                 </td>
                 <td colspan="2">
-                    <input class="form-control" id="hwmFlagged" name="newReport.HWM_FLAGGED" readonly="readonly"
-                           ng-model="newReport.HWM_FLAGGED" type="text" numeric-only required />
+                    <input class="form-control" id="hwmFlagged" name="newReport.hwm_flagged" readonly="readonly"
+                           ng-model="newReport.hwm_flagged" type="text" numeric-only required />
                 </td>
             </tr>
             <tr>
@@ -406,8 +406,8 @@
                     <span>Collected</span>
                 </td>
                 <td colspan="2">
-                    <input class="form-control" id="hwmCollected" name="newReport.HWM_COLLECTED" readonly="readonly"
-                           ng-model="newReport.HWM_COLLECTED" type="text" numeric-only required />
+                    <input class="form-control" id="hwmCollected" name="newReport.hwm_collected" readonly="readonly"
+                           ng-model="newReport.hwm_collected" type="text" numeric-only required />
                 </td>
             </tr>
             <tr>
@@ -415,8 +415,8 @@
                     <span class="required">QW Gage visits (cumulative)</span>
                 </td>
                 <td colspan="2">
-                    <input class="form-control" id="qwGageVisit" name="newReport.QW_GAGE_VISIT"
-                           ng-model="newReport.QW_GAGE_VISIT" type="text" numeric-only required />
+                    <input class="form-control" id="qwGageVisit" name="newReport.qw_gage_visit"
+                           ng-model="newReport.qw_gage_visit" type="text" numeric-only required />
                 </td>
             </tr>
             <tr>
@@ -424,8 +424,8 @@
                     <span class="required">Continuous QW Gages visited</span>
                 </td>
                 <td colspan="2">
-                    <input class="form-control" id="contQwGageVisit" name="newReport.QW_CONT_GAGEVISIT"
-                           ng-model="newReport.QW_CONT_GAGEVISIT" type="text" numeric-only required />
+                    <input class="form-control" id="contQwGageVisit" name="newReport.qw_cont_gagevisit"
+                           ng-model="newReport.qw_cont_gagevisit" type="text" numeric-only required />
                 </td>
             </tr>
             <tr>
@@ -433,8 +433,8 @@
                     <span class="required">Continuous QW Gages down</span>
                 </td>
                 <td colspan="2">
-                    <input class="form-control" id="qwGagesDown" name="newReport.QW_GAGE_DOWN"
-                           ng-model="newReport.QW_GAGE_DOWN" type="text" numeric-only required />
+                    <input class="form-control" id="qwGagesDown" name="newReport.qw_gage_down"
+                           ng-model="newReport.qw_gage_down" type="text" numeric-only required />
                 </td>
             </tr>
             <tr>
@@ -442,8 +442,8 @@
                     <span class="required">Discrete QW samples collected</span>
                 </td>
                 <td colspan="2">
-                    <input class="form-control" id="qwSamplesCol" name="newReport.QW_DISCR_SAMPLES"
-                           ng-model="newReport.QW_DISCR_SAMPLES" type="text" numeric-only required />
+                    <input class="form-control" id="qwSamplesCol" name="newReport.qw_discr_samples"
+                           ng-model="newReport.qw_discr_samples" type="text" numeric-only required />
                 </td>
             </tr>
             <tr>
@@ -451,8 +451,8 @@
                     <span class="required">Sediment samples collected</span>
                 </td>
                 <td colspan="2">
-                    <input class="form-control" id="sedSamplesCol" name="newReport.COLL_SEDSAMPLES"
-                           ng-model="newReport.COLL_SEDSAMPLES" type="text" numeric-only required />
+                    <input class="form-control" id="sedSamplesCol" name="newReport.coll_sedsamples"
+                           ng-model="newReport.coll_sedsamples" type="text" numeric-only required />
                 </td>
             </tr>
         </table>
@@ -460,17 +460,17 @@
     <!--Section 4: Notes-->
     <uib-accordion-group heading="Section 4: Notes">
         <div>Notes detailing the day's field activities (optional)</div>
-        <textarea class="form-control" id="NOTES" type="text" rows="5" cols="90" ng-model="newReport.NOTES" />
+        <textarea class="form-control" id="notes" type="text" rows="5" cols="90" ng-model="newReport.notes" />
         <div>*Limit 2000 characters</div>
     </uib-accordion-group>
     <!-- Section 5: Contacts -->
     <uib-accordion-group heading="Section 5: Contact Information">
         <div><b>Submitter</b></div>
-        <div><span class="col-md-3">Name:</span><span>{{MemberLoggedIn.FNAME}} {{MemberLoggedIn.LNAME}}</span></div>
-        <div><span class="col-md-3">Phone</span><span>{{MemberLoggedIn.PHONE}}</span></div>
-        <div><span class="col-md-3">Email</span><span>{{MemberLoggedIn.EMAIL}}</span></div>
-        <div><span class="col-md-3">Office Name</span><span>{{MemberLoggedIn.AGENCY_NAME}}</span></div>
-        <div><span class="col-md-3">Office Address</span><span>{{MemberLoggedIn.AGENCY_ADDRESS}}</span></div>
+        <div><span class="col-md-3">Name:</span><span>{{MemberLoggedIn.fname}} {{MemberLoggedIn.lname}}</span></div>
+        <div><span class="col-md-3">Phone</span><span>{{MemberLoggedIn.phone}}</span></div>
+        <div><span class="col-md-3">Email</span><span>{{MemberLoggedIn.email}}</span></div>
+        <div><span class="col-md-3">Office Name</span><span>{{MemberLoggedIn.agency_name}}</span></div>
+        <div><span class="col-md-3">Office Address</span><span>{{MemberLoggedIn.agency_address}}</span></div>
 
         <h3>Event Contacts</h3>
 
@@ -478,39 +478,39 @@
         <div><b>Deployed Staff (required)</b></div>
         <div class="col-sm-12" style="margin-bottom:15px;">
             <div class="col-md-3 form-group required">
-                <span class="col-md-12 control-label req" for="FNAME">First Name:</span>
+                <span class="col-md-12 control-label req" for="fname">First Name:</span>
                 <div class="col-md-12">
-                    <input class="form-control" id="D_FNAME" name="FNAME" type="text" ng-model="DeployStaff.FNAME" required />
+                    <input class="form-control" id="D_fname" name="fname" type="text" ng-model="DeployStaff.fname" required />
                 </div>
             </div>
 
             <div class="col-md-3 form-group required">
-                <span class="col-md-12 control-label req" for="LNAME">Last Name:</span>
+                <span class="col-md-12 control-label req" for="lname">Last Name:</span>
                 <div class="col-md-12">
-                    <input class="form-control" id="D_LNAME" name="LNAME" type="text" ng-model="DeployStaff.LNAME" required />
+                    <input class="form-control" id="D_lname" name="lname" type="text" ng-model="DeployStaff.lname" required />
                 </div>
             </div>
 
             <div class="col-md-4 form-group required">
-                <span class="col-md-12 control-label req" for="EMAIL">Email:</span>
+                <span class="col-md-12 control-label req" for="email">Email:</span>
                 <div class="col-md-12">
-                    <input class="form-control" id="D_EMAIL" name="EMAIL" type="email" ng-model="DeployStaff.EMAIL" required />
+                    <input class="form-control" id="D_email" name="email" type="email" ng-model="DeployStaff.email" required />
                 </div>
             </div>
 
             <div class="col-md-3 form-group required">
-                <span class="col-md-12 control-label req" for="PHONE">Phone:</span>
+                <span class="col-md-12 control-label req" for="phone">Phone:</span>
                 <div class="col-md-12">
-                    <input class="form-control" id="D_PHONE" name="PHONE"
-                           type="text" my-input-mask="{mask: '(999) 999-9999[ x99999]', greedy:false}" ng-model="DeployStaff.PHONE" required />
+                    <input class="form-control" id="D_phone" name="phone"
+                           type="text" my-input-mask="{mask: '(999) 999-9999[ x99999]', greedy:false}" ng-model="DeployStaff.phone" required />
                 </div>
             </div>
 
             <div class="col-md-3 form-group">
-                <span class="col-md-12 control-label" for="ALTERNATE_PHONE">Alternate Phone:</span>
+                <span class="col-md-12 control-label" for="alternate_phone">Alternate Phone:</span>
                 <div class="col-md-12">
-                    <input class="form-control" id="D_ALTERNATE_PHONE" name="ALTERNATE_PHONE"
-                           type="text" my-input-mask="{mask: '(999) 999-9999[ x99999]', greedy:false}" ng-model="DeployStaff.ALTERNATE_PHONE" />
+                    <input class="form-control" id="D_alternate_phone" name="alternate_phone"
+                           type="text" my-input-mask="{mask: '(999) 999-9999[ x99999]', greedy:false}" ng-model="DeployStaff.alternate_phone" />
                 </div>
             </div>
         </div>
@@ -519,39 +519,39 @@
         <div><b>General (optional)</b></div>
         <div class="col-sm-12" style="margin-bottom:15px;">
             <div class="col-md-3 form-group">
-                <span class="col-md-12 control-label" for="FNAME">First Name:</span>
+                <span class="col-md-12 control-label" for="fname">First Name:</span>
                 <div class="col-md-12">
-                    <input class="form-control" id="G_FNAME" name="FNAME" type="text" ng-model="GenStaff.FNAME" />
+                    <input class="form-control" id="G_fname" name="fname" type="text" ng-model="GenStaff.fname" />
                 </div>
             </div>
 
             <div class="col-md-3 form-group">
-                <span class="col-md-12 control-label" for="LNAME">Last Name:</span>
+                <span class="col-md-12 control-label" for="lname">Last Name:</span>
                 <div class="col-md-12">
-                    <input class="form-control" id="G_LNAME" name="LNAME" type="text" ng-model="GenStaff.LNAME" />
+                    <input class="form-control" id="G_lname" name="lname" type="text" ng-model="GenStaff.lname" />
                 </div>
             </div>
 
             <div class="col-md-4 form-group">
-                <span class="col-md-12 control-label" for="EMAIL">Email:</span>
+                <span class="col-md-12 control-label" for="email">Email:</span>
                 <div class="col-md-12">
-                    <input class="form-control" id="G_EMAIL" name="EMAIL" type="email" ng-model="GenStaff.EMAIL" />
+                    <input class="form-control" id="G_email" name="email" type="email" ng-model="GenStaff.email" />
                 </div>
             </div>
 
             <div class="col-md-3 form-group">
-                <span class="col-md-12 control-label" for="PHONE">Phone:</span>
+                <span class="col-md-12 control-label" for="phone">Phone:</span>
                 <div class="col-md-12">
-                    <input class="form-control" id="G_PHONE" name="PHONE"
-                           type="text" my-input-mask="{mask: '(999) 999-9999[ x99999]', greedy:false}" ng-model="GenStaff.PHONE" />
+                    <input class="form-control" id="G_phone" name="phone"
+                           type="text" my-input-mask="{mask: '(999) 999-9999[ x99999]', greedy:false}" ng-model="GenStaff.phone" />
                 </div>
             </div>
 
             <div class="col-md-3 form-group">
-                <span class="col-md-12 control-label" for="ALTERNATE_PHONE">Alternate Phone:</span>
+                <span class="col-md-12 control-label" for="alternate_phone">Alternate Phone:</span>
                 <div class="col-md-12">
-                    <input class="form-control" id="G_ALTERNATE_PHONE" name="ALTERNATE_PHONE"
-                           type="text" my-input-mask="{mask: '(999) 999-9999[ x99999]', greedy:false}" ng-model="GenStaff.ALTERNATE_PHONE" />
+                    <input class="form-control" id="G_alternate_phone" name="alternate_phone"
+                           type="text" my-input-mask="{mask: '(999) 999-9999[ x99999]', greedy:false}" ng-model="GenStaff.alternate_phone" />
                 </div>
             </div>
         </div>
@@ -560,39 +560,39 @@
         <div><b>Inland Flood (optional)</b></div>
         <div class="col-sm-12" style="margin-bottom:15px;">
             <div class="col-md-3 form-group">
-                <span class="col-md-12 control-label" for="FNAME">First Name:</span>
+                <span class="col-md-12 control-label" for="fname">First Name:</span>
                 <div class="col-md-12">
-                    <input class=" form-control" id="I_FNAME" name="FNAME" type="text" ng-model="InlandStaff.FNAME" />
+                    <input class=" form-control" id="I_fname" name="fname" type="text" ng-model="InlandStaff.fname" />
                 </div>
             </div>
 
             <div class="col-md-3 form-group">
-                <span class="col-md-12 control-label" for="LNAME">Last Name:</span>
+                <span class="col-md-12 control-label" for="lname">Last Name:</span>
                 <div class="col-md-12">
-                    <input class="form-control" id="I_LNAME" name="LNAME" type="text" ng-model="InlandStaff.LNAME" />
+                    <input class="form-control" id="I_lname" name="lname" type="text" ng-model="InlandStaff.lname" />
                 </div>
             </div>
 
             <div class="col-md-4 form-group">
-                <span class="col-md-12 control-label" for="EMAIL">Email:</span>
+                <span class="col-md-12 control-label" for="email">Email:</span>
                 <div class="col-md-12">
-                    <input class="form-control" id="I_EMAIL" name="EMAIL" type="email" ng-model="InlandStaff.EMAIL" />
+                    <input class="form-control" id="I_email" name="email" type="email" ng-model="InlandStaff.email" />
                 </div>
             </div>
 
             <div class="col-md-3 form-group">
-                <span class="col-md-12 control-label" for="PHONE">Phone:</span>
+                <span class="col-md-12 control-label" for="phone">Phone:</span>
                 <div class="col-md-12">
-                    <input class="form-control" id="I_PHONE" name="PHONE"
-                           type="text" my-input-mask="{mask: '(999) 999-9999[ x99999]', greedy:false}" ng-model="InlandStaff.PHONE" />
+                    <input class="form-control" id="I_phone" name="phone"
+                           type="text" my-input-mask="{mask: '(999) 999-9999[ x99999]', greedy:false}" ng-model="InlandStaff.phone" />
                 </div>
             </div>
 
             <div class="col-md-3 form-group">
-                <span class="col-md-12 control-label" for="ALTERNATE_PHONE">Alternate Phone:</span>
+                <span class="col-md-12 control-label" for="alternate_phone">Alternate Phone:</span>
                 <div class="col-md-12">
-                    <input class="form-control" id="I_ALTERNATE_PHONE" name="ALTERNATE_PHONE"
-                           type="text" my-input-mask="{mask: '(999) 999-9999[ x99999]', greedy:false}" ng-model="InlandStaff.ALTERNATE_PHONE" />
+                    <input class="form-control" id="I_alternate_phone" name="alternate_phone"
+                           type="text" my-input-mask="{mask: '(999) 999-9999[ x99999]', greedy:false}" ng-model="InlandStaff.alternate_phone" />
                 </div>
             </div>
         </div>
@@ -601,39 +601,39 @@
         <div><b>Coastal Flood (optional)</b></div>
         <div class="col-sm-12" style="margin-bottom:15px;">
             <div class="col-md-3 form-group">
-                <span class="col-md-12 control-label" for="FNAME">First Name:</span>
+                <span class="col-md-12 control-label" for="fname">First Name:</span>
                 <div class="col-md-12">
-                    <input class="form-control" id="C_FNAME" name="FNAME" type="text" ng-model="CoastStaff.FNAME" />
+                    <input class="form-control" id="C_fname" name="fname" type="text" ng-model="CoastStaff.fname" />
                 </div>
             </div>
 
             <div class="col-md-3 form-group">
-                <span class="col-md-12 control-label" for="LNAME">Last Name:</span>
+                <span class="col-md-12 control-label" for="lname">Last Name:</span>
                 <div class="col-md-12">
-                    <input class="form-control" id="C_LNAME" name="LNAME" type="text" ng-model="CoastStaff.LNAME" />
+                    <input class="form-control" id="C_lname" name="lname" type="text" ng-model="CoastStaff.lname" />
                 </div>
             </div>
 
             <div class="col-md-4 form-group">
-                <span class="col-md-12 control-label" for="EMAIL">Email:</span>
+                <span class="col-md-12 control-label" for="email">Email:</span>
                 <div class="col-md-12">
-                    <input class="form-control" id="C_EMAIL" name="EMAIL" type="email" ng-model="CoastStaff.EMAIL" />
+                    <input class="form-control" id="C_email" name="email" type="email" ng-model="CoastStaff.email" />
                 </div>
             </div>
 
             <div class="col-md-3 form-group">
-                <span class="col-md-12 control-label" for="PHONE">Phone:</span>
+                <span class="col-md-12 control-label" for="phone">Phone:</span>
                 <div class="col-md-12">
-                    <input class="form-control" id="C_PHONE" name="PHONE"
-                           type="text" my-input-mask="{mask: '(999) 999-9999[ x99999]', greedy:false}" ng-model="CoastStaff.PHONE" />
+                    <input class="form-control" id="C_phone" name="phone"
+                           type="text" my-input-mask="{mask: '(999) 999-9999[ x99999]', greedy:false}" ng-model="CoastStaff.phone" />
                 </div>
             </div>
 
             <div class="col-md-3 form-group">
-                <span class="col-md-12 control-label" for="ALTERNATE_PHONE">Alternate Phone:</span>
+                <span class="col-md-12 control-label" for="alternate_phone">Alternate Phone:</span>
                 <div class="col-md-12">
-                    <input class="form-control" id="C_ALTERNATE_PHONE" name="ALTERNATE_PHONE"
-                           type="text" my-input-mask="{mask: '(999) 999-9999[ x99999]', greedy:false}" ng-model="CoastStaff.ALTERNATE_PHONE" />
+                    <input class="form-control" id="C_alternate_phone" name="alternate_phone"
+                           type="text" my-input-mask="{mask: '(999) 999-9999[ x99999]', greedy:false}" ng-model="CoastStaff.alternate_phone" />
                 </div>
             </div>
         </div>
@@ -642,46 +642,46 @@
         <div><b>Water Quality (optional)</b></div>
         <div class="col-sm-12" style="margin-bottom:15px;">
             <div class="col-md-3 form-group">
-                <span class="col-md-12 control-label req" for="FNAME">First Name:</span>
+                <span class="col-md-12 control-label req" for="fname">First Name:</span>
                 <div class="col-md-12">
-                    <input class="form-control" id="W_FNAME" name="FNAME" type="text" ng-model="WaterStaff.FNAME" />
+                    <input class="form-control" id="W_fname" name="fname" type="text" ng-model="WaterStaff.fname" />
                 </div>
             </div>
 
             <div class="col-md-3 form-group">
-                <span class="col-md-12 control-label" for="LNAME">Last Name:</span>
+                <span class="col-md-12 control-label" for="lname">Last Name:</span>
                 <div class="col-md-12">
-                    <input class="form-control" id="W_LNAME" name="LNAME" type="text" ng-model="WaterStaff.LNAME" />
+                    <input class="form-control" id="W_lname" name="lname" type="text" ng-model="WaterStaff.lname" />
                 </div>
             </div>
 
             <div class="col-md-4 form-group">
-                <span class="col-md-12 control-label" for="EMAIL">Email:</span>
+                <span class="col-md-12 control-label" for="email">Email:</span>
                 <div class="col-md-12">
-                    <input class="form-control" id="W_EMAIL" name="EMAIL" type="email" ng-model="WaterStaff.EMAIL" />
+                    <input class="form-control" id="W_email" name="email" type="email" ng-model="WaterStaff.email" />
                 </div>
             </div>
 
             <div class="col-md-3 form-group">
-                <span class="col-md-12 control-label" for="PHONE">Phone:</span>
+                <span class="col-md-12 control-label" for="phone">Phone:</span>
                 <div class="col-md-12">
-                    <input class="form-control" id="W_PHONE" name="PHONE"
-                           type="text" my-input-mask="{mask: '(999) 999-9999[ x99999]', greedy:false}" ng-model="WaterStaff.PHONE" />
+                    <input class="form-control" id="W_phone" name="phone"
+                           type="text" my-input-mask="{mask: '(999) 999-9999[ x99999]', greedy:false}" ng-model="WaterStaff.phone" />
                 </div>
             </div>
 
             <div class="col-md-3 form-group">
-                <span class="col-md-12 control-label" for="ALTERNATE_PHONE">Alternate Phone:</span>
+                <span class="col-md-12 control-label" for="alternate_phone">Alternate Phone:</span>
                 <div class="col-md-12">
-                    <input class="form-control" id="W_ALTERNATE_PHONE" name="ALTERNATE_PHONE"
-                           type="text" my-input-mask="{mask: '(999) 999-9999[ x99999]', greedy:false}" ng-model="WaterStaff.ALTERNATE_PHONE" />
+                    <input class="form-control" id="W_alternate_phone" name="alternate_phone"
+                           type="text" my-input-mask="{mask: '(999) 999-9999[ x99999]', greedy:false}" ng-model="WaterStaff.alternate_phone" />
                 </div>
             </div>
         </div>
     </uib-accordion-group>
 
     <div>
-        <input type="checkbox" name="COMPLETE" ng-model="newReport.COMPLETE" ng-true-value="'1'" ng-false-value="'0'" />
+        <input type="checkbox" name="complete" ng-model="newReport.complete" ng-true-value="'1'" ng-false-value="'0'" />
         <span>Check if this Report is Complete. (If left unchecked, you may come back later to finish it)</span>
     </div>
     <div class="form-group">
