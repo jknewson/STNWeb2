@@ -76,18 +76,16 @@
                                     site_id: response.site_id,
                                     sensor_type_id: response.sensor_type_id,
                                     instrument_id: response.instrument_id,
-                                    deploymentType: $scope.deployTypeList.filter(function (dtl) { return dtl.deployment_type_id == response.deployment_type_id; })[0].method
+                                    deploymentType: $scope.deployTypeList.filter(function (dtl) { return dtl.deployment_type_id == response.deployment_type_id; })[0].method,
+                                    sensorType: $scope.sensDepTypes.filter(function (s) { return s.sensor_type_id == response.sensor_type_id;})[0].sensor
                                 };
                                 propStatToAdd = { instrument_id: response.instrument_id, status_type_id: 4, member_id: $cookies.get('mID'), time_stamp: Time_STAMP, time_zone: 'UTC', };
 
                                 INSTRUMENT_STATUS.save(propStatToAdd).$promise.then(function (statResponse) {
-                                    propStatToAdd.Status = 'Proposed'; propStatToAdd.instrument_status_id = statResponse.instrument_status_id;
-                                    //statResponse.Status = 'Proposed';
-                                    var instToPushToList = {
-                                        Instrument: createdPropSensor,
-                                        InstrumentStats: [propStatToAdd]
-                                    };
-                                    $scope.SiteSensors.push(instToPushToList);
+                                    propStatToAdd.status = 'Proposed'; propStatToAdd.instrument_status_id = statResponse.instrument_status_id;
+                                    createdPropSensor.instrument_status = [propStatToAdd];
+
+                                    $scope.SiteSensors.push(createdPropSensor);
                                     $scope.sensorCount = { total: $scope.SiteSensors.length };
                                     //clean up ...all unchecked and then hide
                                     for (var dep = 0; dep < $scope.deployTypeList.length; dep++) {
@@ -96,10 +94,14 @@
                                     $timeout(function () {
                                         // anything you want can go here and will safely be run on the next digest.
                                         $scope.showProposed = false;
-                                        toastr.success("Proposed sensor created");                                        
+                                        toastr.success("Proposed sensor created");
                                     });
 
+                                }, function (errorResponse) {
+                                    toastr.error("Error saving Sensor: " + errorResponse.statusText);
                                 });//end INSTRUMENT_STATUS.save
+                            }, function (errorResponse) {
+                                toastr.error("Error saving Sensor: " + errorResponse.statusText);
                             }); //end INSTRUMENT.save
                         }//end if selected == true
                     }//end foreach deployTypeList
@@ -167,7 +169,7 @@
                     
                     //if this is a create, show the sensormodal.html, if looking at deployed sensor, go to the depsensormodal.html
                     var modalInstance = $uibModal.open({
-                        templateUrl: sensorClicked === 0 || sensorClicked.InstrumentStats[0].status_type_id === 4 ? 'Sensormodal.html' : 'DepSensormodal.html',
+                        templateUrl: sensorClicked === 0 || sensorClicked.instrument_status[0].status_type_id === 4 ? 'Sensormodal.html' : 'DepSensormodal.html',
                         controller: 'sensorModalCtrl',
                         size: 'lg',
                         backdrop: 'static',
@@ -290,7 +292,7 @@
                     $scope.sessionEventName = newValue !== undefined ? newValue : "All Events";
                     $scope.sessionEventExists = $scope.sessionEventName != "All Events" ? true : false;
                     if (newValue !== undefined) {
-                        $scope.SiteSensors = thisSiteSensors.filter(function (h) { return (h.Instrument.event_id == $cookies.get('SessionEventID')) || h.InstrumentStats[0].status_type_id == 4; });
+                        $scope.SiteSensors = thisSiteSensors.filter(function (h) { return (h.event_id == $cookies.get('SessionEventID')) || h.instrument_status[0].status_type_id == 4; });
                         $scope.sensorCount = { total: $scope.SiteSensors.length };
                     } else {
                         $scope.SiteSensors = thisSiteSensors;

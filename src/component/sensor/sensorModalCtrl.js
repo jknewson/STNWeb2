@@ -1,4 +1,5 @@
-﻿(function () {
+﻿/// <reference path="sensorModalCtrl.js" />
+(function () {
     'use strict';
 
     var ModalControllers = angular.module('ModalControllers');
@@ -16,7 +17,7 @@
            $scope.vertDatumList = allDropdowns[5];
            $scope.depSenfileIsUploading = false; //Loading...
            $scope.allSFiles = Site_Files.getAllSiteFiles();
-           $scope.DepSensorFiles = thisSensor !== "empty" ? $scope.allSFiles.filter(function (sf) { return sf.instrument_id == thisSensor.Instrument.instrument_id; }) : [];// holder for hwm files added
+           $scope.DepSensorFiles = thisSensor !== "empty" ? $scope.allSFiles.filter(function (sf) { return sf.instrument_id == thisSensor.instrument_id; }) : [];// holder for hwm files added
            $scope.depSensImageFiles = $scope.DepSensorFiles.filter(function (hf) { return hf.filetype_id === 1; }); //image files for carousel
            $scope.showFileForm = false; //hidden form to add file to hwm
            $scope.showNWISFileForm = false; //hidden form to add nwis file to sensor
@@ -165,7 +166,7 @@
                            $scope.datafile.good_start = $scope.datafile.good_start.toString().substring(0, si);
                            $scope.datafile.good_end = $scope.datafile.good_end.toString().substring(0, ei);
                        }
-                       $scope.datafile.instrument_id = thisSensor.Instrument.instrument_id;
+                       $scope.datafile.instrument_id = thisSensor.instrument_id;
                        $scope.datafile.processor_id = $cookies.get('mID');
                        DATA_FILE.save($scope.datafile).$promise.then(function (dfResonse) {
                             //then POST fileParts (Services populate PATH)
@@ -180,7 +181,7 @@
                                     photo_direction: $scope.aFile.photo_direction,
                                     latitude_dd: $scope.aFile.latitude_dd,
                                     longitude_dd: $scope.aFile.longitude_dd,
-                                    instrument_id: thisSensor.Instrument.instrument_id
+                                    instrument_id: thisSensor.instrument_id
                                 },
                                 File: $scope.aFile.File
                             };
@@ -223,7 +224,7 @@
                                        photo_direction: $scope.aFile.photo_direction,
                                        latitude_dd: $scope.aFile.latitude_dd,
                                        longitude_dd: $scope.aFile.longitude_dd,
-                                       instrument_id: thisSensor.Instrument.instrument_id
+                                       instrument_id: thisSensor.instrument_id
                                    },
                                    File: $scope.aFile.File
                                };
@@ -246,7 +247,7 @@
                                });
                            } else {
                                 //this is a link file, no fileItem
-                               $scope.aFile.source_id = response.source_id; $scope.aFile.site_id = $scope.thisSensorSite.site_id; $scope.aFile.instrument_id = thisSensor.Instrument.instrument_id;
+                               $scope.aFile.source_id = response.source_id; $scope.aFile.site_id = $scope.thisSensorSite.site_id; $scope.aFile.instrument_id = thisSensor.instrument_id;
                                FILE.save($scope.aFile).$promise.then(function (fresponse) {
                                    toastr.success("File Uploaded");
                                    fresponse.fileBelongsTo = "Sensor File";
@@ -445,12 +446,14 @@
                         $scope.NWISDF.good_end = $scope.NWISDF.good_end.toString().substring(0, ei);
                     }
                    
-                    DATA_FILE.save($scope.NWISDF).$promise.then(function (NdfResonse) {
+                    DATA_FILE.save($scope.NWISDF).$promise.then(function (NdfResponse) {
                         //now create an approval with the event's coordinator and add the approval_id, put it, then post the file TODO ::: NEW ENDPOINT FOR THIS
                         //then POST file
-                        $scope.NWISDF.data_file_id = NdfResonse.data_file_id;
-                        postApprovalForNWISfile(NdfResonse.data_file_id); //process approval
+                        $scope.NWISDF.data_file_id = NdfResponse.data_file_id;
+                        postApprovalForNWISfile(NdfResponse.data_file_id); //process approval
                         //now POST File
+                        $scope.NWISFile.data_file_id = NdfResponse.data_file_id;
+                        delete $scope.NWISFile.FileType;
                         FILE.save($scope.NWISFile).$promise.then(function (Fresponse) {
                             toastr.success("File Data saved");
                             Fresponse.fileBelongsTo = "DataFile File";
@@ -652,18 +655,10 @@
            //get deployment types for sensor type chosen
            $scope.getDepTypes = function () {
                $scope.filteredDeploymentTypes = [];
-               var matchingSensDeplist = $scope.sensorTypeList.filter(function (sd) { return sd.sensor_type_id == $scope.aSensor.sensor_type_id; });
-              // var matchingSensDeplist = $scope.sensorDeployList.filter(function (sd) { return sd.sensor_type_id == $scope.aSensor.sensor_type_id; });
-
-               for (var y = 0; y < matchingSensDeplist.length; y++) {
-                   for (var i = 0; i < $scope.depTypeList.length; i++) {
-                       //for each one, if projObjectives has this id, add 'selected:true' else add 'selected:false'
-                       if (matchingSensDeplist[y].deployment_type_id == $scope.depTypeList[i].deployment_type_id) {
-                           $scope.filteredDeploymentTypes.push($scope.depTypeList[i]);
-                           i = $scope.depTypeList.length; //ensures it doesn't set it as false after setting it as true
-                       }
-                   }
-               }
+               var matchingSensDeplist = $scope.sensorTypeList.filter(function (sd) { return sd.sensor_type_id == $scope.aSensor.sensor_type_id; })[0];
+               //this is 1 sensorType with inner list of  .deploymenttypes
+               $scope.filteredDeploymentTypes = matchingSensDeplist.deploymenttypes;
+               
                if ($scope.filteredDeploymentTypes.length == 1) 
                    $scope.aSensor.deployment_type_id = $scope.filteredDeploymentTypes[0].deployment_type_id;
                
@@ -680,10 +675,7 @@
            //cancel
            $scope.cancel = function () {
                $rootScope.stateIsLoading.showLoading = false; // loading.. 
-               var sensorObjectToSendBack = {
-                   Instrument: thisSensor.Instrument,
-                   InstrumentStats: thisSensor.InstrumentStats
-               };
+               var sensorObjectToSendBack = thisSensor;
                $timeout(function () {
                    // anything you want can go here and will safely be run on the next digest.                   
                    var sendBack = [sensorObjectToSendBack];
@@ -764,26 +756,31 @@
                                 if (DEPthisTape.op_measurements_id !== undefined) {
                                     //existing, put in case they changed it
                                     OP_MEASURE.update({ id: DEPthisTape.op_measurements_id }, DEPthisTape).$promise.then(function (tapeResponse) {
+                                        tapeResponse.op_name = DEPthisTape.op_name;
+                                        tapeResponse.Vdatum = DEPthisTape.Vdatum;
                                         $scope.tapeDownTable.push(tapeResponse);
                                     });
                                 } else {
                                     //new one added, post
                                     DEPthisTape.instrument_status_id = statResponse.instrument_status_id;
-                                    OP_MEASURE.addInstStatMeasure({ instrumentStatusId: statResponse.instrument_status_id }, DEPthisTape).$promise.then(function (tapeResponse) {
+                                    OP_MEASURE.save(DEPthisTape).$promise.then(function (tapeResponse) {
+                                        tapeResponse.op_name = DEPthisTape.op_name;
+                                        tapeResponse.Vdatum = DEPthisTape.Vdatum;
                                         $scope.tapeDownTable.push(tapeResponse);
                                     });
                                 }
                             }
                             //now add instrument and instrument status to send back
                             updatedSenStat = statResponse;
-                            updatedSenStat.Status = 'Deployed';
+                            updatedSenStat.status = 'Deployed';
+                            var instrument_statusesHolder = $scope.aSensor.instrument_status; //put them here so they can be updated and readded (all versions)
                             $scope.aSensor = updatedSensor;
-                            thisSensor.Instrument = updatedSensor;
+                            thisSensor = updatedSensor; thisSensor.instrument_status = instrument_statusesHolder;
                             $scope.aSensStatus = updatedSenStat;
                             $scope.aSensStatus.time_stamp = getDateTimeParts($scope.aSensStatus.time_stamp);//this keeps it as utc in display
                                                         
-                            var ind = thisSensor.InstrumentStats.map(function (i) { return i.status_type_id; }).indexOf(1);
-                            thisSensor.InstrumentStats[ind] = $scope.aSensStatus;
+                            var ind = thisSensor.instrument_status.map(function (i) { return i.status_type_id; }).indexOf(1);
+                            thisSensor.instrument_status[ind] = $scope.aSensStatus;
                             $scope.depStuffCopy = []; $scope.IntervalType = { type: 'Seconds' };
                             $scope.view.DEPval = 'detail';
                             toastr.success("Sensor Updated");
@@ -830,29 +827,25 @@
                                        var thisTape = $scope.tapeDownTable[t];
                                        thisTape.instrument_status_id = statResponse.instrument_status_id;
                                        ///POST IT///
-                                       OP_MEASURE.addInstStatMeasure({ instrumentStatusId: statResponse.instrument_status_id }, thisTape).$promise;
+                                       OP_MEASURE.save(thisTape).$promise;
                                    }
                                }
                                //build the createdSensor to send back and add to the list page
                                depSenStat = statResponse;
                                //add Status
-                               depSenStat.Status = 'Deployed';
-                               var sensorObjectToSendBack = {
-                                   Instrument: createdSensor,
-                                   InstrumentStats: [depSenStat, $scope.previousStateStatus]
-                               };
+                               depSenStat.status = 'Deployed';
+                               createdSensor.instrument_status = [depSenStat, $scope.previousStateStatus];                               
                                $timeout(function () {
                                    // anything you want can go here and will safely be run on the next digest.
                                    toastr.success("Sensor deployed");
                                    var state = $scope.whichButton == 'deployP' ? 'proposedDeployed' : 'newDeployed';
-                                   var sendBack = [sensorObjectToSendBack, state];
+                                   var sendBack = [createdSensor, state];
                                    $uibModalInstance.close(sendBack);
                                });
                            });
                        });
                    } else {
                        //post instrument and status for deploying NEW sensor
-                       var test;
                        INSTRUMENT.save($scope.aSensor).$promise.then(function (response) {
                            //create instrumentstatus too need: status_type_id and instrument_id
                            createdSensor = response;
@@ -869,19 +862,16 @@
                                        var thisTape = $scope.tapeDownTable[t];
                                        thisTape.instrument_status_id = statResponse.instrument_status_id;
                                        ///POST IT///
-                                       OP_MEASURE.addInstStatMeasure({ instrumentStatusId: statResponse.instrument_status_id }, thisTape).$promise;
+                                       OP_MEASURE.save(thisTape).$promise;
                                    } 
                                }
                                //build the createdSensor to send back and add to the list page
                                depSenStat = statResponse;
-                               depSenStat.Status = 'Deployed';
-                               var sensorObjectToSendBack = {
-                                   Instrument: createdSensor,
-                                   InstrumentStats: [depSenStat]
-                               };
+                               depSenStat.status = 'Deployed';
+                               createdSensor.instrument_status = [depSenStat];                               
                                toastr.success("Sensor deployed");
                                var state = $scope.whichButton == 'deployP' ? 'proposedDeployed' : 'newDeployed';
-                               var sendBack = [sensorObjectToSendBack, state];
+                               var sendBack = [createdSensor, state];
                                $uibModalInstance.close(sendBack);
                            });
                        });
@@ -936,8 +926,8 @@
            if (thisSensor != "empty") {
                //actions: 'depProp', 'editDep', 'retrieve', 'editRet'
                //#region existing deployed Sensor .. break apart the 'thisSensor' into 'aSensor' and 'aSensStatus'
-               $scope.aSensor = angular.copy(thisSensor.Instrument);
-               $scope.aSensStatus = angular.copy(thisSensor.InstrumentStats[0]);
+               $scope.aSensor = angular.copy(thisSensor);
+               $scope.aSensStatus = angular.copy(thisSensor.instrument_status[0]);
                $scope.sensorDataNWIS = (($scope.aSensor.sensor_type_id == 2 || $scope.aSensor.sensor_type_id == 5) || $scope.aSensor.sensor_type_id == 6) ? true : false;
                $scope.getDepTypes();//populate $scope.filteredDeploymentTypes for dropdown options
                $scope.IntervalType.type = 'Seconds'; //default
@@ -956,13 +946,12 @@
                }
                
                //are we deploying a proposed sensor or editing a deployed sensor??
-               if (thisSensor.InstrumentStats[0].Status == "Proposed") {
+               if (thisSensor.instrument_status[0].status == "Proposed") {
                    //deploying proposed
-                   $scope.previousStateStatus = angular.copy(thisSensor.InstrumentStats[0]); //hold the proposed state (proposed to deployed)
+                   $scope.previousStateStatus = angular.copy(thisSensor.instrument_status[0]); //hold the proposed state (proposed to deployed)
                    $scope.whichButton = 'deployP';
                    $scope.aSensor.interval = $scope.aSensor.interval === 0 ? null : $scope.aSensor.interval; //clear out the '0' value here               
-                   //$scope.aSensStatus.Status = "Deployed";
-                   //displaying date / time it user's timezone
+                  //displaying date / time it user's timezone
                    var timeParts = getTimeZoneStamp();
                    $scope.aSensStatus.time_stamp = timeParts[0];
                    $scope.aSensStatus.time_zone = timeParts[1]; //will be converted to utc on post/put
@@ -1056,9 +1045,9 @@
     // Retrieve a Sensor modal
     ModalControllers.controller('sensorRetrievalModalCtrl', ['$scope', '$rootScope', '$timeout', '$cookies', '$http', '$uibModalInstance', '$uibModal', 'thisSensor', 'SensorSite', 'siteOPs', 'allEventList', 'allVDatumList', 'allMembers', 'allStatusTypes', 'allInstCollCond', 'INSTRUMENT', 'INSTRUMENT_STATUS', 'OP_MEASURE',
         function ($scope, $rootScope, $timeout, $cookies, $http, $uibModalInstance, $uibModal, thisSensor, SensorSite, siteOPs, allEventList, allVDatumList, allMembers, allStatusTypes, allInstCollCond, INSTRUMENT, INSTRUMENT_STATUS, OP_MEASURE) {
-            $scope.aSensor = thisSensor.Instrument;
+            $scope.aSensor = thisSensor;
             $scope.EventName = allEventList.filter(function (r) {return r.event_id == $scope.aSensor.event_id;})[0].event_name;            
-            $scope.depSensStatus = angular.copy(thisSensor.InstrumentStats[0]);
+            $scope.depSensStatus = angular.copy(thisSensor.instrument_status[0]);
             var isDate = Object.prototype.toString.call($scope.depSensStatus.time_stamp) === '[object Date]';
             if (isDate === false) {
                 var y = $scope.depSensStatus.time_stamp.substr(0, 4);
@@ -1069,6 +1058,8 @@
                 var sec = $scope.depSensStatus.time_stamp.substr(17, 2);
                 $scope.depSensStatus.time_stamp = new Date(y, m, d, h, mi, sec);
             }
+            if ($scope.depSensStatus.vdatum_id != undefined && $scope.depSensStatus.vdatum_id > 0)
+                $scope.depSensStatus.VDatum = allVDatumList.filter(function (v) { return v.datum_id == $scope.depSensStatus.vdatum_id; })[0].datum_abbreviation;
 
             $scope.OPsForTapeDown = siteOPs;
             $scope.OPsPresent = siteOPs.length > 0 ? true : false;
@@ -1250,7 +1241,7 @@
                             updatedSensor.housingType = $scope.aSensor.housingType;
                             updatedSensor.sensorBrand = $scope.aSensor.sensorBrand;
                             updatedSensor.sensorType = $scope.aSensor.sensorType;
-                            updatedSensor.Inst_Collection = $scope.collectCondList.filter(function (i) { return i.id === $scope.aSensor.inst_collection_id; })[0].condition;
+                            updatedSensor.instCollection = $scope.collectCondList.filter(function (i) { return i.id === $scope.aSensor.inst_collection_id; })[0].condition;
 
                             INSTRUMENT_STATUS.save($scope.aRetrieval).$promise.then(function (statResponse) {
                                 //any tape downs?
@@ -1259,22 +1250,19 @@
                                         var thisTape = $scope.tapeDownTable[t];
                                         thisTape.instrument_status_id = statResponse.instrument_status_id;
                                         ///POST IT///
-                                        OP_MEASURE.addInstStatMeasure({ instrumentStatusId: statResponse.instrument_status_id }, thisTape).$promise;
+                                        OP_MEASURE.save(thisTape).$promise;
                                     }
                                 }
                                 //build the createdSensor to send back and add to the list page
                                 createRetSens = statResponse;
-                                createRetSens.Status = statResponse.status_type_id == 2 ? 'Retrieved' : 'Lost';
-                                var sensorObjectToSendBack = {
-
-                                    Instrument: updatedSensor,
-                                    InstrumentStats: [createRetSens, thisSensor.InstrumentStats[0]]
-                                };
+                                createRetSens.status = statResponse.status_type_id == 2 ? 'Retrieved' : 'Lost';
+                                updatedSensor.instrument_status = [createRetSens, thisSensor.instrument_status[0]];
+                                
                                 $timeout(function () {
                                     // anything you want can go here and will safely be run on the next digest.
                                     toastr.success("Sensor retrieved");
                                     var state = 'retrieved';
-                                    var sendBack = [sensorObjectToSendBack, state];
+                                    var sendBack = [updatedSensor, state];
                                     $uibModalInstance.close(sendBack);
                                 });
                             });
@@ -1298,7 +1286,7 @@
             $scope.fileTypeList = allDepDropdowns[3]; //used if creating/editing depSens file
             $scope.vertDatumList = allDepDropdowns[4];
             $scope.allSFiles = Site_Files.getAllSiteFiles();
-            $scope.sensorFiles = thisSensor !== "empty" ? $scope.allSFiles.filter(function (sf) { return sf.instrument_id == thisSensor.Instrument.instrument_id; }) : [];// holder for hwm files added
+            $scope.sensorFiles = thisSensor !== "empty" ? $scope.allSFiles.filter(function (sf) { return sf.instrument_id == thisSensor.instrument_id; }) : [];// holder for hwm files added
             $scope.sensImageFiles = $scope.sensorFiles.filter(function (hf) { return hf.filetype_id === 1; }); //image files for carousel
             $scope.showFileForm = false; //hidden form to add file to sensor
             $scope.showNWISFileForm = false; //hidden form to add nwis file to sensor
@@ -1364,11 +1352,11 @@
 
             $scope.thisSensorSite = SensorSite; $scope.userRole = $cookies.get('usersRole');
 
-            $scope.sensor = angular.copy(thisSensor.Instrument);
+            $scope.sensor = angular.copy(thisSensor);
             $scope.sensorDataNWIS = (($scope.sensor.sensor_type_id == 2 || $scope.sensor.sensor_type_id == 5) || $scope.sensor.sensor_type_id == 6) ? true : false;
             
             //deploy part //////////////////
-            $scope.DeployedSensorStat = angular.copy(thisSensor.InstrumentStats.filter(function (inst) { return inst.Status === "Deployed"; })[0]);
+            $scope.DeployedSensorStat = angular.copy(thisSensor.instrument_status.filter(function (inst) { return inst.status === "Deployed"; })[0]);
             $scope.DeployedSensorStat.time_stamp = getDateTimeParts($scope.DeployedSensorStat.time_stamp); //this keeps it as utc in display
             if ($scope.DeployedSensorStat.vdatum_id !== undefined)
                 $scope.DeployedSensorStat.vdatumName = $scope.vertDatumList.filter(function (vd) { return vd.datum_id == $scope.DeployedSensorStat.vdatum_id; })[0].datum_abbreviation;
@@ -1454,10 +1442,10 @@
                 });
             }
             //retrieve part //////////////////
-            $scope.RetrievedSensorStat = angular.copy(thisSensor.InstrumentStats.filter(function (inst) { return inst.Status === "Retrieved"; })[0]);
+            $scope.RetrievedSensorStat = angular.copy(thisSensor.instrument_status.filter(function (inst) { return inst.status === "Retrieved"; })[0]);
             //if there isn't one .. then this is a lost status
             if ($scope.RetrievedSensorStat === undefined) {
-                $scope.RetrievedSensorStat = angular.copy(thisSensor.InstrumentStats.filter(function (inst) { return inst.Status === "Lost"; })[0]);
+                $scope.RetrievedSensorStat = angular.copy(thisSensor.instrument_status.filter(function (inst) { return inst.status === "Lost"; })[0]);
                 $scope.mostRecentStatus = "Lost";
             } else {
                 $scope.mostRecentStatus = "Retrieved";
@@ -1578,31 +1566,18 @@
             //get deployment types for sensor type chosen
             $scope.getDepTypes = function (sensType) {
                 $scope.filteredDeploymentTypes = [];
-                var matchingSensDeplist = $scope.sensorTypeList.filter(function (sd) { return sd.sensor_type_id == sensType.sensor_type_id; });
-               // var matchingSensDeplist = $scope.sensorDeployList.filter(function (sd) { return sd.sensor_type_id == sensType.sensor_type_id;  });
-
-                for (var y = 0; y < matchingSensDeplist.length; y++) {
-                    for (var i = 0; i < $scope.depTypeList.length; i++) {
-                        //for each one, if projObjectives has this id, add 'selected:true' else add 'selected:false'
-                        if (matchingSensDeplist[y].deployment_type_id == $scope.depTypeList[i].deployment_type_id) {
-                                $scope.filteredDeploymentTypes.push($scope.depTypeList[i]);
-                                i = $scope.depTypeList.length; //ensures it doesn't set it as false after setting it as true
-                        }
-                    }
-                }
+                var matchingSensDeplist = $scope.sensorTypeList.filter(function (sd) { return sd.sensor_type_id == sensType.sensor_type_id; })[0];
+                //this is 1 sensorType with inner list of  .deploymenttypes
+                $scope.filteredDeploymentTypes = matchingSensDeplist.deploymenttypes;
             };
 
             $scope.getDepTypes($scope.sensor); //call it first time through
 
             //cancel
-            $scope.cancel = function () {
-                var sensorObjectToSendBack = {
-                    Instrument: thisSensor.Instrument,
-                    InstrumentStats: thisSensor.InstrumentStats
-                };
+            $scope.cancel = function () {                
                 $timeout(function () {
                     // anything you want can go here and will safely be run on the next digest.                   
-                    var sendBack =[sensorObjectToSendBack];
+                    var sendBack = [thisSensor];
                     $uibModalInstance.close(sendBack);
                 });
             };
@@ -1664,7 +1639,7 @@
                             updatedSensor.housingType = $scope.depStuffCopy[0].housing_type_id > 0 ? $scope.houseTypeList.filter(function (h) { return h.housing_type_id === $scope.depStuffCopy[0].housing_type_id; })[0].type_name : '';
                             updatedSensor.sensorBrand = $scope.sensorBrandList.filter(function (s) { return s.sensor_brand_id === $scope.depStuffCopy[0].sensor_brand_id; })[0].brand_name;
                             updatedSensor.sensorType = $scope.sensorTypeList.filter(function (t) { return t.sensor_type_id === $scope.depStuffCopy[0].sensor_type_id; })[0].sensor;
-                            updatedSensor.Inst_Collection = $scope.collectCondList.filter(function (i) { return i.id === $scope.depStuffCopy[0].inst_collection_id; })[0].condition;
+                            updatedSensor.instCollection = $scope.collectCondList.filter(function (i) { return i.id === $scope.depStuffCopy[0].inst_collection_id; })[0].condition;
                             INSTRUMENT_STATUS.update({ id: $scope.depStuffCopy[1].instrument_status_id }, $scope.depStuffCopy[1]).$promise.then(function (statResponse) {
                                 //deal with tapedowns. remove/add
                                 for (var rt = 0; rt < $scope.DEPremoveOPList.length; rt++) {
@@ -1677,25 +1652,32 @@
                                     if (DEPthisTape.op_measurements_id !== undefined) {
                                         //existing, put in case they changed it
                                         OP_MEASURE.update({ id: DEPthisTape.op_measurements_id }, DEPthisTape).$promise.then(function (tapeResponse) {
+                                            tapeResponse.op_name = DEPthisTape.op_name;
+                                            tapeResponse.Vdatum = DEPthisTape.Vdatum;
                                             $scope.DEPtapeDownTable.push(tapeResponse);
                                         });
                                     } else {
                                         //new one added, post
                                         DEPthisTape.instrument_status_id = statResponse.instrument_status_id;
-                                        OP_MEASURE.addInstStatMeasure({ instrumentStatusId: statResponse.instrument_status_id }, DEPthisTape).$promise.then(function (tapeResponse) {
+                                        OP_MEASURE.save(DEPthisTape).$promise.then(function (tapeResponse) {
+                                            tapeResponse.op_name = DEPthisTape.op_name;
+                                            tapeResponse.Vdatum = DEPthisTape.Vdatum;
                                             $scope.DEPtapeDownTable.push(tapeResponse);
                                         });
                                     }
                                 }
                                 updatedSenStat = statResponse;
-                                updatedSenStat.Status = "Deployed"; //can't change status on a deployed edit..still deployed
+                                updatedSenStat.status = "Deployed"; //can't change status on a deployed edit..still deployed
                                 $scope.sensor = updatedSensor;
-                                thisSensor.Instrument = updatedSensor;
+                                var allStatusHolder = thisSensor.instrument_status;
+                                thisSensor = updatedSensor;
                                 $scope.DeployedSensorStat = updatedSenStat;
 
                                 $scope.DeployedSensorStat.time_stamp = getDateTimeParts($scope.DeployedSensorStat.time_stamp);//this keeps it as utc in display
-                                var ind = thisSensor.InstrumentStats.map(function (i) { return i.status_type_id; }).indexOf(1);
-                                thisSensor.InstrumentStats[ind] = $scope.DeployedSensorStat;
+                                thisSensor.instrument_status = allStatusHolder;
+                                var ind = thisSensor.instrument_status.map(function (i) { return i.status_type_id; }).indexOf(1);
+                                thisSensor.instrument_status[ind] = $scope.DeployedSensorStat;
+                                $scope.sensor.instrument_status = thisSensor.instrument_status;
                                 $scope.depStuffCopy = []; $scope.depTapeCopy = [];
                                 $scope.IntervalType = { type: 'Seconds' };
                                 $scope.view.DEPval = 'detail';
@@ -1754,16 +1736,18 @@
                         updatedRetSensor.housingType = $scope.retStuffCopy[0].housing_type_id > 0 ? $scope.houseTypeList.filter(function (h) { return h.housing_type_id === $scope.retStuffCopy[0].housing_type_id; })[0].type_name : '';
                         updatedRetSensor.sensorBrand = $scope.sensorBrandList.filter(function (s) { return s.sensor_brand_id === $scope.retStuffCopy[0].sensor_brand_id; })[0].brand_name;
                         updatedRetSensor.sensorType = $scope.sensorTypeList.filter(function (t) { return t.sensor_type_id === $scope.retStuffCopy[0].sensor_type_id; })[0].sensor;
-                        updatedRetSensor.Inst_Collection = $scope.collectCondList.filter(function (i) { return i.id === $scope.retStuffCopy[0].inst_collection_id; })[0].condition;
+                        updatedRetSensor.instCollection = $scope.collectCondList.filter(function (i) { return i.id === $scope.retStuffCopy[0].inst_collection_id; })[0].condition;
                         //update copied references for passing back to list
                         $scope.sensor = updatedRetSensor;
-                        thisSensor.Instrument = updatedRetSensor;
+                        var statsHolder = thisSensor.instrument_status;
+                        thisSensor = updatedRetSensor;
+                        thisSensor.instrument_status = statsHolder;
                         INSTRUMENT_STATUS.update({ id: $scope.retStuffCopy[1].instrument_status_id }, $scope.retStuffCopy[1]).$promise.then(function (statResponse) {
                             $scope.mostRecentStatus = statResponse.status_type_id == 2 ? "Retrieved" : "Lost";
                             $scope.RetrievedSensorStat = statResponse;
-                            $scope.RetrievedSensorStat.Status = statResponse.status_type_id == 2 ? "Retrieved" : "Lost";
+                            $scope.RetrievedSensorStat.status = statResponse.status_type_id == 2 ? "Retrieved" : "Lost";
                             $scope.RetrievedSensorStat.time_stamp = getDateTimeParts($scope.RetrievedSensorStat.time_stamp);//this keeps it as utc in display
-                            thisSensor.InstrumentStats[0] = $scope.RetrievedSensorStat;
+                            thisSensor.instrument_status[0] = $scope.RetrievedSensorStat;
 
                             //deal with tapedowns. remove/add
                             for (var rt = 0; rt < $scope.RETremoveOPList.length; rt++) {
@@ -1781,7 +1765,7 @@
                                 } else {
                                     //new one added, post
                                     RETthisTape.instrument_status_id = statResponse.instrument_status_id;
-                                    OP_MEASURE.addInstStatMeasure({ instrumentStatusId: statResponse.instrument_status_id }, RETthisTape).$promise.then(function (tapeResponse) {
+                                    OP_MEASURE.save(RETthisTape).$promise.then(function (tapeResponse) {
                                         $scope.RETtapeDownTable.push(tapeResponse);
                                     });
                                 }
@@ -1972,7 +1956,7 @@
                         $scope.datafile.good_start = $scope.datafile.good_start.toString().substring(0, si);
                         $scope.datafile.good_end = $scope.datafile.good_end.toString().substring(0, ei);
                     }
-                    $scope.datafile.instrument_id = thisSensor.Instrument.instrument_id;
+                    $scope.datafile.instrument_id = thisSensor.instrument_id;
                     $scope.datafile.processor_id = $cookies.get('mID');
                     DATA_FILE.save($scope.datafile).$promise.then(function (dfResonse) {
                         //then POST fileParts (Services populate PATH)
@@ -1987,7 +1971,7 @@
                                 photo_direction: $scope.aFile.photo_direction,
                                 latitude_dd: $scope.aFile.latitude_dd,
                                 longitude_dd: $scope.aFile.longitude_dd,
-                                instrument_id: thisSensor.Instrument.instrument_id
+                                instrument_id: thisSensor.instrument_id
                             },
                             File: $scope.aFile.File
                         };
@@ -2029,7 +2013,7 @@
                                     photo_direction: $scope.aFile.photo_direction,
                                     latitude_dd: $scope.aFile.latitude_dd,
                                     longitude_dd: $scope.aFile.longitude_dd,
-                                    instrument_id: thisSensor.Instrument.instrument_id
+                                    instrument_id: thisSensor.instrument_id
                                 },
                                 File: $scope.aFile.File
                             };

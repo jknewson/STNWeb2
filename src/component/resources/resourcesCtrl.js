@@ -955,7 +955,7 @@
                     modalInstance.result.then(function (keyToRemove) {
                         var index = $scope.instColCondList.indexOf(icc);
                         $http.defaults.headers.common.Authorization = 'Basic ' + $cookies.get('STNCreds');
-                        INST_COLL_CONDITION.delete({ id: icc.ID }, icc, function success(response) {
+                        INST_COLL_CONDITION.delete({ id: icc.id }, icc, function success(response) {
                             $scope.instColCondList.splice(index, 1);
                             toastr.success("Instrument Collection Condition Removed");
                         }, function error(errorResponse) {
@@ -1611,7 +1611,7 @@
                                 angular.forEach($scope.newDepTypeRelating, function (ndt) {
                                     delete ndt.selected;
                                     relatedDeps.push(ndt.deployment_type_id);
-                                    SENSOR_TYPE.addSensorDeploymentType({ id: newSensor.sensor_type_id }, ndt, function success(response1) {
+                                    SENSOR_TYPE.addSensorDeploymentType({ sensorTypeId: newSensor.sensor_type_id,deploymentTypeId: ndt.deployment_type_id }, function success(response1) {
                                         var test;
                                     }, function error(errorResponse) {
                                         var what = errorResponse.statusText;
@@ -1644,7 +1644,7 @@
                     SENSOR_TYPE.update({ id: id }, data, function success(response) {
                         retur = response;
                         angular.forEach(DTs, function (dt) {
-                            SENSOR_TYPE.addSensorDeploymentType({ id: id }, dt, function success(response1) {
+                            SENSOR_TYPE.addSensorDeploymentType({ sensorTypeId: id, deploymentTypeId: ndt.deployment_type_id }, dt, function success(response1) {
                                 toastr.success("Deployment Type is now related");
                             }, function error(errorResponse1) {
                                 var what = errorResponse1.statusText;
@@ -1657,7 +1657,7 @@
                     }).$promise.then(
                         //remove those
                         angular.forEach($scope.removeTheseDepTypes, function (rdt) {
-                            SENSOR_TYPE.removeSensorDeploymentType({ id: id }, rdt, function success(response2) {
+                            SENSOR_TYPE.removeSensorDeploymentType({ sensorTypeId: id, DeploymentTypeId: rdt.deployment_type_id }, function success(response2) {
                                 toastr.success("Deployment Type is no longer related");
                             }, function error(errorResponse) {
                                 var what = errorResponse.statusText;
@@ -1691,7 +1691,7 @@
                             if (senT.DepTypes.indexOf(s.deployment_type_id) >= 0) {
                                 //get it and then delete the relationship
                                 var thisDT = { deployment_type_id: s.deployment_type_id, method: s.method };
-                                SENSOR_TYPE.removeSensorDeploymentType({ id: ST.sensor_type_id }, thisDT, function success(response2) {
+                                SENSOR_TYPE.removeSensorDeploymentType({ sensorTypeId: ST.sensor_type_id, DeploymentTypeId: thisDT.deployment_type_id }, function success(response2) {
                                     var removed;
                                 });
                             }

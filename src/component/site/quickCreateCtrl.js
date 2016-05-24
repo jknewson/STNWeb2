@@ -677,7 +677,7 @@
                                                 thisTape.instrument_status_id = statResponse.instrument_status_id;
                                                 thisTape.objective_point_id = createdOP.objective_point_id;
                                                 ///POST IT///
-                                                OP_MEASURE.addInstStatMeasure({ instrumentStatusId: statResponse.instrument_status_id }, thisTape).$promise;                                                
+                                                OP_MEASURE.save(thisTape).$promise;                                                
                                             }
                                             toastr.success("Quick Sensor created");
                                             $rootScope.stateIsLoading.showLoading = false;// loading..

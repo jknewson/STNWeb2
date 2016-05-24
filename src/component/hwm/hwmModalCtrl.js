@@ -304,7 +304,7 @@
                         if ($scope.aHWM.survey_date === undefined)
                             $scope.aHWM.survey_date = makeAdate("");
 
-                        $scope.aHWM.survey_member_id = $scope.flag_member_id;
+                        $scope.aHWM.survey_member_id = $scope.aHWM.flag_member_id;
                     }
 
                     $http.defaults.headers.common.Authorization = 'Basic ' + $cookies.get('STNCreds');
@@ -387,7 +387,35 @@
                     //logic for cancel
                 });//end modal
             };
-            
+            var formatHWM = function (h) {
+                var formattedHWM = {
+                    hwm_id: h.hwm_id,
+                    bank: h.bank,
+                    elev_ft: h.elev_ft,
+                    event_id: h.event_id,
+                    flag_date: h.flag_date,
+                    flag_member_id: h.flag_member_id,
+                    hcollect_method_id: h.hcollect_method_id,
+                    hdatum_id: h.hdatum_id,
+                    height_above_gnd: h.height_above_gnd,
+                    hwm_environment: h.hwm_environment,
+                    hwm_locationdescription: h.hwm_locationdescription,
+                    hwm_notes: h.hwm_notes,
+                    hwm_quality_id: h.hwm_quality_id,
+                    hwm_type_id: h.hwm_type_id,
+                    latitude_dd: h.latitude_dd,
+                    longitude_dd: h.longitude_dd,
+                    marker_id: h.marker_id,
+                    site_id: h.site_id,
+                    stillwater: h.stillwater,
+                    survey_date: h.survey_date,
+                    survey_member_id: h.survey_member_id,
+                    vcollect_method_id: h.vcollect_method_id,
+                    vdatum_id: h.vdatum_id,
+                    waterbody: h.waterbody
+                };
+                return formattedHWM;
+            };
             //save aHWM
             $scope.save = function (valid) {
                 if (valid) {
@@ -418,7 +446,8 @@
 
                     $http.defaults.headers.common.Authorization = 'Basic ' + $cookies.get('STNCreds');
                     $http.defaults.headers.common.Accept = 'application/json';
-                    HWM.update({ id: $scope.hwmCopy.hwm_id }, $scope.hwmCopy).$promise.then(function (response) {
+                    var cleanHWM = formatHWM($scope.hwmCopy);
+                    HWM.update({ id: cleanHWM.hwm_id }, cleanHWM).$promise.then(function (response) {
                         toastr.success("HWM updated");
                         $scope.aHWM = response; thisHWM = response;
                         //get all the names for details view

@@ -33,17 +33,17 @@
                 esh.files = allSiteFiles.filter(function (sf) { return sf.hwm_id == esh.hwm_id && sf.fileBelongsTo == "HWM File"; });
             });
             
-            $scope.eventSiteSensors = allSiteSensors.filter(function (s) { return s.Instrument.event_id == $cookies.get('SessionEventID'); }); //maybe go from here to get all datafiles for each sensor
+            $scope.eventSiteSensors = allSiteSensors.filter(function (s) { return s.event_id == $cookies.get('SessionEventID'); }); //maybe go from here to get all datafiles for each sensor
             angular.forEach($scope.eventSiteSensors, function (ess) {
-                // if ess.Instrument.Sensor_type == 2, 5, or 6 .. and there are no files.. show red ! with text
-                ess.CollectCondition = ess.Instrument.inst_collection_id !== null && ess.Instrument.inst_collection_id > 0 ?
-                    allCollectConditions.filter(function (cc) { return cc.ID == ess.Instrument.inst_collection_id; })[0].condition :
+                // if ess.Sensor_type == 2, 5, or 6 .. and there are no files.. show red ! with text
+                ess.CollectCondition = ess.inst_collection_id !== null && ess.inst_collection_id > 0 ?
+                    allCollectConditions.filter(function (cc) { return cc.id == ess.inst_collection_id; })[0].condition :
                     '';
                 //store if this is retrieved (if not, show ! for them to retrieve it in order to complete the peak
-                ess.isRetrieved = ess.InstrumentStats[0].Status == 'Retrieved' ? true : false;
-                ess.files = allSiteFiles.filter(function (sf) { return sf.instrument_id == ess.Instrument.instrument_id && (sf.fileBelongsTo == "DataFile File" || sf.fileBelongsTo == "Sensor File"); });
+                ess.isRetrieved = ess.instrument_status[0].status == 'Retrieved' ? true : false;
+                ess.files = allSiteFiles.filter(function (sf) { return sf.instrument_id == ess.instrument_id && (sf.fileBelongsTo == "DataFile File" || sf.fileBelongsTo == "Sensor File"); });
                 //var hasDF = {value:true}; (2: Met Station, 5: Rapid Deployment Gage, 6: Rain Gage)
-                if (ess.Instrument.sensor_type_id == 2 || ess.Instrument.sensor_type_id == 5 || ess.Instrument.sensor_type_id == 6) {
+                if (ess.sensor_type_id == 2 || ess.sensor_type_id == 5 || ess.sensor_type_id == 6) {
                     if (ess.files.length === 0) ess.NeedDF = true;
                     else {
                         if (!determineDFPresent(ess.files)) ess.NeedDF = true;
@@ -534,5 +534,7 @@
                     size: 'sm'
                 });
             };
+
+            $rootScope.stateIsLoading.showLoading = false; // loading..
         }]); //end HWM
 })();
