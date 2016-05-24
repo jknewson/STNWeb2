@@ -10,10 +10,10 @@
            $scope.sensorTypeList = allDropdowns[0];
            $scope.sensorBrandList = allDropdowns[1];
            $scope.houseTypeList = allDropdowns[2];
-           $scope.sensorDeployList = allDropdowns[3];
-           $scope.eventList = allDropdowns[4];
-           $scope.fileTypeList = allDropdowns[5]; //used if creating/editing depSens file
-           $scope.vertDatumList = allDropdowns[6];
+          // $scope.sensorDeployList = allDropdowns[3];
+           $scope.eventList = allDropdowns[3];
+           $scope.fileTypeList = allDropdowns[4]; //used if creating/editing depSens file
+           $scope.vertDatumList = allDropdowns[5];
            $scope.depSenfileIsUploading = false; //Loading...
            $scope.allSFiles = Site_Files.getAllSiteFiles();
            $scope.DepSensorFiles = thisSensor !== "empty" ? $scope.allSFiles.filter(function (sf) { return sf.instrument_id == thisSensor.Instrument.instrument_id; }) : [];// holder for hwm files added
@@ -172,7 +172,7 @@
                             var fileParts = {
                                 FileEntity: {
                                     filetype_id: $scope.aFile.filetype_id,
-                                    file_url: $scope.aFile.file_url,
+                                    name: $scope.aFile.File.name,
                                     file_date: $scope.aFile.file_date,
                                     description: $scope.aFile.description,
                                     site_id: $scope.thisSensorSite.site_id,
@@ -214,7 +214,7 @@
                                var fileParts = {
                                    FileEntity: {
                                        filetype_id: $scope.aFile.filetype_id,
-                                       file_url: $scope.aFile.file_url,
+                                       name: $scope.aFile.File.name,
                                        file_date: $scope.aFile.file_date,
                                        photo_date: $scope.aFile.photo_date,
                                        description: $scope.aFile.description,
@@ -397,7 +397,8 @@
                 } else {
                     //creating a nwis file
                     $scope.NWISFile = {
-                        file_url: 'http://waterdata.usgs.gov/nwis/uv?site_no=' + $scope.thisSensorSite.usgs_sid,  // if [fill in if not here.. TODO...&begin_date=20160413&end_date=20160419 (event start/end)
+                        name: 'http://waterdata.usgs.gov/nwis/uv?site_no=' + $scope.thisSensorSite.usgs_sid,  // if [fill in if not here.. TODO...&begin_date=20160413&end_date=20160419 (event start/end)
+                        path: '<link>',
                         file_date: new Date(),
                         filetype_id: 2,
                         FileType: 'Data',
@@ -651,7 +652,8 @@
            //get deployment types for sensor type chosen
            $scope.getDepTypes = function () {
                $scope.filteredDeploymentTypes = [];
-               var matchingSensDeplist = $scope.sensorDeployList.filter(function (sd) { return sd.sensor_type_id == $scope.aSensor.sensor_type_id; });
+               var matchingSensDeplist = $scope.sensorTypeList.filter(function (sd) { return sd.sensor_type_id == $scope.aSensor.sensor_type_id; });
+              // var matchingSensDeplist = $scope.sensorDeployList.filter(function (sd) { return sd.sensor_type_id == $scope.aSensor.sensor_type_id; });
 
                for (var y = 0; y < matchingSensDeplist.length; y++) {
                    for (var i = 0; i < $scope.depTypeList.length; i++) {
@@ -1292,9 +1294,9 @@
             $scope.sensorTypeList = allDepDropdowns[0];
             $scope.sensorBrandList = allDepDropdowns[1];
             $scope.houseTypeList = allDepDropdowns[2];
-            $scope.sensorDeployList = allDepDropdowns[3];
-            $scope.fileTypeList = allDepDropdowns[4]; //used if creating/editing depSens file
-            $scope.vertDatumList = allDepDropdowns[5];
+         //   $scope.sensorDeployList = allDepDropdowns[3];
+            $scope.fileTypeList = allDepDropdowns[3]; //used if creating/editing depSens file
+            $scope.vertDatumList = allDepDropdowns[4];
             $scope.allSFiles = Site_Files.getAllSiteFiles();
             $scope.sensorFiles = thisSensor !== "empty" ? $scope.allSFiles.filter(function (sf) { return sf.instrument_id == thisSensor.Instrument.instrument_id; }) : [];// holder for hwm files added
             $scope.sensImageFiles = $scope.sensorFiles.filter(function (hf) { return hf.filetype_id === 1; }); //image files for carousel
@@ -1576,7 +1578,8 @@
             //get deployment types for sensor type chosen
             $scope.getDepTypes = function (sensType) {
                 $scope.filteredDeploymentTypes = [];
-                var matchingSensDeplist = $scope.sensorDeployList.filter(function (sd) { return sd.sensor_type_id == sensType.sensor_type_id;  });
+                var matchingSensDeplist = $scope.sensorTypeList.filter(function (sd) { return sd.sensor_type_id == sensType.sensor_type_id; });
+               // var matchingSensDeplist = $scope.sensorDeployList.filter(function (sd) { return sd.sensor_type_id == sensType.sensor_type_id;  });
 
                 for (var y = 0; y < matchingSensDeplist.length; y++) {
                     for (var i = 0; i < $scope.depTypeList.length; i++) {
@@ -1976,7 +1979,7 @@
                         var fileParts = {
                             FileEntity: {
                                 filetype_id: $scope.aFile.filetype_id,
-                                file_url: $scope.aFile.file_url,
+                                name: $scope.aFile.File.name,
                                 file_date: $scope.aFile.file_date,
                                 description: $scope.aFile.description,
                                 site_id: $scope.thisSensorSite.site_id,
@@ -2017,7 +2020,7 @@
                             var fileParts = {
                                 FileEntity: {
                                     filetype_id: $scope.aFile.filetype_id,
-                                    file_url: $scope.aFile.file_url,
+                                    name: $scope.aFile.File.name,
                                     file_date: $scope.aFile.file_date,
                                     photo_date: $scope.aFile.photo_date,
                                     description: $scope.aFile.description,
@@ -2267,8 +2270,9 @@
                     $scope.NWISFile = {
                         file_date: new Date(),
                         filetype_id: 2,
-                        file_url: 'http://waterdata.usgs.gov/nwis/uv?site_no=' + $scope.thisSensorSite.usgs_sid,  // if [fill in if not here.. TODO...&begin_date=20160413&end_date=20160419 (event start/end)
-                        FileType: 'Data',                        
+                        name: 'http://waterdata.usgs.gov/nwis/uv?site_no=' + $scope.thisSensorSite.usgs_sid,  // if [fill in if not here.. TODO...&begin_date=20160413&end_date=20160419 (event start/end)
+                        path: '<link>',
+                        FileType: 'Data',
                         site_id: $scope.sensor.site_id,
                         data_file_id: 0,
                         instrument_id: $scope.sensor.instrument_id,

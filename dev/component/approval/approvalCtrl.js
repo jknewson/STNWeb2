@@ -22,9 +22,7 @@
 
                 $http.defaults.headers.common.Authorization = 'Basic ' + $cookies.get('STNCreds');
                 $http.defaults.headers.common.Accept = 'application/json';
-                MEMBER.getAll(function success(response) {
-                    $scope.allMembers = response;
-                }).$promise;
+                MEMBER.getAll(function success(response) { $scope.allMembers = response;}).$promise;
 
                 $scope.allStates = stateList;
                 $scope.allInstruments = instrumentList;
@@ -46,7 +44,7 @@
                     $http.defaults.headers.common.Authorization = 'Basic ' + $cookies.get('STNCreds');
                     $http.defaults.headers.common.Accept = 'application/json';
                     HWM.getUnapprovedHWMs({ IsApproved: 'false', Event: thisSearch.eventID, Member: thisSearch.memberID, State: thisSearch.stateID }, function success(response) {
-                        $scope.unApprovedHWMs = response.HWMs;
+                        $scope.unApprovedHWMs = response;
                         $scope.showHWMbox = true;
 
                     }, function error(errorResponse) {
@@ -56,16 +54,16 @@
                         var DFs = response1;
                         //need sensor and site info
                         angular.forEach(DFs, function (df) {
-                            var thisdfInst = $scope.allInstruments.filter(function (i) { return i.INSTRUMENT_ID == df.INSTRUMENT_ID; })[0];
+                            var thisdfInst = $scope.allInstruments.filter(function (i) { return i.instrument_id == df.instrument_id; })[0];
                             var formattedDF = {};
-                            var siteID = thisdfInst.SITE_ID;
+                            var siteID = thisdfInst.site_id;
                             formattedDF.SiteId = siteID;
-                            formattedDF.senType = $scope.allSensorTypes.filter(function (s) { return s.SENSOR_TYPE_ID == thisdfInst.SENSOR_TYPE_ID; })[0].SENSOR;
-                            var depType = $scope.allDeploymentTypes.filter(function (d) { return d.DEPLOYMENT_TYPE_ID == thisdfInst.DEPLOYMENT_TYPE_ID; })[0];
-                            formattedDF.depType = depType !== undefined ? depType.METHOD : undefined;
-                            formattedDF.InstrID = thisdfInst.INSTRUMENT_ID;
+                            formattedDF.senType = $scope.allSensorTypes.filter(function (s) { return s.sensor_type_id == thisdfInst.sensor_type_id; })[0].sensor;
+                            var depType = $scope.allDeploymentTypes.filter(function (d) { return d.deployment_type_id == thisdfInst.deployment_type_id; })[0];
+                            formattedDF.depType = depType !== undefined ? depType.method : undefined;
+                            formattedDF.InstrID = thisdfInst.instrument_id;
                             SITE.query({ id: siteID }).$promise.then(function (response2) {
-                                formattedDF.SiteNo = response2.SITE_NO;
+                                formattedDF.SiteNo = response2.site_no;
                                 
                                 $scope.unApprovedDFs.push(formattedDF);
                             });
@@ -91,7 +89,13 @@
                     $http.defaults.headers.common.Authorization = 'Basic ' + $cookies.get('STNCreds');
                     $http.defaults.headers.common.Accept = 'application/json';
                     HWM.getUnapprovedHWMs({ IsApproved: 'false', Event: evID, Member: mID, State: sID }, function success(response) {
-                        $scope.unApprovedHWMs = response.HWMs;
+                        //need site no
+                        angular.forEach(response, function (h) {
+                            SITE.query({ id: h.site_id }).$promise.then(function (sresponse) {
+                                h.site_no = sresponse.site_no;
+                                $scope.unApprovedHWMs.push(h);
+                            });
+                        });
                         $scope.showHWMbox = true;
 
                     }, function error(errorResponse) {
@@ -101,16 +105,16 @@
                         var DFs = response1;
                         //need sensor and site info
                         angular.forEach(DFs, function (df) {
-                            var thisdfInst = $scope.allInstruments.filter(function (i) { return i.INSTRUMENT_ID == df.INSTRUMENT_ID; })[0];
+                            var thisdfInst = $scope.allInstruments.filter(function (i) { return i.instrument_id == df.instrument_id; })[0];
                             var formattedDF = {};
-                            var siteID = thisdfInst.SITE_ID;
+                            var siteID = thisdfInst.site_id;
                             formattedDF.SiteId = siteID;
-                            formattedDF.senType = $scope.allSensorTypes.filter(function (s) { return s.SENSOR_TYPE_ID == thisdfInst.SENSOR_TYPE_ID; })[0].SENSOR;
-                            var depType = $scope.allDeploymentTypes.filter(function (d) { return d.DEPLOYMENT_TYPE_ID == thisdfInst.DEPLOYMENT_TYPE_ID; })[0];
-                            formattedDF.depType = depType !== undefined ? depType.METHOD : undefined;
-                            formattedDF.InstrID = thisdfInst.INSTRUMENT_ID;
+                            formattedDF.senType = $scope.allSensorTypes.filter(function (s) { return s.sensor_type_id == thisdfInst.sensor_type_id; })[0].sensor;
+                            var depType = $scope.allDeploymentTypes.filter(function (d) { return d.deployment_type_id == thisdfInst.deployment_type_id; })[0];
+                            formattedDF.depType = depType !== undefined ? depType.method : undefined;
+                            formattedDF.InstrID = thisdfInst.instrument_id;
                             SITE.query({ id: siteID }).$promise.then(function (response2) {
-                                formattedDF.SiteNo = response2.SITE_NO;
+                                formattedDF.SiteNo = response2.site_no;
                                 
                                 $scope.unApprovedDFs.push(formattedDF);
                             });

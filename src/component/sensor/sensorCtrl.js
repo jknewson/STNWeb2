@@ -3,8 +3,8 @@
 
     var STNControllers = angular.module('STNControllers');
 
-    STNControllers.controller('sensorCtrl', ['$scope', '$rootScope', '$q', '$cookies', '$location', '$state', '$http', '$uibModal', '$filter', '$timeout', 'thisSite', 'Instrument_Service', 'thisSiteSensors', 'allSensorBrands', 'allAgencies', 'allVertDatums', 'allDeployTypes', 'allSensorTypes', 'allSensDeps', 'allHousingTypes', 'allEvents', 'allFileTypes', 'INSTRUMENT', 'INSTRUMENT_STATUS', 'SITE', 'MEMBER', 'DEPLOYMENT_TYPE', 'STATUS_TYPE', 'INST_COLL_CONDITION',
-        function ($scope, $rootScope, $q, $cookies, $location, $state, $http, $uibModal, $filter, $timeout, thisSite, Instrument_Service, thisSiteSensors, allSensorBrands, allAgencies, allVertDatums, allDeployTypes, allSensorTypes, allSensDeps, allHousingTypes, allEvents, allFileTypes, INSTRUMENT, INSTRUMENT_STATUS, SITE, MEMBER, DEPLOYMENT_TYPE, STATUS_TYPE, INST_COLL_CONDITION) {
+    STNControllers.controller('sensorCtrl', ['$scope', '$rootScope', '$q', '$cookies', '$location', '$state', '$http', '$uibModal', '$filter', '$timeout', 'thisSite', 'Instrument_Service', 'thisSiteSensors', 'allSensorBrands', 'allAgencies', 'allVertDatums', 'allDeployTypes', 'allSensorTypes', 'allHousingTypes', 'allEvents', 'allFileTypes', 'INSTRUMENT', 'INSTRUMENT_STATUS', 'SITE', 'MEMBER', 'DEPLOYMENT_TYPE', 'STATUS_TYPE', 'INST_COLL_CONDITION',
+        function ($scope, $rootScope, $q, $cookies, $location, $state, $http, $uibModal, $filter, $timeout, thisSite, Instrument_Service, thisSiteSensors, allSensorBrands, allAgencies, allVertDatums, allDeployTypes, allSensorTypes, allHousingTypes, allEvents, allFileTypes, INSTRUMENT, INSTRUMENT_STATUS, SITE, MEMBER, DEPLOYMENT_TYPE, STATUS_TYPE, INST_COLL_CONDITION) {
             if ($cookies.get('STNCreds') === undefined || $cookies.get('STNCreds') === "") {
                 $scope.auth = false;
                 $location.path('/login');
@@ -22,7 +22,7 @@
                 }
                 $scope.deployTypeList.push({ deployment_type_id: tempDepTypeID, method: "Temperature (Pressure Transducer)" });
 
-                $scope.sensDepTypes = allSensDeps;
+                $scope.sensDepTypes = allSensorTypes;// allSensDeps;
                 $scope.showProposed = false; //they want to add a proposed sensor, open options
                 $scope.SiteSensors = thisSiteSensors;
                 Instrument_Service.setAllSiteSensors($scope.SiteSensors);
@@ -51,11 +51,19 @@
                                     sensor_type_id: $scope.deployTypeList[dt].method == "Temperature (Pressure Transducer)" ? 1 : 2,
                                 };
                             } else {
+                                //go through the new fullInstrument and see if any of the sensor's deploymenttypes are this deployment type to set the sensor_type_id
+                                var sID = 0;
+                                angular.forEach($scope.sensDepTypes, function (sdt) {
+                                    for (var x = 0; x < sdt.deploymenttypes.length; x++) {
+                                        if (sdt.deploymenttypes[x].deployment_type_id == $scope.deployTypeList[dt].deployment_type_id)
+                                            sID = sdt.sensor_type_id;
+                                    }
+                                });
                                 //any other type
                                 proposedToAdd = {
                                     deployment_type_id: $scope.deployTypeList[dt].deployment_type_id,
                                     site_id: thisSite.site_id,
-                                    sensor_type_id: $scope.sensDepTypes.filter(function (sdt) { return sdt.deployment_type_id == $scope.deployTypeList[dt].deployment_type_id; })[0].sensor_type_id,
+                                    sensor_type_id: sID,
                                 };
                             }
                             //now post it (Instrument first, then Instrument Status
@@ -153,7 +161,7 @@
 
                 //want to deploy a proposed sensor, edit a deployed sensor or create a new deployed sensor
                 $scope.showSensorModal = function (sensorClicked) {
-                    var passAllLists = [allSensorTypes, allSensorBrands, allHousingTypes, allSensDeps, allEvents, SensFileTypes, allVertDatums];
+                    var passAllLists = [allSensorTypes, allSensorBrands, allHousingTypes, allEvents, SensFileTypes, allVertDatums];
                     var indexClicked = $scope.SiteSensors.indexOf(sensorClicked);
                     $rootScope.stateIsLoading.showLoading = true;// loading..// $(".page-loading").removeClass("hidden"); //loading...
                     
@@ -222,7 +230,7 @@
                 //want to see the retrieved sensor (can edit deployed part and retrieved part on here)
                 $scope.showFullSensorModal = function (sensorClicked) {
                     //send all deployed stuff and retrieved stuff to modal
-                    var deployedStuff = [allSensorTypes, allSensorBrands, allHousingTypes, allSensDeps, SensFileTypes, allVertDatums];
+                    var deployedStuff = [allSensorTypes, allSensorBrands, allHousingTypes, SensFileTypes, allVertDatums];
                     var retrievedStuff = [];
                     var indexClicked = $scope.SiteSensors.indexOf(sensorClicked);
                     $rootScope.stateIsLoading.showLoading = true;// loading..// $(".page-loading").removeClass("hidden"); //loading...

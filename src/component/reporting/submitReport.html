@@ -594,7 +594,7 @@
             <h3>Event Contacts</h3>
 
             <!-- ------------------------- Deployed--------------------------------- -->
-            <div><span style="padding-right:10px"><label>Deployed Staff (required)</label></span><a sref="#" style="cursor:pointer" ng-click="populateDeployer()">Same as submitter</a></div>
+            <div><span class="col-md-2"><label>Deployed Staff (required)</label></span><a sref="#" style="cursor:pointer" ng-click="populateDeployer()">(Same as submitter)</a></div>
             <div class="col-sm-12" style="margin-bottom:15px;">
                 <div class="col-md-3 form-group required">
                     <span class="col-md-12 control-label req" for="fname">First Name:</span>
@@ -634,34 +634,34 @@
                 </div>
             </div>
 
-            <!-- ------------------------- General--------------------------------- -->
+            <!-- ------------------------- General--------------------------------- --> 
             <div><b>General (optional)</b></div>
             <div class="col-sm-12" style="margin-bottom:15px;">
-                <div class="col-md-3 form-group">
-                    <span class="col-md-12 control-label" for="fname">First Name:</span>
+                <div class="col-md-3 form-group" ng-class="{'required':GenStaff.fname || GenStaff.lname || GenStaff.email || GenStaff.phone}">
+                    <span class="col-md-12 control-label" for="fname" ng-class="{'req':GenStaff.fname ||GenStaff.lname || GenStaff.email || GenStaff.phone}">First Name:</span>
                     <div class="col-md-12">
-                        <input ng-readonly="isCompleted" class="form-control" id="G_fname" name="fname" type="text" ng-model="GenStaff.fname" />
+                        <input ng-readonly="isCompleted" class="form-control" id="G_fname" name="fname" type="text" ng-model="GenStaff.fname" ng-required="GenStaff.lname || GenStaff.email || GenStaff.phone" />
                     </div>
                 </div>
 
-                <div class="col-md-3 form-group">
-                    <span class="col-md-12 control-label" for="lname">Last Name:</span>
+                <div class="col-md-3 form-group" ng-class="{'required':GenStaff.fname || GenStaff.lname || GenStaff.email || GenStaff.phone}">
+                    <span class="col-md-12 control-label" ng-class="{'req':GenStaff.fname || GenStaff.lname || GenStaff.email || GenStaff.phone}" for="lname">Last Name:</span>
                     <div class="col-md-12">
-                        <input ng-readonly="isCompleted" class="form-control" id="G_lname" name="lname" type="text" ng-model="GenStaff.lname" />
+                        <input ng-readonly="isCompleted" class="form-control" id="G_lname" name="lname" type="text" ng-model="GenStaff.lname" ng-required="GenStaff.fname || GenStaff.email || GenStaff.phone" />
                     </div>
                 </div>
 
-                <div class="col-md-4 form-group">
-                    <span class="col-md-12 control-label" for="email">Email:</span>
+                <div class="col-md-4 form-group" ng-class="{'required':GenStaff.lname || GenStaff.fname || GenStaff.email || GenStaff.phone}">
+                    <span class="col-md-12 control-label" ng-class="{'req':GenStaff.lname || GenStaff.fname || GenStaff.email || GenStaff.phone}" for="email">Email:</span>
                     <div class="col-md-12">
-                        <input ng-readonly="isCompleted" class="form-control" id="G_email" name="email" type="email" ng-model="GenStaff.email" />
+                        <input ng-readonly="isCompleted" class="form-control" id="G_email" name="email" type="email" ng-model="GenStaff.email" ng-required="GenStaff.lname || GenStaff.fname || GenStaff.phone" />
                     </div>
                 </div>
 
-                <div class="col-md-3 form-group">
-                    <span class="col-md-12 control-label" for="phone">Phone:</span>
+                <div class="col-md-3 form-group" ng-class="{'required':GenStaff.lname || GenStaff.email || GenStaff.fname || GenStaff.phone}">
+                    <span class="col-md-12 control-label" ng-class="{'req':GenStaff.lname || GenStaff.email || GenStaff.fname|| GenStaff.phone}" for="phone">Phone:</span>
                     <div class="col-md-12">
-                        <input ng-readonly="isCompleted" class="form-control" id="G_phone" name="phone"
+                        <input ng-readonly="isCompleted" class="form-control" id="G_phone" name="phone" ng-rrequired="GenStaff.lname || GenStaff.email || GenStaff.fname"
                                type="text" my-input-mask="{mask: '(999) 999-9999[ x99999]', greedy:false}" ng-model="GenStaff.phone" />
                     </div>
                 </div>
@@ -678,31 +678,31 @@
             <!-- ------------------------- Inland Flood--------------------------------- -->
             <div><b>Inland Flood (optional)</b></div>
             <div class="col-sm-12" style="margin-bottom:15px;">
-                <div class="col-md-3 form-group">
-                    <span class="col-md-12 control-label" for="fname">First Name:</span>
+                <div class="col-md-3 form-group" ng-class="{'required':InlandStaff.fname || InlandStaff.lname || InlandStaff.email || InlandStaff.phone}">
+                    <span class="col-md-12 control-label" ng-class="{'req':InlandStaff.fname || InlandStaff.lname || InlandStaff.email || InlandStaff.phone}" for="fname">First Name:</span>
                     <div class="col-md-12">
-                        <input ng-readonly="isCompleted" class=" form-control" id="I_fname" name="fname" type="text" ng-model="InlandStaff.fname" />
+                        <input ng-readonly="isCompleted" class=" form-control" id="I_fname" name="fname" type="text" ng-model="InlandStaff.fname" ng-required="InlandStaff.fname ||InlandStaff.lname || InlandStaff.email || InlandStaff.phone" />
                     </div>
                 </div>
 
-                <div class="col-md-3 form-group">
-                    <span class="col-md-12 control-label" for="lname">Last Name:</span>
+                <div class="col-md-3 form-group" ng-class="{'required':InlandStaff.fname || InlandStaff.lname || InlandStaff.email || InlandStaff.phone}">
+                    <span class="col-md-12 control-label" ng-class="{'req':InlandStaff.fname || InlandStaff.lname || InlandStaff.email || InlandStaff.phone}" for="lname">Last Name:</span>
                     <div class="col-md-12">
-                        <input ng-readonly="isCompleted" class="form-control" id="I_lname" name="lname" type="text" ng-model="InlandStaff.lname" />
+                        <input ng-readonly="isCompleted" class="form-control" id="I_lname" name="lname" type="text" ng-model="InlandStaff.lname" ng-required="InlandStaff.fname || InlandStaff.lname || InlandStaff.email || InlandStaff.phone" />
                     </div>
                 </div>
 
-                <div class="col-md-4 form-group">
-                    <span class="col-md-12 control-label" for="email">Email:</span>
+                <div class="col-md-4 form-group" ng-class="{'required':InlandStaff.lname || InlandStaff.fname || InlandStaff.email || InlandStaff.phone}">
+                    <span class="col-md-12 control-label" ng-class="{'req':InlandStaff.lname || InlandStaff.fname || InlandStaff.email || InlandStaff.phone}" for="email">Email:</span>
                     <div class="col-md-12">
-                        <input ng-readonly="isCompleted" class="form-control" id="I_email" name="email" type="email" ng-model="InlandStaff.email" />
+                        <input ng-readonly="isCompleted" class="form-control" id="I_email" name="email" type="email" ng-model="InlandStaff.email" ng-required="InlandStaff.lname || InlandStaff.fname || InlandStaff.email || InlandStaff.phone" />
                     </div>
                 </div>
 
-                <div class="col-md-3 form-group">
-                    <span class="col-md-12 control-label" for="phone">Phone:</span>
+                <div class="col-md-3 form-group" ng-class="{'required':InlandStaff.lname || InlandStaff.email || InlandStaff.fname|| InlandStaff.phone}">
+                    <span class="col-md-12 control-label" ng-class="{'req':InlandStaff.lname || InlandStaff.email || InlandStaff.fname || InlandStaff.phone}" for="phone">Phone:</span>
                     <div class="col-md-12">
-                        <input ng-readonly="isCompleted" class="form-control" id="I_phone" name="phone"
+                        <input ng-readonly="isCompleted" class="form-control" id="I_phone" name="phone" ng-required="InlandStaff.lname || InlandStaff.email || InlandStaff.fname || InlandStaff.phone"
                                type="text" my-input-mask="{mask: '(999) 999-9999[ x99999]', greedy:false}" ng-model="InlandStaff.phone" />
                     </div>
                 </div>
@@ -719,31 +719,31 @@
             <!-- ------------------------- Coastal Flood--------------------------------- -->
             <div><b>Coastal Flood (optional)</b></div>
             <div class="col-sm-12" style="margin-bottom:15px;">
-                <div class="col-md-3 form-group">
-                    <span class="col-md-12 control-label" for="fname">First Name:</span>
+                <div class="col-md-3 form-group" ng-class="{'required':CoastStaff.fname || CoastStaff.lname || CoastStaff.email || CoastStaff.phone}">
+                    <span class="col-md-12 control-label" ng-class="{'req':CoastStaff.fname || CoastStaff.lname || CoastStaff.email || CoastStaff.phone}" for="fname">First Name:</span>
                     <div class="col-md-12">
-                        <input ng-readonly="isCompleted" class="form-control" id="C_fname" name="fname" type="text" ng-model="CoastStaff.fname" />
+                        <input ng-readonly="isCompleted" class="form-control" id="C_fname" name="fname" type="text" ng-model="CoastStaff.fname" ng-required="CoastStaff.fname || CoastStaff.lname || CoastStaff.email || CoastStaff.phone" />
                     </div>
                 </div>
 
-                <div class="col-md-3 form-group">
-                    <span class="col-md-12 control-label" for="lname">Last Name:</span>
+                <div class="col-md-3 form-group" ng-class="{'required':CoastStaff.fname || CoastStaff.lname || CoastStaff.email || CoastStaff.phone}">
+                    <span class="col-md-12 control-label" ng-class="{'req':CoastStaff.fname || CoastStaff.lname || CoastStaff.email || CoastStaff.phone}" for="lname">Last Name:</span>
                     <div class="col-md-12">
-                        <input ng-readonly="isCompleted" class="form-control" id="C_lname" name="lname" type="text" ng-model="CoastStaff.lname" />
+                        <input ng-readonly="isCompleted" class="form-control" id="C_lname" name="lname" type="text" ng-model="CoastStaff.lname" ng-required="CoastStaff.fname || CoastStaff.lname || CoastStaff.email || CoastStaff.phone" />
                     </div>
                 </div>
 
-                <div class="col-md-4 form-group">
-                    <span class="col-md-12 control-label" for="email">Email:</span>
+                <div class="col-md-4 form-group" ng-class="{'required':CoastStaff.lname || CoastStaff.fname || CoastStaff.email || CoastStaff.phone}">
+                    <span class="col-md-12 control-label" ng-class="{'req':CoastStaff.lname || CoastStaff.fname || CoastStaff.email || CoastStaff.phone}" for="email">Email:</span>
                     <div class="col-md-12">
-                        <input ng-readonly="isCompleted" class="form-control" id="C_email" name="email" type="email" ng-model="CoastStaff.email" />
+                        <input ng-readonly="isCompleted" class="form-control" id="C_email" name="email" type="email" ng-model="CoastStaff.email" ng-required="CoastStaff.lname || CoastStaff.fname || CoastStaff.email || CoastStaff.phone" />
                     </div>
                 </div>
 
-                <div class="col-md-3 form-group">
-                    <span class="col-md-12 control-label" for="phone">Phone:</span>
+                <div class="col-md-3 form-group" ng-class="{'required':CoastStaff.lname || CoastStaff.email || CoastStaff.fname || CoastStaff.phone}">
+                    <span class="col-md-12 control-label" ng-class="{'req':CoastStaff.lname || CoastStaff.email || CoastStaff.fname || CoastStaff.phone}" for="phone">Phone:</span>
                     <div class="col-md-12">
-                        <input ng-readonly="isCompleted" class="form-control" id="C_phone" name="phone"
+                        <input ng-readonly="isCompleted" class="form-control" id="C_phone" name="phone" ng-required="CoastStaff.lname || CoastStaff.email || CoastStaff.fname || CoastStaff.phone"
                                type="text" my-input-mask="{mask: '(999) 999-9999[ x99999]', greedy:false}" ng-model="CoastStaff.phone" />
                     </div>
                 </div>
@@ -760,31 +760,31 @@
             <!-- ------------------------- Water Quality--------------------------------- -->
             <div><b>Water Quality (optional)</b></div>
             <div class="col-sm-12" style="margin-bottom:15px;">
-                <div class="col-md-3 form-group">
-                    <span class="col-md-12 control-label req" for="fname">First Name:</span>
+                <div class="col-md-3 form-group" ng-class="{'required':WaterStaff.fname || WaterStaff.lname || WaterStaff.email || WaterStaff.phone}">
+                    <span class="col-md-12 control-label req" ng-class="{'req':WaterStaff.fname || WaterStaff.lname || WaterStaff.email || WaterStaff.phone}" for="fname">First Name:</span>
                     <div class="col-md-12">
-                        <input ng-readonly="isCompleted" class="form-control" id="W_fname" name="fname" type="text" ng-model="WaterStaff.fname" />
+                        <input ng-readonly="isCompleted" class="form-control" id="W_fname" name="fname" type="text" ng-model="WaterStaff.fname" ng-required="WaterStaff.fname || WaterStaff.lname || WaterStaff.email || WaterStaff.phone" />
                     </div>
                 </div>
 
-                <div class="col-md-3 form-group">
-                    <span class="col-md-12 control-label" for="lname">Last Name:</span>
+                <div class="col-md-3 form-group" ng-class="{'required':WaterStaff.fname || WaterStaff.lname || WaterStaff.email || WaterStaff.phone}">
+                    <span class="col-md-12 control-label" ng-class="{'req':WaterStaff.fname || WaterStaff.lname || WaterStaff.email || WaterStaff.phone}" for="lname">Last Name:</span>
                     <div class="col-md-12">
-                        <input ng-readonly="isCompleted" class="form-control" id="W_lname" name="lname" type="text" ng-model="WaterStaff.lname" />
+                        <input ng-readonly="isCompleted" class="form-control" id="W_lname" name="lname" type="text" ng-model="WaterStaff.lname" ng-required="WaterStaff.fname || WaterStaff.lname || WaterStaff.email || WaterStaff.phone" />
                     </div>
                 </div>
 
-                <div class="col-md-4 form-group">
-                    <span class="col-md-12 control-label" for="email">Email:</span>
+                <div class="col-md-4 form-group" ng-class="{'required':WaterStaff.lname || WaterStaff.fname || WaterStaff.email || WaterStaff.phone}">
+                    <span class="col-md-12 control-label" ng-class="{'req':WaterStaff.lname || WaterStaff.fname || WaterStaff.email || WaterStaff.phone}" for="email">Email:</span>
                     <div class="col-md-12">
-                        <input ng-readonly="isCompleted" class="form-control" id="W_email" name="email" type="email" ng-model="WaterStaff.email" />
+                        <input ng-readonly="isCompleted" class="form-control" id="W_email" name="email" type="email" ng-model="WaterStaff.email" ng-required="WaterStaff.lname || WaterStaff.fname || WaterStaff.email || WaterStaff.phone" />
                     </div>
                 </div>
 
-                <div class="col-md-3 form-group">
-                    <span class="col-md-12 control-label" for="phone">Phone:</span>
+                <div class="col-md-3 form-group" ng-class="{'required':WaterStaff.lname || WaterStaff.email || WaterStaff.fname || WaterStaff.phone}">
+                    <span class="col-md-12 control-label" ng-class="{'req':WaterStaff.lname || WaterStaff.email || WaterStaff.fname || WaterStaff.phone}" for="phone">Phone:</span>
                     <div class="col-md-12">
-                        <input ng-readonly="isCompleted" class="form-control" id="W_phone" name="phone"
+                        <input ng-readonly="isCompleted" class="form-control" id="W_phone" name="phone" ng-required="WaterStaff.lname || WaterStaff.email || WaterStaff.fname || WaterStaff.phone"
                                type="text" my-input-mask="{mask: '(999) 999-9999[ x99999]', greedy:false}" ng-model="WaterStaff.phone" />
                     </div>
                 </div>

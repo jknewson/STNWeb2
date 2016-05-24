@@ -56,7 +56,7 @@
                     for (var i = 0; i < $scope.states.length; i++) {
                         //for each one, if response has this id, add 'selected:true' else add 'selected:false'
                         for (var y = 0; y < thisSearch.state.length; y++) {
-                            if (thisSearch.state[y] == $scope.states[i].STATE_ABBREV) {
+                            if (thisSearch.state[y] == $scope.states[i].state_abbrev) {
                                 $scope.states[i].selected = true;
                                 y = thisSearch.state.length; //ensures it doesn't set it as false after setting it as true
                             } else
@@ -72,7 +72,7 @@
                     $scope.checkboxModel.senOnly = thisSearch.SensorOnly;
                     $scope.checkboxModel.rdgOnly = thisSearch.RDGOnly;
                     $scope.checkboxModel.opDefined = thisSearch.OPDefined;
-                    SITE.getAll({
+                    SITE.getFilteredSites({
                         Event: $scope.sessionEvent,
                         State: $scope.chosenStates.join(),
                         SensorType: $scope.Chosen.sensor,
@@ -110,7 +110,7 @@
                         RDGOnly: $scope.checkboxModel.rdgOnly,
                         OPDefined: $scope.checkboxModel.opDefined
                     };
-                    SITE.getAll({
+                    SITE.getFilteredSites({
                         Event: evID,
                         State: stateString,
                         SensorType: $scope.Chosen.sensor,
@@ -133,10 +133,10 @@
                 //add each state to an array to be joined in the GET
                 $scope.stateClick = function (data) {
                     if (data.selected === true) {
-                        $scope.chosenStates.push(data.STATE_ABBREV);
+                        $scope.chosenStates.push(data.state_abbrev);
                     }
                     if (data.selected === false) {
-                        var ind = $scope.chosenStates.indexOf(data.STATE_ABBREV);
+                        var ind = $scope.chosenStates.indexOf(data.state_abbrev);
                         if (ind >= 0) {
                             $scope.chosenStates.splice(ind, 1);
                         }

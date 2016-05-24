@@ -18,7 +18,7 @@
                     $scope.sessionEventName = newValue !== undefined ? newValue : "All Events";
                     $scope.sessionEventExists = $scope.sessionEventName != "All Events" ? true : false;
                     if (newValue !== undefined) {
-                        $scope.SitePeaks = thisSitePeaks.filter(function (p) { return p.EVENT_NAME == $scope.sessionEventName; });
+                        $scope.SitePeaks = thisSitePeaks.filter(function (p) { return p.event_name == $scope.sessionEventName; });
                         $scope.peakCount = { total: $scope.SitePeaks.length };
                     } else {
                         $scope.SitePeaks = thisSitePeaks;
@@ -47,12 +47,12 @@
                             },
                             thisPeak: function () {
                                 if (peakClicked !== 0) {
-                                    return PEAK.query({ id: peakClicked.PEAK_SUMMARY_ID }).$promise;
+                                    return PEAK.query({ id: peakClicked.peak_summary_id }).$promise;
                                 } else { return "empty"; }
                             },
                             thisPeakDFs: function () {
                                 if (peakClicked !== 0){
-                                    return PEAK.getPeakSummaryDFs({id: peakClicked.PEAK_SUMMARY_ID}).$promise;
+                                    return PEAK.getPeakSummaryDFs({id: peakClicked.peak_summary_id}).$promise;
                                 }
                             },
                             peakSite: function () {
@@ -70,7 +70,7 @@
                                 return Site_Files.getAllSiteFiles();
                             },
                             allSiteSensors: function () {
-                                return SITE.getSiteSensors({ id: thisSite.SITE_ID }).$promise;
+                                return SITE.getSiteSensors({ id: thisSite.site_id }).$promise;
                             }
                         }
                     });

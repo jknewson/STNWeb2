@@ -16,20 +16,20 @@
                 //include if HWM, Instrument, Data File or OP File for each               
                 for (var sf = 0; sf < thisSiteFiles.length; sf++) {
                     var whatKindaFile = '';
-                    if (thisSiteFiles[sf].HWM_ID > 0 && thisSiteFiles[sf].HWM_ID !== null) {
+                    if (thisSiteFiles[sf].hwm_id > 0 && thisSiteFiles[sf].hwm_id !== null) {
                         whatKindaFile = "HWM File";
                     }
-                    if (thisSiteFiles[sf].DATA_FILE_ID > 0 && thisSiteFiles[sf].DATA_FILE_ID !== null) {
+                    if (thisSiteFiles[sf].data_file_id > 0 && thisSiteFiles[sf].data_file_id !== null) {
                         whatKindaFile = "DataFile File";
                     }
-                    if (thisSiteFiles[sf].INSTRUMENT_ID > 0 && thisSiteFiles[sf].INSTRUMENT_ID !== null) {
+                    if (thisSiteFiles[sf].instrument_id > 0 && thisSiteFiles[sf].instrument_id !== null) {
                         whatKindaFile = "Sensor File";
-                        var thisIns = thisSiteSensors.filter(function (s) { return s.Instrument.INSTRUMENT_ID == thisSiteFiles[sf].INSTRUMENT_ID; })[0];
-                        thisSiteFiles[sf].typeName = thisIns.Instrument.SERIAL_NUMBER;
+                        var thisIns = thisSiteSensors.filter(function (s) { return s.instrument_id == thisSiteFiles[sf].instrument_id; })[0];
+                        thisSiteFiles[sf].typeName = thisIns.serial_number;
                     }
-                    if (thisSiteFiles[sf].OBJECTIVE_POINT_ID > 0 && thisSiteFiles[sf].OBJECTIVE_POINT_ID !== null) {
+                    if (thisSiteFiles[sf].objective_point_id > 0 && thisSiteFiles[sf].objective_point_id !== null) {
                         whatKindaFile = "Objective Point File";
-                        thisSiteFiles[sf].typeName = thisSiteOPs.filter(function (op) { return op.OBJECTIVE_POINT_ID == thisSiteFiles[sf].OBJECTIVE_POINT_ID; })[0].NAME;
+                        thisSiteFiles[sf].typeName = thisSiteOPs.filter(function (op) { return op.objective_point_id == thisSiteFiles[sf].objective_point_id; })[0].name;
                     }
                     if (whatKindaFile === '') whatKindaFile = "Site File";
                     thisSiteFiles[sf].fileBelongsTo = whatKindaFile;
@@ -45,22 +45,22 @@
                         $scope.SiteFiles = sitefiles.filter(function (h) { return h.fileBelongsTo == 'Site File' || h.fileBelongsTo == 'Objective Point File'; });  //keep all site and op files
                         angular.forEach($scope.SiteFiles, function (sf){
                             if (sf.fileBelongsTo == 'Objective Point File')
-                                sf.typeName =  thisSiteOPs.filter(function (op) { return op.OBJECTIVE_POINT_ID == sf.OBJECTIVE_POINT_ID; })[0].NAME;                            
+                                sf.typeName = thisSiteOPs.filter(function (op) { return op.objective_point_id == sf.objective_point_id; })[0].name;
                         });
                         var hwmFiles = sitefiles.filter(function (sfiles) { return sfiles.fileBelongsTo == 'HWM File'; });
-                        var sensFiles = sitefiles.filter(function (sfi) { return sfi.INSTRUMENT_ID > 0 && sfi.INSTRUMENT_ID !== null; });
+                        var sensFiles = sitefiles.filter(function (sfi) { return sfi.instrument_id > 0 && sfi.instrument_id !== null; });
                         //only show files for this event (go through hwm files and match eventid
                         for (var hf = 0; hf < hwmFiles.length; hf++) {
                             for (var hwm = 0; hwm < $scope.siteHWMs.length; hwm++) {
-                                if (hwmFiles[hf].HWM_ID == $scope.siteHWMs[hwm].HWM_ID && $scope.siteHWMs[hwm].EVENT_ID == $cookies.get('SessionEventID'))
+                                if (hwmFiles[hf].hwm_id == $scope.siteHWMs[hwm].hwm_id && $scope.siteHWMs[hwm].event_id == $cookies.get('SessionEventID'))
                                     $scope.SiteFiles.push(hwmFiles[hf]);
                             }
                         }
                         //only show files for this event (go through sensor files and match eventid
                         for (var sf = 0; sf < sensFiles.length; sf++) {
                             for (var inst = 0; inst < $scope.siteSensors.length; inst++) {
-                                if (sensFiles[sf].INSTRUMENT_ID == $scope.siteSensors[inst].Instrument.INSTRUMENT_ID && $scope.siteSensors[inst].Instrument.EVENT_ID == $cookies.get('SessionEventID')) {
-                                    sensFiles[sf].typeName = $scope.siteSensors[inst].Instrument.SERIAL_NUMBER;
+                                if (sensFiles[sf].instrument_id == $scope.siteSensors[inst].instrument_id && $scope.siteSensors[inst].event_id == $cookies.get('SessionEventID')) {
+                                    sensFiles[sf].typeName = $scope.siteSensors[inst].serial_number;
                                     $scope.SiteFiles.push(sensFiles[sf]);
                                 }
                             }
@@ -78,22 +78,22 @@
                         $scope.SiteFiles = Site_Files.getAllSiteFiles().filter(function (h) { return h.fileBelongsTo == 'Site File' || h.fileBelongsTo == 'Objective Point File'; });  //keep all site and op files
                         angular.forEach($scope.SiteFiles, function (sf) {
                             if (sf.fileBelongsTo == 'Objective Point File')
-                                sf.typeName = thisSiteOPs.filter(function (op) { return op.OBJECTIVE_POINT_ID == sf.OBJECTIVE_POINT_ID; })[0].NAME;
+                                sf.typeName = thisSiteOPs.filter(function (op) { return op.objective_point_id == sf.objective_point_id; })[0].name;
                         });
                         var hwmFiles = Site_Files.getAllSiteFiles().filter(function (sfiles) { return sfiles.fileBelongsTo == 'HWM File'; }); 
-                        var sensFiles = Site_Files.getAllSiteFiles().filter(function (sfi) { return sfi.INSTRUMENT_ID > 0 && sfi.INSTRUMENT_ID !== null; });
+                        var sensFiles = Site_Files.getAllSiteFiles().filter(function (sfi) { return sfi.instrument_id > 0 && sfi.instrument_id !== null; });
                         //only show files for this event (go through hwm files and match eventid
                         for (var hf = 0; hf < hwmFiles.length; hf++) {
                             for (var hwm = 0; hwm < $scope.siteHWMs.length; hwm++) {
-                                if (hwmFiles[hf].HWM_ID == $scope.siteHWMs[hwm].HWM_ID && $scope.siteHWMs[hwm].EVENT_ID == $cookies.get('SessionEventID')) 
+                                if (hwmFiles[hf].hwm_id == $scope.siteHWMs[hwm].hwm_id && $scope.siteHWMs[hwm].event_id == $cookies.get('SessionEventID')) 
                                     $scope.SiteFiles.push(hwmFiles[hf]);
                             }
                         }
                         //only show files for this event (go through sensor files and match eventid
                         for (var sf = 0; sf < sensFiles.length; sf++) {
                             for (var inst = 0; inst < $scope.siteSensors.length; inst++) {
-                                if (sensFiles[sf].INSTRUMENT_ID == $scope.siteSensors[inst].Instrument.INSTRUMENT_ID && $scope.siteSensors[inst].Instrument.EVENT_ID == $cookies.get('SessionEventID')) {
-                                    sensFiles[sf].typeName = $scope.siteSensors[inst].Instrument.SERIAL_NUMBER;
+                                if (sensFiles[sf].instrument_id == $scope.siteSensors[inst].instrument_id && $scope.siteSensors[inst].event_id == $cookies.get('SessionEventID')) {
+                                    sensFiles[sf].typeName = $scope.siteSensors[inst].serial_number;
                                     $scope.SiteFiles.push(sensFiles[sf]);
                                 }
                             }
@@ -125,21 +125,21 @@
                     var SindexClicked = $scope.SiteFiles.indexOf(FileClicked);
                     //populate all filetypes that create/edit file needs depending on what the file is attached to
                     $scope.siteFileTypes = allFileTypes.filter(function (ft) {
-                        return ft.FILETYPE === 'Photo' || ft.FILETYPE === 'Historic Citation' || ft.FILETYPE === 'Field Sheets' ||
-                            ft.FILETYPE === 'Level Notes' || ft.FILETYPE === 'Site Sketch' || ft.FILETYPE === 'Other' || ft.FILETYPE === 'Link' || ft.FILETYPE === 'Sketch' ||
-                            ft.FILETYPE === 'Landowner Permission Form';
+                        return ft.filetype === 'Photo' || ft.filetype === 'Historic Citation' || ft.filetype === 'Field Sheets' ||
+                            ft.filetype === 'Level Notes' || ft.filetype === 'Site Sketch' || ft.filetype === 'Other' || ft.filetype === 'Link' || ft.filetype === 'Sketch' ||
+                            ft.filetype === 'Landowner Permission Form';
                     });
                     $scope.hwmFileTypes = allFileTypes.filter(function (hft){ 
-                        return hft.FILETYPE === 'Photo' || hft.FILETYPE === 'Historic Citation' || hft.FILETYPE === 'Field Sheets' ||
-                            hft.FILETYPE === 'Level Notes' || hft.FILETYPE === 'Other' || hft.FILETYPE === 'Link' || hft.FILETYPE === 'Sketch';
+                        return hft.filetype === 'Photo' || hft.filetype === 'Historic Citation' || hft.filetype === 'Field Sheets' ||
+                            hft.filetype === 'Level Notes' || hft.filetype === 'Other' || hft.filetype === 'Link' || hft.filetype === 'Sketch';
                     });
                     $scope.sensorFileTypes = allFileTypes.filter(function (sft){
-                        return sft.FILETYPE === 'Photo' || sft.FILETYPE === 'Data' || sft.FILETYPE === 'Historic Citation' || sft.FILETYPE === 'Field Sheets' ||
-                           sft.FILETYPE === 'Level Notes' || sft.FILETYPE === 'Other' || sft.FILETYPE === 'Link' || sft.FILETYPE === 'Sketch';
+                        return sft.filetype === 'Photo' || sft.filetype === 'Data' || sft.filetype === 'Historic Citation' || sft.filetype === 'Field Sheets' ||
+                           sft.filetype === 'Level Notes' || sft.filetype === 'Other' || sft.filetype === 'Link' || sft.filetype === 'Sketch';
                     });
                     $scope.opFileTypes = allFileTypes.filter(function (oft) {
-                        return oft.FILETYPE === 'Photo' || oft.FILETYPE === 'Field Sheets' || oft.FILETYPE === 'Level Notes' ||
-                            oft.FILETYPE === 'Other' || oft.FILETYPE === 'NGS Datasheet' || oft.FILETYPE === 'Sketch';
+                        return oft.filetype === 'Photo' || oft.filetype === 'Field Sheets' || oft.filetype === 'Level Notes' ||
+                            oft.filetype === 'Other' || oft.filetype === 'NGS Datasheet' || oft.filetype === 'Sketch';
                     });
 
                     //modal allFileTypes, thisFile, allMembers, agencyList, fileSite,
@@ -186,14 +186,14 @@
                             },
                             fileSource: function () {
                                 if (FileClicked !== 0) {
-                                    if (FileClicked.SOURCE_ID !== null)
-                                        return SOURCE.query({id:FileClicked.SOURCE_ID}).$promise;
+                                    if (FileClicked.source_id !== null)
+                                        return SOURCE.query({id:FileClicked.source_id}).$promise;
                                 }
                             },
                             dataFile: function () {
                                 if (FileClicked !== 0) {
-                                    if (FileClicked.DATA_FILE_ID !== null)
-                                        return DATA_FILE.query({ id: FileClicked.DATA_FILE_ID }).$promise;
+                                    if (FileClicked.data_file_id !== null)
+                                        return DATA_FILE.query({ id: FileClicked.data_file_id }).$promise;
                                 }
                             }
                         }

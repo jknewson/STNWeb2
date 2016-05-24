@@ -46,19 +46,19 @@
                         //DELETE it
                         $http.defaults.headers.common.Authorization = 'Basic ' + $cookies.get('STNCreds');
 
-                        EVENT.delete({ id: nameToRemove.EVENT_ID }, function success(response) {
+                        EVENT.delete({ id: nameToRemove.event_id }, function success(response) {
                             var delEv = {};
-                            delEv.EVENT_ID = nameToRemove.EVENT_ID;
-                            delEv.Name = nameToRemove.EVENT_NAME;
-                            delEv.Type = $scope.eventTypeList.filter(function (a) { return a.EVENT_TYPE_ID == nameToRemove.EVENT_TYPE_ID; })[0].TYPE;
-                            delEv.Status = $scope.eventStatList.filter(function (r) { return r.EVENT_STATUS_ID == nameToRemove.EVENT_STATUS_ID; })[0].STATUS;
-                            var coord = $scope.eventCoordList.filter(function (c) { return c.MEMBER_ID == nameToRemove.EVENT_COORDINATOR; })[0];
-                            delEv.StartDate = nameToRemove.EVENT_START_DATE;
-                            delEv.EndDate = nameToRemove.EVENT_END_DATE;
-                            delEv.Coord = coord !== undefined ? coord.FNAME + " " + coord.LNAME : "";
+                            delEv.event_id = nameToRemove.event_id;
+                            delEv.Name = nameToRemove.event_name;
+                            delEv.Type = $scope.eventTypeList.filter(function (a) { return a.event_type_id == nameToRemove.event_type_id; })[0].type;
+                            delEv.Status = $scope.eventStatList.filter(function (r) { return r.event_status_id == nameToRemove.event_status_id; })[0].status;
+                            var coord = $scope.eventCoordList.filter(function (c) { return c.member_id == nameToRemove.event_coordinator; })[0];
+                            delEv.StartDate = nameToRemove.event_start_date;
+                            delEv.EndDate = nameToRemove.event_end_date;
+                            delEv.Coord = coord !== undefined ? coord.fname + " " + coord.lname : "";
                             var index = 0;
                             for (var i = 0; i < $scope.eventList.length; i++) {
-                                if ($scope.eventList[i].EVENT_ID == delEv.EVENT_ID) {
+                                if ($scope.eventList[i].event_id == delEv.event_id) {
                                     index = i;
                                     i = $scope.eventList.length;
                                 }
@@ -93,17 +93,17 @@
 
                 if (thisEvent !== undefined) {
                     $scope.anEvent = thisEvent;
-                    $scope.anEvent.EVENT_START_DATE = makeAdate($scope.anEvent.EVENT_START_DATE); $scope.anEvent.EVENT_END_DATE = makeAdate($scope.anEvent.EVENT_END_DATE);
-                    $scope.thisEventType = $scope.eventTypeList.filter(function (a) { return a.EVENT_TYPE_ID == thisEvent.EVENT_TYPE_ID; })[0].TYPE;
-                    $scope.thisEventStatus = $scope.eventStatList.filter(function (r) { return r.EVENT_STATUS_ID == thisEvent.EVENT_STATUS_ID; })[0].STATUS;
-                    var EC = $scope.eventCoordList.filter(function (c) { return c.MEMBER_ID == thisEvent.EVENT_COORDINATOR; })[0];
-                    $scope.thisEventCoord = EC !== undefined ? EC.FNAME + " " + EC.LNAME : "";
+                    $scope.anEvent.event_start_date = makeAdate($scope.anEvent.event_start_date); $scope.anEvent.event_end_date = makeAdate($scope.anEvent.event_end_date);
+                    $scope.thisEventType = $scope.eventTypeList.filter(function (a) { return a.event_type_id == thisEvent.event_type_id; })[0].type;
+                    $scope.thisEventStatus = $scope.eventStatList.filter(function (r) { return r.event_status_id == thisEvent.event_status_id; })[0].status;
+                    var EC = $scope.eventCoordList.filter(function (c) { return c.member_id == thisEvent.event_coordinator; })[0];
+                    $scope.thisEventCoord = EC !== undefined ? EC.fname + " " + EC.lname : "";
 
                 }//end if thisEvent != null
                 else {
                     //this is a new event being created
-                    $scope.anEvent.EVENT_START_DATE = makeAdate();
-                    $scope.anEvent.EVENT_END_DATE = makeAdate();
+                    $scope.anEvent.event_start_date = makeAdate();
+                    $scope.anEvent.event_end_date = makeAdate();
 
                 }//end -new event
 
@@ -113,7 +113,7 @@
                         //ensure they don't delete required field values                    
                         $http.defaults.headers.common.Authorization = 'Basic ' + $cookies.get('STNCreds');
                         $http.defaults.headers.common.Accept = 'application/json';
-                        EVENT.update({ id: $scope.anEvent.EVENT_ID }, $scope.anEvent, function success(response) {
+                        EVENT.update({ id: $scope.anEvent.event_id }, $scope.anEvent, function success(response) {
                             toastr.success("Event Updated");
                         }, function error(errorResponse) {
                             toastr.error("Error: " + errorResponse.statusText);
@@ -143,14 +143,14 @@
                             toastr.success("Event Created");
                             //push this new event into the eventList
                             var E = {};
-                            E.EVENT_ID = response.EVENT_ID;
-                            E.Name = response.EVENT_NAME;
-                            E.Type = $scope.eventTypeList.filter(function (a) { return a.EVENT_TYPE_ID == response.EVENT_TYPE_ID; })[0].TYPE;
-                            E.Status = $scope.eventStatList.filter(function (r) { return r.EVENT_STATUS_ID == response.EVENT_STATUS_ID; })[0].STATUS;
-                            var coord = $scope.eventCoordList.filter(function (c) { return c.MEMBER_ID == response.EVENT_COORDINATOR; })[0];
-                            E.StartDate = response.EVENT_START_DATE;
-                            E.EndDate = response.EVENT_END_DATE;
-                            E.Coord = coord !== undefined ? coord.FNAME + " " + coord.LNAME : "";
+                            E.event_id = response.event_id;
+                            E.Name = response.event_name;
+                            E.Type = $scope.eventTypeList.filter(function (a) { return a.event_type_id == response.event_type_id; })[0].type;
+                            E.Status = $scope.eventStatList.filter(function (r) { return r.event_status_id == response.event_status_id; })[0].status;
+                            var coord = $scope.eventCoordList.filter(function (c) { return c.member_id == response.event_coordinator; })[0];
+                            E.StartDate = response.event_start_date;
+                            E.EndDate = response.event_end_date;
+                            E.Coord = coord !== undefined ? coord.fname + " " + coord.lname : "";
                             $scope.eventList.push(E);
                         }).$promise.then(function () {
                             $location.path('/Events/EventsList').replace();

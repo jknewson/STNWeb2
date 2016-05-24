@@ -205,7 +205,7 @@
                             $scope.GenRepEventModel.EventType = $scope.eventTypes.filter(function (et) { return et.event_type_id == $scope.EventName.event_type_id; })[0];
                             $scope.GenRepEventModel.EventStat = $scope.eventStats.filter(function (es) { return es.event_status_id == $scope.EventName.event_status_id; })[0];
                             //3. event Coordinator info
-                            $scope.GenRepEventModel.Coordinator = $scope.members.filter(function (m) { return m.member_id == $scope.GenRepEventModel.Event.even_coordinator; })[0];
+                            $scope.GenRepEventModel.Coordinator = $scope.members.filter(function (m) { return m.member_id == $scope.GenRepEventModel.Event.event_coordinator; })[0];
                             $scope.GenRepEventModel.CoordAgency = $scope.agencies.filter(function (a) { return a.agency_id == $scope.GenRepEventModel.Coordinator.agency_id; })[0];
 
                             //modal
@@ -265,11 +265,11 @@
                             //loop through reports and get each's contacts
                             for (var x = 0; x < result.length; x++) {
                                 var rep = {};
-                                rep.repID = result[x].Report.reporting_metrics_id; rep.State = result[x].Report.state; rep.report_date = result[x].Report.report_date;
-                                var submitter = $scope.members.filter(function (m) { return m.member_id == result[x].Report.member_id; })[0];
-                                var submitterAgency = $scope.agencies.filter(function (a) { return a.agency_id == submitter.agency_id; });
+                                rep.repID = result[x].reporting_metrics_id; rep.State = result[x].state; rep.report_date = result[x].report_date;
+                                var submitter = $scope.members.filter(function (m) { return m.member_id == result[x].member_id; })[0];
+                                var submitterAgency = $scope.agencies.filter(function (a) { return a.agency_id == submitter.agency_id; })[0];
                                 var sub = {};
-                                sub.fname = submitter.fname; sub.fname = submitter.fname;
+                                sub.fname = submitter.fname; sub.lname = submitter.lname;
                                 sub.email = submitter.email; sub.phone = submitter.phone;
                                 sub.agencyname = submitterAgency.agency_name;
                                 sub.agencyadd = submitterAgency.city + " " + submitterAgency.state + " " + submitterAgency.zip;
@@ -300,7 +300,7 @@
                                             $scope.GenRepEventModel.EventType = $scope.eventTypes.filter(function (et) { return et.event_type_id == $scope.EventName.event_type_id; })[0];
                                             $scope.GenRepEventModel.EventStat = $scope.eventStats.filter(function (es) { return es.event_status_id == $scope.EventName.event_status_id; })[0];
                                             //3. event Coordinator info
-                                            $scope.GenRepEventModel.Coordinator = $scope.members.filter(function (m) { return m.member_id == $scope.EventName.even_coordinator; })[0];
+                                            $scope.GenRepEventModel.Coordinator = $scope.members.filter(function (m) { return m.member_id == $scope.EventName.event_coordinator; })[0];
                                             $scope.GenRepEventModel.CoordAgency = $scope.agencies.filter(function (a) { return a.agency_id == $scope.GenRepEventModel.Coordinator.agency_id; })[0];
                                             return $scope.GenRepEventModel;
                                         }

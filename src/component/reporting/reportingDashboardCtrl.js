@@ -41,7 +41,7 @@
                         contacts: function () {
                             $http.defaults.headers.common.Authorization = 'Basic ' + $cookies.get('STNCreds');
                             $http.defaults.headers.common.Accept = 'application/json';
-                            return CONTACT.getContactModel({ ContactModelByReport: r.reporting_metrics_id }).$promise;
+                            return CONTACT.getContactModel({ ReportMetric: r.reporting_metrics_id }).$promise;
                         }
                     }
                 });
@@ -101,13 +101,13 @@
                 $scope.$parent.needToComplete = true;
                 $http.defaults.headers.common.Authorization = 'Basic ' + $cookies.get('STNCreds');
                 $http.defaults.headers.common.Accept = 'application/json';
-                CONTACT.getContactModel({ ContactModelByReport: rep.reporting_metrics_id }, function success(response) {
+                CONTACT.getContactModel({ ReportMetric: rep.reporting_metrics_id }, function success(response) {
                     if (response.length >= 1) {
-                        $scope.$parent.DeployStaff = response.filter(function (d) { return d.type == "Deployed Staff"; })[0];
-                        $scope.$parent.GenStaff = response.filter(function (d) { return d.type == "General"; })[0];
-                        $scope.$parent.InlandStaff = response.filter(function (d) { return d.type == "Inland Flood"; })[0];
-                        $scope.$parent.CoastStaff = response.filter(function (d) { return d.type == "Coastal Flood"; })[0];
-                        $scope.$parent.WaterStaff = response.filter(function (d) { return d.type == "Water Quality"; })[0];
+                        $scope.$parent.DeployStaff = response.filter(function (d) { return d.contactType == "Deployed Staff"; })[0];
+                        $scope.$parent.GenStaff = response.filter(function (d) { return d.contactType == "General"; })[0];
+                        $scope.$parent.InlandStaff = response.filter(function (d) { return d.contactType == "Inland Flood"; })[0];
+                        $scope.$parent.CoastStaff = response.filter(function (d) { return d.contactType == "Coastal Flood"; })[0];
+                        $scope.$parent.WaterStaff = response.filter(function (d) { return d.contactType == "Water Quality"; })[0];
                     } else {
                         $scope.$parent.DeployStaff = {}; $scope.$parent.GenStaff = {}; $scope.$parent.InlandStaff = {}; $scope.$parent.CoastStaff = {}; $scope.$parent.WaterStaff = {};
                     }

@@ -3,7 +3,8 @@
 
     //look up common service module, and register the new factory with that module 
     var STNResource = angular.module('STNResource', ['ngResource']);
-    var rootURL = "https://stntest.wim.usgs.gov/STNServices2";
+    //var rootURL = "https://stntest.wim.usgs.gov/STNServices2";
+    var rootURL = "https://stntest.wim.usgs.gov/STNServices2P";
    
 
     //#region AGENCY
@@ -40,7 +41,7 @@
                 getContactModel: {method: 'GET', isArray: true },
                 getAll: { method: 'GET', isArray: true },
                 update: { method: 'PUT', cache: false, isArray: false },
-                addReportContact: {method: 'POST', cache: false, isArray: false, url: rootURL + '/Contacts/AddReportContact'},
+                addReportContact: { method: 'POST', cache: false, isArray: false, params: { contactId: '@contactId', ReportId: '@reportId', ContactTypeId: '@contactTypeId' }, url: rootURL + '/Contacts/:contactId/AddReportContact' }, //"Contacts/{contactId}/addReportContact?ReportId={reportId}&ContactTypeId={contactTypeId}"
                 save: { method: 'POST', cache: false, isArray: false },
                 delete: { method: 'DELETE', cache: false, isArray: false }
             });
@@ -220,7 +221,7 @@
                 query: {},
                 getAll: { method: 'GET', isArray: true },
                 getFilteredHWMs: { method: 'GET', isArray: true, url: rootURL + '/HWMs/FilteredHWMs.json' }, //Event={eventIds}&EventType={eventTypeIDs}&EventStatus={eventStatusID}&States={states}&County={counties}&HWMType={hwmTypeIDs}&HWMQuality={hwmQualIDs}&HWMEnvironment={hwmEnvironment}&SurveyComplete={surveyComplete}&StillWater={stillWater}
-                getUnapprovedHWMs: { method: 'GET', cache: false }, //IsApproved={'true'/'false'}&Event={eventId}&Member={memberId}&State={state}
+                getUnapprovedHWMs: { method: 'GET', isArray: true, cache: false }, //IsApproved={'true'/'false'}&Event={eventId}&Member={memberId}&State={state}
                 getHWMApproval: {method: 'GET', cache: false, isArray: false, url: rootURL + '/hwms/:id/Approval.json'},
                 approveHWM: { method: 'POST', cache: false, isArray: false, params: { id: '@id' }, url: rootURL + '/hwms/:id/Approve.json' }, //posts an APPROVAL, updates the HWM with approval_id and returns APPROVAL
                 unApproveHWM: { method: 'DELETE', cache: false, isArray: false, url: rootURL + '/hwms/:id/Unapprove.json' }, //posts an APPROVAL, updates the HWM with approval_id and returns APPROVAL
@@ -274,10 +275,10 @@
 
     //#region INSTRUMENT
     STNResource.factory('INSTRUMENT', ['$resource', function ($resource) {
-        return $resource(rootURL + '/instruments/:id.json',
+        return $resource(rootURL + '/Instruments/:id.json',
             {}, {
                 query: {},
-                getAll: { method: 'GET', isArray: true, url: rootURL + '/Instruments/GetAll.json' },
+                getAll: { method: 'GET', isArray: true },
                 getstatusInstruments: { method: 'GET', isArray: true, url: rootURL + '/Instruments.json/' }, //CurrentStatus: 1, Event: $scope.evID 
                 getFullInstrument: { method: 'GET', url: rootURL + '/Instruments/:id/FullInstrument.json' }, //gets instrument and it's stats together
                 getInstrumentStatus: { method: 'GET', url: rootURL + '/Instruments/:id/InstrumentStatus.json' },
@@ -454,8 +455,8 @@
     }]);
     //#endregion of OBJECTIVE_POINT
 
-    //#region OP_CONTROL_IDENTIFIER
-    STNResource.factory('OP_CONTROL_IDENTIFIER', ['$resource', function ($resource) {
+    //#region OP_CONTROL_identifier
+    STNResource.factory('OP_CONTROL_identifier', ['$resource', function ($resource) {
         return $resource(rootURL + '/OPControlIdentifiers/:id.json',
             {}, {
                 query: {},
@@ -465,7 +466,7 @@
                 delete: { method: 'DELETE', cache: false, isArray: false }
             });
     }]);
-    //#endregion of OP_CONTROL_IDENTIFIER
+    //#endregion of OP_CONTROL_identifier
 
     //#region OP_MEASURE
     STNResource.factory('OP_MEASURE', ['$resource', function ($resource) {
@@ -565,17 +566,17 @@
     }]);
     //#endregion of SENSOR_BRAND
 
-    //#region SENSOR_DEPLOYMENT
-    STNResource.factory('SENSOR_DEPLOYMENT', ['$resource', function ($resource) {
-        return $resource(rootURL + '/SensorDeployments/:id.json',
-            {}, {
-                query: {},
-                getAll: { method: 'GET', isArray: true },               
-                update: { method: 'PUT', cache: false, isArray: false },
-                save: { method: 'POST', cache: false, isArray: false },
-                delete: { method: 'DELETE', cache: false, isArray: false }
-            });
-    }]);
+    //#region SENSOR_DEPLOYMENT --- no longer needed since SENSOR_TYPE returns as this relationship now
+    //STNResource.factory('SENSOR_DEPLOYMENT', ['$resource', function ($resource) {
+    //    return $resource(rootURL + '/SensorDeployments/:id.json',
+    //        {}, {
+    //            query: {},
+    //            getAll: { method: 'GET', isArray: true },               
+    //            update: { method: 'PUT', cache: false, isArray: false },
+    //            save: { method: 'POST', cache: false, isArray: false },
+    //            delete: { method: 'DELETE', cache: false, isArray: false }
+    //        });
+    //}]);
     //#endregion of SENSOR_DEPLOYMENT
 
     //#region SENSOR_TYPE
@@ -583,7 +584,7 @@
         return $resource(rootURL + '/SensorTypes/:id.json',
             {}, {
                 query: {},
-                getAll: { method: 'GET', isArray: true },
+                getAll: { method: 'GET', isArray: true }, //this returns sensortypes with list of deploymenttypes for each one
                 getSensorDeploymentTypes: { method: 'GET', isArray: true, url: rootURL + '/SensorTypes/:id/DeploymentTypes.json' },
                 addSensorDeploymentType: {method: 'POST', cache: false, isArray: true, url: rootURL + '/SensorTypes/:id/addDeploymentType'},
                 removeSensorDeploymentType: { method: 'POST', isArray: false, url: rootURL + '/SensorTypes/:id/removeDeploymentType' },
@@ -599,7 +600,10 @@
         return $resource(rootURL + '/Sites/:id.json',
             {}, {
                 query: {},
+                getProximitySites: {method: 'GET', isArray: true, params: { Latitude: '@latitude', Longitude: '@longitude', Buffer: '@buffer' }},
                 getAll: { method: 'GET', isArray: true },
+                getSearchedSite: { method: 'GET', isArray: false, url: rootURL + '/Sites/Search' }, //?bySiteNo={siteNo}&bySiteName={siteName}&bySiteId={siteId} (only going to populate 1 of these params
+                getFilteredSites: { method: 'GET', isArray: true, url: rootURL + '/Sites/FilteredSites.json' }, //accepts optional parameters: Event={eventId}&State={stateNames}&SensorType={sensorTypeId}&NetworkName={networkNameId}&OPDefined={opDefined}&HWMOnly={hwmOnlySites}
                 //landowner
                 getSiteLandOwner: { method: 'GET', url: rootURL + '/Sites/:id/LandOwner.json' },
                 //Site NetworkTypes
@@ -615,7 +619,7 @@
                 postSiteHousing: {method: 'POST', cache: false, isArray:true, url: rootURL + '/site/:id/AddSiteSiteHousing.json'},
                 //Site Parts
                 getSiteOPs: { method: 'GET', isArray: true, url: rootURL + '/Sites/:id/ObjectivePoints.json' },
-                getSiteSensors: { method: 'GET', isArray: true, url: rootURL + '/Sites/:id/FullInstrumentList.json' }, //all instruments and their stats together
+                getSiteSensors: { method: 'GET', isArray: true, url: rootURL + '/Sites/:id/SiteFullInstrumentList.json' }, //all instruments and their stats together
                 getSiteHWMs: { method: 'GET', isArray: true, url: rootURL + '/Sites/:id/HWMs.json' },
                 getSiteFiles: { method: 'GET', isArray: true, url: rootURL + '/Sites/:id/Files.json' },
                 getSitePeaks: { method: 'GET', isArray: true, url: rootURL + '/Sites/:id/PeakSummaryView.json' },

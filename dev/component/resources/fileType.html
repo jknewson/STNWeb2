@@ -7,10 +7,10 @@
             </tr>
         </thead>
         <tbody>
-            <tr ng-repeat="ft in fileTypeList | orderBy: 'FILETYPE'">
+            <tr ng-repeat="ft in fileTypeList | orderBy: 'filetype'">
                 <td style="white-space: nowrap">
                     <!-- form -->
-                    <form editable-form name="FTrowform" onaftersave="saveFileType($data, ft.FILETYPE_ID)" ng-show="FTrowform.$visible" class="form-buttons form-inline" shown="inserted == ft">
+                    <form editable-form name="FTrowform" onaftersave="saveFileType($data, ft.filetype_id)" ng-show="FTrowform.$visible" class="form-buttons form-inline" shown="inserted == ft">
                         <button type="submit" ng-disabled="FTrowform.$waiting" class="btn btn-primary">
                             save
                         </button>
@@ -24,8 +24,8 @@
                     </div>
                 </td>
                 <td>
-                    <div style="display:none"><span editable-text="ft.FILETYPE_ID" e-form="FTrowform" e-name="FILETYPE_ID">{{ft.FILETYPE_ID}}</span></div>
-                    <span editable-text="ft.FILETYPE" e-name="FILETYPE" e-form="FTrowform">{{ ft.FILETYPE || '' }}</span>
+                    <div style="display:none"><span editable-text="ft.filetype_id" e-form="FTrowform" e-name="filetype_id">{{ft.filetype_id}}</span></div>
+                    <span editable-text="ft.filetype" e-name="filetype" e-form="FTrowform">{{ ft.filetype || '' }}</span>
                 </td>
             </tr>
         </tbody>
@@ -40,9 +40,9 @@
             <fieldset>
 
                 <div class="form-group required">
-                    <label class="col-md-3 control-label req" for="FILETYPE">File Type:</label>
+                    <label class="col-md-3 control-label req" for="filetype">File Type:</label>
                     <div class="col-md-6">
-                        <input class="form-control" id="FILETYPE" name="FILETYPE" type="text" placeholder="" ng-model="newFT.FILETYPE" required />
+                        <input class="form-control" id="filetype" name="filetype" type="text" placeholder="" ng-model="newFT.filetype" required />
                     </div>                    
                 </div>
 
@@ -66,18 +66,18 @@
 </div><!--end admin view-->
 <div ng-if="accountRole !='Admin'">
     <script>
-        var sortingOrder = 'FILETYPE';
+        var sortingOrder = 'filetype';
     </script>
 
     <table class="table table-striped table-condensed">
         <thead>
             <tr>
-                <th class="FILETYPE">File Type&nbsp;<a ng-click="sort_by('FILETYPE')"><i class="glyphicon glyphicon-sort"></i></a></th>
+                <th class="filetype">File Type&nbsp;<a ng-click="sort_by('filetype')"><i class="glyphicon glyphicon-sort"></i></a></th>
             </tr>
         </thead>
         <tbody>
             <tr ng-repeat="ft in fileTypeList | orderBy:sortingOrder:reverse">
-                <td>{{ ft.FILETYPE || '' }}</td>
+                <td>{{ ft.filetype || '' }}</td>
             </tr>
         </tbody>
     </table>

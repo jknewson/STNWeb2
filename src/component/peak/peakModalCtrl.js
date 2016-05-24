@@ -318,7 +318,7 @@
                     $scope.DFBox.fileDesc = f.description;
                     $scope.DFBox.processedBy = allMembers.filter(function (m) { return m.member_id == response.processor_id; })[0];
                     $scope.DFBox.nwisFile = f.is_nwis == 1 ? true : false;
-                    $scope.DFBox.fileURL = f.file_url;
+                    $scope.DFBox.fileURL = f.name;
                     $scope.dataFileDetail = true; $scope.hwmDetail = false; $scope.sensorDetail = false;
                 });
                 

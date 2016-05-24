@@ -6,9 +6,9 @@
 
     STNControllers.controller('quickCreateCtrl', ['$scope', '$rootScope', '$cookies', '$location', '$state', '$http', '$uibModal', '$filter', '$sce', 'whichQuick', 'allHorDatums',
         'allHorCollMethods', 'allStates', 'allCounties', 'allOPTypes', 'allVertDatums', 'allVertColMethods', 'allOPQualities', 'allHWMTypes', 'allHWMQualities', 'allMarkers',
-        'allEvents', 'allSensorTypes', 'allSensorBrands', 'allDeployTypes', 'allHousingTypes', 'allSensDeps', 'SITE', 'OBJECTIVE_POINT', 'HWM', 'MEMBER', 'INSTRUMENT', 'INSTRUMENT_STATUS', 'OP_MEASURE',
+        'allEvents', 'allSensorTypes', 'allSensorBrands', 'allDeployTypes', 'allHousingTypes', 'SITE', 'OBJECTIVE_POINT', 'HWM', 'MEMBER', 'INSTRUMENT', 'INSTRUMENT_STATUS', 'OP_MEASURE',
         function ($scope, $rootScope, $cookies, $location, $state, $http, $uibModal, $filter, $sce, whichQuick, allHorDatums, allHorCollMethods, allStates, allCounties, allOPTypes,
-            allVertDatums, allVertColMethods, allOPQualities, allHWMTypes, allHWMQualities, allMarkers, allEvents, allSensorTypes, allSensorBrands, allDeployTypes, allHousingTypes, allSensDeps,
+            allVertDatums, allVertColMethods, allOPQualities, allHWMTypes, allHWMQualities, allMarkers, allEvents, allSensorTypes, allSensorBrands, allDeployTypes, allHousingTypes, 
             SITE, OBJECTIVE_POINT, HWM, MEMBER, INSTRUMENT, INSTRUMENT_STATUS, OP_MEASURE) {
             if ($cookies.get('STNCreds') === undefined || $cookies.get('STNCreds') === "") {
                 $scope.auth = false;
@@ -102,7 +102,8 @@
                     //get deployment types for sensor type chosen
                     $scope.getDepTypes = function () {
                         $scope.filteredDeploymentTypes = [];
-                        var matchingSensDeplist = allSensDeps.filter(function (sd) { return sd.sensor_type_id == $scope.aSensor.sensor_type_id; });
+                        var matchingSensDeplist = allSensorTypes.filter(function (sd) { return sd.sensor_type_id == $scope.aSensor.sensor_type_id; });
+                       // var matchingSensDeplist = allSensDeps.filter(function (sd) { return sd.sensor_type_id == $scope.aSensor.sensor_type_id; });
 
                         for (var y = 0; y < matchingSensDeplist.length; y++) {
                             for (var i = 0; i < $scope.depTypeList.length; i++) {

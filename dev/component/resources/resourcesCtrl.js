@@ -109,7 +109,7 @@
                         var index = $scope.agencyList.indexOf(ag);
                         //DELETE it
                         $http.defaults.headers.common.Authorization = 'Basic ' + $cookies.get('STNCreds');
-                        AGENCY.delete({ id: ag.AGENCY_ID }, ag, function success(response) {
+                        AGENCY.delete({ id: ag.agency_id }, ag, function success(response) {
                             $scope.agencyList.splice(index, 1);
                             toastr.success("Agency Removed");
                         }, function error(errorResponse) {
@@ -122,10 +122,10 @@
                 };
                 $scope.showStateAbbrev = function (a) {
                     var selected = [];
-                    if (a.STATE) {
-                        selected = $filter('filter')($scope.stateList, { STATE_ABBREV: a.STATE });
+                    if (a.state) {
+                        selected = $filter('filter')($scope.stateList, { state_abbrev: a.state });
                     }
-                    return selected.length ? selected[0].STATE_ABBREV : '';
+                    return selected.length ? selected[0].state_abbrev : '';
                 };
                 //#endregion Agency Add/Update/Delete
 
@@ -197,7 +197,7 @@
                         var index = $scope.contactTypeList.indexOf(ct);
                         //DELETE it
                         $http.defaults.headers.common.Authorization = 'Basic ' + $cookies.get('STNCreds');
-                        CONTACT_TYPE.delete({ id: ct.CONTACT_TYPE_ID }, ct, function success(response) {
+                        CONTACT_TYPE.delete({ id: ct.contact_type_id }, ct, function success(response) {
                             $scope.contactTypeList.splice(index, 1);
                             toastr.success("Contact Type Removed");
                         }, function error(errorResponse) {
@@ -271,7 +271,7 @@
                     modalInstance.result.then(function (keyToRemove) {
                         var index = $scope.deployPriorityList.indexOf(dp);
                         $http.defaults.headers.common.Authorization = 'Basic ' + $cookies.get('STNCreds');
-                        DEPLOYMENT_PRIORITY.delete({ id: dp.PRIORITY_ID }, dp, function success(response) {
+                        DEPLOYMENT_PRIORITY.delete({ id: dp.priority_id }, dp, function success(response) {
                             $scope.deployPriorityList.splice(index, 1);
                             toastr.success("Deployment Priority Removed");
                         }, function error(errorResponse) {
@@ -345,7 +345,7 @@
                     modalInstance.result.then(function (keyToRemove) {
                         var index = $scope.eventStatList.indexOf(es);
                         $http.defaults.headers.common.Authorization = 'Basic ' + $cookies.get('STNCreds');
-                        EVENT_STATUS.delete({ id: es.EVENT_STATUS_ID }, es, function success(response) {
+                        EVENT_STATUS.delete({ id: es.event_status_id }, es, function success(response) {
                             $scope.eventStatList.splice(index, 1);
                             toastr.success("Event Status Removed");
                         }, function error(errorResponse) {
@@ -425,7 +425,7 @@
                         var index = $scope.eventTypeList.indexOf(et);
                         //DELETE it
                         $http.defaults.headers.common.Authorization = 'Basic ' + $cookies.get('STNCreds');
-                        EVENT_TYPE.delete({ id: et.EVENT_TYPE_ID }, et, function success(response) {
+                        EVENT_TYPE.delete({ id: et.event_type_id }, et, function success(response) {
                             $scope.eventTypeList.splice(index, 1);
                             toastr.success("Event Type Removed");
                         }, function error(errorResponse) {
@@ -499,7 +499,7 @@
                     modalInstance.result.then(function (keyToRemove) {
                         var index = $scope.fileTypeList.indexOf(ft);
                         $http.defaults.headers.common.Authorization = 'Basic ' + $cookies.get('STNCreds');
-                        FILE_TYPE.delete({ id: ft.FILETYPE_ID }, ft, function success(response) {
+                        FILE_TYPE.delete({ id: ft.filetype_id }, ft, function success(response) {
                             $scope.fileTypeList.splice(index, 1);
                             toastr.success("File Type Removed");
                         }, function error(errorResponse) {
@@ -573,7 +573,7 @@
                     modalInstance.result.then(function (keyToRemove) {
                         var index = $scope.horColMethList.indexOf(hcm);
                         $http.defaults.headers.common.Authorization = 'Basic ' + $cookies.get('STNCreds');
-                        HORIZONTAL_COLL_METHODS.delete({ id: hcm.HCOLLECT_METHOD_ID }, hcm, function success(response) {
+                        HORIZONTAL_COLL_METHODS.delete({ id: hcm.hcollect_method_id }, hcm, function success(response) {
                             $scope.horColMethList.splice(index, 1);
                             toastr.success("Horizontal Collection Method Removed");
                         }, function error(errorResponse) {
@@ -653,7 +653,7 @@
                         var index = $scope.horDatList.indexOf(hd);
                         //DELETE it
                         $http.defaults.headers.common.Authorization = 'Basic ' + $cookies.get('STNCreds');
-                        HORIZONTAL_DATUM.delete({ id: hd.DATUM_ID }, hd, function success(response) {
+                        HORIZONTAL_DATUM.delete({ id: hd.datum_id }, hd, function success(response) {
                             $scope.horDatList.splice(index, 1);
                             toastr.success("Horizontal Datum Removed");
                         }, function error(errorResponse) {
@@ -727,7 +727,7 @@
                     modalInstance.result.then(function (keyToRemove) {
                         var index = $scope.houseTypeList.indexOf(ht);
                         $http.defaults.headers.common.Authorization = 'Basic ' + $cookies.get('STNCreds');
-                        HOUSING_TYPE.delete({ id: ht.HOUSING_TYPE_ID }, ht, function success(response) {
+                        HOUSING_TYPE.delete({ id: ht.housing_type_id }, ht, function success(response) {
                             $scope.houseTypeList.splice(index, 1);
                             toastr.success("Housing Type Removed");
                         }, function error(errorResponse) {
@@ -801,7 +801,7 @@
                     modalInstance.result.then(function (keyToRemove) {
                         var index = $scope.hwmQualList.indexOf(hwmq);
                         $http.defaults.headers.common.Authorization = 'Basic ' + $cookies.get('STNCreds');
-                        HWM_QUALITY.delete({ id: hwmq.HWM_QUALITY_ID }, hwmq, function success(response) {
+                        HWM_QUALITY.delete({ id: hwmq.hwm_quality_id }, hwmq, function success(response) {
                             $scope.hwmQualList.splice(index, 1);
                             toastr.success("HWM Quality Removed");
                         }, function error(errorResponse) {
@@ -881,7 +881,7 @@
                         var index = $scope.hwmTypeList.indexOf(hwmt);
                         //DELETE it
                         $http.defaults.headers.common.Authorization = 'Basic ' + $cookies.get('STNCreds');
-                        HWM_TYPE.delete({ id: hwmt.HWM_TYPE_ID }, hwmt, function success(response) {
+                        HWM_TYPE.delete({ id: hwmt.hwm_type_id }, hwmt, function success(response) {
                             $scope.hwmTypeList.splice(index, 1);
                             toastr.success("HWM Type Removed");
                         }, function error(errorResponse) {
@@ -1029,7 +1029,7 @@
                     modalInstance.result.then(function (keyToRemove) {
                         var index = $scope.markList.indexOf(m);
                         $http.defaults.headers.common.Authorization = 'Basic ' + $cookies.get('STNCreds');
-                        MARKER.delete({ id: m.MARKER_ID }, m, function success(response) {
+                        MARKER.delete({ id: m.marker_id }, m, function success(response) {
                             $scope.markList.splice(index, 1);
                             toastr.success("Marker Removed");
                         }, function error(errorResponse) {
@@ -1103,7 +1103,7 @@
                     modalInstance.result.then(function (keyToRemove) {
                         var index = $scope.netNameList.indexOf(nn);
                         $http.defaults.headers.common.Authorization = 'Basic ' + $cookies.get('STNCreds');
-                        NETWORK_NAME.delete({ id: nn.NETWORK_NAME_ID }, nn, function success(response) {
+                        NETWORK_NAME.delete({ id: nn.network_name_id }, nn, function success(response) {
                             $scope.netNameList.splice(index, 1);
                             toastr.success("Network Name Removed");
                         }, function error(errorResponse) {
@@ -1183,7 +1183,7 @@
                         var index = $scope.opQualList.indexOf(opq);
                         //DELETE it
                         $http.defaults.headers.common.Authorization = 'Basic ' + $cookies.get('STNCreds');
-                        OP_QUALITY.delete({ id: opq.OP_QUALITY_ID }, opq, function success(response) {
+                        OP_QUALITY.delete({ id: opq.op_quality_id }, opq, function success(response) {
                             $scope.opQualList.splice(index, 1);
                             toastr.success("Objective Point Quality Removed");
                         }, function error(errorResponse) {
@@ -1257,7 +1257,7 @@
                     modalInstance.result.then(function (keyToRemove) {
                         var index = $scope.opTypeList.indexOf(opt);
                         $http.defaults.headers.common.Authorization = 'Basic ' + $cookies.get('STNCreds');
-                        OP_TYPE.delete({ id: opt.OBJECTIVE_POINT_TYPE_ID }, opt, function success(response) {
+                        OP_TYPE.delete({ id: opt.objective_point_type_id }, opt, function success(response) {
                             $scope.opTypeList.splice(index, 1);
                             toastr.success("Objective Point Type Removed");
                         }, function error(errorResponse) {
@@ -1331,7 +1331,7 @@
                     modalInstance.result.then(function (keyToRemove) {
                         var index = $scope.sensBrandList.indexOf(sb);
                         $http.defaults.headers.common.Authorization = 'Basic ' + $cookies.get('STNCreds');
-                        SENSOR_BRAND.delete({ id: sb.SENSOR_BRAND_ID }, sb, function success(response) {
+                        SENSOR_BRAND.delete({ id: sb.sensor_brand_id }, sb, function success(response) {
                             $scope.sensBrandList.splice(index, 1);
                             toastr.success("Sensor Brand Removed");
                         }, function error(errorResponse) {
@@ -1411,7 +1411,7 @@
                         var index = $scope.depTypeList.indexOf(dt);
                         //DELETE it
                         $http.defaults.headers.common.Authorization = 'Basic ' + $cookies.get('STNCreds');
-                        DEPLOYMENT_TYPE.delete({ id: dt.DEPLOYMENT_TYPE_ID }, dt, function success(response) {
+                        DEPLOYMENT_TYPE.delete({ id: dt.deployment_type_id }, dt, function success(response) {
                             $scope.depTypeList.splice(index, 1);
                             toastr.success("Deployment Type Removed");
                         }, function error(errorResponse) {
@@ -1485,7 +1485,7 @@
                     modalInstance.result.then(function (keyToRemove) {
                         var index = $scope.statTypeList.indexOf(statT);
                         $http.defaults.headers.common.Authorization = 'Basic ' + $cookies.get('STNCreds');
-                        STATUS_TYPE.delete({ id: statT.STATUS_TYPE_ID }, statT, function success(response) {
+                        STATUS_TYPE.delete({ id: statT.status_type_id }, statT, function success(response) {
                             $scope.statTypeList.splice(index, 1);
                             toastr.success("Status Type Removed");
                         }, function error(errorResponse) {
@@ -1505,13 +1505,13 @@
                 //add the deployment types
                 $scope.formattedSensTypeList = [];
                 $scope.sensTypeList.forEach(function (sensType) {
-                    SENSOR_TYPE.getSensorDeploymentTypes({ id: sensType.SENSOR_TYPE_ID }, function success(response) {
+                    SENSOR_TYPE.getSensorDeploymentTypes({ id: sensType.sensor_type_id }, function success(response) {
                         var deps = response;
                         sensType.DepTypes = []; var DepMStrings = []; sensType.DepMETHODStrings = "";
                         if (deps.length > 0) {
                             deps.forEach(function (d) {
-                                sensType.DepTypes.push(d.DEPLOYMENT_TYPE_ID);
-                                DepMStrings.push(d.METHOD);
+                                sensType.DepTypes.push(d.deployment_type_id);
+                                DepMStrings.push(d.method);
                                 sensType.DepMETHODStrings = DepMStrings.join(', ');
                             });
                         }
@@ -1523,8 +1523,8 @@
                 $scope.showDepTypes = function (SenT) {
                     var selected = [];
                     angular.forEach($scope.depTypeList, function (s) {
-                        if (SenT.DepTypes.indexOf(s.DEPLOYMENT_TYPE_ID) >= 0) {
-                            selected.push(s.METHOD);
+                        if (SenT.DepTypes.indexOf(s.deployment_type_id) >= 0) {
+                            selected.push(s.method);
                         }
                     });
                     return selected.length ? selected.join(', ') : "";
@@ -1538,11 +1538,11 @@
                         angular.forEach(originalChecked, function (oc) {
                             if (nowChecked.indexOf(oc) < 0) {
                                 //not there anymore
-                                var deleteDep = $scope.depTypeList.filter(function (dt) { return dt.DEPLOYMENT_TYPE_ID == oc; })[0];
+                                var deleteDep = $scope.depTypeList.filter(function (dt) { return dt.deployment_type_id == oc; })[0];
                                 //make sure you don't add it twice
                                 if ($scope.removeTheseDepTypes.length > 0) {
                                     for (var d = 0; d < $scope.removeTheseDepTypes.length; d++) {
-                                        if ($scope.removeTheseDepTypes[d].DEPLOYMENT_TYPE_ID == deleteDep.DEPLOYMENT_TYPE_ID) {
+                                        if ($scope.removeTheseDepTypes[d].deployment_type_id == deleteDep.deployment_type_id) {
                                             //forgettabout it
                                             d = $scope.newDepTypeRelating.length;
                                         } else {
@@ -1580,7 +1580,7 @@
                         //dont add it more than once
                         if ($scope.newDepTypeRelating.length > 0) {
                             for (var d = 0; d < $scope.newDepTypeRelating.length; d++) {
-                                if ($scope.newDepTypeRelating[d].DEPLOYMENT_TYPE_ID == dt.DEPLOYMENT_TYPE_ID) {
+                                if ($scope.newDepTypeRelating[d].deployment_type_id == dt.deployment_type_id) {
                                     //forgettabout it
                                     d = $scope.newDepTypeRelating.length;
                                 } else {
@@ -1610,8 +1610,8 @@
                             if ($scope.newDepTypeRelating.length > 0) {
                                 angular.forEach($scope.newDepTypeRelating, function (ndt) {
                                     delete ndt.selected;
-                                    relatedDeps.push(ndt.DEPLOYMENT_TYPE_ID);
-                                    SENSOR_TYPE.addSensorDeploymentType({ id: newSensor.SENSOR_TYPE_ID }, ndt, function success(response1) {
+                                    relatedDeps.push(ndt.deployment_type_id);
+                                    SENSOR_TYPE.addSensorDeploymentType({ id: newSensor.sensor_type_id }, ndt, function success(response1) {
                                         var test;
                                     }, function error(errorResponse) {
                                         var what = errorResponse.statusText;
@@ -1631,12 +1631,12 @@
                     $http.defaults.headers.common.Authorization = 'Basic ' + $cookies.get('STNCreds');
                     $http.defaults.headers.common.Accept = 'application/json';
                     //pull out just the sensor and then the deployment type to post separately
-                    var ST = { SENSOR_TYPE_ID: data.SENSOR_TYPE_ID, SENSOR: data.SENSOR };
+                    var ST = { sensor_type_id: data.sensor_type_id, sensor: data.sensor };
                     var DTs = [];
                     //get the Deployment Types from the list of ids in data.DepTypes
                     angular.forEach($scope.depTypeList, function (s) {
-                        if (data.DepTypes.indexOf(s.DEPLOYMENT_TYPE_ID) >= 0) {
-                            var thisDT = { DEPLOYMENT_TYPE_ID: s.DEPLOYMENT_TYPE_ID, METHOD: s.METHOD };
+                        if (data.DepTypes.indexOf(s.deployment_type_id) >= 0) {
+                            var thisDT = { deployment_type_id: s.deployment_type_id, method: s.method };
                             DTs.push(thisDT);
                         }
                     });
@@ -1683,21 +1683,21 @@
                     });
                     modalInstance.result.then(function (keyToRemove) {
                         var index = $scope.formattedSensTypeList.indexOf(senT);
-                        var ST = { SENSOR_TYPE_ID: senT.SENSOR_TYPE_ID, SENSOR: senT.SENSOR };
+                        var ST = { sensor_type_id: senT.sensor_type_id, sensor: senT.sensor };
                         $http.defaults.headers.common.Authorization = 'Basic ' + $cookies.get('STNCreds');
 
                         //need to delete the relationship before I can delete the sensor type                    
                         angular.forEach($scope.depTypeList, function (s) {
-                            if (senT.DepTypes.indexOf(s.DEPLOYMENT_TYPE_ID) >= 0) {
+                            if (senT.DepTypes.indexOf(s.deployment_type_id) >= 0) {
                                 //get it and then delete the relationship
-                                var thisDT = { DEPLOYMENT_TYPE_ID: s.DEPLOYMENT_TYPE_ID, METHOD: s.METHOD };
-                                SENSOR_TYPE.removeSensorDeploymentType({ id: ST.SENSOR_TYPE_ID }, thisDT, function success(response2) {
+                                var thisDT = { deployment_type_id: s.deployment_type_id, method: s.method };
+                                SENSOR_TYPE.removeSensorDeploymentType({ id: ST.sensor_type_id }, thisDT, function success(response2) {
                                     var removed;
                                 });
                             }
                         });
                         //now delete the sensor                    
-                        SENSOR_TYPE.delete({ id: ST.SENSOR_TYPE_ID }, ST, function success(response) {
+                        SENSOR_TYPE.delete({ id: ST.sensor_type_id }, ST, function success(response) {
                             $scope.formattedSensTypeList.splice(index, 1);
                             //get the Deployment Types from the list of ids in data.DepTypes
 
@@ -1779,7 +1779,7 @@
                         var index = $scope.netTypeList.indexOf(nt);
                         //DELETE it
                         $http.defaults.headers.common.Authorization = 'Basic ' + $cookies.get('STNCreds');
-                        NETWORK_TYPE.delete({ id: nt.NETWORK_TYPE_ID }, nt, function success(response) {
+                        NETWORK_TYPE.delete({ id: nt.network_type_id }, nt, function success(response) {
                             $scope.netTypeList.splice(index, 1);
                             toastr.success("Network Type Removed");
                         }, function error(errorResponse) {
@@ -1853,7 +1853,7 @@
                     modalInstance.result.then(function (keyToRemove) {
                         var index = $scope.vertColMethList.indexOf(vcm);
                         $http.defaults.headers.common.Authorization = 'Basic ' + $cookies.get('STNCreds');
-                        VERTICAL_COLL_METHOD.delete({ id: vcm.VCOLLECT_METHOD_ID }, vcm, function success(response) {
+                        VERTICAL_COLL_METHOD.delete({ id: vcm.vcollect_method_id }, vcm, function success(response) {
                             $scope.vertColMethList.splice(index, 1);
                             toastr.success("Vertical Collection Method Removed");
                         }, function error(errorResponse) {
@@ -1927,7 +1927,7 @@
                     modalInstance.result.then(function (keyToRemove) {
                         var index = $scope.vertDatList.indexOf(vd);
                         $http.defaults.headers.common.Authorization = 'Basic ' + $cookies.get('STNCreds');
-                        VERTICAL_DATUM.delete({ id: vd.DATUM_ID }, vd, function success(response) {
+                        VERTICAL_DATUM.delete({ id: vd.datum_id }, vd, function success(response) {
                             $scope.vertDatList.splice(index, 1);
                             toastr.success("Vertical Datum Removed");
                         }, function error(errorResponse) {

@@ -15,8 +15,8 @@
             $scope.filterEvents = function () {
                 //?Date: null, Type: 0, State: null
                 var d = $scope.event.DATE !== null && $scope.event.DATE !== undefined ? $scope.event.DATE : null;
-                var t = $scope.event.TYPE !== null && $scope.event.TYPE !== undefined ? $scope.event.TYPE : 0;
-                var s = $scope.event.STATE !== null && $scope.event.STATE !== undefined ? $scope.event.STATE : null;
+                var t = $scope.event.type !== null && $scope.event.type !== undefined ? $scope.event.type : 0;
+                var s = $scope.event.state !== null && $scope.event.state !== undefined ? $scope.event.state : null;
                 EVENT.getFilteredEvents({ Date: d, Type: t, State: s }).$promise.then(function (response) {
                     $scope.EventList = response;
                 });
@@ -29,11 +29,11 @@
             //event has been chosen. Set it as session event
             $scope.setEvent = function () {
                 $scope.evID = $scope.event.EventChosen;
-                var eventName = allEvents.filter(function (x) { return x.EVENT_ID == $scope.evID; })[0];
+                var eventName = allEvents.filter(function (x) { return x.event_id == $scope.evID; })[0];
                 $cookies.put('SessionEventID', $scope.evID);
-                $cookies.put('SessionEventName', eventName.EVENT_NAME);               
+                $cookies.put('SessionEventName', eventName.event_name);               
 
-                $rootScope.sessionEvent = "Session Event: " + eventName.EVENT_NAME + ".";
+                $rootScope.sessionEvent = "Session Event: " + eventName.event_name + ".";
                 $uibModalInstance.dismiss('cancel');
             };
 

@@ -22,7 +22,7 @@
                 <ul style="padding-left: 0">
                     <li style="list-style:none;padding-bottom: 15px;">
                         <span class="col-sm-9 borderLess" style="padding:0">
-                            <a class="btn borderLess" style="padding:0" title="{{f.FILE_DATE | date: 'MM/dd/yyyy'}} ({{f.PATH || f.FILE_URL || f.FILE_ID}})" ng-click="showFileModal(f)">{{f.FILE_DATE | date: 'MM/dd/yyyy'}} ({{f.PATH || f.FILE_URL || f.FILE_ID}})</a>
+                            <a class="btn borderLess" style="padding:0" title="{{f.file_date | date: 'MM/dd/yyyy'}} ({{f.name || f.file_id}})" ng-click="showFileModal(f)">{{f.file_date | date: 'MM/dd/yyyy'}} ({{f.name || f.file_id}})</a>
                         </span>
                     </li>
                 </ul>
@@ -40,7 +40,7 @@
                 <ul style="padding-left: 0">
                     <li style="list-style:none;padding-bottom: 15px;">
                         <span class="col-sm-9 borderLess" style="padding:0">
-                            <a class="btn borderLess" style="padding:0" title="{{f.typeName}}- {{f.FILE_DATE | date: 'MM/dd/yyyy'}} ({{f.PATH || f.FILE_URL || f.FILE_ID}})" ng-click="showFileModal(f)">{{f.typeName}}- {{f.FILE_DATE | date: 'MM/dd/yyyy'}} ({{f.PATH || f.FILE_URL || f.FILE_ID}})</a>
+                            <a class="btn borderLess" style="padding:0" title="{{f.typeName}}- {{f.file_date | date: 'MM/dd/yyyy'}} ({{f.name || f.file_id}})" ng-click="showFileModal(f)">{{f.typeName}}- {{f.file_date | date: 'MM/dd/yyyy'}} ({{f.name || f.file_id}})</a>
                         </span>
                     </li>
                 </ul>
@@ -58,7 +58,7 @@
                 <ul style="padding-left: 0">
                     <li style="list-style:none;padding-bottom: 15px;">
                         <span class="col-sm-9 borderLess" style="padding:0">
-                            <a class="btn borderLess" style="padding:0" title="{{f.typeName}}- {{f.FILE_DATE | date: 'MM/dd/yyyy'}} ({{f.PATH || f.FILE_URL || f.FILE_ID}})" ng-click="showFileModal(f)">{{f.typeName}}- {{f.FILE_DATE | date: 'MM/dd/yyyy'}} ({{f.PATH || f.FILE_URL || f.FILE_ID}})</a>
+                            <a class="btn borderLess" style="padding:0" title="{{f.typeName}}- {{f.file_date | date: 'MM/dd/yyyy'}} ({{f.name || f.file_id}})" ng-click="showFileModal(f)">{{f.typeName}}- {{f.file_date | date: 'MM/dd/yyyy'}} ({{f.name || f.file_id}})</a>
                         </span>
                     </li>
                 </ul>
@@ -76,7 +76,7 @@
                 <ul style="padding-left: 0">
                     <li style="list-style:none;padding-bottom: 15px;">
                         <span class="col-sm-9 borderLess" style="padding:0">
-                            <a class="btn borderLess" style="padding:0" title="{{f.FILE_DATE | date: 'MM/dd/yyyy'}} ({{f.PATH || f.FILE_URL || f.FILE_ID}})" ng-click="showFileModal(f)">{{f.FILE_DATE | date: 'MM/dd/yyyy'}} ({{f.PATH || f.FILE_URL || f.FILE_ID}})</a>
+                            <a class="btn borderLess" style="padding:0" title="{{f.file_date | date: 'MM/dd/yyyy'}} ({{f.name || f.file_id}})" ng-click="showFileModal(f)">{{f.file_date | date: 'MM/dd/yyyy'}} ({{f.name || f.file_id}})</a>
                         </span>
                     </li>
                 </ul>
@@ -87,10 +87,10 @@
         <br clear="all" />
         <div ng-if="SiteFiles.length > 0" style="height:140px;" title="Click image for preview.">
             <uib-carousel interval="4000">
-                <uib-slide ng-repeat="f in SiteFiles | where:{FILETYPE_ID: 1}">
-                    <img ng-click="showImageModal(f.FILE_ID)" ng-src="{{serverURL}}/Files/{{f.FILE_ID}}/Item" />
+                <uib-slide ng-repeat="f in SiteFiles | where:{filetype_id: 1}">
+                    <img ng-click="showImageModal(f.file_id)" ng-src="{{serverURL}}/Files/{{f.file_id}}/Item" />
                     <div class="carousel-caption">
-                        <p>{{f.PATH || f.FILE_URL || f.FILE_ID}}</p>
+                        <p>{{f.name || f.file_id}}</p>
                     </div>
                 </uib-slide>
             </uib-carousel>

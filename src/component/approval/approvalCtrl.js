@@ -22,9 +22,7 @@
 
                 $http.defaults.headers.common.Authorization = 'Basic ' + $cookies.get('STNCreds');
                 $http.defaults.headers.common.Accept = 'application/json';
-                MEMBER.getAll(function success(response) {
-                    $scope.allMembers = response;
-                }).$promise;
+                MEMBER.getAll(function success(response) { $scope.allMembers = response;}).$promise;
 
                 $scope.allStates = stateList;
                 $scope.allInstruments = instrumentList;
@@ -91,7 +89,13 @@
                     $http.defaults.headers.common.Authorization = 'Basic ' + $cookies.get('STNCreds');
                     $http.defaults.headers.common.Accept = 'application/json';
                     HWM.getUnapprovedHWMs({ IsApproved: 'false', Event: evID, Member: mID, State: sID }, function success(response) {
-                        $scope.unApprovedHWMs = response;
+                        //need site no
+                        angular.forEach(response, function (h) {
+                            SITE.query({ id: h.site_id }).$promise.then(function (sresponse) {
+                                h.site_no = sresponse.site_no;
+                                $scope.unApprovedHWMs.push(h);
+                            });
+                        });
                         $scope.showHWMbox = true;
 
                     }, function error(errorResponse) {

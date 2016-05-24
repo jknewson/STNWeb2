@@ -8,7 +8,7 @@
     STNControllers.controller('MapSensorProposeController', ['$scope', '$http', '$timeout', '$rootScope', '$cookies', '$location', 'SITE', 'INSTRUMENT', 'INSTRUMENT_STATUS', 'allDeployTypes', 'allSensDeps', 'leafletMarkerEvents', 'leafletBoundsHelpers', '$state',
         function ($scope, $http, $timeout, $rootScope, $cookies, $location, SITE, INSTRUMENT, INSTRUMENT_STATUS, allDeployTypes, allSensDeps, leafletMarkerEvents, leafletBoundsHelpers, $state) {
             //when a site is  clicked, this will be triggered from service to let this controller know about it
-            $rootScope.$on('mapSiteClick', function (event, siteParts) {
+            $rootScope.$on('mapSiteClickResults', function (event, siteParts) {
                 $scope.thisSite = siteParts[0]; //here's the site they clicked
                 $scope.status.sensorOpen = false; //make sure the proposed sensor accordion is closed so they have to open and trigger the get
                 $scope.ProposedSensors4Site = []; //make sure this is clear in case they are clicking on one site after another
@@ -20,17 +20,17 @@
 
             //fix deployment types so that "Temperature" becomes 2 : Temperature (Met sensor)-SensorType:2 and Temperature (pressure transducer)-SensorType:1 -- just for proposed
             for (var d = 0; d < $scope.deployTypeList.length; d++) {
-                if ($scope.deployTypeList[d].METHOD === "Temperature") {
-                    tempDepTypeID = $scope.deployTypeList[d].DEPLOYMENT_TYPE_ID;
-                    $scope.deployTypeList[d].METHOD = "Temperature (Met sensor)";
+                if ($scope.deployTypeList[d].method === "Temperature") {
+                    tempDepTypeID = $scope.deployTypeList[d].deployment_type_id;
+                    $scope.deployTypeList[d].method = "Temperature (Met sensor)";
                 }
             }
-            $scope.deployTypeList.push({ DEPLOYMENT_TYPE_ID: tempDepTypeID, METHOD: "Temperature (Pressure Transducer)" });
+            $scope.deployTypeList.push({ deployment_type_id: tempDepTypeID, method: "Temperature (Pressure Transducer)" });
 
             //proposed sensors accordion was opened, go get them
             $scope.getProposedSensors = function () {
-                SITE.getSiteSensors({ id: $scope.thisSite.SITE_ID }).$promise.then(function (sResponse) {
-                    $scope.ProposedSensors4Site = sResponse.filter(function (ss) { return ss.InstrumentStats[0].STATUS_TYPE_ID == 4; });
+                SITE.getSiteSensors({ id: $scope.thisSite.site_id }).$promise.then(function (sResponse) {
+                    $scope.ProposedSensors4Site = sResponse.filter(function (ss) { return ss.instrument_status[0].status_type_id == 4; });
                 });
             };
 
@@ -53,19 +53,28 @@
                 for (var dt = 0; dt < $scope.deployTypeList.length; dt++) {
                     if ($scope.deployTypeList[dt].selected === true) {
                         var proposedToAdd = {}; var propStatToAdd = {};
-                        if ($scope.deployTypeList[dt].METHOD.substring(0, 4) == "Temp") {
+                       
+                        if ($scope.deployTypeList[dt].method.substring(0, 4) == "Temp") {
                             //temperature proposed sensor
                             proposedToAdd = {
-                                DEPLOYMENT_TYPE_ID: $scope.deployTypeList[dt].DEPLOYMENT_TYPE_ID,
-                                SITE_ID: $scope.thisSite.SITE_ID,
-                                SENSOR_TYPE_ID: $scope.deployTypeList[dt].METHOD == "Temperature (Pressure Transducer)" ? 1 : 2,
+                                deployment_type_id: $scope.deployTypeList[dt].deployment_type_id,
+                                site_id: $scope.thisSite.site_id,
+                                sensor_type_id: $scope.deployTypeList[dt].method == "Temperature (Pressure Transducer)" ? 1 : 2,
                             };
                         } else {
+                            //go through the new fullInstrument and see if any of the sensor's deploymenttypes are this deployment type to set the sensor_type_id
+                            var sID = 0;
+                            angular.forEach($scope.sensDepTypes, function (sdt) {
+                                for (var x = 0; x < sdt.deploymenttypes.length; x++) {
+                                    if (sdt.deploymenttypes[x].deployment_type_id == $scope.deployTypeList[dt].deployment_type_id)
+                                        sID = sdt.sensor_type_id;
+                                }
+                            });
                             //any other type
                             proposedToAdd = {
-                                DEPLOYMENT_TYPE_ID: $scope.deployTypeList[dt].DEPLOYMENT_TYPE_ID,
-                                SITE_ID: $scope.thisSite.SITE_ID,
-                                SENSOR_TYPE_ID: $scope.sensDepTypes.filter(function (sdt) { return sdt.DEPLOYMENT_TYPE_ID == $scope.deployTypeList[dt].DEPLOYMENT_TYPE_ID; })[0].SENSOR_TYPE_ID,
+                                deployment_type_id: $scope.deployTypeList[dt].deployment_type_id,
+                                site_id: $scope.thisSite.site_id,
+                                sensor_type_id: sID
                             };
                         }
                         //now post it (Instrument first, then Instrument Status
@@ -74,22 +83,19 @@
 
                         INSTRUMENT.save(proposedToAdd).$promise.then(function (response) {
                             var createdPropSensor = {
-                                DEPLOYMENT_TYPE_ID: response.DEPLOYMENT_TYPE_ID,
-                                SITE_ID: response.SITE_ID,
-                                SENSOR_TYPE_ID: response.SENSOR_TYPE_ID,
-                                INSTRUMENT_ID: response.INSTRUMENT_ID,
-                                Deployment_Type: $scope.deployTypeList.filter(function (dtl) { return dtl.DEPLOYMENT_TYPE_ID == response.DEPLOYMENT_TYPE_ID; })[0].METHOD
+                                deployment_type_id: response.deployment_type_id,
+                                site_id: response.site_id,
+                                sensor_type_id: response.sensor_type_id,
+                                instrument_id: response.instrument_id,
+                                deploymentType: $scope.deployTypeList.filter(function (dtl) { return dtl.deployment_type_id == response.deployment_type_id; })[0].method,
+                                sensorType: $scope.sensDepTypes.filter(function (s) { return s.sensor_type_id == response.sensor_type_id;})[0].sensor
                             };
-                            propStatToAdd = { INSTRUMENT_ID: response.INSTRUMENT_ID, STATUS_TYPE_ID: 4, MEMBER_ID: $cookies.get('mID'), TIME_STAMP: Time_STAMP, TIME_ZONE: 'UTC', };
+                            propStatToAdd = { instrument_id: response.instrument_id, status_type_id: 4, member_id: $cookies.get('mID'), time_stamp: Time_STAMP, time_zone: 'UTC', };
 
                             INSTRUMENT_STATUS.save(propStatToAdd).$promise.then(function (statResponse) {
-                                propStatToAdd.Status = 'Proposed'; propStatToAdd.INSTRUMENT_STATUS_ID = statResponse.INSTRUMENT_STATUS_ID;
-                                //statResponse.Status = 'Proposed';
-                                var instToPushToList = {
-                                    Instrument: createdPropSensor,
-                                    InstrumentStats: [propStatToAdd]
-                                };
-                                $scope.ProposedSensors4Site.push(instToPushToList);
+                                propStatToAdd.Status = 'Proposed'; propStatToAdd.instrument_status_id = statResponse.instrument_status_id;
+                                createdPropSensor.instrument_status = [propStatToAdd];                               
+                                $scope.ProposedSensors4Site.push(createdPropSensor);
                                 
                                 //clean up ...all unchecked and then hide
                                 for (var dep = 0; dep < $scope.deployTypeList.length; dep++) {
@@ -101,7 +107,11 @@
                                     toastr.success("Proposed sensor created");
                                 });
 
+                            }, function (errorResponse) {
+                                toastr.error("Error creating proposed instrument: " + errorResponse.statusText);
                             });//end INSTRUMENT_STATUS.save
+                        }, function (errorResponse) {
+                            toastr.error("Error creating proposed instrument: " + errorResponse.statusText);
                         }); //end INSTRUMENT.save
                     }//end if selected == true
                 }//end foreach deployTypeList

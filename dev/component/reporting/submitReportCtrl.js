@@ -6,29 +6,42 @@
         function ($scope, $http, $cookies, $uibModal, $state, CONTACT, REPORT) {
             //#make sure this clears except for if they are needing to complete a report
             if ($scope.$parent.needToComplete !== true) {
-                $scope.$parent.newReport = {REPORT_DATE: new Date()};
+                $scope.$parent.newReport = {report_date: new Date()};
             }
             else {
                 //keeps it valid and tells it it's utc so it will convert proper local
-                var yr = $scope.newReport.REPORT_DATE.substr(0, 4);
-                var mo = $scope.newReport.REPORT_DATE.substr(5, 2);
-                var day = $scope.newReport.REPORT_DATE.substr(8, 2);
-                $scope.newReport.REPORT_DATE = new Date(mo + "/" + day + "/" + yr);
-//                $scope.newReport.REPORT_DATE = new Date($scope.newReport.REPORT_DATE);
+                var yr = $scope.newReport.report_date.substr(0, 4);
+                var mo = $scope.newReport.report_date.substr(5, 2);
+                var day = $scope.newReport.report_date.substr(8, 2);
+                $scope.newReport.report_date = new Date(mo + "/" + day + "/" + yr);
+//                $scope.newReport.report_date = new Date($scope.newReport.report_date);
             }
             $scope.status = { openContacts: false }; //if submit form invalid, open contacts to show required field
-
+            //called a few times to format just the date (no time)
+            var makeAdate = function (d) {
+                var aDate = new Date();
+                if (d !== "" && d !== undefined) {
+                    //provided date
+                    aDate = new Date(d);
+                }
+                var year = aDate.getFullYear();
+                var month = aDate.getMonth();
+                var day = ('0' + aDate.getDate()).slice(-2);
+                var monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+                var dateWOtime = new Date(monthNames[month] + " " + day + ", " + year);
+                return dateWOtime;
+            };//end makeAdate()
             //reset it here so form will clear when they leave and come back.
             $scope.$parent.needToComplete = false;
 
-            if ($scope.newReport.REPORTING_METRICS_ID === undefined)
+            if ($scope.newReport.reporting_metrics_id === undefined)
                 $scope.disabled = true;
 
             //get this event name from the eventid
             $scope.getEventName = function (evID) {
                 var name;
-                var thisEvent = $scope.events.filter(function (e) { return e.EVENT_ID == evID; })[0];
-                name = thisEvent.EVENT_NAME;
+                var thisEvent = $scope.events.filter(function (e) { return e.event_id == evID; })[0];
+                name = thisEvent.event_name;
                 return name;
             };
 
@@ -36,12 +49,12 @@
             var getReportContacts = function (reportID) {
                 $http.defaults.headers.common.Authorization = 'Basic ' + $cookies.get('STNCreds');
                 $http.defaults.headers.common.Accept = 'application/json';
-                CONTACT.getContactModel({ ContactModelByReport: reportID }, function success(response) {
-                    $scope.DeployStaff = response.filter(function (d) { return d.TYPE == "Deployed Staff"; })[0];
-                    $scope.GenStaff = response.filter(function (d) { return d.TYPE == "General"; })[0];
-                    $scope.InlandStaff = response.filter(function (d) { return d.TYPE == "Inland Flood"; })[0];
-                    $scope.CoastStaff = response.filter(function (d) { return d.TYPE == "Coastal Flood"; })[0];
-                    $scope.WaterStaff = response.filter(function (d) { return d.TYPE == "Water Quality"; })[0];
+                CONTACT.getContactModel({ ReportMetric: reportID }, function success(response) {
+                    $scope.DeployStaff = response.filter(function (d) { return d.contactType == "Deployed Staff"; })[0];
+                    $scope.GenStaff = response.filter(function (d) { return d.contactType == "General"; })[0];
+                    $scope.InlandStaff = response.filter(function (d) { return d.contactType == "Inland Flood"; })[0];
+                    $scope.CoastStaff = response.filter(function (d) { return d.contactType == "Coastal Flood"; })[0];
+                    $scope.WaterStaff = response.filter(function (d) { return d.contactType == "Water Quality"; })[0];
                 }).$promise;
                 $scope.disabled = false;
             };
@@ -50,39 +63,50 @@
             //#region POST Report Contacts
             var postReportContacts = function (reportID) {
                 if (!angular.equals({}, $scope.DeployStaff) && $scope.DeployStaff !== undefined) {
-                    CONTACT.addReportContact({ contactTypeId: 1, reportId: reportID }, $scope.DeployStaff, function success(response1) {
-                        toastr.success("Deploy Staff Updated");
-                    }, function error(errorResponse1) {
-                        alert("Error: " + errorResponse1.statusText);
-                    }).$promise;
+                    //first post contact, then post reportContact
+                    CONTACT.save($scope.DeployStaff).$promise.then(function (newDep) {
+                        CONTACT.addReportContact({ contactId: newDep.contact_id, contactTypeId: 1, reportId: reportID }, function success(response1) {
+                            toastr.success("Deploy Staff Updated");
+                        }, function error(errorResponse1) {
+                            alert("Error: " + errorResponse1.statusText);
+                        }).$promise;
+                    });                    
                 }
                 if (!angular.equals({}, $scope.GenStaff) && $scope.GenStaff !== undefined) {
-                    CONTACT.addReportContact({ contactTypeId: 2, reportId: reportID }, $scope.GenStaff, function success(response2) {
-                        toastr.success("General Staff Updated");
-                    }, function error(errorResponse2) {
-                        alert("Error: " + errorResponse2.statusText);
-                    }).$promise;
+                    CONTACT.save($scope.GenStaff).$promise.then(function (newGen) {
+                        CONTACT.addReportContact({ contactId: newGen.contact_id, contactTypeId: 2, reportId: reportID }, function success(response2) {
+                            toastr.success("General Staff Updated");
+                        }, function error(errorResponse2) {
+                            alert("Error: " + errorResponse2.statusText);
+                        }).$promise;
+                    });
                 }
                 if (!angular.equals({}, $scope.InlandStaff) && $scope.InlandStaff !== undefined) {
-                    CONTACT.addReportContact({ contactTypeId: 3, reportId: reportID }, $scope.InlandStaff, function success(response3) {
-                        toastr.success("Inland Staff Updated");
-                    }, function error(errorResponse3) {
-                        alert("Error: " + errorResponse3.statusText);
-                    }).$promise;
+                    CONTACT.save($scope.InlandStaff).$promise.then(function (newInl) {
+                        CONTACT.addReportContact({ contactId: newInl.contact_id, ContactTypeId: 3, ReportId: reportID }, function success(response3) {
+                            toastr.success("Inland Staff Updated");
+                        }, function error(errorResponse3) {
+                            alert("Error: " + errorResponse3.statusText);
+                        }).$promise;
+                    });                    
                 }
                 if (!angular.equals({}, $scope.CoastStaff) && $scope.CoastStaff !== undefined) {
-                    CONTACT.addReportContact({ contactTypeId: 4, reportId: reportID }, $scope.CoastStaff, function success(response4) {
-                        toastr.success("Coastal Staff Updated");
-                    }, function error(errorResponse4) {
-                        alert("Error: " + errorResponse4.statusText);
-                    }).$promise;
+                    CONTACT.save($scope.CoastStaff).$promise.then(function (newCoa) {
+                        CONTACT.addReportContact({ contactId: newCoa.contact_id, ContactTypeId: 4, ReportId: reportID }, function success(response4) {
+                            toastr.success("Coastal Staff Updated");
+                        }, function error(errorResponse4) {
+                            alert("Error: " + errorResponse4.statusText);
+                        }).$promise;
+                    });
                 }
                 if (!angular.equals({}, $scope.WaterStaff) && $scope.WaterStaff !== undefined) {
-                    CONTACT.addReportContact({ contactTypeId: 5, reportId: reportID }, $scope.WaterStaff, function success(response5) {
-                        toastr.success("Water Staff Updated");
-                    }, function error(errorResponse5) {
-                        alert("Error: " + errorResponse5.statusText);
-                    }).$promise;
+                    CONTACT.save($scope.WaterStaff).$promise.then(function (newWat) {
+                        CONTACT.addReportContact({ contactId: $scope.WaterStaff.contact_id, ContactTypeId: 5, ReportId: reportID }, function success(response5) {
+                            toastr.success("Water Staff Updated");
+                        }, function error(errorResponse5) {
+                            alert("Error: " + errorResponse5.statusText);
+                        }).$promise;
+                    });
                 }
             };
             //#endregion POST Report Contacts
@@ -91,7 +115,7 @@
                 //remove it from the list of incompletes
                 var index = 0;
                 for (var i = 0; i < $scope.memberIncompletes.length; i++) {
-                    if ($scope.memberIncompletes[i].REPORTING_METRICS_ID == $scope.newReport.REPORTING_METRICS_ID) {
+                    if ($scope.memberIncompletes[i].reporting_metrics_id == $scope.newReport.reporting_metrics_id) {
                         index = i;
                         i = $scope.memberIncompletes.length;
                     }
@@ -101,26 +125,26 @@
 
             //Post/Put the Report and Report Contacts. Called twice (from within Modal (incomplete) and outside (complete))
             var PostPutReportAndReportContacts = function () {
-                //POST or PUT
-                $scope.newReport.REPORT_DATE = $scope.newReport.REPORT_DATE.toDateString();
+                //POST or PUT        
+                $scope.newReport.report_date = $scope.newReport.report_date.toDateString();
                 $http.defaults.headers.common.Authorization = 'Basic ' + $cookies.get('STNCreds');
                 $http.defaults.headers.common.Accept = 'application/json';
-                if ($scope.newReport.REPORTING_METRICS_ID !== undefined) {                    
+                if ($scope.newReport.reporting_metrics_id !== undefined) {                    
                     //PUT
-                    REPORT.update({ id: $scope.newReport.REPORTING_METRICS_ID }, $scope.newReport, function success(response) {
+                    REPORT.update({ id: $scope.newReport.reporting_metrics_id }, $scope.newReport, function success(response) {
                         toastr.success("Report Updated");
-                        $scope.newReport.EVENT_NAME = $scope.getEventName($scope.newReport.EVENT_ID);
-                        if ($scope.newReport.COMPLETE == 1) {
+                        $scope.newReport.event_name = $scope.getEventName($scope.newReport.event_id);
+                        if ($scope.newReport.complete == 1) {
                             removeIncomplete();
                             $scope.isCompleted = true;
                         }
                         //then POST the ReportContacts
-                        postReportContacts($scope.newReport.REPORTING_METRICS_ID);
+                        postReportContacts($scope.newReport.reporting_metrics_id);
                     }, function error(errorResponse) {
                         toastr.error("Error: " + errorResponse.statusText);
                     }).$promise.then(function () {
                         $scope.fullReportForm.submit.$setPristine();
-                        $scope.fullReportForm.submit.EVENT_ID.$viewValue = undefined;//needed for the changeState to not throw up leaving tab message
+                        $scope.fullReportForm.submit.event_id.$viewValue = undefined;//needed for the changeState to not throw up leaving tab message
                         $state.go('reporting.reportDash');
                     });
                 } else {
@@ -128,20 +152,20 @@
                     REPORT.save($scope.newReport, function success(response) {
                         toastr.success("Report Created");
                         $scope.reports.push(response); //add to the list of all reports for filtering on the generate tab
-                        if ($scope.newReport.COMPLETE == 1) {
+                        if ($scope.newReport.complete == 1) {
                             removeIncomplete(); $scope.isCompleted = true;
-                            $scope.newReport.EVENT_NAME = $scope.getEventName($scope.newReport.EVENT_ID);
+                            $scope.newReport.event_name = $scope.getEventName($scope.newReport.event_id);
                         } else {
                             $scope.memberIncompletes.push(response);
                         }
                         //then POST the ReportContacts
-                        $scope.newReport.REPORTING_METRICS_ID = response.REPORTING_METRICS_ID;
-                        postReportContacts($scope.newReport.REPORTING_METRICS_ID);
+                        $scope.newReport.reporting_metrics_id = response.reporting_metrics_id;
+                        postReportContacts($scope.newReport.reporting_metrics_id);
                     }, function error(errorResponse) {
                         toastr.error("Error: " + errorResponse.statusText);
                     }).$promise.then(function () {
                         $scope.fullReportForm.submit.$setPristine();
-                        $scope.fullReportForm.submit.EVENT_ID.$viewValue = undefined; //needed for the changeState to not throw up leaving tab message
+                        $scope.fullReportForm.submit.event_id.$viewValue = undefined; //needed for the changeState to not throw up leaving tab message
                         $state.go('reporting.reportDash');
                     });
                 }//end post
@@ -149,16 +173,16 @@
 
             //get values for Personnel Yesterdays, and Contacts (if report was done yesterday), and all counts for instruments & hwms
             $scope.populateYestTots = function () {
-                if ($scope.newReport.REPORT_DATE !== undefined && $scope.newReport.STATE !== undefined && $scope.newReport.EVENT_ID !== undefined) {
-                    var formatDate = new Date($scope.newReport.REPORT_DATE);
+                if ($scope.newReport.report_date !== undefined && $scope.newReport.state !== undefined && $scope.newReport.event_id !== undefined) {
+                    var formatDate = new Date($scope.newReport.report_date);
                     formatDate.setHours(0, 0, 0, 0);
                     formatDate = formatDate.toISOString().substr(0, 10);
                     var myDate = formatDate;
-                    var theState = $scope.newReport.STATE;
-                    var eID = $scope.newReport.EVENT_ID;
+                    var theState = $scope.newReport.state;
+                    var eID = $scope.newReport.event_id;
 
                     $scope.disabled = false;
-                    $scope.newReport = { REPORT_DATE: $scope.newReport.REPORT_DATE, STATE: theState, EVENT_ID: eID };
+                    $scope.newReport = { report_date: $scope.newReport.report_date, state: theState, event_id: eID };
                     $scope.DeployStaff = {}; $scope.GenStaff = {}; $scope.InlandStaff = {};
                     $scope.CoastStaff = {}; $scope.WaterStaff = {};
                     var previousDay = new Date(myDate);
@@ -166,47 +190,47 @@
                     previousDay = previousDay.toISOString().substr(0, 10);
                     
                     var yesterdayRpt = $scope.reports.filter(function (r) {
-                        var repDate = r.REPORT_DATE.toString().substring(0, 10);
-                        return (r.EVENT_ID == $scope.newReport.EVENT_ID && r.STATE == $scope.newReport.STATE) && (repDate == previousDay);
+                        var repDate = r.report_date.toString().substring(0, 10);
+                        return (r.event_id == $scope.newReport.event_id && r.state == $scope.newReport.state) && (repDate == previousDay);
                     })[0];
                     $http.defaults.headers.common.Authorization = 'Basic ' + $cookies.get('STNCreds');
                     $http.defaults.headers.common.Accept = 'application/json';
                     if (yesterdayRpt !== undefined) {
                         // PERSONNEL populating
-                        $scope.newReport.SW_YEST_FIELDPERS = yesterdayRpt.SW_TOD_FIELDPERS;
-                        $scope.newReport.WQ_YEST_FIELDPERS = yesterdayRpt.WQ_TOD_FIELDPERS;
-                        $scope.newReport.SW_YEST_OFFICEPERS = yesterdayRpt.SW_TOD_OFFICEPERS;
-                        $scope.newReport.WQ_YEST_OFFICEPERS = yesterdayRpt.WQ_TOD_OFFICEPERS;
+                        $scope.newReport.sw_yest_fieldpers = yesterdayRpt.sw_tod_fieldpers;
+                        $scope.newReport.wq_yest_fieldpers = yesterdayRpt.wq_tod_fieldpers;
+                        $scope.newReport.sw_yest_officepers = yesterdayRpt.sw_tod_officepers;
+                        $scope.newReport.wq_yest_officepers = yesterdayRpt.wq_tod_officepers;
 
                         // CONTACTS populating 
-                        getReportContacts(yesterdayRpt.REPORTING_METRICS_ID);
+                        getReportContacts(yesterdayRpt.reporting_metrics_id);
                     }//end if yesterdayRpt != undefined
                     else {
-                        $scope.newReport.SW_YEST_FIELDPERS = 0;
-                        $scope.newReport.WQ_YEST_FIELDPERS = 0;
-                        $scope.newReport.SW_YEST_OFFICEPERS = 0;
-                        $scope.newReport.WQ_YEST_OFFICEPERS = 0;
+                        $scope.newReport.sw_yest_fieldpers = 0;
+                        $scope.newReport.wq_yest_fieldpers = 0;
+                        $scope.newReport.sw_yest_officepers = 0;
+                        $scope.newReport.wq_yest_officepers = 0;
                     }
                     //now get totals for all sensors and hwms to populate in this newReport
-                    REPORT.getDailyReportTots({ Date: myDate, Event: $scope.newReport.EVENT_ID, State: $scope.newReport.STATE }, function success(response6) {
+                    REPORT.getDailyReportTots({ Date: myDate, Event: $scope.newReport.event_id, State: $scope.newReport.state }, function success(response6) {
                         //only care about the counts
-                        $scope.newReport.DEP_RAPDEPL_GAGE = response6.DEP_RAPDEPL_GAGE;
-                        $scope.newReport.REC_RAPDEPL_GAGE = response6.REC_RAPDEPL_GAGE;
-                        $scope.newReport.LOST_RAPDEPL_GAGE = response6.LOST_RAPDEPL_GAGE;
-                        $scope.newReport.DEP_WTRLEV_SENSOR = response6.DEP_WTRLEV_SENSOR;
-                        $scope.newReport.REC_WTRLEV_SENSOR = response6.REC_WTRLEV_SENSOR;
-                        $scope.newReport.LOST_WTRLEV_SENSOR = response6.LOST_WTRLEV_SENSOR;
-                        $scope.newReport.DEP_WV_SENS = response6.DEP_WV_SENS;
-                        $scope.newReport.REC_WV_SENS = response6.REC_WV_SENS;
-                        $scope.newReport.LOST_WV_SENS = response6.LOST_WV_SENS;
-                        $scope.newReport.DEP_BAROMETRIC = response6.DEP_BAROMETRIC;
-                        $scope.newReport.REC_BAROMETRIC = response6.REC_BAROMETRIC;
-                        $scope.newReport.LOST_BAROMETRIC = response6.LOST_BAROMETRIC;
-                        $scope.newReport.DEP_METEOROLOGICAL = response6.DEP_METEOROLOGICAL;
-                        $scope.newReport.REC_METEOROLOGICAL = response6.REC_METEOROLOGICAL;
-                        $scope.newReport.LOST_METEOROLOGICAL = response6.LOST_METEOROLOGICAL;
-                        $scope.newReport.HWM_FLAGGED = response6.HWM_FLAGGED;
-                        $scope.newReport.HWM_COLLECTED = response6.HWM_COLLECTED;
+                        $scope.newReport.dep_rapdepl_gage = response6.dep_rapdepl_gage;
+                        $scope.newReport.rec_rapdepl_gage = response6.rec_rapdepl_gage;
+                        $scope.newReport.lost_rapdepl_gage = response6.lost_rapdepl_gage;
+                        $scope.newReport.dep_wtrlev_sensor = response6.dep_wtrlev_sensor;
+                        $scope.newReport.rec_wtrlev_sensor = response6.rec_wtrlev_sensor;
+                        $scope.newReport.lost_wtrlev_sensor = response6.lost_wtrlev_sensor;
+                        $scope.newReport.dep_wv_sens = response6.dep_wv_sens;
+                        $scope.newReport.rec_wv_sens = response6.rec_wv_sens;
+                        $scope.newReport.lost_wv_sens = response6.lost_wv_sens;
+                        $scope.newReport.dep_barometric = response6.dep_barometric;
+                        $scope.newReport.rec_barometric = response6.rec_barometric;
+                        $scope.newReport.lost_barometric = response6.lost_barometric;
+                        $scope.newReport.dep_meteorological = response6.dep_meteorological;
+                        $scope.newReport.rec_meteorological = response6.rec_meteorological;
+                        $scope.newReport.lost_meteorological = response6.lost_meteorological;
+                        $scope.newReport.hwm_flagged = response6.hwm_flagged;
+                        $scope.newReport.hwm_collected = response6.hwm_collected;
                     }, function error(errorResponse6) {
                         alert("Error: " + errorResponse6.statusText);
                     });
@@ -218,7 +242,7 @@
 
             //save this report and it's contacts
             $scope.saveReport = function (valid) {
-                if ($scope.newReport.COMPLETE === undefined || $scope.newReport.COMPLETE === 0) {
+                if ($scope.newReport.complete === undefined || $scope.newReport.complete === 0) {
                     //don't worry if valid, just postput modal confirming they want to save this without marking it complete
                     var modalInstance = $uibModal.open({
                         templateUrl: 'saveReportModal.html',
@@ -227,15 +251,15 @@
                     });
                     modalInstance.result.then(function () {
                         //yes, post this as incomplete
-                        $scope.newReport.COMPLETE = 0;
-                        $scope.newReport.MEMBER_ID = $scope.MemberLoggedIn.MEMBER_ID;
+                        $scope.newReport.complete = 0;
+                        $scope.newReport.member_id = $scope.MemberLoggedIn.member_id;
                         PostPutReportAndReportContacts();
                     });//end modalInstance.result.then
                 } else {
-                    //..COMPLETE is 1 .. check if valid
+                    //..complete is 1 .. check if valid
                     if (valid) {
                         //the report is complete and valid, just post/put it                        
-                        $scope.newReport.MEMBER_ID = $scope.MemberLoggedIn.MEMBER_ID;
+                        $scope.newReport.member_id = $scope.MemberLoggedIn.member_id;
                         PostPutReportAndReportContacts();
                     } else {
                         //alert("All fields are required");
@@ -250,15 +274,15 @@
             };
             //incomplete report was clicked, go get it and the contacts for it
             $scope.getIncompleteReport = function () {
-                var reportId = this.ir.REPORTING_METRICS_ID;
+                var reportId = this.ir.reporting_metrics_id;
                 REPORT.query({ id: reportId }, function success(response) {
                     $scope.newReport = response;
                     //if Chrome, format date:
-                    var yr = response.REPORT_DATE.substr(0, 4);
-                    var mo = response.REPORT_DATE.substr(5, 2);
-                    var day = response.REPORT_DATE.substr(8, 2);
-                    $scope.newReport.REPORT_DATE = new Date(mo + "/" + day + "/" + yr);
-                    //$scope.newReport.REPORT_DATE = new Date($scope.newReport.REPORT_DATE);
+                    var yr = response.report_date.substr(0, 4);
+                    var mo = response.report_date.substr(5, 2);
+                    var day = response.report_date.substr(8, 2);
+                    $scope.newReport.report_date = new Date(mo + "/" + day + "/" + yr);
+                    //$scope.newReport.report_date = new Date($scope.newReport.report_date);
                     $scope.fullReportForm.submit.$setDirty();
                     //get contacts 
                     getReportContacts(reportId);
