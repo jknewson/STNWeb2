@@ -8,24 +8,24 @@
 
     <form name="approvalForm" class="wim-form border-bottom">
         <div class="form-item item-25">
-            <label for="EVENT">Event:</label>
+            <label for="event">Event:</label>
             <div class="form-item-value">{{sessionEvent}}</div>
         </div><!--
 
         --><div class="form-item item-25">
-            <label for="STATE">States:</label>
-            <select id="STATE_ABBREV" name="STATE_ABBREV" ng-model="ChosenState.id"
-                    ng-options="s.STATE_ABBREV as s.STATE_NAME for s in allStates">
-                <option value=""></option>
-            </select>
+            <label for="state">States:</label>
+               <select id="state_abbrev" name="state_abbrev" ng-model="ChosenState.id"
+                       ng-options="s.state_abbrev as s.state_name for s in allStates">
+                   <option value=""></option>
+               </select>
         </div><!--
 
         --><div class="form-item item-25">
-            <label for="MEMBER">Members:</label>
-            <select id="MEMBER_ID" name="MEMBER_ID" ng-model="ChosenMember.id"
-                    ng-options="m.MEMBER_ID as (m.LNAME || '') + ', ' + (m.FNAME || '') for m in allMembers | orderBy: 'LNAME'">
-                <option value=""></option>
-            </select>
+            <label for="member">Members:</label>
+               <select id="member_id" name="member_id" ng-model="ChosenMember.id"
+                       ng-options="m.member_id as (m.lname || '') + ', ' + (m.fname || '') for m in allMembers | orderBy: 'lname'">
+                   <option value=""></option>
+               </select>
         </div><!--
 
         --><div class="form-item item-25">
@@ -41,8 +41,8 @@
     <div ng-if="showHWMbox" class="results-box rb-50">
         <h3 class="results-box-title">Unapproved Site HWMs</h3>
         <ul ng-show="unApprovedHWMs.length > 0">
-            <li style="list-style:none;" ng-repeat="h in unApprovedHWMs | orderBy: 'SITE_ID'">
-                <span><a ui-sref="site.dashboard({id: h.SITE_ID})">{{h.SITE_NO}}</a>: {{h.HWM_ID}} ({{h.ELEV_FT}} ft.)</span>
+            <li style="list-style:none;" ng-repeat="h in unApprovedHWMs | orderBy: 'site_id'">
+                <span><a ui-sref="site.dashboard({id: h.site_id})">{{h.site_no}}</a>: {{h.hwm_id}} ({{h.elev_ft}} ft.)</span>
             </li>
         </ul>
         <div ng-show="unApprovedHWMs.length == 0" class="results-box-no-result">

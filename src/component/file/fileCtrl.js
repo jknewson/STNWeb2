@@ -24,8 +24,8 @@
                     }
                     if (thisSiteFiles[sf].instrument_id > 0 && thisSiteFiles[sf].instrument_id !== null) {
                         whatKindaFile = "Sensor File";
-                        var thisIns = thisSiteSensors.filter(function (s) { return s.Instrument.instrument_id == thisSiteFiles[sf].instrument_id; })[0];
-                        thisSiteFiles[sf].typeName = thisIns.Instrument.serial_number;
+                        var thisIns = thisSiteSensors.filter(function (s) { return s.instrument_id == thisSiteFiles[sf].instrument_id; })[0];
+                        thisSiteFiles[sf].typeName = thisIns.serial_number;
                     }
                     if (thisSiteFiles[sf].objective_point_id > 0 && thisSiteFiles[sf].objective_point_id !== null) {
                         whatKindaFile = "Objective Point File";
@@ -59,8 +59,8 @@
                         //only show files for this event (go through sensor files and match eventid
                         for (var sf = 0; sf < sensFiles.length; sf++) {
                             for (var inst = 0; inst < $scope.siteSensors.length; inst++) {
-                                if (sensFiles[sf].instrument_id == $scope.siteSensors[inst].Instrument.instrument_id && $scope.siteSensors[inst].Instrument.event_id == $cookies.get('SessionEventID')) {
-                                    sensFiles[sf].typeName = $scope.siteSensors[inst].Instrument.serial_number;
+                                if (sensFiles[sf].instrument_id == $scope.siteSensors[inst].instrument_id && $scope.siteSensors[inst].event_id == $cookies.get('SessionEventID')) {
+                                    sensFiles[sf].typeName = $scope.siteSensors[inst].serial_number;
                                     $scope.SiteFiles.push(sensFiles[sf]);
                                 }
                             }
@@ -92,8 +92,8 @@
                         //only show files for this event (go through sensor files and match eventid
                         for (var sf = 0; sf < sensFiles.length; sf++) {
                             for (var inst = 0; inst < $scope.siteSensors.length; inst++) {
-                                if (sensFiles[sf].instrument_id == $scope.siteSensors[inst].Instrument.instrument_id && $scope.siteSensors[inst].Instrument.event_id == $cookies.get('SessionEventID')) {
-                                    sensFiles[sf].typeName = $scope.siteSensors[inst].Instrument.serial_number;
+                                if (sensFiles[sf].instrument_id == $scope.siteSensors[inst].instrument_id && $scope.siteSensors[inst].event_id == $cookies.get('SessionEventID')) {
+                                    sensFiles[sf].typeName = $scope.siteSensors[inst].serial_number;
                                     $scope.SiteFiles.push(sensFiles[sf]);
                                 }
                             }

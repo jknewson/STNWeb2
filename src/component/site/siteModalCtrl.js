@@ -265,8 +265,8 @@
                                 $scope.aSite.zip = components.postal_code;
 
                                 //see if there are any sites within a 0.0005 buffer of here for them to use instead
-                                SITE.query({ Latitude: $scope.aSite.latitude_dd, Longitude: $scope.aSite.longitude_dd, Buffer: 0.0005 }, function success(response) {
-                                    $scope.closeSites = response.Sites;
+                                SITE.getProximitySites({ Latitude: $scope.aSite.latitude_dd, Longitude: $scope.aSite.longitude_dd, Buffer: 0.0005 }, function success(response) {
+                                    $scope.closeSites = response;
                                     if ($scope.closeSites.length > 0) {
                                         for (var i = 0; i < $scope.closeSites.length; i++) {
                                             var a = $scope.closeSites[i];

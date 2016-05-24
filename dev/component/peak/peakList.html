@@ -13,7 +13,7 @@
         </div>
         <div class="col-md-12" ng-show="!sessionEventExists" style="border:solid 1px red">To create or view a Peak Summary, first choose an Event above.</div><br clear="all"/>
         <ul ng-if="sessionEventExists">
-            <li style="list-style:none" ng-repeat="p in SitePeaks"><a ng-click="showPeakModal(p)">{{p.PEAK_DATE | date: "MM/dd/yyyy"}} <span ng-if="p.PEAK_STAGE"> - ({{p.PEAK_STAGE}} ft.)</span></a></li>
+            <li style="list-style:none" ng-repeat="p in SitePeaks"><a ng-click="showPeakModal(p)">{{p.peak_date | date: "MM/dd/yyyy"}} <span ng-if="p.peak_stage"> - ({{p.peak_stage}} ft.)</span></a></li>
         </ul>
     </uib-accordion-group>
 </uib-accordion>

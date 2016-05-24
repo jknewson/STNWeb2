@@ -19,14 +19,14 @@
             $scope.fileTypeList = allDropdowns[8]; //used if creating/editing HWM file    
             
             $scope.allSFiles = Site_Files.getAllSiteFiles();
-            $scope.HWMFiles = thisHWM !== "empty" ? $scope.allSFiles.filter(function (sf) { return sf.HWM_ID == thisHWM.HWM_ID; }) : [];// holder for hwm files added
-            $scope.hwmImageFiles = $scope.HWMFiles.filter(function (hf) { return hf.FILETYPE_ID === 1; }); //image files for carousel
+            $scope.HWMFiles = thisHWM !== "empty" ? $scope.allSFiles.filter(function (sf) { return sf.hwm_id == thisHWM.hwm_id; }) : [];// holder for hwm files added
+            $scope.hwmImageFiles = $scope.HWMFiles.filter(function (hf) { return hf.filetype_id === 1; }); //image files for carousel
             $scope.showFileForm = false; //hidden form to add file to hwm
             $scope.userRole = $cookies.get('usersRole');
             $scope.FlagMember = ""; //just for show on page
             $scope.SurveyMember = ""; //just for show on page
             $scope.showEventDD = false; //toggle to show/hide event dd (admin only)
-            $scope.adminChanged = {}; //will hold EVENT_ID if admin changes it. apply when PUTting
+            $scope.adminChanged = {}; //will hold event_id if admin changes it. apply when PUTting
             $scope.serverURL = SERVER_URL; //constant with stntest.wim.usgs.gov/STNServices2 
             //button click to show event dropdown to change it on existing hwm (admin only)
             $scope.showChangeEventDD = function () {
@@ -35,10 +35,10 @@
 
             //change event = apply it to the $scope.EventName
             $scope.ChangeEvent = function () {
-                $scope.EventName = $scope.eventList.filter(function (el) { return el.EVENT_ID == $scope.adminChanged.EVENT_ID; })[0].EVENT_NAME;
+                $scope.EventName = $scope.eventList.filter(function (el) { return el.event_id == $scope.adminChanged.event_id; })[0].event_name;
             };
             // $scope.sessionEvent = $cookies.get('SessionEventName');
-            $scope.LoggedInMember = allMembers.filter(function (m) { return m.MEMBER_ID == $cookies.get('mID'); })[0];
+            $scope.LoggedInMember = allMembers.filter(function (m) { return m.member_id == $cookies.get('mID'); })[0];
 
             $scope.aHWM = {};
             $scope.DMS = {};
@@ -89,27 +89,27 @@
                         //they clicked Dec Deg..
                         if ($scope.DMS.LADeg !== undefined) {
                             //convert what's here for each lat and long
-                            $scope.hwmCopy.LATITUDE_DD = azimuth($scope.DMS.LADeg, $scope.DMS.LAMin, $scope.DMS.LASec);
-                            $scope.hwmCopy.LONGITUDE_DD = azimuth($scope.DMS.LODeg, $scope.DMS.LOMin, $scope.DMS.LOSec);
+                            $scope.hwmCopy.latitude_dd = azimuth($scope.DMS.LADeg, $scope.DMS.LAMin, $scope.DMS.LASec);
+                            $scope.hwmCopy.longitude_dd = azimuth($scope.DMS.LODeg, $scope.DMS.LOMin, $scope.DMS.LOSec);
                             //clear
                             $scope.DMS = {};
                         }
                     } else {
                         //they clicked dms (convert lat/long to dms)
-                        if ($scope.hwmCopy.LATITUDE_DD !== undefined) {
-                            var latDMS = (deg_to_dms($scope.hwmCopy.LATITUDE_DD)).toString();
+                        if ($scope.hwmCopy.latitude_dd !== undefined) {
+                            var latDMS = (deg_to_dms($scope.hwmCopy.latitude_dd)).toString();
                             var ladDMSarray = latDMS.split(':');
                             $scope.DMS.LADeg = ladDMSarray[0];
                             $scope.DMS.LAMin = ladDMSarray[1];
                             $scope.DMS.LASec = ladDMSarray[2];
 
-                            var longDMS = deg_to_dms($scope.hwmCopy.LONGITUDE_DD);
+                            var longDMS = deg_to_dms($scope.hwmCopy.longitude_dd);
                             var longDMSarray = longDMS.split(':');
                             $scope.DMS.LODeg = longDMSarray[0] * -1;
                             $scope.DMS.LOMin = longDMSarray[1];
                             $scope.DMS.LOSec = longDMSarray[2];
                             //clear
-                            $scope.hwmCopy.LATITUDE_DD = undefined; $scope.hwmCopy.LONGITUDE_DD = undefined;
+                            $scope.hwmCopy.latitude_dd = undefined; $scope.hwmCopy.longitude_dd = undefined;
                         }
                     }
                 } else {
@@ -118,27 +118,27 @@
                         //they clicked Dec Deg..
                         if ($scope.DMS.LADeg !== undefined) {
                             //convert what's here for each lat and long
-                            $scope.aHWM.LATITUDE_DD = azimuth($scope.DMS.LADeg, $scope.DMS.LAMin, $scope.DMS.LASec);
-                            $scope.aHWM.LONGITUDE_DD = azimuth($scope.DMS.LODeg, $scope.DMS.LOMin, $scope.DMS.LOSec);
+                            $scope.aHWM.latitude_dd = azimuth($scope.DMS.LADeg, $scope.DMS.LAMin, $scope.DMS.LASec);
+                            $scope.aHWM.longitude_dd = azimuth($scope.DMS.LODeg, $scope.DMS.LOMin, $scope.DMS.LOSec);
                             //clear
                             $scope.DMS = {};
                         }
                     } else {
                         //they clicked dms (convert lat/long to dms)
-                        if ($scope.aHWM.LATITUDE_DD !== undefined) {
-                            var create_latDMS = (deg_to_dms($scope.aHWM.LATITUDE_DD)).toString();
+                        if ($scope.aHWM.latitude_dd !== undefined) {
+                            var create_latDMS = (deg_to_dms($scope.aHWM.latitude_dd)).toString();
                             var create_ladDMSarray = create_latDMS.split(':');
                             $scope.DMS.LADeg = create_ladDMSarray[0];
                             $scope.DMS.LAMin = create_ladDMSarray[1];
                             $scope.DMS.LASec = create_ladDMSarray[2];
 
-                            var create_longDMS = deg_to_dms($scope.aHWM.LONGITUDE_DD);
+                            var create_longDMS = deg_to_dms($scope.aHWM.longitude_dd);
                             var create_longDMSarray = create_longDMS.split(':');
                             $scope.DMS.LODeg = create_longDMSarray[0] * -1;
                             $scope.DMS.LOMin = create_longDMSarray[1];
                             $scope.DMS.LOSec = create_longDMSarray[2];
                             //clear
-                            $scope.aHWM.LATITUDE_DD = undefined; $scope.aHWM.LONGITUDE_DD = undefined;
+                            $scope.aHWM.latitude_dd = undefined; $scope.aHWM.longitude_dd = undefined;
                         }
                     }
                 }
@@ -158,7 +158,7 @@
                     size: 'sm'
                 });
                 latModal.result.then(function (fieldFocus) {
-                    if (w == 'latlong') $("#LATITUDE_DD").focus();
+                    if (w == 'latlong') $("#latitude_dd").focus();
                     else $("#LaDeg").focus();
                 });
             };
@@ -177,7 +177,7 @@
                     size: 'sm'
                 });
                 longModal.result.then(function (fieldFocus) {
-                    if (w == 'latlong') $("#LONGITUDE_DD").focus();
+                    if (w == 'latlong') $("#longitude_dd").focus();
                     else $("#LoDeg").focus();
                 });
             };
@@ -195,10 +195,10 @@
                 } else {
                     //check the latitude/longitude
                     var h = $scope.view.HWMval == 'edit' ? $scope.hwmCopy : $scope.aHWM;
-                    if (h.LATITUDE_DD < 0 || h.LATITUDE_DD > 73) {
+                    if (h.latitude_dd < 0 || h.latitude_dd > 73) {
                         openLatModal('latlong');
                     }
-                    if (h.LONGITUDE_DD < -175 || h.LONGITUDE_DD > -60) {
+                    if (h.longitude_dd < -175 || h.longitude_dd > -60) {
                         openLongModal('latlong');
                     }
                 }
@@ -233,48 +233,48 @@
                 $scope.createOReditHWM = 'edit';
                 $scope.aHWM = angular.copy(thisHWM);
                 //get all the names for details view
-                $scope.aHWM.HWM_Type = $scope.hwmTypeList.filter(function (ht) { return ht.HWM_TYPE_ID == $scope.aHWM.HWM_TYPE_ID; })[0].HWM_TYPE;
-                if ($scope.aHWM.STILLWATER !== null) {
-                    $scope.aHWM.Tranquil = $scope.aHWM.STILLWATER > 0 ? 'Yes' : 'No';
+                $scope.aHWM.hwm_type = $scope.hwmTypeList.filter(function (ht) { return ht.hwm_type_id == $scope.aHWM.hwm_type_id; })[0].hwm_type;
+                if ($scope.aHWM.stillwater !== null) {
+                    $scope.aHWM.Tranquil = $scope.aHWM.stillwater > 0 ? 'Yes' : 'No';
                 }
-                $scope.aHWM.Marker = $scope.aHWM.MARKER_ID > 0 ? $scope.markerList.filter(function (m) { return m.MARKER_ID == $scope.aHWM.MARKER_ID; })[0].MARKER1 : '';
-                $scope.aHWM.Quality = $scope.aHWM.HWM_QUALITY_ID > 0 ? $scope.hwmQualList.filter(function (hq) { return hq.HWM_QUALITY_ID == $scope.aHWM.HWM_QUALITY_ID; })[0].HWM_QUALITY : '';
-                $scope.aHWM.hdatum = $scope.aHWM.HDATUM_ID > 0 ? $scope.HDatumsList.filter(function (hd) { return hd.DATUM_ID == $scope.aHWM.HDATUM_ID; })[0].DATUM_NAME : '';
-                $scope.aHWM.hCollectMethod = $scope.aHWM.HCOLLECT_METHOD_ID > 0 ? $scope.hCollMList.filter(function (hc) { return hc.HCOLLECT_METHOD_ID == $scope.aHWM.HCOLLECT_METHOD_ID; })[0].HCOLLECT_METHOD : '';
-                $scope.aHWM.vDatum = $scope.aHWM.VDATUM_ID > 0 ? $scope.VDatumsList.filter(function (vd) { return vd.DATUM_ID == $scope.aHWM.VDATUM_ID; })[0].DATUM_NAME : '';
-                $scope.aHWM.vCollectMethod = $scope.aHWM.VCOLLECT_METHOD_ID > 0 ? $scope.vCollMList.filter(function (vc) { return vc.VCOLLECT_METHOD_ID == $scope.aHWM.VCOLLECT_METHOD_ID; })[0].VCOLLECT_METHOD : '';
+                $scope.aHWM.Marker = $scope.aHWM.marker_id > 0 ? $scope.markerList.filter(function (m) { return m.marker_id == $scope.aHWM.marker_id; })[0].marker1 : '';
+                $scope.aHWM.Quality = $scope.aHWM.hwm_quality_id > 0 ? $scope.hwmQualList.filter(function (hq) { return hq.hwm_quality_id == $scope.aHWM.hwm_quality_id; })[0].hwm_quality : '';
+                $scope.aHWM.hdatum = $scope.aHWM.hdatum_id > 0 ? $scope.HDatumsList.filter(function (hd) { return hd.datum_id == $scope.aHWM.hdatum_id; })[0].datum_name : '';
+                $scope.aHWM.hCollectMethod = $scope.aHWM.hcollect_method_id > 0 ? $scope.hCollMList.filter(function (hc) { return hc.hcollect_method_id == $scope.aHWM.hcollect_method_id; })[0].hcollect_method : '';
+                $scope.aHWM.vDatum = $scope.aHWM.vdatum_id > 0 ? $scope.VDatumsList.filter(function (vd) { return vd.datum_id == $scope.aHWM.vdatum_id; })[0].datum_name : '';
+                $scope.aHWM.vCollectMethod = $scope.aHWM.vcollect_method_id > 0 ? $scope.vCollMList.filter(function (vc) { return vc.vcollect_method_id == $scope.aHWM.vcollect_method_id; })[0].vcollect_method : '';
 
                 $scope.hwmModalHeader = "HWM Information";
                 //get this hwm's event name
-                $scope.EventName = $scope.aHWM.EVENT_ID > 0 ? $scope.eventList.filter(function (e) { return e.EVENT_ID == $scope.aHWM.EVENT_ID; })[0].EVENT_NAME : 'None provided';
+                $scope.EventName = $scope.aHWM.event_id > 0 ? $scope.eventList.filter(function (e) { return e.event_id == $scope.aHWM.event_id; })[0].event_name : 'None provided';
                 //date formatting
-                $scope.aHWM.FLAG_DATE = makeAdate($scope.aHWM.FLAG_DATE);                
+                $scope.aHWM.flag_date = makeAdate($scope.aHWM.flag_date);                
                 //if this is surveyed, date format and get survey member's name
-                if ($scope.aHWM.SURVEY_DATE !== null) {
-                    $scope.aHWM.SURVEY_DATE = makeAdate($scope.aHWM.SURVEY_DATE);
-                    $scope.SurveyMember = allMembers.filter(function (m) { return m.MEMBER_ID == $scope.aHWM.SURVEY_MEMBER_ID; })[0];
+                if ($scope.aHWM.survey_date !== null) {
+                    $scope.aHWM.survey_date = makeAdate($scope.aHWM.survey_date);
+                    $scope.SurveyMember = allMembers.filter(function (m) { return m.member_id == $scope.aHWM.survey_member_id; })[0];
                 }
                 //get flagging member's name
-                $scope.FlagMember = allMembers.filter(function (m) { return m.MEMBER_ID == $scope.aHWM.FLAG_MEMBER_ID; })[0];
+                $scope.FlagMember = allMembers.filter(function (m) { return m.member_id == $scope.aHWM.flag_member_id; })[0];
                 //#endregion existing HWM
             } else {
                 //#region new HWM
                 $scope.hwmModalHeader = "Create new HWM";
                 $scope.createOReditHWM = 'create';
-                //use site's LAT, LONG, WATERBODY, HDATUM, HCOLLECTMETHOD, set FLAGDATE with today
+                //use site's LAT, LONG, waterbody, HDATUM, HCOLLECTMETHOD, set FLAGDATE with today
                 $scope.aHWM = {
-                    SITE_ID: $scope.thisHWMsite.SITE_ID,
-                    EVENT_ID: $cookies.get('SessionEventID'),
-                    HWM_ENVIRONMENT: 'Riverine',
-                    BANK: 'N/A',
-                    STILLWATER: 0,
-                    LATITUDE_DD: hwmSite.LATITUDE_DD,
-                    LONGITUDE_DD: hwmSite.LONGITUDE_DD,
-                    WATERBODY: hwmSite.WATERBODY,
-                    HDATUM_ID: hwmSite.HDATUM_ID,
-                    HCOLLECT_METHOD_ID: hwmSite.HCOLLECT_METHOD_ID,
-                    FLAG_DATE: makeAdate(""),
-                    FLAG_MEMBER_ID: $scope.LoggedInMember.MEMBER_ID
+                    site_id: $scope.thisHWMsite.site_id,
+                    event_id: $cookies.get('SessionEventID'),
+                    hwm_environment: 'Riverine',
+                    bank: 'N/A',
+                    stillwater: 0,
+                    latitude_dd: hwmSite.latitude_dd,
+                    longitude_dd: hwmSite.longitude_dd,
+                    waterbody: hwmSite.waterbody,
+                    hdatum_id: hwmSite.hdatum_id,
+                    hcollect_method_id: hwmSite.hcollect_method_id,
+                    flag_date: makeAdate(""),
+                    flag_member_id: $scope.LoggedInMember.member_id
                 };
                 $scope.EventName = $cookies.get('SessionEventName');
                 $scope.FlagMember = $scope.LoggedInMember;
@@ -287,24 +287,24 @@
             $scope.create = function (valid) {
                 if (valid) {
                     var createdHWM = {};
-                    if ($scope.DMS.LADeg !== undefined) $scope.aHWM.LATITUDE_DD = azimuth($scope.DMS.LADeg, $scope.DMS.LAMin, $scope.DMS.LASec);
-                    if ($scope.DMS.LODeg !== undefined) $scope.aHWM.LONGITUDE_DD = azimuth($scope.DMS.LODeg, $scope.DMS.LOMin, $scope.DMS.LOSec);
+                    if ($scope.DMS.LADeg !== undefined) $scope.aHWM.latitude_dd = azimuth($scope.DMS.LADeg, $scope.DMS.LAMin, $scope.DMS.LASec);
+                    if ($scope.DMS.LODeg !== undefined) $scope.aHWM.longitude_dd = azimuth($scope.DMS.LODeg, $scope.DMS.LOMin, $scope.DMS.LOSec);
                     //if they entered a survey date or elevation, then set survey member as the flag member (flagging and surveying at same time
-                    if ($scope.aHWM.SURVEY_DATE !== undefined && $scope.aHWM.SURVEY_DATE !== null)
-                        $scope.aHWM.SURVEY_MEMBER_ID = $scope.FLAG_MEMBER_ID;
+                    if ($scope.aHWM.survey_date !== undefined && $scope.aHWM.survey_date !== null)
+                        $scope.aHWM.survey_member_id = $scope.flag_member_id;
 
                     if ($scope.FTorCM == "cm") {
                         $scope.FTorCM = 'ft';
-                        if ($scope.aHWM.UNCERTAINTY !== undefined)
-                            $scope.aHWM.UNCERTAINTY = $scope.aHWM.UNCERTAINTY / 30.48;
+                        if ($scope.aHWM.uncertainty !== undefined)
+                            $scope.aHWM.uncertainty = $scope.aHWM.uncertainty / 30.48;
                     }
 
-                    if ($scope.aHWM.ELEV_FT !== undefined && $scope.aHWM.ELEV_FT !== null) {
+                    if ($scope.aHWM.elev_ft !== undefined && $scope.aHWM.elev_ft !== null) {
                         //make sure they added the survey date if they added an elevation
-                        if ($scope.aHWM.SURVEY_DATE === undefined)
-                            $scope.aHWM.SURVEY_DATE = makeAdate("");
+                        if ($scope.aHWM.survey_date === undefined)
+                            $scope.aHWM.survey_date = makeAdate("");
 
-                        $scope.aHWM.SURVEY_MEMBER_ID = $scope.FLAG_MEMBER_ID;
+                        $scope.aHWM.survey_member_id = $scope.flag_member_id;
                     }
 
                     $http.defaults.headers.common.Authorization = 'Basic ' + $cookies.get('STNCreds');
@@ -324,7 +324,7 @@
                 var thisHWM = $scope.aHWM;
                 var approveModal = $uibModal.open({
                     template: "<div class='modal-header'><h3 class='modal-title'>Approve HWM</h3></div>" +
-                        "<div class='modal-body'><p>Are you ready to approve this HWM?</p><p>The surveyed elevation is {{approveHWM.ELEV_FT || '---'}}</p><p>The height above ground is {{approveHWM.HEIGHT_ABOVE_GND || '---'}}</p></div>" +
+                        "<div class='modal-body'><p>Are you ready to approve this HWM?</p><p>The surveyed elevation is {{approveHWM.elev_ft || '---'}}</p><p>The height above ground is {{approveHWM.height_above_gnd || '---'}}</p></div>" +
                         "<div class='modal-footer'><button class='btn btn-primary' ng-click='approveIt()'>Approve</button><button class='btn btn-warning' ng-click='cancel()'>Cancel</button></div>",
                     controller: ['$scope', '$uibModalInstance', function ($scope, $uibModalInstance) {
                         $scope.approveHWM = thisHWM;
@@ -339,11 +339,11 @@
                 });
                 approveModal.result.then(function (h) {
                     $http.defaults.headers.common.Authorization = 'Basic ' + $cookies.get('STNCreds');
-                    HWM.approveHWM({ id: h.HWM_ID }).$promise.then(function (approvalResponse) {
-                        h.APPROVAL_ID = approvalResponse.APPROVAL_ID;
+                    HWM.approveHWM({ id: h.hwm_id }).$promise.then(function (approvalResponse) {
+                        h.approval_id = approvalResponse.approval_id;
                         toastr.success("HWM Approved");
-                        $scope.ApprovalInfo.approvalDate = new Date(approvalResponse.APPROVAL_DATE); //include note that it's displayed in their local time but stored in UTC
-                        $scope.ApprovalInfo.Member = allMembers.filter(function (amem) { return amem.MEMBER_ID == approvalResponse.MEMBER_ID; })[0];
+                        $scope.ApprovalInfo.approvalDate = new Date(approvalResponse.approval_date); //include note that it's displayed in their local time but stored in UTC
+                        $scope.ApprovalInfo.Member = allMembers.filter(function (amem) { return amem.member_id == approvalResponse.member_id; })[0];
                         //var sendBack = [h, 'updated'];
                         //$uibModalInstance.close(sendBack);
                     }, function error(errorResponse) {
@@ -374,8 +374,8 @@
                 });
                 unapproveModal.result.then(function (h) {
                     $http.defaults.headers.common.Authorization = 'Basic ' + $cookies.get('STNCreds');
-                    HWM.unApproveHWM({ id: h.HWM_ID }).$promise.then(function () {
-                        h.APPROVAL_ID = null;
+                    HWM.unApproveHWM({ id: h.hwm_id }).$promise.then(function () {
+                        h.approval_id = null;
                         toastr.success("HWM Unapproved");
                         $scope.ApprovalInfo = {};
                         //var sendBack = [h, 'updated'];
@@ -392,61 +392,61 @@
             $scope.save = function (valid) {
                 if (valid) {
                     var updatedHWM = {};
-                    if ($scope.DMS.LADeg !== undefined) $scope.hwmCopy.LATITUDE_DD = azimuth($scope.DMS.LADeg, $scope.DMS.LAMin, $scope.DMS.LASec);
-                    if ($scope.DMS.LODeg !== undefined) $scope.hwmCopy.LONGITUDE_DD = azimuth($scope.DMS.LODeg, $scope.DMS.LOMin, $scope.DMS.LOSec);
-                    if ($scope.adminChanged.EVENT_ID !== undefined) {
+                    if ($scope.DMS.LADeg !== undefined) $scope.hwmCopy.latitude_dd = azimuth($scope.DMS.LADeg, $scope.DMS.LAMin, $scope.DMS.LASec);
+                    if ($scope.DMS.LODeg !== undefined) $scope.hwmCopy.longitude_dd = azimuth($scope.DMS.LODeg, $scope.DMS.LOMin, $scope.DMS.LOSec);
+                    if ($scope.adminChanged.event_id !== undefined) {
                         //admin changed the event for this hwm..
-                        $scope.hwmCopy.EVENT_ID = $scope.adminChanged.EVENT_ID;
+                        $scope.hwmCopy.event_id = $scope.adminChanged.event_id;
                     }
                     //if they added a survey date, apply survey member as logged in member
-                    if ($scope.hwmCopy.SURVEY_DATE !== undefined)
-                        $scope.hwmCopy.SURVEY_MEMBER_ID = $cookies.get('mID');
+                    if ($scope.hwmCopy.survey_date !== undefined)
+                        $scope.hwmCopy.survey_member_id = $cookies.get('mID');
 
                     if ($scope.FTorCM == "cm") {
                         $scope.FTorCM = 'ft';
-                        if ($scope.hwmCopy.UNCERTAINTY !== undefined)
-                            $scope.hwmCopy.UNCERTAINTY = $scope.hwmCopy.UNCERTAINTY / 30.48;
+                        if ($scope.hwmCopy.uncertainty !== undefined)
+                            $scope.hwmCopy.uncertainty = $scope.hwmCopy.uncertainty / 30.48;
                     }
 
-                    if ($scope.hwmCopy.ELEV_FT !== undefined && $scope.hwmCopy.ELEV_FT !== null) {
+                    if ($scope.hwmCopy.elev_ft !== undefined && $scope.hwmCopy.elev_ft !== null) {
                         //make sure they added the survey date if they added an elevation
-                        if ($scope.hwmCopy.SURVEY_DATE === undefined)
-                            $scope.hwmCopy.SURVEY_DATE = makeAdate("");
+                        if ($scope.hwmCopy.survey_date === undefined)
+                            $scope.hwmCopy.survey_date = makeAdate("");
 
-                        $scope.hwmCopy.SURVEY_MEMBER_ID = $cookies.get('mID');
+                        $scope.hwmCopy.survey_member_id = $cookies.get('mID');
                     }
 
                     $http.defaults.headers.common.Authorization = 'Basic ' + $cookies.get('STNCreds');
                     $http.defaults.headers.common.Accept = 'application/json';
-                    HWM.update({ id: $scope.hwmCopy.HWM_ID }, $scope.hwmCopy).$promise.then(function (response) {
+                    HWM.update({ id: $scope.hwmCopy.hwm_id }, $scope.hwmCopy).$promise.then(function (response) {
                         toastr.success("HWM updated");
                         $scope.aHWM = response; thisHWM = response;
                         //get all the names for details view
-                        $scope.aHWM.HWM_Type = $scope.hwmTypeList.filter(function (ht) { return ht.HWM_TYPE_ID == $scope.aHWM.HWM_TYPE_ID; })[0].HWM_TYPE;
-                        if ($scope.aHWM.STILLWATER !== null) {
-                            $scope.aHWM.Tranquil = $scope.aHWM.STILLWATER > 0 ? 'Yes' : 'No';
+                        $scope.aHWM.hwm_type = $scope.hwmTypeList.filter(function (ht) { return ht.hwm_type_id == $scope.aHWM.hwm_type_id; })[0].hwm_type;
+                        if ($scope.aHWM.stillwater !== null) {
+                            $scope.aHWM.Tranquil = $scope.aHWM.stillwater > 0 ? 'Yes' : 'No';
                         }
-                        $scope.aHWM.Marker = $scope.aHWM.MARKER_ID > 0 ? $scope.markerList.filter(function (m) { return m.MARKER_ID == $scope.aHWM.MARKER_ID; })[0].MARKER1 : '';
-                        $scope.aHWM.Quality = $scope.aHWM.HWM_QUALITY_ID > 0 ? $scope.hwmQualList.filter(function (hq) { return hq.HWM_QUALITY_ID == $scope.aHWM.HWM_QUALITY_ID; })[0].HWM_QUALITY : '';
-                        $scope.aHWM.hdatum = $scope.aHWM.HDATUM_ID > 0 ? $scope.HDatumsList.filter(function (hd) { return hd.DATUM_ID == $scope.aHWM.HDATUM_ID; })[0].DATUM_NAME : '';
-                        $scope.aHWM.hCollectMethod = $scope.aHWM.HCOLLECT_METHOD_ID > 0 ? $scope.hCollMList.filter(function (hc) { return hc.HCOLLECT_METHOD_ID == $scope.aHWM.HCOLLECT_METHOD_ID; })[0].HCOLLECT_METHOD : '';
-                        $scope.aHWM.vDatum = $scope.aHWM.VDATUM_ID > 0 ? $scope.VDatumsList.filter(function (vd) { return vd.DATUM_ID == $scope.aHWM.VDATUM_ID; })[0].DATUM_NAME : '';
-                        $scope.aHWM.vCollectMethod = $scope.aHWM.VCOLLECT_METHOD_ID > 0 ? $scope.vCollMList.filter(function (vc) { return vc.VCOLLECT_METHOD_ID == $scope.aHWM.VCOLLECT_METHOD_ID; })[0].VCOLLECT_METHOD : '';
-                        $scope.aHWM.FLAG_DATE = makeAdate($scope.aHWM.FLAG_DATE);
+                        $scope.aHWM.Marker = $scope.aHWM.marker_id > 0 ? $scope.markerList.filter(function (m) { return m.marker_id == $scope.aHWM.marker_id; })[0].marker1 : '';
+                        $scope.aHWM.Quality = $scope.aHWM.hwm_quality_id > 0 ? $scope.hwmQualList.filter(function (hq) { return hq.hwm_quality_id == $scope.aHWM.hwm_quality_id; })[0].hwm_quality : '';
+                        $scope.aHWM.hdatum = $scope.aHWM.hdatum_id > 0 ? $scope.HDatumsList.filter(function (hd) { return hd.datum_id == $scope.aHWM.hdatum_id; })[0].datum_name : '';
+                        $scope.aHWM.hCollectMethod = $scope.aHWM.hcollect_method_id > 0 ? $scope.hCollMList.filter(function (hc) { return hc.hcollect_method_id == $scope.aHWM.hcollect_method_id; })[0].hcollect_method : '';
+                        $scope.aHWM.vDatum = $scope.aHWM.vdatum_id > 0 ? $scope.VDatumsList.filter(function (vd) { return vd.datum_id == $scope.aHWM.vdatum_id; })[0].datum_name : '';
+                        $scope.aHWM.vCollectMethod = $scope.aHWM.vcollect_method_id > 0 ? $scope.vCollMList.filter(function (vc) { return vc.vcollect_method_id == $scope.aHWM.vcollect_method_id; })[0].vcollect_method : '';
+                        $scope.aHWM.flag_date = makeAdate($scope.aHWM.flag_date);
                         //is it approved?
                         if (hwmApproval !== undefined) {
-                            $scope.ApprovalInfo.approvalDate = new Date(hwmApproval.APPROVAL_DATE); //include note that it's displayed in their local time but stored in UTC
-                            $scope.ApprovalInfo.Member = allMembers.filter(function (amem) { return amem.MEMBER_ID == hwmApproval.MEMBER_ID; })[0];
+                            $scope.ApprovalInfo.approvalDate = new Date(hwmApproval.approval_date); //include note that it's displayed in their local time but stored in UTC
+                            $scope.ApprovalInfo.Member = allMembers.filter(function (amem) { return amem.member_id == hwmApproval.member_id; })[0];
 
                         }
                         //if this is surveyed, date format and get survey member's name
-                        if ($scope.aHWM.SURVEY_DATE !== null) {
-                            $scope.aHWM.SURVEY_DATE = makeAdate($scope.aHWM.SURVEY_DATE);
-                            $scope.SurveyMember = allMembers.filter(function (m) { return m.MEMBER_ID == $scope.aHWM.SURVEY_MEMBER_ID; })[0];
+                        if ($scope.aHWM.survey_date !== null) {
+                            $scope.aHWM.survey_date = makeAdate($scope.aHWM.survey_date);
+                            $scope.SurveyMember = allMembers.filter(function (m) { return m.member_id == $scope.aHWM.survey_member_id; })[0];
                         }
 
                         //get flagging member's name
-                        $scope.FlagMember = allMembers.filter(function (m) { return m.MEMBER_ID == $scope.aHWM.FLAG_MEMBER_ID; })[0];
+                        $scope.FlagMember = allMembers.filter(function (m) { return m.member_id == $scope.aHWM.flag_member_id; })[0];
 
                         $scope.hwmCopy = {};
                         $scope.view.HWMval = 'detail';
@@ -475,13 +475,13 @@
 
                 DeleteModalInstance.result.then(function (hwmToRemove) {
                     $http.defaults.headers.common.Authorization = 'Basic ' + $cookies.get('STNCreds');
-                    HWM.delete({ id: hwmToRemove.HWM_ID }, hwmToRemove).$promise.then(function () {
+                    HWM.delete({ id: hwmToRemove.hwm_id }, hwmToRemove).$promise.then(function () {
                         $scope.HWMFiles = []; //clear out hwmFiles for this hwm
                         $scope.hwmImageFiles = []; //clear out image files for this hwm
                         //now remove all these files from SiteFiles
                         var l = $scope.allSFiles.length;
                         while (l--) {
-                            if ($scope.allSFiles[l].HWM_ID == hwmToRemove.HWM_ID) $scope.allSFiles.splice(l, 1);
+                            if ($scope.allSFiles[l].hwm_id == hwmToRemove.hwm_id) $scope.allSFiles.splice(l, 1);
                         }
                         //updates the file list on the sitedashboard
                         Site_Files.setAllSiteFiles($scope.allSFiles); 
@@ -513,7 +513,7 @@
                 $scope.view.HWMval = 'detail';
                 $scope.hwmCopy = []; 
                 $scope.adminChanged = {};
-                $scope.EventName = $scope.eventList.filter(function (e) { return e.EVENT_ID == $scope.aHWM.EVENT_ID; })[0].EVENT_NAME;
+                $scope.EventName = $scope.eventList.filter(function (e) { return e.event_id == $scope.aHWM.event_id; })[0].event_name;
             };
 
             //#region FILE STUFF
@@ -548,28 +548,28 @@
                     $scope.allSFileIndex = $scope.allSFiles.indexOf(file);
                     $scope.existIMGFileIndex = $scope.hwmImageFiles.length > 0 ? $scope.hwmImageFiles.indexOf(file) : -1;
                     $scope.aFile = angular.copy(file);
-                    $scope.aFile.FILE_DATE = new Date($scope.aFile.FILE_DATE); //date for validity of form on PUT
-                    if ($scope.aFile.PHOTO_DATE !== undefined) $scope.aFile.PHOTO_DATE = new Date($scope.aFile.PHOTO_DATE); //date for validity of form on PUT
-                    if (file.SOURCE_ID !== null) {
-                        SOURCE.query({ id: file.SOURCE_ID }).$promise.then(function (s) {
+                    $scope.aFile.file_date = new Date($scope.aFile.file_date); //date for validity of form on PUT
+                    if ($scope.aFile.photo_date !== undefined) $scope.aFile.photo_date = new Date($scope.aFile.photo_date); //date for validity of form on PUT
+                    if (file.source_id !== null) {
+                        SOURCE.query({ id: file.source_id }).$promise.then(function (s) {
                             $scope.aSource = s;
-                            $scope.aSource.FULLNAME = $scope.aSource.SOURCE_NAME;
-                            $scope.agencyNameForCap = $scope.agencies.filter(function (a) { return a.AGENCY_ID == $scope.aSource.AGENCY_ID; })[0].AGENCY_NAME;
+                            $scope.aSource.FULLname = $scope.aSource.source_name;
+                            $scope.agencyNameForCap = $scope.agencies.filter(function (a) { return a.agency_id == $scope.aSource.agency_id; })[0].agency_name;
                         });
                     }//end if source
                 }//end existing file
                 else {
-                    $scope.aFile.FILE_DATE = new Date(); $scope.aFile.PHOTO_DATE = new Date();
-                    $scope.aSource = allMembers.filter(function (m) { return m.MEMBER_ID == $cookies.get('mID'); })[0];
-                    $scope.aSource.FULLNAME = $scope.aSource.FNAME + " " + $scope.aSource.LNAME;
-                    $scope.agencyNameForCap = $scope.agencies.filter(function (a) { return a.AGENCY_ID == $scope.aSource.AGENCY_ID; })[0].AGENCY_NAME;
+                    $scope.aFile.file_date = new Date(); $scope.aFile.photo_date = new Date();
+                    $scope.aSource = allMembers.filter(function (m) { return m.member_id == $cookies.get('mID'); })[0];
+                    $scope.aSource.FULLname = $scope.aSource.fname + " " + $scope.aSource.lname;
+                    $scope.agencyNameForCap = $scope.agencies.filter(function (a) { return a.agency_id == $scope.aSource.agency_id; })[0].agency_name;
                 } //end new file
                 $scope.showFileForm = true;
 
                   
                 $scope.updateAgencyForCaption = function () {
-                    if ($scope.aFile.FILETYPE_ID == 1)
-                        $scope.agencyNameForCap = $scope.agencies.filter(function (a) { return a.AGENCY_ID == $scope.aSource.AGENCY_ID; })[0].AGENCY_NAME;
+                    if ($scope.aFile.filetype_id == 1)
+                        $scope.agencyNameForCap = $scope.agencies.filter(function (a) { return a.agency_id == $scope.aSource.agency_id; })[0].agency_name;
                 };
             };
             //create this new file
@@ -578,24 +578,24 @@
                     $scope.HWMfileIsUploading = true;
                     $http.defaults.headers.common.Authorization = 'Basic ' + $cookies.get('STNCreds');
                     $http.defaults.headers.common.Accept = 'application/json';
-                    var theSource = { SOURCE_NAME: $scope.aSource.FULLNAME, AGENCY_ID: $scope.aSource.AGENCY_ID };
-                    //post source first to get SOURCE_ID
+                    var theSource = { source_name: $scope.aSource.FULLname, agency_id: $scope.aSource.agency_id };
+                    //post source first to get source_id
                     SOURCE.save(theSource).$promise.then(function (response) {
-                        if ($scope.aFile.FILETYPE_ID !== 8) {
+                        if ($scope.aFile.filetype_id !== 8) {
                             //then POST fileParts (Services populate PATH)
                             var fileParts = {
                                 FileEntity: {
-                                    FILETYPE_ID: $scope.aFile.FILETYPE_ID,
-                                    FILE_URL: $scope.aFile.FILE_URL,
-                                    FILE_DATE: $scope.aFile.FILE_DATE,
-                                    PHOTO_DATE: $scope.aFile.PHOTO_DATE,
-                                    DESCRIPTION: $scope.aFile.DESCRIPTION,
-                                    SITE_ID: $scope.thisHWMsite.SITE_ID,
-                                    SOURCE_ID: response.SOURCE_ID,
-                                    PHOTO_DIRECTION: $scope.aFile.PHOTO_DIRECTION,
-                                    LATITUDE_DD: $scope.aFile.LATITUDE_DD,
-                                    LONGITUDE_DD: $scope.aFile.LONGITUDE_DD,
-                                    HWM_ID: $scope.aHWM.HWM_ID
+                                    filetype_id: $scope.aFile.filetype_id,
+                                    name: $scope.aFile.File.name,
+                                    file_date: $scope.aFile.file_date,
+                                    photo_date: $scope.aFile.photo_date,
+                                    description: $scope.aFile.description,
+                                    site_id: $scope.thisHWMsite.site_id,
+                                    source_id: response.source_id,
+                                    photo_direction: $scope.aFile.photo_direction,
+                                    latitude_dd: $scope.aFile.latitude_dd,
+                                    longitude_dd: $scope.aFile.longitude_dd,
+                                    hwm_id: $scope.aHWM.hwm_id
                                 },
                                 File: $scope.aFile.File
                             };
@@ -610,14 +610,14 @@
                                 $scope.HWMFiles.push(fresponse);
                                 $scope.allSFiles.push(fresponse);
                                 Site_Files.setAllSiteFiles($scope.allSFiles); //updates the file list on the sitedashboard
-                                if (fresponse.FILETYPE_ID === 1) $scope.hwmImageFiles.push(fresponse);
+                                if (fresponse.filetype_id === 1) $scope.hwmImageFiles.push(fresponse);
                                 $scope.showFileForm = false; $scope.HWMfileIsUploading = false;
                             }, function (errorResponse) {
                                 $scope.HWMfileIsUploading = false;
                                 toastr.error("Error uploading file: " + errorResponse.statusText);
                             });
                         } else {
-                            $scope.aFile.SOURCE_ID = response.SOURCE_ID; $scope.aFile.SITE_ID = $scope.thisHWMsite.SITE_ID; $scope.aFile.HWM_ID = $scope.aHWM.HWM_ID;
+                            $scope.aFile.source_id = response.source_id; $scope.aFile.site_id = $scope.thisHWMsite.site_id; $scope.aFile.hwm_id = $scope.aHWM.hwm_id;
                             FILE.save($scope.aFile).$promise.then(function (fresponse) {
                                 toastr.success("Link saved");
                                 fresponse.fileBelongsTo = "HWM File";
@@ -646,10 +646,10 @@
                     var whatkind = $scope.aFile.fileBelongsTo;
                     $http.defaults.headers.common.Authorization = 'Basic ' + $cookies.get('STNCreds');
                     $http.defaults.headers.common.Accept = 'application/json';
-                    if ($scope.aSource.SOURCE_ID !== undefined) {
-                        $scope.aSource.SOURCE_NAME = $scope.aSource.FULLNAME;
-                        SOURCE.update({ id: $scope.aSource.SOURCE_ID }, $scope.aSource).$promise.then(function () {
-                            FILE.update({ id: $scope.aFile.FILE_ID }, $scope.aFile).$promise.then(function (fileResponse) {
+                    if ($scope.aSource.source_id !== undefined) {
+                        $scope.aSource.source_name = $scope.aSource.FULLname;
+                        SOURCE.update({ id: $scope.aSource.source_id }, $scope.aSource).$promise.then(function () {
+                            FILE.update({ id: $scope.aFile.file_id }, $scope.aFile).$promise.then(function (fileResponse) {
                                 toastr.success("File Updated");
                                 fileResponse.fileBelongsTo = "HWM File";
                                 $scope.HWMFiles[$scope.existFileIndex] = fileResponse;
@@ -686,7 +686,7 @@
 
                 DeleteModalInstance.result.then(function (fileToRemove) {
                     $http.defaults.headers.common.Authorization = 'Basic ' + $cookies.get('STNCreds');
-                    FILE.delete({ id: fileToRemove.FILE_ID }).$promise.then(function () {
+                    FILE.delete({ id: fileToRemove.file_id }).$promise.then(function () {
                         toastr.success("File Removed");
                         $scope.HWMFiles.splice($scope.existFileIndex, 1);
                         $scope.allSFiles.splice($scope.allSFileIndex, 1);

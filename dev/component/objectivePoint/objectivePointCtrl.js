@@ -16,8 +16,8 @@
 
                 $scope.showOPModal = function (OPclicked) {
                     $scope.opFileTypes = allFileTypes.filter(function (oft) {
-                        return oft.FILETYPE === 'Photo' || oft.FILETYPE === 'Field Sheets' || oft.FILETYPE === 'Level Notes' ||
-                            oft.FILETYPE === 'Other' || oft.FILETYPE === 'NGS Datasheet' || oft.FILETYPE === 'Sketch';
+                        return oft.filetype === 'Photo' || oft.filetype === 'Field Sheets' || oft.filetype === 'Level Notes' ||
+                            oft.filetype === 'Other' || oft.filetype === 'NGS Datasheet' || oft.filetype === 'Sketch';
                     });
                     var passAllLists = [allOPTypes, allHorDatums, allHorCollMethods, allVertDatums, allVertColMethods, allOPQualities, $scope.opFileTypes];
                     var indexClicked = $scope.SiteObjectivePoints.indexOf(OPclicked);
@@ -39,7 +39,7 @@
                             },
                             thisOPControls: function () {
                                 if (OPclicked !== 0) {
-                                    return OBJECTIVE_POINT.getOPControls({id: OPclicked.OBJECTIVE_POINT_ID}).$promise;
+                                    return OBJECTIVE_POINT.getOPControls({id: OPclicked.objective_point_id}).$promise;
                                 }
                             },
                             opSite: function () {

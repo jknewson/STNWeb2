@@ -126,7 +126,7 @@
                             var fileParts = {
                                 FileEntity: {
                                     filetype_id: $scope.aFile.filetype_id,
-                                    file_url: $scope.aFile.file_url,
+                                    name: $scope.aFile.File.name,
                                     file_date: $scope.aFile.file_date,
                                     photo_date: $scope.aFile.photo_date,
                                     description: $scope.aFile.description,

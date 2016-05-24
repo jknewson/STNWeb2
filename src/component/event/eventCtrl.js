@@ -42,7 +42,7 @@
                    E.Name = allEvents[x].event_name;
                    E.Type = $scope.eventTypeList.filter(function (a) { return a.event_type_id == allEvents[x].event_type_id; })[0].type;
                    E.Status = $scope.eventStatList.filter(function (r) { return r.event_status_id == allEvents[x].event_status_id; })[0].status;
-                   var coord = $scope.eventCoordList.filter(function (c) { return c.member_id == allEvents[x].even_coordinator; })[0];
+                   var coord = $scope.eventCoordList.filter(function (c) { return c.member_id == allEvents[x].event_coordinator; })[0];
                    E.StartDate = allEvents[x].event_start_date;
                    E.EndDate = allEvents[x].event_end_date;
                    E.Coord = coord !== undefined ? coord.fname + " " + coord.lname : "";

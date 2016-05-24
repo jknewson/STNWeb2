@@ -52,7 +52,7 @@
                             delEv.Name = nameToRemove.event_name;
                             delEv.Type = $scope.eventTypeList.filter(function (a) { return a.event_type_id == nameToRemove.event_type_id; })[0].type;
                             delEv.Status = $scope.eventStatList.filter(function (r) { return r.event_status_id == nameToRemove.event_status_id; })[0].status;
-                            var coord = $scope.eventCoordList.filter(function (c) { return c.member_id == nameToRemove.even_coordinator; })[0];
+                            var coord = $scope.eventCoordList.filter(function (c) { return c.member_id == nameToRemove.event_coordinator; })[0];
                             delEv.StartDate = nameToRemove.event_start_date;
                             delEv.EndDate = nameToRemove.event_end_date;
                             delEv.Coord = coord !== undefined ? coord.fname + " " + coord.lname : "";
@@ -96,7 +96,7 @@
                     $scope.anEvent.event_start_date = makeAdate($scope.anEvent.event_start_date); $scope.anEvent.event_end_date = makeAdate($scope.anEvent.event_end_date);
                     $scope.thisEventType = $scope.eventTypeList.filter(function (a) { return a.event_type_id == thisEvent.event_type_id; })[0].type;
                     $scope.thisEventStatus = $scope.eventStatList.filter(function (r) { return r.event_status_id == thisEvent.event_status_id; })[0].status;
-                    var EC = $scope.eventCoordList.filter(function (c) { return c.member_id == thisEvent.even_coordinator; })[0];
+                    var EC = $scope.eventCoordList.filter(function (c) { return c.member_id == thisEvent.event_coordinator; })[0];
                     $scope.thisEventCoord = EC !== undefined ? EC.fname + " " + EC.lname : "";
 
                 }//end if thisEvent != null
@@ -147,7 +147,7 @@
                             E.Name = response.event_name;
                             E.Type = $scope.eventTypeList.filter(function (a) { return a.event_type_id == response.event_type_id; })[0].type;
                             E.Status = $scope.eventStatList.filter(function (r) { return r.event_status_id == response.event_status_id; })[0].status;
-                            var coord = $scope.eventCoordList.filter(function (c) { return c.member_id == response.even_coordinator; })[0];
+                            var coord = $scope.eventCoordList.filter(function (c) { return c.member_id == response.event_coordinator; })[0];
                             E.StartDate = response.event_start_date;
                             E.EndDate = response.event_end_date;
                             E.Coord = coord !== undefined ? coord.fname + " " + coord.lname : "";

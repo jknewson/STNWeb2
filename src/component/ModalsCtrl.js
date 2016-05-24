@@ -97,7 +97,7 @@
                     $scope.nameToRmv = nameToRemove.deploymentType;
                     break;
                 case "File":
-                    var f = nameToRemove.path !== undefined || nameToRemove.path !== null ? nameToRemove.path : nameToRemove.file_url;
+                    var f = nameToRemove.name !== undefined || nameToRemove.name !== null ? nameToRemove.name : nameToRemove.file_date;
                     f = f !== null || f !== undefined ? f : nameToRemove.file_id;
                     $scope.nameToRmv = f;
                     break;

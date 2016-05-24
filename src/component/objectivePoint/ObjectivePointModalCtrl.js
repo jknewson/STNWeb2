@@ -104,7 +104,7 @@
                             var fileParts = {
                                 FileEntity: {
                                     filetype_id: $scope.aFile.filetype_id,
-                                    file_url: $scope.aFile.file_url,
+                                    name: $scope.aFile.File.name,
                                     file_date: $scope.aFile.file_date,
                                     photo_date: $scope.aFile.photo_date,
                                     description: $scope.aFile.description,
@@ -479,12 +479,18 @@
             //X was clicked next to existing Control Identifier to have it removed, store in remove array for Save()
             $scope.RemoveID = function (opControl) {
                 //only add to remove list if it's an existing one to DELETE
-                var i = $scope.addedIdentifiersCopy.indexOf(opControl);
-                if (opControl.op_control_identifier_id !== undefined) {
-                    $scope.removeOPCarray.push(opControl);
-                    $scope.addedIdentifiersCopy.splice(i, 1);
+                if ($scope.addedIdentifiersCopy != undefined) {
+                    var i = $scope.addedIdentifiersCopy.indexOf(opControl);
+                    if (opControl.op_control_identifier_id !== undefined) {
+                        $scope.removeOPCarray.push(opControl);
+                        $scope.addedIdentifiersCopy.splice(i, 1);
+                    } else {
+                        $scope.addedIdentifiersCopy.splice(i, 1);
+                    }
                 } else {
-                    $scope.addedIdentifiersCopy.splice(i, 1);
+                    //this is a create
+                    var i = $scope.addedIdentifiers.indexOf(opControl);
+                    $scope.addedIdentifiers.splice(i, 1);
                 }
             };
 

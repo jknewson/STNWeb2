@@ -93,9 +93,9 @@
 
         <!-- Event Coordinator -->
         <div class="form-group required">
-            <label class="col-md-3 control-label req" for="even_coordinator">Event Coordinator:</label>
+            <label class="col-md-3 control-label req" for="event_coordinator">Event Coordinator:</label>
             <div class="col-md-3">
-                <select ng-if="loggedInRole == 'Admin'" class=" form-control" id="even_coordinator" name="even_coordinator" ng-model="anEvent.even_coordinator"
+                <select ng-if="loggedInRole == 'Admin'" class=" form-control" id="event_coordinator" name="even_coordinator" ng-model="anEvent.event_coordinator"
                         ng-options="ec.member_id as ec.fname + ' ' + ec.lname for ec in eventCoordList | orderBy: 'lname'" ng-model-options="{ updateOn: 'blur' }" ng-change="SaveOnBlur(eventForm.$valid)"
                         required>
                     <option value="">Select Event Coordinator</option>

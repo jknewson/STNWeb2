@@ -14,7 +14,7 @@
         </thead>
         <tbody>
             <tr ng-repeat="m in memberList | orderBy:sortingOrder:reverse">
-                <td><a ui-sref="members.MemberInfo({id: m.MEMBER_ID})">{{m.Name}}</a></td>
+                <td><a ui-sref="members.MemberInfo({id: m.member_id})">{{m.Name}}</a></td>
                 <td>{{m.Agency}}</td>
                 <td>{{m.Role}}</td>
             </tr>

@@ -4,9 +4,9 @@
     var STNControllers = angular.module('STNControllers');
 
     STNControllers.controller('siteCtrl', ['$scope', '$state', '$rootScope', '$cookies', '$location', '$http', '$uibModal', '$filter', 'thisSite', 'latlong', 'thisSiteNetworkNames', 'thisSiteNetworkTypes', 'thisSiteHousings',
-        'SITE', 'MEMBER', 'allHorDatums', 'allHorCollMethods', 'allStates', 'allCounties', 'allDeployPriorities', 'allHousingTypes', 'allNetworkNames', 'allNetworkTypes', 'allDeployTypes', 'allSensDeps',
+        'SITE', 'MEMBER', 'allHorDatums', 'allHorCollMethods', 'allStates', 'allCounties', 'allDeployPriorities', 'allHousingTypes', 'allNetworkNames', 'allNetworkTypes', 'allDeployTypes', 'allSensorTypes',
         function ($scope, $state, $rootScope, $cookies, $location, $http, $uibModal, $filter, thisSite, latlong, thisSiteNetworkNames, thisSiteNetworkTypes, thisSiteHousings, SITE, MEMBER, allHorDatums,
-            allHorCollMethods, allStates, allCounties, allDeployPriorities, allHousingTypes, allNetworkNames, allNetworkTypes, allDeployTypes, allSensDeps) {
+            allHorCollMethods, allStates, allCounties, allDeployPriorities, allHousingTypes, allNetworkNames, allNetworkTypes, allDeployTypes, allSensorTypes) {
             if ($cookies.get('STNCreds') === undefined || $cookies.get('STNCreds') === "") {
                 $scope.auth = false;
                 $location.path('/login');
@@ -23,7 +23,7 @@
                 $scope.openSiteCreate = function () {
                     $rootScope.stateIsLoading.showLoading = true; // loading..
                     var dropdownParts =[allHorDatums, allHorCollMethods, allStates, allCounties, allHousingTypes, allDeployPriorities,
-                        allNetworkNames, allNetworkTypes, allDeployTypes, allSensDeps];
+                        allNetworkNames, allNetworkTypes, allDeployTypes, allSensorTypes];
                     //modal
                     var modalInstance = $uibModal.open({
                             templateUrl: 'SITEmodal.html',
@@ -119,14 +119,14 @@
                                 $scope.siteNetworkTypes.push(nt.network_type_name);
                             }
                         }
-                        if ($scope.aSite.sensor_not_appropriate !== null || $scope.aSite.sensor_not_appropriate > 0)
+                        if ($scope.aSite.sensor_not_appropriate !== undefined || $scope.aSite.sensor_not_appropriate > 0)
                             $scope.sensorNotAppr = "Yes";
                         else
                             $scope.sensorNotAppr = "No";
 
 
                         //get member name for display
-                        if ($scope.aSite.member_id !== null) {
+                        if ($scope.aSite.member_id !== undefined) {
                             $http.defaults.headers.common.Authorization = 'Basic ' + $cookies.get('STNCreds');
                             $http.defaults.headers.common.Accept = 'application/json';
                             MEMBER.query({ id: $scope.aSite.member_id }).$promise.then(function (response) {

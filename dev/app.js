@@ -4,7 +4,8 @@
         ['ngResource', 'ui.router', 'ngCookies', 'ui.mask', 'ui.bootstrap', 'isteven-multi-select', 'ngInputModified', 'ui.validate', 'cgBusy',
             'angular.filter', 'xeditable', 'checklist-model', 'ngFileUpload', 'STNResource', 'ui.bootstrap.datetimepicker','leaflet-directive',
             'STNControllers', 'LogInOutController', 'ModalControllers', 'SettingsControllers', 'WiM.Services', 'WiM.Event', 'wim_angular', 'angularSpinners']);
-    app.constant('SERVER_URL', 'https://stntest.wim.usgs.gov/STNServices2');
+    //app.constant('SERVER_URL', 'https://stntest.wim.usgs.gov/STNServices2');
+    app.constant('SERVER_URL', 'https://stntest.wim.usgs.gov/STNServices2P');
 
     app.run(['$rootScope', '$uibModalStack', '$cookies', '$state', function ($rootScope, $uibModalStack, $cookies, $state) {
         $rootScope.$on('$stateChangeStart', function (event, toState, toParams, fromState, fromParams) {
@@ -96,7 +97,11 @@
                                 allDeployTypes: function (dt) {
                                     return dt.getAll().$promise;
                                 },
-                                sd: 'SENSOR_DEPLOYMENT',
+                                //sd: 'SENSOR_DEPLOYMENT',
+                                //allSensDeps: function (sd) {
+                                //    return sd.getAll().$promise;
+                                //}
+                                sd: 'SENSOR_TYPE',
                                 allSensDeps: function (sd) {
                                     return sd.getAll().$promise;
                                 }
@@ -750,10 +755,10 @@
                         allDeployTypes: function (dt) {
                             return dt.getAll().$promise;
                         },
-                        sd: 'SENSOR_DEPLOYMENT',
-                        allSensDeps: function (sd) {
-                            return sd.getAll().$promise;
-                        },
+                        //sd: 'SENSOR_DEPLOYMENT', ----------------returned in the below request 'allSensorTypes' grouped together
+                        //allSensDeps: function (sd) {
+                        //    return sd.getAll().$promise;
+                        //},                          
                         dp: 'DEPLOYMENT_PRIORITY',
                         allDeployPriorities: function (dp) {
                             return dp.getAll().$promise;
@@ -827,7 +832,7 @@
                         'siteNo': {
                             controller: ['$scope', '$cookies', 'thisSite', function ($scope, $cookies, thisSite) {
                                 if (thisSite !== undefined)
-                                    $scope.SiteNo = thisSite.SITE_NO;
+                                    $scope.SiteNo = thisSite.site_no;
                                 // watch for the session event to change and update
                                 $scope.$watch(function () { return $cookies.get('SessionEventName'); }, function (newValue) {
                                     $scope.sessionEvent = $cookies.get('SessionEventName') !== null && $cookies.get('SessionEventName') !== undefined ? $cookies.get('SessionEventName') : "All Events";
@@ -951,10 +956,10 @@
                         allSensorBrands: function (sb, $stateParams) {
                             if ($stateParams.id == 'Sensor') return sb.getAll().$promise;
                         },
-                        sd: 'SENSOR_DEPLOYMENT',
-                        allSensDeps: function (sd) {
-                            return sd.getAll().$promise;
-                        },
+                        //sd: 'SENSOR_DEPLOYMENT', -----------------------------returned in above 'allSensorTypes' grouped together
+                        //allSensDeps: function (sd) {
+                        //    return sd.getAll().$promise;
+                        //},
                         ht: 'HOUSING_TYPE',
                         allHousingTypes: function (ht) {
                             return ht.getAll().$promise;

@@ -18,7 +18,7 @@
                         case '/SubmitReport':
                             if ($scope.fullReportForm.submit !== undefined) {
                                 formIsPopulated = $scope.fullReportForm.submit.$dirty;
-                                formIsPopulated = $scope.fullReportForm.submit.EVENT_ID.$viewValue !== undefined ? true : formIsPopulated;
+                                formIsPopulated = $scope.fullReportForm.submit.event_id.$viewValue !== undefined ? true : formIsPopulated;
                             }
                             break;
                     }
@@ -70,7 +70,7 @@
                 $scope.WaterStaff = {};
                 $scope.disabled = true;
                 $scope.needToComplete = false;
-                $scope.memberIncompletes = memberReports.filter(function (ir) { return ir.COMPLETE === 0; });
+                $scope.memberIncompletes = memberReports.filter(function (ir) { return ir.complete === 0; });
                 $scope.events = allEvents;
                 $scope.states = allStates;
                 $scope.reports = allReports;
@@ -79,9 +79,9 @@
                 $http.defaults.headers.common.Accept = 'application/json';
                 MEMBER.query({ id: $cookies.get('mID') }, function success(response) {
                     $scope.MemberLoggedIn = response;
-                    var memberAgency = allAgencies.filter(function (a) { return a.AGENCY_ID == $scope.MemberLoggedIn.AGENCY_ID; })[0];
-                    $scope.MemberLoggedIn.AGENCY_NAME = memberAgency.AGENCY_NAME;
-                    $scope.MemberLoggedIn.AGENCY_ADDRESS = memberAgency.ADDRESS + ", " + memberAgency.CITY + " " + memberAgency.STATE + " " + memberAgency.ZIP;
+                    var memberAgency = allAgencies.filter(function (a) { return a.agency_id == $scope.MemberLoggedIn.agency_id; })[0];
+                    $scope.MemberLoggedIn.agency_name = memberAgency.agency_name;
+                    $scope.MemberLoggedIn.agency_address = memberAgency.address + ", " + memberAgency.city + " " + memberAgency.state + " " + memberAgency.zip;
                 }).$promise;
                 MEMBER.getAll().$promise.then(function (response) {
                     $scope.members = response;
@@ -100,11 +100,11 @@
 
                 //each option the populate, need to show selection in 'Confirm Selections' section (date works)
                 $scope.genRepChange = function () {
-                    $scope.EventName = $scope.events.filter(function (e) { return e.EVENT_ID == $scope.genSummary.EVENT_ID; })[0];
+                    $scope.EventName = $scope.events.filter(function (e) { return e.event_id == $scope.genSummary.event_id; })[0];
                     var names = [];
                     var abbrevs = [];
                     angular.forEach($scope.Statemodel.value, function (state) {
-                        names.push(state.STATE_NAME); abbrevs.push(state.STATE_ABBREV);
+                        names.push(state.state_name); abbrevs.push(state.state_abbrev);
                     });
 
                     $scope.StateNames = names.join(','); $scope.StateAbbrevs = abbrevs.join(',');
@@ -138,25 +138,25 @@
                         //get metrics summary to show in new tab                    
                         var abbrevs = [];
                         angular.forEach($scope.Statemodel.value, function (state) {
-                            abbrevs.push(state.STATE_ABBREV);
+                            abbrevs.push(state.state_abbrev);
                         });
                         var abbrevString = abbrevs.join(',');
-                        var thisDate = $scope.formatDate($scope.genSummary.SUM_DATE);
+                        var thisDate = $scope.formatDate($scope.genSummary.sum_date);
                         //need: 
                         //1. all reports
                         REPORT.getFilteredReports({
-                            Event: $scope.EventName.EVENT_ID, States: abbrevString, Date: thisDate
+                            Event: $scope.EventName.event_id, States: abbrevString, Date: thisDate
                         }).$promise.then(function (result) {
                             //for each report, get all reports with that event and state
                             for (var x = 0; x < result.length; x++) {
-                                //var evStReports = $scope.reports.filter(function (f) { return f.EVENT_ID == result[x].EVENT_ID && f.STATE == result[x].STATE; });
+                                //var evStReports = $scope.reports.filter(function (f) { return f.event_id == result[x].event_id && f.state == result[x].STATE; });
                                 var thisRPModel = {};
                                 thisRPModel.report = result[x]; var YesSWFsum = 0; var YesWQFsum = 0; var YesSWOsum = 0; var YesWQOsum = 0;
                                 //cumulative person days totals
-                                for (var a = 0; a < result.length; a++) { YesSWFsum += result[a].SW_YEST_FIELDPERS; }
-                                for (var b = 0; b < result.length; b++) { YesWQFsum += result[b].WQ_YEST_FIELDPERS; }
-                                for (var c = 0; c < result.length; c++) { YesSWOsum += result[c].SW_YEST_OFFICEPERS; }
-                                for (var d = 0; d < result.length; d++) { YesWQOsum += result[d].WQ_YEST_OFFICEPERS; }
+                                for (var a = 0; a < result.length; a++) { YesSWFsum += result[a].sw_yest_fieldpers; }
+                                for (var b = 0; b < result.length; b++) { YesWQFsum += result[b].wq_yest_fieldpers; }
+                                for (var c = 0; c < result.length; c++) { YesSWOsum += result[c].sw_yest_officepers; }
+                                for (var d = 0; d < result.length; d++) { YesWQOsum += result[d].wq_yest_officepers; }
 
                                 thisRPModel.FieldPYesSWTot = YesSWFsum;
                                 thisRPModel.FieldPYesWQTot = YesWQFsum;
@@ -164,49 +164,49 @@
                                 thisRPModel.OfficePYesWQTot = YesWQOsum;
 
                                 //add to totals for total row
-                                $scope.totalRow.notAcctForEmps += (thisRPModel.report.SW_FIELDPERS_NOTACCT + thisRPModel.report.WQ_FIELDPERS_NOTACCT);
+                                $scope.totalRow.notAcctForEmps += (thisRPModel.report.sw_fieldpers_notacct + thisRPModel.report.wq_fieldpers_notacct);
                                 $scope.totalRow.cumPField += (thisRPModel.FieldPYesSWTot + thisRPModel.FieldPYesWQTot);
-                                $scope.totalRow.yesPField += (thisRPModel.report.SW_YEST_FIELDPERS + thisRPModel.report.WQ_YEST_FIELDPERS);
-                                $scope.totalRow.todPField += (thisRPModel.report.SW_TOD_FIELDPERS + thisRPModel.report.WQ_TOD_FIELDPERS);
-                                $scope.totalRow.tomPField += (thisRPModel.report.SW_TMW_FIELDPERS + thisRPModel.report.WQ_TMW_FIELDPERS);
+                                $scope.totalRow.yesPField += (thisRPModel.report.sw_yest_fieldpers + thisRPModel.report.wq_yest_fieldpers);
+                                $scope.totalRow.todPField += (thisRPModel.report.sw_tod_fieldpers + thisRPModel.report.wq_tod_fieldpers);
+                                $scope.totalRow.tomPField += (thisRPModel.report.sw_tmw_fieldpers + thisRPModel.report.wq_tmw_fieldpers);
                                 $scope.totalRow.cumPOffice += (thisRPModel.OfficePYesSWTot + thisRPModel.OfficePYesWQTot);
-                                $scope.totalRow.yesPOffice += (thisRPModel.report.SW_YEST_OFFICEPERS + thisRPModel.report.WQ_YEST_OFFICEPERS);
-                                $scope.totalRow.todPOffice += (thisRPModel.report.SW_TOD_OFFICEPERS + thisRPModel.report.WQ_TOD_OFFICEPERS);
-                                $scope.totalRow.tomPOffice += (thisRPModel.report.SW_TMW_OFFICEPERS + thisRPModel.report.WQ_TMW_OFFICEPERS);
-                                $scope.totalRow.truck += (thisRPModel.report.SW_AUTOS_DEPL + thisRPModel.report.WQ_AUTOS_DEPL);
-                                $scope.totalRow.boat += (thisRPModel.report.SW_BOATS_DEPL + thisRPModel.report.WQ_BOATS_DEPL);
-                                $scope.totalRow.other += (thisRPModel.report.SW_OTHER_DEPL + thisRPModel.report.WQ_OTHER_DEPL);
+                                $scope.totalRow.yesPOffice += (thisRPModel.report.sw_yest_officepers + thisRPModel.report.wq_yest_officepers);
+                                $scope.totalRow.todPOffice += (thisRPModel.report.sw_tod_officepers + thisRPModel.report.wq_tod_officepers);
+                                $scope.totalRow.tomPOffice += (thisRPModel.report.sw_tmw_officepers + thisRPModel.report.wq_tmw_officepers);
+                                $scope.totalRow.truck += (thisRPModel.report.sw_autos_depl + thisRPModel.report.wq_autos_depl);
+                                $scope.totalRow.boat += (thisRPModel.report.sw_boats_depl + thisRPModel.report.wq_boats_depl);
+                                $scope.totalRow.other += (thisRPModel.report.sw_other_depl + thisRPModel.report.wq_other_depl);
 
-                                $scope.totalRow.gageVisits += thisRPModel.report.GAGE_VISIT; $scope.totalRow.gagesDown += thisRPModel.report.GAGE_DOWN;
-                                $scope.totalRow.disCtoDate += thisRPModel.report.TOT_DISCHARGE_MEAS; $scope.totalRow.disCPlanned += thisRPModel.report.PLAN_DISCHARGE_MEAS;
-                                $scope.totalRow.CheckMeasToDate += thisRPModel.report.TOT_CHECK_MEAS; $scope.totalRow.CheckMeasPlanned += thisRPModel.report.PLAN_CHECK_MEAS;
-                                $scope.totalRow.indMeas = thisRPModel.report.PLAN_INDIRECT_MEAS; $scope.totalRow.ratExt = thisRPModel.report.RATING_EXTENS;
-                                $scope.totalRow.peaksOfRec += thisRPModel.report.GAGE_PEAK_RECORD; $scope.totalRow.QWGageVis += thisRPModel.report.QW_GAGE_VISIT;
-                                $scope.totalRow.contQWGageVis = thisRPModel.report.QW_CONT_GAGEVISIT; $scope.totalRow.contQWGageDown = thisRPModel.report.QW_GAGE_DOWN;
-                                $scope.totalRow.disQWSamples += thisRPModel.report.QW_DISCR_SAMPLES; $scope.totalRow.sedSamples += thisRPModel.report.COLL_SEDSAMPLES;
+                                $scope.totalRow.gageVisits += thisRPModel.report.GAGE_VISIT; $scope.totalRow.gagesDown += thisRPModel.report.gage_down;
+                                $scope.totalRow.disCtoDate += thisRPModel.report.tot_discharge_meas; $scope.totalRow.disCPlanned += thisRPModel.report.plan_discharge_meas;
+                                $scope.totalRow.CheckMeasToDate += thisRPModel.report.tot_check_meas; $scope.totalRow.CheckMeasPlanned += thisRPModel.report.plan_check_meas;
+                                $scope.totalRow.indMeas = thisRPModel.report.plan_indirect_meas; $scope.totalRow.ratExt = thisRPModel.report.rating_extens;
+                                $scope.totalRow.peaksOfRec += thisRPModel.report.gage_peak_record; $scope.totalRow.QWGageVis += thisRPModel.report.qw_gage_visit;
+                                $scope.totalRow.contQWGageVis = thisRPModel.report.qw_cont_gagevisit; $scope.totalRow.contQWGageDown = thisRPModel.report.qw_gage_down;
+                                $scope.totalRow.disQWSamples += thisRPModel.report.qw_discr_samples; $scope.totalRow.sedSamples += thisRPModel.report.coll_sedsamples;
 
-                                $scope.totalRow.rdgPlan += thisRPModel.report.PLAN_RAPDEPL_GAGE; $scope.totalRow.rdgDep += thisRPModel.report.DEP_RAPDEPL_GAGE;
-                                $scope.totalRow.rdgRec += thisRPModel.report.REC_RAPDEPL_GAGE; $scope.totalRow.rdgLost += thisRPModel.report.LOST_RAPDEPL_GAGE;
-                                $scope.totalRow.waterPlan += thisRPModel.report.PLAN_WTRLEV_SENSOR; $scope.totalRow.waterDep += thisRPModel.report.DEP_WTRLEV_SENSOR;
-                                $scope.totalRow.waterRec += thisRPModel.report.REC_WTRLEV_SENSOR; $scope.totalRow.waterLost += thisRPModel.report.LOST_WTRLEV_SENSOR;
-                                $scope.totalRow.wavePlan += thisRPModel.report.PLAN_WV_SENS; $scope.totalRow.waveDep += thisRPModel.report.DEP_WV_SENS;
-                                $scope.totalRow.waveRec += thisRPModel.report.REC_WV_SENS; $scope.totalRow.waveLost += thisRPModel.report.LOST_WV_SENS;
-                                $scope.totalRow.baroPlan += thisRPModel.report.PLAN_BAROMETRIC; $scope.totalRow.baroDep += thisRPModel.report.DEP_BAROMETRIC;
-                                $scope.totalRow.baroRec += thisRPModel.report.REC_BAROMETRIC; $scope.totalRow.baroLost += thisRPModel.report.LOST_BAROMETRIC;
-                                $scope.totalRow.metPlan += thisRPModel.report.PLAN_METEOROLOGICAL; $scope.totalRow.metDep += thisRPModel.report.DEP_METEOROLOGICAL;
-                                $scope.totalRow.metRec += thisRPModel.report.REC_METEOROLOGICAL; $scope.totalRow.metLost += thisRPModel.report.LOST_METEOROLOGICAL;
-                                $scope.totalRow.hwmFlag += thisRPModel.report.HWM_FLAGGED; $scope.totalRow.hwmCol = thisRPModel.report.HWM_COLLECTED;
+                                $scope.totalRow.rdgPlan += thisRPModel.report.plan_rapdepl_gage; $scope.totalRow.rdgDep += thisRPModel.report.dep_rapdepl_gage;
+                                $scope.totalRow.rdgRec += thisRPModel.report.rec_rapdepl_gage; $scope.totalRow.rdgLost += thisRPModel.report.lost_rapdepl_gage;
+                                $scope.totalRow.waterPlan += thisRPModel.report.plan_wtrlev_sensor; $scope.totalRow.waterDep += thisRPModel.report.dep_wtrlev_sensor;
+                                $scope.totalRow.waterRec += thisRPModel.report.rec_wtrlev_sensor; $scope.totalRow.waterLost += thisRPModel.report.lost_wtrlev_sensor;
+                                $scope.totalRow.wavePlan += thisRPModel.report.plan_wv_sens; $scope.totalRow.waveDep += thisRPModel.report.dep_wv_sens;
+                                $scope.totalRow.waveRec += thisRPModel.report.rec_wv_sens; $scope.totalRow.waveLost += thisRPModel.report.lost_wv_sens;
+                                $scope.totalRow.baroPlan += thisRPModel.report.plan_barometric; $scope.totalRow.baroDep += thisRPModel.report.dep_barometric;
+                                $scope.totalRow.baroRec += thisRPModel.report.rec_barometric; $scope.totalRow.baroLost += thisRPModel.report.lost_barometric;
+                                $scope.totalRow.metPlan += thisRPModel.report.plan_meteorological; $scope.totalRow.metDep += thisRPModel.report.dep_meteorological;
+                                $scope.totalRow.metRec += thisRPModel.report.rec_meteorological; $scope.totalRow.metLost += thisRPModel.report.lost_meteorological;
+                                $scope.totalRow.hwmFlag += thisRPModel.report.hwm_flagged; $scope.totalRow.hwmCol = thisRPModel.report.hwm_collected;
 
                                 $scope.MetricDisplayModel.push(thisRPModel);
                             }//end forloop for ReportModelList
                             //2. this Event
                             $scope.GenRepEventModel = {};
                             $scope.GenRepEventModel.Event = $scope.EventName;
-                            $scope.GenRepEventModel.EventType = $scope.eventTypes.filter(function (et) { return et.EVENT_TYPE_ID == $scope.EventName.EVENT_TYPE_ID; })[0];
-                            $scope.GenRepEventModel.EventStat = $scope.eventStats.filter(function (es) { return es.EVENT_STATUS_ID == $scope.EventName.EVENT_STATUS_ID; })[0];
+                            $scope.GenRepEventModel.EventType = $scope.eventTypes.filter(function (et) { return et.event_type_id == $scope.EventName.event_type_id; })[0];
+                            $scope.GenRepEventModel.EventStat = $scope.eventStats.filter(function (es) { return es.event_status_id == $scope.EventName.event_status_id; })[0];
                             //3. event Coordinator info
-                            $scope.GenRepEventModel.Coordinator = $scope.members.filter(function (m) { return m.MEMBER_ID == $scope.GenRepEventModel.Event.EVENT_COORDINATOR; })[0];
-                            $scope.GenRepEventModel.CoordAgency = $scope.agencies.filter(function (a) { return a.AGENCY_ID == $scope.GenRepEventModel.Coordinator.AGENCY_ID; })[0];
+                            $scope.GenRepEventModel.Coordinator = $scope.members.filter(function (m) { return m.member_id == $scope.GenRepEventModel.Event.event_coordinator; })[0];
+                            $scope.GenRepEventModel.CoordAgency = $scope.agencies.filter(function (a) { return a.agency_id == $scope.GenRepEventModel.Coordinator.agency_id; })[0];
 
                             //modal
                             var modalInstance = $uibModal.open({
@@ -251,34 +251,34 @@
                         //event chosen    $scope.EventName[0];
                         var abbrevs = [];
                         angular.forEach($scope.Statemodel.value, function (state) {
-                            abbrevs.push(state.STATE_ABBREV);
+                            abbrevs.push(state.state_abbrev);
                         });
                         var abbrevString = abbrevs.join(',');
-                        var thisDate = $scope.formatDate($scope.genSummary.SUM_DATE);
+                        var thisDate = $scope.formatDate($scope.genSummary.sum_date);
                         $scope.reportModel = [];
                         //all filtered reports 
                         $http.defaults.headers.common.Authorization = 'Basic ' + $cookies.get('STNCreds');
                         $http.defaults.headers.common.Accept = 'application/json';
                         REPORT.getReportwithContacts({
-                            Event: $scope.EventName.EVENT_ID, States: abbrevString, Date: thisDate
+                            Event: $scope.EventName.event_id, States: abbrevString, Date: thisDate
                         }).$promise.then(function (result) {
                             //loop through reports and get each's contacts
                             for (var x = 0; x < result.length; x++) {
                                 var rep = {};
-                                rep.repID = result[x].Report.REPORTING_METRICS_ID; rep.State = result[x].Report.STATE; rep.REPORT_DATE = result[x].Report.REPORT_DATE;
-                                var submitter = $scope.members.filter(function (m) { return m.MEMBER_ID == result[x].Report.MEMBER_ID; })[0];
-                                var submitterAgency = $scope.agencies.filter(function (a) { return a.AGENCY_ID == submitter.AGENCY_ID; });
+                                rep.repID = result[x].reporting_metrics_id; rep.State = result[x].state; rep.report_date = result[x].report_date;
+                                var submitter = $scope.members.filter(function (m) { return m.member_id == result[x].member_id; })[0];
+                                var submitterAgency = $scope.agencies.filter(function (a) { return a.agency_id == submitter.agency_id; })[0];
                                 var sub = {};
-                                sub.FNAME = submitter.FNAME; sub.FNAME = submitter.FNAME;
-                                sub.EMAIL = submitter.EMAIL; sub.PHONE = submitter.PHONE;
-                                sub.AGENCYNAME = submitterAgency.AGENCY_NAME;
-                                sub.AGENCYADD = submitterAgency.CITY + " " + submitterAgency.STATE + " " + submitterAgency.ZIP;
+                                sub.fname = submitter.fname; sub.lname = submitter.lname;
+                                sub.email = submitter.email; sub.phone = submitter.phone;
+                                sub.agencyname = submitterAgency.agency_name;
+                                sub.agencyadd = submitterAgency.city + " " + submitterAgency.state + " " + submitterAgency.zip;
                                 rep.submitter = sub;
-                                rep.depC = result[x].ReportContacts.filter(function (x) { return x.TYPE == "Deployed Staff"; })[0];
-                                rep.genC = result[x].ReportContacts.filter(function (x) { return x.TYPE == "General"; })[0];
-                                rep.inlC = result[x].ReportContacts.filter(function (x) { return x.TYPE == "Inland Flood"; })[0];
-                                rep.coastC = result[x].ReportContacts.filter(function (x) { return x.TYPE == "Coastal Flood"; })[0];
-                                rep.waterC = result[x].ReportContacts.filter(function (x) { return x.TYPE == "Water Quality"; })[0];
+                                rep.depC = result[x].ReportContacts.filter(function (x) { return x.type == "Deployed Staff"; })[0];
+                                rep.genC = result[x].ReportContacts.filter(function (x) { return x.type == "General"; })[0];
+                                rep.inlC = result[x].ReportContacts.filter(function (x) { return x.type == "Inland Flood"; })[0];
+                                rep.coastC = result[x].ReportContacts.filter(function (x) { return x.type == "Coastal Flood"; })[0];
+                                rep.waterC = result[x].ReportContacts.filter(function (x) { return x.type == "Water Quality"; })[0];
                                 $scope.reportModel.push(rep);
                             } //end for loop 
 
@@ -297,11 +297,11 @@
                                         thisEvent: function () {
                                             $scope.GenRepEventModel = {};
                                             $scope.GenRepEventModel.Event = $scope.EventName;
-                                            $scope.GenRepEventModel.EventType = $scope.eventTypes.filter(function (et) { return et.EVENT_TYPE_ID == $scope.EventName.EVENT_TYPE_ID; })[0];
-                                            $scope.GenRepEventModel.EventStat = $scope.eventStats.filter(function (es) { return es.EVENT_STATUS_ID == $scope.EventName.EVENT_STATUS_ID; })[0];
+                                            $scope.GenRepEventModel.EventType = $scope.eventTypes.filter(function (et) { return et.event_type_id == $scope.EventName.event_type_id; })[0];
+                                            $scope.GenRepEventModel.EventStat = $scope.eventStats.filter(function (es) { return es.event_status_id == $scope.EventName.event_status_id; })[0];
                                             //3. event Coordinator info
-                                            $scope.GenRepEventModel.Coordinator = $scope.members.filter(function (m) { return m.MEMBER_ID == $scope.EventName.EVENT_COORDINATOR; })[0];
-                                            $scope.GenRepEventModel.CoordAgency = $scope.agencies.filter(function (a) { return a.AGENCY_ID == $scope.GenRepEventModel.Coordinator.AGENCY_ID; })[0];
+                                            $scope.GenRepEventModel.Coordinator = $scope.members.filter(function (m) { return m.member_id == $scope.EventName.event_coordinator; })[0];
+                                            $scope.GenRepEventModel.CoordAgency = $scope.agencies.filter(function (a) { return a.agency_id == $scope.GenRepEventModel.Coordinator.agency_id; })[0];
                                             return $scope.GenRepEventModel;
                                         }
                                     },
@@ -330,7 +330,7 @@
                         //get reports and give a csv file back
                         $http.defaults.headers.common.Accept = 'text/csv';
                   
-                        REPORT.getReportsCSV({ Event: $scope.genSummary.EVENT_ID, States: $scope.StateAbbrevs, Date: $scope.genSummary.SUM_DATE }).$promise.then(function (result) {
+                        REPORT.getReportsCSV({ Event: $scope.genSummary.event_id, States: $scope.StateAbbrevs, Date: $scope.genSummary.sum_date }).$promise.then(function (result) {
                             var anchor = angular.element('<a/>');
                             var joinedResponse = result.join("");
                             var file = new Blob([joinedResponse], { type: 'application/csv' });

@@ -89,7 +89,7 @@
         </div>
     </div>
 
-    <div ng-show="siteResponse" class="results-box rb-100">
+    <div ng-show="siteResponse" class="results-box">
         <h3 class="results-box-title">Sites:</h3>
         <script>
             var sortingOrder = 'site_no';
@@ -98,7 +98,7 @@
             <thead>
                 <tr>
                     <th class="site_no">Site Number&nbsp;<a ng-click="sort_by('site_no')"><i class="glyphicon glyphicon-sort"></i></a></th>
-                    <th class="description">Description&nbsp;<a ng-click="sort_by('description')"><i class="glyphicon glyphicon-sort"></i></a></th>
+                    <th class="site_description">Description&nbsp;<a ng-click="sort_by('site_description')"><i class="glyphicon glyphicon-sort"></i></a></th>
                     <th class="county">County&nbsp;<a ng-click="sort_by('county')"><i class="glyphicon glyphicon-sort"></i></a></th>
                     <th class="state">State&nbsp;<a ng-click="sort_by('state')"><i class="glyphicon glyphicon-sort"></i></a></th>
                     <th class="Networks">Network&nbsp;<a ng-click="sort_by('Networks')"><i class="glyphicon glyphicon-sort"></i></a></th>
@@ -109,13 +109,12 @@
             <tbody>
                 <tr ng-repeat="s in siteList | orderBy:sortingOrder:reverse">
                     <td><a ui-sref="site.dashboard({id: s.site_id})">{{s.site_no}}</a></td>
-                    <td>{{s.description}}</td>
+                    <td>{{s.site_description}}</td>
                     <td>{{s.county}}</td>
                     <td>{{s.state}}</td>
-                    <td><span ng-repeat="net in s.Networks">{{net.name}}</span></td>
-                    <td ng-if="s.RecentOP">{{s.RecentOP.name}}, Established: {{s.RecentOP.date_established | date:'MM/dd/yyyy'}}</td>
-                    <td ng-if="!s.RecentOP"></td>
-                    <td><span ng-repeat="ev in s.Events">{{ev.event_name}}<br/></span></td>
+                    <td><span ng-repeat="net in s.networkNames">{{net}}</span></td>
+                    <td><span ng-if="s.RecentOP">{{s.RecentOP.name}}, Established: {{s.RecentOP.date_established | date:'MM/dd/yyyy'}}</span></td>
+                    <td><span ng-repeat="ev in s.Events">{{ev}}<br/></span></td>
                 </tr>
             </tbody>
         </table>

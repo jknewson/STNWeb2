@@ -7,11 +7,11 @@
             $scope.ReportView = {};
             $scope.ReportView.Report = report;
             $scope.ReportView.submitter = submitPerson;
-            $scope.ReportView.deployStaff = contacts.filter(function (d) { return d.type == "Deployed Staff"; })[0];
-            $scope.ReportView.generalStaff = contacts.filter(function (d) { return d.type == "General"; })[0];
-            $scope.ReportView.inlandStaff = contacts.filter(function (d) { return d.type == "Inland Flood"; })[0];
-            $scope.ReportView.coastStaff = contacts.filter(function (d) { return d.type == "Coastal Flood"; })[0];
-            $scope.ReportView.waterStaff = contacts.filter(function (d) { return d.type == "Water Quality"; })[0];
+            $scope.ReportView.deployStaff = contacts.filter(function (d) { return d.contactType == "Deployed Staff"; })[0];
+            $scope.ReportView.generalStaff = contacts.filter(function (d) { return d.contactType == "General"; })[0];
+            $scope.ReportView.inlandStaff = contacts.filter(function (d) { return d.contactType == "Inland Flood"; })[0];
+            $scope.ReportView.coastStaff = contacts.filter(function (d) { return d.contactType == "Coastal Flood"; })[0];
+            $scope.ReportView.waterStaff = contacts.filter(function (d) { return d.contactType == "Water Quality"; })[0];
             $scope.print = function () {
                 window.print();
             };

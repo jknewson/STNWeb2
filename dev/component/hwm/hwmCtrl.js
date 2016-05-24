@@ -20,7 +20,7 @@
                     $scope.sessionEventName = newValue !== undefined ? newValue : "All Events";
                     $scope.sessionEventExists = $scope.sessionEventName != "All Events" ? true : false;
                     if (newValue !== undefined) {
-                        $scope.SiteHWMs = thisSiteHWMs.filter(function (h) { return h.EVENT_ID == $cookies.get('SessionEventID'); });
+                        $scope.SiteHWMs = thisSiteHWMs.filter(function (h) { return h.event_id == $cookies.get('SessionEventID'); });
                         $scope.hwmCount = { total: $scope.SiteHWMs.length };
                     } else {
                         $scope.SiteHWMs = thisSiteHWMs;
@@ -31,8 +31,8 @@
                 $scope.showHWMModal = function (HWMclicked) {
                     var hwmFileTypes = allFileTypes.filter(function (hft) {
                         //Photo (1), Historic (3), Field Sheets (4), Level Notes (5), Other (7), Link (8), Sketch (10)
-                        return hft.FILETYPE === 'Photo' || hft.FILETYPE === 'Historic Citation' || hft.FILETYPE === 'Field Sheets' || hft.FILETYPE === 'Level Notes' ||
-                            hft.FILETYPE === 'Other' || hft.FILETYPE === 'Link' || hft.FILETYPE === 'Sketch';
+                        return hft.filetype === 'Photo' || hft.filetype === 'Historic Citation' || hft.filetype === 'Field Sheets' || hft.filetype === 'Level Notes' ||
+                            hft.filetype === 'Other' || hft.filetype === 'Link' || hft.filetype === 'Sketch';
                     });
                     var passAllLists = [allHWMTypes, allHWMQualities, allHorDatums, allHorCollMethods, allVertDatums, allVertColMethods, allMarkers, allEvents, hwmFileTypes];
                     var indexClicked = $scope.SiteHWMs.indexOf(HWMclicked);
@@ -53,8 +53,8 @@
                                     return HWMclicked !== 0 ? HWMclicked: "empty";
                                 },
                                 hwmApproval: function () {
-                                    if (HWMclicked !== 0 && (HWMclicked.APPROVAL_ID !== undefined && HWMclicked.APPROVAL_ID > 0)) {
-                                        return HWM.getHWMApproval({ id: HWMclicked.HWM_ID }).$promise;
+                                    if (HWMclicked !== 0 && (HWMclicked.approval_id !== undefined && HWMclicked.approval_id > 0)) {
+                                        return HWM.getHWMApproval({ id: HWMclicked.hwm_id }).$promise;
                                     }
                                 },
                                 hwmSite: function () {

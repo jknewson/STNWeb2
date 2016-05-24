@@ -14,7 +14,7 @@
             //need a datafile for this kind of sensor, check files for presence of df to set flag on sensor
             var determineDFPresent = function (f) {
                 for (var x = 0; x < f.length; x++) {
-                    if (f[x].FILETYPE_ID == 2) {
+                    if (f[x].filetype_id == 2) {
                         return true;
                     }
                 }
@@ -27,23 +27,23 @@
                 }
             }
 
-            $scope.eventSiteHWMs = allEventHWMs.filter(function (h) { return h.SITE_ID == peakSite.SITE_ID; });
+            $scope.eventSiteHWMs = allEventHWMs.filter(function (h) { return h.site_id == peakSite.site_id; });
             angular.forEach($scope.eventSiteHWMs, function (esh) {
                 esh.selected = false;
-                esh.files = allSiteFiles.filter(function (sf) { return sf.HWM_ID == esh.HWM_ID && sf.fileBelongsTo == "HWM File"; });
+                esh.files = allSiteFiles.filter(function (sf) { return sf.hwm_id == esh.hwm_id && sf.fileBelongsTo == "HWM File"; });
             });
             
-            $scope.eventSiteSensors = allSiteSensors.filter(function (s) { return s.Instrument.EVENT_ID == $cookies.get('SessionEventID'); }); //maybe go from here to get all datafiles for each sensor
+            $scope.eventSiteSensors = allSiteSensors.filter(function (s) { return s.Instrument.event_id == $cookies.get('SessionEventID'); }); //maybe go from here to get all datafiles for each sensor
             angular.forEach($scope.eventSiteSensors, function (ess) {
                 // if ess.Instrument.Sensor_type == 2, 5, or 6 .. and there are no files.. show red ! with text
-                ess.CollectCondition = ess.Instrument.INST_COLLECTION_ID !== null && ess.Instrument.INST_COLLECTION_ID > 0 ?
-                    allCollectConditions.filter(function (cc) { return cc.ID == ess.Instrument.INST_COLLECTION_ID; })[0].CONDITION :
+                ess.CollectCondition = ess.Instrument.inst_collection_id !== null && ess.Instrument.inst_collection_id > 0 ?
+                    allCollectConditions.filter(function (cc) { return cc.ID == ess.Instrument.inst_collection_id; })[0].condition :
                     '';
                 //store if this is retrieved (if not, show ! for them to retrieve it in order to complete the peak
                 ess.isRetrieved = ess.InstrumentStats[0].Status == 'Retrieved' ? true : false;
-                ess.files = allSiteFiles.filter(function (sf) { return sf.INSTRUMENT_ID == ess.Instrument.INSTRUMENT_ID && (sf.fileBelongsTo == "DataFile File" || sf.fileBelongsTo == "Sensor File"); });
+                ess.files = allSiteFiles.filter(function (sf) { return sf.instrument_id == ess.Instrument.instrument_id && (sf.fileBelongsTo == "DataFile File" || sf.fileBelongsTo == "Sensor File"); });
                 //var hasDF = {value:true}; (2: Met Station, 5: Rapid Deployment Gage, 6: Rain Gage)
-                if (ess.Instrument.SENSOR_TYPE_ID == 2 || ess.Instrument.SENSOR_TYPE_ID == 5 || ess.Instrument.SENSOR_TYPE_ID == 6) {
+                if (ess.Instrument.sensor_type_id == 2 || ess.Instrument.sensor_type_id == 5 || ess.Instrument.sensor_type_id == 6) {
                     if (ess.files.length === 0) ess.NeedDF = true;
                     else {
                         if (!determineDFPresent(ess.files)) ess.NeedDF = true;
@@ -52,9 +52,9 @@
             });
 
             
-            // $scope.siteFilesForSensors = allSiteFiles.filter(function (f) { return f.INSTRUMENT_ID !== null && f.INSTRUMENT_ID > 0; });
+            // $scope.siteFilesForSensors = allSiteFiles.filter(function (f) { return f.instrument_id !== null && f.instrument_id > 0; });
             $scope.timeZoneList = ['UTC', 'PST', 'MST', 'CST', 'EST'];
-            $scope.LoggedInMember = allMembers.filter(function (m) { return m.MEMBER_ID == $cookies.get('mID'); })[0];
+            $scope.LoggedInMember = allMembers.filter(function (m) { return m.member_id == $cookies.get('mID'); })[0];
             $scope.chosenHWMList = [];//holder of chosen hwms for this peak
             $scope.removedChosenHWMList = []; //holder for removed ones for PUT (if this is edit)
             $scope.chosenDFList = []; //holder for chosen datafile for this peak
@@ -121,15 +121,15 @@
             //is it UTC or local time..make sure it stays UTC
             var dealWithTimeStampb4Send = function () {
                 //check and see if they are not using UTC
-                if ($scope.aPeak.TIME_ZONE != "UTC") {
+                if ($scope.aPeak.time_zone != "UTC") {
                     //convert it
-                    var utcDateTime = new Date($scope.aPeak.PEAK_DATE).toUTCString();
-                    $scope.aPeak.PEAK_DATE = utcDateTime;
-                    $scope.aPeak.TIME_ZONE = 'UTC';
+                    var utcDateTime = new Date($scope.aPeak.peak_date).toUTCString();
+                    $scope.aPeak.peak_date = utcDateTime;
+                    $scope.aPeak.time_zone = 'UTC';
                 } else {
                     //make sure 'GMT' is tacked on so it doesn't try to add hrs to make the already utc a utc in db
-                    var i = $scope.aPeak.PEAK_DATE.toString().indexOf('GMT') + 3;
-                    $scope.aPeak.PEAK_DATE = $scope.aPeak.PEAK_DATE.toString().substring(0, i);
+                    var i = $scope.aPeak.peak_date.toString().indexOf('GMT') + 3;
+                    $scope.aPeak.peak_date = $scope.aPeak.peak_date.toString().substring(0, i);
                 }
             };
 
@@ -152,12 +152,12 @@
             if (thisPeak != "empty") {
                 //#region existing PEAK
                 $scope.aPeak = angular.copy(thisPeak);
-                $scope.aPeak.PEAK_DATE = { date: getDateTimeParts($scope.aPeak.PEAK_DATE), time: getDateTimeParts($scope.aPeak.PEAK_DATE) };
+                $scope.aPeak.peak_date = { date: getDateTimeParts($scope.aPeak.peak_date), time: getDateTimeParts($scope.aPeak.peak_date) };
                 //get peak creator name
-                $scope.PeakCreator = allMembers.filter(function (m) { return m.MEMBER_ID == $scope.aPeak.MEMBER_ID; })[0];
+                $scope.PeakCreator = allMembers.filter(function (m) { return m.member_id == $scope.aPeak.member_id; })[0];
                 //check off those hwms used for this peak
                 for (var h = 0; h < $scope.eventSiteHWMs.length; h++) {
-                    if ($scope.eventSiteHWMs[h].PEAK_SUMMARY_ID == $scope.aPeak.PEAK_SUMMARY_ID)
+                    if ($scope.eventSiteHWMs[h].peak_summary_id == $scope.aPeak.peak_summary_id)
                         $scope.eventSiteHWMs[h].selected = true;
                 }
                 //check off those hwms used for this peak
@@ -167,7 +167,7 @@
                     var essI = s;
                     for (var df = 0; df < $scope.eventSiteSensors[essI].files.length; df++) {
                         //for each file within this eventSiteSensor
-                        var isThere = thisPeakDFs.filter(function (pdf) { return pdf.DATA_FILE_ID == $scope.eventSiteSensors[essI].files[df].DATA_FILE_ID; })[0];
+                        var isThere = thisPeakDFs.filter(function (pdf) { return pdf.data_file_id == $scope.eventSiteSensors[essI].files[df].data_file_id; })[0];
                         if (isThere !== undefined) $scope.eventSiteSensors[essI].files[df].selected = true;
                     }
                 }
@@ -175,8 +175,8 @@
             } else {
                 //#region new PEAK
                 var timeParts = getTimeZoneStamp();
-                $scope.aPeak = { PEAK_DATE: {date: timeParts[0], time: timeParts[0]}, TIME_ZONE: timeParts[1], MEMBER_ID: $cookies.get('mID') };
-                $scope.PeakCreator = allMembers.filter(function (m) { return m.MEMBER_ID == $cookies.get('mID'); })[0];
+                $scope.aPeak = { peak_date: { date: timeParts[0], time: timeParts[0] }, time_zone: timeParts[1], member_id: $cookies.get('mID') };
+                $scope.PeakCreator = allMembers.filter(function (m) { return m.member_id == $cookies.get('mID'); })[0];
                
                 //#endregion new PEAK
             }
@@ -201,32 +201,32 @@
             //#region hwm list stuff
             var formatSelectedHWM = function (h) {
                 var fhwm = {};
-                fhwm.APPROVAL_ID = h.APPROVAL_ID;
-                fhwm.BANK = h.BANK;
-                fhwm.ELEV_FT = h.ELEV_FT;
-                fhwm.EVENT_ID = h.EVENT_ID;
-                fhwm.FLAG_DATE = h.FLAG_DATE;
-                fhwm.FLAG_MEMBER_ID = h.FLAG_MEMBER_ID;
-                fhwm.HCOLLECT_METHOD_ID = h.HCOLLECT_METHOD_ID;
-                fhwm.HDATUM_ID = h.HDATUM_ID;
-                fhwm.HEIGHT_ABOVE_GND = h.HEIGHT_ABOVE_GND;
-                fhwm.HWM_ENVIRONMENT = h.HWM_ENVIRONMENT;
-                fhwm.HWM_ID = h.HWM_ID;
-                fhwm.HWM_LOCATIONDESCRIPTION = h.HWM_LOCATIONDESCRIPTION;
-                fhwm.HWM_NOTES = h.HWM_NOTES;
-                fhwm.HWM_QUALITY_ID = h.HWM_QUALITY_ID;
-                fhwm.HWM_TYPE_ID = h.HWM_TYPE_ID;
-                fhwm.LATITUDE_DD = h.LATITUDE;
-                fhwm.LONGITUDE_DD = h.LONGITUDE;
-                fhwm.MARKER_ID = h.MARKER_ID;
-                fhwm.PEAK_SUMMARY_ID = h.PEAK_SUMMARY_ID;
-                fhwm.SITE_ID = h.SITE_ID;
-                fhwm.STILLWATER = h.STILLWATER == "No" ? 0 : 1;
-                fhwm.SURVEY_DATE = h.SURVEY_DATE;
-                fhwm.SURVEY_MEMBER_ID = h.SURVEY_MEMBER_ID;
-                fhwm.VCOLLECT_METHOD_ID = h.VCOLLECT_METHOD_ID;
-                fhwm.VDATUM_ID = h.VDATUM_ID;
-                fhwm.WATERBODY = h.WATERBODY;
+                fhwm.approval_id = h.approval_id;
+                fhwm.bank = h.bank;
+                fhwm.elev_ft = h.elev_ft;
+                fhwm.event_id = h.event_id;
+                fhwm.flag_date = h.flag_date;
+                fhwm.flag_member_id = h.flag_member_id;
+                fhwm.hcollect_method_id = h.hcollect_method_id;
+                fhwm.hdatum_id = h.hdatum_id;
+                fhwm.height_above_gnd = h.height_above_gnd;
+                fhwm.hwm_environment = h.hwm_environment;
+                fhwm.hwm_id = h.hwm_id;
+                fhwm.hwm_locationdescription = h.hwm_locationdescription;
+                fhwm.hwm_notes = h.hwm_notes;
+                fhwm.hwm_quality_id = h.hwm_quality_id;
+                fhwm.hwm_type_id = h.hwm_type_id;
+                fhwm.latitude_dd = h.latitude;
+                fhwm.longitude_dd = h.longitude;
+                fhwm.marker_id = h.marker_id;
+                fhwm.peak_summary_id = h.peak_summary_id;
+                fhwm.site_id = h.site_id;
+                fhwm.stillwater = h.stillwater == "No" ? 0 : 1;
+                fhwm.survey_date = h.survey_date;
+                fhwm.survey_member_id = h.survey_member_id;
+                fhwm.vcollect_method_id = h.vcollect_method_id;
+                fhwm.vdatum_id = h.vdatum_id;
+                fhwm.waterbody = h.waterbody;
                 return fhwm;
             };
             //add or remove a hwm from the list of chosen hwms for determining this peak
@@ -235,12 +235,12 @@
                 if (h.selected === true) {                    
                     $scope.chosenHWMList.push(aHWM);
                 } else {
-                    if ($scope.aPeak.PEAK_SUMMARY_ID !== undefined) {
+                    if ($scope.aPeak.peak_summary_id !== undefined) {
                         //edit.. need to store removed ones for PUT
                         $scope.removedChosenHWMList.push(dataFile);
                     }
                     if ($scope.chosenHWMList.length > 0) {
-                        var ind = $scope.chosenHWMList.map(function (hwm) { return hwm.HWM_ID; }).indexOf(aHWM.HWM_ID); //not working:: $scope.chosenHWMList.indexOf(aHWM);
+                        var ind = $scope.chosenHWMList.map(function (hwm) { return hwm.hwm_id; }).indexOf(aHWM.hwm_id); //not working:: $scope.chosenHWMList.indexOf(aHWM);
                         $scope.chosenHWMList.splice(ind, 1);
                     }
                 }
@@ -270,10 +270,10 @@
                 });
                 setPrimHWM.result.then(function (setIt) {
                     if (setIt == 'Yes') {
-                        $scope.aPeak.PEAK_DATE.date = new Date(h.FLAG_DATE);
-                        $scope.aPeak.PEAK_STAGE = h.ELEV_FT;
-                        $scope.aPeak.VDATUM_ID = h.VDATUM_ID;
-                        $scope.aPeak.HEIGHT_ABOVE_GND = h.HEIGHT_ABV_GND;
+                        $scope.aPeak.peak_date.date = new Date(h.flag_date);
+                        $scope.aPeak.peak_stage = h.elev_ft;
+                        $scope.aPeak.vdatum_id = h.vdatum_id;
+                        $scope.aPeak.height_above_gnd = h.height_above_gnd;
                     }
                 });
             };
@@ -287,17 +287,17 @@
             //add or remove a sensor from the list of chosen sensor for determining this peak
             $scope.addDataFile = function (datafile) {
                 var dataFile = {};                
-                DATA_FILE.query({ id: datafile.DATA_FILE_ID }).$promise.then(function (response) {
+                DATA_FILE.query({ id: datafile.data_file_id }).$promise.then(function (response) {
                     dataFile = response;
                     if (datafile.selected === true) {
                         $scope.chosenDFList.push(dataFile);
                     } else {
-                        if ($scope.aPeak.PEAK_SUMMARY_ID !== undefined) {
+                        if ($scope.aPeak.peak_summary_id !== undefined) {
                             //edit.. need to store removed ones for PUT
                             $scope.removedChosenDFList.push(dataFile);
                         }
                         if ($scope.chosenDFList.length > 0) {
-                            var ind = $scope.chosenDFList.map(function (df) { return df.DATA_FILE_ID; }).indexOf(datafile.DATA_FILE_ID); //not working:: $scope.chosenDFList.indexOf(s);
+                            var ind = $scope.chosenDFList.map(function (df) { return df.data_file_id; }).indexOf(datafile.data_file_id); //not working:: $scope.chosenDFList.indexOf(s);
                             $scope.chosenDFList.splice(ind, 1);
                         }
                     }
@@ -311,14 +311,14 @@
             };
             //they want to see the details of the datafile, or not see it anymore
             $scope.showDataFileDetails = function (f) {
-                DATA_FILE.query({ id: f.DATA_FILE_ID }, function success(response) {
+                DATA_FILE.query({ id: f.data_file_id }, function success(response) {
                     $scope.DFBox = response;
-                    $scope.DFBox.filePath = f.PATH;
-                    $scope.DFBox.fileID = f.FILE_ID;
-                    $scope.DFBox.fileDesc = f.DESCRIPTION;
-                    $scope.DFBox.processedBy = allMembers.filter(function (m) { return m.MEMBER_ID == response.PROCESSOR_ID; })[0];
-                    $scope.DFBox.nwisFile = f.IS_NWIS == 1 ? true : false;
-                    $scope.DFBox.fileURL = f.FILE_URL;
+                    $scope.DFBox.filePath = f.path;
+                    $scope.DFBox.fileID = f.file_id;
+                    $scope.DFBox.fileDesc = f.description;
+                    $scope.DFBox.processedBy = allMembers.filter(function (m) { return m.member_id == response.processor_id; })[0];
+                    $scope.DFBox.nwisFile = f.is_nwis == 1 ? true : false;
+                    $scope.DFBox.fileURL = f.name;
                     $scope.dataFileDetail = true; $scope.hwmDetail = false; $scope.sensorDetail = false;
                 });
                 
@@ -344,10 +344,10 @@
                 });
                 setPrimHWM.result.then(function (setIt) {
                     if (setIt == 'Yes') {
-                        //$scope.aPeak.PEAK_DATE.date = h.FLAG_DATE;
-                        //$scope.aPeak.PEAK_STAGE = h.ELEV_FT;
-                        //$scope.aPeak.VDATUM_ID = h.VDATUM_ID
-                        //$scope.aPeak.HEIGHT_ABOVE_GND = h.HEIGHT_ABV_GND;
+                        //$scope.aPeak.peak_date.date = h.flag_date;
+                        //$scope.aPeak.peak_stage = h.elev_ft;
+                        //$scope.aPeak.vdatum_id = h.vdatum_id
+                        //$scope.aPeak.height_above_gnd = h.height_above_gnd;
                     }
                 });
             };
@@ -357,34 +357,34 @@
             $scope.savePeak = function (valid) {
                 if (valid) {
                     var updatedPeak = {};                       
-                    var datetime = new Date($scope.aPeak.PEAK_DATE.date.getFullYear(), $scope.aPeak.PEAK_DATE.date.getMonth(), $scope.aPeak.PEAK_DATE.date.getDate(),
-                        $scope.aPeak.PEAK_DATE.time.getHours(), $scope.aPeak.PEAK_DATE.time.getMinutes(), $scope.aPeak.PEAK_DATE.time.getSeconds());
-                    $scope.aPeak.PEAK_DATE = datetime;
+                    var datetime = new Date($scope.aPeak.peak_date.date.getFullYear(), $scope.aPeak.peak_date.date.getMonth(), $scope.aPeak.peak_date.date.getDate(),
+                        $scope.aPeak.peak_date.time.getHours(), $scope.aPeak.peak_date.time.getMinutes(), $scope.aPeak.peak_date.time.getSeconds());
+                    $scope.aPeak.peak_date = datetime;
                     $http.defaults.headers.common.Authorization = 'Basic ' + $cookies.get('STNCreds');
                     $http.defaults.headers.common.Accept = 'application/json';
-                    PEAK.update({ id: $scope.aPeak.PEAK_SUMMARY_ID }, $scope.aPeak).$promise.then(function (response) {
+                    PEAK.update({ id: $scope.aPeak.peak_summary_id }, $scope.aPeak).$promise.then(function (response) {
                         //update hwms/datafiles used
                         //remove those unchosen
                         if ($scope.removedChosenDFList.length > 0) {
                             for (var remd = 0; remd < $scope.removedChosenDFList.length; remd++) {
-                                $scope.removedChosenDFList[remd].PEAK_SUMMARY_ID = null;
-                                DATA_FILE.update({ id: $scope.removedChosenDFList[remd].DATA_FILE_ID }, $scope.removedChosenDFList[remd]).$promise;
+                                $scope.removedChosenDFList[remd].peak_summary_id = null;
+                                DATA_FILE.update({ id: $scope.removedChosenDFList[remd].data_file_id }, $scope.removedChosenDFList[remd]).$promise;
                             }
                         }
                         if ($scope.removedChosenHWMList.length > 0) {
                             for (var remh = 0; remh < $scope.removedChosenHWMList.length; remh++) {
-                                $scope.removedChosenHWMList[remh].PEAK_SUMMARY_ID = null;
-                                HWM.update({ id: $scope.removedChosenHWMList[remh].DATA_FILE_ID }, $scope.removedChosenHWMList[remh]).$promise;
+                                $scope.removedChosenHWMList[remh].peak_summary_id = null;
+                                HWM.update({ id: $scope.removedChosenHWMList[remh].data_file_id }, $scope.removedChosenHWMList[remh]).$promise;
                             }
                         }
                         //add those chosen
                         for (var addh = 0; addh < $scope.chosenHWMList.length; addh++) {
-                            $scope.chosenHWMList[addh].PEAK_SUMMARY_ID = response.PEAK_SUMMARY_ID;
-                            HWM.update({ id: $scope.chosenHWMList[addh].HWM_ID }, $scope.chosenHWMList[addh]).$promise;
+                            $scope.chosenHWMList[addh].peak_summary_id = response.peak_summary_id;
+                            HWM.update({ id: $scope.chosenHWMList[addh].hwm_id }, $scope.chosenHWMList[addh]).$promise;
                         } //end foreach hwm save
                         for (var addd = 0; addd < $scope.chosenDFList.length; addd++) {
-                            $scope.chosenDFList[addd].PEAK_SUMMARY_ID = response.PEAK_SUMMARY_ID;
-                            DATA_FILE.update({ id: $scope.chosenDFList[addd].DATA_FILE_ID }, $scope.chosenDFList[addd]).$promise;
+                            $scope.chosenDFList[addd].peak_summary_id = response.peak_summary_id;
+                            DATA_FILE.update({ id: $scope.chosenDFList[addd].data_file_id }, $scope.chosenDFList[addd]).$promise;
                         } //end foreach hwm save
                         toastr.success("Peak updated");
                         updatedPeak = response;
@@ -400,8 +400,8 @@
                 DATA_FILE.query({ id: df_id }).$promise.then(function (res) {
                     $http.defaults.headers.common.Authorization = 'Basic ' + $cookies.get('STNCreds');
                     $http.defaults.headers.common.Accept = 'application/json';
-                    res.PEAK_SUMMARY_ID = null;
-                    DATA_FILE.update({ id: res.DATA_FILE_ID }, res).$promise;
+                    res.peak_summary_id = null;
+                    DATA_FILE.update({ id: res.data_file_id }, res).$promise;
                 });
             };
             //delete Peak
@@ -422,21 +422,21 @@
                 });               
 
                 deletePeakMdl.result.then(function () {
-                    var peakID = $scope.aPeak.PEAK_SUMMARY_ID;
-                    var datetime = new Date($scope.aPeak.PEAK_DATE.date.getFullYear(), $scope.aPeak.PEAK_DATE.date.getMonth(), $scope.aPeak.PEAK_DATE.date.getDate(),
-                        $scope.aPeak.PEAK_DATE.time.getHours(), $scope.aPeak.PEAK_DATE.time.getMinutes(), $scope.aPeak.PEAK_DATE.time.getSeconds());
-                    $scope.aPeak.PEAK_DATE = datetime;
+                    var peakID = $scope.aPeak.peak_summary_id;
+                    var datetime = new Date($scope.aPeak.peak_date.date.getFullYear(), $scope.aPeak.peak_date.date.getMonth(), $scope.aPeak.peak_date.date.getDate(),
+                        $scope.aPeak.peak_date.time.getHours(), $scope.aPeak.peak_date.time.getMinutes(), $scope.aPeak.peak_date.time.getSeconds());
+                    $scope.aPeak.peak_date = datetime;
                     //delete the peak and then PUT all hwm and df that have peakID
                     $http.defaults.headers.common.Authorization = 'Basic ' + $cookies.get('STNCreds');
                     $http.defaults.headers.common.Accept = 'application/json';
-                    PEAK.delete({ id: $scope.aPeak.PEAK_SUMMARY_ID }).$promise.then(function () {
+                    PEAK.delete({ id: $scope.aPeak.peak_summary_id }).$promise.then(function () {
                         //for each $scope.eventSiteSensors for each files if file.selected == true.. PUT and remove PEAKID
                         for (var i = 0; i < $scope.eventSiteSensors.length; i++) {
                             var thisS = $scope.eventSiteSensors[i];
                             for (var f = 0; f < thisS.files.length; f++) {
                                 var thisF = thisS.files[f];
                                 if (thisF.selected)
-                                    updateDFwoPeakID(thisF.DATA_FILE_ID);
+                                    updateDFwoPeakID(thisF.data_file_id);
                             }
                         }
                         //for each $scope.eventSiteHWMs if h.selected == true.. PUT and remove PEAKID 
@@ -445,9 +445,9 @@
                             var thisH = $scope.eventSiteHWMs[h];
                             if (thisH.selected) {
                                 //remove peakID and PUT
-                                thisH.PEAK_SUMMARY_ID = null;
+                                thisH.peak_summary_id = null;
                                 var updateThisHWM = formatSelectedHWM(thisH); //need to format it to remove all the site stuff
-                                HWM.update({ id: thisH.HWM_ID }, updateThisHWM).$promise;
+                                HWM.update({ id: thisH.hwm_id }, updateThisHWM).$promise;
                             }
                         }
 
@@ -467,9 +467,9 @@
                 if (valid) {
                     var createdPeak = {};
                     //format to combine the date and time back together into 1 date object
-                    var datetime = new Date($scope.aPeak.PEAK_DATE.date.getFullYear(), $scope.aPeak.PEAK_DATE.date.getMonth(), $scope.aPeak.PEAK_DATE.date.getDate(),
-                       $scope.aPeak.PEAK_DATE.time.getHours(), $scope.aPeak.PEAK_DATE.time.getMinutes(), $scope.aPeak.PEAK_DATE.time.getSeconds());
-                    $scope.aPeak.PEAK_DATE = datetime;
+                    var datetime = new Date($scope.aPeak.peak_date.date.getFullYear(), $scope.aPeak.peak_date.date.getMonth(), $scope.aPeak.peak_date.date.getDate(),
+                       $scope.aPeak.peak_date.time.getHours(), $scope.aPeak.peak_date.time.getMinutes(), $scope.aPeak.peak_date.time.getSeconds());
+                    $scope.aPeak.peak_date = datetime;
                     dealWithTimeStampb4Send(); //UTC or local?
 
                     $http.defaults.headers.common.Authorization = 'Basic ' + $cookies.get('STNCreds');
@@ -478,12 +478,12 @@
                         createdPeak = response;
                         //update the chosen hwms/data files with peak id
                         for (var h = 0; h < $scope.chosenHWMList.length; h++) {
-                            $scope.chosenHWMList[h].PEAK_SUMMARY_ID = response.PEAK_SUMMARY_ID;
-                            HWM.update({ id: $scope.chosenHWMList[h].HWM_ID }, $scope.chosenHWMList[h]).$promise;
+                            $scope.chosenHWMList[h].peak_summary_id = response.peak_summary_id;
+                            HWM.update({ id: $scope.chosenHWMList[h].hwm_id }, $scope.chosenHWMList[h]).$promise;
                         } //end foreach hwm save
                         for (var d = 0; d < $scope.chosenDFList.length; d++) {
-                            $scope.chosenDFList[d].PEAK_SUMMARY_ID = response.PEAK_SUMMARY_ID;
-                            DATA_FILE.update({ id: $scope.chosenDFList[d].DATA_FILE_ID }, $scope.chosenDFList[d]).$promise;
+                            $scope.chosenDFList[d].peak_summary_id = response.peak_summary_id;
+                            DATA_FILE.update({ id: $scope.chosenDFList[d].data_file_id }, $scope.chosenDFList[d]).$promise;
                         } //end foreach hwm save
 
                         toastr.success("Peak created");

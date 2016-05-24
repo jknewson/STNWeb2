@@ -63,11 +63,11 @@
             <div class="container" id="jobSetupPrintPdf">
                 <div class="col-lg-12">
                     <table id="Sec1PDF" class="table">
-                        <tr><label>Section 1: Report Parameters</label></tr>
+                        <tr><th>Section 1: Report Parameters</th></tr>
                         <tr style="border-bottom:solid thin #e2e2e2">
-                            <td><b>Date being reported:</b> {{ReportView.Report.REPORT_DATE | date: 'MM/dd/yyyy'}}</td>
-                            <td><b>Event:</b> {{ReportView.Report.EVENT_NAME}}</td>
-                            <td><b>State:</b> {{ReportView.Report.STATE}}</td>
+                            <td><b>Date being reported:</b> {{ReportView.Report.report_date | date: 'MM/dd/yyyy'}}</td>
+                            <td><b>Event:</b> {{ReportView.Report.event_name}}</td>
+                            <td><b>State:</b> {{ReportView.Report.state}}</td>
                         </tr>
                     </table>
                 </div>
@@ -83,58 +83,58 @@
                         </tr>
                         <tr>
                             <td colspan="2">Employees not accounted for</td>
-                            <td style="text-align:center">{{ReportView.Report.SW_FIELDPERS_NOTACCT}}</td>
-                            <td style="text-align:center">{{ReportView.Report.WQ_FIELDPERS_NOTACCT}}</td>
+                            <td style="text-align:center">{{ReportView.Report.sw_fieldpers_notacct}}</td>
+                            <td style="text-align:center">{{ReportView.Report.wq_fieldpers_notacct}}</td>
                         </tr>
                         <tr>
                             <td rowspan="3">
                                 <span>Personnel in the field</span>
                             </td>
                             <td>Yesterday</td>
-                            <td style="text-align:center">{{ReportView.Report.SW_YEST_FIELDPERS}}</td>
-                            <td style="text-align:center">{{ReportView.Report.WQ_YEST_FIELDPERS}}</td>
+                            <td style="text-align:center">{{ReportView.Report.sw_yest_fieldpers}}</td>
+                            <td style="text-align:center">{{ReportView.Report.wq_yest_fieldpers}}</td>
                         </tr>
                         <tr>
                             <td>Today</td>
-                            <td style="text-align:center">{{ReportView.Report.SW_TOD_FIELDPERS}}</td>
-                            <td style="text-align:center">{{ReportView.Report.WQ_TOD_FIELDPERS}}</td>
+                            <td style="text-align:center">{{ReportView.Report.sw_tod_fieldpers}}</td>
+                            <td style="text-align:center">{{ReportView.Report.wq_tod_fieldpers}}</td>
                         </tr>
                         <tr>
                             <td>Tomorrow</td>
-                            <td style="text-align:center">{{ReportView.Report.SW_TMW_FIELDPERS}}</td>
-                            <td style="text-align:center">{{ReportView.Report.WQ_TMW_FIELDPERS}}</td>
+                            <td style="text-align:center">{{ReportView.Report.sw_tmw_fieldpers}}</td>
+                            <td style="text-align:center">{{ReportView.Report.wq_tmw_fieldpers}}</td>
                         </tr>
                         <tr>
                             <td rowspan="3">Personnel in the office</td>
                             <td>Yesterday</td>
-                            <td style="text-align:center">{{ReportView.Report.SW_YEST_OFFICEPERS}}</td>
-                            <td style="text-align:center">{{ReportView.Report.WQ_YEST_OFFICEPERS}}</td>
+                            <td style="text-align:center">{{ReportView.Report.sw_yest_officepers}}</td>
+                            <td style="text-align:center">{{ReportView.Report.wq_yest_officepers}}</td>
                         </tr>
                         <tr>
                             <td>Today</td>
-                            <td style="text-align:center">{{ReportView.Report.SW_TOD_OFFICEPERS}}</td>
-                            <td style="text-align:center">{{ReportView.Report.WQ_TOD_OFFICEPERS}}</td>
+                            <td style="text-align:center">{{ReportView.Report.sw_tod_officepers}}</td>
+                            <td style="text-align:center">{{ReportView.Report.wq_tod_officepers}}</td>
                         </tr>
                         <tr>
                             <td>Tomorrow
-                            <td style="text-align:center">{{ReportView.Report.SW_TMW_OFFICEPERS}}</td>
-                            <td style="text-align:center">{{ReportView.Report.WQ_TMW_OFFICEPERS}}</td>
+                            <td style="text-align:center">{{ReportView.Report.sw_tmw_officepers}}</td>
+                            <td style="text-align:center">{{ReportView.Report.wq_tmw_officepers}}</td>
                         </tr>
                         <tr>
                             <td rowspan="3">Vehicles deployed</td>
                             <td>Trucks & Cars</td>
-                            <td style="text-align:center">{{ReportView.Report.SW_AUTOS_DEPL}}</td>
-                            <td style="text-align:center">{{ReportView.Report.WQ_AUTOS_DEPL}}</td>
+                            <td style="text-align:center">{{ReportView.Report.sw_autos_depl}}</td>
+                            <td style="text-align:center">{{ReportView.Report.wq_autos_depl}}</td>
                         </tr>
                         <tr>
                             <td>Boats</td>
-                            <td style="text-align:center">{{ReportView.Report.SW_BOATS_DEPL}}</td>
-                            <td style="text-align:center">{{ReportView.Report.WQ_BOATS_DEPL}}</td>
+                            <td style="text-align:center">{{ReportView.Report.sw_boats_depl}}</td>
+                            <td style="text-align:center">{{ReportView.Report.wq_boats_depl}}</td>
                         </tr>
                         <tr>
                             <td>Other</td>
-                            <td style="text-align:center">{{ReportView.Report.SW_OTHER_DEPL}}</td>
-                            <td style="text-align:center">{{ReportView.Report.WQ_OTHER_DEPL}}</td>
+                            <td style="text-align:center">{{ReportView.Report.sw_other_depl}}</td>
+                            <td style="text-align:center">{{ReportView.Report.wq_other_depl}}</td>
                         </tr>
                     </table>
 
@@ -146,151 +146,151 @@
                         </tr>
                         <tr>
                             <td colspan="2">Gages down at present</td>
-                            <td style="text-align:center" colspan="2">{{ReportView.Report.GAGE_DOWN}}</td>
+                            <td style="text-align:center" colspan="2">{{ReportView.Report.gage_down}}</td>
                         </tr>
                         <tr>
                             <td rowspan="2">Discharge measurements</td>
                             <td>To date</td>
-                            <td style="text-align:center" colspan="2">{{ReportView.Report.TOT_DISCHARGE_MEAS}}</td>
+                            <td style="text-align:center" colspan="2">{{ReportView.Report.tot_discharge_meas}}</td>
                         </tr>
                         <tr>
                             <td>Planned</td>
-                            <td style="text-align:center" colspan="2">{{ReportView.Report.PLAN_DISCHARGE_MEAS}}</td>
+                            <td style="text-align:center" colspan="2">{{ReportView.Report.plan_discharge_meas}}</td>
                         </tr>
                         <tr>
                             <td rowspan="2">Check measurements</td>
                             <td>To Date</td>
-                            <td style="text-align:center" colspan="2">{{ReportView.Report.TOT_CHECK_MEAS}}</td>
+                            <td style="text-align:center" colspan="2">{{ReportView.Report.tot_check_meas}}</td>
                         </tr>
                         <tr>
                             <td>Planned</td>
-                            <td style="text-align:center" colspan="2">{{ReportView.Report.PLAN_CHECK_MEAS}}</td>
+                            <td style="text-align:center" colspan="2">{{ReportView.Report.plan_check_meas}}</td>
                         </tr>
                         <tr>
                             <td colspan="2">Indirect measurements planned</td>
-                            <td style="text-align:center" colspan="2">{{ReportView.Report.PLAN_INDIRECT_MEAS}}</td>
+                            <td style="text-align:center" colspan="2">{{ReportView.Report.plan_indirect_meas}}</td>
                         </tr>
                         <tr>
                             <td colspan="2">Rating extensions</td>
-                            <td style="text-align:center" colspan="2">{{ReportView.Report.RATING_EXTENS}}</td>
+                            <td style="text-align:center" colspan="2">{{ReportView.Report.rating_extens}}</td>
                         </tr>
                         <tr>
                             <td colspan="2">Peaks of record on gages to date </br>(>20 yrs of record)</td>
-                            <td style="text-align:center" colspan=" 2">{{ReportView.Report.GAGE_PEAK_RECORD}}</td>
+                            <td style="text-align:center" colspan=" 2">{{ReportView.Report.gage_peak_record}}</td>
                         </tr>
                         <tr>
                             <td rowspan="4">Rapid Deployment gages to date</td>
                             <td>Planned</td>
-                            <td style="text-align:center" colspan="2">{{ReportView.Report.PLAN_RAPDEPL_GAGE}}</td>
+                            <td style="text-align:center" colspan="2">{{ReportView.Report.plan_rapdepl_gage}}</td>
                         </tr>
                         <tr>
                             <td>Deployed</td>
-                            <td style="text-align:center" colspan="2">{{ReportView.Report.DEP_RAPDEPL_GAGE}}</td>
+                            <td style="text-align:center" colspan="2">{{ReportView.Report.dep_rapdepl_gage}}</td>
                         </tr>
                         <tr>
                             <td>Recovered</td>
-                            <td style="text-align:center" colspan="2">{{ReportView.Report.REC_RAPDEPL_GAGE}}</td>
+                            <td style="text-align:center" colspan="2">{{ReportView.Report.rec_rapdepl_gage}}</td>
                         </tr>
                         <tr>
                             <td>Lost</td>
-                            <td style="text-align:center" colspan="2">{{ReportView.Report.LOST_RAPDEPL_GAGE}}</td>
+                            <td style="text-align:center" colspan="2">{{ReportView.Report.lost_rapdepl_gage}}</td>
                         </tr>
                         <tr>
                             <td rowspan="4">Water Level Sensors to date</td>
                             <td>Planned</td>
-                            <td style="text-align:center" colspan="2">{{ReportView.Report.PLAN_WTRLEV_SENSOR}}</td>
+                            <td style="text-align:center" colspan="2">{{ReportView.Report.plan_wtrlev_sensor}}</td>
                         </tr>
                         <tr>
                             <td>Deployed</td>
-                            <td style="text-align:center" colspan="2">{{ReportView.Report.DEP_WTRLEV_SENSOR}}</td>
+                            <td style="text-align:center" colspan="2">{{ReportView.Report.dep_wtrlev_sensor}}</td>
                         </tr>
                         <tr>
                             <td>Recovered</td>
-                            <td style="text-align:center" colspan="2">{{ReportView.Report.REC_WTRLEV_SENSOR}}</td>
+                            <td style="text-align:center" colspan="2">{{ReportView.Report.rec_wtrlev_sensor}}</td>
                         </tr>
                         <tr>
                             <td>Lost</td>
-                            <td style="text-align:center" colspan="2">{{ReportView.Report.LOST_WTRLEV_SENSOR}}</td>
+                            <td style="text-align:center" colspan="2">{{ReportView.Report.lost_wtrlev_sensor}}</td>
                         </tr>
                         <tr>
                             <td rowspan="4">Wave Sensors to date</td>
                             <td>Planned</td>
-                            <td style="text-align:center" colspan="2">{{ReportView.Report.PLAN_WV_SENS}}</td>
+                            <td style="text-align:center" colspan="2">{{ReportView.Report.plan_wv_sens}}</td>
                         </tr>
                         <tr>
                             <td>Deployed</td>
-                            <td style="text-align:center" colspan="2">{{ReportView.Report.DEP_WV_SENS}}</td>
+                            <td style="text-align:center" colspan="2">{{ReportView.Report.dep_wv_sens}}</td>
                         </tr>
                         <tr>
                             <td>Recovered</td>
-                            <td style="text-align:center" colspan="2">{{ReportView.Report.REC_WV_SENS}}</td>
+                            <td style="text-align:center" colspan="2">{{ReportView.Report.rec_wv_sens}}</td>
                         </tr>
                         <tr>
                             <td>Lost</td>
-                            <td style="text-align:center" colspan="2">{{ReportView.Report.LOST_WV_SENS}}</td>
+                            <td style="text-align:center" colspan="2">{{ReportView.Report.lost_wv_sens}}</td>
                         </tr>
                         <tr>
                             <td rowspan="4">Barometers to date</td>
                             <td>Planned</td>
-                            <td style="text-align:center" colspan="2">{{ReportView.Report.PLAN_BAROMETRIC}}</td>
+                            <td style="text-align:center" colspan="2">{{ReportView.Report.plan_barometric}}</td>
                         </tr>
                         <tr>
                             <td>Deployed</td>
-                            <td style="text-align:center" colspan="2">{{ReportView.Report.DEP_BAROMETRIC}}</td>
+                            <td style="text-align:center" colspan="2">{{ReportView.Report.dep_barometric}}</td>
                         </tr>
                         <tr>
                             <td>Recovered</td>
-                            <td style="text-align:center" colspan="2">{{ReportView.Report.REC_BAROMETRIC}}</td>
+                            <td style="text-align:center" colspan="2">{{ReportView.Report.rec_barometric}}</td>
                         </tr>
                         <tr>
                             <td>Lost</td>
-                            <td style="text-align:center" colspan="2">{{ReportView.Report.LOST_BAROMETRIC}}</td>
+                            <td style="text-align:center" colspan="2">{{ReportView.Report.lost_barometric}}</td>
                         </tr>
                         <tr>
                             <td rowspan="4">Meteorological Sensors to date</td>
                             <td>Planned</td>
-                            <td style="text-align:center" colspan="2">{{ReportView.Report.PLAN_METEOROLOGICAL}}</td>
+                            <td style="text-align:center" colspan="2">{{ReportView.Report.plan_meteorological}}</td>
                         </tr>
                         <tr>
                             <td>Deployed</td>
-                            <td style="text-align:center" colspan="2">{{ReportView.Report.DEP_METEOROLOGICAL}}</td>
+                            <td style="text-align:center" colspan="2">{{ReportView.Report.dep_meteorological}}</td>
                         </tr>
                         <tr>
                             <td>Recovered</td>
-                            <td style="text-align:center" colspan="2">{{ReportView.Report.REC_METEOROLOGICAL}}</td>
+                            <td style="text-align:center" colspan="2">{{ReportView.Report.rec_meteorological}}</td>
                         </tr>
                         <tr>
                             <td>Lost</td>
-                            <td style="text-align:center" colspan="2">{{ReportView.Report.LOST_METEOROLOGICAL}}</td>
+                            <td style="text-align:center" colspan="2">{{ReportView.Report.lost_meteorological}}</td>
                         </tr>
                         <tr>
                             <td rowspan="2">Highwater Mark to date</td>
                             <td>Flagged</td>
-                            <td style="text-align:center" colspan=" 2">{{ReportView.Report.HWM_FLAGGED}}</td>
+                            <td style="text-align:center" colspan=" 2">{{ReportView.Report.hwm_flagged}}</td>
                         </tr>
                         <tr>
                             <td>Collected</td>
-                            <td style="text-align:center" colspan="2">{{ReportView.Report.HWM_COLLECTED}}</td>
+                            <td style="text-align:center" colspan="2">{{ReportView.Report.hwm_collected}}</td>
                         </tr>
                         <tr>
                             <td colspan="2">QW Gage visits (cumulative)</td>
-                            <td style="text-align:center" colspan="2">{{ReportView.Report.QW_GAGE_VISIT}}</td>
+                            <td style="text-align:center" colspan="2">{{ReportView.Report.qw_gage_visit}}</td>
                         </tr>
                         <tr>
                             <td colspan="2">Continuous QW Gages visited</td>
-                            <td style="text-align:center" colspan="2">{{ReportView.Report.QW_CONT_GAGEVISIT}}</td>
+                            <td style="text-align:center" colspan="2">{{ReportView.Report.qw_cont_gagevisit}}</td>
                         </tr>
                         <tr>
                             <td colspan="2">Continuous QW Gages down</td>
-                            <td style="text-align:center" colspan="2">{{ReportView.Report.QW_GAGE_DOWN}}</td>
+                            <td style="text-align:center" colspan="2">{{ReportView.Report.qw_gage_down}}</td>
                         </tr>
                         <tr>
                             <td colspan="2">Discrete QW samples collected</td>
-                            <td style="text-align:center" colspan="2">{{ReportView.Report.QW_DISCR_SAMPLES}}</td>
+                            <td style="text-align:center" colspan="2">{{ReportView.Report.qw_discr_samples}}</td>
                         </tr>
                         <tr>
                             <td colspan="2">Sediment samples collected</td>
-                            <td style="text-align:center" colspan="2">{{ReportView.Report.COLL_SEDSAMPLES}}</td>
+                            <td style="text-align:center" colspan="2">{{ReportView.Report.coll_sedsamples}}</td>
                         </tr>
                     </table>
                 </div>
@@ -298,58 +298,58 @@
                 <div class="col-lg-6 pull-right">
                     <table id="Sec4PDF" class="table">
                         <tr><label>Section 4: Notes</label></tr>
-                        <tr><div>{{ReportView.Report.NOTES}}</div></tr>
+                        <tr><div>{{ReportView.Report.notes}}</div></tr>
                     </table>
 
                     <table id="Sec5PDF_Submit" class="table">
                         <tr><label>Section 5: Contact Information</label></tr>
                         <tr><td><label>Submitter</label></td><td></td></tr>
-                        <tr><td>Name</td><td>{{ReportView.submitter.mem.FNAME}} {{submitter.mem.LNAME}}</td></tr>
-                        <tr><td>Phone</td><td>{{ReportView.submitter.mem.PHONE}}</td></tr>
-                        <tr><td>Email</td><td>{{ReportView.submitter.mem.EMAIL}}</td></tr>
-                        <tr><td>Office Name</td><td>{{ReportView.submitter.AGENCY_NAME}}</td></tr>
-                        <tr><td>Office Address</td><td>{{ReportView.submitter.AGENCY_ADDRESS}}</td></tr>
+                        <tr><td>Name</td><td>{{ReportView.submitter.mem.fname}} {{submitter.mem.lname}}</td></tr>
+                        <tr><td>Phone</td><td>{{ReportView.submitter.mem.phone}}</td></tr>
+                        <tr><td>Email</td><td>{{ReportView.submitter.mem.email}}</td></tr>
+                        <tr><td>Office Name</td><td>{{ReportView.submitter.agency_name}}</td></tr>
+                        <tr><td>Office Address</td><td>{{ReportView.submitter.agency_address}}</td></tr>
                     </table>
 
-                    <table ng-if="ReportView.deployStaff.FNAME != undefined" id="Sec5PDF_Deploy" class="table">
+                    <table ng-if="ReportView.deployStaff.fname != undefined" id="Sec5PDF_Deploy" class="table">
                         <tr><td style="border:none"><label>Event Contacts</label></td></tr>
                         <tr><td colspan="2"><label>Deployed Staff</label></td></tr>
-                        <tr><td>Name</td><td>{{ReportView.deployStaff.FNAME}} {{ReportView.deployStaff.LNAME}}</td></tr>
-                        <tr><td>Email</td><td>{{ReportView.deployStaff.EMAIL}}</td></tr>
-                        <tr><td>Phone</td><td>{{ReportView.deployStaff.PHONE}}</td></tr>
-                        <tr><td>Alternate Phone</td><td>{{ReportView.deployStaff.ALTERNATE_PHONE}}</td></tr>
+                        <tr><td>Name</td><td>{{ReportView.deployStaff.fname}} {{ReportView.deployStaff.lname}}</td></tr>
+                        <tr><td>Email</td><td>{{ReportView.deployStaff.email}}</td></tr>
+                        <tr><td>Phone</td><td>{{ReportView.deployStaff.phone}}</td></tr>
+                        <tr><td>Alternate Phone</td><td>{{ReportView.deployStaff.alternate_phone}}</td></tr>
                     </table>
 
-                    <table ng-if="ReportView.generalStaff.FNAME != undefined" id="Sec5PDF_Gen" class="table">
+                    <table ng-if="ReportView.generalStaff.fname != undefined" id="Sec5PDF_Gen" class="table">
                         <tr><td colspan="2"><label>General Staff</label></td></tr>
-                        <tr><td>Name</td><td>{{ReportView.generalStaff.FNAME}} {{ReportView.generalStaff.LNAME}}</td></tr>
-                        <tr><td>Email</td><td>{{ReportView.generalStaff.EMAIL}}</td></tr>
-                        <tr><td>Phone</td><td>{{ReportView.generalStaff.PHONE}}</td></tr>
-                        <tr><td>Alternate Phone</td><td>{{ReportView.generalStaff.ALTERNATE_PHONE}}</td></tr>
+                        <tr><td>Name</td><td>{{ReportView.generalStaff.fname}} {{ReportView.generalStaff.lname}}</td></tr>
+                        <tr><td>Email</td><td>{{ReportView.generalStaff.email}}</td></tr>
+                        <tr><td>Phone</td><td>{{ReportView.generalStaff.phone}}</td></tr>
+                        <tr><td>Alternate Phone</td><td>{{ReportView.generalStaff.alternate_phone}}</td></tr>
                     </table>
 
-                    <table ng-if="ReportView.inlandStaff.FNAME != undefined" id="Sec5PDF_Inland" class="table">
+                    <table ng-if="ReportView.inlandStaff.fname != undefined" id="Sec5PDF_Inland" class="table">
                         <tr><td colspan="2"><label>Inland Staff</label></td></tr>
-                        <tr><td>Name</td><td>{{ReportView.inlandStaff.FNAME}} {{ReportView.inlandStaff.LNAME}}</td></tr>
-                        <tr><td>Email</td><td>{{ReportView.inlandStaff.EMAIL}}</td></tr>
-                        <tr><td>Phone</td><td>{{ReportView.inlandStaff.PHONE}}</td></tr>
-                        <tr><td>Alternate Phone</td><td>{{ReportView.inlandStaff.ALTERNATE_PHONE}}</td></tr>
+                        <tr><td>Name</td><td>{{ReportView.inlandStaff.fname}} {{ReportView.inlandStaff.lname}}</td></tr>
+                        <tr><td>Email</td><td>{{ReportView.inlandStaff.email}}</td></tr>
+                        <tr><td>Phone</td><td>{{ReportView.inlandStaff.phone}}</td></tr>
+                        <tr><td>Alternate Phone</td><td>{{ReportView.inlandStaff.alternate_phone}}</td></tr>
                     </table>
 
-                    <table ng-if="ReportView.coastStaff.FNAME != undefined" id="Sec5PDF_Coast" class="table">
+                    <table ng-if="ReportView.coastStaff.fname != undefined" id="Sec5PDF_Coast" class="table">
                         <tr><td colspan="2"><label>Coastal Staff</label></td></tr>
-                        <tr><td>Name</td><td>{{ReportView.coastStaff.FNAME}} {{ReportView.coastStaff.LNAME}}</td></tr>
-                        <tr><td>Email</td><td>{{ReportView.coastStaff.EMAIL}}</td></tr>
-                        <tr><td>Phone</td><td>{{ReportView.coastStaff.PHONE}}</td></tr>
-                        <tr><td>Alternate Phone</td><td>{{ReportView.coastStaff.ALTERNATE_PHONE}}</td></tr>
+                        <tr><td>Name</td><td>{{ReportView.coastStaff.fname}} {{ReportView.coastStaff.lname}}</td></tr>
+                        <tr><td>Email</td><td>{{ReportView.coastStaff.email}}</td></tr>
+                        <tr><td>Phone</td><td>{{ReportView.coastStaff.phone}}</td></tr>
+                        <tr><td>Alternate Phone</td><td>{{ReportView.coastStaff.alternate_phone}}</td></tr>
                     </table>
 
-                    <table ng-if="ReportView.waterStaff.FNAME != undefined" id="Sec5PDF_Water" class="table">
+                    <table ng-if="ReportView.waterStaff.fname != undefined" id="Sec5PDF_Water" class="table">
                         <tr><td colspan="2"><label>Water Staff</label></td></tr>
-                        <tr><td>Name</td><td>{{ReportView.waterStaff.FNAME}} {{ReportView.waterStaff.LNAME}}</td></tr>
-                        <tr><td>Email</td><td>{{ReportView.waterStaff.EMAIL}}</td></tr>
-                        <tr><td>Phone</td><td>{{ReportView.waterStaff.PHONE}}</td></tr>
-                        <tr><td>Alternate Phone</td><td>{{ReportView.waterStaff.ALTERNATE_PHONE}}</td></tr>
+                        <tr><td>Name</td><td>{{ReportView.waterStaff.fname}} {{ReportView.waterStaff.lname}}</td></tr>
+                        <tr><td>Email</td><td>{{ReportView.waterStaff.email}}</td></tr>
+                        <tr><td>Phone</td><td>{{ReportView.waterStaff.phone}}</td></tr>
+                        <tr><td>Alternate Phone</td><td>{{ReportView.waterStaff.alternate_phone}}</td></tr>
                     </table>
                 </div>
             </div>
@@ -376,11 +376,11 @@
         <div class="modal-body">
             <div ng-show="Report.length > 0" class="" id="jobSetupPrintPdf1">
                 <div class="col-lg-12">
-                    <h3>USGS {{Event.Event.EVENT_NAME}} Report for {{Report[0].report.REPORT_DATE | date: 'MM/dd/yyyy'}}</h3>
+                    <h3>USGS {{Event.Event.event_name}} Report for {{Report[0].report.report_date | date: 'MM/dd/yyyy'}}</h3>
                     <table id="eventPart" class="table">
                         <tr>
                             <td class="col-lg-2">Event Description:</td>
-                            <td>{{Event.Event.EVENT_DESCRIPTION}}</td>
+                            <td>{{Event.Event.event_description}}</td>
                         </tr>
                         <tr>
                             <td>Event Type:</td>
@@ -388,11 +388,11 @@
                         </tr>
                         <tr>
                             <td>Event Status:</td>
-                            <td>{{Event.EventStat.STATUS}}</td>
+                            <td>{{Event.EventStat.status}}</td>
                         </tr>
                         <tr>
                             <td>Event Coordinator:</td>
-                            <td>{{Event.Coordinator.FNAME}} {{Event.Coordinator.LNAME}}, {{Event.CoordAgency.AGENCY_NAME}}, {{Event.Coordinator.EMAIL}}</td>
+                            <td>{{Event.Coordinator.fname}} {{Event.Coordinator.lname}}, {{Event.CoordAgency.agency_name}}, {{Event.Coordinator.email}}</td>
                         </tr>
                     </table>
                 </div>
@@ -423,35 +423,35 @@
                         </tr>
                         <tbody ng-repeat="r in Report">
                             <tr>
-                                <td style="vertical-align:middle" rowspan="2">{{r.report.STATE}}</td>
+                                <td style="vertical-align:middle" rowspan="2">{{r.report.state}}</td>
                                 <td class="col-lg-2">SW</td>
-                                <td style="text-align:center">{{r.report.SW_FIELDPERS_NOTACCT}}</td><!-- Not accounted for -->
+                                <td style="text-align:center">{{r.report.sw_fieldpers_notacct}}</td><!-- Not accounted for -->
                                 <td style="text-align:center">{{r.FieldPYesSWTot}}</td><!-- cumulative field -->
-                                <td style="text-align:center">{{r.report.SW_YEST_FIELDPERS}}</td><!-- yest field -->
-                                <td style="text-align:center">{{r.report.SW_TOD_FIELDPERS}}</td><!-- today field -->
-                                <td style="text-align:center">{{r.report.SW_TMW_FIELDPERS}}</td><!-- tomorrow field -->
+                                <td style="text-align:center">{{r.report.sw_yest_fieldpers}}</td><!-- yest field -->
+                                <td style="text-align:center">{{r.report.sw_tod_fieldpers}}</td><!-- today field -->
+                                <td style="text-align:center">{{r.report.sw_tmw_fieldpers}}</td><!-- tomorrow field -->
                                 <td style="text-align:center">{{r.OfficePYesSWTot}}</td><!-- cumulative office -->
-                                <td style="text-align:center">{{r.report.SW_YEST_OFFICEPERS}}</td><!-- yest office -->
-                                <td style="text-align:center">{{r.report.SW_TOD_OFFICEPERS}}</td><!-- today office -->
-                                <td style="text-align:center">{{r.report.SW_TMW_OFFICEPERS}}</td><!-- tomorrow office -->
-                                <td style="text-align:center">{{r.report.SW_AUTOS_DEPL}}</td><!-- trucks/cars -->
-                                <td style="text-align:center">{{r.report.SW_BOATS_DEPL}}</td><!-- boats -->
-                                <td style="text-align:center">{{r.report.SW_OTHER_DEPL}}</td><!-- other -->
+                                <td style="text-align:center">{{r.report.sw_yest_officepers}}</td><!-- yest office -->
+                                <td style="text-align:center">{{r.report.sw_tod_officepers}}</td><!-- today office -->
+                                <td style="text-align:center">{{r.report.sw_tmw_officepers}}</td><!-- tomorrow office -->
+                                <td style="text-align:center">{{r.report.sw_autos_depl}}</td><!-- trucks/cars -->
+                                <td style="text-align:center">{{r.report.sw_boats_depl}}</td><!-- boats -->
+                                <td style="text-align:center">{{r.report.sw_other_depl}}</td><!-- other -->
                             </tr>
                             <tr>
                                 <td>WQ & Other</td>
-                                <td style="text-align:center">{{r.report.WQ_FIELDPERS_NOTACCT}}</td><!-- Not accounted for -->
+                                <td style="text-align:center">{{r.report.wq_fieldpers_notacct}}</td><!-- Not accounted for -->
                                 <td style="text-align:center">{{r.FieldPYesWQTot}}</td><!-- cumulative field -->
-                                <td style="text-align:center">{{r.report.WQ_YEST_FIELDPERS}}</td><!-- yest field -->
-                                <td style="text-align:center">{{r.report.WQ_TOD_FIELDPERS}}</td><!-- today field -->
-                                <td style="text-align:center">{{r.report.WQ_TMW_FIELDPERS}}</td><!-- tomorrow field -->
+                                <td style="text-align:center">{{r.report.wq_yest_fieldpers}}</td><!-- yest field -->
+                                <td style="text-align:center">{{r.report.wq_tod_fieldpers}}</td><!-- today field -->
+                                <td style="text-align:center">{{r.report.wq_tmw_fieldpers}}</td><!-- tomorrow field -->
                                 <td style="text-align:center">{{r.OfficePYesWQTot}}</td><!-- cumulative office -->
-                                <td style="text-align:center">{{r.report.WQ_YEST_OFFICEPERS}}</td><!-- yest office -->
-                                <td style="text-align:center">{{r.report.WQ_TOD_OFFICEPERS}}</td><!-- today office -->
-                                <td style="text-align:center">{{r.report.WQ_TMW_OFFICEPERS}}</td><!-- tomorrow office -->
-                                <td style="text-align:center">{{r.report.WQ_AUTOS_DEPL}}</td><!-- trucks/cars -->
-                                <td style="text-align:center">{{r.report.WQ_BOATS_DEPL}}</td><!-- boats -->
-                                <td style="text-align:center">{{r.report.WQ_OTHER_DEPL}}</td><!-- other -->
+                                <td style="text-align:center">{{r.report.wq_yest_officepers}}</td><!-- yest office -->
+                                <td style="text-align:center">{{r.report.wq_tod_officepers}}</td><!-- today office -->
+                                <td style="text-align:center">{{r.report.wq_tmw_officepers}}</td><!-- tomorrow office -->
+                                <td style="text-align:center">{{r.report.wq_autos_depl}}</td><!-- trucks/cars -->
+                                <td style="text-align:center">{{r.report.wq_boats_depl}}</td><!-- boats -->
+                                <td style="text-align:center">{{r.report.wq_other_depl}}</td><!-- other -->
                             </tr>
                         </tbody>
                         <tfoot>
@@ -500,21 +500,21 @@
                         </tr>
                         <tbody ng-repeat="r in Report">
                             <tr>
-                                <td>{{r.report.STATE}}</td>
-                                <td style="text-align:center">{{r.report.GAGE_VISIT}}</td>
-                                <td style="text-align:center">{{r.report.GAGE_DOWN}}</td>
-                                <td style="text-align:center">{{r.report.TOT_DISCHARGE_MEAS}}</td>
-                                <td style="text-align:center">{{r.report.PLAN_DISCHARGE_MEAS}}</td>
-                                <td style="text-align:center">{{r.report.TOT_CHECK_MEAS}}</td>
-                                <td style="text-align:center">{{r.report.PLAN_CHECK_MEAS}}</td>
-                                <td style="text-align:center">{{r.report.PLAN_INDIRECT_MEAS}}</td>
-                                <td style="text-align:center">{{r.report.RATING_EXTENS}}</td>
-                                <td style="text-align:center">{{r.report.GAGE_PEAK_RECORD}}</td>
-                                <td style="text-align:center">{{r.report.QW_GAGE_VISIT}}</td>
-                                <td style="text-align:center">{{r.report.QW_CONT_GAGEVISIT}}</td>
-                                <td style="text-align:center">{{r.report.QW_GAGE_DOWN}}</td>
-                                <td style="text-align:center">{{r.report.QW_DISCR_SAMPLES}}</td>
-                                <td style="text-align:center">{{r.report.COLL_SEDSAMPLES}}</td>
+                                <td>{{r.report.state}}</td>
+                                <td style="text-align:center">{{r.report.gage_visit}}</td>
+                                <td style="text-align:center">{{r.report.gage_down}}</td>
+                                <td style="text-align:center">{{r.report.tot_discharge_meas}}</td>
+                                <td style="text-align:center">{{r.report.plan_discharge_meas}}</td>
+                                <td style="text-align:center">{{r.report.tot_check_meas}}</td>
+                                <td style="text-align:center">{{r.report.plan_check_meas}}</td>
+                                <td style="text-align:center">{{r.report.plan_indirect_meas}}</td>
+                                <td style="text-align:center">{{r.report.rating_extens}}</td>
+                                <td style="text-align:center">{{r.report.gage_peak_record}}</td>
+                                <td style="text-align:center">{{r.report.qw_gage_visit}}</td>
+                                <td style="text-align:center">{{r.report.qw_cont_gagevisit}}</td>
+                                <td style="text-align:center">{{r.report.qw_gage_down}}</td>
+                                <td style="text-align:center">{{r.report.qw_discr_samples}}</td>
+                                <td style="text-align:center">{{r.report.coll_sedsamples}}</td>
                             </tr>
                         </tbody>
                         <tfoot>
@@ -576,29 +576,29 @@
                         </tr>
                         <tbody ng-repeat="r in Report">
                             <tr>
-                                <td>{{r.report.STATE}}</td>
-                                <td style="text-align:center">{{r.report.PLAN_RAPDEPL_GAGE}}</td>
-                                <td style="text-align:center">{{r.report.DEP_RAPDEPL_GAGE}}</td>
-                                <td style="text-align:center">{{r.report.REC_RAPDEPL_GAGE}}</td>
-                                <td style="text-align:center">{{r.report.LOST_RAPDEPL_GAGE}}</td>
-                                <td style="text-align:center">{{r.report.PLAN_WTRLEV_SENSOR}}</td>
-                                <td style="text-align:center">{{r.report.DEP_WTRLEV_SENSOR}}</td>
-                                <td style="text-align:center">{{r.report.REC_WTRLEV_SENSOR}}</td>
-                                <td style="text-align:center">{{r.report.LOST_WTRLEV_SENSOR}}</td>
-                                <td style="text-align:center">{{r.report.PLAN_WV_SENS}}</td>
-                                <td style="text-align:center">{{r.report.DEP_WV_SENS}}</td>
-                                <td style="text-align:center">{{r.report.REC_WV_SENS}}</td>
-                                <td style="text-align:center">{{r.report.LOST_WV_SENS}}</td>
-                                <td style="text-align:center">{{r.report.PLAN_BAROMETRIC}}</td>
-                                <td style="text-align:center">{{r.report.DEP_BAROMETRIC}}</td>
-                                <td style="text-align:center">{{r.report.REC_BAROMETRIC}}</td>
-                                <td style="text-align:center">{{r.report.LOST_BAROMETRIC}}</td>
-                                <td style="text-align:center">{{r.report.PLAN_METEOROLOGICAL}}</td>
-                                <td style="text-align:center">{{r.report.DEP_METEOROLOGICAL}}</td>
-                                <td style="text-align:center">{{r.report.REC_METEOROLOGICAL}}</td>
-                                <td style="text-align:center">{{r.report.LOST_METEOROLOGICAL}}</td>
-                                <td style="text-align:center">{{r.report.HWM_FLAGGED}}</td>
-                                <td style="text-align:center">{{r.report.HWM_COLLECTED}}</td>
+                                <td>{{r.report.state}}</td>
+                                <td style="text-align:center">{{r.report.plan_rapdepl_gage}}</td>
+                                <td style="text-align:center">{{r.report.dep_rapdepl_gage}}</td>
+                                <td style="text-align:center">{{r.report.rec_rapdepl_gage}}</td>
+                                <td style="text-align:center">{{r.report.lost_rapdepl_gage}}</td>
+                                <td style="text-align:center">{{r.report.plan_wtrlev_sensor}}</td>
+                                <td style="text-align:center">{{r.report.dep_wtrlev_sensor}}</td>
+                                <td style="text-align:center">{{r.report.rec_wtrlev_sensor}}</td>
+                                <td style="text-align:center">{{r.report.lost_wtrlev_sensor}}</td>
+                                <td style="text-align:center">{{r.report.plan_wv_sens}}</td>
+                                <td style="text-align:center">{{r.report.dep_wv_sens}}</td>
+                                <td style="text-align:center">{{r.report.rec_wv_sens}}</td>
+                                <td style="text-align:center">{{r.report.lost_wv_sens}}</td>
+                                <td style="text-align:center">{{r.report.plan_barometric}}</td>
+                                <td style="text-align:center">{{r.report.dep_barometric}}</td>
+                                <td style="text-align:center">{{r.report.rec_barometric}}</td>
+                                <td style="text-align:center">{{r.report.lost_barometric}}</td>
+                                <td style="text-align:center">{{r.report.plan_meteorological}}</td>
+                                <td style="text-align:center">{{r.report.dep_meteorological}}</td>
+                                <td style="text-align:center">{{r.report.rec_meteorological}}</td>
+                                <td style="text-align:center">{{r.report.lost_meteorological}}</td>
+                                <td style="text-align:center">{{r.report.hwm_flagged}}</td>
+                                <td style="text-align:center">{{r.report.hwm_collected}}</td>
                             </tr>
                         </tbody>
                         <tfoot>
@@ -631,7 +631,7 @@
             </div>
 
             <div ng-show="Report.length == 0">
-                <h4>No Reports match your filter choices.</h4>
+                <h4>No Completed Reports match your filter choices.</h4>
             </div>
             <br clear="all" />
 
@@ -655,30 +655,30 @@
         <div class="modal-body">
             <div ng-show="Reports.length > 0" class="" id="jobSetupPrintPdf2">
                 <div class="col-lg-12">
-                    <h3>USGS {{Event.Event.EVENT_NAME}} Contacts Report for {{Reports[0].REPORT_DATE | date: 'MM/dd/yyyy'}}</h3>
+                    <h3>USGS {{Event.Event.event_name}} Contacts Report for {{Reports[0].report_date | date: 'MM/dd/yyyy'}}</h3>
                     <table id="eventPart" class="table">
                         <tr>
                             <td class="col-lg-2">Event Description:</td>
-                            <td>{{Event.Event.EVENT_DESCRIPTION}}</td>
+                            <td>{{Event.Event.event_description}}</td>
                         </tr>
                         <tr>
                             <td>Event Type:</td>
-                            <td>{{Event.EventType.TYPE}}</td>
+                            <td>{{Event.EventType.type}}</td>
                         </tr>
                         <tr>
                             <td>Event Status:</td>
-                            <td>{{Event.EventStat.STATUS}}</td>
+                            <td>{{Event.EventStat.status}}</td>
                         </tr>
                         <tr>
                             <td>Event Coordinator:</td>
-                            <td>{{Event.Coordinator.FNAME}} {{Event.Coordinator.LNAME}}, {{Event.CoordAgency.AGENCY_NAME}}, {{Event.Coordinator.EMAIL}}</td>
+                            <td>{{Event.Coordinator.fname}} {{Event.Coordinator.lname}}, {{Event.CoordAgency.agency_name}}, {{Event.Coordinator.email}}</td>
                         </tr>
                     </table>
                 </div>
                 <div class="col-lg-12" ng-repeat="r in Reports">
                     <table class="table">
                         <tr>
-                            <td colspan="6" style="text-align:center;border:thin solid black;background:steelblue"><label>{{r.State}}</label></td>
+                            <td colspan="6" style="text-align:center;border:thin solid black;background:steelblue"><label>{{r.state}}</label></td>
                         </tr>
                         <tr>
                             <td colspan="2" style="text-align:center;border:thin solid black"><label>Submitter</label></td>
@@ -687,39 +687,39 @@
                         </tr>
                         <tr>
                             <td style="width:10%;border-left:thin solid black;border-right:thin solid black">Name</td>
-                            <td style="border-right:thin solid black">{{r.submitter.FNAME}} {{r.submitter.LNAME}}</td>
+                            <td style="border-right:thin solid black">{{r.submitter.fname}} {{r.submitter.lname}}</td>
                             <td style="width:10%;border-left:thin solid black;border-right:thin solid black">Name</td>
-                            <td style="border-right:thin solid black">{{r.depC.FNAME}} {{r.depC.LNAME}}</td>
+                            <td style="border-right:thin solid black">{{r.depC.fname}} {{r.depC.lname}}</td>
                             <td style="width:10%;border-left:thin solid black;border-right:thin solid black">Name</td>
-                            <td style="border-right:thin solid black">{{r.genC.FNAME}} {{r.genC.LNAME}}</td>
+                            <td style="border-right:thin solid black">{{r.genC.fname}} {{r.genC.lname}}</td>
                         </tr>
                         <tr>
                             <td style="border-left:thin solid black;border-right:thin solid black">Phone</td>
-                            <td style="border-right:thin solid black">{{r.submitter.PHONE}}</td>
+                            <td style="border-right:thin solid black">{{r.submitter.phone}}</td>
                             <td style="border-left:thin solid black;border-right:thin solid black">Phone</td>
-                            <td style="border-right:thin solid black">{{r.depC.PHONE}}</td>
+                            <td style="border-right:thin solid black">{{r.depC.phone}}</td>
                             <td style="border-left:thin solid black;border-right:thin solid black">Phone</td>
-                            <td style="border-right:thin solid black">{{r.genC.PHONE}}</td>
+                            <td style="border-right:thin solid black">{{r.genC.phone}}</td>
                         </tr>
                         <tr>
                             <td style="border-left:thin solid black;border-right:thin solid black">Email</td>
-                            <td style="border-right:thin solid black">{{r.submitter.EMAIL}}</td>
+                            <td style="border-right:thin solid black">{{r.submitter.email}}</td>
                             <td style="border-left:thin solid black;border-right:thin solid black">Alt Phone</td>
-                            <td style="border-right:thin solid black">{{r.depC.ALT_PHONE}}</td>
+                            <td style="border-right:thin solid black">{{r.depC.alt_phone}}</td>
                             <td style="border-left:thin solid black;border-right:thin solid black">Alt Phone</td>
-                            <td style="border-right:thin solid black">{{r.genC.ALT_PHONE}}</td>
+                            <td style="border-right:thin solid black">{{r.genC.alt_phone}}</td>
                         </tr>
                         <tr>
                             <td style="border-left:thin solid black;border-right:thin solid black">Office Name</td>
-                            <td style="border-right:thin solid black">{{r.submitter.OFFICENAME}}</td>
+                            <td style="border-right:thin solid black">{{r.submitter.officename}}</td>
                             <td style="border-bottom:thin solid black;border-right:thin solid black">Email</td>
-                            <td style="border-bottom:thin solid black;border-right:thin solid black">{{r.depC.EMAIL}}</td>
+                            <td style="border-bottom:thin solid black;border-right:thin solid black">{{r.depC.email}}</td>
                             <td style="border-bottom:thin solid black;border-right:thin solid black">Email</td>
-                            <td style="border-bottom:thin solid black;border-right:thin solid black">{{r.genC.EMAIL}}</td>
+                            <td style="border-bottom:thin solid black;border-right:thin solid black">{{r.genC.email}}</td>
                         </tr>
                         <tr>
                             <td style="border-left:thin solid black;border-bottom:thin solid black;border-right:thin solid black">Office Address</td>
-                            <td style="border-bottom:thin solid black;border-right:thin solid black">{{r.submitter.OFFICEADD}}</td>
+                            <td style="border-bottom:thin solid black;border-right:thin solid black">{{r.submitter.officeadd}}</td>
                             <td></td>
                             <td></td>
                             <td></td>
@@ -733,42 +733,42 @@
                         </tr>
                         <tr>
                             <td style="border-left:thin solid black;border-right:thin solid black">Name</td>
-                            <td style="border-right:thin solid black">{{r.inlC.FNAME}} {{r.inlC.LNAME}}</td>
+                            <td style="border-right:thin solid black">{{r.inlC.fname}} {{r.inlC.lname}}</td>
                             <td style="border-left:thin solid black;border-right:thin solid black">Name</td>
-                            <td style="border-right:thin solid black">{{r.coastC.FNAME}} {{r.coastC.LNAME}}</td>
+                            <td style="border-right:thin solid black">{{r.coastC.fname}} {{r.coastC.lname}}</td>
                             <td style="border-left:thin solid black;border-right:thin solid black">Name</td>
-                            <td style="border-right:thin solid black">{{r.waterC.FNAME}} {{r.waterC.LNAME}}</td>
+                            <td style="border-right:thin solid black">{{r.waterC.fname}} {{r.waterC.lname}}</td>
                         </tr>
                         <tr>
                             <td style="border-left:thin solid black;border-right:thin solid black">Phone</td>
-                            <td style="border-right:thin solid black">{{r.inlC.PHONE}}</td>
+                            <td style="border-right:thin solid black">{{r.inlC.phone}}</td>
                             <td style="border-left:thin solid black;border-right:thin solid black">Phone</td>
-                            <td style="border-right:thin solid black">{{r.coastC.PHONE}}</td>
+                            <td style="border-right:thin solid black">{{r.coastC.phone}}</td>
                             <td style="border-left:thin solid black;border-right:thin solid black">Phone</td>
-                            <td style="border-right:thin solid black">{{r.waterC.PHONE}}</td>
+                            <td style="border-right:thin solid black">{{r.waterC.phone}}</td>
                         </tr>
                         <tr>
                             <td style="border-left:thin solid black;border-right:thin solid black">Alt Phone</td>
-                            <td style="border-right:thin solid black">{{r.inlC.ALT_PHONE}}</td>
+                            <td style="border-right:thin solid black">{{r.inlC.alt_phone}}</td>
                             <td style="border-left:thin solid black;border-right:thin solid black">Alt Phone</td>
-                            <td style="border-right:thin solid black">{{r.coastC.ALT_PHONE}}</td>
+                            <td style="border-right:thin solid black">{{r.coastC.alt_phone}}</td>
                             <td style="border-left:thin solid black;border-right:thin solid black">Alt Phone</td>
-                            <td style="border-right:thin solid black">{{r.waterC.ALT_PHONE}}</td>
+                            <td style="border-right:thin solid black">{{r.waterC.alt_phone}}</td>
                         </tr>
                         <tr>
                             <td style="border-left:thin solid black;border-bottom:thin solid black;border-right:thin solid black">Email</td>
-                            <td style="border-right:thin solid black;border-bottom:thin solid black">{{r.inlC.EMAIL}}</td>
+                            <td style="border-right:thin solid black;border-bottom:thin solid black">{{r.inlC.email}}</td>
                             <td style="border-left:thin solid black;border-bottom:thin solid black;border-right:thin solid black">Email</td>
-                            <td style="border-right:thin solid black;border-bottom:thin solid black">{{r.coastC.EMAIL}}</td>
+                            <td style="border-right:thin solid black;border-bottom:thin solid black">{{r.coastC.email}}</td>
                             <td style="border-left:thin solid black;border-bottom:thin solid black;border-right:thin solid black">Email</td>
-                            <td style="border-right:thin solid black;border-bottom:thin solid black">{{r.waterC.EMAIL}}</td>
+                            <td style="border-right:thin solid black;border-bottom:thin solid black">{{r.waterC.email}}</td>
                         </tr>
                     </table>
                 </div>
             </div>
 
             <div ng-show="Reports.length == 0">
-                <h4>No Reports match your filter choices.</h4>
+                <h4>No Completed Reports match your filter choices.</h4>
             </div>
             <br clear="all" />
 
