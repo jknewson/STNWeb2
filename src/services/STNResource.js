@@ -474,10 +474,9 @@
             {}, {
                 query: {},
                 getAll: { method: 'GET', isArray: true },
-                getInstStatOPMeasures: { method: 'GET', isArray: true, url: rootURL + '/InstrumentStatus/:instrumentStatusId/InstrMeasurements' },
+                getInstStatOPMeasures: { method: 'GET', isArray: true, url: rootURL + '/InstrumentStatus/:instrumentStatusId/OPMeasurements' },
                 getDatumLocationOPMeasures: { method: 'GET', isArray: true, url: rootURL + '/ObjectivePoints/:objectivePointId/OPMeasurements' },
                 update: { method: 'PUT', cache: false, isArray: false },
-                addInstStatMeasure: { method: 'POST', cache: false, isArray: false, url: rootURL + '/InstrumentStatus/:instrumentStatusId/AddInstrMeasurement' },
                 save: { method: 'POST', cache: false, isArray: false },
                 delete: { method: 'DELETE', cache: false, isArray: false }
             });
@@ -585,9 +584,9 @@
             {}, {
                 query: {},
                 getAll: { method: 'GET', isArray: true }, //this returns sensortypes with list of deploymenttypes for each one
-                getSensorDeploymentTypes: { method: 'GET', isArray: true, url: rootURL + '/SensorTypes/:id/DeploymentTypes.json' },
-                addSensorDeploymentType: {method: 'POST', cache: false, isArray: true, url: rootURL + '/SensorTypes/:id/addDeploymentType'},
-                removeSensorDeploymentType: { method: 'POST', isArray: false, url: rootURL + '/SensorTypes/:id/removeDeploymentType' },
+                getSensorDeploymentTypes: { method: 'GET', isArray: true, url: rootURL + '/SensorTypes/:id/DeploymentTypes.json' },                
+                addSensorDeploymentType: { method: 'POST', cache: false, isArray: true, params: { sensorTypeId: '@sensorTypeId', DeploymentTypeId: '@deploymentTypeId' }, url: rootURL + '/SensorTypes/:sensorTypeId/addDeploymentType' },//?DeploymentTypeId={deploymentTypeId}"
+                removeSensorDeploymentType: { method: 'POST', isArray: false, params: { sensorTypeId: '@sensorTypeId', DeploymentTypeId: '@deploymentTypeId' }, url: rootURL + '/SensorTypes/:sensorTypeId/removeDeploymentType' },//?DeploymentTypeId={deploymentTypeId}"
                 update: { method: 'PUT', cache: false, isArray: false },
                 save: { method: 'POST', cache: false, isArray: false },
                 delete: { method: 'DELETE', cache: false, isArray: false }

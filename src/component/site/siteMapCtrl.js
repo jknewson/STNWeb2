@@ -53,8 +53,8 @@
                             for (var i = 0; i < $scope.closeSites.length; i++) {
                                 var a = $scope.closeSites[i];
                                 $scope.markers.push({
-                                    lat: a.latitude,
-                                    lng: a.longitude,
+                                    lat: a.latitude_dd,
+                                    lng: a.longitude_dd,
                                     icon: icons.stn
                                 });
                             }

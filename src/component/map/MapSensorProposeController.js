@@ -93,7 +93,7 @@
                             propStatToAdd = { instrument_id: response.instrument_id, status_type_id: 4, member_id: $cookies.get('mID'), time_stamp: Time_STAMP, time_zone: 'UTC', };
 
                             INSTRUMENT_STATUS.save(propStatToAdd).$promise.then(function (statResponse) {
-                                propStatToAdd.Status = 'Proposed'; propStatToAdd.instrument_status_id = statResponse.instrument_status_id;
+                                propStatToAdd.status = 'Proposed'; propStatToAdd.instrument_status_id = statResponse.instrument_status_id;
                                 createdPropSensor.instrument_status = [propStatToAdd];                               
                                 $scope.ProposedSensors4Site.push(createdPropSensor);
                                 
