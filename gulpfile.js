@@ -13,7 +13,7 @@ var mainBowerFiles = require('main-bower-files');
 
 var paths = {
     scripts: 'src/**/*.js',
-    styles: 'src/**/*.css',
+    appStyles: 'src/**/*.css',
     //vendorStyles: '../bower_components/**/**/**/*.css',
     less: 'src/less',
     images: 'src/images/**/*',
@@ -43,6 +43,11 @@ pipes.orderedVendorScripts = function() {
 //    return plugins.order(['select.css, app.css']);
 //};
 
+//pipes.orderedVendorStyles = function(){
+//    return plugins.order(['first.css, second.css']);
+//};
+
+//this angularFilesort plugin may not work because each file does not have a uniquely named module(needed, acc. to docs)
 pipes.orderedAppScripts = function() {
     return plugins.angularFilesort();
 };
@@ -118,6 +123,7 @@ pipes.builtVendorScriptsProd = function() {
         .pipe(plugins.sourcemaps.write())
         .pipe(gulp.dest(paths.distScriptsProd));
 };
+//checked 5/5 BAD
 
 pipes.validatedPartials = function() {
     return gulp.src(paths.partials)
@@ -149,8 +155,8 @@ pipes.builtPartialsProd = function() {
 //};
 
 ///stripped out sass compiler - sass not in use
-pipes.builtStylesDev = function() {
-    return gulp.src(paths.styles)
+pipes.builtAppStylesDev = function() {
+    return gulp.src(paths.appStyles)
         //.pipe(plugins.sass())
         .pipe(gulp.dest(paths.dev));
 };
@@ -163,10 +169,10 @@ pipes.builtStylesDev = function() {
 //};
 
 
-///took out sourcemapping stuff, and updated css minification to use cssnano
-pipes.builtStylesProd = function() {
-    return gulp.src(paths.styles)
-        // .pipe(plugins.sourcemaps.init())
+///updated css minification to use cssnano
+pipes.builtAppStylesProd = function() {
+    return gulp.src(paths.appStyles)
+        .pipe(plugins.sourcemaps.init())
         //     .pipe(plugins.sass())
         //     .pipe(plugins.minifyCss())
         //.pipe(plugins.minifyCss())
@@ -176,6 +182,14 @@ pipes.builtStylesProd = function() {
         .pipe(gulp.dest(paths.dist));
 };
 ///////////////////////////////////////////////
+
+pipes.builtVendorStylesProd = function() {
+    return gulp.src(mainBowerFiles('**/*.css'))
+        //.pipe(pipes.orderedVendorStyles())
+        .pipe(plugins.concat('vendor.min.css'))
+        .pipe(gulp.dest(paths.dist + '/css'));
+};
+////////////////////////////////////////////////////////
 
 pipes.processedImagesDev = function() {
     return gulp.src(paths.images)
@@ -210,11 +224,8 @@ pipes.builtIndexDev = function() {
 
     var orderedAppScripts = pipes.builtAppScriptsDev()
         .pipe(pipes.orderedAppScripts());
-
     //var orderedAppStyles = pipes.orderedAppStyles();
-
-
-    var appStyles = pipes.builtStylesDev();
+    var appStyles = pipes.builtAppStylesDev();
 
     return pipes.validatedIndex()
         .pipe(gulp.dest(paths.dev)) // write first to get relative path for inject
@@ -225,16 +236,19 @@ pipes.builtIndexDev = function() {
         .pipe(gulp.dest(paths.dev));
 };
 
+
 pipes.builtIndexProd = function() {
 
     var vendorScripts = pipes.builtVendorScriptsProd();
     var appScripts = pipes.builtAppScriptsProd();
-    var appStyles = pipes.builtStylesProd();
+    var appStyles = pipes.builtAppStylesProd();
+    var vendorStyles = pipes.builtVendorStylesProd();
 
     return pipes.validatedIndex()
         .pipe(gulp.dest(paths.dist)) // write first to get relative path for inject
         .pipe(plugins.inject(vendorScripts, {relative: true, name: 'bower'}))
         .pipe(plugins.inject(appScripts, {relative: true}))
+        .pipe(plugins.inject(vendorStyles, {relative: true, name: 'bower'}))
         .pipe(plugins.inject(appStyles, {relative: true}))
         .pipe(plugins.htmlmin({collapseWhitespace: true, removeComments: true}))
         .pipe(gulp.dest(paths.dist));
@@ -306,10 +320,13 @@ gulp.task('build-app-scripts-dev', pipes.builtAppScriptsDev);
 gulp.task('build-app-scripts-prod', pipes.builtAppScriptsProd);
 
 // compiles app sass and moves to the dev environment
-gulp.task('build-styles-dev', pipes.builtStylesDev);
+gulp.task('build-app-styles-dev', pipes.builtAppStylesDev);
 
 // compiles and minifies app sass to css and moves to the prod environment
-gulp.task('build-styles-prod', pipes.builtStylesProd);
+gulp.task('build-app-styles-prod', pipes.builtAppStylesProd);
+
+// compiles and minifies vendor sass to css and moves to the prod environment
+gulp.task('build-avendor-styles-prod', pipes.builtVendorStylesProd);
 
 // moves vendor scripts into the dev environment
 gulp.task('build-vendor-scripts-dev', pipes.builtVendorScriptsDev);
@@ -369,9 +386,9 @@ gulp.task('watch-dev', ['build-app-dev'], function() {
             .pipe(connect.reload());
     });
 
-    // watch styles
-    gulp.watch(paths.styles, function() {
-        return pipes.builtStylesDev()
+    // watch app styles
+    gulp.watch(paths.appStyles, function() {
+        return pipes.builtAppStylesDev()
             //.pipe(plugins.livereload());
             .pipe(connect.reload());
     });
@@ -402,16 +419,16 @@ gulp.task('watch-prod', ['build-app-prod'], function() {
             .pipe(connect.reload());
     });
 
-    // watch hhtml partials
+    // watch html partials
     gulp.watch(paths.partials, function() {
         return pipes.builtAppScriptsProd()
             //.pipe(plugins.livereload());
             .pipe(connect.reload());
     });
 
-    // watch styles
-    gulp.watch(paths.styles, function() {
-        return pipes.builtStylesProd()
+    // watch app styles
+    gulp.watch(paths.appStyles, function() {
+        return pipes.builtAppStylesProd()
             //.pipe(plugins.livereload());
             .pipe(connect.reload());
     });
