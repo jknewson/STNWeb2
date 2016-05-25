@@ -637,22 +637,20 @@
                 angular.forEach($scope.siteHouseTypesTable, function (htype) {
                     htype.site_id = sID;
                     delete htype.type_name;
-                    var hTPromise = SITE.postSiteHousing({ id: sID }, htype).$promise;
+                    var hTPromise = SITE_HOUSING.save(htype).$promise;
                     postPromises.push(hTPromise);
                 });
                 //site_NetworkNames
                 angular.forEach($scope.NetNameList, function (nName) {
                     if (nName.selected === true) {
-                        var siteNetName = { network_name_id: nName.network_name_id, name: nName.name };
-                        var nNPromise = SITE.postSiteNetworkName({ id: sID }, siteNetName).$promise;
+                        var nNPromise = SITE.postSiteNetworkName({ siteId: sID, networkNameId: nName.network_name_id }).$promise;
                         postPromises.push(nNPromise);
                     }
                 });
                 //site_NetworkTypes
                 angular.forEach($scope.NetTypeList, function (nType) {
                     if (nType.selected === true) {
-                        var siteNetType = { network_type_id: nType.network_type_id, network_type_name: nType.network_type_name };
-                        var nTPromise = SITE.postSiteNetworkType({ id: sID }, siteNetType).$promise;
+                        var nTPromise = SITE.postSiteNetworkType({ siteId: sID, networkTypeId: nType.network_type_id }).$promise;
                         postPromises.push(nTPromise);
                     }
                 });
@@ -706,8 +704,16 @@
                         var selectedProposedSensors = $scope.ProposedSens.filter(function (p) { return p.selected === true; });
                         if (selectedProposedSensors.length > 0) {
                             angular.forEach(selectedProposedSensors, function (propSens, index) {
-                                //POST each sensor and status type
-                                var sensorTypeID = $scope.SensorDeployment.filter(function (sd) { return sd.deployment_type_id == propSens.deployment_type_id; })[0].sensor_type_id;
+                                //POST each sensor and status type (after going thru the sensDeps to get the matching deploymenttypeid from each sensor's inner list
+                                var sID = 0;
+                                angular.forEach($scope.SensorDeployment, function (sdt) {
+                                    for (var x = 0; x < sdt.deploymenttypes.length; x++) {
+                                        if (sdt.deploymenttypes[x].deployment_type_id == propSens.deployment_type_id)
+                                            sID = sdt.sensor_type_id;
+                                    }
+                                });
+
+                                var sensorTypeID = sID;
                                 var inst = { deployment_type_id: propSens.deployment_type_id, site_id: createdSiteID, sensor_type_id: sensorTypeID };
                                 INSTRUMENT.save(inst).$promise.then(function (insResponse) {
                                     var instStat = { instrument_id: insResponse.instrument_id, status_type_id: 4, member_id: $scope.aSite.member_id, time_stamp: new Date(), time_zone: 'UTC' };
