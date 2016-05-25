@@ -5,6 +5,7 @@
     var STNResource = angular.module('STNResource', ['ngResource']);
     //var rootURL = "https://stntest.wim.usgs.gov/STNServices2";
     var rootURL = "https://stntest.wim.usgs.gov/STNServices2P";
+   // var rootURL = "https://localhost/STNServices2";
    
 
     //#region AGENCY
@@ -607,15 +608,15 @@
                 getSiteLandOwner: { method: 'GET', url: rootURL + '/Sites/:id/LandOwner.json' },
                 //Site NetworkTypes
                 getSiteNetworkTypes: { method: 'GET', isArray: true, url: rootURL + '/sites/:id/networkTypes.json' },
-                postSiteNetworkType: {method: 'POST', cache: false, isArray:true, url: rootURL + '/sites/:id/AddNetworkType'},
+                postSiteNetworkType: { method: 'POST', cache: false, params: { siteId: '@siteId', NetworkTypeId: '@networkTypeId' }, isArray: true, url: rootURL + '/sites/:siteId/AddNetworkType' }, //?NetworkTypeId= {networkTypeId}
                 deleteSiteNetworkType: { method: 'POST', cache: false, isArray: false, url: rootURL + '/sites/:id/removeNetworkType' },
                 //Site Network Names
                 getSiteNetworkNames: { method: 'GET', isArray: true, url: rootURL + '/sites/:id/networkNames.json' },
-                postSiteNetworkName: { method: 'POST', cache: false, isArray: true, url: rootURL + '/sites/:id/AddNetworkName' },
+                postSiteNetworkName: { method: 'POST', cache: false, params: { siteId: '@siteId', NetworkNameId: '@networkNameId' }, isArray: true, url: rootURL + '/sites/:siteId/AddNetworkName' }, //?NetworkNameId= {networkNameId}
                 deleteSiteNetworkName: { method: 'POST', cache: false, isArray: false, url: rootURL + '/sites/:id/removeNetworkName' },
                 //Site Housings
                 getSiteHousings: { method: 'GET', isArray: true, url: rootURL + '/sites/:id/SiteHousings.json' },
-                postSiteHousing: {method: 'POST', cache: false, isArray:true, url: rootURL + '/site/:id/AddSiteSiteHousing.json'},
+              //  postSiteHousing: {method: 'POST', cache: false, isArray:true, url: rootURL + '/site/:id/AddSiteSiteHousing.json'},
                 //Site Parts
                 getSiteOPs: { method: 'GET', isArray: true, url: rootURL + '/Sites/:id/ObjectivePoints.json' },
                 getSiteSensors: { method: 'GET', isArray: true, url: rootURL + '/Sites/:id/SiteFullInstrumentList.json' }, //all instruments and their stats together

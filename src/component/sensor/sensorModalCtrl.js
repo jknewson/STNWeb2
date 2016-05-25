@@ -105,13 +105,16 @@
                    $scope.aFile = angular.copy(file);
                    $scope.aFile.file_date = new Date($scope.aFile.file_date); //date for validity of form on PUT
                    if ($scope.aFile.photo_date !== undefined) $scope.aFile.photo_date = new Date($scope.aFile.photo_date); //date for validity of form on PUT
-                   if (file.source_id !== null) {
+                   if (file.source_id !== undefined) {
                        SOURCE.query({ id: file.source_id }).$promise.then(function (s) {
                            $scope.aSource = s;
                            $scope.aSource.FULLname = $scope.aSource.source_name;
+                           //add agency name to photo caption
+                           if ($scope.aFile.filetype_id == 1)
+                               $scope.agencyNameForCap = $scope.agencies.filter(function (a) { return a.agency_id == $scope.aSource.agency_id; })[0].agency_name;
                        });
                    }//end if source
-                   if (file.data_file_id !== null) {
+                   if (file.data_file_id !== undefined) {
                        DATA_FILE.query({ id: file.data_file_id }).$promise.then(function (df) {
                            $scope.datafile = df;
                            $scope.processor = allMembers.filter(function (m) { return m.member_id == $scope.datafile.processor_id; })[0];
@@ -135,9 +138,6 @@
                } //end new file
                $scope.showFileForm = true;
 
-               //add agency name to photo caption
-               if ($scope.aFile.filetype_id == 1)
-                   $scope.agencyNameForCap = $scope.agencies.filter(function (a) { return a.agency_id == $scope.aSource.agency_id; })[0].agency_name;
                $scope.updateAgencyForCaption = function () {
                    if ($scope.aFile.filetype_id == 1)
                        $scope.agencyNameForCap = $scope.agencies.filter(function (a) { return a.agency_id == $scope.aSource.agency_id; })[0].agency_name;

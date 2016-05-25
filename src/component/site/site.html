@@ -3541,7 +3541,7 @@
                                 <div ng-if="aFile.file_id !== undefined && aFile.filetype_id !== 8" class="form-group" style="margin:0;padding:0">
                                     <label class="col-md-4 control-label">Download File:</label>
                                     <div class="col-md-6" style="padding-top: 12px;">
-                                        <a target="_blank" title="Download file" ng-href="{{serverURL}}/Files/{{aFile.file_id}}/Item">
+                                       <a target="_blank" title="Download file" ng-href="{{serverURL}}/Files/{{aFile.file_id}}/Item">
                                             <span class="glyphicon glyphicon-download"></span>
                                         </a>
                                         <img ng-if="aFile.filetype_id === 1" style="height:80px;" ng-src="{{serverURL}}/Files/{{aFile.file_id}}/Item" />
