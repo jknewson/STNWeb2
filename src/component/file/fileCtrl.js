@@ -186,13 +186,13 @@
                             },
                             fileSource: function () {
                                 if (FileClicked !== 0) {
-                                    if (FileClicked.source_id !== null)
+                                    if (FileClicked.source_id !== undefined)
                                         return SOURCE.query({id:FileClicked.source_id}).$promise;
                                 }
                             },
                             dataFile: function () {
                                 if (FileClicked !== 0) {
-                                    if (FileClicked.data_file_id !== null)
+                                    if (FileClicked.data_file_id !== undefined)
                                         return DATA_FILE.query({ id: FileClicked.data_file_id }).$promise;
                                 }
                             }

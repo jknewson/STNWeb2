@@ -665,7 +665,7 @@
                 });//end $q
             };
             $scope.create = function (valid) {
-                if (valid === true) {
+                if (valid) {
                     $rootScope.stateIsLoading.showLoading = true; // loading..
                     //POST landowner, if they added one
                     $http.defaults.headers.common.Authorization = 'Basic ' + $cookies.get('STNCreds');

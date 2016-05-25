@@ -7,7 +7,14 @@
     var rootURL = "https://stntest.wim.usgs.gov/STNServices2P";
    // var rootURL = "https://localhost/STNServices2";
    
-
+    //#region GEOCODE
+    STNResource.factory('GEOCODE', ['$resource', function ($resource) {
+        return $resource('https://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer/reverseGeocode?f=json&distance=2000',
+            {}, {
+                getAddressParts: { method: 'GET', params: { location: '@location' }, headers: { 'X-Requested-With': undefined } } //location=longlat
+            });
+    }]);
+    //#endregion of GEOCODE
     //#region AGENCY
     STNResource.factory('AGENCY', ['$resource', function ($resource) {
         return $resource(rootURL + '/Agencies/:id.json',
@@ -448,7 +455,6 @@
                 getAll: { method: 'GET', isArray: true },
                 update: { method: 'PUT', cache: false, isArray: false },
                 getOPFiles: {method: 'GET', isArray:true, url: rootURL + "/ObjectivePoints/:id/Files"},
-                createOPControlID: { method: 'POST', cache: false, isArray: false, url: rootURL + "/ObjectivePoints/:id/AddOPControls" },
                 getOPControls: { method: 'GET', cache: false, isArray: true, url: rootURL + "/ObjectivePoints/:id/OPControls.json" },
                 save: { method: 'POST', cache: false, isArray: false },
                 delete: { method: 'DELETE', cache: false, isArray: false }
@@ -456,8 +462,8 @@
     }]);
     //#endregion of OBJECTIVE_POINT
 
-    //#region OP_CONTROL_identifier
-    STNResource.factory('OP_CONTROL_identifier', ['$resource', function ($resource) {
+    //#region OP_CONTROL_IDENTIFIER
+    STNResource.factory('OP_CONTROL_IDENTIFIER', ['$resource', function ($resource) {
         return $resource(rootURL + '/OPControlIdentifiers/:id.json',
             {}, {
                 query: {},
@@ -467,7 +473,7 @@
                 delete: { method: 'DELETE', cache: false, isArray: false }
             });
     }]);
-    //#endregion of OP_CONTROL_identifier
+    //#endregion of OP_CONTROL_IDENTIFIER
 
     //#region OP_MEASURE
     STNResource.factory('OP_MEASURE', ['$resource', function ($resource) {
