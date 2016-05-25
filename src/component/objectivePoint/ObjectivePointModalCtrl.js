@@ -2,8 +2,8 @@
     'use strict';
 
     var ModalControllers = angular.module('ModalControllers');
-    ModalControllers.controller('OPmodalCtrl', ['$scope', '$rootScope', '$cookies', '$http', '$sce', '$uibModalInstance', '$uibModal', 'SERVER_URL', 'Site_Files', 'allDropdowns', 'thisOP', 'thisOPControls', 'opSite', 'agencyList', 'allMembers', 'OBJECTIVE_POINT', 'OP_CONTROL_identifier', 'OP_MEASURE', 'SOURCE', 'FILE',
-        function ($scope, $rootScope, $cookies, $http, $sce, $uibModalInstance, $uibModal, SERVER_URL, Site_Files, allDropdowns, thisOP, thisOPControls, opSite, agencyList, allMembers, OBJECTIVE_POINT, OP_CONTROL_identifier, OP_MEASURE, SOURCE, FILE) {
+    ModalControllers.controller('OPmodalCtrl', ['$scope', '$rootScope', '$cookies', '$http', '$sce', '$uibModalInstance', '$uibModal', 'SERVER_URL', 'Site_Files', 'allDropdowns', 'thisOP', 'thisOPControls', 'opSite', 'agencyList', 'allMembers', 'OBJECTIVE_POINT', 'OP_CONTROL_IDENTIFIER', 'OP_MEASURE', 'SOURCE', 'FILE',
+        function ($scope, $rootScope, $cookies, $http, $sce, $uibModalInstance, $uibModal, SERVER_URL, Site_Files, allDropdowns, thisOP, thisOPControls, opSite, agencyList, allMembers, OBJECTIVE_POINT, OP_CONTROL_IDENTIFIER, OP_MEASURE, SOURCE, FILE) {
             //defaults for radio buttons
             //dropdowns
             $scope.serverURL = SERVER_URL;
@@ -72,6 +72,9 @@
                         SOURCE.query({ id: file.source_id }).$promise.then(function (s) {
                             $scope.aSource = s;
                             $scope.aSource.FULLname = $scope.aSource.source_name;
+                            //add agency name to photo caption
+                            if ($scope.aFile.filetype_id == 1)
+                                $scope.agencyNameForCap = $scope.agencies.filter(function (a) { return a.agency_id == $scope.aSource.agency_id; })[0].agency_name;
                         });
                     }//end if source
                 }//end existing file
@@ -81,9 +84,7 @@
                     $scope.aSource.FULLname = $scope.aSource.fname + " " + $scope.aSource.lname;
                 } //end new file
                 $scope.showFileForm = true;
-                //add agency name to photo caption
-                if ($scope.aFile.filetype_id == 1)
-                    $scope.agencyNameForCap = $scope.agencies.filter(function (a) { return a.agency_id == $scope.aSource.agency_id; })[0].agency_name;
+                
                 $scope.updateAgencyForCaption = function () {
                     if ($scope.aFile.filetype_id == 1)
                         $scope.agencyNameForCap = $scope.agencies.filter(function (a) { return a.agency_id == $scope.aSource.agency_id; })[0].agency_name;
@@ -464,8 +465,11 @@
                         createdOP = response;
                         if ($scope.addedIdentifiers.length > 0) {
                             //post each one THIS WILL CHANGE SOON TO HAVE objective_point_id already added and not sent along with it
-                            for (var opc = 0; opc < $scope.addedIdentifiers.length; opc++)
-                                OBJECTIVE_POINT.createOPControlID({ id: response.objective_point_id }, $scope.addedIdentifiers[opc]).$promise;
+                            for (var opc = 0; opc < $scope.addedIdentifiers.length; opc++) {
+                                var thisOne = $scope.addedIdentifiers[opc];
+                                thisOne.objective_point_id = response.objective_point_id;
+                                OP_CONTROL_IDENTIFIER.save(thisOne).$promise;
+                            }
                         }
                     }, function error(errorResponse) {
                         toastr.error("Error creating Datum Location: " + errorResponse.statusText);
@@ -508,12 +512,14 @@
                             if ($scope.addedIdentifiersCopy[i].op_control_identifier_id !== undefined) {
                                 //existing: PUTvar ind = $scope.chosenHWMList.map(function (hwm) { return hwm.hwm_id; }).indexOf(aHWM.hwm_id); //not working:: $scope.chosenHWMList.indexOf(aHWM);
                                 var existIndex = $scope.addedIdentifiers.map(function (i) { return i.op_control_identifier_id; }).indexOf($scope.addedIdentifiersCopy[i].op_control_identifier_id);
-                                OP_CONTROL_identifier.update({ id: $scope.addedIdentifiersCopy[i].op_control_identifier_id }, $scope.addedIdentifiersCopy[i]).$promise.then(function (response){
+                                OP_CONTROL_IDENTIFIER.update({ id: $scope.addedIdentifiersCopy[i].op_control_identifier_id }, $scope.addedIdentifiersCopy[i]).$promise.then(function (response) {
                                     $scope.addedIdentifiers[existIndex] = response;
                                 });
                             } else {
                                 //post each one
-                                OBJECTIVE_POINT.createOPControlID({ id: $scope.OP.objective_point_id }, $scope.addedIdentifiersCopy[i]).$promise.then(function (response){
+                                var thisOPControlID = $scope.addedIdentifiersCopy[i];
+                                thisOPControlID.objective_point_id = $scope.OP.objective_point_id;
+                                OP_CONTROL_IDENTIFIER.save(thisOPControlID).$promise.then(function (response) {
                                     $scope.addedIdentifiers.push(response);
                                 });
                             }
@@ -524,7 +530,7 @@
                     if ($scope.removeOPCarray.length > 0) {
                         for (var r = 0; r < $scope.removeOPCarray.length; r++) {
                             var deIndex = $scope.addedIdentifiers.map(function (ri) { return ri.op_control_identifier_id; }).indexOf($scope.removeOPCarray[r].op_control_identifier_id);
-                            OP_CONTROL_identifier.delete({ id: $scope.removeOPCarray[r].op_control_identifier_id }).$promise.then(function () {
+                            OP_CONTROL_IDENTIFIER.delete({ id: $scope.removeOPCarray[r].op_control_identifier_id }).$promise.then(function () {
                                 $scope.addedIdentifiers.splice(deIndex,1);
                             });
                         }//end foreach removeOPCarray

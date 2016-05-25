@@ -268,7 +268,6 @@
                }//end valid
            };//end create()
 
-            //update this file
            $scope.saveFile = function (valid) {
                if (valid) {
                    $scope.depSenfileIsUploading = true;
@@ -332,7 +331,6 @@
                }//end valid
            };//end save()
 
-            //delete this file
            $scope.deleteFile = function () {
                var DeleteModalInstance = $uibModal.open({
                    backdrop: 'static',
@@ -370,9 +368,7 @@
                $scope.aSource = {};
                $scope.datafile = {};
                $scope.showFileForm = false;
-           };
-
-           
+           };           
             //#endregion file Upload
 
             //#region NWIS Connection
@@ -427,6 +423,7 @@
             };
             $scope.createNWISFile = function (valid) {
                 if (valid) {
+                    $scope.depNWISSenfileIsUploading = true; //Loading...
                     $http.defaults.headers.common.Authorization = 'Basic ' +$cookies.get('STNCreds');
                     $http.defaults.headers.common.Accept = 'application/json';
                     //post datafile first to get or data_file_id
@@ -460,11 +457,13 @@
                             $scope.sensorNWISFiles.push(Fresponse);
                             $scope.allSFiles.push(Fresponse);
                             Site_Files.setAllSiteFiles($scope.allSFiles); //updates the file list on the sitedashboard                 
-                            $scope.showNWISFileForm = false;
+                            $scope.showNWISFileForm = false; $scope.depNWISSenfileIsUploading = false; //Loading...
                         }, function (errorResponse) {
+                            $scope.depNWISSenfileIsUploading = false; //Loading...
                             toastr.error("Error saving file: " + errorResponse.statusText);
                         });
                     }, function (errorResponse) {
+                        $scope.depNWISSenfileIsUploading = false; //Loading...
                         toastr.error("Error saving data file info: " + errorResponse.statusText);
                     });//end source.save()
                 }//end valid
@@ -1760,12 +1759,16 @@
                                 if (RETthisTape.op_measurements_id !== undefined) {
                                     //existing, put in case they changed it
                                     OP_MEASURE.update({ id: RETthisTape.op_measurements_id }, RETthisTape).$promise.then(function (tapeResponse) {
+                                        tapeResponse.op_name = RETthisTape.op_name;
+                                        tapeResponse.Vdatum = RETthisTape.Vdatum;
                                         $scope.RETtapeDownTable.push(tapeResponse);
                                     });
                                 } else {
                                     //new one added, post
                                     RETthisTape.instrument_status_id = statResponse.instrument_status_id;
                                     OP_MEASURE.save(RETthisTape).$promise.then(function (tapeResponse) {
+                                        tapeResponse.op_name = RETthisTape.op_name;
+                                        tapeResponse.Vdatum = RETthisTape.Vdatum;
                                         $scope.RETtapeDownTable.push(tapeResponse);
                                     });
                                 }
@@ -1804,8 +1807,7 @@
         }
         };
             //#endregion Retrieve edit
-
-           
+      
             //delete aSensor and sensor statuses
             $scope.deleteS = function () {
                 //TODO:: Delete the files for this sensor too or reassign to the Site?? Services or client handling?
@@ -1885,13 +1887,16 @@
                     $scope.aFile = angular.copy(file);
                     $scope.aFile.file_date = new Date($scope.aFile.file_date); //date for validity of form on PUT
                     if ($scope.aFile.photo_date !== undefined) $scope.aFile.photo_date = new Date($scope.aFile.photo_date); //date for validity of form on PUT
-                    if (file.source_id !== null) {
+                    if (file.source_id !== undefined) {
                         SOURCE.query({ id: file.source_id }).$promise.then(function (s) {
                             $scope.aSource = s;
                             $scope.aSource.FULLname = $scope.aSource.source_name;
+                            //add agency name to photo caption
+                            if ($scope.aFile.filetype_id == 1)
+                                $scope.agencyNameForCap = $scope.agencies.filter(function (a) { return a.agency_id == $scope.aSource.agency_id; })[0].agency_name;
                         });
                     }//end if source
-                    if (file.data_file_id !== null) {
+                    if (file.data_file_id !== undefined) {
                         $scope.ApprovalInfo = {};
                         DATA_FILE.query({ id: file.data_file_id }).$promise.then(function (df) {
                             $scope.datafile = df;
@@ -1924,9 +1929,7 @@
                 } //end new file
                 $scope.showFileForm = true;
 
-                //add agency name to photo caption
-                if ($scope.aFile.filetype_id == 1)
-                    $scope.agencyNameForCap = $scope.agencies.filter(function (a) { return a.agency_id == $scope.aSource.agency_id; })[0].agency_name;
+                
                 $scope.updateAgencyForCaption = function () {
                     if ($scope.aFile.filetype_id == 1)
                         $scope.agencyNameForCap = $scope.agencies.filter(function (a) { return a.agency_id == $scope.aSource.agency_id; })[0].agency_name;
@@ -2275,7 +2278,7 @@
                 $scope.showNWISFileForm = true;
             };
             var postApprovalForNWISfile = function (DFid) {
-                DATA_FILE.approveNWISDF({ id: df.data_file_id }).$promise.then(function (approvalResponse) {
+                DATA_FILE.approveNWISDF({ id: DFid }).$promise.then(function (approvalResponse) {
                     $scope.NWISFile.approval_id = approvalResponse.approval_id;
                 });
             };
