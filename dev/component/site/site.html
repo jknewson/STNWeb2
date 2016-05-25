@@ -2912,7 +2912,7 @@
                         <!-- Sensor Type*:(detail) -->
                         <div class="col-md-12" ng-if="view.DEPval == 'detail'">
                             <div class="col-md-3 col-md-offset-1"><label>Sensor Type:</label></div>
-                            <div class="col-md-6"><span>{{aSensor.Sensor_Type || '---'}}</span></div>
+                            <div class="col-md-6"><span>{{aSensor.sensorType || '---'}}</span></div>
                         </div>
                         <!-- Sensor Type*:(edit) -->
                         <div class="form-group required" ng-class="{'has-error':editDeployedForm.sensor_type_id.$invalid && editDeployedForm.sensor_type_id.$dirty}" ng-if="view.DEPval == 'edit'">
@@ -2928,7 +2928,7 @@
                         <!-- Sensor Brand*:(detail) -->
                         <div class="col-md-12" ng-if="view.DEPval == 'detail'">
                             <div class="col-md-3 col-md-offset-1"><label>Sensor Brand:</label></div>
-                            <div class="col-md-6"><span>{{aSensor.Sensor_Brand || '---'}}</span></div>
+                            <div class="col-md-6"><span>{{aSensor.sensorBrand || '---'}}</span></div>
                         </div>
                         <!-- Sensor Brand*:(edit) -->
                         <div class="form-group required" ng-class="{'has-error':editDeployedForm.sensor_brand_id.$invalid && editDeployedForm.sensor_brand_id.$dirty}" ng-if="view.DEPval == 'edit'">
@@ -2976,7 +2976,7 @@
                         <!-- Housing Types: (detail) -->
                         <div class="col-md-12" ng-if="view.DEPval == 'detail'">
                             <div class="col-md-3 col-md-offset-1"><label>Housing Types:</label></div>
-                            <div class="col-md-6"><span>{{aSensor.Housing_Type || '---'}}</span></div>
+                            <div class="col-md-6"><span>{{aSensor.housingType || '---'}}</span></div>
                         </div>
                         <!-- Housing Types: (edit) -->
                         <div class="form-group" ng-if="view.DEPval == 'edit'">
@@ -3133,7 +3133,7 @@
                         <!--In feet above(details)-->
                         <div ng-if="OPsPresent && view.DEPval == 'detail'" class="col-md-12">
                             <div class="col-md-4 col-md-offset-1"><label>In feet above:</label></div>
-                            <div class="col-md-4"><span>{{aSensStatus.vdatumName}}</span></div>
+                            <div class="col-md-4"><span>{{aSensStatus.vdatum}}</span></div>
                         </div>
                         <!--In feet above(edit)-->
                         <div ng-if="OPsPresent && view.DEPval == 'edit'" class="form-group">
@@ -3173,7 +3173,7 @@
                         <!-- Deployment Type: (detail) -->
                         <div class="col-md-12" ng-if="view.DEPval == 'detail'">
                             <div class="col-md-3 col-md-offset-1"><label>Deployment Type:</label></div>
-                            <div class="col-md-6"><span>{{aSensor.Deployment_Type || '---'}}</span></div>
+                            <div class="col-md-6"><span>{{aSensor.deploymentType || '---'}}</span></div>
                         </div>
                         <!-- Deployment Type: (edit) -->
                         <div class="form-group" ng-if="view.DEPval == 'edit'">
@@ -3749,12 +3749,12 @@
                 <!-- Sensor Type: -->
                 <div class="col-md-12">
                     <div class="col-md-4 col-md-offset-1"><label>Sensor Type:</label></div>
-                    <div class="col-md-6">{{aSensor.Sensor_Type || '---'}}</div>
+                    <div class="col-md-6">{{aSensor.sensorType || '---'}}</div>
                 </div>
                 <!-- Sensor Brand: -->
                 <div class="col-md-12">
                     <div class="col-md-4 col-md-offset-1"><label>Sensor Brand:</label></div>
-                    <div class="col-md-6">{{aSensor.Sensor_Brand || '---'}}</div>
+                    <div class="col-md-6">{{aSensor.sensorBrand || '---'}}</div>
                 </div>
                 <!-- Serial Number: -->
                 <div class="col-md-12">
@@ -3769,7 +3769,7 @@
                 <!-- Housing Types: -->
                 <div class="col-md-12">
                     <div class="col-md-4 col-md-offset-1"><label>Housing Types:</label></div>
-                    <div class="col-md-6">{{aSensor.Housing_Type || '---'}}</div>
+                    <div class="col-md-6">{{aSensor.housingType || '---'}}</div>
                 </div>
 
                 <!--Tapedowns-->
@@ -3826,7 +3826,7 @@
                 <!-- Deployment Type: -->
                 <div class="col-md-12">
                     <div class="col-md-4 col-md-offset-1"><label>Deployment Type:</label></div>
-                    <div class="col-md-6">{{aSensor.Deployment_Type || '---'}}</div>
+                    <div class="col-md-6">{{aSensor.deploymentType || '---'}}</div>
                 </div>
                 <!-- Location Description: -->
                 <div class="col-md-12">
@@ -4065,7 +4065,7 @@
                         <!-- Sensor Type*: (detail) -->
                         <div class="col-md-12" ng-if="view.DEPval == 'detail'">
                             <div class="col-md-4 col-md-offset-1"><label>Sensor Type:</label></div>
-                            <div class="col-md-6"><span>{{sensor.Sensor_Type || '---'}}</span></div>
+                            <div class="col-md-6"><span>{{sensor.sensorType || '---'}}</span></div>
                         </div>
                         <!-- Sensor Type*: (edit) -->
                         <div class="form-group required" ng-if="view.DEPval == 'edit'">
@@ -4081,7 +4081,7 @@
                         <!-- Sensor Brand*: (detail) -->
                         <div class="col-md-12" ng-if="view.DEPval == 'detail'">
                             <div class="col-md-4 col-md-offset-1"><label>Sensor Brand:</label></div>
-                            <div class="col-md-6"><span>{{sensor.Sensor_Brand || '---'}}</span></div>
+                            <div class="col-md-6"><span>{{sensor.sensorBrand || '---'}}</span></div>
                         </div>
                         <!-- Sensor Brand*: (edit) -->
                         <div class="form-group required" ng-if="view.DEPval == 'edit'">
@@ -4129,7 +4129,7 @@
                         <!-- Housing Types: (detail) -->
                         <div class="col-md-12" ng-if="view.DEPval == 'detail'">
                             <div class="col-md-4 col-md-offset-1"><label>Housing Types:</label></div>
-                            <div class="col-md-6"><span>{{sensor.Housing_Type || '---'}}</span></div>
+                            <div class="col-md-6"><span>{{sensor.housingType || '---'}}</span></div>
                         </div>
                         <!-- Housing Types: (edit) -->
                         <div class="form-group" ng-if="view.DEPval == 'edit'">
@@ -4304,7 +4304,7 @@
                         <!-- Vented (only if Sensor Type is Pressure Transducer) (detail)-->
                         <div ng-show="(sensor.sensor_type_id == 1 || depStuffCopy[0].sensor_type_id == 1) && view.DEPval == 'detail'">
                             <div class="col-md-12">
-                                <div class="col-md-4 col-md-offset-1"><span>Vented:</span></div>
+                                <div class="col-md-4 col-md-offset-1"><label>Vented:</label></div>
                                 <div class="col-md-6"><span>{{sensor.vented || '---'}}</span></div>
                             </div>
                         </div>
@@ -4326,7 +4326,7 @@
                         <!-- Deployment Type: (detail) -->
                         <div class="col-md-12" ng-if="view.DEPval == 'detail'">
                             <div class="col-md-4 col-md-offset-1"><label>Deployment Type:</label></div>
-                            <div class="col-md-6"><span>{{sensor.Deployment_Type || '---'}}</span></div>
+                            <div class="col-md-6"><span>{{sensor.deploymentType || '---'}}</span></div>
                         </div>
                         <!-- Deployment Type: (edit)-->
                         <div class="form-group" ng-if="view.DEPval == 'edit'">
@@ -4472,7 +4472,7 @@
                         <!-- Status Type:*(detail) -->
                         <div class="col-md-12" ng-if="view.RETval == 'detail'">
                             <div class="col-md-4 col-md-offset-1"><label>Status:</label></div>
-                            <div class="col-md-6"><span>{{RetrievedSensorStat.Status || '---'}}</span></div>
+                            <div class="col-md-6"><span>{{RetrievedSensorStat.status || '---'}}</span></div>
                         </div>
                         <!-- Status Type:*(edit) -->
                         <div class="form-group required" ng-if="view.RETval == 'edit'">
@@ -4487,7 +4487,7 @@
                         <!-- Collection Condition:*(detail) -->
                         <div class="col-md-12" ng-if="view.RETval == 'detail'">
                             <div class="col-md-4 col-md-offset-1"><label>Collection Conditions:</label></div>
-                            <div class="col-md-6"><span>{{sensor.Inst_Collection || '---'}}</span></div>
+                            <div class="col-md-6"><span>{{sensor.instCollection || '---'}}</span></div>
                         </div>
                         <!-- Collection Condition:* (edit)-->
                         <div class="form-group required" ng-if="view.RETval == 'edit'">
@@ -5859,7 +5859,7 @@
                 <div class="col-md-9" ng-repeat="s in eventSiteSensors">
                     <span class="col-sm-1"> </span>
                     <span class="col-md-7">
-                        {{s.Instrument.Deployment_Type || s.Instrument.Sensor_Type}} Sensor
+                        {{s.deploymentType || s.sensorType}} Sensor
                     </span>
                     <button type="button" class="borderLess" tooltip-placement="top" uib-tooltip="Show Details" ng-click="showSensorDetails(s)"><span class="glyphicon glyphicon-info-sign"></span></button>
                     <button ng-if="s.NeedDF" type="button" class="borderLess" tooltip-placement="top" uib-tooltip="Incomplete" ng-click="showIncompleteDFInfo()"><span class="glyphicon glyphicon-alert"></span></button>
@@ -5918,15 +5918,15 @@
                 <!-- sensor box of meta data and files -->
                 <div style="border:solid 1px black;padding-bottom:10px" class="col-md-12" ng-if="sensorDetail">
                     <!-- only show if they click showSensorDetails() above -->
-                    <label>{{SensorBox.Instrument.Deployment_Type || SensorBox.Instrument.Sensor_Type}} Sensor Details</label><button class="close" type="button" ng-click="closeDetail()" aria-hidden="true" style="color:gray;">&times;</button>
+                    <label>{{SensorBox.deploymentType || SensorBox.sensorType}} Sensor Details</label><button class="close" type="button" ng-click="closeDetail()" aria-hidden="true" style="color:gray;">&times;</button>
                     <ul>
-                        <li style="list-style:none">Sensor Type: {{SensorBox.Instrument.Sensor_Type}}</li>
-                        <li style="list-style:none">Deployment Type: {{SensorBox.Instrument.Deployment_Type || '--'}}</li>
-                        <li style="list-style:none">Retrieved on: {{SensorBox.InstrumentStats[0].time_stamp | date: 'MM/dd/yyyy hh:mm a'}}</li>
+                        <li style="list-style:none">Sensor Type: {{SensorBox.sensorType}}</li>
+                        <li style="list-style:none">Deployment Type: {{SensorBox.deploymentType || '--'}}</li>
+                        <li style="list-style:none">Retrieved on: {{SensorBox.instrument_status[0].time_stamp | date: 'MM/dd/yyyy hh:mm a'}}</li>
                         <li style="list-style:none">Collection Condition: {{SensorBox.CollectCondition || '--'}}</li>
-                        <li style="list-style:none">Serial Number: {{SensorBox.Instrument.serial_number || '--'}}</li>
-                        <li style="list-style:none">Location Description: {{SensorBox.Instrument.location_description || '--'}}</li>
-                        <li style="list-style:none">Sensor Brand: {{SensorBox.Instrument.Sensor_Brand || '--'}}</li>
+                        <li style="list-style:none">Serial Number: {{SensorBox.serial_number || '--'}}</li>
+                        <li style="list-style:none">Location Description: {{SensorBox.location_description || '--'}}</li>
+                        <li style="list-style:none">Sensor Brand: {{SensorBox.sensorBrand || '--'}}</li>
                     </ul><br clear="all" />
                     <div class="col-md-12">
                         <label>Sensor Files</label>
