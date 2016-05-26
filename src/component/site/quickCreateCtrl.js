@@ -6,10 +6,10 @@
 
     STNControllers.controller('quickCreateCtrl', ['$scope', '$rootScope', '$cookies', '$location', '$state', '$http', '$uibModal', '$filter', '$sce', 'whichQuick', 'allHorDatums',
         'allHorCollMethods', 'allStates', 'allCounties', 'allOPTypes', 'allVertDatums', 'allVertColMethods', 'allOPQualities', 'allHWMTypes', 'allHWMQualities', 'allMarkers',
-        'allEvents', 'allSensorTypes', 'allSensorBrands', 'allDeployTypes', 'allHousingTypes', 'SITE', 'OBJECTIVE_POINT', 'HWM', 'MEMBER', 'INSTRUMENT', 'INSTRUMENT_STATUS', 'OP_MEASURE', 'GEOCODE',
+        'allEvents', 'allSensorTypes', 'allSensorBrands', 'allDeployTypes', 'allHousingTypes', 'SITE', 'OBJECTIVE_POINT', 'HWM', 'MEMBER', 'INSTRUMENT', 'INSTRUMENT_STATUS', 'OP_MEASURE', 'OP_CONTROL_IDENTIFIER', 'GEOCODE',
         function ($scope, $rootScope, $cookies, $location, $state, $http, $uibModal, $filter, $sce, whichQuick, allHorDatums, allHorCollMethods, allStates, allCounties, allOPTypes,
             allVertDatums, allVertColMethods, allOPQualities, allHWMTypes, allHWMQualities, allMarkers, allEvents, allSensorTypes, allSensorBrands, allDeployTypes, allHousingTypes, 
-            SITE, OBJECTIVE_POINT, HWM, MEMBER, INSTRUMENT, INSTRUMENT_STATUS, OP_MEASURE,GEOCODE) {
+            SITE, OBJECTIVE_POINT, HWM, MEMBER, INSTRUMENT, INSTRUMENT_STATUS, OP_MEASURE, OP_CONTROL_IDENTIFIER, GEOCODE) {
             if ($cookies.get('STNCreds') === undefined || $cookies.get('STNCreds') === "") {
                 $scope.auth = false;
                 $location.path('/login');
@@ -102,18 +102,12 @@
                     //get deployment types for sensor type chosen
                     $scope.getDepTypes = function () {
                         $scope.filteredDeploymentTypes = [];
-                        var matchingSensDeplist = allSensorTypes.filter(function (sd) { return sd.sensor_type_id == $scope.aSensor.sensor_type_id; });
-                       // var matchingSensDeplist = allSensDeps.filter(function (sd) { return sd.sensor_type_id == $scope.aSensor.sensor_type_id; });
+                        var matchingSensDeplist = allSensorTypes.filter(function (sd) { return sd.sensor_type_id == $scope.aSensor.sensor_type_id; })[0];
+                        //this is 1 sensorType with inner list of  .deploymenttypes
+                        $scope.filteredDeploymentTypes = matchingSensDeplist.deploymenttypes;
+                        if ($scope.filteredDeploymentTypes.length == 1)
+                            $scope.aSensor.deployment_type_id = $scope.filteredDeploymentTypes[0].deployment_type_id;
 
-                        for (var y = 0; y < matchingSensDeplist.length; y++) {
-                            for (var i = 0; i < $scope.depTypeList.length; i++) {
-                                //for each one, if projObjectives has this id, add 'selected:true' else add 'selected:false'
-                                if (matchingSensDeplist[y].deployment_type_id == $scope.depTypeList[i].deployment_type_id) {
-                                    $scope.filteredDeploymentTypes.push($scope.depTypeList[i]);
-                                    i = $scope.depTypeList.length; //ensures it doesn't set it as false after setting it as true
-                                }
-                            }
-                        }
                     };
 
                 }
@@ -312,14 +306,14 @@
                                     $scope.aSite.state = thisState.state_abbrev;
                                     $scope.stateCountyList = $scope.allCountyList.filter(function (c) { return c.state_id == thisState.state_id; });
                                     $rootScope.stateIsLoading.showLoading = false;// loading..
-                                    $scope.$apply();
+                                   // $scope.$apply();
                                 } else {
                                     $rootScope.stateIsLoading.showLoading = false;// loading..
-                                    toastr.error("The Latitude/Longitude did not return a location within the U.S.");
+                                    toastr.error("The Latitude/Longitude did not return a recognized state. Please choose one from the dropdown.");
                                 }
                             } else {
                                 $rootScope.stateIsLoading.showLoading = false;// loading..
-                                toastr.error(results.error.details[0]);;
+                                toastr.error(results.error.details[0]);
                             }
 
                         });
@@ -499,7 +493,7 @@
                             $scope.aOP.site_id = createdSiteID; $scope.aOP.latitude_dd = response.latitude_dd; $scope.aOP.longitude_dd = response.longitude_dd;
                             $scope.aOP.hdatum_id = response.hdatum_id; $scope.aOP.hcollect_method_id = response.hcollect_method_id;
                             if ($scope.CreateWhat == 'HWM') {
-                                $scope.aHWM.site_id = createdSiteID; $scope.aHWM.WATERBODY = response.WATERBODY; $scope.aHWM.latitude_dd = response.latitude_dd;
+                                $scope.aHWM.site_id = createdSiteID; $scope.aHWM.waterbody = response.waterbody; $scope.aHWM.latitude_dd = response.latitude_dd;
                                 $scope.aHWM.longitude_dd = response.longitude_dd; $scope.aHWM.hcollect_method_id = response.hcollect_method_id;
                                 $scope.aHWM.hdatum_id = response.hdatum_id; $scope.aHWM.flag_member_id = response.member_id; $scope.aHWM.event_id = $cookies.get('SessionEventID');
                             }
