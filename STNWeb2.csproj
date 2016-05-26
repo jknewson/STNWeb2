@@ -49,7 +49,7 @@
     <Content Include="src\component\map\MapSiteInfoController.js" />
     <Content Include="src\component\member\memberCtrl.js" />
     <Content Include="src\component\member\memberInfo.html" />
-    <Content Include="src\component\member\memberInfoCtrl.js" />
+    <Content Include="src\component\member\memberModalCtrl.js" />
     <Content Include="src\component\member\membersList.html" />
     <Content Include="src\component\ModalsCtrl.js" />
     <Content Include="src\component\objectivePoint\objectivePointCtrl.js" />

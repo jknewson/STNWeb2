@@ -344,7 +344,7 @@
                     geoSearchControl.addTo(map);
                 });
 
-
+                delete $http.defaults.headers.common.Authorization;
                 angular.extend($scope, {
                     events: {
                         markers: {
