@@ -28,6 +28,8 @@
     <!-- Not working in Bower -->
     <link rel="stylesheet" href="http://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
     <script src="bower_components/angular-ui-router.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-router/0.3.0/angular-ui-router.js"></script>
+
 
 
 
@@ -38,9 +40,9 @@
     <!--HEADER START navCtrl-->
     <div ng-controller="mainCtrl" class="app-nav">
         <h2 class="testing-alert"><b>TESTING ONLY! DATA WILL BE OVERRIDDEN FOLLOWING TESTING PHASE</b></h2>
-        <h1 class="nav-header">Short-Term Network<span ng-if="thisPage"> - {{thisPage}}</span></h1>
+        <h1 class="nav-header">Short-Term Network<span ng-if="thisPage"> - {{thisPage}}</span></h1><!--
 
-        <button type="button" ng-show="isAuth.val" ng-controller="eventSessionCtrl" class="btn-wim btn-sm btn-white nav-change-session" ng-click="openEventModal()">
+        --><button type="button" ng-show="isAuth.val" ng-controller="eventSessionCtrl" class="btn-wim btn-sm btn-white nav-change-session" ng-click="openEventModal()">
             <span ng-show="!sessionEvent">Choose Event</span>
             <span ng-show="sessionEvent">Change Event</span>
         </button>
@@ -102,9 +104,9 @@
     <div class="modal-body">
         <p>Are you sure you want to remove this {{what}}: <b>{{nameToRmv}}</b></p>
     </div>
-    <div class="modal-footer">
-        <button type="button" class="btn btn-primary" ng-click="ok()">OK</button>
-        <button type="button" class="btn btn-warning" ng-click="cancel()">Cancel</button>
+    <div class="modal-footer center-all">
+        <button type="button" class="btn-wim btn-blue btn-inline" ng-click="ok()">OK</button>
+        <button type="button" class="btn-wim btn-inline btn-orange" ng-click="cancel()">Cancel</button>
     </div>
 </script>
 
@@ -116,10 +118,10 @@
     <div class="modal-body">
         <form class="form-horizontal" name="eventForm" novalidate>
             <fieldset>
-                <div>Filter Events by any of the following or just choose an event below:</div>
-                <div class="form-group">
-                    <label class="col-md-5 control-label">Events created on or after:</label>
-                    <div class="col-md-6 input-group" style="padding-right:14px;padding-left:14px">
+                <p>Filter Events by any of the following or just choose an event below:</p>
+                <div class="form-group fg-sm">
+                    <label>Events created on or after:</label>
+                    <div class="input-group">
                         <input class="form-control dateInputStyle" name="ed" type="date" uib-datepicker-popup="MM/dd/yyyy" is-open="datepickrs.ed"
                                show-weeks="false" ng-model="event.DATE" placeholder="No filter" />
                         <span class="input-group-btn">
@@ -130,50 +132,42 @@
                     </div>
                 </div>
 
-                <div class="form-group">
-                    <label class="col-md-5 control-label">Event Type:</label>
-                    <div class="col-md-6">
-                        <select class="form-control" name="" ng-model="event.TYPE" ng-options="et.event_type_id as et.TYPE for et in EventTypeList">
-                            <option value="">No filter</option>
-                        </select>
-                    </div>
+                <div class="form-group fg-sm">
+                    <label>Event Type:</label>
+                    <select class="form-control" name="" ng-model="event.TYPE" ng-options="et.event_type_id as et.TYPE for et in EventTypeList">
+                        <option value="">No filter</option>
+                    </select>
                 </div>
 
-                <div class="form-group">
-                    <label class="col-md-5 control-label">Event State:</label>
-                    <div class="col-md-6">
-                        <select class="form-control" name="" ng-model="event.state" ng-options="s.state_abbrev as s.state_name for s in StateList">
-                            <option value="">No filter</option>
-                        </select>
-                    </div>
+                <div class="form-group fg-sm">
+                <label>Event State:</label>
+                    <select class="form-control" name="" ng-model="event.state" ng-options="s.state_abbrev as s.state_name for s in StateList">
+                        <option value="">No filter</option>
+                    </select>
                 </div>
-                <div class="form-group">
-                    <div class="col-md-offset-4">
-                        <button class="btn btn-primary" type="button" ng-click="filterEvents()">Filter Events</button>
-                        <button class="btn btn-warning" type="button" ng-click="clearFilters()">Clear Filter</button>
-                    </div>
+
+                <div class="form-group fg-sm center-all">
+                    <button class="btn-wim btn-blue btn-md btn-inline" type="button" ng-click="filterEvents()">Filter Events</button>
+                    <button class="btn-wim btn-orange btn-md btn-inline" type="button" ng-click="clearFilters()">Clear Filter</button>
                 </div>
 
                 <hr />
 
-                <div class="form-group">
-                    <label class="col-md-5 control-label">Events:</label>
-                    <div class="col-md-6">
-                        <select class="form-control" name="" ng-model="event.EventChosen"
-                                ng-options="e.event_id as e.event_name for e in EventList | orderBy: 'event_name'"
-                                <option value=""></option>
-                            </select>
-                    </div>
+                <div class="form-group fg-sm">
+                    <label>Events:</label>
+                    <select class="form-control" name="" ng-model="event.EventChosen"
+                            ng-options="e.event_id as e.event_name for e in EventList | orderBy: 'event_name'"
+                            <option value=""></option>
+                        </select>
                 </div>
             </fieldset>
         </form>
     </div>
-    <div class="modal-footer">
-        <button type="button" class="btn btn-primary" ng-click="setEvent()">Set event</button>
-        <button type="button" class="btn btn-warning" ng-click="clearEvent()">Clear event</button>
-        <button type="button" class="btn btn-warning" ng-click="close()">Cancel</button>
+    <div class="modal-footer center-all">
+        <button type="button" class="btn-wim btn-blue btn-md btn-inline" ng-click="setEvent()">Set event</button>
+        <button type="button" class="btn-wim btn-orange btn-md btn-inline" ng-click="clearEvent()">Clear event</button>
+        <button type="button" class="btn-wim btn-orange btn-md btn-inline" ng-click="close()">Cancel</button>
     </div>
-
 </script>
 
 
@@ -184,9 +178,9 @@
     <div class="modal-body">
         <p>Are you sure you want to save this Report without marking it complete?</p>
     </div>
-    <div class="modal-footer">
-        <button type="button" class="btn btn-primary" ng-click="ok()">OK</button>
-        <button type="button" class="btn btn-warning" ng-click="cancel()">Cancel</button>
+    <div class="modal-footer center-all">
+        <button type="button" class="btn-wim btn-primary btn-inline" ng-click="ok()">OK</button>
+        <button type="button" class="btn-wim btn-primary btn-inline" ng-click="cancel()">Cancel</button>
     </div>
 </script>
 
@@ -195,7 +189,7 @@
         <h3 class="modal-title">Project Alert Paragraph for a Flood Event</h3>
     </div>
     <div class="modal-body">
-        <div>
+        <p>
             Flooding has or is occurring in {{ProjAlertParts.Report.state}} and is considered {MAJOR, MODERATE OR MINOR}. The areas with the most significant
             flooding are {AREAS OF FLOODING}. {{ProjAlertParts.Event.event_description}}, {DAMAGES AND FATALITIES}. The USGS {{ProjAlertParts.Report.state}} Office has dispatched
             {{ProjAlertParts.totYestFieldPers}} field staff to support high water data collection.  In addition, {{ProjAlertParts.totYestOfficPers}}
@@ -205,12 +199,12 @@
             previous period of record highs. Peaks at {NUMBER OF GAGES} streamgages rank in the top 5 for the period of record.  Preliminary
             flood frequency estimates indicate {NUMBER OF GAGES} streamgages had Annual Exceedance Probabilities (AEP) less than 1% and
             {NUMBER OF GAGES} streamgages had AEP between 2% and 1%.
-        </div>
+        </p>
         <div style="margin-top:2em">Click <a href="http://water.usgs.gov/project_alert/alert_form.html" target="_blank">here</a> to open Project Alert in a new tab.</div>
         <br clear="all" />
     </div>
-    <div class="modal-footer">
-        <button type="button" class="btn btn-primary" ng-click="ok()">OK</button>
+    <div class="modal-footer center-all">
+        <button type="button" class="btn-wim btn-blue btn-inline" ng-click="ok()">OK</button>
     </div>
 </script>
 
@@ -219,7 +213,7 @@
         <h3 class="modal-title">Project Alert Paragraph for an Hurricane Event</h3>
     </div>
     <div class="modal-body">
-        <div>
+        <p>
             A major landfall hurricane is affecting {{ProjAlertParts.Report.state}}. The Storm Team has been activated and daily conference calls are being held at 0900
             Eastern Time. {{ProjAlertParts.Event.event_description || "(No Event Discription)"}}, {WEATHER DAMAGES AND FATALITIES}. The areas with the most significant local impacts are
             {AREAS WITH MOST LOCAL IMPACT}. The USGS {{ProjAlertParts.Report.state}} Office has dispatched {{ProjAlertParts.totYestFieldPers}} field staff to support high water
@@ -231,11 +225,11 @@
             {{ProjAlertParts.Report.state}}. Numerous contacts have been made with {EVENT CONTACTS}. These contacts were primarily to give instrumentation status updates
             and {OTHER REASONS}. {{ProjAlertParts.measureCts}} additional streamflow measurements have been made at the surface-water gages in the
             {OTHER AREAS MEASUREMENTS TAKEN} area. {{ProjAlertParts.Report.gage_peak_record}} streamgages have exceeded period of record highs.
-        </div>
+        </p>
         <div style="margin-top:2em">Click <a href="http://water.usgs.gov/project_alert/alert_form.html" target="_blank">here</a> to open Project Alert in a new tab.</div>
         <br clear="all" />
     </div>
-    <div class="modal-footer">
-        <button type="button" class="btn btn-primary" ng-click="ok()">OK</button>
+    <div class="modal-footer center-all">
+        <button type="button" class="btn-wim btn-blue btn-inline" ng-click="ok()">OK</button>
     </div>
 </script>
