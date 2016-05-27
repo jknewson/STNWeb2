@@ -3,14 +3,14 @@
 
     var SettingsControllers = angular.module('SettingsControllers');
 
-    SettingsControllers.controller('memberCtrl', ['$scope', '$rootScope', '$cookies', '$location', '$http', '$filter', '$uibModal', 'MEMBER', 'allRoles', 'allAgencies', 
-        function ($scope, $rootScope, $cookies, $location, $http, $filter, $uibModal, MEMBER, allRoles, allAgencies) {
+    SettingsControllers.controller('memberCtrl', ['$scope', '$rootScope', '$cookies', '$location', '$http', '$filter', '$uibModal', 'MEMBER', 'allRoles', 'allAgencies', 'userProfileId',
+        function ($scope, $rootScope, $cookies, $location, $http, $filter, $uibModal, MEMBER, allRoles, allAgencies, userProfileId) {
             if ($cookies.get('STNCreds') === undefined || $cookies.get('STNCreds') === "") {
                 $scope.auth = false;
                 $location.path('/login');
             } else {
                 //all things both new and existing member page will need
-                $rootScope.thisPage = "Settings/Members";
+                $rootScope.thisPage = "Settings/Members";                
                 // change sorting order
                 $scope.sort_by = function (newSortingOrder) {
                     if ($scope.sortingOrder == newSortingOrder) {
@@ -85,6 +85,12 @@
                         eachM.Role = ro.role_name;
 
                         $scope.memberList.push(eachM);
+                    }
+                    //if someone clicked on their name in the upper right corner, come in and straight away open modal
+                    if (userProfileId !== undefined) {
+                        MEMBER.query({ id: userProfileId }).$promise.then(function (resp) {
+                            $scope.showMemberModal(resp);
+                        });
                     }
                 });
             }
