@@ -7,7 +7,7 @@
         'SITE', 'SITE_HOUSING', 'MEMBER', 'INSTRUMENT', 'INSTRUMENT_STATUS', 'LANDOWNER_CONTACT', 'GEOCODE',
         function ($scope, $rootScope, $cookies, $q, $location, $state, $http, $sce, $timeout, $uibModal, $uibModalInstance, $filter, leafletMarkerEvents, allDropDownParts, latlong, thisSiteStuff, SITE, SITE_HOUSING, 
             MEMBER, INSTRUMENT, INSTRUMENT_STATUS, LANDOWNER_CONTACT, GEOCODE) {
-            //dropdowns
+            //dropdowns 
             $scope.HorizontalDatumList = allDropDownParts[0];
             $scope.HorCollMethodList = allDropDownParts[1];
             $scope.StateList = allDropDownParts[2];
@@ -484,13 +484,13 @@
 
                     //ok now run the removes, then the adds and then pass the stuff back out of here.
                     $q.all(RemovePromises).then(function () {
-                        $q.all(AddPromises).then(function () {
+                        $q.all(AddPromises).then(function (response) {
                             var sendBack = [$scope.aSite, $scope.siteNetworkNames, $scope.siteNetworkTypes];
                             $uibModalInstance.close(sendBack);
                             $rootScope.stateIsLoading.showLoading = false; // loading..
                             toastr.success("Site updated");
-                            $location.path('/Site/' + $scope.aSite.site_id + '/SiteDashboard').replace();//.notify(false);
-                            $scope.apply;
+                            //$location.path('/Site/' + $scope.aSite.site_id + '/SiteDashboard').replace();//.notify(false);
+                            //$scope.apply;
                         }).catch(function error(msg) {
                             console.error(msg);
                         });
@@ -610,7 +610,7 @@
         
             if (thisSiteStuff !== undefined) {
                 //#region existing site 
-                //$scope.aSite[0], $scope.originalSiteHousings[1], $scope.siteHouseTypesTable[2], thisSiteNetworkNames[3], siteNetworkTypes[4], $scope.landowner[5]
+                //$scope.aSite[0], $scope.originalSiteHousings[1], $scope.existingSiteHouseTypesTable[2], thisSiteNetworkNames[3], siteNetworkTypes[4], $scope.landowner[5]
                 $scope.aSite = angular.copy(thisSiteStuff[0]);
                 //for some reason there are tons of sites with hcollect_method_id set to 0 when it's required..make it null so validation picks up on required field
                 if ($scope.aSite.hcollect_method_id <= 0) $scope.aSite.hcollect_method_id = null;

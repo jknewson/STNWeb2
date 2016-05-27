@@ -351,11 +351,11 @@
 
                     <div class="col-md-6">
                         <!-- Vertical Datum: -->
-                        <div class="form-group">
-                            <label class="col-md-4 control-label" for="vdatum_id">Vertical Datum:</label>
+                        <div class="form-group required" ng-class="{'has-error':quickForm.quick.vdatum_id.$invalid && quickForm.quick.vdatum_id.$dirty}">
+                            <label class="col-md-4 control-label req" for="vdatum_id">Vertical Datum:</label>
                             <div class="col-md-7">
                                 <select class="form-control" id="OP_vdatum_id" name="vdatum_id" ng-model="aOP.vdatum_id"
-                                        ng-options="vd.datum_id as vd.datum_abbreviation for vd in vertDatumList">
+                                        ng-options="vd.datum_id as vd.datum_abbreviation for vd in vertDatumList" required>
                                     <option value=""></option>
                                 </select>
                             </div>
@@ -944,4 +944,4 @@
     </form>
 </div>
 
-<div ng-if="!sessionEventExists">Please choose a Session Event in the upper right corner before creating a Quick {{CreateWhat}}.</div>
+<div ng-if="!sessionEventExists"><h3>Please choose an Event before creating a Quick {{CreateWhat}}.</h3></div>

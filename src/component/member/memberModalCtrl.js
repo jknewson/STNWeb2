@@ -29,7 +29,7 @@
                 case 'Manager':
                     $scope.roleList = roleList.filter(function (r) { return r.role_id == 3; });
                     break;
-            };
+            }
             //is this creating new member or editing existing?
             if (thisMember != "empty") {
                 //check to see if the acct User is the same as the user they are looking at
@@ -97,7 +97,7 @@
                     }, function error(errorResponse) {
                         toastr.error("Error: " + errorResponse.statusText);
                     }).$promise.then(function () {
-                        var sendBack = [updatedMember, 'updated']
+                        var sendBack = [updatedMember, 'updated'];
                         $uibModalInstance.close(sendBack);
                     });
                 } else {

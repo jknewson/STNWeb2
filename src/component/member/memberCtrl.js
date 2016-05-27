@@ -29,20 +29,6 @@
                     }
                 };
 
-                //$scope.loggedInUser = {};
-                //$scope.loggedInUser.Name = $cookies.get('usersName'); //User's NAME
-                //$scope.loggedInUser.ID = $cookies.get('mID');
-                //$scope.loggedInUser.Role = $cookies.get('usersRole');
-
-                ////populate role list based on who's logged in (admin can assign manager or field, manager can only assign field
-                //switch ($scope.loggedInUser.Role) {
-                //    case 'Admin':
-                //        $scope.roleList = allRoles.filter(function (r) { return r.role_id <= 3; });
-                //        break;
-                //    case 'Manager':
-                //        $scope.roleList = allRoles.filter(function (r) { return r.role_id == 3; });
-                //        break;
-                //}
                 //create/view member was clicked
                 $scope.showMemberModal = function (memberClicked) {
                     var indexClicked = $scope.memberList.indexOf(memberClicked);
@@ -55,10 +41,10 @@
                         backdrop: 'static',
                         keyboard: false,
                         windowClass: 'rep-dialog',
-                        resolve: {                            
+                        resolve: {
                             thisMember: function () {
                                 return memberClicked !== 0 ? memberClicked : "empty";
-                            },                            
+                            },
                             agencyList: function () {
                                 return allAgencies;
                             },
@@ -84,8 +70,8 @@
                             //    $scope.opCount.total = $scope.SiteObjectivePoints.length;
                             //}
                         }
-                    });                    
-                }
+                    });
+                };
                 $scope.agencyList = allAgencies;
                 $http.defaults.headers.common.Authorization = 'Basic ' + $cookies.get('STNCreds');
                 $http.defaults.headers.common.Accept = 'application/json';

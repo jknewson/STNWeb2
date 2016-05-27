@@ -39,7 +39,7 @@
                                 thisSiteStuff: function () {
                                     if ($scope.aSite.site_id !== undefined) {
                                         var origSiteHouses = $scope.originalSiteHousings !== undefined ? $scope.originalSiteHousings : []; //needed for multi select to set prop selected
-                                        var sHouseTypeModel = $scope.thisSiteHouseTypeModel.length > 0 ? $scope.thisSiteHouseTypeModel : [];
+                                        var sHouseTypeModel = $scope.thisSiteHouseTypeModel.length > 0 ? $scope.thisSiteHouseTypeModel : []; //here's what the site already has
                                         var sNetNames = thisSiteNetworkNames !== undefined ? thisSiteNetworkNames : [];
                                         var sNetTypes = thisSiteNetworkTypes !== undefined ? thisSiteNetworkTypes : [];
                                         var lo = $scope.landowner !== undefined ? $scope.landowner : { };
