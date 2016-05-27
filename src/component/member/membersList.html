@@ -161,7 +161,7 @@
                     <!--END new password inputs-->
                     <!--START update/cancel button-->
                     <div class="form-group">
-                        <div class="col-md-12" style="margin-top:7px">                            
+                        <div class="col-md-12" style="margin-top:7px">
                             <span>
                                 <button type="button" class="btn btn-primary"
                                         style="margin-right:10px"
@@ -195,44 +195,8 @@
                     </div>
                 </div>
                 <!--end new member password section-->
-                <!-- If this isn't the user logged in -->
-                <div ng-show="!matchingUsers && loggedInUser.Role != 'Admin'">
-                    <!-- Your Name -->
-                    <div class="col-md-12">
-                        <label class="col-md-4 control-label">Name:</label>
-                        <div class="col-md-6"><span>{{aMember.fname}} {{aMember.lname}}</span></div>
-                    </div>
 
-                    <!-- Username-->
-                    <div class="col-md-12">
-                        <label class="col-md-4 control-label">Username:</label>
-                        <div class="col-md-6"><span>{{aMember.username}}</span></div>
-                    </div>
 
-                    <!-- agency-->
-                    <div class="col-md-12">
-                        <label class="col-md-4 control-label">Agency:</label>
-                        <div class="col-md-6"><span>{{(agencyList | filter: {agency_id : aMember.agency_id})[0].agency_name }}</span></div>
-                    </div>
-
-                    <!-- Email -->
-                    <div class="col-md-12">
-                        <label class="col-md-4 control-label">Email:</label>
-                        <div class="col-md-6"><span>{{aMember.email}}</span></div>
-                    </div>
-
-                    <!-- Phone -->
-                    <div class="col-md-12">
-                        <label class="col-md-4 control-label">Phone:</label>
-                        <div class="col-md-6"><span>{{aMember.phone}}</span></div>
-                    </div>
-
-                    <!-- Role-->
-                    <div class="col-md-12">
-                        <label class="col-md-4 control-label">Role:</label>
-                        <div class="col-md-6"><span>{{aMember.Role}}</span></div>
-                    </div>
-                </div><!-- end not able to edit view -->
             </div> <!-- end modalBody-->
             <div class="modal-footer">
                 <div class="form-group">
@@ -258,4 +222,55 @@
             </div>
         </fieldset>
     </form>
+    <!-- If this isn't the user logged in -->
+
+    <div ng-show="!matchingUsers && loggedInUser.Role != 'Admin'">
+        <div class="modal-body">
+            <!-- Your Name -->
+            <div class="col-md-12">
+                <label class="col-md-4 control-label">Name:</label>
+                <div class="col-md-6"><span>{{aMember.fname}} {{aMember.lname}}</span></div>
+            </div>
+
+            <!-- Username-->
+            <div class="col-md-12">
+                <label class="col-md-4 control-label">Username:</label>
+                <div class="col-md-6"><span>{{aMember.username}}</span></div>
+            </div>
+
+            <!-- agency-->
+            <div class="col-md-12">
+                <label class="col-md-4 control-label">Agency:</label>
+                <div class="col-md-6"><span>{{(agencyList | filter: {agency_id : aMember.agency_id})[0].agency_name }}</span></div>
+            </div>
+
+            <!-- Email -->
+            <div class="col-md-12">
+                <label class="col-md-4 control-label">Email:</label>
+                <div class="col-md-6"><span>{{aMember.email}}</span></div>
+            </div>
+
+            <!-- Phone -->
+            <div class="col-md-12">
+                <label class="col-md-4 control-label">Phone:</label>
+                <div class="col-md-6"><span>{{aMember.phone}}</span></div>
+            </div>
+
+            <!-- Role-->
+            <div class="col-md-12">
+                <label class="col-md-4 control-label">Role:</label>
+                <div class="col-md-6"><span>{{aMember.Role}}</span></div>
+            </div>
+        </div><br clear="all"/>
+        <div class="modal-footer">
+            <div class="form-group">
+                <div class="col-md-12">                    
+                    <span>
+                        <button type="button" class="btn btn-warning" ng-click="cancel()">Close/Cancel</button>
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- end not able to edit view -->
 </script>
