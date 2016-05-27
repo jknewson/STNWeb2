@@ -52,7 +52,8 @@
         </div>
 
         <div class="nav-userctrl" ng-show="isAuth.val">
-            <span>Welcome, <a ui-sref="members.MemberInfo({id: userID})">{{usersName}}</a></span>
+            <!--<span>Welcome, <a ui-sref="members.MemberInfo({id: userID})">{{usersName}}</a></span>-->
+            <span>Welcome, <a ui-sref="members.MembersList({id: userID})">{{usersName}}</a></span>
             <button type="button" ng-controller="logoutCtrl" ng-click="logout()">LOG OFF</button>
         </div>
 
