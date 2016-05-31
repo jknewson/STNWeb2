@@ -84,28 +84,30 @@
                     $scope.searchBy = { val: 'bySiteNo' };
                     $scope.placeholder = '...';
                     $scope.IndexSearchSites = function () {
-                        switch ($scope.searchBy.val) {
-                            case 'bySiteNo':
-                                SITE.getSearchedSite({ bySiteNo: $scope.searchTerm }, function success(resp) {
-                                    siteSearchResponse(resp);
-                                }, function error(errorResponse) {
-                                    siteSearchResponse(errorResponse);
-                                });
-                                break;
-                            case 'bySiteId':
-                                SITE.getSearchedSite({ bySiteId: $scope.searchTerm }, function (resp) {
-                                    siteSearchResponse(resp);
-                                }, function (errorResponse) {
-                                    siteSearchResponse(errorResponse);
-                                });
-                                break;
-                            case 'bySiteName':
-                                SITE.getSearchedSite({ bySiteName: $scope.searchTerm }, function (resp) {
-                                    siteSearchResponse(resp);
-                                }, function (errorResponse) {
-                                    siteSearchResponse(errorResponse);
-                                });
-                                break;
+                        if ($scope.searchTerm !== "") {
+                            switch ($scope.searchBy.val) {
+                                case 'bySiteNo':
+                                    SITE.getSearchedSite({ bySiteNo: $scope.searchTerm }, function success(resp) {
+                                        siteSearchResponse(resp);
+                                    }, function error(errorResponse) {
+                                        siteSearchResponse(errorResponse);
+                                    });
+                                    break;
+                                case 'bySiteId':
+                                    SITE.getSearchedSite({ bySiteId: $scope.searchTerm }, function (resp) {
+                                        siteSearchResponse(resp);
+                                    }, function (errorResponse) {
+                                        siteSearchResponse(errorResponse);
+                                    });
+                                    break;
+                                case 'bySiteName':
+                                    SITE.getSearchedSite({ bySiteName: $scope.searchTerm }, function (resp) {
+                                        siteSearchResponse(resp);
+                                    }, function (errorResponse) {
+                                        siteSearchResponse(errorResponse);
+                                    });
+                                    break;
+                            }
                         }
                     };
                     var siteSearchResponse = function (s) {
