@@ -483,7 +483,7 @@
             //X was clicked next to existing Control Identifier to have it removed, store in remove array for Save()
             $scope.RemoveID = function (opControl) {
                 //only add to remove list if it's an existing one to DELETE
-                if ($scope.addedIdentifiersCopy != undefined) {
+                if ($scope.addedIdentifiersCopy !== undefined) {
                     var i = $scope.addedIdentifiersCopy.indexOf(opControl);
                     if (opControl.op_control_identifier_id !== undefined) {
                         $scope.removeOPCarray.push(opControl);
@@ -493,8 +493,8 @@
                     }
                 } else {
                     //this is a create
-                    var i = $scope.addedIdentifiers.indexOf(opControl);
-                    $scope.addedIdentifiers.splice(i, 1);
+                    var ci = $scope.addedIdentifiers.indexOf(opControl);
+                    $scope.addedIdentifiers.splice(ci, 1);
                 }
             };
 

@@ -13,8 +13,6 @@
                 $scope.message = "Many of the supplemental GIS data layers found in the map are from a range of sources and are not maintained by WiM. We offer these map layers as a " +
                     "decision support supplement to the STN sites layer, but we cannot guarantee their performance and availability. Many of these externally maintained layers are " +
                     "large datasets and may load slowly depending on network latency. In some cases they may fail to load entirely when network latency is high.";
-                //$scope.map = "Welcome to the new STN Map Page!!";
-
 
                 $rootScope.$on('filterSitesClick', function (event, filteredSitesArray) {
                     if (filteredSitesArray.length > 0) {
@@ -176,38 +174,40 @@
                 $scope.selectedMarkerNum = 0;
                 ////this shows how to grab the Site ID in args.model.site_id
                 $scope.$on('leafletDirectiveMarker.click', function (event, args) {
-                    
-                    spinnerService.show("siteInfoSpinner");
+                    if (args.model.site_id != 'newSite') {
 
-                    $scope.markers[$scope.selectedMarkerNum].icon = icons.stn;
-                    delete $scope.markers[$scope.selectedMarkerNum].label;
+                        spinnerService.show("siteInfoSpinner");
 
-                    var siteID = args.model.site_id;
-                    //$rootScope.stateIsLoading.showLoading = true;// loading..
-                    Map_Site.setMapSiteParts(siteID);
-                    //gets array number of marker element
-                    $scope.selectedMarkerNum = parseInt(args.modelName);
-                    //sets the icon to the selected icon class
-                    $scope.markers[$scope.selectedMarkerNum].icon = icons.selected;
-                    $scope.markers[$scope.selectedMarkerNum].label = {
-                        message: 'Site ' + siteID,
-                        options: {
-                            noHide: true,
-                            offset: [25, -15],
-                            className: 'siteLabel'
+                        $scope.markers[$scope.selectedMarkerNum].icon = icons.stn;
+                        delete $scope.markers[$scope.selectedMarkerNum].label;
+
+                        var siteID = args.model.site_id;
+                        //$rootScope.stateIsLoading.showLoading = true;// loading..
+                        Map_Site.setMapSiteParts(siteID);
+                        //gets array number of marker element
+                        $scope.selectedMarkerNum = parseInt(args.modelName);
+                        //sets the icon to the selected icon class
+                        $scope.markers[$scope.selectedMarkerNum].icon = icons.selected;
+                        $scope.markers[$scope.selectedMarkerNum].label = {
+                            message: 'Site ' + siteID,
+                            options: {
+                                noHide: true,
+                                offset: [25, -15],
+                                className: 'siteLabel'
+                            }
+                        };
+                        if ($scope.mapCenter.zoom <= 9) {
+                            $scope.mapCenter = {lat: args.model.lat, lng: args.model.lng, zoom: 10};
+                        } else if ($scope.mapCenter.zoom >= 10) {
+                            $scope.mapCenter = {lat: args.model.lat, lng: args.model.lng, zoom : $scope.mapCenter.zoom};
                         }
-                    };
-                    if ($scope.mapCenter.zoom <= 9) {
-                        $scope.mapCenter = {lat: args.model.lat, lng: args.model.lng, zoom: 10};
-                    } else if ($scope.mapCenter.zoom >= 10) {
-                        $scope.mapCenter = {lat: args.model.lat, lng: args.model.lng, zoom : $scope.mapCenter.zoom};
+                        var addShape = function() {
+                            $scope.paths = {};
+                            $scope.pathsObj.circleMarker.latlngs = {lat: args.model.lat, lng: args.model.lng};
+                            $scope.paths['circleMarker'] = $scope.pathsObj['circleMarker'];
+                        };
+                        addShape();
                     }
-                    var addShape = function() {
-                        $scope.paths = {};
-                        $scope.pathsObj.circleMarker.latlngs = {lat: args.model.lat, lng: args.model.lng};
-                        $scope.paths['circleMarker'] = $scope.pathsObj['circleMarker'];
-                    };
-                    addShape();
                 });
                 ///this needs to be instantiated before it can be filled programmatically below. may need to move scope.extend block to top
                 // $scope.controls = {
@@ -344,7 +344,7 @@
                     geoSearchControl.addTo(map);
                 });
 
-
+                delete $http.defaults.headers.common.Authorization;
                 angular.extend($scope, {
                     events: {
                         markers: {

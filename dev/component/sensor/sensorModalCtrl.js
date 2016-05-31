@@ -1057,7 +1057,7 @@
                 var sec = $scope.depSensStatus.time_stamp.substr(17, 2);
                 $scope.depSensStatus.time_stamp = new Date(y, m, d, h, mi, sec);
             }
-            if ($scope.depSensStatus.vdatum_id != undefined && $scope.depSensStatus.vdatum_id > 0)
+            if ($scope.depSensStatus.vdatum_id !== undefined && $scope.depSensStatus.vdatum_id > 0)
                 $scope.depSensStatus.VDatum = allVDatumList.filter(function (v) { return v.datum_id == $scope.depSensStatus.vdatum_id; })[0].datum_abbreviation;
 
             $scope.OPsForTapeDown = siteOPs;

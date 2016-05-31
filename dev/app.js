@@ -248,6 +248,7 @@
                 //#region members (abstract)
                 .state("members", {
                     url: "/Members",
+                    params: { id: null},
                     abstract: true,
                     template: "<div ui-view></div>",
                     controller: "memberCtrl",
@@ -260,6 +261,11 @@
                         a: 'AGENCY',
                         allAgencies: function (a) {
                             return a.getAll().$promise;
+                        },
+                        userProfileId: function ($stateParams) {
+                            if ($stateParams.id !== undefined) 
+                                return $stateParams.id;
+                            
                         }
                     }
                 })//#endregion members
@@ -268,8 +274,8 @@
                 .state("members.MembersList", {
                     url: "/MembersList",
                     templateUrl: "component/member/membersList.html",
-                    authenticate: true,
-                })
+                    authenticate: true,                  
+                 })
                 //#endregion members.MembersList
 
                 //#region members.MemberInfo
