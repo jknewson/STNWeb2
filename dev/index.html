@@ -60,7 +60,6 @@
     <script src="bower_components/angular-resource.js"></script>
     <script src="bower_components/angular-route.js"></script>
     <script src="bower_components/angular-spinners.min.js"></script>
-    <script src="bower_components/angular-ui-router.js"></script>
     <script src="bower_components/bootstrap-multiselect.js"></script>
     <script src="bower_components/bootstrap-table.js"></script>
     <script src="bower_components/bootstrap.js"></script>
@@ -105,27 +104,27 @@
     <script src="component/site/siteCtrl.js"></script>
     <script src="component/site/quickCreateCtrl.js"></script>
     <script src="component/settings/settingsCtrl.js"></script>
-    <script src="component/resources/resourcesCtrl.js"></script>
     <script src="component/sensor/sensorModalCtrl.js"></script>
     <script src="component/sensor/sensorCtrl.js"></script>
+    <script src="component/resources/resourcesCtrl.js"></script>
     <script src="component/reporting/submitReportCtrl.js"></script>
-    <script src="component/reporting/reportModalCtrl.js"></script>
     <script src="component/reporting/reportingDashboardCtrl.js"></script>
     <script src="component/reporting/reportingCtrl.js"></script>
+    <script src="component/reporting/reportModalCtrl.js"></script>
     <script src="component/reporting/projectAlertModalCtrl.js"></script>
     <script src="component/reporting/confirmReportModalCtrl.js"></script>
     <script src="component/peak/peakModalCtrl.js"></script>
     <script src="component/peak/peakCtrl.js"></script>
-    <script src="component/objectivePoint/ObjectivePointModalCtrl.js"></script>
     <script src="component/objectivePoint/objectivePointCtrl.js"></script>
+    <script src="component/objectivePoint/ObjectivePointModalCtrl.js"></script>
     <script src="component/member/memberModalCtrl.js"></script>
     <script src="component/member/memberInfoCtrl.js"></script>
     <script src="component/member/memberCtrl.js"></script>
+    <script src="component/map/mapCtrl.js"></script>
     <script src="component/map/MapSiteInfoController.js"></script>
     <script src="component/map/MapSensorProposeController.js"></script>
     <script src="component/map/MapPeaksController.js"></script>
     <script src="component/map/MapFiltersController.js"></script>
-    <script src="component/map/mapCtrl.js"></script>
     <script src="component/main/mainCtrl.js"></script>
     <script src="component/logInOut/LogInOutCtrl.js"></script>
     <script src="component/hwm/quickHWMCtrl.js"></script>
@@ -141,10 +140,10 @@
     <script src="component/event/eventInfoCtrl.js"></script>
     <script src="component/event/eventCtrl.js"></script>
     <script src="component/approval/approvalCtrl.js"></script>
-    <script src="services/STNResource.js"></script>
     <script src="services/businessServices.js"></script>
-    <script src="component/ModalsCtrl.js"></script>
+    <script src="services/STNResource.js"></script>
     <script src="component/jquery.inputmask.bundle.js"></script>
+    <script src="component/ModalsCtrl.js"></script>
     <script src="app.js"></script>
     <!-- endinject -->
 
@@ -204,7 +203,7 @@
                 <button id="single-button" type="button" class="btn-subnav" uib-dropdown-toggle ng-disabled="disabled">
                     Create <span ng-show="status.isopen" class="ion-arrow-up-b"></span><span ng-show="!status.isopen" class="ion-arrow-down-b"></span>
                 </button>
-                <ul class="dropdown-menu" role="menu" aria-labelledby="single-button">
+                <ul ng-show="status.isopen" class="dropdown-menu" role="menu" aria-labelledby="single-button">
                     <li role="menuitem"><a ui-sref="site.dashboard({id: 0})">Site</a></li>
                     <li role="menuitem"><a ui-sref="quickCreate({id:'HWM'})">Quick HWM</a></li>
                     <li role="menuitem"><a ui-sref="quickCreate({id:'Sensor'})">Quick Sensor</a></li>
