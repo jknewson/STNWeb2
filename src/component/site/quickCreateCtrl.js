@@ -287,7 +287,7 @@
                     if ($scope.aSite.latitude_dd !== undefined && $scope.aSite.longitude_dd !== undefined) {
                         $rootScope.stateIsLoading.showLoading = true; //loading...
                         delete $http.defaults.headers.common.Authorization;
-                        GEOCODE.getAddressParts({longitude: $scope.aSite.longitude_dd, latitude: $scope.aSite.latitude_dd}, function (results){
+                        GEOCODE.getAddressParts({x: $scope.aSite.longitude_dd, y: $scope.aSite.latitude_dd}, function (results){
                             if (results.geographies !== undefined){
                                 var components = results.geographies;
                                 var thisState = undefined;                                

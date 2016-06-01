@@ -8,9 +8,9 @@
    
     //#region GEOCODE https://geocoding.geo.census.gov/geocoder/geographies/coordinates?benchmark=4&vintage=4&format=json
     STNResource.factory('GEOCODE', ['$resource', function ($resource) {          
-        return $resource('https://data.fcc.gov/api/block/find?format=json&showall=true',
+        return $resource(rootURL + '/Geocode/location',
             {}, {
-                getAddressParts: { method: 'GET', params: { latitude: '@latitude', longitude: '@longitude' } , headers: { 'X-Requested-With': undefined }} //latitude=28.35975&longitude=-81.421988
+                getAddressParts: { method: 'GET', params: { y: '@y', x: '@x' }} //y=28.35975&x=-81.421988
             });
     }]);
     //#endregion of GEOCODE
