@@ -596,7 +596,13 @@
                                         //when done looping, go to last step in this post
                                         if (index == selectedProposedSensors.length - 1)
                                             finishPOST(createdSiteID);
+                                    }, function (errorResponse) {
+                                        $rootScope.stateIsLoading.showLoading = false; // loading.. 
+                                        toastr.error("Error adding proposed Sensor: " + errorResponse.statusText)
                                     });//end status post
+                                }, function (errorResponse) {
+                                    $rootScope.stateIsLoading.showLoading = false; // loading.. 
+                                    toastr.error("Error adding proposed Sensor: " + errorResponse.statusText)
                                 });//end sensor post
                             });//end angular.foreach on proposed sensors
                         } else finishPOST(createdSiteID);
@@ -604,6 +610,7 @@
                         finishPOST(createdSiteID);
                     }
                 }, function (errorResponse) {
+                    $rootScope.stateIsLoading.showLoading = false; // loading.. 
                     toastr.error("Error creating site: " + errorResponse.statusText);
                 });
             };//end postSiteand Parts

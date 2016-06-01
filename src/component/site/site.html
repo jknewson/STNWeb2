@@ -3922,10 +3922,13 @@
                         <uib-accordion-heading>
                             <i style="margin-right:10px" class="pull-left glyphicon" ng-class="{'glyphicon-chevron-down': tapedownOpen, 'glyphicon-chevron-right': !tapedownOpen}"></i>
                             <span>Tape Down Information</span>
+                            <button type="button" class="col-md-1 borderLess pull-right" tooltip-placement="left" tooltip-append-to-body="false" uib-tooltip="These elevations and tape down data are used for both field activities and final products. Please pay attention to how your data is entered.">
+                                <span class="glyphicon glyphicon-question-sign"></span>
+                            </button>
                         </uib-accordion-heading>
                         <!--Add Tapedown button-->
                         <div ng-if="OPsPresent" class="form-group">
-                            <label class="col-md-3 control-label" for="TAPEDOWNBTN">Datum Location(s):</label>
+                            <label class="col-md-3 control-label">Datum Location(s):</label>
                             <div class="col-md-6">
                                 <div isteven-multi-select
                                      input-model="OPsForTapeDown"
@@ -3954,7 +3957,12 @@
                                     <tr>
                                         <th>Datum Location</th>
                                         <th>Elevation</th>
-                                        <th class="col-md-2">Offset Correction</th>
+                                        <th class="col-md-2">
+                                            Offset<br />Correction
+                                            <button type="button" class="borderLess" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="From the datum location to the sensor orifice.">
+                                                <span class="glyphicon glyphicon-question-sign"></span>
+                                            </button>
+                                        </th>
                                         <th class="col-md-2">Water Surface</th>
                                         <th class="col-md-2">Ground Surface</th>
                                     </tr>
@@ -3978,6 +3986,9 @@
                                     <div class="col-md-6">
                                         <input class="form-control" ng-keypress="isNum($event)" name="sensor_elevation" ng-model="aRetrieval.sensor_elevation" type="text" />
                                     </div>
+                                    <button type="button" class="col-md-1 borderLess pull-left" tooltip-placement="right-top" tooltip-append-to-body="false" uib-tooltip="Using the offset correction, elevation of the sensor orifice.">
+                                        <span class="glyphicon glyphicon-question-sign"></span>
+                                    </button>
                                 </div>
 
                                 <div class="form-group" style="margin-bottom:0">
@@ -3985,6 +3996,9 @@
                                     <div class="col-md-6">
                                         <input class="form-control" ng-keypress="isNum($event)" name="ws_elevation" ng-model="aRetrieval.ws_elevation" type="text" />
                                     </div>
+                                    <button type="button" class="col-md-1 borderLess pull-left" tooltip-placement="right-top" tooltip-append-to-body="false" uib-tooltip="Using the water surface tape down, elevation of the water surface.">
+                                        <span class="glyphicon glyphicon-question-sign"></span>
+                                    </button>
                                 </div>
 
                                 <div class="form-group" style="margin-bottom:0">
@@ -3992,6 +4006,9 @@
                                     <div class="col-md-6">
                                         <input class="form-control" ng-keypress="isNum($event)" name="gs_elevation" ng-model="aRetrieval.gs_elevation" type="text" />
                                     </div>
+                                    <button type="button" class="col-md-1 borderLess pull-left" tooltip-placement="right-top" tooltip-append-to-body="false" uib-tooltip="Using the ground surface tape down, elevation of the ground surface.">
+                                        <span class="glyphicon glyphicon-question-sign"></span>
+                                    </button>
                                 </div>
 
                                 <div class="form-group">

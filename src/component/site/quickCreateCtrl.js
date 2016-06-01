@@ -286,25 +286,18 @@
                     if ($scope.DMS.LODeg !== undefined) $scope.aSite.longitude_dd = azimuth($scope.DMS.LODeg, $scope.DMS.LOMin, $scope.DMS.LOSec);
                     if ($scope.aSite.latitude_dd !== undefined && $scope.aSite.longitude_dd !== undefined) {
                         $rootScope.stateIsLoading.showLoading = true; //loading...
-                        var latlng = $scope.aSite.longitude_dd + ",+" + $scope.aSite.latitude_dd;
                         delete $http.defaults.headers.common.Authorization;
-                        GEOCODE.getAddressParts({location: latlng}, function (results){
-                            if (results.address !== undefined){
-                                var components = results.address;
-                                var thisState = undefined;
-                                $scope.aSite.address = components.Address;
-                                $scope.aSite.city = components.City;
-                                $scope.aSite.zip = components.Postal;
+                        GEOCODE.getAddressParts({longitude: $scope.aSite.longitude_dd, latitude: $scope.aSite.latitude_dd}, function (results){
+                            if (results.geographies !== undefined){
+                                var components = results.geographies;
+                                var thisState = undefined;                                
                                 if (components.CountryCode == "USA") {
-                                    thisState = $scope.stateList.filter(function (s) { return s.state_name == components.Region; })[0];
-                                } else {
-                                    if (components.CountryCode == "PRI") {
-                                        thisState = $scope.stateList.filter(function (s) { return s.state_name == "Puerto Rico"; })[0];
-                                    }
+                                    thisState = $scope.stateList.filter(function (s) { return s.state_name == components.States[0].NAME; })[0];
                                 }
                                 if (thisState !== undefined) {
                                     $scope.aSite.state = thisState.state_abbrev;
                                     $scope.stateCountyList = $scope.allCountyList.filter(function (c) { return c.state_id == thisState.state_id; });
+                                    $scope.aSite.county = components.Counties[0].NAME;
                                     $rootScope.stateIsLoading.showLoading = false;// loading..
                                    // $scope.$apply();
                                 } else {
@@ -315,7 +308,6 @@
                                 $rootScope.stateIsLoading.showLoading = false;// loading..
                                 toastr.error(results.error.details[0]);
                             }
-
                         });
                     } else {
                         //they did not type a lat/long first...
