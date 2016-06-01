@@ -3,15 +3,14 @@
 
     //look up common service module, and register the new factory with that module 
     var STNResource = angular.module('STNResource', ['ngResource']);
-    //var rootURL = "https://stntest.wim.usgs.gov/STNServices2";
-    var rootURL = "https://stntest.wim.usgs.gov/STNServices2P";
+    var rootURL = "https://stntest.wim.usgs.gov/STNServices2";
   //  var rootURL = "https://localhost/STNServices2";
    
-    //#region GEOCODE
-    STNResource.factory('GEOCODE', ['$resource', function ($resource) {
-        return $resource('https://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer/reverseGeocode?f=json&distance=2000',
+    //#region GEOCODE https://geocoding.geo.census.gov/geocoder/geographies/coordinates?benchmark=4&vintage=4&format=json
+    STNResource.factory('GEOCODE', ['$resource', function ($resource) {          
+        return $resource('https://data.fcc.gov/api/block/find?format=json&showall=true',
             {}, {
-                getAddressParts: { method: 'GET', params: { location: '@location' }, headers: { 'X-Requested-With': undefined } } //location=longlat
+                getAddressParts: { method: 'GET', params: { latitude: '@latitude', longitude: '@longitude' } , headers: { 'X-Requested-With': undefined }} //latitude=28.35975&longitude=-81.421988
             });
     }]);
     //#endregion of GEOCODE

@@ -450,6 +450,7 @@
                         postApprovalForNWISfile(NdfResponse.data_file_id); //process approval
                         //now POST File
                         $scope.NWISFile.data_file_id = NdfResponse.data_file_id;
+                        $scope.NWISFile.path = '<link>';
                         delete $scope.NWISFile.FileType;
                         FILE.save($scope.NWISFile).$promise.then(function (Fresponse) {
                             toastr.success("File Data saved");
@@ -1281,7 +1282,6 @@
             $scope.sensorTypeList = allDepDropdowns[0];
             $scope.sensorBrandList = allDepDropdowns[1];
             $scope.houseTypeList = allDepDropdowns[2];
-         //   $scope.sensorDeployList = allDepDropdowns[3];
             $scope.fileTypeList = allDepDropdowns[3]; //used if creating/editing depSens file
             $scope.vertDatumList = allDepDropdowns[4];
             $scope.allSFiles = Site_Files.getAllSiteFiles();
