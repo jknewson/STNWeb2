@@ -287,30 +287,34 @@
                     if ($scope.aSite.latitude_dd !== undefined && $scope.aSite.longitude_dd !== undefined) {
                         $rootScope.stateIsLoading.showLoading = true; //loading...
                         delete $http.defaults.headers.common.Authorization;
-                        GEOCODE.getAddressParts({x: $scope.aSite.longitude_dd, y: $scope.aSite.latitude_dd}, function (results){
-                            if (results.geographies !== undefined){
-                                var components = results.geographies;
-                                var thisState = undefined;                                
-                                if (components.CountryCode == "USA") {
-                                    thisState = $scope.stateList.filter(function (s) { return s.state_name == components.States[0].NAME; })[0];
-                                }
+                        $http.defaults.headers.common.Accept = 'application/json';
+                        GEOCODE.getAddressParts({ Longitude: $scope.aSite.longitude_dd, Latitude: $scope.aSite.latitude_dd }, function success(response) {
+                            if (response.result.geographies.Counties.length > 0) {
+                                var stateFIPS = response.result.geographies.Counties[0].STATE;
+                                var countyName = response.result.geographies.Counties[0].NAME;
+                                var thisStateID = $scope.allCountyList.filter(function (c) { return c.state_fip == stateFIPS; })[0].state_id;
+                                var thisState = $scope.stateList.filter(function(s){return s.state_id == thisStateID; })[0];
+                                
                                 if (thisState !== undefined) {
                                     $scope.aSite.state = thisState.state_abbrev;
                                     $scope.stateCountyList = $scope.allCountyList.filter(function (c) { return c.state_id == thisState.state_id; });
-                                    $scope.aSite.county = components.Counties[0].NAME;
-                                    $rootScope.stateIsLoading.showLoading = false;// loading..
-                                   // $scope.$apply();
+                                    $scope.aSite.county = countyName;
+                                    $rootScope.stateIsLoading.showLoading = false;// loading..                                   
                                 } else {
                                     $rootScope.stateIsLoading.showLoading = false;// loading..
                                     toastr.error("The Latitude/Longitude did not return a recognized state. Please choose one from the dropdown.");
                                 }
                             } else {
                                 $rootScope.stateIsLoading.showLoading = false;// loading..
-                                toastr.error(results.error.details[0]);
+                                toastr.error("No location information came back from that lat/long");
                             }
+                        }, function error(errorResponse) {
+                            $rootScope.stateIsLoading.showLoading = false;// loading..
+                            toastr.error("Error getting address: " + errorResponse.statusText);
                         });
                     } else {
                         //they did not type a lat/long first...
+                        $rootScope.stateIsLoading.showLoading = false;// loading..
                         var emptyLatLongModal = $uibModal.open({
                             template: '<div class="modal-header"><h3 class="modal-title">Error</h3></div>' +
                                 '<div class="modal-body"><p>Please provide a Latitude and Longitude before clicking Verify Location</p></div>' +

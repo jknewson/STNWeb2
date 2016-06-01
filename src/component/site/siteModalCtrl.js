@@ -68,26 +68,28 @@
             $scope.updateAddressOnly = function () {                
                 if ($scope.DMS.LADeg !== undefined) $scope.aSite.latitude_dd = azimuth($scope.DMS.LADeg, $scope.DMS.LAMin, $scope.DMS.LASec);
                 if ($scope.DMS.LODeg !== undefined) $scope.aSite.longitude_dd = azimuth($scope.DMS.LODeg, $scope.DMS.LOMin, $scope.DMS.LOSec);
-                var latlng = $scope.aSite.longitude_dd + ",+" + $scope.aSite.latitude_dd;
                 delete $http.defaults.headers.common.Authorization;
-                GEOCODE.getAddressParts({ location: latlng }, function (results) {
-                    if (results.address !== undefined) {
-                        var components = results.address;
-                        var thisState = undefined;
-                        $scope.aSite.address = components.Address;
-                        $scope.aSite.city = components.City;
-                        $scope.aSite.zip = components.Postal;
-                        if (components.CountryCode == "USA") {                            
-                            thisState = $scope.StateList.filter(function (s) { return s.state_name == components.Region; })[0];
-                        } else {                            
-                            if (components.CountryCode == "PRI") 
-                                thisState = $scope.StateList.filter(function (s) { return s.state_name == "Puerto Rico"; })[0];
-                        }//end this is in the US
+                $http.defaults.headers.common.Accept = 'application/json';
+                GEOCODE.getAddressParts({ Longitude: $scope.aSite.longitude_dd, Latitude: $scope.aSite.latitude_dd }, function success(response) {
+                    if (response.result.geographies.Counties.length > 0) {
+                        var stateFIPS = response.result.geographies.Counties[0].STATE;
+                        var countyName = response.result.geographies.Counties[0].NAME;
+                        var thisStateID = $scope.AllCountyList.filter(function (c) { return c.state_fip == stateFIPS; })[0].state_id;
+                        var thisState = $scope.StateList.filter(function (s) { return s.state_id == thisStateID; })[0];
                         if (thisState !== undefined) {
                             $scope.aSite.state = thisState.state_abbrev;
-                            $scope.stateCountyList = $scope.AllCountyList.filter(function (c) { return c.state_id == thisState.state_id; });                            
+                            $scope.stateCountyList = $scope.AllCountyList.filter(function (c) { return c.state_id == thisState.state_id; });
+                            $scope.aSite.county = countyName;
+                        } else {
+                            $rootScope.stateIsLoading.showLoading = false;// loading..
+                            toastr.error("The Latitude/Longitude did not return a recognized state. Please choose one from the dropdown.");
                         }
+                    } else {
+                        $rootScope.stateIsLoading.showLoading = false;// loading..
+                        toastr.error("No location information came back from that lat/long");
                     }
+                }, function error (errorResponse){
+                    toastr.error("Error getting location information.");
                 });
             };
             ///update newSite lat/lng after dragend
@@ -120,25 +122,19 @@
                     $scope.mapCenter = { lat: parseFloat($scope.aSite.latitude_dd), lng: parseFloat($scope.aSite.longitude_dd), zoom: 18 };
                     $scope.mapMarkers = [];
                     $rootScope.stateIsLoading.showLoading = true; //loading...
-                    var latlng = $scope.aSite.longitude_dd + ",+" + $scope.aSite.latitude_dd;
+                    $http.defaults.headers.common.Accept = 'application/json';
                     delete $http.defaults.headers.common.Authorization;
-                    GEOCODE.getAddressParts({ location: latlng }, function (results) {
-                        if (results.address !== undefined) {
-                            var components = results.address;
-                            var thisState = undefined;
-                            $scope.aSite.address = components.Address;
-                            $scope.aSite.city = components.City;
-                            $scope.aSite.zip = components.Postal;
-                            if (components.CountryCode == "USA") {
-                                thisState = $scope.StateList.filter(function (s) { return s.state_name == components.Region; })[0];
-                            } else {
-                                if (components.CountryCode == "PRI")
-                                    thisState = $scope.StateList.filter(function (s) { return s.state_name == "Puerto Rico"; })[0];
-                            }//end this is in the US
+                    GEOCODE.getAddressParts({ Longitude: $scope.aSite.longitude_dd, Latitude: $scope.aSite.latitude_dd }, function success(response) {
+                        if (response.result.geographies.Counties.length > 0) {
+                            var stateFIPS = response.result.geographies.Counties[0].STATE;
+                            var countyName = response.result.geographies.Counties[0].NAME;
+                            var thisStateID = $scope.AllCountyList.filter(function (c) { return c.state_fip == stateFIPS; })[0].state_id;
+                            var thisState = $scope.StateList.filter(function (s) { return s.state_id == thisStateID; })[0];
+
                             if (thisState !== undefined) {
                                 $scope.aSite.state = thisState.state_abbrev;
                                 $scope.stateCountyList = $scope.AllCountyList.filter(function (c) { return c.state_id == thisState.state_id; });
-
+                                $scope.aSite.county = countyName;
                                 //see if there are any sites within a 0.0005 buffer of here for them to use instead
                                 SITE.getProximitySites({ Latitude: $scope.aSite.latitude_dd, Longitude: $scope.aSite.longitude_dd, Buffer: 0.0005 }, function success(response) {
                                     $scope.closeSites = response;
@@ -176,7 +172,7 @@
                             }
                         } else {
                             $rootScope.stateIsLoading.showLoading = false;// loading..
-                            toastr.error(results.error.details[0]);
+                            toastr.error("Error getting address location.");
                         }
                     }, function (errorResponse) {
                         toastr.error("Error: " + errorResponse.statusText);
@@ -598,11 +594,11 @@
                                             finishPOST(createdSiteID);
                                     }, function (errorResponse) {
                                         $rootScope.stateIsLoading.showLoading = false; // loading.. 
-                                        toastr.error("Error adding proposed Sensor: " + errorResponse.statusText)
+                                        toastr.error("Error adding proposed Sensor: " + errorResponse.statusText);
                                     });//end status post
                                 }, function (errorResponse) {
                                     $rootScope.stateIsLoading.showLoading = false; // loading.. 
-                                    toastr.error("Error adding proposed Sensor: " + errorResponse.statusText)
+                                    toastr.error("Error adding proposed Sensor: " + errorResponse.statusText);
                                 });//end sensor post
                             });//end angular.foreach on proposed sensors
                         } else finishPOST(createdSiteID);
