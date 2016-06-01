@@ -75,16 +75,23 @@
                 searchTerm: '='
             },
             replace: true,
-            template: '<div class="searchnav"><div class="searchby"><b>Search By:</b><div class="searchbyoption"><input type="radio" name="SearchBy" ng-model="searchBy.val" value="bySiteId" />ID</div><!----><div class="searchbyoption"><input type="radio" name="SearchBy" ng-model="searchBy.val" value="bySiteNo" />Number</div><!----><div class="searchbyoption"><input type="radio" name="SearchBy" ng-model="searchBy.val" value="bySiteName" />Name</div></div><!----><div class="search-input"><input ng-focus="goSearch" type="text" ng-model="searchTerm" ng-enter="IndexSearchSites()" placeholder="Search Sites..." /><!----><button type="button" class="borderLess" ng-click="IndexSearchSites()">Search <i class="ion-search"></i></button></div></div>',
+            template: '<div class="searchnav">' +
+                          '<div class="searchby"><b>Search By:</b>'+
+                              '<div class="searchbyoption"><input type="radio" name="SearchBy" ng-model="searchBy.val" value="bySiteId" />ID</div>'+
+                              '<div class="searchbyoption"><input type="radio" name="SearchBy" ng-model="searchBy.val" value="bySiteNo" />Number</div>' +
+                              '<div class="searchbyoption"><input type="radio" name="SearchBy" ng-model="searchBy.val" value="bySiteName" />Name</div></div>' +
+                              '<div class="search-input"><input ng-focus="goSearch" type="text" ng-model="searchTerm" ng-enter="IndexSearchSites()" placeholder="Search Sites..." />'+
+                              '<button type="button" class="borderLess" ng-click="IndexSearchSites()">Search <i class="ion-search"></i></button></div></div>',
 
             controller: [
-                '$scope', '$state', 'SITE', '$uibModal',
-                function ($scope, $state, SITE, $uibModal) {
+                '$scope', '$state', '$http', 'SITE', '$uibModal',
+                function ($scope, $state, $http, SITE, $uibModal) {
                     $scope.searchTerm = '';
                     $scope.searchBy = { val: 'bySiteNo' };
                     $scope.placeholder = '...';
-                    $scope.IndexSearchSites = function () {
+                    $scope.IndexSearchSites = function () {                       
                         if ($scope.searchTerm !== "") {
+                            $http.defaults.headers.common.Accept = 'application/json';
                             switch ($scope.searchBy.val) {
                                 case 'bySiteNo':
                                     SITE.getSearchedSite({ bySiteNo: $scope.searchTerm }, function success(resp) {
