@@ -144,7 +144,7 @@
                                 $scope.landowner = response;
                                 $scope.addLandowner = true;
                             }, function error(errorResponse) {
-                                toastr.error("Error: " + errorResponse.statusText);
+                                toastr.error("Error getting Landowner Information: " + errorResponse.statusText);
                             }).$promise;
                         }//end if site has landownercontact id
 
