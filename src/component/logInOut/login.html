@@ -1,12 +1,27 @@
 <div class="stn-home">
-    <!--<p>
-        This Data Management System (DMS) supports the <a href="{{serverURL}}/STN" target="_blank">STN Mapper</a>,
-        which is a metadata-discovery tool that captures information about...
+    <p style="width:100%">
+        The USGS Short-Term Network (STN) is a national-scale application and database designed to support USGS event-based sensor deployments and High-Water Mark (HWM)
+        data collection efforts. The STN database is designed to encourage, but not require, repeated visits to temporary sensor deployment (wave or water level) or
+        HWM locations. By developing a system that encourages repeated, as-needed deployments in the same locations, it facilitates the development of longer-term datasets
+        of storm events than would be feasible by relying on field personnel's memories of previous deployments or interpretations of paper records alone. Such efficient
+        responses have become a cornerstone of the USGS Hazards Response.
     </p>
-    <p>
-        <b>You can use the STN DMS to submit, edit, and delete your information.</b>
-    </p>-->
-
+    <p style="width:100%">
+        You are logging into the data management system designed to submit, edit, and delete your information.
+    </p>
+    <p style="width:100%">
+        There are many PUBLIC ways to access flood event data:
+        <ul>
+            <li>Information on the program and the PUBLIC link to be distributed is: <a href="http://water.usgs.gov/floods/FEV/" target="_blank">USGS Flood Information</a></li>
+            <li>View data from all events in the map viewer: <a href="https://stn.wim.usgs.gov/FEV" target="_blank">Flood Event Viewer</a></li>
+            <li>Download data by event, state, and more: <a href="http://stn.wim.usgs.gov/STNDataPortal/#" target="_blank">STN Data Portal</a></li>
+            <li>
+                View the REST data services: (Coming soon)
+                <!-- <a href="http://stn.wim.usgs.gov/STNServices/Documentation.html" target="_blank">REST Service Documentation</a> (TODO :: NOT available yet)-->
+            </li>
+            <li>View the Map data services: <a href="http://stnmapservices.wim.usgs.gov:6080/arcgis/rest/services/STN" target="_blank">Map Service Documentation</a></li>
+        </ul>
+    </p>
 
     <form ng-submit="submit()" ng-controller="loginCtrl" class="login-form">
         <div class="stn-login-error">{{error}}</div>
@@ -14,17 +29,21 @@
         <div class="login-form-item pad-r">
             <label for="username">Username</label>
             <input type="text" ng-model="username" id="userNameFocus" name="username" placeholder="Enter User Name" required focus />
-        </div><!--
-        --><div class="login-form-item pad-b">
+        </div>
+        <!--
+        -->
+        <div class="login-form-item pad-b">
             <label for="password">Password</label>
             <input type="password" ng-model="password" name="password" placeholder="Enter Password" required data-toggle="tooltip" data-trigger="manual" data-title="Caps lock is on" />
-        </div><!--
-        --><div class="login-form-submit pad-l">
+        </div>
+        <!--
+        -->
+        <div class="login-form-submit pad-l">
             <button type="submit" class="btn-wim">Sign in</button>
         </div>
     </form>
 
-    <br clear="all"/>
+    <br clear="all" />
 
     <p>
         <small>

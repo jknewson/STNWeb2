@@ -66,7 +66,7 @@
                 <li><a ng-class="{active: activeMenu == 'report'}"  ui-sref="reporting.reportDash" ng-click="activeMenu = 'report'">Reporting</a></li>
                 <li><a ng-class="{active: activeMenu == 'settings'}"  ui-sref="settings" ng-click="activeMenu = 'settings'">Settings</a></li>
             </ul>
-            <div class="subnav-right" uib-dropdown is-open="status.isopen">
+            <div class="subnav-right" uib-dropdown is-open="status.isopen" ng-show="isAuth.val">
                 <button type="button" ng-click="goSearch = !goSearch" class="btn-subnav">
                     <span ng-show="!goSearch">Search <i class="ion-search"></i></span>
                     <span ng-show="goSearch">Cancel <i class="ion-close"></i></span>
@@ -83,7 +83,7 @@
             </div>
         </div>
 
-        <site-search  ng-show="goSearch"/>
+        <site-search ng-show="goSearch && isAuth.val"/>
 
     </div>
 
