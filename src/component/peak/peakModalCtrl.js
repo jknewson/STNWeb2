@@ -274,6 +274,8 @@
                         $scope.aPeak.peak_stage = h.elev_ft;
                         $scope.aPeak.vdatum_id = h.vdatum_id;
                         $scope.aPeak.height_above_gnd = h.height_above_gnd;
+                        var hIndex = $scope.eventSiteHWMs.indexOf(h);
+                        $scope.eventSiteHWMs[hIndex].selected = true;
                     }
                 });
             };
@@ -328,7 +330,7 @@
             /*'<div class="modal-body"><p>Are you sure you want to set this as the Primary Data file? Doing so will populate the Peak Date, Time and time zone, Stage, Vertical Datum and Height Above Ground.</p></div>' +
                         '<div class="modal-footer"><button class="btn btn-primary" ng-click="SetIt()">Set as Primary</button><button class="btn btn-primary" ng-click="cancel()">Cancel</button></div>',*/
             $scope.primaryDataFile = function (f) {
-                var setPrimHWM = $uibModal.open({
+                var setPrimeDF = $uibModal.open({
                     template: '<div class="modal-header"><h3 class="modal-title">Set as Primary</h3></div>' +
                         '<div class="modal-body"><p>Are you sure you want to set this as the Primary Data file?</p><p>(Coming soon: Script processing to populate the Peak date, time and time zone, Stage, Vertical Datum and Height above ground)</p></div>' +
                         '<div class="modal-footer"><button class="btn btn-primary" ng-click="SetIt()">Set as Primary</button><button class="btn btn-primary" ng-click="cancel()">Cancel</button></div>',
@@ -342,12 +344,16 @@
                     }],
                     size: 'sm'
                 });
-                setPrimHWM.result.then(function (setIt) {
+                setPrimeDF.result.then(function (setIt) {
                     if (setIt == 'Yes') {
                         //$scope.aPeak.peak_date.date = h.flag_date;
                         //$scope.aPeak.peak_stage = h.elev_ft;
                         //$scope.aPeak.vdatum_id = h.vdatum_id
                         //$scope.aPeak.height_above_gnd = h.height_above_gnd;
+                        var sens = $scope.eventSiteSensors.filter(function (s) { return s.instrument_id == f.instrument_id; })[0];
+                        var sIndex = $scope.eventSiteSensors.indexOf(sens);
+                        var fIndex = sens.files.indexOf(f);
+                        $scope.eventSiteSensors[sIndex].files[fIndex].selected = true;
                     }
                 });
             };
@@ -464,31 +470,60 @@
 
             //create Peak
             $scope.createPeak = function (valid) {
-                if (valid) {
-                    var createdPeak = {};
-                    //format to combine the date and time back together into 1 date object
-                    var datetime = new Date($scope.aPeak.peak_date.date.getFullYear(), $scope.aPeak.peak_date.date.getMonth(), $scope.aPeak.peak_date.date.getDate(),
-                       $scope.aPeak.peak_date.time.getHours(), $scope.aPeak.peak_date.time.getMinutes(), $scope.aPeak.peak_date.time.getSeconds());
-                    $scope.aPeak.peak_date = datetime;
-                    dealWithTimeStampb4Send(); //UTC or local?
+                //first determine that they did chooose a hwm or data file for interpretatoin
+                var isHwmChecked = false; var isDFChecked = false;
+                angular.forEach($scope.eventSiteHWMs, function (shwm) {
+                    if (shwm.selected) isHwmChecked = true;
+                });
+                angular.forEach($scope.eventSiteSensors, function (ssen) {
+                    for (var fI = 0; fI < ssen.files.length; fI++) {
+                        if (ssen.files[fI].selected) {
+                            isDFChecked = true;
+                            fI = ssen.files.length;
+                        }
+                    }
+                });
+                if (isHwmChecked || isDFChecked) {
+                    //they chose one, but is it valid
+                    if (valid) {
+                        var createdPeak = {};
+                        //format to combine the date and time back together into 1 date object
+                        var datetime = new Date($scope.aPeak.peak_date.date.getFullYear(), $scope.aPeak.peak_date.date.getMonth(), $scope.aPeak.peak_date.date.getDate(),
+                           $scope.aPeak.peak_date.time.getHours(), $scope.aPeak.peak_date.time.getMinutes(), $scope.aPeak.peak_date.time.getSeconds());
+                        $scope.aPeak.peak_date = datetime;
+                        dealWithTimeStampb4Send(); //UTC or local?
 
-                    $http.defaults.headers.common.Authorization = 'Basic ' + $cookies.get('STNCreds');
-                    $http.defaults.headers.common.Accept = 'application/json';
-                    PEAK.save($scope.aPeak).$promise.then(function (response) {
-                        createdPeak = response;
-                        //update the chosen hwms/data files with peak id
-                        for (var h = 0; h < $scope.chosenHWMList.length; h++) {
-                            $scope.chosenHWMList[h].peak_summary_id = response.peak_summary_id;
-                            HWM.update({ id: $scope.chosenHWMList[h].hwm_id }, $scope.chosenHWMList[h]).$promise;
-                        } //end foreach hwm save
-                        for (var d = 0; d < $scope.chosenDFList.length; d++) {
-                            $scope.chosenDFList[d].peak_summary_id = response.peak_summary_id;
-                            DATA_FILE.update({ id: $scope.chosenDFList[d].data_file_id }, $scope.chosenDFList[d]).$promise;
-                        } //end foreach hwm save
+                        $http.defaults.headers.common.Authorization = 'Basic ' + $cookies.get('STNCreds');
+                        $http.defaults.headers.common.Accept = 'application/json';
+                        PEAK.save($scope.aPeak).$promise.then(function (response) {
+                            createdPeak = response;
+                            //update the chosen hwms/data files with peak id
+                            for (var h = 0; h < $scope.chosenHWMList.length; h++) {
+                                $scope.chosenHWMList[h].peak_summary_id = response.peak_summary_id;
+                                HWM.update({ id: $scope.chosenHWMList[h].hwm_id }, $scope.chosenHWMList[h]).$promise;
+                            } //end foreach hwm save
+                            for (var d = 0; d < $scope.chosenDFList.length; d++) {
+                                $scope.chosenDFList[d].peak_summary_id = response.peak_summary_id;
+                                DATA_FILE.update({ id: $scope.chosenDFList[d].data_file_id }, $scope.chosenDFList[d]).$promise;
+                            } //end foreach hwm save
 
-                        toastr.success("Peak created");
-                        var sendBack = [createdPeak, 'created'];
-                        $uibModalInstance.close(sendBack);
+                            toastr.success("Peak created");
+                            var sendBack = [createdPeak, 'created'];
+                            $uibModalInstance.close(sendBack);
+                        });
+                    }
+                } else {
+                    //no data file or hwm checked as used, show modal
+                    var setOneModal = $uibModal.open({
+                        template: '<div class="modal-header"><h3 class="modal-title">Error</h3></div>' +
+                            '<div class="modal-body"><p>You must choose at least one HWM or Data File to use for interpretation for this Peak Summary.</p></div>' +
+                            '<div class="modal-footer"><button class="btn btn-primary" ng-click="Ok()">OK</button></div>',
+                        controller: ['$scope', '$uibModalInstance', function ($scope, $uibModalInstance) {
+                            $scope.Ok = function () {
+                                $uibModalInstance.dismiss();
+                            };
+                        }],
+                        size: 'sm'
                     });
                 }
             };//end create()
