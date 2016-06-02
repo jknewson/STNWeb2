@@ -326,6 +326,12 @@ a.disabled {
     background-color: #0000FF;
 }
 
+.stnSiteGray {
+    border-radius: 120px;
+    opacity: .75;
+    background-color: #292929	;
+}
+
 .newSiteIcon {
     border-radius: 120px;
     border-color: black;

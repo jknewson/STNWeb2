@@ -7,11 +7,18 @@
 
 
         <form name="siteSearchForm" class="map-filters-form">
+            <!--<div class="form-group col-md-6">-->
+                <!--<label>Events:</label>-->
+                <!--<span class="filters-site-title">-->
+                    <!--{{sessionEvent}}-->
+                <!--</span>-->
+            <!--</div>-->
+
             <div class="form-group col-md-6">
-                <label>Events:</label>
-                <span class="filters-site-title">
-                    {{sessionEvent}}
-                </span>
+                <div class="chx">
+                    <input type="checkbox" ng-model="checkboxModel.eventSitesOnly" ng-true-value="'1'" ng-false-value="'0'" />
+                </div>
+                <label class="checkbox-label">{{sessionEvent}} Sites Only</label>
             </div>
 
             <div class="form-group col-md-6">
