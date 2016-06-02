@@ -5923,7 +5923,7 @@
         <fieldset>
             <div class="modal-body">
                 <!-- Start SENSORs and HWMs used for Peak -->
-                <label class="col-md-4 text-center">Select Data used for Interpretation</label>
+                <label class="col-md-6 text-center">Select Data used for Interpretation</label>
                 <!-- HWM list-->
                 <div class="col-md-9" ng-repeat="h in eventSiteHWMs">
                     <input type="checkbox" class="col-sm-1 pull-left" ng-model="h.selected" ng-click="addHWM(h)" />
@@ -5943,6 +5943,7 @@
                     <button type="button" class="borderLess" tooltip-placement="top" uib-tooltip="Show Details" ng-click="showSensorDetails(s)"><span class="glyphicon glyphicon-info-sign"></span></button>
                     <button ng-if="s.NeedDF" type="button" class="borderLess" tooltip-placement="top" uib-tooltip="Incomplete" ng-click="showIncompleteDFInfo()"><span class="glyphicon glyphicon-alert"></span></button>
                     <button ng-if="!s.isRetrieved" type="button" class="borderLess" tooltip-placement="top" uib-tooltip="Needs to be Retrieved" ng-click="showRetrieveInfo()"><span class="needRetrieve glyphicon glyphicon-alert"></span></button>
+                    <!-- Sensor FILES list -->
                     <div ng-repeat="f in s.files | where:{filetype_id: 2}">
                         <span class="col-sm-1"> </span>
                         <input type="checkbox" class="pull-left col-sm-1" ng-model="f.selected" ng-click="addDataFile(f)" />
@@ -6065,8 +6066,8 @@
                     </div>
                 </div>
                 <!--</div>
-                </div>
-                </div>-->
+            </div>
+            </div>-->
                 <!-- End SENSORs and HWMs used for Peak -->
 
 
