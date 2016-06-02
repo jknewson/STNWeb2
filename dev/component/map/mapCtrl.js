@@ -18,7 +18,7 @@
                     if (filteredSitesArray.length > 0) {
                         $scope.paths = {};
                         $scope.selectedMarkerNum = 0;
-                        onSiteComplete(filteredSitesArray);
+                        showEventSites(filteredSitesArray);
                     } else {
                         //toastr.options({"positionClass": "toast-bottom-right"});
                         toastr.options.positionClass = "toast-bottom-right";
@@ -31,6 +31,11 @@
                         type: 'div',
                         iconSize: [10, 10],
                         className: 'stnSiteIcon'
+                    },
+                    stnGray: {
+                        type: 'div',
+                        iconSize: [10, 10],
+                        className: 'stnSiteGray'
                     },
                     newSite: {
                         type: 'div',
@@ -87,16 +92,8 @@
                     })
                 };
                 //creates the markers on the map after getting JSON from STN web services call
-                var onSiteComplete = function(response) {
-           //         console.table(response);
-                    //sites array fo $http.get method
-                    //var sitesArray = response.data.Sites;
-                    //sitesArray for SITE factory method
+                var showEventSites = function(response) {
                     var sitesArray = response;
-          //          console.table(sitesArray);
-                    //$http.get method
-                    //$scope.sites = response.data;
-                    //SITE factory method
                     $scope.sites = sitesArray;
                     $scope.markers = [];
                     $scope.markersLatLngArray = [];
@@ -117,6 +114,7 @@
                                 title: "STN Site",
                                 icon: icons.stn
                             });
+                            //need this 'markersLatLngArray' for the zoom to bounds - requires simple lat/lng array to work
                             $scope.markersLatLngArray.push([a.latitude_dd, a.longitude_dd]);
                         }
 
@@ -160,6 +158,7 @@
                     /////////////end rando keys method//////////////////////////////////////////
 
                 };
+
                 $scope.pathsObj = {
                     circleMarker: {
                         type: "circleMarker",
@@ -233,17 +232,18 @@
                         spinnerService.show("mapSpinner");
                         $scope.selectedMarkerNum = 0;
                         $scope.paths = {};
-                        //bloew gets sites using simple angular $http service
+                        //below gets sites using simple angular $http service
                         // $scope.sitesPromise = $http.get('https://stntest.wim.usgs.gov/STNServices2/Events/' + evID + '/Sites.json')
-                        //                     .then(onSiteComplete, onError);
+                        //                     .then(showEventSites, onError);
                         //below gets sites using the SITE 'factory'
                         $scope.sitesPromise = EVENT.getEventSites({id: evID},// SITE.getAll({  Event: evID},
                         function success(response) {
                             spinnerService.hide("mapSpinner");
-                            onSiteComplete(response);
+                            showEventSites(response);
                         }, function error(errorResponse) {
                                 $scope.error = "Could not fetch sites";
                         });
+
                     } else {
 
                     }
@@ -321,6 +321,47 @@
                        alert("Please click a location on the map to create a site this way.");
                    }
                 };
+
+                // $scope.showAllSites = function () {
+                //     spinnerService.show("mapSpinner");
+                //     ////////////////////////////testing full sites performance/////////////////////////////////////////
+                //     SITE.getAll(
+                //         function success(response) {
+                //
+                //             var allSitesArray = response;
+                //             $scope.allSites = allSitesArray;
+                //             //$scope.markers = [];
+                //             //$scope.markersLatLngArray = [];
+                //
+                //             /////controls method///////////////////////////////////////////////////////////////////////////////
+                //             leafletData.getDirectiveControls().then(function (controls) {
+                //                 //controls.markers.create({}, $scope.markers);
+                //
+                //                 var markers = [];
+                //                 for (var i = 0; i < allSitesArray.length; i++) {
+                //                     var a = allSitesArray[i];
+                //                     markers.push({
+                //                         layer: 'stnSitesAll',
+                //                         lat: a.latitude_dd,
+                //                         lng: a.longitude_dd,
+                //                         site_id: a.site_id,
+                //                         title: "STN Site",
+                //                         icon: icons.stn
+                //                     });
+                //                     //$scope.markersLatLngArray.push([a.latitude_dd, a.longitude_dd]);
+                //                 }
+                //
+                //                 controls.markers.create(markers, $scope.markers);
+                //                 $scope.markers = markers;
+                //                 spinnerService.hide("mapSpinner");
+                //
+                //             }, function error(errorResponse) {
+                //                 $scope.error = "Could not fetch sites";
+                //             });
+                //
+                //         });
+                //
+                // };
 
                 //get all STN sites
                 //$http.get('https://stn.wim.usgs.gov/STNServices/Sites/points.json')
@@ -454,6 +495,11 @@
                             stnSites: {
                                 type: 'group',
                                 name:'STN Sites',
+                                visible: true
+                            },
+                            stnSitesAll: {
+                                type: 'group',
+                                name:'STN Sites All',
                                 visible: true
                             },
                             newSite : {

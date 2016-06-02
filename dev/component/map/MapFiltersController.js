@@ -16,51 +16,91 @@
             $scope.chosenStates = []; //used to join each abbrev to pass to call
             $scope.siteResponse = false;
             $scope.checkboxModel = {
-                hwmOnly: 0,
-                senOnly: 0,
-                rdgOnly: 0,
-                opDefined: 0
+                eventSitesOnly: '1',
+                hwmOnly: '0',
+                senOnly: '0',
+                rdgOnly: '0',
+                opDefined: '0'
             };
 
             $scope.searchSites = function () {
                 //$rootScope.stateIsLoading.showLoading = true; // loading..
                 //store search in case they leave and click back
                 spinnerService.show("mapSpinner");
-                var stateString = $scope.chosenStates.join();
-                $scope.siteResponse = false;
-                $scope.siteList = [];
-                var evID = $cookies.get('SessionEventID') !== null && $cookies.get('SessionEventID') !== undefined ? $cookies.get('SessionEventID') : 0;
-                $rootScope.searchParams = {
-                    event: evID,
-                    state: $scope.chosenStates,
-                    SensorType: $scope.Chosen.sensor,
-                    NetworkName: $scope.Chosen.network,
-                    HWMOnly: $scope.checkboxModel.hwmOnly,
-                    SensorOnly: $scope.checkboxModel.senOnly,
-                    RDGOnly: $scope.checkboxModel.rdgOnly,
-                    OPDefined: $scope.checkboxModel.opDefined
-                };
-                SITE.getFilteredSites({
-                        Event: evID,
-                        State: stateString,
+
+                if ($scope.checkboxModel.eventSitesOnly === "1") {
+                    var stateString = $scope.chosenStates.join();
+                    $scope.siteResponse = false;
+                    $scope.siteList = [];
+                    var evID = $cookies.get('SessionEventID') !== null && $cookies.get('SessionEventID') !== undefined ? $cookies.get('SessionEventID') : 0;
+                    $rootScope.searchParams = {
+                        event: evID,
+                        state: $scope.chosenStates,
                         SensorType: $scope.Chosen.sensor,
                         NetworkName: $scope.Chosen.network,
                         HWMOnly: $scope.checkboxModel.hwmOnly,
                         SensorOnly: $scope.checkboxModel.senOnly,
                         RDGOnly: $scope.checkboxModel.rdgOnly,
                         OPDefined: $scope.checkboxModel.opDefined
-                    },
-                    function success(response) {
-                        // $scope.siteList = response;
-                        // $scope.siteResponse = true;
-                        spinnerService.hide("mapSpinner");
-                        //$rootScope.stateIsLoading.showLoading = false; // loading..
-                        Map_Filter.setFilteredSites(response);
+                    };
+                    SITE.getFilteredSites({
+                            Event: evID,
+                            State: stateString,
+                            SensorType: $scope.Chosen.sensor,
+                            NetworkName: $scope.Chosen.network,
+                            HWMOnly: $scope.checkboxModel.hwmOnly,
+                            SensorOnly: $scope.checkboxModel.senOnly,
+                            RDGOnly: $scope.checkboxModel.rdgOnly,
+                            OPDefined: $scope.checkboxModel.opDefined
+                        },
+                        function success(response) {
+                            // $scope.siteList = response;
+                            // $scope.siteResponse = true;
+                            spinnerService.hide("mapSpinner");
+                            //$rootScope.stateIsLoading.showLoading = false; // loading..
+                            Map_Filter.setFilteredSites(response);
 
-                    }, function error(errorResponse) {
-                        $rootScope.stateIsLoading.showLoading = false; // loading..
-                        alert("Error: " + errorResponse.statusText);
-                    });
+                        }, function error(errorResponse) {
+                            $rootScope.stateIsLoading.showLoading = false; // loading..
+                            alert("Error: " + errorResponse.statusText);
+                        });
+                } else if ($scope.checkboxModel.eventSitesOnly === "0"){
+                    var stateString = $scope.chosenStates.join();
+                    $scope.siteResponse = false;
+                    $scope.siteList = [];
+
+                    $rootScope.searchParams = {
+                        state: $scope.chosenStates,
+                        SensorType: $scope.Chosen.sensor,
+                        NetworkName: $scope.Chosen.network,
+                        HWMOnly: $scope.checkboxModel.hwmOnly,
+                        SensorOnly: $scope.checkboxModel.senOnly,
+                        RDGOnly: $scope.checkboxModel.rdgOnly,
+                        OPDefined: $scope.checkboxModel.opDefined
+                    };
+                    SITE.getFilteredSites({
+                            State: stateString,
+                            SensorType: $scope.Chosen.sensor,
+                            NetworkName: $scope.Chosen.network,
+                            HWMOnly: $scope.checkboxModel.hwmOnly,
+                            SensorOnly: $scope.checkboxModel.senOnly,
+                            RDGOnly: $scope.checkboxModel.rdgOnly,
+                            OPDefined: $scope.checkboxModel.opDefined
+                        },
+                        function success(response) {
+                            // $scope.siteList = response;
+                            // $scope.siteResponse = true;
+                            spinnerService.hide("mapSpinner");
+                            //$rootScope.stateIsLoading.showLoading = false; // loading..
+                            Map_Filter.setFilteredSites(response);
+
+                        }, function error(errorResponse) {
+                            $rootScope.stateIsLoading.showLoading = false; // loading..
+                            alert("Error: " + errorResponse.statusText);
+                        });
+
+
+                }
             };//end searchSites click action
 
             //add each state to an array to be joined in the GET
@@ -80,6 +120,7 @@
             $scope.clearFilters = function () {
                 spinnerService.show("mapSpinner");
                 $scope.checkboxModel = {
+                    eventSitesOnly: 1,
                     hwmOnly: 0,
                     senOnly: 0,
                     rdgOnly: 0,
