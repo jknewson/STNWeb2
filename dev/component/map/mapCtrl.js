@@ -246,8 +246,21 @@
 
                     } else {
 
+                        toastr.options.positionClass = "toast-top-center";
+                        toastr.options.timeOut = "8000";
+                        toastr.options.closeButton = true;
+                        toastr.warning("No sites are showing because you have no filters applied. Please select at least one search parameter.", "Map Filters");
+                        return;
+
                     }
                 });
+
+                //watch for the session event to change and update
+                $scope.$watch(function () { return $cookies.get('SessionEventName'); }, function (newValue) {
+                    $scope.sessionEventName = newValue !== undefined ? newValue : "All Events";
+                    $scope.sessionEventExists = $scope.sessionEventName != "All Events" ? true : false;
+                });
+
                 var onError = function(reason){
                     $scope.error = "Could not fetch sites";
                 };
@@ -530,7 +543,7 @@
                             ahps : {
                                 name: "AHPS Gages",
                                 type: "agsFeature",
-                                url : "http://idpgis.ncep.noaa.gov/arcgis/rest/services/NWS_Observations/ahps_riv_gauges/MapServer/0",
+                                url : "https://idpgis.ncep.noaa.gov/arcgis/rest/services/NWS_Observations/ahps_riv_gauges/MapServer/0",
                                 visible: false,
                                 layerOptions : {
                                     //layers: [0],
@@ -542,7 +555,7 @@
                                     },
                                     onEachFeature: function(feature, layer) {
                                         //layer.bindPopup("USGS ID: " + feature.properties.Name);
-                                        var graphURL = "http://water.weather.gov/resources/hydrographs/" + feature.properties.gaugelid.toLowerCase() + "_hg.png";
+                                        var graphURL = "https://water.weather.gov/resources/hydrographs/" + feature.properties.gaugelid.toLowerCase() + "_hg.png";
                                         //layer.bindPopup("<b>Gage ID: </b>" + feature.properties.gaugelid + "</br><b>Location: </b>" + feature.properties.location + "</br><b>Waterbody: </b>" + feature.properties.waterbody + "</br><a target='_blank' href='"+ feature.properties.url + "'><img title='Click for details page' width=300 src='" + graphURL +"'/></a>");
                                         layer.bindPopup("<b>Gage ID: </b>" + feature.properties.gaugelid + "</br><a target='_blank' href='"+ feature.properties.url + "'><img title='Click for details page' width=300 src='" + graphURL +"'/></a>");
 
@@ -552,7 +565,7 @@
                             radar : {
                                 name: "Weather Radar",
                                 type: "agsDynamic",
-                                url : "http://idpgis.ncep.noaa.gov/arcgis/rest/services/NWS_Observations/radar_base_reflectivity/MapServer",
+                                url : "https://idpgis.ncep.noaa.gov/arcgis/rest/services/NWS_Observations/radar_base_reflectivity/MapServer",
                                 visible: false,
                                 layerOptions : {
                                     layers: [0],
@@ -562,7 +575,7 @@
                             watchWarn : {
                                 name: "NWS Watches & Warnings",
                                 type: "agsDynamic",
-                                url : "http://idpgis.ncep.noaa.gov/arcgis/rest/services/NWS_Forecasts_Guidance_Warnings/watch_warn_adv/MapServer",
+                                url : "https://idpgis.ncep.noaa.gov/arcgis/rest/services/NWS_Forecasts_Guidance_Warnings/watch_warn_adv/MapServer",
                                 visible: false,
                                 layerOptions : {
                                     layers: [1],

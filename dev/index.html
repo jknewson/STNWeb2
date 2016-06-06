@@ -99,11 +99,11 @@
     <script src="component/STNCtrl.js"></script>
     <script src="shared/directives/STNDirectives.js"></script>
     <script src="component/siteSearch/siteSearchCtrl.js"></script>
-    <script src="component/settings/settingsCtrl.js"></script>
     <script src="component/site/siteModalCtrl.js"></script>
     <script src="component/site/siteMapCtrl.js"></script>
     <script src="component/site/siteCtrl.js"></script>
     <script src="component/site/quickCreateCtrl.js"></script>
+    <script src="component/settings/settingsCtrl.js"></script>
     <script src="component/sensor/sensorModalCtrl.js"></script>
     <script src="component/sensor/sensorCtrl.js"></script>
     <script src="component/resources/resourcesCtrl.js"></script>
@@ -130,15 +130,15 @@
     <script src="component/hwm/quickHWMCtrl.js"></script>
     <script src="component/hwm/hwmModalCtrl.js"></script>
     <script src="component/hwm/hwmCtrl.js"></script>
-    <script src="component/help/helpCtrl.js"></script>
     <script src="component/home/homeCtrl.js"></script>
-    <script src="component/file/fileUploadCtrl.js"></script>
-    <script src="component/file/fileModalCtrl.js"></script>
-    <script src="component/file/fileCtrl.js"></script>
+    <script src="component/help/helpCtrl.js"></script>
     <script src="component/event/eventSessionModalCtrl.js"></script>
     <script src="component/event/eventSessionCtrl.js"></script>
     <script src="component/event/eventInfoCtrl.js"></script>
     <script src="component/event/eventCtrl.js"></script>
+    <script src="component/file/fileUploadCtrl.js"></script>
+    <script src="component/file/fileModalCtrl.js"></script>
+    <script src="component/file/fileCtrl.js"></script>
     <script src="component/approval/approvalCtrl.js"></script>
     <script src="services/STNResource.js"></script>
     <script src="services/businessServices.js"></script>
@@ -194,7 +194,7 @@
                 <li><a ng-class="{active: activeMenu == 'report'}"  ui-sref="reporting.reportDash" ng-click="activeMenu = 'report'">Reporting</a></li>
                 <li><a ng-class="{active: activeMenu == 'settings'}"  ui-sref="settings" ng-click="activeMenu = 'settings'">Settings</a></li>
             </ul>
-            <div class="subnav-right" uib-dropdown is-open="status.isopen">
+            <div class="subnav-right" uib-dropdown is-open="status.isopen" ng-show="isAuth.val">
                 <button type="button" ng-click="goSearch = !goSearch" class="btn-subnav">
                     <span ng-show="!goSearch">Search <i class="ion-search"></i></span>
                     <span ng-show="goSearch">Cancel <i class="ion-close"></i></span>
@@ -211,7 +211,7 @@
             </div>
         </div>
 
-        <site-search  ng-show="goSearch"/>
+        <site-search ng-show="goSearch && isAuth.val"/>
 
     </div>
 
