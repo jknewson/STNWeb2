@@ -4353,7 +4353,7 @@
                         <!-- In feet above (detail) -->
                         <div ng-if="OPsPresent && view.DEPval == 'detail'" class="col-md-12">
                             <div class="col-md-4 col-md-offset-1"><label>In feet above:</label></div>
-                            <div class="col-md-6"><span>{{DeployedSensorStat.vdatumName}}</span></div>
+                            <div class="col-md-6"><span>{{DeployedSensorStat.vdatum}}</span></div>
                         </div>
                         <!-- In feet above (edit) -->
                         <div ng-if="OPsPresent && view.DEPval == 'edit'" class="form-group">
@@ -4580,12 +4580,12 @@
                             </div>
                         </div>
 
-                        <!-- Retrieve Time: *(detail) -->
+                        <!-- Retrieve Date: *(detail) -->
                         <div class="col-md-12" ng-if="view.RETval == 'detail'">
                             <div class="col-md-4 col-md-offset-1"><label>Retrieve Date:</label></div>
                             <div class="col-md-6"><span>{{RetrievedSensorStat.time_stamp | date: 'MM/dd/yyyy hh:mm a'}}</span></div>
                         </div>
-                        <!-- Retrieve Time: *(edit) -->
+                        <!-- Retrieve Date: *(edit) -->
                         <div class="form-group required" ng-if="view.RETval == 'edit'">
                             <label class="col-md-4 col-md-offset-1 control-label topPad">Retrieve Date:</label>
                             <div class="col-md-6">
