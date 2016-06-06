@@ -12,7 +12,10 @@
             $scope.states = stateList;
             $scope.senTypes = sensorTypes;
             $scope.netNames = networkNames;
-            $scope.Chosen = {};
+            $scope.Chosen = {
+                network: null,
+                sensor: null
+            };
             $scope.chosenStates = []; //used to join each abbrev to pass to call
             $scope.siteResponse = false;
             $scope.checkboxModel = {
@@ -28,7 +31,7 @@
                 //store search in case they leave and click back
                 spinnerService.show("mapSpinner");
 
-                if ($scope.checkboxModel.eventSitesOnly === "1") {
+                if ($scope.checkboxModel.eventSitesOnly === "1" && $scope.sessionEventExists == true ) {
                     var stateString = $scope.chosenStates.join();
                     $scope.siteResponse = false;
                     $scope.siteList = [];
@@ -64,7 +67,9 @@
                             $rootScope.stateIsLoading.showLoading = false; // loading..
                             alert("Error: " + errorResponse.statusText);
                         });
-                } else if ($scope.checkboxModel.eventSitesOnly === "0"){
+                } else if ($scope.checkboxModel.eventSitesOnly === "0" || $scope.sessionEventExists == false){
+
+
                     var stateString = $scope.chosenStates.join();
                     $scope.siteResponse = false;
                     $scope.siteList = [];
@@ -78,6 +83,15 @@
                         RDGOnly: $scope.checkboxModel.rdgOnly,
                         OPDefined: $scope.checkboxModel.opDefined
                     };
+
+                    var sp = $rootScope.searchParams;
+                    if (sp.HWMOnly === "0" && sp.NetworkName == null && sp.OPDefined === "0" && sp.RDGOnly === "0" && sp.SensorOnly === "0" && sp.SensorType === null && sp.state.length == 0) {
+                        spinnerService.hide("mapSpinner");
+                        toastr.options.positionClass = "toast-bottom-right";
+                        toastr.warning("Please select at least one search parameter.", "Map Filters");
+                        return;
+                    }
+
                     SITE.getFilteredSites({
                             State: stateString,
                             SensorType: $scope.Chosen.sensor,
