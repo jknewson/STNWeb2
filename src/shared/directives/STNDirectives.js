@@ -149,8 +149,6 @@
         };
     });
 
-
-
     //This directive allows us to pass a function in on an enter key to do what we want.
     STNControllers.directive('ngEnter', function () {
         return function (scope, element, attrs) {
