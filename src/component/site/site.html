@@ -1706,7 +1706,7 @@
                             </span>
                         </div>
                     </div>
-
+                    <br clear="all" /><hr />
                     <!-- Surveyed Date: -->
                     <div class="form-group">
                         <label class="col-md-4 control-label" for="survey_date">Surveyed Date:</label>
@@ -1770,7 +1770,7 @@
 
                     <!-- Uncertainty: -->
                     <div class="form-group">
-                        <label class="col-md-4 control-label" for="uncertainty">Uncertainty:</label>
+                        <label class="col-md-4 control-label" for="uncertainty">Survey Uncertainty:</label>
                         <div class="col-md-6">
                             <div class="col-md-12" style="margin-bottom:5px;padding-left:0">
                                 <div class="col-md-3" style="padding-left: 0;"><input class="form-control" ng-keypress="isNum($event)" ng-model="aHWM.uncertainty" type="text" /></div>
@@ -2135,7 +2135,7 @@
                                     </span>
                                 </div>
                             </div>
-
+                            <br clear="all" /><hr />
                             <!-- Surveyed Date: (details) -->
                             <div class="col-md-12" ng-if="view.HWMval== 'detail'">
                                 <div class="col-md-4"><label>Surveyed Date:</label></div>
@@ -2146,17 +2146,15 @@
                             <!-- Surveyed Date: (edit) -->
                             <div class="form-group" ng-class="{'has-error':HWMEditForm.survey_date.$invalid && HWMEditForm.survey_date.$dirty}" ng-if="view.HWMval== 'edit'">
                                 <label class="col-md-4 control-label" for="survey_date">Surveyed Date:</label>
-                                <div class="col-md-3">
-                                    <div class="col-md-3 input-group">
-                                        <input show-weeks="false" class="form-control dateInputStyle" type="date" id="survey_date" name="sd" uib-datepicker-popup="MM/dd/yyyy" is-open="datepickrs.sd" ng-model="hwmCopy.survey_date" />
-                                        <span class="input-group-btn">
-                                            <button class="btn btn-default" ng-click="open($event, 'sd')" type="button">
-                                                <i class="glyphicon glyphicon-calendar" />
-                                            </button>
-                                        </span>
-                                    </div>
+                                <div class="col-md-3 input-group" style="padding-right:14px;padding-left:14px">
+                                    <input show-weeks="false" class="form-control dateInputStyle" type="date" id="survey_date" name="sd" uib-datepicker-popup="MM/dd/yyyy" is-open="datepickrs.sd" ng-model="hwmCopy.survey_date" />
+                                    <span class="input-group-btn">
+                                        <button class="btn btn-default" ng-click="open($event, 'sd')" type="button">
+                                            <i class="glyphicon glyphicon-calendar" />
+                                        </button>
+                                    </span>
                                 </div>
-                                <button type="button" class="col-md-3 borderLess pull-right" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Elevation required below if survey date is populated.">
+                                <button type="button" class="col-md-2 borderLess pull-right" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Elevation required below if survey date is populated.">
                                     <span class="glyphicon glyphicon-question-sign"></span>
                                 </button>
                             </div>
@@ -2222,12 +2220,12 @@
 
                             <!-- Uncertainty: (details) -->
                             <div class="col-md-12" ng-if="view.HWMval== 'detail'">
-                                <div class="col-md-4"><label>Uncertainty:</label></div>
+                                <div class="col-md-4"><label>Survey Uncertainty:</label></div>
                                 <div class="col-md-6"><span>{{aHWM.uncertainty || '---'}}<span ng-show="aHWM.uncertainty"> ft.</span></span></div>
                             </div>
                             <!-- Uncertainty: (edit) -->
                             <div class="form-group" ng-if="view.HWMval== 'edit'">
-                                <label class="col-md-4 control-label" for="uncertainty">Uncertainty:</label>
+                                <label class="col-md-4 control-label" for="uncertainty">Survey Uncertainty:</label>
                                 <div class="col-md-6">
                                     <div class="col-md-12" style="margin-bottom:5px;padding-left:0">
                                         <div class="col-md-3" style="padding-left: 0;"><input class="form-control" ng-keypress="isNum($event)" ng-model="hwmCopy.uncertainty" type="text" /></div>
