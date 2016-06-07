@@ -160,7 +160,42 @@
                         $rootScope.stateIsLoading.showLoading = false; // loading..
                     });
                 };//end showRetrieveModal
-
+                $scope.showProposedSensor = function (proposedSensorClicked) {                   
+                    var propIndex = $scope.SiteSensors.indexOf(proposedSensorClicked);
+                    var propModalInstance = $uibModal.open({
+                        templateUrl: 'ProposedSensor.html',
+                        controller: ['$scope', '$uibModalInstance', 'proposedSensor', function($scope, $uibModalInstance, proposedSensor){
+                            $scope.thisProposedSensor = proposedSensor;
+                            $scope.cancel = function () {
+                                $uibModalInstance.dismiss();
+                            };
+                            $scope.deleteProposed = function () {
+                                $uibModalInstance.close('delete');
+                            };
+                        }],
+                        size: 'sm',
+                        backdrop: 'static',
+                        keyboard: false,
+                        windowClass: 'rep-dialog',
+                        resolve: {
+                            proposedSensor: function () {
+                                return proposedSensorClicked;
+                            }
+                        }
+                    });
+                    propModalInstance.result.then(function (d) {
+                        if (d == 'delete') {
+                            $http.defaults.headers.common.Authorization = 'Basic ' + $cookies.get('STNCreds');
+                            INSTRUMENT.delete({ id: proposedSensorClicked.instrument_id }).$promise.then(function () {
+                                thisSiteSensors.splice(propIndex, 1);
+                                $scope.SiteSensors = thisSiteSensors;
+                                Instrument_Service.setAllSiteSensors($scope.SiteSensors);
+                            }, function (errorResponse) {
+                                toastr.error("Error deleting proposed sensor. Refresh and try again. Error: " + errorResponse.statusText);
+                            });
+                        }
+                    });
+                }
                 //want to deploy a proposed sensor, edit a deployed sensor or create a new deployed sensor
                 $scope.showSensorModal = function (sensorClicked) {
                     var passAllLists = [allSensorTypes, allSensorBrands, allHousingTypes, allEvents, SensFileTypes, allVertDatums];

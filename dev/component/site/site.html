@@ -2523,6 +2523,43 @@
     </div> <!-- end modal-footer -->
 </script>
 
+<!-- MODAL for viewing proposed sensor-->
+<script type="text/ng-template" id="ProposedSensor.html">
+    <div class="modal-header">
+        <h3 class="modal-title">Proposed Sensor<button class="close" type="button" ng-click="cancel()" aria-hidden="true" style="color:gray;">&times;</button></h3>
+    </div>
+    <form class="form-horizontal">
+        <fieldset>
+            <div class="modal-body">
+                <!--Sensor Type-->
+                <div class="col-md-12">
+                    <div class="col-md-4"><label>Sensor Type:</label></div>
+                    <div class="col-md-7"><span>{{thisProposedSensor.sensorType}}</span></div>
+                </div>
+
+                <!--Deployment Type-->
+                <div class="col-md-12">
+                    <div class="col-md-4"><label>Deployment Type:</label></div>
+                    <div class="col-md-7"><span>{{thisProposedSensor.deploymentType || ' '}}</span></div>
+                </div>
+            <br clear="all"/>
+            </div><!-- end modal-body -->
+
+            <div class="modal-footer">
+                <div class="form-group">
+                    <div class="col-md-12">
+                        <span><button type="button" class="btn btn-primary" ng-click="cancel()"><span>Close</span></button></span>
+                        <span><button type="button" class="btn btn-warning" ng-click="deleteProposed()"><span>Delete Proposed Sensor</span></button></span>
+                    </div>
+                </div>
+            </div>
+        </fieldset>
+    </form>
+
+    
+    
+</script>
+
 <!-- MODAL for Deploying Sensor-->
 <script type="text/ng-template" id="Sensormodal.html">
     <div class="modal-header">
@@ -3099,7 +3136,7 @@
                                     </table>
                                 </div>
                             </div>
-                            
+
                         </div><!--end formgroup for Tapedowns-->
 
                         <br clear="all" />
@@ -3484,7 +3521,7 @@
                                     <button style="margin-top:4%" type="button" class="col-md-1 borderLess pull-left" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Used by the processing scripts to clip irrelavent data.">
                                         <span class="glyphicon glyphicon-question-sign"></span>
                                     </button>
-                                </div>
+                                </div>                                
 
                                 <!-- Good Data End Time* (data)-->
                                 <div ng-if="aFile.filetype_id === 2" class="form-group required" ng-class="{'has-error':DepSenFILEForm.good_end.$invalid && DepSenFILEForm.good_end.$dirty}" style="margin:0;padding:0">
@@ -3493,11 +3530,13 @@
                                         <datetimepicker ng-model="datafile.good_end" show-meridian="true" date-format="MM/dd/yyyy" readonly-date="false" date-options="dateOptions"
                                                         hidden-time="false" hidden-date="false" show-spinners="true" date-opened="datepickrs.dfge" date-ng-click="open($event, 'dfge')" required>
                                         </datetimepicker>
+
                                     </div>
                                     <button style="margin-top:4%" type="button" class="col-md-1 borderLess pull-left" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Used by the processing scripts to clip irrelavent data.">
                                         <span class="glyphicon glyphicon-question-sign"></span>
                                     </button>
                                 </div>
+                                <span class="error" ng-show="DepSenFILEForm.good_end.$error.higherThan">Max cannot be lower than min.</span>
 
                                 <!-- Timezone*: -->
                                 <div ng-if="aFile.filetype_id === 2" class="form-group required" style="margin:0;padding:0">
@@ -3564,7 +3603,7 @@
                                 <div ng-if="aFile.file_id !== undefined && aFile.filetype_id !== 8" class="form-group" style="margin:0;padding:0">
                                     <label class="col-md-4 control-label">Download File:</label>
                                     <div class="col-md-6" style="padding-top: 12px;">
-                                       <a target="_blank" title="Download file" ng-href="{{serverURL}}/Files/{{aFile.file_id}}/Item">
+                                        <a target="_blank" title="Download file" ng-href="{{serverURL}}/Files/{{aFile.file_id}}/Item">
                                             <span class="glyphicon glyphicon-download"></span>
                                         </a>
                                         <img ng-if="aFile.filetype_id === 1" style="height:80px;" ng-src="{{serverURL}}/Files/{{aFile.file_id}}/Item" />
@@ -3841,7 +3880,7 @@
                         <div class="col-md-6">{{depSensStatus.VDatum || '---'}}</div>
                     </div>
                     <hr class="col-md-9 col-md-offset-1" />
-                </div>                
+                </div>
 
                 <!-- Vented (only if Sensor Type is Pressure Transducer)-->
                 <div class="col-md-12" ng-show="aSensor.sensor_type_id == 1">
@@ -4353,7 +4392,7 @@
                         <!-- In feet above (detail) -->
                         <div ng-if="OPsPresent && view.DEPval == 'detail'" class="col-md-12">
                             <div class="col-md-4 col-md-offset-1"><label>In feet above:</label></div>
-                            <div class="col-md-6"><span>{{DeployedSensorStat.vdatumName}}</span></div>
+                            <div class="col-md-6"><span>{{DeployedSensorStat.vdatum}}</span></div>
                         </div>
                         <!-- In feet above (edit) -->
                         <div ng-if="OPsPresent && view.DEPval == 'edit'" class="form-group">
@@ -4580,12 +4619,12 @@
                             </div>
                         </div>
 
-                        <!-- Retrieve Time: *(detail) -->
+                        <!-- Retrieve Date: *(detail) -->
                         <div class="col-md-12" ng-if="view.RETval == 'detail'">
                             <div class="col-md-4 col-md-offset-1"><label>Retrieve Date:</label></div>
                             <div class="col-md-6"><span>{{RetrievedSensorStat.time_stamp | date: 'MM/dd/yyyy hh:mm a'}}</span></div>
                         </div>
-                        <!-- Retrieve Time: *(edit) -->
+                        <!-- Retrieve Date: *(edit) -->
                         <div class="form-group required" ng-if="view.RETval == 'edit'">
                             <label class="col-md-4 col-md-offset-1 control-label topPad">Retrieve Date:</label>
                             <div class="col-md-6">
@@ -6066,8 +6105,8 @@
                     </div>
                 </div>
                 <!--</div>
-            </div>
-            </div>-->
+                </div>
+                </div>-->
                 <!-- End SENSORs and HWMs used for Peak -->
 
 

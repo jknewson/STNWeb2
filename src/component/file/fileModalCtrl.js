@@ -178,6 +178,28 @@
 
             //update this file
             $scope.save = function (valid) {
+                if ($scope.fileCopy.filetype_id == 2) {
+                    //make sure end date is after start date
+                    var s = $scope.dfCopy.good_start;//need to get dep status date in same format as retrieved to compare
+                    var e = $scope.dfCopy.good_end; //stupid comma in there making it not the same
+                    if (new Date(e) < new Date(s)) {
+                        valid = false;
+                        var fixDate = $uibModal.open({
+                            template: '<div class="modal-header"><h3 class="modal-title">Error</h3></div>' +
+                                '<div class="modal-body"><p>The good end date must be after the good start date.</p></div>' +
+                                '<div class="modal-footer"><button class="btn btn-primary" ng-enter="ok()" ng-click="ok()">OK</button></div>',
+                            controller: ['$scope', '$uibModalInstance', function ($scope, $uibModalInstance) {
+                                $scope.ok = function () {
+                                    $uibModalInstance.close();
+                                };
+                            }],
+                            size: 'sm'
+                        });
+                        fixDate.result.then(function () {
+                            valid = false;
+                        });
+                    }
+                }
                 if (valid) {
                     $scope.sFileIsUploading = true;
                     //only photo or other file type (no data file here)

@@ -145,8 +145,30 @@
            };
             //create this new file
            $scope.createFile = function (valid) {
+               if ($scope.aFile.filetype_id == 2) {
+                   //make sure end date is after start date
+                   var s = $scope.datafile.good_start;//need to get dep status date in same format as retrieved to compare
+                   var e = $scope.datafile.good_end; //stupid comma in there making it not the same
+                   if (new Date(e) < new Date(s)) {
+                       valid = false;
+                       var fixDate = $uibModal.open({
+                           template: '<div class="modal-header"><h3 class="modal-title">Error</h3></div>' +
+                               '<div class="modal-body"><p>The good end date must be after the good start date.</p></div>' +
+                               '<div class="modal-footer"><button class="btn btn-primary" ng-enter="ok()" ng-click="ok()">OK</button></div>',
+                           controller: ['$scope', '$uibModalInstance', function ($scope, $uibModalInstance) {
+                               $scope.ok = function () {
+                                   $uibModalInstance.close();
+                               };
+                           }],
+                           size: 'sm'
+                       });
+                       fixDate.result.then(function () {
+                           valid = false;
+                       });
+                   }
+               }
                if (valid) {
-               $scope.depSenfileIsUploading = true; //Loading...
+                   $scope.depSenfileIsUploading = true; //Loading...
                    $http.defaults.headers.common.Authorization = 'Basic ' + $cookies.get('STNCreds');
                    $http.defaults.headers.common.Accept = 'application/json';
                    //post source or datafile first to get source_id or data_file_id
@@ -169,43 +191,43 @@
                        $scope.datafile.instrument_id = thisSensor.instrument_id;
                        $scope.datafile.processor_id = $cookies.get('mID');
                        DATA_FILE.save($scope.datafile).$promise.then(function (dfResonse) {
-                            //then POST fileParts (Services populate PATH)
-                            var fileParts = {
-                                FileEntity: {
-                                    filetype_id: $scope.aFile.filetype_id,
-                                    name: $scope.aFile.File.name,
-                                    file_date: $scope.aFile.file_date,
-                                    description: $scope.aFile.description,
-                                    site_id: $scope.thisSensorSite.site_id,
-                                    data_file_id: dfResonse.data_file_id,
-                                    photo_direction: $scope.aFile.photo_direction,
-                                    latitude_dd: $scope.aFile.latitude_dd,
-                                    longitude_dd: $scope.aFile.longitude_dd,
-                                    instrument_id: thisSensor.instrument_id
-                                },
-                                File: $scope.aFile.File
-                            };
-                            //need to put the fileParts into correct format for post
-                            var fd = new FormData();
-                            fd.append("FileEntity", JSON.stringify(fileParts.FileEntity));
-                            fd.append("File", fileParts.File);
-                            //now POST it (fileparts)
-                            FILE.uploadFile(fd).$promise.then(function (fresponse) {
-                                toastr.success("File Uploaded");
-                                fresponse.fileBelongsTo = "DataFile File";
-                                $scope.DepSensorFiles.push(fresponse);
-                                $scope.allSFiles.push(fresponse);
-                                Site_Files.setAllSiteFiles($scope.allSFiles); //updates the file list on the sitedashboard
-                                if (fresponse.filetype_id === 1) $scope.depSensImageFiles.push(fresponse);
-                                $scope.showFileForm = false; $scope.depSenfileIsUploading = false;
-                            }, function (errorResponse) {
-                                $scope.depSenfileIsUploading = false;
-                                toastr.error("Error saving file: " + errorResponse.statusText);
-                            });
-                        }, function (errorResponse) {
-                            $scope.depSenfileIsUploading = false;
-                            toastr.error("Error saving Source info: " + errorResponse.statusText);
-                        });//end datafile.save()
+                           //then POST fileParts (Services populate PATH)
+                           var fileParts = {
+                               FileEntity: {
+                                   filetype_id: $scope.aFile.filetype_id,
+                                   name: $scope.aFile.File.name,
+                                   file_date: $scope.aFile.file_date,
+                                   description: $scope.aFile.description,
+                                   site_id: $scope.thisSensorSite.site_id,
+                                   data_file_id: dfResonse.data_file_id,
+                                   photo_direction: $scope.aFile.photo_direction,
+                                   latitude_dd: $scope.aFile.latitude_dd,
+                                   longitude_dd: $scope.aFile.longitude_dd,
+                                   instrument_id: thisSensor.instrument_id
+                               },
+                               File: $scope.aFile.File
+                           };
+                           //need to put the fileParts into correct format for post
+                           var fd = new FormData();
+                           fd.append("FileEntity", JSON.stringify(fileParts.FileEntity));
+                           fd.append("File", fileParts.File);
+                           //now POST it (fileparts)
+                           FILE.uploadFile(fd).$promise.then(function (fresponse) {
+                               toastr.success("File Uploaded");
+                               fresponse.fileBelongsTo = "DataFile File";
+                               $scope.DepSensorFiles.push(fresponse);
+                               $scope.allSFiles.push(fresponse);
+                               Site_Files.setAllSiteFiles($scope.allSFiles); //updates the file list on the sitedashboard
+                               if (fresponse.filetype_id === 1) $scope.depSensImageFiles.push(fresponse);
+                               $scope.showFileForm = false; $scope.depSenfileIsUploading = false;
+                           }, function (errorResponse) {
+                               $scope.depSenfileIsUploading = false;
+                               toastr.error("Error saving file: " + errorResponse.statusText);
+                           });
+                       }, function (errorResponse) {
+                           $scope.depSenfileIsUploading = false;
+                           toastr.error("Error saving Source info: " + errorResponse.statusText);
+                       });//end datafile.save()
                    } else {
                        //it's not a data file, so do the source
                        var theSource = { source_name: $scope.aSource.FULLname, agency_id: $scope.aSource.agency_id};//, SOURCE_DATE: $scope.aSource.SOURCE_DATE };
@@ -246,7 +268,7 @@
                                    toastr.error("Error saving file: " + errorResponse.statusText);
                                });
                            } else {
-                                //this is a link file, no fileItem
+                               //this is a link file, no fileItem
                                $scope.aFile.source_id = response.source_id; $scope.aFile.site_id = $scope.thisSensorSite.site_id; $scope.aFile.instrument_id = thisSensor.instrument_id;
                                FILE.save($scope.aFile).$promise.then(function (fresponse) {
                                    toastr.success("File Uploaded");
@@ -261,14 +283,36 @@
                                });
                            } //end else (it's a Link file)
                        }, function (errorResponse) {
-                            $scope.depSenfileIsUploading = false;
-                            toastr.error("Error saving Source info: " + errorResponse.statusText);
+                           $scope.depSenfileIsUploading = false;
+                           toastr.error("Error saving Source info: " + errorResponse.statusText);
                        });//end source.save()
                    }//end if source
-               }//end valid
+                }//end valid                   
            };//end create()
 
            $scope.saveFile = function (valid) {
+               if ($scope.aFile.filetype_id == 2) {
+                   //make sure end date is after start date
+                   var s = $scope.datafile.good_start;//need to get dep status date in same format as retrieved to compare
+                   var e = $scope.datafile.good_end; //stupid comma in there making it not the same
+                   if (new Date(e) < new Date(s)) {
+                       valid = false;
+                       var fixDate = $uibModal.open({
+                           template: '<div class="modal-header"><h3 class="modal-title">Error</h3></div>' +
+                               '<div class="modal-body"><p>The good end date must be after the good start date.</p></div>' +
+                               '<div class="modal-footer"><button class="btn btn-primary" ng-enter="ok()" ng-click="ok()">OK</button></div>',
+                           controller: ['$scope', '$uibModalInstance', function ($scope, $uibModalInstance) {
+                               $scope.ok = function () {
+                                   $uibModalInstance.close();
+                               };
+                           }],
+                           size: 'sm'
+                       });
+                       fixDate.result.then(function () {
+                           valid = false;
+                       });
+                   }
+               }
                if (valid) {
                    $scope.depSenfileIsUploading = true;
                    //put source or datafile, put file
@@ -422,6 +466,26 @@
                 });
             };
             $scope.createNWISFile = function (valid) {
+                //make sure end date is after start date
+                var s = $scope.NWISDF.good_start;//need to get dep status date in same format as retrieved to compare
+                var e = $scope.NWISDF.good_end; //stupid comma in there making it not the same
+                if (new Date(e) < new Date(s)) {
+                    valid = false;
+                    var fixDate = $uibModal.open({
+                        template: '<div class="modal-header"><h3 class="modal-title">Error</h3></div>' +
+                            '<div class="modal-body"><p>The good end date must be after the good start date.</p></div>' +
+                            '<div class="modal-footer"><button class="btn btn-primary" ng-enter="ok()" ng-click="ok()">OK</button></div>',
+                        controller: ['$scope', '$uibModalInstance', function ($scope, $uibModalInstance) {
+                            $scope.ok = function () {
+                                $uibModalInstance.close();
+                            };
+                        }],
+                        size: 'sm'
+                    });
+                    fixDate.result.then(function () {
+                        valid = false;
+                    });
+                }
                 if (valid) {
                     $scope.depNWISSenfileIsUploading = true; //Loading...
                     $http.defaults.headers.common.Authorization = 'Basic ' +$cookies.get('STNCreds');
@@ -471,6 +535,26 @@
             };// end create NWIS file
             //update this NWIS file
             $scope.saveNWISFile = function (valid) {
+                //make sure end date is after start date
+                var s = $scope.NWISDF.good_start;//need to get dep status date in same format as retrieved to compare
+                var e = $scope.NWISDF.good_end; //stupid comma in there making it not the same
+                if (new Date(e) < new Date(s)) {
+                    valid = false;
+                    var fixDate = $uibModal.open({
+                        template: '<div class="modal-header"><h3 class="modal-title">Error</h3></div>' +
+                            '<div class="modal-body"><p>The good end date must be after the good start date.</p></div>' +
+                            '<div class="modal-footer"><button class="btn btn-primary" ng-enter="ok()" ng-click="ok()">OK</button></div>',
+                        controller: ['$scope', '$uibModalInstance', function ($scope, $uibModalInstance) {
+                            $scope.ok = function () {
+                                $uibModalInstance.close();
+                            };
+                        }],
+                        size: 'sm'
+                    });
+                    fixDate.result.then(function () {
+                        valid = false;
+                    });
+                }
                 if (valid) {
                     //put source or datafile, put file
                     $http.defaults.headers.common.Authorization = 'Basic ' + $cookies.get('STNCreds');
@@ -1938,6 +2022,28 @@
 
             //create this new file
             $scope.createFile = function (valid) {
+                if ($scope.aFile.filetype_id == 2) {
+                    //make sure end date is after start date
+                    var s = $scope.datafile.good_start;//need to get dep status date in same format as retrieved to compare
+                    var e = $scope.datafile.good_end; //stupid comma in there making it not the same
+                    if (new Date(e) < new Date(s)) {
+                        valid = false;
+                        var fixDate = $uibModal.open({
+                            template: '<div class="modal-header"><h3 class="modal-title">Error</h3></div>' +
+                                '<div class="modal-body"><p>The good end date must be after the good start date.</p></div>' +
+                                '<div class="modal-footer"><button class="btn btn-primary" ng-enter="ok()" ng-click="ok()">OK</button></div>',
+                            controller: ['$scope', '$uibModalInstance', function ($scope, $uibModalInstance) {
+                                $scope.ok = function () {
+                                    $uibModalInstance.close();
+                                };
+                            }],
+                            size: 'sm'
+                        });
+                        fixDate.result.then(function () {
+                            valid = false;
+                        });
+                    }
+                }
                 if (valid) {
                     $scope.fullSenfileIsUploading = true;
                     $http.defaults.headers.common.Authorization = 'Basic ' +$cookies.get('STNCreds');
@@ -2047,6 +2153,28 @@
 
             //update this file
             $scope.saveFile = function (valid) {
+                if ($scope.aFile.filetype_id == 2) {
+                    //make sure end date is after start date
+                    var s = $scope.datafile.good_start;//need to get dep status date in same format as retrieved to compare
+                    var e = $scope.datafile.good_end; //stupid comma in there making it not the same
+                    if (new Date(e) < new Date(s)) {
+                        valid = false;
+                        var fixDate = $uibModal.open({
+                            template: '<div class="modal-header"><h3 class="modal-title">Error</h3></div>' +
+                                '<div class="modal-body"><p>The good end date must be after the good start date.</p></div>' +
+                                '<div class="modal-footer"><button class="btn btn-primary" ng-enter="ok()" ng-click="ok()">OK</button></div>',
+                            controller: ['$scope', '$uibModalInstance', function ($scope, $uibModalInstance) {
+                                $scope.ok = function () {
+                                    $uibModalInstance.close();
+                                };
+                            }],
+                            size: 'sm'
+                        });
+                        fixDate.result.then(function () {
+                            valid = false;
+                        });
+                    }
+                }
                 if (valid) {
                     $scope.fullSenfileIsUploading = true;
                     //put source or datafile, put file
@@ -2283,6 +2411,26 @@
                 });
             };
             $scope.createNWISFile = function (valid) {
+                //make sure end date is after start date
+                var s = $scope.NWISDF.good_start;//need to get dep status date in same format as retrieved to compare
+                var e = $scope.NWISDF.good_end; //stupid comma in there making it not the same
+                if (new Date(e) < new Date(s)) {
+                    valid = false;
+                    var fixDate = $uibModal.open({
+                        template: '<div class="modal-header"><h3 class="modal-title">Error</h3></div>' +
+                            '<div class="modal-body"><p>The good end date must be after the good start date.</p></div>' +
+                            '<div class="modal-footer"><button class="btn btn-primary" ng-enter="ok()" ng-click="ok()">OK</button></div>',
+                        controller: ['$scope', '$uibModalInstance', function ($scope, $uibModalInstance) {
+                            $scope.ok = function () {
+                                $uibModalInstance.close();
+                            };
+                        }],
+                        size: 'sm'
+                    });
+                    fixDate.result.then(function () {
+                        valid = false;
+                    });
+                }                
                 if (valid) {
                     $http.defaults.headers.common.Authorization = 'Basic ' +$cookies.get('STNCreds');
                     $http.defaults.headers.common.Accept = 'application/json';
@@ -2321,6 +2469,26 @@
             };// end create NWIS file
             //update this NWIS file
             $scope.saveNWISFile = function (valid) {
+                //make sure end date is after start date
+                var s = $scope.NWISDF.good_start;//need to get dep status date in same format as retrieved to compare
+                var e = $scope.NWISDF.good_end; //stupid comma in there making it not the same
+                if (new Date(e) < new Date(s)) {
+                    valid = false;
+                    var fixDate = $uibModal.open({
+                        template: '<div class="modal-header"><h3 class="modal-title">Error</h3></div>' +
+                            '<div class="modal-body"><p>The good end date must be after the good start date.</p></div>' +
+                            '<div class="modal-footer"><button class="btn btn-primary" ng-enter="ok()" ng-click="ok()">OK</button></div>',
+                        controller: ['$scope', '$uibModalInstance', function ($scope, $uibModalInstance) {
+                            $scope.ok = function () {
+                                $uibModalInstance.close();
+                            };
+                        }],
+                        size: 'sm'
+                    });
+                    fixDate.result.then(function () {
+                        valid = false;
+                    });
+                }
                 if (valid) {
                     //put source or datafile, put file
                     $http.defaults.headers.common.Authorization = 'Basic ' +$cookies.get('STNCreds');

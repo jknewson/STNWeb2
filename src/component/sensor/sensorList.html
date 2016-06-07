@@ -31,7 +31,9 @@
             <div ng-if="s.instrument_status[0].status_type_id == 4">
                 <ul>
                     <li style="list-style:none;padding-bottom: 15px;">
-                        <span class="col-sm-10 borderLess">{{s.deploymentType || s.sensorType}} Sensor</span>
+                        <span class="col-sm-10 borderLess" style="padding:0">
+                            <a class="btn borderLess" style="padding:0" ng-click="showProposedSensor(s)">{{s.deploymentType || s.sensorType}} Sensor</a>
+                        </span>
                         <div ng-show="sessionEventExists" class="pull-right">
                             <button type="button" class="btn btn-primary" style="padding:0" ng-click="showSensorModal(s)" tooltip-placement="left"
                                     tooltip-append-to-body="true" uib-tooltip="Deploy this proposed sensor">
@@ -59,7 +61,7 @@
             <div ng-if="s.instrument_status[0].status_type_id == 1">
                 <ul>
                     <li style="list-style:none;padding-bottom: 15px;">
-                        <span class="col-sm-9 borderLess" style="padding:0">
+                        <span class="col-sm-10 borderLess" style="padding:0">
                             <a class="btn borderLess" style="padding:0" ng-click="showSensorModal(s)" title="{{s.serial_number}}- {{s.deploymentType || s.sensorType}} Sensor">{{s.serial_number}}- {{s.deploymentType || s.sensorType}} Sensor</a>
                         </span>
                         <div ng-show="sessionEventExists" class="pull-right">
