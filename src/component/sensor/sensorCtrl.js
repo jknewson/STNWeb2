@@ -160,7 +160,8 @@
                         $rootScope.stateIsLoading.showLoading = false; // loading..
                     });
                 };//end showRetrieveModal
-                $scope.showProposedSensor = function (proposedSensorClicked) {                   
+
+                $scope.showProposedSensor = function (proposedSensorClicked) {
                     var propIndex = $scope.SiteSensors.indexOf(proposedSensorClicked);
                     var propModalInstance = $uibModal.open({
                         templateUrl: 'ProposedSensor.html',
@@ -190,6 +191,7 @@
                                 thisSiteSensors.splice(propIndex, 1);
                                 $scope.SiteSensors = thisSiteSensors;
                                 Instrument_Service.setAllSiteSensors($scope.SiteSensors);
+                                toastr.success("Proposed sensor deleted");
                             }, function (errorResponse) {
                                 toastr.error("Error deleting proposed sensor. Refresh and try again. Error: " + errorResponse.statusText);
                             });
