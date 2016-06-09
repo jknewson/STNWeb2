@@ -246,7 +246,7 @@
 
                     } else {
 
-                        toastr.options.positionClass = "toast-top-center";
+                        toastr.options.positionClass = "toast-bottom-right";
                         toastr.options.timeOut = "8000";
                         toastr.options.closeButton = true;
                         toastr.warning("No sites are showing because you have no filters applied. Please select at least one search parameter.", "Map Filters");

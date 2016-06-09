@@ -9,11 +9,13 @@
         <form name="siteSearchForm" class="map-filters-form">
 
             <div class="form-group col-md-6" >
-                <div ng-if="sessionEventExists">
-                    <div class="chx">
-                        <input type="checkbox" ng-model="checkboxModel.eventSitesOnly" ng-true-value="'1'" ng-false-value="'0'" />
+                <div ng-if="sessionEventExists" class="flex-group">
+                    <div>
+                        <div class="chx">
+                            <input type="checkbox" ng-model="checkboxModel.eventSitesOnly" ng-true-value="'1'" ng-false-value="'0'" />
+                        </div>
+                        <label class="checkbox-label">{{sessionEvent}} Sites Only</label>
                     </div>
-                    <label class="checkbox-label">{{sessionEvent}} Sites Only</label>
                 </div>
             </div>
 

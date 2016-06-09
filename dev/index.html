@@ -59,7 +59,6 @@
     <script src="bower_components/angular-resource.js"></script>
     <script src="bower_components/angular-route.js"></script>
     <script src="bower_components/angular-spinners.min.js"></script>
-    <script src="bower_components/angular-ui-router.js"></script>
     <script src="bower_components/bootstrap-multiselect.js"></script>
     <script src="bower_components/bootstrap-table.js"></script>
     <script src="bower_components/bootstrap.js"></script>
@@ -108,25 +107,25 @@
     <script src="component/sensor/sensorCtrl.js"></script>
     <script src="component/resources/resourcesCtrl.js"></script>
     <script src="component/reporting/submitReportCtrl.js"></script>
-    <script src="component/reporting/reportModalCtrl.js"></script>
     <script src="component/reporting/reportingDashboardCtrl.js"></script>
     <script src="component/reporting/reportingCtrl.js"></script>
+    <script src="component/reporting/reportModalCtrl.js"></script>
     <script src="component/reporting/projectAlertModalCtrl.js"></script>
     <script src="component/reporting/confirmReportModalCtrl.js"></script>
     <script src="component/peak/peakModalCtrl.js"></script>
     <script src="component/peak/peakCtrl.js"></script>
-    <script src="component/objectivePoint/objectivePointModalCtrl.js"></script>
     <script src="component/objectivePoint/objectivePointCtrl.js"></script>
+    <script src="component/objectivePoint/ObjectivePointModalCtrl.js"></script>
     <script src="component/member/memberModalCtrl.js"></script>
     <script src="component/member/memberInfoCtrl.js"></script>
     <script src="component/member/memberCtrl.js"></script>
+    <script src="component/map/mapCtrl.js"></script>
     <script src="component/map/MapSiteInfoController.js"></script>
     <script src="component/map/MapSensorProposeController.js"></script>
     <script src="component/map/MapPeaksController.js"></script>
     <script src="component/map/MapFiltersController.js"></script>
-    <script src="component/map/mapCtrl.js"></script>
     <script src="component/main/mainCtrl.js"></script>
-    <script src="component/logInOut/logInOutCtrl.js"></script>
+    <script src="component/logInOut/LogInOutCtrl.js"></script>
     <script src="component/hwm/quickHWMCtrl.js"></script>
     <script src="component/hwm/hwmModalCtrl.js"></script>
     <script src="component/hwm/hwmCtrl.js"></script>
@@ -140,10 +139,10 @@
     <script src="component/event/eventInfoCtrl.js"></script>
     <script src="component/event/eventCtrl.js"></script>
     <script src="component/approval/approvalCtrl.js"></script>
-    <script src="services/STNResource.js"></script>
     <script src="services/businessServices.js"></script>
-    <script src="component/ModalsCtrl.js"></script>
+    <script src="services/STNResource.js"></script>
     <script src="component/jquery.inputmask.bundle.js"></script>
+    <script src="component/ModalsCtrl.js"></script>
     <script src="app.js"></script>
     <!-- endinject -->
 
@@ -169,6 +168,8 @@
     <div ng-controller="mainCtrl" class="app-nav">
         <h2 class="testing-alert"><b>TESTING ONLY! DATA WILL BE OVERRIDDEN FOLLOWING TESTING PHASE</b></h2>
         <h1 class="nav-header">Short-Term Network<span ng-if="thisPage"> - {{thisPage}}</span></h1><!--
+        --><i  ng-show="isAuth.val" class="mobile-menu-btn ion-navicon" id="mobile-menu-btn"></i><!--
+
 
         --><button type="button" ng-show="isAuth.val" ng-controller="eventSessionCtrl" class="btn-wim btn-sm btn-white nav-change-session" ng-click="openEventModal()">
             <span ng-show="!sessionEvent">Choose Event</span>
@@ -179,6 +180,16 @@
             <span ng-if="sessionEvent">{{sessionEvent}}</span>
         </div>
 
+
+        <!-- Script for nav control -->
+        <script>
+            $("#mobile-menu-btn").click(function(){
+                $(".subnav").toggle();
+                $(".mobile-menu-btn").toggleClass('ion-navicon');
+                $(".mobile-menu-btn").toggleClass('ion-close-round');
+            })
+        </script>
+
         <div class="nav-userctrl" ng-show="isAuth.val">
             <!--<span>Welcome, <a ui-sref="members.MemberInfo({id: userID})">{{usersName}}</a></span>-->
             <span>Welcome, <a ui-sref="members.MembersList({id: userID})">{{usersName}}</a></span>
@@ -187,13 +198,6 @@
 
 
         <div class="subnav" ng-show="isAuth.val">
-            <ul class="subnav-links">
-                <li><a ng-class="{active: activeMenu == 'map'}" ui-sref="map" ng-click="activeMenu = 'map'">Map</a></li>
-                <li><a ng-class="{active: activeMenu == 'approval'}" ui-sref="approval" ng-click="activeMenu = 'approval'">Approval</a></li>
-                <li><a ng-class="{active: activeMenu == 'sites'}"  ui-sref="siteSearch" ng-click="activeMenu = 'sites'">Sites</a></li>
-                <li><a ng-class="{active: activeMenu == 'report'}"  ui-sref="reporting.reportDash" ng-click="activeMenu = 'report'">Reporting</a></li>
-                <li><a ng-class="{active: activeMenu == 'settings'}"  ui-sref="settings" ng-click="activeMenu = 'settings'">Settings</a></li>
-            </ul>
             <div class="subnav-right" uib-dropdown is-open="status.isopen" ng-show="isAuth.val">
                 <button type="button" ng-click="goSearch = !goSearch" class="btn-subnav">
                     <span ng-show="!goSearch">Search <i class="ion-search"></i></span>
@@ -209,9 +213,22 @@
                     <li role="menuitem"><a ui-sref="quickCreate({id:'Sensor'})">Quick Sensor</a></li>
                 </ul>
             </div>
+
+
+            <ul class="subnav-links">
+                <li class="mobile-only special" ng-show="!sessionEvent"><a ng-controller="eventSessionCtrl" ng-click="openEventModal()">Choose Event</a></li>
+                <li class="mobile-only special" ng-show="sessionEvent"><a ng-controller="eventSessionCtrl" ng-click="openEventModal()">{{sessionEvent}} - (Change)</a></li>
+                <li><a ng-class="{active: activeMenu == 'map'}" ui-sref="map" ng-click="activeMenu = 'map'">Map</a></li>
+                <li><a ng-class="{active: activeMenu == 'approval'}" ui-sref="approval" ng-click="activeMenu = 'approval'">Approval</a></li>
+                <li><a ng-class="{active: activeMenu == 'sites'}"  ui-sref="siteSearch" ng-click="activeMenu = 'sites'">Sites</a></li>
+                <li><a ng-class="{active: activeMenu == 'report'}"  ui-sref="reporting.reportDash" ng-click="activeMenu = 'report'">Reporting</a></li>
+                <li><a ng-class="{active: activeMenu == 'settings'}"  ui-sref="settings" ng-click="activeMenu = 'settings'">Settings</a></li>
+                <li class="mobile-only special2"><a ng-controller="logoutCtrl" ng-click="logout()">Log Off</a></li>
+            </ul>
+            <site-search ng-show="goSearch && isAuth.val"/>
+
         </div>
 
-        <site-search ng-show="goSearch && isAuth.val"/>
 
     </div>
 
