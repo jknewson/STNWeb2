@@ -3,7 +3,7 @@
         <uib-accordion-heading>
             <i style="margin-right:10px" class="pull-left glyphicon" ng-class="{'glyphicon-chevron-down': status.hwmOpen, 'glyphicon-chevron-right': !status.hwmOpen}"></i>
             <span>High Water Marks</span>
-            <span class="badge pull-right">{{hwmCount.total}}</span>
+            <span class="badge pull-right">{{SiteHWMs.length}}</span>
         </uib-accordion-heading>
         <div ng-show="sessionEventExists" class="btn-group pull-right">
             <button type="button" class="borderLess" ng-click="showHWMModal(0)" tooltip-placement="left" tooltip-append-to-body="true" uib-tooltip="Add a HWM">

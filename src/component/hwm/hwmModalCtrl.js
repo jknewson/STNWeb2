@@ -33,6 +33,12 @@
                 $scope.showEventDD = !$scope.showEventDD;
             };
 
+            //hwm Uncertainty populated, choose appropriate hwm quality
+            //$scope.updateHWMQuality = function () {
+            //    //TODO//////////////////////////////
+            //    var test = $scope.hwmQualList.filter(function (h) { return h.range == $scope.aHWM.hwm_uncertainty; })[0];
+            //    $scope.aHWM.hwm_quality_id = test.hwm_quality_id;
+            //}
             //change event = apply it to the $scope.EventName
             $scope.ChangeEvent = function () {
                 $scope.EventName = $scope.eventList.filter(function (el) { return el.event_id == $scope.adminChanged.event_id; })[0].event_name;
@@ -243,6 +249,14 @@
                 $scope.aHWM.hCollectMethod = $scope.aHWM.hcollect_method_id > 0 ? $scope.hCollMList.filter(function (hc) { return hc.hcollect_method_id == $scope.aHWM.hcollect_method_id; })[0].hcollect_method : '';
                 $scope.aHWM.vDatum = $scope.aHWM.vdatum_id > 0 ? $scope.VDatumsList.filter(function (vd) { return vd.datum_id == $scope.aHWM.vdatum_id; })[0].datum_name : '';
                 $scope.aHWM.vCollectMethod = $scope.aHWM.vcollect_method_id > 0 ? $scope.vCollMList.filter(function (vc) { return vc.vcollect_method_id == $scope.aHWM.vcollect_method_id; })[0].vcollect_method : '';
+                //get approval info if any
+                if ($scope.aHWM.approval_id !== undefined) {
+
+                    HWM.getHWMApproval({ id: $scope.aHWM.hwm_id }).$promise.then(function (response) {
+                        $scope.ApprovalInfo.approvalDate = new Date(response.approval_date); //include note that it's displayed in their local time but stored in UTC
+                        $scope.ApprovalInfo.Member = allMembers.filter(function (amem) { return amem.member_id == response.member_id; })[0];
+                    });
+                }
 
                 $scope.hwmModalHeader = "HWM Information";
                 //get this hwm's event name

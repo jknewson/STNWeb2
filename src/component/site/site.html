@@ -662,7 +662,7 @@
                         <label class="col-md-4 control-label"></label>
                         <div class="col-md-6">
                             <div ng-repeat="id in addedIdentifiers">
-                                <div class="col-md-12" style="margin-bottom:5px">
+                                <div class="col-md-12" style="margin-bottom:5px;padding:0">
                                     <div class="col-md-7"><input class="form-control" name="OPControl" ng-model="id.identifier" type="text" /></div>
                                     <input type="hidden" name="op_control_identifier_id" ng-model="id.op_control_identifier_id" />
                                     <input type="hidden" name="objective_point_id" ng-model="id.objective_point_id" />
@@ -674,7 +674,7 @@
                                         <input type="radio" name="identifier_type{{$index}}" ng-model="id.identifier_type" value="Other" /> Other
                                     </span>
                                     <div class="buttons pull-right">
-                                        <button class="btn borderLess" ng-click="RemoveID(id)" type="button">
+                                        <button class="btn borderLess" style="padding-right:0" ng-click="RemoveID(id)" type="button">
                                             <i class="glyphicon glyphicon-remove"></i>
                                         </button>
                                     </div>
@@ -1590,6 +1590,14 @@
                         </div>
                     </div>
 
+                    <!--HWM Uncertainty:
+                    <div class="form-group">
+                        <label class="col-md-4 control-label" for="primaryphone">HWM Uncertainty:</label>
+                        <div class="col-md-6">
+                            <input class="form-control" name="hwm_uncertainty" type="text" my-input-mask="{mask: '0.99', greedy: false}" ng-model="aHWM.hwm_uncertainty" ng-model-options="{ updateOn: 'blur' }" ng-change="updateHWMQuality()" />
+                        </div>
+                    </div>-->
+
                     <!-- HWM Quality:* -->
                     <div class="form-group required" ng-class="{'has-error':HWMForm.hwm_quality_id.$invalid && HWMForm.hwm_quality_id.$dirty}">
                         <label class="col-md-4 control-label req">HWM Quality:</label>
@@ -1729,17 +1737,15 @@
                     <!-- Surveyed Date: -->
                     <div class="form-group">
                         <label class="col-md-4 control-label" for="survey_date">Surveyed Date:</label>
-                        <div class="col-md-3">
-                            <div class="col-md-3 input-group">
-                                <input show-weeks="false" class="form-control dateInputStyle" type="date" id="survey_date" name="sd" uib-datepicker-popup="MM/dd/yyyy" is-open="datepickrs.sd" ng-model="aHWM.survey_date" />
-                                <span class="input-group-btn">
-                                    <button type="button" class="btn btn-default" ng-click="open($event, 'sd')">
-                                        <i class="glyphicon glyphicon-calendar" />
-                                    </button>
-                                </span>
-                            </div>
+                        <div class="col-md-3 input-group" style="padding-right:14px;padding-left:14px">
+                            <input show-weeks="false" class="form-control dateInputStyle" type="date" id="survey_date" name="sd" uib-datepicker-popup="MM/dd/yyyy" is-open="datepickrs.sd" ng-model="aHWM.survey_date" />
+                            <span class="input-group-btn">
+                                <button type="button" class="btn btn-default" ng-click="open($event, 'sd')">
+                                    <i class="glyphicon glyphicon-calendar" />
+                                </button>
+                            </span>
                         </div>
-                        <button type="button" class="col-md-3 borderLess pull-right" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Elevation required below if survey date is populated.">
+                        <button type="button" class="col-md-2 borderLess pull-right" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Elevation required below if survey date is populated.">
                             <span class="glyphicon glyphicon-question-sign"></span>
                         </button>
                     </div>
@@ -2300,7 +2306,7 @@
                             </div>
 
                             <!-- Survey Member: (detail)-->
-                            <div class="form-group" ng-show="SurveyMember.fname && view.hwmval == 'detail'">
+                            <div class="col-md-12" ng-show="SurveyMember.fname && view.hwmval == 'detail'">
                                 <div class=" col-md-4"><label>Survey Member:</label></div>
                                 <div class="col-md-6"><span>{{SurveyMember.fname}} {{SurveyMember.lname}}</span></div>
                             </div>
@@ -2313,8 +2319,8 @@
                             </div>
 
                             <!-- Approval info (detail) -->
-                            <div class="form-group" ng-show="ApprovalInfo.Member !==undefined">
-                                <label class="col-md-4 control-label" for="approval_id">Approval Info:</label>
+                            <div class="col-md-12" ng-show="ApprovalInfo.Member !==undefined">
+                                <div class=" col-md-4"><label>Approval Info:</label></div>
                                 <div class="col-md-6">
                                     <span>Approved By:</span><span ng-if="ApprovalInfo.Member"> {{ApprovalInfo.Member.fname || '---'}} {{ApprovalInfo.Member.lname || '---'}}</span><br />
                                     <span>On:</span><span ng-if="ApprovalInfo.approvalDate"> {{ApprovalInfo.approvalDate | date: 'MM/dd/yyyy hh:mm a' || '---'}}</span>
@@ -2928,7 +2934,7 @@
                     <fieldset>
                         <!--edit button-->
                         <div class="form-group">
-                            <div class="col-md-12">
+                            <div class="col-md-12" style="margin-bottom:5px">
                                 <span>
                                     <button ng-show="view.DEPval == 'detail'" type="button" class="btn btn-primary" ng-click="wannaEditDep()">
                                         <span>Edit Sensor</span>
@@ -2949,12 +2955,12 @@
                         <br />
                         <!-- Event: (detail) -->
                         <div class="col-md-12" ng-if="view.DEPval == 'detail'">
-                            <div class="col-md-3 col-md-offset-1"><label>Event:</label></div>
+                            <div class="col-md-4"><label>Event:</label></div>
                             <div class="col-md-6">{{EventName}}</div>
                         </div>
                         <!-- Event: -->
                         <div class="form-group" ng-if="view.DEPval == 'edit'">
-                            <label class="col-md-3 col-md-offset-1 control-label">Event:</label>
+                            <label class="col-md-4 control-label">Event:</label>
                             <div class="col-md-6">{{EventName}}</div>
                             <div class="col-md-2" ng-show="userRole == 'Admin' && view.DEPval == 'edit'">
                                 <button type="button" ng-click="showChangeEventDD()" class="btn btn-primary">Change Event</button>
@@ -2964,7 +2970,7 @@
                         <!--Event dropdown for admin -->
                         <div ng-show="showEventDD && view.DEPval == 'edit'">
                             <div class="form-group">
-                                <label class="col-md-3 col-md-offset-1 control-label" for="event_id">Events:</label>
+                                <label class="col-md-4 control-label" for="event_id">Events:</label>
                                 <div class="col-md-6">
                                     <select class="form-control" id="event_id" name="event_id" ng-model="adminChanged.event_id" ng-change="ChangeEvent()"
                                             ng-options="e.event_id as (e.event_name + ' --- ' + (e.event_start_date | date: 'MM/dd/yyyy') + ' to ' + ((e.event_end_date || '-Not Set-') | date: 'MM/dd/yyyy'))  for e in eventList | orderBy: '-event_start_date'"
@@ -2976,12 +2982,12 @@
 
                         <!-- Sensor Type*:(detail) -->
                         <div class="col-md-12" ng-if="view.DEPval == 'detail'">
-                            <div class="col-md-3 col-md-offset-1"><label>Sensor Type:</label></div>
+                            <div class="col-md-4"><label>Sensor Type:</label></div>
                             <div class="col-md-6"><span>{{aSensor.sensorType || '---'}}</span></div>
                         </div>
                         <!-- Sensor Type*:(edit) -->
                         <div class="form-group required" ng-class="{'has-error':editDeployedForm.sensor_type_id.$invalid && editDeployedForm.sensor_type_id.$dirty}" ng-if="view.DEPval == 'edit'">
-                            <label class="col-md-3 col-md-offset-1 req control-label">Sensor Type:</label>
+                            <label class="col-md-4 req control-label">Sensor Type:</label>
                             <div class="col-md-6">
                                 <select class="form-control" name="sensor_type_id" ng-model="depStuffCopy[0].sensor_type_id"
                                         ng-options="s.sensor_type_id as s.sensor for s in sensorTypeList" ng-change="getDepTypes()" required>
@@ -2992,12 +2998,12 @@
 
                         <!-- Sensor Brand*:(detail) -->
                         <div class="col-md-12" ng-if="view.DEPval == 'detail'">
-                            <div class="col-md-3 col-md-offset-1"><label>Sensor Brand:</label></div>
+                            <div class="col-md-4"><label>Sensor Brand:</label></div>
                             <div class="col-md-6"><span>{{aSensor.sensorBrand || '---'}}</span></div>
                         </div>
                         <!-- Sensor Brand*:(edit) -->
                         <div class="form-group required" ng-class="{'has-error':editDeployedForm.sensor_brand_id.$invalid && editDeployedForm.sensor_brand_id.$dirty}" ng-if="view.DEPval == 'edit'">
-                            <label class="col-md-3 col-md-offset-1 req control-label">Sensor Brand:</label>
+                            <label class="col-md-4 req control-label">Sensor Brand:</label>
                             <div class="col-md-6">
                                 <select class="form-control" name="sensor_brand_id" ng-model="depStuffCopy[0].sensor_brand_id"
                                         ng-options="sb.sensor_brand_id as sb.brand_name for sb in sensorBrandList" required>
@@ -3008,12 +3014,12 @@
 
                         <!-- Serial Number*: (detail)-->
                         <div class="col-md-12" ng-if="view.DEPval == 'detail'">
-                            <div class="col-md-3 col-md-offset-1"><label>Serial Number:</label></div>
+                            <div class="col-md-4"><label>Serial Number:</label></div>
                             <div class="col-md-6"><span>{{aSensor.serial_number || '---'}}</span></div>
                         </div>
                         <!-- Serial Number*:(edit) -->
                         <div class="form-group required" ng-class="{'has-error':editDeployedForm.serial_number.$invalid && editDeployedForm.serial_number.$dirty}" ng-if="view.DEPval == 'edit'">
-                            <label class="col-md-3 col-md-offset-1 req control-label">Serial Number:</label>
+                            <label class="col-md-4 req control-label">Serial Number:</label>
                             <div class="col-md-6">
                                 <input class="form-control" name="serial_number" ng-model="depStuffCopy[0].serial_number" type="text" required />
                             </div>
@@ -3024,12 +3030,12 @@
 
                         <!-- Housing Serial Number:(detail) -->
                         <div class="col-md-12" ng-if="view.DEPval == 'detail'">
-                            <div class="col-md-3 col-md-offset-1"><label>Housing Serial Number:</label></div>
+                            <div class="col-md-4"><label>Housing Serial Number:</label></div>
                             <div class="col-md-6"><span>{{aSensor.housing_serial_number || '---'}}</span></div>
                         </div>
                         <!-- Housing Serial Number:(edit) -->
                         <div class="form-group" ng-if="view.DEPval == 'edit'">
-                            <label class="col-md-3 col-md-offset-1 control-label">Housing Serial Number:</label>
+                            <label class="col-md-4 control-label">Housing Serial Number:</label>
                             <div class="col-md-6">
                                 <input class="form-control" name="housing_serial_number" ng-model="depStuffCopy[0].housing_serial_number" type="text" />
                             </div>
@@ -3040,12 +3046,12 @@
 
                         <!-- Housing Types: (detail) -->
                         <div class="col-md-12" ng-if="view.DEPval == 'detail'">
-                            <div class="col-md-3 col-md-offset-1"><label>Housing Types:</label></div>
+                            <div class="col-md-4"><label>Housing Types:</label></div>
                             <div class="col-md-6"><span>{{aSensor.housingType || '---'}}</span></div>
                         </div>
                         <!-- Housing Types: (edit) -->
                         <div class="form-group" ng-if="view.DEPval == 'edit'">
-                            <label class="col-md-3 col-md-offset-1 control-label">Housing Types:</label>
+                            <label class="col-md-4 control-label">Housing Types:</label>
                             <div class="col-md-6">
                                 <select class="form-control" id="housing_type_id" name="housing_type_id" ng-model="depStuffCopy[0].housing_type_id"
                                         ng-options="ht.housing_type_id as ht.type_name for ht in houseTypeList">
@@ -3056,7 +3062,7 @@
                         <br clear="all" /><hr />
 
                         <div class="col-md-12" ng-if="view.DEPval == 'detail'">
-                            <div class="col-md-3 col-md-offset-1"><label>Tapedowns:</label></div>
+                            <div class="col-md-4"><label>Tapedowns:</label></div>
                             <div class="col-md-6">
                                 <div ng-show="tapeDownTable.length > 0">
                                     <div class="col-md-8">
@@ -3086,15 +3092,15 @@
                             </div>
                         </div><!--end details for Tapedowns-->
                         <div class="form-group" ng-if="view.DEPval == 'edit'">
-                            <label class="col-md-3 col-md-offset-1 control-label">Tapedowns:</label>
+                            <label class="col-md-4 control-label">Tapedowns:</label>
                             <div class="col-md-6"></div>
                             <button type="button" class="col-md-1 borderLess pull-left" tooltip-placement="left" tooltip-append-to-body="false" uib-tooltip="These elevations and tape down data are used for both field activities and final products. Please pay attention to how your data is entered.">
                                 <span class="glyphicon glyphicon-question-sign"></span>
                             </button>
                             <div class="col-md-12">
                                 <!--start add tapedown area -->
-                                <div ng-if="OPsPresent" class="col-md-8 pull-right">
-                                    <label class="col-md-4 control-label">Datum Locations:</label>
+                                <div ng-if="OPsPresent" class="col-md-9 pull-right">
+                                    <label class="col-md-5 control-label">Datum Locations:</label>
                                     <div class="col-md-6">
                                         <div isteven-multi-select
                                              input-model="OPsForTapeDown"
@@ -3159,83 +3165,85 @@
                         <br clear="all" />
 
                         <!--sensor stat tapedown parts-->
-                        <!--sensor elevation (details)-->
-                        <div ng-if="OPsPresent && view.DEPval == 'detail'" class="col-md-12">
-                            <div class="col-md-4 col-md-offset-1"><label>Sensor Elevation:</label></div>
-                            <div class="col-md-4"><span>{{aSensStatus.sensor_elevation || '--'}}</span></div>
-                        </div>
-                        <!--sensor elevation (edit)-->
-                        <div ng-if="OPsPresent && view.DEPval == 'edit'" class="form-group">
-                            <label class="col-md-4 col-md-offset-1 control-label">Sensor Elevation:</label>
-                            <div class="col-md-4">
-                                <input class="form-control" ng-keypress="isNum($event)" name="sensor_elevation" ng-model="depStuffCopy[1].sensor_elevation" type="text" />
+                        <div class="col-md-8">
+                            <!--sensor elevation (details)-->
+                            <div ng-if="OPsPresent && view.DEPval == 'detail'" class="col-md-12">
+                                <div class="col-md-7"><label>Sensor Elevation:</label></div>
+                                <div class="col-md-4"><span>{{aSensStatus.sensor_elevation || '--'}}</span></div>
                             </div>
-                            <button type="button" class="col-md-1 borderLess pull-left" tooltip-placement="right" tooltip-append-to-body="false" uib-tooltip="Using the offset correction, elevation of the sensor orifice.">
-                                <span class="glyphicon glyphicon-question-sign"></span>
-                            </button>
-                        </div>
-
-                        <!--Water Surface Elevation (details)-->
-                        <div ng-if="OPsPresent && view.DEPval == 'detail'" class="col-md-12">
-                            <div class="col-md-4 col-md-offset-1"><label>Water Surface Elevation:</label></div>
-                            <div class="col-md-4"><span>{{aSensStatus.ws_elevation || '--'}}</span></div>
-                        </div>
-                        <!--Water Surface Elevation (edit)-->
-                        <div ng-if="OPsPresent && view.DEPval == 'edit'" class="form-group">
-                            <label class="col-md-4 col-md-offset-1 control-label">Water Surface Elevation:</label>
-                            <div class="col-md-4">
-                                <input class="form-control" ng-keypress="isNum($event)" name="ws_elevation" ng-model="depStuffCopy[1].ws_elevation" type="text" />
+                            <!--sensor elevation (edit)-->
+                            <div ng-if="OPsPresent && view.DEPval == 'edit'" class="form-group col-md-12">
+                                <label class="col-md-7 control-label">Sensor Elevation:</label>
+                                <div class="col-md-4">
+                                    <input class="form-control" ng-keypress="isNum($event)" name="sensor_elevation" ng-model="depStuffCopy[1].sensor_elevation" type="text" />
+                                </div>
+                                <button type="button" class="col-md-1 borderLess pull-left" tooltip-placement="right" tooltip-append-to-body="false" uib-tooltip="Using the offset correction, elevation of the sensor orifice.">
+                                    <span class="glyphicon glyphicon-question-sign"></span>
+                                </button>
                             </div>
-                            <button type="button" class="col-md-1 borderLess pull-left" tooltip-placement="right" tooltip-append-to-body="false" uib-tooltip="Using the water surface tape down, elevation of the water surface.">
-                                <span class="glyphicon glyphicon-question-sign"></span>
-                            </button>
-                        </div>
 
-                        <!--Ground Elevation (details)-->
-                        <div ng-if="OPsPresent && view.DEPval == 'detail'" class="col-md-12">
-                            <div class="col-md-4 col-md-offset-1"><label>Ground Elevation:</label></div>
-                            <div class="col-md-4"><span>{{aSensStatus.gs_elevation || '--'}}</span></div>
-                        </div>
-                        <!--Ground Elevation (edit)-->
-                        <div ng-if="OPsPresent && view.DEPval == 'edit'" class="form-group">
-                            <label class="col-md-4 col-md-offset-1 control-label">Ground Elevation:</label>
-                            <div class="col-md-4">
-                                <input class="form-control" ng-keypress="isNum($event)" name="gs_elevation" ng-model="depStuffCopy[1].gs_elevation" type="text" />
+                            <!--Water Surface Elevation (details)-->
+                            <div ng-if="OPsPresent && view.DEPval == 'detail'" class="col-md-12">
+                                <div class="col-md-7"><label>Water Surface Elevation:</label></div>
+                                <div class="col-md-4"><span>{{aSensStatus.ws_elevation || '--'}}</span></div>
                             </div>
-                            <button type="button" class="col-md-1 borderLess pull-left" tooltip-placement="right-top" tooltip-append-to-body="false" uib-tooltip="Using the ground surface tape down, elevation of the ground surface.">
-                                <span class="glyphicon glyphicon-question-sign"></span>
-                            </button>
-                        </div>
+                            <!--Water Surface Elevation (edit)-->
+                            <div ng-if="OPsPresent && view.DEPval == 'edit'" class="form-group col-md-12">
+                                <label class="col-md-7 control-label">Water Surface Elevation:</label>
+                                <div class="col-md-4">
+                                    <input class="form-control" ng-keypress="isNum($event)" name="ws_elevation" ng-model="depStuffCopy[1].ws_elevation" type="text" />
+                                </div>
+                                <button type="button" class="col-md-1 borderLess pull-left" tooltip-placement="right" tooltip-append-to-body="false" uib-tooltip="Using the water surface tape down, elevation of the water surface.">
+                                    <span class="glyphicon glyphicon-question-sign"></span>
+                                </button>
+                            </div>
 
-                        <!--In feet above(details)-->
-                        <div ng-if="OPsPresent && view.DEPval == 'detail'" class="col-md-12">
-                            <div class="col-md-4 col-md-offset-1"><label>In feet above:</label></div>
-                            <div class="col-md-4"><span>{{aSensStatus.vdatum}}</span></div>
-                        </div>
-                        <!--In feet above(edit)-->
-                        <div ng-if="OPsPresent && view.DEPval == 'edit'" class="form-group">
-                            <label class="col-md-4 col-md-offset-1 control-label">In feet above:</label>
-                            <div class="col-md-4">
-                                <select class="form-control" id="vdatum_id" name="vdatum_id" ng-model="depStuffCopy[1].vdatum_id"
-                                        ng-options="vd.datum_id as vd.datum_abbreviation for vd in vertDatumList">
-                                    <option value=""></option>
-                                </select>
+                            <!--Ground Elevation (details)-->
+                            <div ng-if="OPsPresent && view.DEPval == 'detail'" class="col-md-12">
+                                <div class="col-md-7"><label>Ground Elevation:</label></div>
+                                <div class="col-md-4"><span>{{aSensStatus.gs_elevation || '--'}}</span></div>
+                            </div>
+                            <!--Ground Elevation (edit)-->
+                            <div ng-if="OPsPresent && view.DEPval == 'edit'" class="form-group col-md-12">
+                                <label class="col-md-7 control-label">Ground Elevation:</label>
+                                <div class="col-md-4">
+                                    <input class="form-control" ng-keypress="isNum($event)" name="gs_elevation" ng-model="depStuffCopy[1].gs_elevation" type="text" />
+                                </div>
+                                <button type="button" class="col-md-1 borderLess pull-left" tooltip-placement="right-top" tooltip-append-to-body="false" uib-tooltip="Using the ground surface tape down, elevation of the ground surface.">
+                                    <span class="glyphicon glyphicon-question-sign"></span>
+                                </button>
+                            </div>
+
+                            <!--In feet above(details)-->
+                            <div ng-if="OPsPresent && view.DEPval == 'detail'" class="col-md-12">
+                                <div class="col-md-7"><label>In feet above:</label></div>
+                                <div class="col-md-4"><span>{{aSensStatus.vdatum}}</span></div>
+                            </div>
+                            <!--In feet above(edit)-->
+                            <div ng-if="OPsPresent && view.DEPval == 'edit'" class="form-group col-md-12">
+                                <label class="col-md-7 control-label">In feet above:</label>
+                                <div class="col-md-4">
+                                    <select class="form-control" id="vdatum_id" name="vdatum_id" ng-model="depStuffCopy[1].vdatum_id"
+                                            ng-options="vd.datum_id as vd.datum_abbreviation for vd in vertDatumList">
+                                        <option value=""></option>
+                                    </select>
+                                </div>
                             </div>
                         </div>
                         <div ng-if="OPsPresent && view.DEPval == 'edit'" class="col-md-12"><em>Note: these elevations are used in the sensor processing and the final products</em></div>
                         <br clear="all" /><hr />
 
                         <!-- Vented (only if Sensor Type is Pressure Transducer) (detail)-->
-                        <div ng-show="(aSensor.sensor_type_id == 1 || depStuffCopy[0].sensor_type_id == 1) && view.DEPval == 'detail'">
+                        <div ng-if="(aSensor.sensor_type_id == 1 || depStuffCopy[0].sensor_type_id == 1) && view.DEPval == 'detail'">
                             <div class="col-md-12">
-                                <div class="col-md-3 col-md-offset-1"><label>Vented:</label></div>
+                                <div class="col-md-4"><label>Vented:</label></div>
                                 <div class="col-md-6"><span>{{aSensor.vented || '---'}}</span></div>
                             </div>
                         </div>
                         <!-- Vented (only if Sensor Type is Pressure Transducer) (edit)-->
-                        <div ng-show="(aSensor.sensor_type_id == 1 || depStuffCopy[0].sensor_type_id == 1) && view.DEPval == 'edit'">
+                        <div ng-if="(aSensor.sensor_type_id == 1 || depStuffCopy[0].sensor_type_id == 1) && view.DEPval == 'edit'">
                             <div class="form-group">
-                                <label class="col-md-3 col-md-offset-1 control-label">Vented:</label>
+                                <label class="col-md-4 control-label">Vented:</label>
                                 <div class="col-md-6">
                                     <span class="radio-inline">
                                         <input type="radio" name="vented" ng-model="depStuffCopy[0].vented" value="Yes" />Yes
@@ -3249,12 +3257,12 @@
 
                         <!-- Deployment Type: (detail) -->
                         <div class="col-md-12" ng-if="view.DEPval == 'detail'">
-                            <div class="col-md-3 col-md-offset-1"><label>Deployment Type:</label></div>
+                            <div class="col-md-4"><label>Deployment Type:</label></div>
                             <div class="col-md-6"><span>{{aSensor.deploymentType || '---'}}</span></div>
                         </div>
                         <!-- Deployment Type: (edit) -->
                         <div class="form-group" ng-if="view.DEPval == 'edit'">
-                            <label class="col-md-3 col-md-offset-1 control-label">Deployment Type:</label>
+                            <label class="col-md-4 control-label">Deployment Type:</label>
                             <div class="col-md-6">
                                 <select class="form-control" id="deployment_type_id" name="deployment_type_id" ng-model="depStuffCopy[0].deployment_type_id"
                                         ng-options="dt.deployment_type_id as dt.method for dt in filteredDeploymentTypes">
@@ -3265,12 +3273,12 @@
 
                         <!-- Location Description: (detail) -->
                         <div class="col-md-12" ng-if="view.DEPval == 'detail'">
-                            <div class="col-md-3 col-md-offset-1"><label>Location Description:</label></div>
+                            <div class="col-md-4"><label>Location Description:</label></div>
                             <div class="col-md-6"><span>{{aSensor.location_description || '---'}}</span></div>
                         </div>
                         <!-- Location Description: (edit) -->
                         <div class="form-group" ng-if="view.DEPval == 'edit'" ng-class="{'has-error':editDeployedForm.location_description.$invalid && editDeployedForm.location_description.$dirty}">
-                            <label class="col-md-3 col-md-offset-1 control-label">Location Description:</label>
+                            <label class="col-md-4 control-label">Location Description:</label>
                             <div class="col-md-6">
                                 <textarea class="form-control" name="location_description" type="text" rows="3" ng-model="depStuffCopy[0].location_description" />
                             </div>
@@ -3281,7 +3289,7 @@
 
                         <!-- Interval: -->
                         <div class="form-group" ng-show="view.DEPval == 'edit'">
-                            <label class="col-md-3 control-label"></label>
+                            <label class="col-md-4"></label>
                             <div class="col-md-6 col-md-offset-1" style="padding-top:5px;">
                                 <span class="radio-inline">
                                     <input type="radio" name="intervalType" ng-model="IntervalType.type" value="Minutes" />Minutes
@@ -3293,12 +3301,12 @@
                         </div>
                         <!--Interval (detail)-->
                         <div class="col-md-12" ng-if="view.DEPval == 'detail'">
-                            <div class="col-md-3 col-md-offset-1"><label>Interval:</label></div>
+                            <div class="col-md-4"><label>Interval:</label></div>
                             <div class="col-md-6"><span>{{aSensor.interval || '---'}} <span ng-if='sensor.interval'>seconds</span></span></div>
                         </div>
                         <!--Interval (edit)-->
                         <div class="form-group" ng-if="view.DEPval == 'edit'">
-                            <label class="col-md-3 col-md-offset-1 control-label">Interval:</label>
+                            <label class="col-md-4 control-label">Interval:</label>
                             <div class="col-md-6">
                                 <input class="form-control" ng-keypress="isNum($event)" name="interval" ng-model="depStuffCopy[0].interval" type="text" />
                             </div>
@@ -3306,12 +3314,12 @@
 
                         <!-- Deploy Date*: (detail) -->
                         <div class="col-md-12" ng-if="view.DEPval == 'detail'">
-                            <div class="col-md-3 col-md-offset-1"><label>Deploy Date:</label></div>
+                            <div class="col-md-4"><label>Deploy Date:</label></div>
                             <div class="col-md-6"><span>{{aSensStatus.time_stamp | date: 'MM/dd/yyyy hh:mm a'}}</span></div>
                         </div>
                         <!-- Deploy Date*: (edit) -->
                         <div class="form-group required" ng-class="{'has-error':editDeployedForm.time_stamp.$invalid && editDeployedForm.time_stamp.$dirty}" ng-if="view.DEPval == 'edit'">
-                            <label class="col-md-3 col-md-offset-1 control-label topPad">Deploy Date:</label>
+                            <label class="col-md-4 control-label topPad">Deploy Date:</label>
                             <div class="col-md-6">
                                 <datetimepicker hour-step="1" minute-step="1" ng-model="depStuffCopy[1].time_stamp" show-meridian="true"
                                                 date-format="MM/dd/yyyy" readonly-date="false" readonly-time="false" date-options="dateOptions"
@@ -3322,12 +3330,12 @@
 
                         <!-- Deploy timezone*: (detail)-->
                         <div class="col-md-12" ng-if="view.DEPval == 'detail'">
-                            <div class="col-md-3 col-md-offset-1"><label>Time Zone:</label></div>
+                            <div class="col-md-4"><label>Time Zone:</label></div>
                             <div class="col-md-6"><span>{{aSensStatus.time_zone}}</span></div>
                         </div>
                         <!-- Deploy timezone*: (edit)-->
                         <div class="form-group required" ng-if="view.DEPval == 'edit'">
-                            <label class="col-md-3 col-md-offset-1 req control-label">Time Zone:</label>
+                            <label class="col-md-4 req control-label">Time Zone:</label>
                             <div class="col-md-6">
                                 <select class="form-control" name="time_zone" ng-model="depStuffCopy[1].time_zone" ng-options="vcm for vcm in timeZoneList" required>
                                     <option value=""></option>
@@ -3340,12 +3348,12 @@
 
                         <!-- Note: (detail)-->
                         <div class="col-md-12" ng-if="view.DEPval == 'detail'">
-                            <div class="col-md-3 col-md-offset-1"><label>Note:</label></div>
+                            <div class="col-md-4"><label>Note:</label></div>
                             <div class="col-md-6"><span>{{aSensStatus.notes || '---'}}</span></div>
                         </div>
                         <!-- Note: (edit)-->
                         <div class="form-group" ng-if="view.DEPval == 'edit'">
-                            <label class="col-md-3 col-md-offset-1 control-label">Note:</label>
+                            <label class="col-md-4 control-label">Note:</label>
                             <div class="col-md-6">
                                 <textarea class="form-control" name="notes" type="text" rows="3" ng-model="depStuffCopy[1].notes" />
                             </div>
@@ -3353,12 +3361,12 @@
 
                         <!-- Deploy Member: (detail) -->
                         <div class="col-md-12" ng-if="view.DEPval == 'detail'">
-                            <div class="col-md-3 col-md-offset-1"><label>Deploy Member:</label></div>
+                            <div class="col-md-4"><label>Deploy Member:</label></div>
                             <div class="col-md-6"><span>{{Deployer.fname}} {{Deployer.lname}}</span></div>
                         </div>
                         <!-- Deploy Member: (edit) -->
                         <div class="form-group" ng-if="view.DEPval == 'edit'">
-                            <label class="col-md-3 col-md-offset-1 control-label">Deploy Member:</label>
+                            <label class="col-md-4 control-label">Deploy Member:</label>
                             <div class="col-md-6">
                                 <input type="hidden" name="member_id" ng-model="aSensStatus.member_id" />
                                 <span>{{Deployer.fname}} {{Deployer.lname}}</span>
@@ -3941,7 +3949,7 @@
                 <label>Retrieval Information</label>
                 <!-- Status Type:* -->
                 <div class="form-group required" ng-class="{'has-error':SensorFormR.status_type_id.$invalid && SensorFormR.status_type_id.$dirty}">
-                    <label class="col-md-3 control-label req" for="status_type_id">Status:</label>
+                    <label class="col-md-4 control-label req" for="status_type_id">Status:</label>
                     <div class="col-md-6">
                         <select class="form-control" name="status_type_id" ng-model="aRetrieval.status_type_id"
                                 ng-options="s.status_type_id as s.status for s in statusTypeList" required>
@@ -3952,7 +3960,7 @@
 
                 <!-- Collection Condition:* -->
                 <div class="form-group required" ng-class="{'has-error':SensorFormR.inst_collection_id.$invalid && SensorFormR.inst_collection_id.$dirty}">
-                    <label class="col-md-3 control-label req" for="inst_collection_id">Collection Conditions:</label>
+                    <label class="col-md-4 control-label req" for="inst_collection_id">Collection Conditions:</label>
                     <div class="col-md-6">
                         <select class="form-control" name="inst_collection_id" ng-model="aSensor.inst_collection_id"
                                 ng-options="ins.id as ins.condition for ins in collectCondList" required>
@@ -3963,7 +3971,7 @@
 
                 <!-- Note: -->
                 <div class="form-group">
-                    <label class="col-md-3 control-label" for="notes">Note:</label>
+                    <label class="col-md-4 control-label" for="notes">Note:</label>
                     <div class="col-md-6">
                         <textarea class="form-control" name="notes" type="text" rows="3" ng-model="aRetrieval.notes" elastic />
                     </div>
@@ -3972,7 +3980,7 @@
 
                 <!-- Retrieve Time: * -->
                 <div class="form-group required" ng-class="{'has-error':SensorFormR.time_stamp.$invalid && SensorFormR.time_stamp.$dirty}">
-                    <label class="col-md-3 control-label req" style="margin-top:3%" for="time_stamp">Date and Time:</label>
+                    <label class="col-md-4 control-label req" style="margin-top:3%" for="time_stamp">Date and Time:</label>
                     <div class="col-md-6">
                         <datetimepicker hour-step="1" minute-step="1" ng-model="aRetrieval.time_stamp" show-meridian="true" id="retrievalDate"
                                         date-format="MM/dd/yyyy" readonly-date="false" readonly-time="false" date-options="dateOptions"
@@ -3983,7 +3991,7 @@
 
                 <!-- Time Zone:* -->
                 <div class="form-group required">
-                    <label class="col-md-3 control-label" for="time_zone">Time Zone:</label>
+                    <label class="col-md-4 control-label" for="time_zone">Time Zone:</label>
                     <div class="col-md-6">
                         <select class="form-control" name="time_zone" ng-model="aRetrieval.time_zone"
                                 ng-options="vcm for vcm in timeZoneList">
@@ -4072,10 +4080,10 @@
                                 </tbody>
                             </table>
                             <!-- Sensor status fields for tapedown -->
-                            <div class="col-md-6">
+                            <div class="col-md-7">
                                 <div class="form-group" style="margin-bottom:0">
                                     <label class="col-md-6 control-label" for="sensor_elevation">Sensor Elevation:</label>
-                                    <div class="col-md-6">
+                                    <div class="col-md-5">
                                         <input class="form-control" ng-keypress="isNum($event)" name="sensor_elevation" ng-model="aRetrieval.sensor_elevation" type="text" />
                                     </div>
                                     <button type="button" class="col-md-1 borderLess pull-left" tooltip-placement="right-top" tooltip-append-to-body="false" uib-tooltip="Using the offset correction, elevation of the sensor orifice.">
@@ -4085,7 +4093,7 @@
 
                                 <div class="form-group" style="margin-bottom:0">
                                     <label class="col-md-6 control-label" for="ws_elevation">Water Surface Elevation:</label>
-                                    <div class="col-md-6">
+                                    <div class="col-md-5">
                                         <input class="form-control" ng-keypress="isNum($event)" name="ws_elevation" ng-model="aRetrieval.ws_elevation" type="text" />
                                     </div>
                                     <button type="button" class="col-md-1 borderLess pull-left" tooltip-placement="right-top" tooltip-append-to-body="false" uib-tooltip="Using the water surface tape down, elevation of the water surface.">
@@ -4095,7 +4103,7 @@
 
                                 <div class="form-group" style="margin-bottom:0">
                                     <label class="col-md-6 control-label" for="gs_elevation">Ground Elevation:</label>
-                                    <div class="col-md-6">
+                                    <div class="col-md-5">
                                         <input class="form-control" ng-keypress="isNum($event)" name="gs_elevation" ng-model="aRetrieval.gs_elevation" type="text" />
                                     </div>
                                     <button type="button" class="col-md-1 borderLess pull-left" tooltip-placement="right-top" tooltip-append-to-body="false" uib-tooltip="Using the ground surface tape down, elevation of the ground surface.">
@@ -4105,7 +4113,7 @@
 
                                 <div class="form-group">
                                     <label class="col-md-6 control-label req" for="vdatum_id">In feet above:</label>
-                                    <div class="col-md-6">
+                                    <div class="col-md-5">
                                         <select class="form-control" id="vdatum_id" name="vdatum_id" ng-model="aRetrieval.vdatum_id"
                                                 ng-options="vd.datum_id as vd.datum_abbreviation for vd in vertDatumList">
                                             <option value=""></option>
@@ -4122,7 +4130,7 @@
                 <!-- -------------------------- END TAPEDOWN SECTION --------------------------------  -->
                 <!-- Retrieve Member: -->
                 <div class="form-group required">
-                    <label class="col-md-3 control-label">Retrieve Member:</label>
+                    <label class="col-md-4 control-label">Retrieve Member:</label>
                     <div class="col-md-6" style="margin-top:12px">{{Retriever.fname}} {{Retriever.lname}}</div>
                 </div>
 
@@ -4168,8 +4176,8 @@
                             <div class="col-md-6">{{EventName}}</div>
                         </div>
                         <!-- Event: -->
-                        <div class="form-group" ng-if="view.DEPval == 'edit'">
-                            <label class="col-md-4 col-md-offset-1 control-label">Event:</label>
+                        <div class="col-md-12 form-group" ng-if="view.DEPval == 'edit'">
+                            <label class="col-md-4 control-label">Event:</label>
                             <div class="col-md-6">{{EventName}}</div>
                         </div>
 
@@ -4180,7 +4188,7 @@
                         </div>
                         <!-- Sensor Type*: (edit) -->
                         <div class="form-group required" ng-if="view.DEPval == 'edit'">
-                            <label class="col-md-4 col-md-offset-1 req control-label">Sensor Type:</label>
+                            <label class="col-md-4 req control-label">Sensor Type:</label>
                             <div class="col-md-6">
                                 <select class="form-control" name="sensor_type_id" ng-model="depStuffCopy[0].sensor_type_id"
                                         ng-options="s.sensor_type_id as s.sensor for s in sensorTypeList" ng-change="getDepTypes(depStuffCopy[0])" required>
@@ -4196,7 +4204,7 @@
                         </div>
                         <!-- Sensor Brand*: (edit) -->
                         <div class="form-group required" ng-if="view.DEPval == 'edit'">
-                            <label class="col-md-4 col-md-offset-1 req control-label">Sensor Brand:</label>
+                            <label class="col-md-4 req control-label">Sensor Brand:</label>
                             <div class="col-md-6">
                                 <select class="form-control" name="sensor_brand_id" ng-model="depStuffCopy[0].sensor_brand_id"
                                         ng-options="sb.sensor_brand_id as sb.brand_name for sb in sensorBrandList" required>
@@ -4212,7 +4220,7 @@
                         </div>
                         <!-- Serial Number*: (edit) -->
                         <div class="form-group required" ng-if="view.DEPval == 'edit'">
-                            <label class="col-md-4 col-md-offset-1 req control-label">Serial Number:</label>
+                            <label class="col-md-4 req control-label">Serial Number:</label>
                             <div class="col-md-6">
                                 <input class="form-control" name="serial_number" ng-model="depStuffCopy[0].serial_number" type="text" required />
                             </div>
@@ -4228,7 +4236,7 @@
                         </div>
                         <!-- Housing Serial Number: (edit) -->
                         <div class="form-group" ng-if="view.DEPval == 'edit'">
-                            <label class="col-md-4 col-md-offset-1 control-label">Housing Serial Number:</label>
+                            <label class="col-md-4 control-label">Housing Serial Number:</label>
                             <div class="col-md-6">
                                 <input class="form-control" name="housing_serial_number" ng-model="depStuffCopy[0].housing_serial_number" type="text" />
                             </div>
@@ -4244,7 +4252,7 @@
                         </div>
                         <!-- Housing Types: (edit) -->
                         <div class="form-group" ng-if="view.DEPval == 'edit'">
-                            <label class="col-md-4 col-md-offset-1 control-label">Housing Types:</label>
+                            <label class="col-md-4 control-label">Housing Types:</label>
                             <div class="col-md-6">
                                 <select class="form-control" id="housing_type_id" name="housing_type_id" ng-model="depStuffCopy[0].housing_type_id"
                                         ng-options="ht.housing_type_id as ht.type_name for ht in houseTypeList">
@@ -4286,15 +4294,15 @@
                         </div><!--end detail for Tapedowns-->
                         <!-- tapedown (edit)-->
                         <div class="form-group" ng-if="view.DEPval == 'edit'">
-                            <label class="col-md-4 col-md-offset-1 control-label">Tapedowns:</label>
+                            <label class="col-md-4 control-label">Tapedowns:</label>
                             <div class="col-md-6"></div>
                             <button type="button" class="col-md-1 borderLess pull-left" tooltip-placement="left" tooltip-append-to-body="false" uib-tooltip="These elevations and tape down data are used for both field activities and final products. Please pay attention to how your data is entered.">
                                 <span class="glyphicon glyphicon-question-sign"></span>
                             </button>
                             <div class="col-md-12">
                                 <!--start add tapedown area -->
-                                <div ng-if="OPsPresent" class="col-md-8 pull-right">
-                                    <label class="col-md-4 control-label">Datum Locations:</label>
+                                <div ng-if="OPsPresent" class="col-md-9 pull-right">
+                                    <label class="col-md-5 control-label">Datum Locations:</label>
                                     <div class="col-md-6">
                                         <div isteven-multi-select
                                              input-model="DEPOPsForTapeDown"
@@ -4358,70 +4366,74 @@
                         <br clear="all" />
 
                         <!--sensor stat tapedown parts-->
-                        <!-- Sensor Elevation (detail) -->
-                        <div ng-if="OPsPresent && view.DEPval == 'detail'" class="col-md-12">
-                            <div class="col-md-4 col-md-offset-1"><label>Sensor Elevation:</label></div>
-                            <div class="col-md-6"><span>{{DeployedSensorStat.sensor_elevation || '--'}}</span></div>
-                        </div>
-                        <!-- Sensor Elevation (edit) -->
-                        <div ng-if="OPsPresent && view.DEPval == 'edit'" class="form-group">
-                            <label class="col-md-4 col-md-offset-1 control-label">Sensor Elevation:</label>
-                            <div class="col-md-6">
-                                <input class="form-control" ng-keypress="isNum($event)" name="sensor_elevation" ng-model="depStuffCopy[1].sensor_elevation" type="text" />
+                        <div class="col-md-7">
+                            <!-- Sensor Elevation (detail) -->
+                            <div ng-if="OPsPresent && view.DEPval == 'detail'" class="col-md-12">
+                                <div class="col-md-8 col-md-offset-1"><label>Sensor Elevation:</label></div>
+                                <div class="col-md-3"><span>{{DeployedSensorStat.sensor_elevation || '--'}}</span></div>
                             </div>
-                            <button type="button" class="col-md-1 borderLess pull-left" tooltip-placement="right" tooltip-append-to-body="false" uib-tooltip="Using the offset correction, elevation of the sensor orifice.">
-                                <span class="glyphicon glyphicon-question-sign"></span>
-                            </button>
-                        </div>
+                            <!-- Sensor Elevation (edit) -->
+                            <div ng-if="OPsPresent && view.DEPval == 'edit'" class="form-group">
+                                <label class="col-md-7 control-label">Sensor Elevation:</label>
+                                <div class="col-md-4">
+                                    <input class="form-control" ng-keypress="isNum($event)" name="sensor_elevation" ng-model="depStuffCopy[1].sensor_elevation" type="text" />
+                                </div>
+                                <button type="button" class="col-md-1 borderLess pull-left" tooltip-placement="right" tooltip-append-to-body="false" uib-tooltip="Using the offset correction, elevation of the sensor orifice.">
+                                    <span class="glyphicon glyphicon-question-sign"></span>
+                                </button>
+                            </div>
 
-                        <!-- Water Surface Elevation (detail) -->
-                        <div ng-if="OPsPresent && view.DEPval == 'detail'" class="col-md-12">
-                            <div class="col-md-4 col-md-offset-1"><label>Water Surface Elevation:</label></div>
-                            <div class="col-md-6"><span>{{DeployedSensorStat.ws_elevation || '--'}}</span></div>
-                        </div>
-                        <!-- Water Surface Elevation (edit) -->
-                        <div ng-if="OPsPresent && view.DEPval == 'edit'" class="form-group">
-                            <label class="col-md-4 col-md-offset-1 control-label">Water Surface Elevation:</label>
-                            <div class="col-md-6">
-                                <input class="form-control" ng-keypress="isNum($event)" name="ws_elevation" ng-model="depStuffCopy[1].ws_elevation" type="text" />
+                            <!-- Water Surface Elevation (detail) -->
+                            <div ng-if="OPsPresent && view.DEPval == 'detail'" class="col-md-12">
+                                <div class="col-md-8 col-md-offset-1"><label>Water Surface Elevation:</label></div>
+                                <div class="col-md-3"><span>{{DeployedSensorStat.ws_elevation || '--'}}</span></div>
                             </div>
-                            <button type="button" class="col-md-1 borderLess pull-left" tooltip-placement="right" tooltip-append-to-body="false" uib-tooltip="Using the water surface tape down, elevation of the water surface.">
-                                <span class="glyphicon glyphicon-question-sign"></span>
-                            </button>
-                        </div>
+                            <!-- Water Surface Elevation (edit) -->
+                            <div ng-if="OPsPresent && view.DEPval == 'edit'" class="form-group">
+                                <label class="col-md-7 control-label">Water Surface Elevation:</label>
+                                <div class="col-md-4">
+                                    <input class="form-control" ng-keypress="isNum($event)" name="ws_elevation" ng-model="depStuffCopy[1].ws_elevation" type="text" />
+                                </div>
+                                <button type="button" class="col-md-1 borderLess pull-left" tooltip-placement="right" tooltip-append-to-body="false" uib-tooltip="Using the water surface tape down, elevation of the water surface.">
+                                    <span class="glyphicon glyphicon-question-sign"></span>
+                                </button>
+                            </div>
 
-                        <!-- Ground Elevation (detail) -->
-                        <div ng-if="OPsPresent && view.DEPval == 'detail'" class="col-md-12">
-                            <div class="col-md-4 col-md-offset-1"><label>Ground Elevation:</label></div>
-                            <div class="col-md-6"><span>{{DeployedSensorStat.gs_elevation || '--'}}</span></div>
-                        </div>
-                        <!-- Ground Elevation (edit) -->
-                        <div ng-if="OPsPresent && view.DEPval == 'edit'" class="form-group">
-                            <label class="col-md-4 col-md-offset-1 control-label">Ground Elevation:</label>
-                            <div class="col-md-6">
-                                <input class="form-control" ng-keypress="isNum($event)" name="gs_elevation" ng-model="depStuffCopy[1].gs_elevation" type="text" />
+                            <!-- Ground Elevation (detail) -->
+                            <div ng-if="OPsPresent && view.DEPval == 'detail'" class="col-md-12">
+                                <div class="col-md-8 col-md-offset-1"><label>Ground Elevation:</label></div>
+                                <div class="col-md-3"><span>{{DeployedSensorStat.gs_elevation || '--'}}</span></div>
                             </div>
-                            <button type="button" class="col-md-1 borderLess pull-left" tooltip-placement="right" tooltip-append-to-body="false" uib-tooltip="Using the ground surface tape down, elevation of the ground surface.">
-                                <span class="glyphicon glyphicon-question-sign"></span>
-                            </button>
-                        </div>
+                            <!-- Ground Elevation (edit) -->
+                            <div ng-if="OPsPresent && view.DEPval == 'edit'" class="form-group">
+                                <label class="col-md-7 control-label">Ground Elevation:</label>
+                                <div class="col-md-4">
+                                    <input class="form-control" ng-keypress="isNum($event)" name="gs_elevation" ng-model="depStuffCopy[1].gs_elevation" type="text" />
+                                </div>
+                                <button type="button" class="col-md-1 borderLess pull-left" tooltip-placement="right" tooltip-append-to-body="false" uib-tooltip="Using the ground surface tape down, elevation of the ground surface.">
+                                    <span class="glyphicon glyphicon-question-sign"></span>
+                                </button>
+                            </div>
 
-                        <!-- In feet above (detail) -->
-                        <div ng-if="OPsPresent && view.DEPval == 'detail'" class="col-md-12">
-                            <div class="col-md-4 col-md-offset-1"><label>In feet above:</label></div>
-                            <div class="col-md-6"><span>{{DeployedSensorStat.vdatum}}</span></div>
-                        </div>
-                        <!-- In feet above (edit) -->
-                        <div ng-if="OPsPresent && view.DEPval == 'edit'" class="form-group">
-                            <label class="col-md-4 col-md-offset-1 control-label">In feet above:</label>
-                            <div class="col-md-6">
-                                <select class="form-control" id="vdatum_id" name="vdatum_id" ng-model="depStuffCopy[1].vdatum_id"
-                                        ng-options="vd.datum_id as vd.datum_abbreviation for vd in vertDatumList">
-                                    <option value=""></option>
-                                </select>
+                            <!-- In feet above (detail) -->
+                            <div ng-if="OPsPresent && view.DEPval == 'detail'" class="col-md-12">
+                                <div class="col-md-8 col-md-offset-1"><label>In feet above:</label></div>
+                                <div class="col-md-3"><span>{{DeployedSensorStat.vdatum}}</span></div>
+                            </div>
+                            <!-- In feet above (edit) -->
+                            <div ng-if="OPsPresent && view.DEPval == 'edit'" class="form-group">
+                                <label class="col-md-7 control-label">In feet above:</label>
+                                <div class="col-md-4">
+                                    <select class="form-control" id="vdatum_id" name="vdatum_id" ng-model="depStuffCopy[1].vdatum_id"
+                                            ng-options="vd.datum_id as vd.datum_abbreviation for vd in vertDatumList">
+                                        <option value=""></option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div ng-if="OPsPresent && view.DEPval == 'edit'" class="col-md-12">
+                                <em>Note: these elevations are used in the sensor processing and the final products</em>
                             </div>
                         </div>
-                        <div ng-if="OPsPresent && view.DEPval == 'edit'" class="col-md-12"><em>Note: these elevations are used in the sensor processing and the final products</em></div>
                         <br clear="all" /><hr />
 
                         <!-- Vented (only if Sensor Type is Pressure Transducer) (detail)-->
@@ -4433,8 +4445,8 @@
                         </div>
                         <!-- Vented (only if Sensor Type is Pressure Transducer) (edit)-->
                         <div ng-show="(sensor.sensor_type_id == 1 || depStuffCopy[0].sensor_type_id == 1) && view.DEPval == 'edit'">
-                            <div class="form-group">
-                                <label class="col-md-4 col-md-offset-1 control-label">Vented:</label>
+                            <div class="form-group col-md-12">
+                                <label class="col-md-4 control-label">Vented:</label>
                                 <div class="col-md-6">
                                     <span class="radio-inline">
                                         <input type="radio" name="vented" ng-model="depStuffCopy[0].vented" value="Yes" />Yes
@@ -4453,7 +4465,7 @@
                         </div>
                         <!-- Deployment Type: (edit)-->
                         <div class="form-group" ng-if="view.DEPval == 'edit'">
-                            <label class="col-md-4 col-md-offset-1 control-label">Deployment Type:</label>
+                            <label class="col-md-4 control-label">Deployment Type:</label>
                             <div class="col-md-6">
                                 <select class="form-control" id="deployment_type_id" name="deployment_type_id" ng-model="depStuffCopy[0].deployment_type_id"
                                         ng-options="dt.deployment_type_id as dt.method for dt in filteredDeploymentTypes">
@@ -4469,7 +4481,7 @@
                         </div>
                         <!-- Location Description: (edit) -->
                         <div class="form-group" ng-if="view.DEPval == 'edit'">
-                            <label class="col-md-4 col-md-offset-1 control-label">Location Description:</label>
+                            <label class="col-md-4 control-label">Location Description:</label>
                             <div class="col-md-6">
                                 <textarea class="form-control" id="location_description" name="location_description" type=" text" rows="3" ng-model="depStuffCopy[0].location_description" />
                             </div>
@@ -4481,7 +4493,7 @@
                         <!-- Interval: -->
                         <div class="form-group" ng-show="view.DEPval == 'edit'">
                             <label class="col-md-4 control-label"></label>
-                            <div class="col-md-6 col-md-offset-1" style="padding-top:5px;">
+                            <div class="col-md-6" style="padding-top:5px;">
                                 <span class="radio-inline">
                                     <input type="radio" name="intervalType" ng-model="IntervalType.type" value="Minutes" />Minutes
                                 </span>
@@ -4497,7 +4509,7 @@
                         </div>
                         <!-- interval (edit)-->
                         <div class="form-group" ng-if="view.DEPval == 'edit'">
-                            <label class="col-md-4 col-md-offset-1 control-label">Interval:</label>
+                            <label class="col-md-4 control-label">Interval:</label>
                             <div class="col-md-6">
                                 <input class="form-control" ng-keypress="isNum($event)" name="interval" ng-model="depStuffCopy[0].interval" type="text" />
                             </div>
@@ -4510,7 +4522,7 @@
                         </div>
                         <!-- Deploy Date*: (edit)-->
                         <div class="form-group required" ng-if="view.DEPval == 'edit'">
-                            <label class="col-md-4 col-md-offset-1 control-label topPad">Deploy Date:</label>
+                            <label class="col-md-4 control-label topPad">Deploy Date:</label>
                             <div class="col-md-6">
                                 <datetimepicker hour-step="1" minute-step="1" ng-model="depStuffCopy[1].time_stamp" show-meridian="true"
                                                 date-format="MM/dd/yyyy" readonly-date="false" readonly-time="false" date-options="dateOptions"
@@ -4526,7 +4538,7 @@
                         </div>
                         <!-- Deploy timezone*: (edit)-->
                         <div class="form-group required" ng-if="view.DEPval == 'edit'">
-                            <label class="col-md-4 col-md-offset-1 req control-label">Time Zone:</label>
+                            <label class="col-md-4 req control-label">Time Zone:</label>
                             <div class="col-md-6">
                                 <select class="form-control" name="time_zone" ng-model="depStuffCopy[1].time_zone" ng-options="vcm for vcm in timeZoneList" required>
                                     <option value=""></option>
@@ -4544,7 +4556,7 @@
                         </div>
                         <!-- Note: (edit)-->
                         <div class="form-group" ng-if="view.DEPval == 'edit'">
-                            <label class="col-md-4 col-md-offset-1 control-label">Note:</label>
+                            <label class="col-md-4 control-label">Note:</label>
                             <div class="col-md-6">
                                 <textarea class="form-control" name="notes" type="text" rows="3" ng-model="depStuffCopy[1].notes" />
                             </div>
@@ -4557,7 +4569,7 @@
                         </div>
                         <!-- Deploy Member: (edit)-->
                         <div class="form-group" ng-if="view.DEPval == 'edit'">
-                            <label class="col-md-4 col-md-offset-1 control-label">Deploy Member:</label>
+                            <label class="col-md-4 control-label">Deploy Member:</label>
                             <div class="col-md-6">{{Deployer.fname}} {{Deployer.lname}}</div>
                         </div>
 
@@ -4599,7 +4611,7 @@
                         </div>
                         <!-- Status Type:*(edit) -->
                         <div class="form-group required" ng-if="view.RETval == 'edit'">
-                            <label class="col-md-4 col-md-offset-1 control-label req">Status:</label>
+                            <label class="col-md-4 control-label req">Status:</label>
                             <div class="col-md-6">
                                 <select class="form-control" name="status_type_id" ng-model="retStuffCopy[1].status_type_id" ng-options="s.status_type_id as s.status for s in statusTypeList" required>
                                     <option value=""></option>
@@ -4614,7 +4626,7 @@
                         </div>
                         <!-- Collection Condition:* (edit)-->
                         <div class="form-group required" ng-if="view.RETval == 'edit'">
-                            <label class="col-md-4 col-md-offset-1 control-label req" for="inst_collection_id">Collection Conditions:</label>
+                            <label class="col-md-4 control-label req" for="inst_collection_id">Collection Conditions:</label>
                             <div class="col-md-6">
                                 <select class="form-control" name="inst_collection_id" ng-model="retStuffCopy[0].inst_collection_id"
                                         ng-options="ins.id as ins.condition for ins in collectCondList" required>
@@ -4630,7 +4642,7 @@
                         </div>
                         <!-- Note:(edit) -->
                         <div class="form-group" ng-if="view.RETval == 'edit'">
-                            <label class="col-md-4 col-md-offset-1 control-label" for="notes">Note:</label>
+                            <label class="col-md-4 control-label" for="notes">Note:</label>
                             <div class="col-md-6">
                                 <textarea class="form-control" name="notes" type="text" rows="3" ng-model="retStuffCopy[1].notes" />
                             </div>
@@ -4643,7 +4655,7 @@
                         </div>
                         <!-- Retrieve Date: *(edit) -->
                         <div class="form-group required" ng-if="view.RETval == 'edit'">
-                            <label class="col-md-4 col-md-offset-1 control-label topPad">Retrieve Date:</label>
+                            <label class="col-md-4 control-label topPad">Retrieve Date:</label>
                             <div class="col-md-6">
                                 <datetimepicker hour-step="1" minute-step="1" ng-model="retStuffCopy[1].time_stamp" show-meridian="true" date-format="MM/dd/yyyy"
                                                 readonly-date="false" readonly-time="false" date-options="dateOptions" hidden-time="false" hidden-date="false" show-spinners="true" required>
@@ -4658,7 +4670,7 @@
                         </div>
                         <!-- Timezone*: (edit)-->
                         <div class="form-group required" ng-if="view.RETval == 'edit'">
-                            <label class="col-md-4 col-md-offset-1 req control-label">Time Zone:</label>
+                            <label class="col-md-4 req control-label">Time Zone:</label>
                             <div class="col-md-6">
                                 <select class="form-control" name="time_zone" ng-model="retStuffCopy[1].time_zone" ng-options="vcm for vcm in timeZoneList" required>
                                     <option value=""></option>
@@ -4704,14 +4716,14 @@
                         </div><!--end tapedown detail -->
                         <!-- tapedown (edit)-->
                         <div class="form-group" ng-if="view.RETval == 'edit'">
-                            <label class="col-md-4 col-md-offset-1 control-label">Tapedowns:</label>
+                            <label class="col-md-4 control-label">Tapedowns:</label>
                             <div class="col-md-6"></div>
                             <button type="button" class="col-md-1 borderLess pull-left" tooltip-placement="left" tooltip-append-to-body="false" uib-tooltip="These elevations and tape down data are used for both field activities and final products. Please pay attention to how your data is entered.">
                                 <span class="glyphicon glyphicon-question-sign"></span>
                             </button>
                             <div class="col-md-12">
-                                <div ng-if="OPsPresent" class="col-md-8 pull-right">
-                                    <label class="col-md-4 control-label">Datum Locations:</label>
+                                <div ng-if="OPsPresent" class="col-md-9 pull-right">
+                                    <label class="col-md-5 control-label">Datum Locations:</label>
                                     <div class="col-md-6">
                                         <div isteven-multi-select
                                              input-model="RETOPsForTapeDown"
@@ -4774,61 +4786,72 @@
 
                         <br clear="all" />
                         <!--sensor stat tapedown parts-->
-                        <!--sensor Elevation (detail)-->
-                        <div ng-if="OPsPresent && view.RETval == 'detail'" class="col-md-12">
-                            <div class="col-md-4 col-md-offset-1"><label>Sensor Elevation:</label></div>
-                            <div class="col-md-6"><span>{{RetrievedSensorStat.sensor_elevation || '--'}}</span></div>
-                        </div>
-                        <!--sensor Elevation (edit)-->
-                        <div ng-if="OPsPresent && view.RETval == 'edit'" class="form-group">
-                            <label class="col-md-4 col-md-offset-1 control-label">Sensor Elevation:</label>
-                            <div class="col-md-6">
-                                <input class="form-control" ng-keypress="isNum($event)" name="sensor_elevation" ng-model="retStuffCopy[1].sensor_elevation" type="text" />
+                        <div class="col-md-7">
+                            <!--sensor Elevation (detail)-->
+                            <div ng-if="OPsPresent && view.RETval == 'detail'" class="col-md-12">
+                                <div class="col-md-8 col-md-offset-1"><label>Sensor Elevation:</label></div>
+                                <div class="col-md-3"><span>{{RetrievedSensorStat.sensor_elevation || '--'}}</span></div>
                             </div>
-                        </div>
+                            <!--sensor Elevation (edit)-->
+                            <div ng-if="OPsPresent && view.RETval == 'edit'" class="form-group">
+                                <label class="col-md-7 control-label">Sensor Elevation:</label>
+                                <div class="col-md-4">
+                                    <input class="form-control" ng-keypress="isNum($event)" name="sensor_elevation" ng-model="retStuffCopy[1].sensor_elevation" type="text" />
+                                </div>
+                                <button type="button" class="col-md-1 borderLess pull-left" tooltip-placement="right" tooltip-append-to-body="false" uib-tooltip="Using the offset correction, elevation of the sensor orifice.">
+                                    <span class="glyphicon glyphicon-question-sign"></span>
+                                </button>
+                            </div>
 
-                        <!--Water Surface Elevation (detail)-->
-                        <div ng-if="OPsPresent && view.RETval == 'detail'" class="col-md-12">
-                            <div class="col-md-4 col-md-offset-1"><label>Water Surface Elevation:</label></div>
-                            <div class="col-md-6"><span>{{RetrievedSensorStat.ws_elevation || '--'}}</span></div>
-                        </div>
-                        <!--Water Surface Elevation (edit)-->
-                        <div ng-if="OPsPresent && view.RETval == 'edit'" class="form-group">
-                            <label class="col-md-4 col-md-offset-1 control-label">Water Surface Elevation:</label>
-                            <div class="col-md-6">
-                                <input class="form-control" ng-keypress="isNum($event)" name="ws_elevation" ng-model="retStuffCopy[1].ws_elevation" type="text" />
+                            <!--Water Surface Elevation (detail)-->
+                            <div ng-if="OPsPresent && view.RETval == 'detail'" class="col-md-12">
+                                <div class="col-md-8 col-md-offset-1"><label>Water Surface Elevation:</label></div>
+                                <div class="col-md-3"><span>{{RetrievedSensorStat.ws_elevation || '--'}}</span></div>
                             </div>
-                        </div>
+                            <!--Water Surface Elevation (edit)-->
+                            <div ng-if="OPsPresent && view.RETval == 'edit'" class="form-group">
+                                <label class="col-md-7 control-label">Water Surface Elevation:</label>
+                                <div class="col-md-4">
+                                    <input class="form-control" ng-keypress="isNum($event)" name="ws_elevation" ng-model="retStuffCopy[1].ws_elevation" type="text" />
+                                </div>
+                                <button type="button" class="col-md-1 borderLess pull-left" tooltip-placement="right" tooltip-append-to-body="false" uib-tooltip="Using the water surface tape down, elevation of the water surface.">
+                                    <span class="glyphicon glyphicon-question-sign"></span>
+                                </button>
+                            </div>
 
-                        <!--Ground Elevation (detail)-->
-                        <div ng-if="OPsPresent && view.RETval == 'detail'" class="col-md-12">
-                            <div class="col-md-4 col-md-offset-1"><label>Ground Elevation:</label></div>
-                            <div class="col-md-6"><span>{{RetrievedSensorStat.gs_elevation || '--'}}</span></div>
-                        </div>
-                        <!--Ground Elevation (edit)-->
-                        <div ng-if="OPsPresent && view.RETval == 'edit'" class="form-group">
-                            <label class="col-md-4 col-md-offset-1 control-label">Ground Elevation:</label>
-                            <div class="col-md-6">
-                                <input class="form-control" ng-keypress="isNum($event)" name="gs_elevation" ng-model="retStuffCopy[1].gs_elevation" type="text" />
+                            <!--Ground Elevation (detail)-->
+                            <div ng-if="OPsPresent && view.RETval == 'detail'" class="col-md-12">
+                                <div class="col-md-8 col-md-offset-1"><label>Ground Elevation:</label></div>
+                                <div class="col-md-3"><span>{{RetrievedSensorStat.gs_elevation || '--'}}</span></div>
                             </div>
-                        </div>
+                            <!--Ground Elevation (edit)-->
+                            <div ng-if="OPsPresent && view.RETval == 'edit'" class="form-group">
+                                <label class="col-md-7 control-label">Ground Elevation:</label>
+                                <div class="col-md-4">
+                                    <input class="form-control" ng-keypress="isNum($event)" name="gs_elevation" ng-model="retStuffCopy[1].gs_elevation" type="text" />
+                                </div>
+                                <button type="button" class="col-md-1 borderLess pull-left" tooltip-placement="right" tooltip-append-to-body="false" uib-tooltip="Using the ground surface tape down, elevation of the ground surface.">
+                                    <span class="glyphicon glyphicon-question-sign"></span>
+                                </button>
+                            </div>
 
-                        <!--in feet above (detail)-->
-                        <div ng-if="OPsPresent && view.RETval == 'detail'" class="col-md-12">
-                            <label class="col-md-4 col-md-offset-1">In feet above:</label>
-                            <div class="col-md-6"><span>{{RetrievedSensorStat.vdatumName}}</span></div>
-                        </div>
-                        <!--in feet above (edit)-->
-                        <div ng-if="OPsPresent && view.RETval == 'edit'" class="form-group">
-                            <label class="col-md-4 col-md-offset-1 control-label">In feet above:</label>
-                            <div class="col-md-6">
-                                <select class="form-control" id="vdatum_id" name="vdatum_id" ng-model="retStuffCopy[1].vdatum_id"
-                                        ng-options="vd.datum_id as vd.datum_abbreviation for vd in vertDatumList">
-                                    <option value=""></option>
-                                </select>
+                            <!--in feet above (detail)-->
+                            <div ng-if="OPsPresent && view.RETval == 'detail'" class="col-md-12">
+                                <label class="col-md-8 col-md-offset-1">In feet above:</label>
+                                <div class="col-md-3"><span>{{RetrievedSensorStat.vdatumName}}</span></div>
                             </div>
+                            <!--in feet above (edit)-->
+                            <div ng-if="OPsPresent && view.RETval == 'edit'" class="form-group">
+                                <label class="col-md-7 control-label">In feet above:</label>
+                                <div class="col-md-4">
+                                    <select class="form-control" id="vdatum_id" name="vdatum_id" ng-model="retStuffCopy[1].vdatum_id"
+                                            ng-options="vd.datum_id as vd.datum_abbreviation for vd in vertDatumList">
+                                        <option value=""></option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div ng-if="OPsPresent && view.RETval == 'edit'" class="col-md-12"><em>Note: these elevations are used in the sensor processing and the final products</em></div>
                         </div>
-                        <div ng-if="OPsPresent && view.RETval == 'edit'" class="col-md-12"><em>Note: these elevations are used in the sensor processing and the final products</em></div>
                         <br clear="all" /><hr />
 
                         <!-- Retrieve Member: (detail) -->
@@ -4838,7 +4861,7 @@
                         </div>
                         <!-- Retrieve Member: (edit) -->
                         <div class="form-group required" ng-if="view.RETval == 'edit'">
-                            <label class="col-md-4 col-md-offset-1 control-label">Member:</label>
+                            <label class="col-md-4 control-label">Member:</label>
                             <div class="col-md-6">{{Retriever.fname}} {{Retriever.lname}}</div>
                         </div>
 

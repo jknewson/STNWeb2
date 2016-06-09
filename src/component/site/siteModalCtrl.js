@@ -769,7 +769,7 @@
                 var thisSite = $scope.aSite;
                 var dSiteModal = $uibModal.open({
                     template: '<div class="modal-header"><h3 class="modal-title">Delete Site</h3></div>' +
-                        '<div class="modal-body"><p>Are you sure you want to delete site {{siteNo}}? Doing so will remove all OPs, HWMs, Sensors and Files associated with it.</p></div>' +
+                        '<div class="modal-body"><p>Are you sure you want to delete site {{siteNo}}?</p></div>' +
                         '<div class="modal-footer"><button type="button" class="btn btn-danger" ng-click="deleteIt()">Delete</button><button type="button" class="btn btn-primary" ng-click="ok()">Cancel</button></div>',
                     controller: ['$scope', '$uibModalInstance', function ($scope, $uibModalInstance) {
                         $scope.siteNo = thisSite.site_no;
@@ -790,7 +790,18 @@
                         var sendBack = "Deleted";
                         $uibModalInstance.close(sendBack);
                     }, function error(errorResponse) {
-                        toastr.error("Error: " + errorResponse.statusText);
+                        $uibModal.open({
+                            template: '<div class="modal-header"><h3 class="modal-title">Error</h3></div>' +
+                            '<div class="modal-body"><p>{{message}}</p></div>' +
+                            '<div class="modal-footer"><button type="button" class="btn btn-primary" ng-click="ok()">Cancel</button></div>',
+                            controller: ['$scope', '$uibModalInstance', function ($scope, $uibModalInstance) {
+                                $scope.message = errorResponse.data;
+                                $scope.ok = function () {
+                                    $uibModalInstance.dismiss('cancel');
+                                };
+                            }], size: 'sm'
+                        });
+                        toastr.error("Error: " + errorResponse.data);
                     });
                 }, function () {
                     //logic for cancel
