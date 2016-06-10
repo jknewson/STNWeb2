@@ -589,24 +589,24 @@
 
                 <!--submit and cancel buttons-->
                 <div class="form-group">
-                    <div class="col-md-5 col-md-offset-2">
+                    <div style="display: block; text-align: center;">
                         <span>
-                            <button ng-show="aSite.site_id == undefined" class="btn btn-primary" style="width:80px;margin-right:10px" ng-click="create(siteForm.$valid)">
+                            <button ng-show="aSite.site_id == undefined" class="btn-wim btn-blue btn-inline btn-lg" ng-click="create(siteForm.$valid)">
                                 <span>Create</span>
                             </button>
                         </span>
                         <span>
-                            <button ng-show="aSite.site_id != undefined" class="btn btn-primary" style="width:80px;margin-right:10px" ng-click="save(siteForm.$valid)">
+                            <button ng-show="aSite.site_id != undefined" class="btn-wim btn-green btn-inline btn-lg"  ng-click="save(siteForm.$valid)">
                                 <span>Save</span>
                             </button>
                         </span>
                         <span ng-if="userRole == 'Admin'">
-                            <button ng-show="aSite.site_id != undefined" class="btn btn-danger" style="width:80px;margin-right:10px" ng-click="deleteSite()">
+                            <button ng-show="aSite.site_id != undefined" class="btn-wim btn-red btn-inline btn-lg"  ng-click="deleteSite()">
                                 <span>Delete</span>
                             </button>
                         </span>
                         <span>
-                            <button type="button" class="btn btn-default" ng-click="cancel()">
+                            <button type="button" class="btn-wim btn-orange btn-inline btn-lg" ng-click="cancel()">
                                 <span>Cancel</span>
                             </button>
                         </span>
