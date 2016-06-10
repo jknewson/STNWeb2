@@ -1,0 +1,275 @@
+<div class="">
+    <h3>Accounts</h3>
+    <div ng-show="loggedInUser.Role !== 'Field'"><a ng-click="showMemberModal(0)"><i class="glyphicon glyphicon-plus"></i>Create New Member</a></div>
+    <script>
+        var sortingOrder = 'lname';
+    </script>
+    <table class="table table-striped table-condensed">
+        <thead>
+            <tr>
+                <th class="lname">Last Name&nbsp;<a ng-click="sort_by('lname')"><i class="glyphicon glyphicon-sort"></i></a></th>
+                <th class="fname">First Name&nbsp;<a ng-click="sort_by('fname')"><i class="glyphicon glyphicon-sort"></i></a></th>
+                <th class="Agency">Agency&nbsp;<a ng-click="sort_by('Agency')"><i class="glyphicon glyphicon-sort"></i></a></th>
+                <th class="Role">Role&nbsp;<a ng-click="sort_by('Role')"><i class="glyphicon glyphicon-sort"></i></a></th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr ng-repeat="m in memberList | orderBy:sortingOrder:reverse">
+                <td><a ng-click="showMemberModal(m)">{{m.lname}}</a></td>
+                <td>{{m.fname}}</td>
+                <td>{{m.Agency}}</td>
+                <td>{{m.Role}}</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<script type="text/ng-template" id="memberModal.html">
+    <div class="modal-header">
+        <h3 class="modal-title">Member<button class="close" type="button" ng-click="cancel()" aria-hidden="true" style="color:gray;">&times;</button></h3>
+    </div>
+    <form ng-show="matchingUsers || loggedInUser.Role == 'Admin'" class="form-horizontal" id="accountForm" name="accountForm">
+        <fieldset>
+            <div class="modal-body">
+                <!-- If this is the user logged -->
+                <!-- First Name -->
+                <div class="form-group required" ng-class="{'has-error':accountForm.fname.$invalid && accountForm.fname.$dirty}">
+                    <label class="col-md-4 control-label req" for="fname">First Name:</label>
+                    <div class="col-md-5">
+                        <input class="form-control" name="fname" ng-model="aMember.fname" type="text" placeholder="First Name" required />
+                    </div>
+                </div>
+
+                <!-- Last Name -->
+                <div class="form-group required" ng-class="{'has-error':accountForm.lname.$invalid && accountForm.lname.$dirty}">
+                    <label class="col-md-4 control-label req" for="lname">Last Name:</label>
+                    <div class="col-md-5">
+                        <input class="form-control" name="lname" ng-model="aMember.lname" type="text" placeholder="Last Name" required />
+                    </div>
+                </div>
+
+                <!-- Username-->
+                <div class="form-group required">
+                    <label class="col-md-4 control-label req" for="username">Username:</label>
+                    <div class="col-md-5">
+                        <input class="form-control" name="username" ng-model="aMember.username" type="text" placeholder="User Name" required />
+                    </div>&nbsp;
+                    <button ng-show="aMember.member_id == undefined" type="button" class="borderLess" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip-html="usernameTooltip">
+                        <span class="glyphicon glyphicon-question-sign"></span>
+                    </button>
+                </div>
+
+                <!-- Agency -->
+                <div class="form-group required">
+                    <label class="col-md-4 control-label req" for="agency_id">Agency:</label>
+                    <div class="col-md-5">
+                        <select class=" form-control" name="agency_id" ng-model="aMember.agency_id"
+                                ng-options="r.agency_id as r.agency_name for r in agencyList | orderBy: 'agency_name'" required>
+                            <option value=""></option>
+                        </select>
+                    </div>&nbsp;
+                    <button type="button" class="borderLess" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Contact an Administrator to set up a new Agency.">
+                        <span class="glyphicon glyphicon-question-sign"></span>
+                    </button>
+                </div>
+
+                <!-- Role-->
+                <div class="form-group required">
+                    <label class="col-md-4 control-label req" for="ROLE">Role:</label>
+                    <div class="col-md-5">
+                        <select ng-show="loggedInUser.Role == 'Admin'" " class=" form-control" name="role_id" ng-model="aMember.role_id"
+                                ng-options="r.role_id as r.role_name for r in roleList | orderBy: 'role_id'" required>
+                            <option value=""></option>
+                        </select>
+                        <span ng-show="loggedInUser.Role !== 'Admin'">{{aMember.Role}}</span>
+                    </div>
+                </div>
+
+                <!-- Phone -->
+                <div class="form-group required">
+                    <label class="col-md-4 control-label req" for="phone">Phone:</label>
+                    <div class="col-md-5">
+                        <input class="form-control" name="phone" type="text" my-input-mask="{mask: '(999) 999-9999[ x99999]', greedy:false}" ng-model="aMember.phone" required />
+                    </div>&nbsp;
+                    <button type="button" class="borderLess" tooltip-placement="right" tooltip-append-to-body="false" uib-tooltip="Enter the member's phone number. To add an extension, immediately following the phone number type 'x' and then the extension number.">
+                        <span class="glyphicon glyphicon-question-sign"></span>
+                    </button>
+                </div>
+
+                <!-- Email -->
+                <div class="form-group required">
+                    <label class="col-md-4 control-label req" for="email">Email:</label>
+                    <div class="col-md-5">
+                        <input class="form-control" name="email" type="email" placeholder="" ng-model="aMember.email" required />
+                    </div>&nbsp;
+                    <button type="button" class="borderLess" tooltip-placement="right" tooltip-append-to-body="false" uib-tooltip="Enter the member's email address.">
+                        <span class="glyphicon glyphicon-question-sign"></span>
+                    </button>
+                </div>
+
+                <!-- Emergency Contact Name -->
+                <div class="form-group">
+                    <label class="col-md-4 control-label" for="emergency_contact_name">Emergency Contact Name:</label>
+                    <div class="col-md-5">
+                        <input class="form-control" name="emergency_contact_name" type="text" placeholder="" ng-model="aMember.emergency_contact_name" />
+                    </div>
+                </div>
+
+                <!-- Emergency Contact phone -->
+                <div class="form-group">
+                    <label class="col-md-4 control-label" for="emergency_contact_phone">Emergency Contact Phone:</label>
+                    <div class="col-md-5">
+                        <input class="form-control" name="emergency_contact_phone" type="text" my-input-mask="{mask: '(999) 999-9999[ x99999]', greedy:false}" ng-model="aMember.emergency_contact_phone" />
+                    </div>&nbsp;
+                    <button type="button" class="borderLess" tooltip-placement="right" tooltip-append-to-body="false" uib-tooltip="Enter the emergency contact's phone number. To add an extension, immediately following the phone number type 'x' and then the extension number.">
+                        <span class="glyphicon glyphicon-question-sign"></span>
+                    </button>
+                </div>
+
+                <!-- start existing password change section -->
+                <div class="form-group" ng-hide="aMember.member_id == undefined">
+                    <label class="col-md-4 control-label">
+                    </label>
+                    <div class="col-md-5">
+                        <button ng-show="!changePass" type="button" ng-click="changeMyPassBtn($event)">
+                            Change Password
+                        </button>
+                    </div>
+                </div>
+                <div class="col-md-12" ng-show="changePass">
+                    <div class="form-group">
+                        <label class="col-md-4 control-label" for="NewPassword">New Password:</label>
+                        <div class="col-md-5">
+                            <input class="form-control" ng-model="pass.newP" name="NPASSWORD" type="password" password-validate />
+                        </div>
+                        <span class="ui-state-error h5-message" ng-show="(accountForm.NPASSWORD.$error.passwordValidate)">
+                            <span class="h5-arrow"></span><span style="display:inline-block" class="h5-content">For password requirement, click the '?' icon.</span>
+                        </span>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-4 control-label" for="ConfirmPassword">Confirm Password:</label>
+                        <div class="col-md-5"><input class="form-control" name="CPASSWORD" type="password" placeholder="" password-validate same-as="pass.newP" ng-model="pass.confirmP" /></div>
+
+                        <span class="ui-state-error h5-message" ng-show="(accountForm.CPASSWORD.$error.passwordValidate)"><span class="h5-arrow"></span><span class="h5-content">For password requirement, hover over the '?' icon.</span></span>
+                        <span class="ui-state-error h5-message" ng-show="(accountForm.CPASSWORD.$error.passwordMismatch)"><span class="h5-arrow"></span><span class="h5-conent">Mismatch password</span></span>
+                        &nbsp;<button type="button" class="borderLess" tooltip-placement="right" tooltip-append-to-body="false" uib-tooltip="Password must be at least 8 characters long, contain at least 1 uppercase, 1 lowercase and 1 numeric. Passwords may contain any of these special characters ONLY: '_', '$', '#'">
+                            <span class="glyphicon glyphicon-question-sign"></span>
+                        </button>
+                    </div>
+                    
+                    <!--END new password inputs-->
+                    <!--START update/cancel button-->
+                    <div class="form-group">
+                        <div class="col-md-12" style="margin-top:7px">
+                            <span>
+                                <button type="button" class="btn btn-primary"
+                                        style="margin-right:10px"
+                                        ng-click="DontChangePass()">
+                                    Never mind
+                                </button>
+                            </span>
+                        </div>
+                    </div>
+                    <!--END update/cancel button-->
+                </div>
+                <br clear="all" />
+                <!--end existing password change section-->
+                <!-- start new member password  section -->
+                <div class="form-group required" ng-if="aMember.member_id == undefined" ng-class="{'has-error':accountForm.NPASSWORD.$invalid && accountForm.NPASSWORD.$dirty}">
+                    <label class="col-md-4 control-label" for="Password">Password:</label>
+                    <div class="col-md-5">
+                        <input class="form-control" ng-model="pass.newP" name="NPASSWORD" id="NPASSWORD" type="password" password-validate required />
+                        <span class="ui-state-error h5-message" ng-show="(accountForm.NPASSWORD.$error.passwordValidate)"><span class="h5-arrow"></span><span class="h5-content">For password requirement, hover over the '?' icon.</span></span>
+                    </div>&nbsp;
+                    <button type="button" class="borderLess" tooltip-placement="right" tooltip-append-to-body="false" uib-tooltip="Password must be at least 8 characters long, contain at least 1 uppercase, 1 lowercase and 1 numeric. Passwords may contain any of these special characters ONLY: '_', '$', '#'">
+                        <span class="glyphicon glyphicon-question-sign"></span>
+                    </button>
+                </div>
+                <div class="form-group required" ng-if="aMember.member_id == undefined" ng-class="{'has-error':accountForm.CPASSWORD.$invalid && accountForm.CPASSWORD.$dirty}">
+                    <label class="col-md-4 control-label" for="Password">Confirm Password:</label>
+                    <div class="col-md-5">
+                        <input class="form-control" id="CPASSWORD" name="CPASSWORD" type="password" placeholder="" password-validate same-as="pass.newP" ng-model="pass.confirmP" required />
+                        <span class="ui-state-error h5-message" ng-show="(accountForm.CPASSWORD.$error.passwordValidate)"><span class="h5-arrow"></span><span class="h5-content">For password requirement, hover over the '?' icon.</span></span>
+                        <span class="ui-state-error h5-message" ng-show="(accountForm.CPASSWORD.$error.passwordMismatch)"><span class="h5-arrow"></span><span class="h5-conent">Mismatch password</span></span>
+                    </div>
+                </div>
+                <!--end new member password section-->
+
+
+            </div> <!-- end modalBody-->
+            <div class="modal-footer">
+                <div class="form-group">
+                    <div class="col-md-12">
+                        <span>
+                            <button ng-if="aMember.member_id !== undefined" class="btn btn-primary" style="width:80px;margin-right:10px" ng-click="save(accountForm.$valid)">
+                                Save
+                            </button>
+                        </span>
+                        <span>
+                            <button ng-if="aMember.member_id == undefined" class="btn btn-primary" style="width:80px;margin-right:10px" ng-click="create(accountForm.$valid)">
+                                Create
+                            </button>
+                        </span>
+                        <span>
+                            <button type="button" ng-if="(loggedInUser.Role == 'Admin' && aMember.member_id != undefined) && !matchingUsers" class="btn btn-danger" ng-click="DeleteMember(aMember)">Delete Member</button>
+                        </span>
+                        <span>
+                            <button type="button" class="btn btn-warning" ng-click="cancel()">Close/Cancel</button>
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </fieldset>
+    </form>
+    <!-- If this isn't the user logged in -->
+
+    <div ng-show="!matchingUsers && loggedInUser.Role != 'Admin'">
+        <div class="modal-body">
+            <!-- Your Name -->
+            <div class="col-md-12">
+                <label class="col-md-4 control-label">Name:</label>
+                <div class="col-md-6"><span>{{aMember.fname}} {{aMember.lname}}</span></div>
+            </div>
+
+            <!-- Username-->
+            <div class="col-md-12">
+                <label class="col-md-4 control-label">Username:</label>
+                <div class="col-md-6"><span>{{aMember.username}}</span></div>
+            </div>
+
+            <!-- agency-->
+            <div class="col-md-12">
+                <label class="col-md-4 control-label">Agency:</label>
+                <div class="col-md-6"><span>{{(agencyList | filter: {agency_id : aMember.agency_id})[0].agency_name }}</span></div>
+            </div>
+
+            <!-- Email -->
+            <div class="col-md-12">
+                <label class="col-md-4 control-label">Email:</label>
+                <div class="col-md-6"><span>{{aMember.email}}</span></div>
+            </div>
+
+            <!-- Phone -->
+            <div class="col-md-12">
+                <label class="col-md-4 control-label">Phone:</label>
+                <div class="col-md-6"><span>{{aMember.phone}}</span></div>
+            </div>
+
+            <!-- Role-->
+            <div class="col-md-12">
+                <label class="col-md-4 control-label">Role:</label>
+                <div class="col-md-6"><span>{{aMember.Role}}</span></div>
+            </div>
+        </div><br clear="all"/>
+        <div class="modal-footer">
+            <div class="form-group">
+                <div class="col-md-12">                    
+                    <span>
+                        <button type="button" class="btn btn-warning" ng-click="cancel()">Close/Cancel</button>
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- end not able to edit view -->
+</script>

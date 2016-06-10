@@ -1537,6 +1537,8 @@ select{
     }
 
     .panel{
+        background-color: fade(@grey, 20%);
+
         border: none !important;
         box-shadow: none !important;
         .panel-heading{
@@ -1551,6 +1553,10 @@ select{
                 color: @white;
                 text-transform: uppercase;
             }
+        }
+        .panel-body{
+            box-sizing: border-box;
+            padding: 0 40px 40px 40px;
         }
     }
 
@@ -1593,4 +1599,61 @@ select{
 .fivepad{
     box-sizing: border-box;
     padding: 25px;
+}
+
+
+.control-label{
+    line-height: 1.4em !important;
+}
+
+.panel{
+    margin: 20px 0 !important;
+    background-color: fade(@grey, 20%);
+    border: none !important;
+}
+.panel-heading{
+    background: none !important;
+    background-color: @blue !important;
+    color: @white !important;
+    padding: 0;
+
+
+    .panel-title{
+        font-family: @montserrat;
+
+        a{
+            width: 100%;
+            display: block;
+            box-sizing: border-box;
+            padding: 15px;
+            &:hover{
+                color: @white;
+            }
+            &:focus{
+                color: @white;
+            }
+        }
+    }
+}
+
+
+.site-panel{
+    display: block;
+    width: 90%;
+    margin-left: 5% !important;
+
+    .panel-heading{
+
+        .panel-title{
+            box-sizing: border-box;
+            padding: 15px;
+        }
+    }
+}
+
+
+.whitebginput{
+    input{
+        background-color: #FFF;
+    }
 }
