@@ -2959,9 +2959,9 @@
                             <div class="col-md-6">{{EventName}}</div>
                         </div>
                         <!-- Event: -->
-                        <div class="form-group" ng-if="view.DEPval == 'edit'">
+                        <div class="form-group col-md-12" ng-if="view.DEPval == 'edit'">
                             <label class="col-md-4 control-label">Event:</label>
-                            <div class="col-md-6">{{EventName}}</div>
+                            <div class="col-md-5">{{EventName}}</div>
                             <div class="col-md-2" ng-show="userRole == 'Admin' && view.DEPval == 'edit'">
                                 <button type="button" ng-click="showChangeEventDD()" class="btn btn-primary">Change Event</button>
                             </div>
@@ -3242,7 +3242,7 @@
                         </div>
                         <!-- Vented (only if Sensor Type is Pressure Transducer) (edit)-->
                         <div ng-if="(aSensor.sensor_type_id == 1 || depStuffCopy[0].sensor_type_id == 1) && view.DEPval == 'edit'">
-                            <div class="form-group">
+                            <div class="col-md-12 form-group">
                                 <label class="col-md-4 control-label">Vented:</label>
                                 <div class="col-md-6">
                                     <span class="radio-inline">
