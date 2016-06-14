@@ -86,13 +86,26 @@
                     $http.defaults.headers.common.Accept = 'application/json';
                     if ($scope.pass.newP !== undefined) $scope.aMember.password = btoa($scope.pass.newP);
                     var updatedMember = {};
-                    delete $scope.aMember.Role; delete $scope.aMember.Agency;
-                    MEMBER.update({ id: $scope.aMember.member_id }, $scope.aMember, function success(response) {
+                    var formattedMember = angular.copy($scope.aMember);
+                    
+                    delete formattedMember.Role;
+                    MEMBER.update({ id: formattedMember.member_id }, formattedMember, function success(response) {
                         updatedMember = response;
                         var ag = $scope.agencyList.filter(function (a) { return a.agency_id == response.agency_id; })[0];
                         var ro = roleList.filter(function (r) { return r.role_id == response.role_id; })[0];
                         updatedMember.Agency = ag.agency_name;
                         updatedMember.Role = ro.role_name;
+                        
+                        //check if this is the member logged in and update the cookies if so
+                        if ($scope.loggedInUser.ID == response.member_id) {
+                            if ($scope.aMember.password !== undefined) {
+                                var enc = btoa(updatedMember.username.concat(":", $scope.pass.newP));
+                                $cookies.put('STNCreds', enc);
+                            }
+                            $cookies.put('STNUsername', updatedMember.username);
+                            var usersNAME = updatedMember.fname + " " + updatedMember.lname;
+                            $cookies.put('usersName', usersNAME);
+                        }
                         toastr.success("Member Updated");
                     }, function error(errorResponse) {
                         toastr.error("Error: " + errorResponse.statusText);

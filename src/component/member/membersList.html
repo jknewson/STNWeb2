@@ -77,7 +77,7 @@
                 <div class="form-group required">
                     <label class="col-md-4 control-label req" for="ROLE">Role:</label>
                     <div class="col-md-5">
-                        <select ng-show="loggedInUser.Role == 'Admin'" " class=" form-control" name="role_id" ng-model="aMember.role_id"
+                        <select ng-show="loggedInUser.Role == 'Admin'" class="form-control" name="role_id" ng-model="aMember.role_id"
                                 ng-options="r.role_id as r.role_name for r in roleList | orderBy: 'role_id'" required>
                             <option value=""></option>
                         </select>
