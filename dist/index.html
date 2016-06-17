@@ -1,0 +1,120 @@
+<!DOCTYPE html><html lang="en" xmlns="http://www.w3.org/1999/xhtml"><head><link rel="shortcut icon" type="image/x-icon" href="http://wim.usgs.gov/img/faviconsmall.png"><title>STNWeb</title><meta name="viewport" content="width=device-width,initial-scale=1"><meta http-equiv="content-type" content="text/html; charset=UTF-8"><link rel="stylesheet" href="css/vendor.min.css"><link rel="stylesheet" href="css/app.min.css"><link rel="stylesheet" href="css/stn.min.css"><script src="scripts/vendor.min.js"></script><script src="scripts/app.min.js"></script><script src="//d3js.org/d3.v3.min.js" charset="utf-8"></script><link rel="stylesheet" href="http://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css"></head><body ng-app="app" ng-strict-di><div ng-controller="mainCtrl" class="app-nav"><h1 class="nav-header">Short-Term Network<span ng-if="thisPage">- {{thisPage}}</span></h1><i ng-show="isAuth.val" class="mobile-menu-btn ion-navicon" id="mobile-menu-btn"></i><button type="button" ng-show="isAuth.val" ng-controller="eventSessionCtrl" class="btn-wim btn-sm btn-white nav-change-session" ng-click="openEventModal()"><span ng-show="!sessionEvent">Choose Event</span> <span ng-show="sessionEvent">Change Event</span></button><div ng-show="isAuth.val" class="nav-session-label" ng-if="sessionTeam || sessionEvent"><span ng-if="sessionTeam">{{sessionTeam}}<br></span> <span ng-if="sessionEvent">{{sessionEvent}}</span></div><script>$("#mobile-menu-btn").click(function(){
+                $(".subnav").toggle();
+                $(".mobile-menu-btn").toggleClass('ion-navicon');
+                $(".mobile-menu-btn").toggleClass('ion-close-round');
+            })</script><div class="nav-userctrl" ng-show="isAuth.val"><span>Welcome, <a ui-sref="members.MembersList({id: userID})">{{usersName}}</a></span> <button type="button" ng-controller="logoutCtrl" ng-click="logout()">LOG OFF</button></div><div class="subnav" ng-show="isAuth.val"><div class="subnav-right" uib-dropdown is-open="status.isopen" ng-show="isAuth.val"><button type="button" ng-click="goSearch = !goSearch" class="btn-subnav"><span ng-show="!goSearch">Search <i class="ion-search"></i></span> <span ng-show="goSearch">Cancel <i class="ion-close"></i></span></button> <button id="single-button" type="button" class="btn-subnav" uib-dropdown-toggle ng-disabled="disabled">Create <span ng-show="status.isopen" class="ion-arrow-up-b"></span><span ng-show="!status.isopen" class="ion-arrow-down-b"></span></button><ul ng-show="status.isopen" class="dropdown-menu" role="menu" aria-labelledby="single-button"><li role="menuitem"><a ui-sref="site.dashboard({id: 0})">Site</a></li><li role="menuitem"><a ui-sref="quickCreate({id:'HWM'})">Quick HWM</a></li><li role="menuitem"><a ui-sref="quickCreate({id:'Sensor'})">Quick Sensor</a></li></ul></div><ul class="subnav-links"><li class="mobile-only special" ng-show="!sessionEvent"><a ng-controller="eventSessionCtrl" ng-click="openEventModal()">Choose Event</a></li><li class="mobile-only special" ng-show="sessionEvent"><a ng-controller="eventSessionCtrl" ng-click="openEventModal()">{{sessionEvent}} - (Change)</a></li><li><a ng-class="{active: activeMenu == 'map'}" ui-sref="map" ng-click="activeMenu = 'map'">Map</a></li><li><a ng-class="{active: activeMenu == 'approval'}" ui-sref="approval" ng-click="activeMenu = 'approval'">Approval</a></li><li><a ng-class="{active: activeMenu == 'sites'}" ui-sref="siteSearch" ng-click="activeMenu = 'sites'">Sites</a></li><li><a ng-class="{active: activeMenu == 'report'}" ui-sref="reporting.reportDash" ng-click="activeMenu = 'report'">Reporting</a></li><li><a ng-class="{active: activeMenu == 'settings'}" ui-sref="settings" ng-click="activeMenu = 'settings'">Settings</a></li><li class="mobile-only special2"><a ng-controller="logoutCtrl" ng-click="logout()">Log Off</a></li></ul><site-search ng-show="goSearch && isAuth.val"></div></div><div ng-class="{'hidden': !stateIsLoading.showLoading}" class="page-loading"><div class="loading"><div class="loadingcontent"><p class="loadingspinner" style=""><img src="images/loading1.gif"></p></div></div></div><div ui-view class="app-view"></div></body></html><script type="text/ng-template" id="removemodal.html"><div class="modal-header">
+        <h3 class="modal-title">Remove {{what}}</h3>
+    </div>
+    <div class="modal-body">
+        <p>Are you sure you want to remove this {{what}}: <b>{{nameToRmv}}</b></p>
+    </div>
+    <div class="modal-footer center-all">
+        <button type="button" class="btn-wim btn-blue btn-inline" ng-click="ok()">OK</button>
+        <button type="button" class="btn-wim btn-inline btn-orange" ng-click="cancel()">Cancel</button>
+    </div></script><script type="text/ng-template" id="ChooseEvent.html"><div class="modal-header">
+        <h3 class="modal-title">Choose Event for this Session</h3>
+    </div>
+    <div class="modal-body">
+        <form class="form-horizontal" name="eventForm" novalidate>
+            <fieldset>
+                <p>Filter Events by any of the following or just choose an event below:</p>
+                <div class="form-group fg-sm">
+                    <label>Events created on or after:</label>
+                    <div class="input-group">
+                        <input class="form-control dateInputStyle" name="ed" type="date" uib-datepicker-popup="MM/dd/yyyy" is-open="datepickrs.ed"
+                               show-weeks="false" ng-model="event.DATE" placeholder="No filter" />
+                        <span class="input-group-btn">
+                            <button type="button" class="btn btn-default" ng-click="open($event, 'ed')">
+                                <i class="glyphicon glyphicon-calendar" />
+                            </button>
+                        </span>
+                    </div>
+                </div>
+
+                <div class="form-group fg-sm">
+                    <label>Event Type:</label>
+                    <select class="form-control" name="" ng-model="event.TYPE" ng-options="et.event_type_id as et.TYPE for et in EventTypeList">
+                        <option value="">No filter</option>
+                    </select>
+                </div>
+
+                <div class="form-group fg-sm">
+                <label>Event State:</label>
+                    <select class="form-control" name="" ng-model="event.state" ng-options="s.state_abbrev as s.state_name for s in StateList">
+                        <option value="">No filter</option>
+                    </select>
+                </div>
+
+                <div class="form-group fg-sm center-all">
+                    <button class="btn-wim btn-blue btn-md btn-inline" type="button" ng-click="filterEvents()">Filter Events</button>
+                    <button class="btn-wim btn-orange btn-md btn-inline" type="button" ng-click="clearFilters()">Clear Filter</button>
+                </div>
+
+                <hr />
+
+                <div class="form-group fg-sm">
+                    <label>Events:</label>
+                    <select class="form-control" name="" ng-model="event.EventChosen"
+                            ng-options="e.event_id as e.event_name for e in EventList | orderBy: 'event_name'"
+                            <option value=""></option>
+                        </select>
+                </div>
+            </fieldset>
+        </form>
+    </div>
+    <div class="modal-footer center-all">
+        <button type="button" class="btn-wim btn-blue btn-md btn-inline" ng-click="setEvent()">Set event</button>
+        <button type="button" class="btn-wim btn-orange btn-md btn-inline" ng-click="clearEvent()">Clear event</button>
+        <button type="button" class="btn-wim btn-orange btn-md btn-inline" ng-click="close()">Cancel</button>
+    </div></script><script type="text/ng-template" id="saveReportModal.html"><div class="modal-header">
+        <h3 class="modal-title">Confirm</h3>
+    </div>
+    <div class="modal-body">
+        <p>Are you sure you want to save this Report without marking it complete?</p>
+    </div>
+    <div class="modal-footer center-all">
+        <button type="button" class="btn-wim btn-primary btn-inline" ng-click="ok()">OK</button>
+        <button type="button" class="btn-wim btn-primary btn-inline" ng-click="cancel()">Cancel</button>
+    </div></script><script type="text/ng-template" id="FloodPA.html"><div class="modal-header">
+        <h3 class="modal-title">Project Alert Paragraph for a Flood Event</h3>
+    </div>
+    <div class="modal-body">
+        <p>
+            Flooding has or is occurring in {{ProjAlertParts.Report.state}} and is considered {MAJOR, MODERATE OR MINOR}. The areas with the most significant
+            flooding are {AREAS OF FLOODING}. {{ProjAlertParts.Event.event_description}}, {DAMAGES AND FATALITIES}. The USGS {{ProjAlertParts.Report.state}} Office has dispatched
+            {{ProjAlertParts.totYestFieldPers}} field staff to support high water data collection.  In addition, {{ProjAlertParts.totYestOfficPers}}
+            office staff are supporting the flood response.  Numerous contacts have been made with {EVENT CONTACTS}. These contacts were
+            primarily to give streamgage status updates and {OTHER REASONS}. {{ProjAlertParts.measureCts}} additional streamflow measurements
+            have been made in the {OTHER AREAS MEASUREMENTS TAKEN} area. {{ProjAlertParts.Report.gage_peak_record}} streamgages have exceeded
+            previous period of record highs. Peaks at {NUMBER OF GAGES} streamgages rank in the top 5 for the period of record.  Preliminary
+            flood frequency estimates indicate {NUMBER OF GAGES} streamgages had Annual Exceedance Probabilities (AEP) less than 1% and
+            {NUMBER OF GAGES} streamgages had AEP between 2% and 1%.
+        </p>
+        <div style="margin-top:2em">Click <a href="http://water.usgs.gov/project_alert/alert_form.html" target="_blank">here</a> to open Project Alert in a new tab.</div>
+        <br clear="all" />
+    </div>
+    <div class="modal-footer center-all">
+        <button type="button" class="btn-wim btn-blue btn-inline" ng-click="ok()">OK</button>
+    </div></script><script type="text/ng-template" id="HurricanePA.html"><div class="modal-header">
+        <h3 class="modal-title">Project Alert Paragraph for an Hurricane Event</h3>
+    </div>
+    <div class="modal-body">
+        <p>
+            A major landfall hurricane is affecting {{ProjAlertParts.Report.state}}. The Storm Team has been activated and daily conference calls are being held at 0900
+            Eastern Time. {{ProjAlertParts.Event.event_description || "(No Event Discription)"}}, {WEATHER DAMAGES AND FATALITIES}. The areas with the most significant local impacts are
+            {AREAS WITH MOST LOCAL IMPACT}. The USGS {{ProjAlertParts.Report.state}} Office has dispatched {{ProjAlertParts.totYestFieldPers}} field staff to support high water
+            data collection.  In addition, {{ProjAlertParts.totYestOfficPers}} office staff are supporting the flood response. In total, {{ProjAlertParts.stateCount}}
+            USGS states are responding to this event. Within {{ProjAlertParts.Report.state}}, {{ProjAlertParts.Report.dep_rapdepl_gage}} rapidly-deployable streamgages,
+            {{ProjAlertParts.Report.dep_wtrlev_sensor}} storm-tide water level sensors, and {{ProjAlertParts.Report.dep_wv_sens}} wave height and structure
+            sensors have been deployed to record storm conditions. As of today, {{ProjAlertParts.Report.hwm_flagged}} high-water marks have been flagged with
+            {{ProjAlertParts.Report.hwm_collected}} surveyed into the elevations. {{ProjAlertParts.Report.qw_discr_samples}} water quality samples have been collected in
+            {{ProjAlertParts.Report.state}}. Numerous contacts have been made with {EVENT CONTACTS}. These contacts were primarily to give instrumentation status updates
+            and {OTHER REASONS}. {{ProjAlertParts.measureCts}} additional streamflow measurements have been made at the surface-water gages in the
+            {OTHER AREAS MEASUREMENTS TAKEN} area. {{ProjAlertParts.Report.gage_peak_record}} streamgages have exceeded period of record highs.
+        </p>
+        <div style="margin-top:2em">Click <a href="http://water.usgs.gov/project_alert/alert_form.html" target="_blank">here</a> to open Project Alert in a new tab.</div>
+        <br clear="all" />
+    </div>
+    <div class="modal-footer center-all">
+        <button type="button" class="btn-wim btn-blue btn-inline" ng-click="ok()">OK</button>
+    </div></script>
