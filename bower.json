@@ -97,6 +97,11 @@
         "dist/Services/HTTPServiceBase.js",
         "dist/css/wimLegend.css"
       ]
+    },
+    "angular-ui-router": {
+      "main": [
+        "release/angular-ui-router.js"
+      ]
     }
   }
 }
