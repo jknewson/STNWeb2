@@ -54,6 +54,9 @@
             else {
                 //new member being created.. 
                 $scope.aMember = {};
+                // if there's only 1 in the roleList, then this member is a field person
+                if ($scope.roleList.length == 1)
+                    $scope.aMember.role_id = $scope.roleList[0].role_id;
             }
 
             $scope.create = function (valid) {
