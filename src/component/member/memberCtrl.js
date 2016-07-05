@@ -87,7 +87,7 @@
                         $scope.memberList.push(eachM);
                     }
                     //if someone clicked on their name in the upper right corner, come in and straight away open modal
-                    if (userProfileId !== undefined) {
+                    if (userProfileId !== undefined && userProfileId !== null) {
                         MEMBER.query({ id: userProfileId }).$promise.then(function (resp) {
                             $scope.showMemberModal(resp);
                         });
