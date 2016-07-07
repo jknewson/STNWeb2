@@ -91,7 +91,7 @@
                     var updatedMember = {};
                     var formattedMember = angular.copy($scope.aMember);
                     
-                    delete formattedMember.Role;
+                    delete formattedMember.Role; delete formattedMember.Agency;
                     MEMBER.update({ id: formattedMember.member_id }, formattedMember, function success(response) {
                         updatedMember = response;
                         var ag = $scope.agencyList.filter(function (a) { return a.agency_id == response.agency_id; })[0];
