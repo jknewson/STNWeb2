@@ -81,7 +81,10 @@
                                 ng-options="r.role_id as r.role_name for r in roleList | orderBy: 'role_id'" required>
                             <option value=""></option>
                         </select>
-                        <span ng-show="loggedInUser.Role !== 'Admin'">{{roleList[0].role_name}}</span>
+                        <!-- not admin and this is new member-->
+                        <span ng-show="loggedInUser.Role !== 'Admin' && aMember.member_id == undefined">{{roleList[0].role_name}}</span>
+                        <!-- not admin and editing member-->
+                        <span ng-show="loggedInUser.Role !== 'Admin' && aMember.member_id !== undefined">{{aMember.Role}}</span>
                     </div>
                 </div>
 
