@@ -35,7 +35,7 @@
                 //check to see if the acct User is the same as the user they are looking at
                 $scope.matchingUsers = thisMember.member_id == $scope.loggedInUser.ID ? true : false;
 
-                $scope.aMember = thisMember;
+                $scope.aMember = angular.copy(thisMember);
                 $scope.aMember.Role = roleList.filter(function (r) { return r.role_id == $scope.aMember.role_id; })[0].role_name;
                 $scope.changePass = false;
 
@@ -147,27 +147,19 @@
                         }
                     }
                 });
-                modalInstance.result.then(function (nameToRemove) {
+                modalInstance.result.then(function (memToRemove) {
                     //yes, remove this keyword
                     var test;
                     //DELETE it
-                    //$http.defaults.headers.common.Authorization = 'Basic ' + $cookies.get('STNCreds');
+                    $http.defaults.headers.common.Authorization = 'Basic ' + $cookies.get('STNCreds');
 
-                    //MEMBER.deleteMember({ id: nameToRemove.member_id }, function success(response) {
-                    //    var delMem = {};
-                    //    delMem.member_id = nameToRemove.member_id;
-                    //    delMem.Name = nameToRemove.fname + " " + nameToRemove.lname;
-                    //    var ag = $scope.agencyList.filter(function (a) { return a.agency_id == nameToRemove.agency_id; })[0];
-                    //    var ro = allRoles.filter(function (r) { return r.role_id == nameToRemove.role_id; })[0];
-                    //    delMem.Agency = ag.agency_name;
-                    //    delMem.Role = ro.role_name;
-                    //    $scope.memberList.splice($scope.memberList.indexOf(delMem), 1);
-                    //    toastr.success("Member Deleted");
-                    //}, function error(errorResponse) {
-                    //    toastr.error("Error: " + errorResponse.statusText);
-                    //}).$promise.then(function () {
-                    //    $location.path('/Members/MembersList').replace();
-                    //});
+                    MEMBER.deleteMember({ id: memToRemove.member_id }, function success(response) {
+                        toastr.success("Member Deleted");
+                    }, function error(errorResponse) {
+                        toastr.error("Error: " + errorResponse.statusText);
+                    }).$promise.then(function () {                        
+                        $uibModalInstance.close(["de", 'deleted']);
+                    });
                 });
                 //end modal
             };
