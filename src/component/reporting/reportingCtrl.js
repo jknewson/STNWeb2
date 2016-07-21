@@ -149,40 +149,24 @@
                         }).$promise.then(function (result) {
                             //for each report, get all reports with that event and state
                             for (var x = 0; x < result.length; x++) {
-                                //var evStReports = $scope.reports.filter(function (f) { return f.event_id == result[x].event_id && f.state == result[x].STATE; });
                                 var thisRPModel = {};
-                                thisRPModel.report = result[x]; var YesSWFsum = 0; var YesWQFsum = 0; var YesSWOsum = 0; var YesWQOsum = 0;
-                                //cumulative person days totals
-                                for (var a = 0; a < result.length; a++) { YesSWFsum += result[a].sw_yest_fieldpers; }
-                                for (var b = 0; b < result.length; b++) { YesWQFsum += result[b].wq_yest_fieldpers; }
-                                for (var c = 0; c < result.length; c++) { YesSWOsum += result[c].sw_yest_officepers; }
-                                for (var d = 0; d < result.length; d++) { YesWQOsum += result[d].wq_yest_officepers; }
-
-                                thisRPModel.FieldPYesSWTot = YesSWFsum;
-                                thisRPModel.FieldPYesWQTot = YesWQFsum;
-                                thisRPModel.OfficePYesSWTot = YesSWOsum;
-                                thisRPModel.OfficePYesWQTot = YesWQOsum;
+                                thisRPModel.report = result[x];
 
                                 //add to totals for total row
                                 $scope.totalRow.notAcctForEmps += (thisRPModel.report.sw_fieldpers_notacct + thisRPModel.report.wq_fieldpers_notacct);
-                                $scope.totalRow.cumPField += (thisRPModel.FieldPYesSWTot + thisRPModel.FieldPYesWQTot);
-                                $scope.totalRow.yesPField += (thisRPModel.report.sw_yest_fieldpers + thisRPModel.report.wq_yest_fieldpers);
-                                $scope.totalRow.todPField += (thisRPModel.report.sw_tod_fieldpers + thisRPModel.report.wq_tod_fieldpers);
-                                $scope.totalRow.tomPField += (thisRPModel.report.sw_tmw_fieldpers + thisRPModel.report.wq_tmw_fieldpers);
-                                $scope.totalRow.cumPOffice += (thisRPModel.OfficePYesSWTot + thisRPModel.OfficePYesWQTot);
-                                $scope.totalRow.yesPOffice += (thisRPModel.report.sw_yest_officepers + thisRPModel.report.wq_yest_officepers);
-                                $scope.totalRow.todPOffice += (thisRPModel.report.sw_tod_officepers + thisRPModel.report.wq_tod_officepers);
-                                $scope.totalRow.tomPOffice += (thisRPModel.report.sw_tmw_officepers + thisRPModel.report.wq_tmw_officepers);
-                                $scope.totalRow.truck += (thisRPModel.report.sw_autos_depl + thisRPModel.report.wq_autos_depl);
-                                $scope.totalRow.boat += (thisRPModel.report.sw_boats_depl + thisRPModel.report.wq_boats_depl);
-                                $scope.totalRow.other += (thisRPModel.report.sw_other_depl + thisRPModel.report.wq_other_depl);
-
-                                $scope.totalRow.gageVisits += thisRPModel.report.GAGE_VISIT; $scope.totalRow.gagesDown += thisRPModel.report.gage_down;
-                                $scope.totalRow.disCtoDate += thisRPModel.report.tot_discharge_meas; $scope.totalRow.disCPlanned += thisRPModel.report.plan_discharge_meas;
-                                $scope.totalRow.CheckMeasToDate += thisRPModel.report.tot_check_meas; $scope.totalRow.CheckMeasPlanned += thisRPModel.report.plan_check_meas;
-                                $scope.totalRow.indMeas = thisRPModel.report.plan_indirect_meas; $scope.totalRow.ratExt = thisRPModel.report.rating_extens;
-                                $scope.totalRow.peaksOfRec += thisRPModel.report.gage_peak_record; $scope.totalRow.QWGageVis += thisRPModel.report.qw_gage_visit;
-                                $scope.totalRow.contQWGageVis = thisRPModel.report.qw_cont_gagevisit; $scope.totalRow.contQWGageDown = thisRPModel.report.qw_gage_down;
+                                $scope.totalRow.cumPField += thisRPModel.report.yest_fieldpers + thisRPModel.report.tod_fieldpers + thisRPModel.report.tmw_fieldpers;
+                                $scope.totalRow.yesPField += thisRPModel.report.yest_fieldpers;
+                                $scope.totalRow.todPField += thisRPModel.report.tod_fieldpers;
+                                $scope.totalRow.tomPField += thisRPModel.report.tmw_fieldpers;
+                                $scope.totalRow.cumPOffice += thisRPModel.report.yest_officepers + thisRPModel.report.tod_officepers + thisRPModel.report.tmw_officepers;
+                                $scope.totalRow.yesPOffice += thisRPModel.report.yest_officepers;
+                                $scope.totalRow.todPOffice += thisRPModel.report.tod_officepers;
+                                $scope.totalRow.tomPOffice += thisRPModel.report.tmw_officepers;
+                               
+                                $scope.totalRow.gageVisits += thisRPModel.report.gage_visit; $scope.totalRow.gagesDown += thisRPModel.report.gage_down;
+                                $scope.totalRow.disCtoDate += thisRPModel.report.tot_discharge_meas; $scope.totalRow.disCPlanned += thisRPModel.report.plan_discharge_meas;                               
+                                $scope.totalRow.indMeas += thisRPModel.report.plan_indirect_meas; $scope.totalRow.ratExt += thisRPModel.report.rating_extens;
+                                $scope.totalRow.peaksOfRec += thisRPModel.report.gage_peak_record; 
                                 $scope.totalRow.disQWSamples += thisRPModel.report.qw_discr_samples; $scope.totalRow.sedSamples += thisRPModel.report.coll_sedsamples;
 
                                 $scope.totalRow.rdgPlan += thisRPModel.report.plan_rapdepl_gage; $scope.totalRow.rdgDep += thisRPModel.report.dep_rapdepl_gage;

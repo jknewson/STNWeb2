@@ -3,8 +3,9 @@
 
     //look up common service module, and register the new factory with that module 
     var STNResource = angular.module('STNResource', ['ngResource']);
-    // var rootURL = "https://stn.wim.usgs.gov/STNServices";
-    var rootURL = "https://stntest.wim.usgs.gov/STNServices2";
+     var rootURL = "https://stn.wim.usgs.gov/STNServices";
+    // var rootURL = "https://stntest.wim.usgs.gov/STNServices2";
+    //var rootURL = "http://localhost/STNServices2";
    
     //#region GEOCODE https://geocoding.geo.census.gov/geocoder/geographies/coordinates?benchmark=4&vintage=4&format=json
     STNResource.factory('GEOCODE', ['$resource', function ($resource) {          
@@ -14,7 +15,6 @@
             });
     }]);
     //#endregion of GEOCODE
-
     //#region AGENCY
     STNResource.factory('AGENCY', ['$resource', function ($resource) {
         return $resource(rootURL + '/Agencies/:id.json',
@@ -27,7 +27,6 @@
             });
     }]);
     //#endregion of AGENCY    
-
     //#region CONTACT_TYPE
     STNResource.factory('CONTACT_TYPE', ['$resource', function ($resource) {
         return $resource(rootURL + '/ContactTypes/:id.json',
@@ -40,7 +39,6 @@
             });
     }]);
     //#endregion of CONTACT_TYPE
-
     //#region CONTACT
     STNResource.factory('CONTACT', ['$resource', function ($resource) {
         return $resource(rootURL + '/Contacts/:id.json',
@@ -49,13 +47,11 @@
                 getContactModel: {method: 'GET', isArray: true },
                 getAll: { method: 'GET', isArray: true },
                 update: { method: 'PUT', cache: false, isArray: false },
-                addReportContact: { method: 'POST', cache: false, isArray: false, params: { contactId: '@contactId', ReportId: '@reportId', ContactTypeId: '@contactTypeId' }, url: rootURL + '/Contacts/:contactId/AddReportContact' }, //"Contacts/{contactId}/addReportContact?ReportId={reportId}&ContactTypeId={contactTypeId}"
                 save: { method: 'POST', cache: false, isArray: false },
                 delete: { method: 'DELETE', cache: false, isArray: false }
             });
     }]);
     //#endregion of CONTACT
-
     //#region COUNTIES
     STNResource.factory('COUNTIES', ['$resource', function ($resource) {
         return $resource(rootURL + '/Counties/:id.json',
@@ -68,7 +64,6 @@
             });
     }]);
     //#endregion of COUNTIES
-
     //#region DATA_FILE
     STNResource.factory('DATA_FILE', ['$resource', function ($resource) {
         return $resource(rootURL + '/DataFiles/:id.json',
@@ -86,7 +81,6 @@
             });
     }]);
     //#endregion of DATA_FILE
-
     //#region DEPLOYMENT_PRIORITY
     STNResource.factory('DEPLOYMENT_PRIORITY', ['$resource', function ($resource) {
         return $resource(rootURL + '/DeploymentPriorities/:id.json',
@@ -99,7 +93,6 @@
             });
     }]);
     //#endregion of DEPLOYMENT_PRIORITY
-
     //#region DEPLOYMENT_TYPE
     STNResource.factory('DEPLOYMENT_TYPE', ['$resource', function ($resource) {
         return $resource(rootURL + '/DeploymentTypes/:id.json',
@@ -113,7 +106,6 @@
             });
     }]);
     //#endregion of DEPLOYMENT_TYPE
-
     //#region EVENT_STATUS
     STNResource.factory('EVENT_STATUS', ['$resource', function ($resource) {
         return $resource(rootURL + '/EventStatus/:id.json',
@@ -126,7 +118,6 @@
             });
     }]);
     //#endregion of EVENT_STATUS
-
     //#region EVENT_TYPE
     STNResource.factory('EVENT_TYPE', ['$resource', function ($resource) {
         return $resource(rootURL + '/EventTypes/:id.json',
@@ -139,7 +130,6 @@
             });
     }]);
     //#endregion of EVENT_TYPE
-
     //#region FILE_TYPE
     STNResource.factory('FILE_TYPE', ['$resource', function ($resource) {
         return $resource(rootURL + '/FileTypes/:id.json',
@@ -151,8 +141,7 @@
                 delete: { method: 'DELETE', cache: false, isArray: false }
             });
     }]);
-    //#endregion of FILE_TYPE
-   
+    //#endregion of FILE_TYPE   
     //#region EVENT
     STNResource.factory('EVENT', ['$resource', function ($resource) {
         return $resource(rootURL + '/Events/:id.json',
@@ -167,7 +156,6 @@
             });
     }]);
     //#endregion of EVENT
-
     //#region FILE
     STNResource.factory('FILE', ['$resource', function ($resource) {
         return $resource(rootURL + '/Files/:id.json',
@@ -182,7 +170,6 @@
             });
     }]);
     //#endregion of FILE
-
     //#region HORIZONTAL_COLL_METHODS
     STNResource.factory('HORIZONTAL_COLL_METHODS', ['$resource', function ($resource) {
         return $resource(rootURL + '/HorizontalMethods/:id.json',
@@ -195,7 +182,6 @@
             });
     }]);
     //#endregion of HORIZONTAL_COLL_METHODS
-
     //#region HORIZONTAL_DATUM
     STNResource.factory('HORIZONTAL_DATUM', ['$resource', function ($resource) {
         return $resource(rootURL + '/HorizontalDatums/:id.json',
@@ -208,7 +194,6 @@
             });
     }]);
     //#endregion of HORIZONTAL_DATUM
-
     //#region HOUSING_TYPE
     STNResource.factory('HOUSING_TYPE', ['$resource', function ($resource) {
         return $resource(rootURL + '/HousingTypes/:id.json',
@@ -221,7 +206,6 @@
             });
     }]);
     //#endregion of HOUSING_TYPE
-
     //#region HWM
     STNResource.factory('HWM', ['$resource', function ($resource) {
         return $resource(rootURL + '/hwms/:id.json',
@@ -239,7 +223,6 @@
             });
     }]);
     //#endregion of HWM
-
     //#region HWM_Service
     STNResource.factory('HWM_Service', [function () {
         //when hwm is created or deleted, this gets updated so that filesCtrl will update it's list of siteHWMs
@@ -254,7 +237,6 @@
         };
     }]);
     //#endregion of HWM_Service
-
     //#region HWM_QUALITY
     STNResource.factory('HWM_QUALITY', ['$resource', function ($resource) {
         return $resource(rootURL + '/HWMQualities/:id.json',
@@ -267,7 +249,6 @@
             });
     }]);
     //#endregion of HWM_QUALITY
-
     //#region HWM_TYPE
     STNResource.factory('HWM_TYPE', ['$resource', function ($resource) {
         return $resource(rootURL + '/HWMTypes/:id.json',
@@ -280,7 +261,6 @@
             });
     }]);
     //#endregion of HWM_TYPE
-
     //#region INSTRUMENT
     STNResource.factory('INSTRUMENT', ['$resource', function ($resource) {
         return $resource(rootURL + '/Instruments/:id.json',
@@ -296,7 +276,6 @@
             });
     }]);
     //#endregion of INSTRUMENT
-
     //#region Instrument_Service
     STNResource.factory('Instrument_Service', [function () {
         //when hwm is created or deleted, this gets updated so that filesCtrl will update it's list of siteHWMs
@@ -311,7 +290,6 @@
         };
     }]);
     //#endregion of Instrument_Service
-
     //#region INSTRUMENT_STATUS
     STNResource.factory('INSTRUMENT_STATUS', ['$resource', function ($resource) {
         return $resource(rootURL + '/InstrumentStatus/:id.json',
@@ -324,7 +302,6 @@
             });
     }]);
     //#endregion of INSTRUMENT
-
     //#region INST_COLL_CONDITION
     STNResource.factory('INST_COLL_CONDITION', ['$resource', function ($resource) {
         return $resource(rootURL + '/InstrCollectConditions/:id.json',
@@ -337,7 +314,6 @@
             });
     }]);
     //#endregion of INST_COLL_CONDITION
-
     //#region LANDOWNER_CONTACT
     STNResource.factory('LANDOWNER_CONTACT', ['$resource', function ($resource) {
         return $resource(rootURL + '/LandOwners/:id.json',
@@ -350,7 +326,6 @@
             });
     }]);
     //#endregion of LANDOWNER_CONTACT
-
     //#region Map_Site
     STNResource.factory('Map_Site', ['SITE', '$rootScope', '$cookies', function (SITE, $rootScope,$cookies) {
         var MapSiteParts = [];
@@ -373,7 +348,6 @@
         };
     }]);
     //#endregion of Map_Site
-
     //#region Map_filter
     STNResource.factory('Map_Filter', [ '$rootScope', function ($rootScope) {
         var filteredSites = [];
@@ -389,7 +363,6 @@
         };
     }]);
     //#endregion of Map_Filter
-
     //#region MARKER
     STNResource.factory('MARKER', ['$resource', function ($resource) {
         return $resource(rootURL + '/Markers/:id.json',
@@ -402,7 +375,6 @@
             });
     }]);
     //#endregion of MARKER
-
     //#region MEMBER
     STNResource.factory('MEMBER', ['$resource', function ($resource) {
         return $resource(rootURL + '/Members/:id.json',
@@ -420,7 +392,6 @@
             });
     }]);
     //#endregion of MEMBER
-
     //#region NETWORK_NAME
     STNResource.factory('NETWORK_NAME', ['$resource', function ($resource) {
         return $resource(rootURL + '/NetworkNames/:id.json',
@@ -433,7 +404,6 @@
             });
     }]);
     //#endregion of NETWORK_NAME
-
     //#region NETWORK_TYPE
     STNResource.factory('NETWORK_TYPE', ['$resource', function ($resource) {
         return $resource(rootURL + '/NetworkTypes/:id.json',
@@ -445,8 +415,7 @@
                 delete: { method: 'DELETE', cache: false, isArray: false }
             });
     }]);
-    //#endregion of NETWORK_TYPE
-    
+    //#endregion of NETWORK_TYPE   
     //#region OBJECTIVE_POINT
     STNResource.factory('OBJECTIVE_POINT', ['$resource', function ($resource) {
         return $resource(rootURL + '/ObjectivePoints/:id.json',
@@ -461,7 +430,6 @@
             });
     }]);
     //#endregion of OBJECTIVE_POINT
-
     //#region OP_CONTROL_IDENTIFIER
     STNResource.factory('OP_CONTROL_IDENTIFIER', ['$resource', function ($resource) {
         return $resource(rootURL + '/OPControlIdentifiers/:id.json',
@@ -474,7 +442,6 @@
             });
     }]);
     //#endregion of OP_CONTROL_IDENTIFIER
-
     //#region OP_MEASURE
     STNResource.factory('OP_MEASURE', ['$resource', function ($resource) {
         return $resource(rootURL + '/OPMeasurements/:id.json',
@@ -489,7 +456,6 @@
             });
     }]);
     //#endregion of OP_MEASURE
-
     //#region OP_QUALITY
     STNResource.factory('OP_QUALITY', ['$resource', function ($resource) {
         return $resource(rootURL + '/ObjectivePointQualities/:id.json',
@@ -502,7 +468,6 @@
             });
     }]);
     //#endregion of OP_QUALITY
-
     //#region OP_TYPE
     STNResource.factory('OP_TYPE', ['$resource', function ($resource) {
         return $resource(rootURL + '/OPTypes/:id.json',
@@ -515,7 +480,6 @@
             });
     }]);
     //#endregion of OP_TYPE
-
     //#region PEAK
     STNResource.factory('PEAK', ['$resource', function ($resource) {
         return $resource(rootURL + '/PeakSummaries/:id.json',
@@ -529,7 +493,6 @@
             });
     }]);
     //#endregion of PEAK
-
     //#region REPORT
     STNResource.factory('REPORT', ['$resource', function ($resource) {
         return $resource(rootURL + '/ReportingMetrics/:id.json',
@@ -543,12 +506,12 @@
                 getReportsCSV: {method: 'GET', url: rootURL + '/ReportingMetrics/FilteredReports.csv'},
                 getAll: { method: 'GET', isArray: true },
                 update: { method: 'PUT', cache: false, isArray: false },
+                addReportContact: { method: 'POST', cache: false, isArray: false, params: { ReportId: '@reportId', ContactTypeId: '@contactTypeId' }, url: rootURL + '/ReportingMetrics/:reportId/AddContactType/:contactTypeId' }, //contact entity in body 
                 save: { method: 'POST', cache: false, isArray: false },
                 delete: { method: 'DELETE', cache: false, isArray: false }
             });
     }]);
     //#endregion of REPORT
-
     //#region ROLE
     STNResource.factory('ROLE', ['$resource', function ($resource) {
         return $resource(rootURL + '/Roles/:id.json',
@@ -558,7 +521,6 @@
             });
     }]);
     //#endregion of ROLE
-
     //#region SENSOR_BRAND
     STNResource.factory('SENSOR_BRAND', ['$resource', function ($resource) {
         return $resource(rootURL + '/SensorBrands/:id.json',
@@ -571,7 +533,6 @@
             });
     }]);
     //#endregion of SENSOR_BRAND
-
     //#region SENSOR_DEPLOYMENT --- no longer needed since SENSOR_TYPE returns as this relationship now
     //STNResource.factory('SENSOR_DEPLOYMENT', ['$resource', function ($resource) {
     //    return $resource(rootURL + '/SensorDeployments/:id.json',
@@ -584,7 +545,6 @@
     //        });
     //}]);
     //#endregion of SENSOR_DEPLOYMENT
-
     //#region SENSOR_TYPE
     STNResource.factory('SENSOR_TYPE', ['$resource', function ($resource) {
         return $resource(rootURL + '/SensorTypes/:id.json',
@@ -600,7 +560,6 @@
             });
     }]);
     //#endregion of SENSOR_TYPE
-
     //#region SITE
     STNResource.factory('SITE', ['$resource', function ($resource) {
         return $resource(rootURL + '/Sites/:id.json',
@@ -636,7 +595,6 @@
             });
     }]);
     //#endregion of SITE
-
     //#region Site_Files
     STNResource.factory('Site_Files', ['$cookies', '$rootScope', function ($cookies, $rootScope) {
         var allSiteFiles = [];
@@ -651,7 +609,6 @@
         };
     }]);
     //#endregion of Site_Files
-
     //#region STATE
     STNResource.factory('STATE', ['$resource', function ($resource) {
         return $resource(rootURL + '/States/:id.json',
@@ -664,7 +621,6 @@
             });
     }]);
     //#endregion of STATE
-
     //#region SITE_HOUSING
     STNResource.factory('SITE_HOUSING', ['$resource', function ($resource) {
         return $resource(rootURL + '/SiteHousings/:id.json',
@@ -677,7 +633,6 @@
             });
     }]);
     //#endregion of SITE_HOUSING
-
     //#region STATUS_TYPE
     STNResource.factory('STATUS_TYPE', ['$resource', function ($resource) {
         return $resource(rootURL + '/StatusTypes/:id.json',
@@ -689,8 +644,7 @@
                 delete: { method: 'DELETE', cache: false, isArray: false }
             });
     }]);
-    //#endregion of STATUS_TYPE
-  
+    //#endregion of STATUS_TYPE 
     //#region SOURCE
     STNResource.factory('SOURCE', ['$resource', function ($resource) {
         return $resource(rootURL + '/Sources/:id.json',
@@ -703,7 +657,6 @@
             });
     }]);
     //#endregion of SOURCE
-
     //#region VERTICAL_COLL_METHOD
     STNResource.factory('VERTICAL_COLL_METHOD', ['$resource', function ($resource) {
         return $resource(rootURL + '/VerticalMethods/:id.json',
@@ -716,7 +669,6 @@
             });
     }]);
     //#endregion of VERTICAL_COLL_METHOD
-
     //#region VERTICAL_DATUM
     STNResource.factory('VERTICAL_DATUM', ['$resource', function ($resource) {
         return $resource(rootURL + '/VerticalDatums/:id.json',
@@ -729,7 +681,6 @@
             });
     }]);
     //#endregion of VERTICAL_DATUM
-
     //#region Login
     STNResource.factory('Login', ['$resource', function ($resource) {
         return $resource(rootURL + '/login',

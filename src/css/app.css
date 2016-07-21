@@ -308,10 +308,10 @@ a.disabled {
         position: relative;
         margin-right: 0;
     }
-    #Sec1PDF td, #Sec2PDF td, #Sec3PDF td, #Sec5PDF td {
+    #Sec1PDF td, #Sec2aPDF td, #Sec2bPDF td, #Sec3PDF td, #Sec5PDF td {
         line-height: 10px;
     }
-    #Sec1PDF thead tr, #Sec2PDF thead tr, #Sec3PDF thead tr, #Sec4PDF thead tr, #Sec5PDF thead tr {
+    #Sec1PDF thead tr, #Sec2aPDF thead tr,#Sec2bPDF thead tr, #Sec3PDF thead tr, #Sec4PDF thead tr, #Sec5PDF thead tr {
         margin-bottom: 5px;
     }
 }
