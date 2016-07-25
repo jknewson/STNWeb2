@@ -48,11 +48,13 @@
                 $scope.removeOPCarray = []; //holder if they remove any OP controls
                 $scope.addedIdentifiers = []; //holder for added Identifiers
                 $scope.showControlIDinput = false; //initially hide the area containing added control Identifiers
+
                 //dropdowns
                 $scope.horDatumList = allHorDatums; $scope.horCollMethodList = allHorCollMethods;
                 $scope.stateList = allStates; $scope.allCountyList = allCounties; $scope.stateCountyList = [];
                 $scope.opTypeList = allOPTypes; $scope.vertDatumList = allVertDatums;
                 $scope.vertCollMethodList = allVertColMethods; $scope.opQualList = allOPQualities;
+
                 //hwm dropdowns
                 if (whichQuick == 'HWM') {
                     $scope.aHWM = { hwm_environment: 'Riverine', event_id: $cookies.get('SessionEventID'), bank: 'N/A', flag_date: makeAdate(""), stillwater: 0, flag_member_id: $cookies.get('mID') };
@@ -331,6 +333,43 @@
 
                 //#endregion lat/long stuff
             
+                //hwm_uncertainty typed in, choose cooresponding hwm_environment
+                $scope.chooseQuality = function () {
+                    if ($scope.aHWM.hwm_uncertainty != "") {
+                        var x = Number($scope.aHWM.hwm_uncertainty);
+                        //                    Excellent    +-0.05       0      -  0.050
+                        //                    Good         +-0.10       0.051  -  0.100
+                        //                    Fair         +-0.20       0.101  -  0.200
+                        //                    Poor         +-0.40       0.201  -  0.400
+                        //                    V Poor       > 0.40       0.401  -  infinity
+                        $scope.aHWM.hwm_quality_id = $scope.hwmQualList.filter(function (h) { return h.min_range <= x && h.max_range >= x; })[0].hwm_quality_id;
+                    }
+                }
+                //hwm quality chosen (or it changed from above), check to make sure it is congruent with input above
+                $scope.compareToUncertainty = function () {
+                    if ($scope.aHWM.hwm_uncertainty != "" || $scope.aHWM.hwm_uncertainty !== undefined) {
+                        var x = Number($scope.aHWM.hwm_uncertainty);
+                        var matchingQualId = $scope.hwmQualList.filter(function (h) { return h.min_range <= x && h.max_range >= x; })[0].hwm_quality_id;
+                        if ($scope.aHWM.hwm_quality_id !== matchingQualId) {
+                            //show warning modal and focus in uncertainty
+                            var incongruentModal = $uibModal.open({
+                                template: '<div class="modal-header"><h3 class="modal-title">Warning</h3></div>' +
+                                    '<div class="modal-body"><p>There is a mismatch between the hwm quality chosen and the hwm uncertainty above. Please correct your hwm uncertainty.</p></div>' +
+                                    '<div class="modal-footer"><button class="btn btn-primary" ng-enter="ok()" ng-click="ok()">OK</button></div>',
+                                controller: ['$scope', '$uibModalInstance', function ($scope, $uibModalInstance) {
+                                    $scope.ok = function () {
+                                        $uibModalInstance.close();
+                                    };
+                                }],
+                                size: 'sm'
+                            });
+                            incongruentModal.result.then(function () {
+                                angular.element("[name='hwm_uncertainty']").focus();
+                            });
+                        }
+                    }
+                }
+
                 // watch for the session event to change and update
                 $scope.$watch(function () { return $cookies.get('SessionEventName'); }, function (newValue) {
                     $scope.sessionEventName = newValue !== undefined ? newValue : "All Events";
