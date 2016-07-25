@@ -512,29 +512,37 @@
                                 </div>
                             </div>
 
-                            <!-- Breakdown of categories -->
-                            <div class="form-group" style="padding-top:0">
-                                <label class="col-md-4"></label>
-                                <div class="col-md-7" style="padding-left:0">
-                                    <table>
-                                        <tr><td style="text-align: center;width: 81px">0.05</td><td style="text-align: center;width: 81px">0.02</td><td style="text-align: left;width: 81px">Excellent</td></tr>
-                                        <tr><td style="text-align: center;width: 81px">0.1</td><td style="text-align: center;width: 81px">0.05</td><td style="text-align: left;width: 81px">Good</td></tr>
-                                        <tr><td style="text-align: center;width: 81px">0.2</td><td style="text-align: center;width: 81px">0.1</td><td style="text-align: left;width: 81px">Fair</td></tr>
-                                        <tr><td style="text-align: center;width: 81px">0.4</td><td style="text-align: center;width: 81px">0.2</td><td style="text-align: left;width: 81px">Poor</td></tr>
-                                        <tr><td style="text-align: center;width: 81px">&#62;0.40</td><td style="text-align: center;width: 81px">&#62;0.20</td><td style="text-align: left;width: 81px">V. Poor</td></tr>
-                                        <tr><td colspan="3"><a href="http://pubs.usgs.gov/tm/11d1/" target="_blank">USGS T&M 11-D1, Table 13</a></td></tr>
-                                    </table>
+                            <!-- uncertainty: -->
+                            <div class="form-group">
+                                <label class="col-md-4 control-label" for="hwm_uncertainty">
+                                    HWM Uncertainty:
+                                    <button type="button" class="help-btn" tooltip-placement="left" tooltip-append-to-body="false" uib-tooltip="A numeric uncertainty entered here is the preferred method of recording uncertainty and represents the vertical range of peak surfaces that could be described by the HWM evidence (see TM3-A24, p.27).  Do not include any survey uncertainty, which is entered further below.">
+                                        <span class="glyphicon glyphicon-question-sign"></span>
+                                    </button>
+                                </label>
+                                <div class="col-md-6">
+                                    <div class="col-md-8 input-group">
+                                        <span class="input-group-addon">&#177;</span>
+                                        <input class="form-control" ng-keypress="isNum($event)" name="hwm_uncertainty" id="hwm_uncertainty" ng-model="aHWM.hwm_uncertainty"
+                                               ng-model-options="{ updateOn: 'blur' }" ng-change="chooseQuality()" type="text" />
+                                        <span class="input-group-addon"> ft</span>
+                                    </div>
                                 </div>
                             </div>
 
                             <!-- HWM Quality:* -->
                             <div class="form-group required" ng-class="{'has-error':quickForm.quick.hwm_quality_id.$invalid && quickForm.quick.hwm_quality_id.$dirty}">
-                                <label class="col-md-4 control-label req">HWM Quality:</label>
-                                <div class="col-md-7">
-                                    <select class="form-control" id="hwm_quality_id" name="hwm_quality_id" ng-model="aHWM.hwm_quality_id"
-                                            ng-options="hqual.hwm_quality_id as hqual.hwm_quality for hqual in hwmQualList" required>
+                                <label class="col-md-4 control-label req" for="hwm_quality_id">
+                                    HWM Quality:
+                                    <button type="button" class="help-btn" tooltip-placement="left" tooltip-append-to-body="false" uib-tooltip="For continuity with older data, a shorthand quality is auto-populated here based on a numeric uncertainty entered above. In addition, three qualities with undefined uncertainties are available.">
+                                        <span class="glyphicon glyphicon-question-sign"></span>
+                                    </button>
+                                </label>
+                                <div class="col-md-6">
+                                    <select class="form-control" name="hwm_quality_id" ng-model="aHWM.hwm_quality_id" ng-change="compareToUncertainty()"
+                                                ng-options="hqual.hwm_quality_id as hqual.hwm_quality for hqual in hwmQualList" required>
                                         <option value=""></option>
-                                    </select>
+                                    </select>                                    
                                 </div>
                             </div>
 
