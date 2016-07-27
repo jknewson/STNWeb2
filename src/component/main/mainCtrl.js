@@ -22,7 +22,7 @@
                         }],
                         size: 'sm'
                     });
-                };
+                }
                 $rootScope.isAuth.val = true;
                 $rootScope.usersName = $cookies.get('usersName');
                 $rootScope.userID = $cookies.get('mID');

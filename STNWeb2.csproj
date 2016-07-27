@@ -22,9 +22,8 @@
     <Content Include="src\component\approval\approval.html" />
     <Content Include="src\component\approval\approvalCtrl.js" />
     <Content Include="src\component\event\eventCtrl.js" />
-    <Content Include="src\component\event\eventInfoCtrl.js" />
+    <Content Include="src\component\event\eventModalCtrl.js" />
     <Content Include="src\component\event\eventSessionCtrl.js" />
-    <Content Include="src\component\event\eventInfo.html" />
     <Content Include="src\component\event\eventSessionModalCtrl.js" />
     <Content Include="src\component\event\eventsList.html" />
     <Content Include="src\component\file\fileCtrl.js" />
@@ -48,7 +47,6 @@
     <Content Include="src\component\map\MapSensorProposeController.js" />
     <Content Include="src\component\map\MapSiteInfoController.js" />
     <Content Include="src\component\member\memberCtrl.js" />
-    <Content Include="src\component\member\memberInfo.html" />
     <Content Include="src\component\member\memberModalCtrl.js" />
     <Content Include="src\component\member\membersList.html" />
     <Content Include="src\component\ModalsCtrl.js" />

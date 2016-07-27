@@ -4,8 +4,8 @@
         ['ngResource', 'ui.router', 'ngCookies', 'ui.mask', 'ui.bootstrap', 'isteven-multi-select', 'ngInputModified', 'ui.validate', 'cgBusy',
             'angular.filter', 'xeditable', 'checklist-model', 'ngFileUpload', 'STNResource', 'ui.bootstrap.datetimepicker','leaflet-directive',
             'STNControllers', 'LogInOutController', 'ModalControllers', 'SettingsControllers', 'WiM.Services', 'WiM.Event', 'wim_angular', 'angularSpinners']);
-   app.constant('SERVER_URL', 'https://stn.wim.usgs.gov/STNServices');
-  //  app.constant('SERVER_URL', 'https://stntest.wim.usgs.gov/STNServices2');
+     app.constant('SERVER_URL', 'https://stn.wim.usgs.gov/STNServices');
+    //app.constant('SERVER_URL', 'https://stntest.wim.usgs.gov/STNServices2');
     // app.constant('SERVER_URL', 'http://localhost/STNServices2');
     
     app.run(['$rootScope', '$uibModalStack', '$cookies', '$state', function ($rootScope, $uibModalStack, $cookies, $state) {
@@ -55,6 +55,8 @@
                 })
 
                 //#endregion entryPoint
+
+                //#region map
                 .state("map", {
                     url: "/Map",
                     //templateUrl: "component/map/map.html",
@@ -99,10 +101,6 @@
                                 allDeployTypes: function (dt) {
                                     return dt.getAll().$promise;
                                 },
-                                //sd: 'SENSOR_DEPLOYMENT',
-                                //allSensDeps: function (sd) {
-                                //    return sd.getAll().$promise;
-                                //}
                                 sd: 'SENSOR_TYPE',
                                 allSensDeps: function (sd) {
                                     return sd.getAll().$promise;
@@ -112,7 +110,7 @@
                         }
                     }
                 })
-                //#endregion
+                //#endregion map
 
                 //#region approval page
                 .state("approval", {
@@ -275,30 +273,10 @@
                 .state("members.MembersList", {
                     url: "/MembersList",
                     templateUrl: "component/member/membersList.html",
-                    authenticate: true,                  
+                    authenticate: true
                  })
                 //#endregion members.MembersList
-
-                //#region members.MemberInfo
-                .state("members.MemberInfo", {
-                    url: "/memberInfo/:id",
-                    templateUrl: "component/member/memberInfo.html",
-                    controller: "memberInfoCtrl",
-                    authenticate: true,
-                    resolve: {
-                        m: 'MEMBER',
-                        thisMember: function (m, $stateParams, $http, $cookies) {
-                            var memberId = $stateParams.id;
-                            if (memberId > 0) {
-                                $http.defaults.headers.common.Authorization = 'Basic ' + $cookies.get('STNCreds');
-                                $http.defaults.headers.common.Accept = 'application/json';
-                                return m.query(
-                                    { id: memberId }).$promise;
-                            }
-                        }
-                    }
-                })//#endregion members.MemberInfo
-                //#endregion members
+                 //#endregion members
 
                 //#region events
                 //#region events
@@ -337,24 +315,6 @@
                     authenticate: true
                 })
                 //#endregion events.EventsList
-
-                //#region events.EventInfof
-                .state("events.EventInfo", {
-                    url: "/eventInfo/:id",
-                    templateUrl: "component/event/eventInfo.html",
-                    controller: "eventInfoCtrl",
-                    authenticate: true,
-                    resolve: {
-                        e: 'EVENT',
-                        thisEvent: function (e, $stateParams) {
-                            var eventId = $stateParams.id;
-                            if (eventId > 0) {
-                                return e.query(
-                                    { id: eventId }).$promise;
-                            }
-                        }
-                    }
-                })//#endregion events.EventInfo
                 //#endregion events
 
                 //#region resources

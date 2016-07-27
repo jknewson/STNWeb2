@@ -3,8 +3,8 @@
 
     var SettingsControllers = angular.module('SettingsControllers');
 
-    SettingsControllers.controller('memberModalCtrl', ['$scope', '$rootScope', '$cookies', '$location', '$http', '$uibModal', '$uibModalInstance', '$stateParams', '$filter', '$sce', 'roleList', 'agencyList', 'thisMember', 'MEMBER',
-        function ($scope, $rootScope, $cookies, $location, $http, $uibModal, $uibModalInstance, $stateParams, $filter, $sce, roleList, agencyList, thisMember, MEMBER) {
+    SettingsControllers.controller('memberModalCtrl', ['$scope', '$rootScope', '$cookies', '$http', '$uibModal', '$uibModalInstance', '$filter', '$sce', 'roleList', 'agencyList', 'thisMember', 'MEMBER',
+        function ($scope, $rootScope, $cookies, $http, $uibModal, $uibModalInstance, $filter, $sce, roleList, agencyList, thisMember, MEMBER) {
             //all things both new and existing member page will need
             $scope.aMember = {}; //holder for member (either coming in for edit, or being created for post
             $scope.matchingUsers = true;
@@ -148,8 +148,6 @@
                     }
                 });
                 modalInstance.result.then(function (memToRemove) {
-                    //yes, remove this keyword
-                    var test;
                     //DELETE it
                     $http.defaults.headers.common.Authorization = 'Basic ' + $cookies.get('STNCreds');
 

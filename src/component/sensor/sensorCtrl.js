@@ -165,7 +165,7 @@
                     var propIndex = $scope.SiteSensors.indexOf(proposedSensorClicked);
                     var propModalInstance = $uibModal.open({
                         templateUrl: 'ProposedSensor.html',
-                        controller: ['$scope', '$uibModalInstance', 'proposedSensor', function($scope, $uibModalInstance, proposedSensor){
+                        controller: ['$scope', '$uibModalInstance', 'proposedSensor', function ($scope, $uibModalInstance, proposedSensor) {
                             $scope.thisProposedSensor = proposedSensor;
                             $scope.cancel = function () {
                                 $uibModalInstance.dismiss();
@@ -197,7 +197,7 @@
                             });
                         }
                     });
-                }
+                };
                 //want to deploy a proposed sensor, edit a deployed sensor or create a new deployed sensor
                 $scope.showSensorModal = function (sensorClicked) {
                     var passAllLists = [allSensorTypes, allSensorBrands, allHousingTypes, allEvents, SensFileTypes, allVertDatums];
