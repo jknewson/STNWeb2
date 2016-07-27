@@ -39,7 +39,7 @@
                     }],
                     size: 'sm'
                 });
-            };
+            }
             
             $scope.serverURL = SERVER_URL;
             $scope.submit = function () {

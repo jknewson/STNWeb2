@@ -335,7 +335,7 @@
             
                 //hwm_uncertainty typed in, choose cooresponding hwm_environment
                 $scope.chooseQuality = function () {
-                    if ($scope.aHWM.hwm_uncertainty != "") {
+                    if ($scope.aHWM.hwm_uncertainty !== "") {
                         var x = Number($scope.aHWM.hwm_uncertainty);
                         //                    Excellent    +-0.05       0      -  0.050
                         //                    Good         +-0.10       0.051  -  0.100
@@ -344,10 +344,10 @@
                         //                    V Poor       > 0.40       0.401  -  infinity
                         $scope.aHWM.hwm_quality_id = $scope.hwmQualList.filter(function (h) { return h.min_range <= x && h.max_range >= x; })[0].hwm_quality_id;
                     }
-                }
+                };
                 //hwm quality chosen (or it changed from above), check to make sure it is congruent with input above
                 $scope.compareToUncertainty = function () {
-                    if ($scope.aHWM.hwm_uncertainty != "" || $scope.aHWM.hwm_uncertainty !== undefined) {
+                    if ($scope.aHWM.hwm_uncertainty !== "" && $scope.aHWM.hwm_uncertainty !== undefined) {
                         var x = Number($scope.aHWM.hwm_uncertainty);
                         var matchingQualId = $scope.hwmQualList.filter(function (h) { return h.min_range <= x && h.max_range >= x; })[0].hwm_quality_id;
                         if ($scope.aHWM.hwm_quality_id !== matchingQualId) {
@@ -368,7 +368,7 @@
                             });
                         }
                     }
-                }
+                };
 
                 // watch for the session event to change and update
                 $scope.$watch(function () { return $cookies.get('SessionEventName'); }, function (newValue) {

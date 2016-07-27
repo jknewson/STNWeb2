@@ -1,8 +1,9 @@
 ﻿<!DOCTYPE html>
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml" >
 <head>
-    <!--<link rel="icon" href="data:;base64,="><link rel="icon" href="data:;base64,iVBORw0KGgo=">-->
-    <link rel="shortcut icon" type="image/x-icon" href="http://wim.usgs.gov/img/faviconsmall.png" />
+    <!--<link rel="icon" href="data:;base64,="><link rel="icon" href="data:;base64,iVBORw0KGgo=">
+    <link rel="shortcut icon" type="image/x-icon" href="http://wim.usgs.gov/img/faviconsmall.png" />-->
+    <link rel="shortcut icon" type="image/x-icon" href="http://wim.usgs.gov/img/favicon-wim.png" />
     <title>STNWeb</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
@@ -39,12 +40,10 @@
 
     <!--HEADER START navCtrl-->
     <div ng-controller="mainCtrl" class="app-nav">
-        <!--<h2 class="testing-alert"><b>TESTING ONLY! DATA WILL BE OVERRIDDEN FOLLOWING TESTING PHASE</b></h2>-->
-        <h1 class="nav-header">Short-Term Network<span ng-if="thisPage"> - {{thisPage}}</span></h1><!--
-        --><i  ng-show="isAuth.val" class="mobile-menu-btn ion-navicon" id="mobile-menu-btn"></i><!--
+        <h1 class="nav-header">Short-Term Network<span ng-if="thisPage"> - {{thisPage}}</span></h1>
+        <i  ng-show="isAuth.val" class="mobile-menu-btn ion-navicon" id="mobile-menu-btn"></i>
 
-
-        --><button type="button" ng-show="isAuth.val" ng-controller="eventSessionCtrl" class="btn-wim btn-sm btn-white nav-change-session" ng-click="openEventModal()">
+        <button type="button" ng-show="isAuth.val" ng-controller="eventSessionCtrl" class="btn-wim btn-sm btn-white nav-change-session" ng-click="openEventModal()">
             <span ng-show="!sessionEvent">Choose Event</span>
             <span ng-show="sessionEvent">Change Event</span>
         </button>
@@ -64,7 +63,6 @@
         </script>
 
         <div class="nav-userctrl" ng-show="isAuth.val">
-            <!--<span>Welcome, <a ui-sref="members.MemberInfo({id: userID})">{{usersName}}</a></span>-->
             <span>Welcome, <a ui-sref="members.MembersList({id: userID})">{{usersName}}</a></span>
             <button type="button" ng-controller="logoutCtrl" ng-click="logout()">LOG OFF</button>
         </div>
