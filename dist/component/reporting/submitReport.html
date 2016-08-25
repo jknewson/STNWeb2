@@ -1,0 +1,819 @@
+<uib-accordion close-others="false">
+    <!--Section 1: Start Report-->
+    <form name="fullReportForm.submit">
+        <uib-accordion-group heading="Section 1: Start Report or Choose Incomplete Report to Finish" is-open="true">
+            <div class="pull-left col-md-7">
+                <div class="row">
+                    <button ng-show="newReport.complete != undefined && newReport.complete == 1">click here to start over</button>
+
+                    <div class="form-group col-md-12 required">
+                        <label class="col-md-12 control-label req" for="report_date">Date being reported:</label>
+                        <div ng-if="!isCompleted" class="col-md-5 input-group" style="padding-left:15px;padding-right:15px;">
+                            <input datepicker-append-to-body="true" class="form-control dateInputStyle" show-weeks="false" id="report_date" name="rd" type="date" uib-datepicker-popup="MM/dd/yyyy"
+                                   is-open="datepickrs.rd" ng-model="newReport.report_date" required />
+                            <span class="input-group-btn">
+                                <button type="button" class="btn btn-default" ng-click="open($event, 'rd')">
+                                    <i class="glyphicon glyphicon-calendar" />
+                                </button>
+                            </span>
+                        </div>
+                        <div ng-if="isCompleted" class="col-md-6">
+                            <span>{{newReport.report_date | date: MM/dd/yyyy}}</span>
+                        </div>
+                    </div>
+
+                    <div class="form-group col-md-12 required">
+                        <label class="col-md-12 control-label req" for="event_id">Event:</label>
+                        <div class="col-md-6">
+                            <select ng-hide="isCompleted" class="form-control" id="event_id" name="event_id"
+                                    ng-model="newReport.event_id" ng-options="e.event_id as e.event_name for e in events" required>
+                                <option value="">Select an event</option>
+                            </select>
+                            <span ng-show="isCompleted">{{newReport.event_name}}</span>
+                        </div>
+                    </div>
+                    <div class="form-group col-md-12 required">
+                        <label class="col-md-12 control-label req" for="state">State:</label>
+                        <div class="col-md-6">
+                            <select ng-hide="isCompleted" class="form-control" id="state" name="state"
+                                    ng-model="newReport.state" ng-options="s.state_abbrev as s.state_name for s in states" required>
+                                <option value="">Select a state</option>
+                            </select>
+                            <span ng-show="isCompleted">{{newReport.state}}</span>
+                        </div>
+                    </div>
+                </div>
+                <br />
+                <div ng-hide="isCompleted" class="row">
+                    <div style="margin:10px;">
+                        <button type="button" class="btn btn-primary large" ng-click="populateYestTots(newReport.report_date, newReport.event_id, newReport.state_abbrev)">
+                            Start Report
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div ng-hide="isCompleted" style="border-left: solid thin black;padding-left:3em" class="container container-fluid col-md-5 pull-right">
+                <label>Incomplete Reports</label>
+                <ul ng-show="memberIncompletes.length > 0">
+                    <li ng-repeat="ir in memberIncompletes | orderBy: '-report_date'">
+                        <a sref="#" style="cursor:pointer" ng-click="getIncompleteReport($this)">{{ir.report_date | date: MM/dd/yyyy}}</a>
+                    </li>
+                </ul>
+                <span ng-show="memberIncompletes.length == 0">No incomplete reports to show.</span>
+            </div>
+        </uib-accordion-group>
+
+        <!-- Section 2: Personnel and vehcle counts -->
+        <!--<form name="fullReportForm">-->
+        <uib-accordion-group heading="Section 2: Personnel and Vehicle Counts" is-disabled="disabled">
+            <table class="table">
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td style="font-family: 'BryantBold';">Surfacewater</td>
+                    <td style="font-family: 'BryantBold';">Water Quality and Other</td>
+                </tr>
+                <tr>
+                    <td colspan="2">
+                        <span ng-if="!isCompleted"><input type="hidden" name="newReport.reporting_metrics_id" ng-model="newReport.reporting_metrics_id" /></span>
+                        <span class="required">Employees not accounted for</span>
+                    </td>
+                    <td>
+                        <input ng-readonly="isCompleted" class="form-control" id="SW_empl" name="newReport.sw_fieldpers_notacct"
+                               ng-model="newReport.sw_fieldpers_notacct" type="text" numeric-only ng-required="newReport.complete == 1" />
+                    </td>
+                    <td>
+                        <input ng-readonly="isCompleted" class="form-control" id="WQ_empl" name="newReport.wq_fieldpers_notacct"
+                               ng-model="newReport.wq_fieldpers_notacct" type="text" numeric-only ng-required="newReport.complete == 1" />
+                    </td>
+                </tr>
+                <tr>
+                    <td rowspan="3">
+                        <span>Personnel in <br />the field</span>
+                    </td>
+                    <td>
+                        <span class="required">Yesterday</span>
+                    </td>
+                    <td>
+                        <input ng-readonly="isCompleted" class="form-control" id="pInFieldYestSurf" name="newReport.sw_yest_fieldpers"
+                               ng-model="newReport.sw_yest_fieldpers" type="text" numeric-only ng-required="newReport.complete == 1" />
+                    </td>
+                    <td>
+                        <input ng-readonly="isCompleted" class="form-control" id="pInFieldYestWQ" name="newReport.wq_yest_fieldpers"
+                               ng-model="newReport.wq_yest_fieldpers" type="text" numeric-only ng-required="newReport.complete == 1" />
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <span class="required">Today</span>
+                    </td>
+                    <td>
+                        <input ng-readonly="isCompleted" class="form-control" id="pInFieldTodaySurf" name="newReport.sw_tod_fieldpers"
+                               ng-model="newReport.sw_tod_fieldpers" type="text" numeric-only ng-required="newReport.complete == 1" />
+                    </td>
+                    <td>
+                        <input ng-readonly="isCompleted" class="form-control" id="pInFieldTodayWQ" name="newReport.wq_tod_fieldpers"
+                               ng-model="newReport.wq_tod_fieldpers" type="text" numeric-only ng-required="newReport.complete == 1" />
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <span class="required">Tomorrow</span>
+                    </td>
+                    <td>
+                        <input ng-readonly="isCompleted" class="form-control" id="pInFieldTomorrowSurf" name="newReport.sw_tmw_fieldpers"
+                               ng-model="newReport.sw_tmw_fieldpers" type="text" numeric-only ng-required="newReport.complete == 1" />
+                    </td>
+                    <td>
+                        <input ng-readonly="isCompleted" class="form-control" id="pInFieldTomorrowWQ" name="newReport.wq_tmw_fieldpers"
+                               ng-model="newReport.wq_tmw_fieldpers" type="text" numeric-only ng-required="newReport.complete == 1" />
+                    </td>
+                </tr>
+                <tr>
+                    <td rowspan="3">
+                        <span>Personnel in <br />the office</span>
+                    </td>
+                    <td>
+                        <span class="required">Yesterday</span>
+                    </td>
+                    <td>
+                        <input ng-readonly="isCompleted" class="form-control" id="pInOfficeYestSurf" name="newReport.sw_yest_officepers"
+                               ng-model="newReport.sw_yest_officepers" type="text" numeric-only ng-required="newReport.complete == 1" />
+                    </td>
+                    <td>
+                        <input ng-readonly="isCompleted" class="form-control" id="pInOfficeYestWQ" name="newReport.wq_yest_officepers"
+                               ng-model="newReport.wq_yest_officepers" type="text" numeric-only ng-required="newReport.complete == 1" />
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <span class="required">Today</span>
+                    </td>
+                    <td>
+                        <input ng-readonly="isCompleted" class="form-control" id="pInOfficeTodaySurf" name="newReport.sw_tod_officepers"
+                               ng-model="newReport.sw_tod_officepers" type="text" numeric-only ng-required="newReport.complete == 1" />
+                    </td>
+                    <td>
+                        <input ng-readonly="isCompleted" class="form-control" id="pInOfficeTodayWQ" name="newReport.wq_tod_officepers"
+                               ng-model="newReport.wq_tod_officepers" type="text" numeric-only ng-required="newReport.complete == 1" />
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <span class="required">Tomorrow</span>
+                    </td>
+                    <td>
+                        <input ng-readonly="isCompleted" class="form-control" id="pInOfficeTomorrowSurf" name="newReport.sw_tmw_officepers"
+                               ng-model="newReport.sw_tmw_officepers" type="text" numeric-only ng-required="newReport.complete == 1" />
+                    </td>
+                    <td>
+                        <input ng-readonly="isCompleted" class="form-control" id="pInOfficeTomorrowWQ" name="newReport.wq_tmw_officepers"
+                               ng-model="newReport.wq_tmw_officepers" type="text" numeric-only ng-required="newReport.complete == 1" />
+
+                    </td>
+                </tr>
+                <tr>
+                    <td rowspan="3">
+                        <span>Vehicles <br /> deployed</span>
+                    </td>
+                    <td>
+                        <span class="required">Trucks & Cars</span>
+                    </td>
+                    <td>
+                        <input ng-readonly="isCompleted" class="form-control" id="trNcarsSurf" name="newReport.sw_autos_depl"
+                               ng-model="newReport.sw_autos_depl" type="text" numeric-only ng-required="newReport.complete == 1" />
+                    </td>
+                    <td>
+                        <input ng-readonly="isCompleted" class="form-control" id="trNcarsWQ" name="newReport.wq_autos_depl"
+                               ng-model="newReport.wq_autos_depl" type="text" numeric-only ng-required="newReport.complete == 1" />
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <span class="required">Boats</span>
+                    </td>
+                    <td>
+                        <input ng-readonly="isCompleted" class="form-control" id="boatsSurf" name="newReport.sw_boats_depl"
+                               ng-model="newReport.sw_boats_depl" type="text" numeric-only ng-required="newReport.complete == 1" />
+                    </td>
+                    <td>
+                        <input ng-readonly="isCompleted" class="form-control" id="boatsWQ" name="newReport.wq_boats_depl"
+                               ng-model="newReport.wq_boats_depl" type="text" numeric-only ng-required="newReport.complete == 1" />
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <span class="required">Other</span>
+                    </td>
+                    <td>
+                        <input ng-readonly="isCompleted" class="form-control" id="otherVehSurf" name="newReport.sw_other_depl"
+                               ng-model="newReport.sw_other_depl" type="text" numeric-only ng-required="newReport.complete == 1" />
+                    </td>
+                    <td>
+                        <input ng-readonly="isCompleted" class="form-control" id="otherVehWQ" name="newReport.wq_other_depl"
+                               ng-model="newReport.wq_other_depl" type="text" numeric-only ng-required="newReport.complete == 1" />
+                    </td>
+                </tr>
+            </table>
+
+        </uib-accordion-group>
+
+        <!-- Section 3: Instrumentation & Sampling Counts-->
+        <uib-accordion-group heading="Section 3: Instrumentation & Sampling Counts" is-disabled="disabled">
+
+            <table class="table">
+                <tr>
+                    <td colspan="2" class="col-md-5">
+                        <span class="required">Gage visits (cumulative)</span>
+                    </td>
+                    <td colspan="2" class="col-md-3">
+                        <input ng-readonly="isCompleted" class="form-control" id="gageVisits" name="newReport.gage_visit"
+                               ng-model="newReport.GAGE_VISIT" type="text" numeric-only ng-required="newReport.complete == 1" />
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2">
+                        <span class="required">Gages down at present</span>
+                    </td>
+                    <td colspan="2">
+                        <input ng-readonly="isCompleted" class="form-control" id="gagesDown" name="newReport.gage_down"
+                               ng-model="newReport.gage_down" type="text" numeric-only ng-required="newReport.complete == 1" />
+                    </td>
+                </tr>
+                <tr>
+                    <td rowspan="2">
+                        <span>Discharge measurements</span>
+                    </td>
+                    <td>
+                        <span class="required">To date</span>
+                    </td>
+                    <td colspan="2">
+                        <input ng-readonly="isCompleted" class="form-control" id="dischMeasToDate" name="newReport.tot_discharge_meas"
+                               ng-model="newReport.tot_discharge_meas" type="text" numeric-only ng-required="newReport.complete == 1" />
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <span class="required">Planned</span>
+                    </td>
+                    <td colspan="2">
+                        <input ng-readonly="isCompleted" class="form-control" id="dischMeasPlanned" name="newReport.plan_discharge_meas"
+                               ng-model="newReport.plan_discharge_meas" type="text" numeric-only ng-required="newReport.complete == 1" />
+                    </td>
+                </tr>
+                <tr>
+                    <td rowspan="2">
+                        <span>Check measurements</span>
+                    </td>
+                    <td>
+                        <span class="required">To Date</span>
+                    </td>
+                    <td colspan="2">
+                        <input ng-readonly="isCompleted" class="form-control" id="chkMeasToDate" name="newReport.tot_check_meas"
+                               ng-model="newReport.tot_check_meas" type="text" numeric-only ng-required="newReport.complete == 1" />
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <span class="required">Planned</span>
+                    </td>
+                    <td colspan="2">
+                        <input ng-readonly="isCompleted" class="form-control" id="chkMeasPlanned" name="newReport.plan_check_meas"
+                               ng-model="newReport.plan_check_meas" type="text" numeric-only ng-required="newReport.complete == 1" />
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2">
+                        <span class="required">Indirect measurements planned</span>
+                    </td>
+                    <td colspan="2">
+                        <input ng-readonly="isCompleted" class="form-control" id="indMeasPlan" name="newReport.plan_indirect_meas"
+                               ng-model="newReport.plan_indirect_meas" type="text" numeric-only ng-required="newReport.complete == 1" />
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2">
+                        <span class="required">Rating extensions</span>
+                    </td>
+                    <td colspan="2">
+                        <input ng-readonly="isCompleted" class="form-control" id="rateExt" name="newReport.rating_extens"
+                               ng-model="newReport.rating_extens" type="text" numeric-only ng-required="newReport.complete == 1" />
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2">
+                        <span class="required">Peaks of record on gages to date<br /> ( &#62; 20 years of record)</span>
+                    </td>
+                    <td colspan="2">
+                        <input ng-readonly="isCompleted" class="form-control" id="peaks" name="newReport.gage_peak_record"
+                               ng-model="newReport.gage_peak_record" type="text" numeric-only ng-required="newReport.complete == 1" />
+                    </td>
+                </tr>
+                <tr>
+                    <td rowspan="4">
+                        <span>Rapid Deployment gages to date</span>
+                    </td>
+                    <td>
+                        <span class="required">Planned</span>
+                    </td>
+                    <td colspan="2">
+                        <input ng-readonly="isCompleted" class="form-control" id="rdgPlanned" name="newReport.plan_rapdepl_gage"
+                               ng-model="newReport.plan_rapdepl_gage" type="text" numeric-only ng-required="newReport.complete == 1" />
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <span>Deployed</span>
+                    </td>
+                    <td colspan="2">
+                        <input class="form-control" id="rdgDeployed" name="newReport.dep_rapdepl_gage" readonly="readonly"
+                               ng-model="newReport.dep_rapdepl_gage" type="text" numeric-only ng-required="newReport.complete == 1" />
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <span>Recovered</span>
+                    </td>
+                    <td colspan="2">
+                        <input class="form-control" id="rdgRecovered" name="newReport.rec_rapdepl_gage" readonly="readonly"
+                               ng-model="newReport.rec_rapdepl_gage" type="text" numeric-only ng-required="newReport.complete == 1" />
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <span>Lost</span>
+                    </td>
+                    <td colspan="2">
+                        <input class="form-control" id="rdgLost" name="newReport.lost_rapdepl_gage" readonly="readonly"
+                               ng-model="newReport.lost_rapdepl_gage" type="text" numeric-only ng-required="newReport.complete == 1" />
+                    </td>
+                </tr>
+                <tr>
+                    <td rowspan="4">
+                        <span>Water Level Sensors to date</span>
+                    </td>
+                    <td>
+                        <span class="required">Planned</span>
+                    </td>
+                    <td colspan="2">
+                        <input ng-readonly="isCompleted" class="form-control" id="wlsPlanned" name="newReport.plan_wtrlev_sensor"
+                               ng-model="newReport.plan_wtrlev_sensor" type="text" numeric-only ng-required="newReport.complete == 1" />
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <span>Deployed</span>
+                    </td>
+                    <td colspan="2">
+                        <input class="form-control" id="wlsDeployed" name="newReport.dep_wtrlev_sensor" readonly="readonly"
+                               ng-model="newReport.dep_wtrlev_sensor" type="text" numeric-only ng-required="newReport.complete == 1" />
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <span>Recovered</span>
+                    </td>
+                    <td colspan="2">
+                        <input class="form-control" id="wlsRecovered" name="newReport.rec_wtrlev_sensor" readonly="readonly"
+                               ng-model="newReport.rec_wtrlev_sensor" type="text" numeric-only ng-required="newReport.complete == 1" />
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <span>Lost</span>
+                    </td>
+                    <td colspan="2">
+                        <input class="form-control" id="wlsLost" name="newReport.lost_wtrlev_sensor" readonly="readonly"
+                               ng-model="newReport.lost_wtrlev_sensor" type="text" numeric-only ng-required="newReport.complete == 1" />
+                    </td>
+                </tr>
+                <tr>
+                    <td rowspan="4">
+                        <span>Wave Sensors to date</span>
+                    </td>
+                    <td>
+                        <span class="required">Planned</span>
+                    </td>
+                    <td colspan="2">
+                        <input ng-readonly="isCompleted" class="form-control" id="wsPlanned" name="newReport.plan_wv_sens"
+                               ng-model="newReport.plan_wv_sens" type="text" numeric-only ng-required="newReport.complete == 1" />
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <span>Deployed</span>
+                    </td>
+                    <td colspan="2">
+                        <input class="form-control" id="wsDeployed" name="newReport.dep_wv_sens" readonly="readonly"
+                               ng-model="newReport.dep_wv_sens" type="text" numeric-only ng-required="newReport.complete == 1" />
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <span>Recovered</span>
+                    </td>
+                    <td colspan="2">
+                        <input class="form-control" id="wsRecovered" name="newReport.rec_wv_sens" readonly="readonly"
+                               ng-model="newReport.rec_wv_sens" type="text" numeric-only ng-required="newReport.complete == 1" />
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <span>Lost</span>
+                    </td>
+                    <td colspan="2">
+                        <input class="form-control" id="wsLost" name="newReport.lost_wv_sens" readonly="readonly"
+                               ng-model="newReport.lost_wv_sens" type="text" numeric-only ng-required="newReport.complete == 1" />
+                    </td>
+                </tr>
+                <tr>
+                    <td rowspan="4">
+                        <span>Barometers to date</span>
+                    </td>
+                    <td>
+                        <span class="required">Planned</span>
+                    </td>
+                    <td colspan="2">
+                        <input ng-readonly="isCompleted" class="form-control" id="barPlanned" name="newReport.plan_barometric"
+                               ng-model="newReport.plan_barometric" type="text" numeric-only ng-required="newReport.complete == 1" />
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <span>Deployed</span>
+                    </td>
+                    <td colspan="2">
+                        <input class="form-control" id="barDeployed" name="newReport.dep_barometric" readonly="readonly"
+                               ng-model="newReport.dep_barometric" type="text" numeric-only ng-required="newReport.complete == 1" />
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <span>Recovered</span>
+                    </td>
+                    <td colspan="2">
+                        <input class="form-control" id="barRecovered" name="newReport.rec_barometric" readonly="readonly"
+                               ng-model="newReport.rec_barometric" type="text" numeric-only ng-required="newReport.complete == 1" />
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <span>Lost</span>
+                    </td>
+                    <td colspan="2">
+                        <input class="form-control" id="barLost" name="newReport.lost_barometric" readonly="readonly"
+                               ng-model="newReport.lost_barometric" type="text" numeric-only ng-required="newReport.complete == 1" />
+                    </td>
+                </tr>
+                <tr>
+                    <td rowspan="4">
+                        <span>Meteorological Sensors to date</span>
+                    </td>
+                    <td>
+                        <span class="required">Planned</span>
+                    </td>
+                    <td colspan="2">
+                        <input ng-readonly="isCompleted" class="form-control" id="msPlanned" name="newReport.plan_meteorological"
+                               ng-model="newReport.plan_meteorological" type="text" numeric-only ng-required="newReport.complete == 1" />
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <span>Deployed</span>
+                    </td>
+                    <td colspan="2">
+                        <input class="form-control" id="msDeployed" name="newReport.dep_meteorological" readonly="readonly"
+                               ng-model="newReport.dep_meteorological" type="text" numeric-only ng-required="newreport.complete == 1" />
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <span>Recovered</span>
+                    </td>
+                    <td colspan="2">
+                        <input class="form-control" id="msRecovered" name="newReport.rec_meteorological" readonly="readonly"
+                               ng-model="newReport.rec_meteorological" type="text" numeric-only ng-required="newReport.complete == 1" />
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <span>Lost</span>
+                    </td>
+                    <td colspan="2">
+                        <input class="form-control" id="msLost" name="newReport.lost_meteorological" readonly="readonly"
+                               ng-model="newReport.lost_meteorological" type="text" numeric-only ng-required="newReport.complete == 1" />
+                    </td>
+                </tr>
+                <tr>
+                    <td rowspan="2">
+                        <span>Highwater Mark to date</span>
+                    </td>
+                    <td>
+                        <span>Flagged</span>
+                    </td>
+                    <td colspan="2">
+                        <input class="form-control" id="hwmFlagged" name="newReport.hwm_flagged" readonly="readonly"
+                               ng-model="newReport.hwm_flagged" type="text" numeric-only ng-required="newReport.complete == 1" />
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <span>Collected</span>
+                    </td>
+                    <td colspan="2">
+                        <input class="form-control" id="hwmCollected" name="newReport.hwm_collected" readonly="readonly"
+                               ng-model="newReport.hwm_collected" type="text" numeric-only ng-required="newReport.complete == 1" />
+                    </td>
+                </tr>
+
+                <tr>
+                    <td colspan="2">
+                        <span class="required">QW Gage visits (cumulative)</span>
+                    </td>
+                    <td colspan="2">
+                        <input ng-readonly="isCompleted" class="form-control" id="qwGageVisit" name="newReport.qw_gage_visit"
+                               ng-model="newReport.qw_gage_visit" type="text" numeric-only ng-required="newReport.complete == 1" />
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2">
+                        <span class="required">Continuous QW Gages visited</span>
+                    </td>
+                    <td colspan="2">
+                        <input ng-readonly="isCompleted" class="form-control" id="contQwGageVisit" name="newReport.qw_cont_gagevisit"
+                               ng-model="newReport.qw_cont_gagevisit" type="text" numeric-only ng-required="newReport.complete == 1" />
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2">
+                        <span class="required">Continuous QW Gages down</span>
+                    </td>
+                    <td colspan="2">
+                        <input ng-readonly="isCompleted" class="form-control" id="qwGagesDown" name="newReport.qw_gage_down"
+                               ng-model="newReport.qw_gage_down" type="text" numeric-only ng-required="newReport.complete == 1" />
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2">
+                        <span class="required">Discrete QW samples collected</span>
+                    </td>
+                    <td colspan="2">
+                        <input ng-readonly="isCompleted" class="form-control" id="qwSamplesCol" name="newReport.qw_discr_samples"
+                               ng-model="newReport.qw_discr_samples" type="text" numeric-only ng-required="newReport.complete == 1" />
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2">
+                        <span class="required">Sediment samples collected</span>
+                    </td>
+                    <td colspan="2">
+                        <input ng-readonly="isCompleted" class="form-control" id="sedSamplesCol" name="newReport.coll_sedsamples"
+                               ng-model="newReport.coll_sedsamples" type="text" numeric-only ng-required="newReport.complete == 1" />
+                    </td>
+                </tr>
+            </table>
+
+        </uib-accordion-group>
+
+        <!--Section 4: Notes-->
+        <uib-accordion-group heading="Section 4: Notes" is-disabled="disabled">
+            <div>Notes detailing the day's field activities (optional)</div>
+            <textarea ng-readonly="isCompleted" class="form-control" id="notes" type="text" rows="5" cols="90" ng-model="newReport.notes" />
+            <div>*Limit 2000 characters</div>
+        </uib-accordion-group>
+
+        <!-- Section 5: Contacts -->
+        <uib-accordion-group heading="Section 5: Contact Information" is-disabled="disabled" is-open="status.openContacts">
+            <div><b>Submitter</b></div>
+            <div><span class="col-md-3">Name:</span><span>{{MemberLoggedIn.fname}} {{MemberLoggedIn.lname}}</span></div>
+            <div><span class="col-md-3">Phone</span><span>{{MemberLoggedIn.phone}}</span></div>
+            <div><span class="col-md-3">Email</span><span>{{MemberLoggedIn.email}}</span></div>
+            <div><span class="col-md-3">Office Name</span><span>{{MemberLoggedIn.agency_name}}</span></div>
+            <div><span class="col-md-3">Office Address</span><span>{{MemberLoggedIn.agency_address}}</span></div>
+
+            <h3>Event Contacts</h3>
+
+            <!-- ------------------------- Deployed--------------------------------- -->
+            <div><span class="col-md-2"><label>Deployed Staff (required)</label></span><a sref="#" style="cursor:pointer" ng-click="populateDeployer()">(Same as submitter)</a></div>
+            <div class="col-sm-12" style="margin-bottom:15px;">
+                <div class="col-md-3 form-group required">
+                    <span class="col-md-12 control-label req" for="fname">First Name:</span>
+                    <div class="col-md-12">
+                        <input ng-readonly="isCompleted" class="form-control" id="D_fname" name="fname" type="text" ng-model="DeployStaff.fname" ng-required="newReport.complete == 1" />
+                    </div>
+                </div>
+
+                <div class="col-md-3 form-group required">
+                    <span class="col-md-12 control-label req" for="lname">Last Name:</span>
+                    <div class="col-md-12">
+                        <input ng-readonly="isCompleted" class="form-control" id="D_lname" name="lname" type="text" ng-model="DeployStaff.lname" ng-required="newReport.complete == 1" />
+                    </div>
+                </div>
+
+                <div class="col-md-4 form-group required">
+                    <span class="col-md-12 control-label req" for="email">Email:</span>
+                    <div class="col-md-12">
+                        <input ng-readonly="isCompleted" class="form-control" id="D_email" name="email" type="email" ng-model="DeployStaff.email" ng-required="newReport.complete == 1" />
+                    </div>
+                </div>
+
+                <div class="col-md-3 form-group required">
+                    <span class="col-md-12 control-label req" for="phone">Phone:</span>
+                    <div class="col-md-12">
+                        <input ng-readonly="isCompleted" class="form-control" id="D_phone" name="phone"
+                               type="text" my-input-mask="{mask: '(999) 999-9999[ x99999]', greedy:false}" ng-model="DeployStaff.phone" ng-required="newReport.complete == 1" />
+                    </div>
+                </div>
+
+                <div class="col-md-3 form-group">
+                    <span class="col-md-12 control-label" for="alternate_phone">Alternate Phone:</span>
+                    <div class="col-md-12">
+                        <input ng-readonly="isCompleted" class="form-control" id="D_alternate_phone" name="alternate_phone"
+                               type="text" my-input-mask="{mask: '(999) 999-9999[ x99999]', greedy:false}" ng-model="DeployStaff.alternate_phone" />
+                    </div>
+                </div>
+            </div>
+
+            <!-- ------------------------- General--------------------------------- --> 
+            <div><b>General (optional)</b></div>
+            <div class="col-sm-12" style="margin-bottom:15px;">
+                <div class="col-md-3 form-group" ng-class="{'required':GenStaff.fname || GenStaff.lname || GenStaff.email || GenStaff.phone}">
+                    <span class="col-md-12 control-label" for="fname" ng-class="{'req':GenStaff.fname ||GenStaff.lname || GenStaff.email || GenStaff.phone}">First Name:</span>
+                    <div class="col-md-12">
+                        <input ng-readonly="isCompleted" class="form-control" id="G_fname" name="fname" type="text" ng-model="GenStaff.fname" ng-required="GenStaff.lname || GenStaff.email || GenStaff.phone" />
+                    </div>
+                </div>
+
+                <div class="col-md-3 form-group" ng-class="{'required':GenStaff.fname || GenStaff.lname || GenStaff.email || GenStaff.phone}">
+                    <span class="col-md-12 control-label" ng-class="{'req':GenStaff.fname || GenStaff.lname || GenStaff.email || GenStaff.phone}" for="lname">Last Name:</span>
+                    <div class="col-md-12">
+                        <input ng-readonly="isCompleted" class="form-control" id="G_lname" name="lname" type="text" ng-model="GenStaff.lname" ng-required="GenStaff.fname || GenStaff.email || GenStaff.phone" />
+                    </div>
+                </div>
+
+                <div class="col-md-4 form-group" ng-class="{'required':GenStaff.lname || GenStaff.fname || GenStaff.email || GenStaff.phone}">
+                    <span class="col-md-12 control-label" ng-class="{'req':GenStaff.lname || GenStaff.fname || GenStaff.email || GenStaff.phone}" for="email">Email:</span>
+                    <div class="col-md-12">
+                        <input ng-readonly="isCompleted" class="form-control" id="G_email" name="email" type="email" ng-model="GenStaff.email" ng-required="GenStaff.lname || GenStaff.fname || GenStaff.phone" />
+                    </div>
+                </div>
+
+                <div class="col-md-3 form-group" ng-class="{'required':GenStaff.lname || GenStaff.email || GenStaff.fname || GenStaff.phone}">
+                    <span class="col-md-12 control-label" ng-class="{'req':GenStaff.lname || GenStaff.email || GenStaff.fname|| GenStaff.phone}" for="phone">Phone:</span>
+                    <div class="col-md-12">
+                        <input ng-readonly="isCompleted" class="form-control" id="G_phone" name="phone" ng-rrequired="GenStaff.lname || GenStaff.email || GenStaff.fname"
+                               type="text" my-input-mask="{mask: '(999) 999-9999[ x99999]', greedy:false}" ng-model="GenStaff.phone" />
+                    </div>
+                </div>
+
+                <div class="col-md-3 form-group">
+                    <span class="col-md-12 control-label" for="alternate_phone">Alternate Phone:</span>
+                    <div class="col-md-12">
+                        <input ng-readonly="isCompleted" class="form-control" id="G_alternate_phone" name="alternate_phone"
+                               type="text" my-input-mask="{mask: '(999) 999-9999[ x99999]', greedy:false}" ng-model="GenStaff.alternate_phone" />
+                    </div>
+                </div>
+            </div>
+
+            <!-- ------------------------- Inland Flood--------------------------------- -->
+            <div><b>Inland Flood (optional)</b></div>
+            <div class="col-sm-12" style="margin-bottom:15px;">
+                <div class="col-md-3 form-group" ng-class="{'required':InlandStaff.fname || InlandStaff.lname || InlandStaff.email || InlandStaff.phone}">
+                    <span class="col-md-12 control-label" ng-class="{'req':InlandStaff.fname || InlandStaff.lname || InlandStaff.email || InlandStaff.phone}" for="fname">First Name:</span>
+                    <div class="col-md-12">
+                        <input ng-readonly="isCompleted" class=" form-control" id="I_fname" name="fname" type="text" ng-model="InlandStaff.fname" ng-required="InlandStaff.fname ||InlandStaff.lname || InlandStaff.email || InlandStaff.phone" />
+                    </div>
+                </div>
+
+                <div class="col-md-3 form-group" ng-class="{'required':InlandStaff.fname || InlandStaff.lname || InlandStaff.email || InlandStaff.phone}">
+                    <span class="col-md-12 control-label" ng-class="{'req':InlandStaff.fname || InlandStaff.lname || InlandStaff.email || InlandStaff.phone}" for="lname">Last Name:</span>
+                    <div class="col-md-12">
+                        <input ng-readonly="isCompleted" class="form-control" id="I_lname" name="lname" type="text" ng-model="InlandStaff.lname" ng-required="InlandStaff.fname || InlandStaff.lname || InlandStaff.email || InlandStaff.phone" />
+                    </div>
+                </div>
+
+                <div class="col-md-4 form-group" ng-class="{'required':InlandStaff.lname || InlandStaff.fname || InlandStaff.email || InlandStaff.phone}">
+                    <span class="col-md-12 control-label" ng-class="{'req':InlandStaff.lname || InlandStaff.fname || InlandStaff.email || InlandStaff.phone}" for="email">Email:</span>
+                    <div class="col-md-12">
+                        <input ng-readonly="isCompleted" class="form-control" id="I_email" name="email" type="email" ng-model="InlandStaff.email" ng-required="InlandStaff.lname || InlandStaff.fname || InlandStaff.email || InlandStaff.phone" />
+                    </div>
+                </div>
+
+                <div class="col-md-3 form-group" ng-class="{'required':InlandStaff.lname || InlandStaff.email || InlandStaff.fname|| InlandStaff.phone}">
+                    <span class="col-md-12 control-label" ng-class="{'req':InlandStaff.lname || InlandStaff.email || InlandStaff.fname || InlandStaff.phone}" for="phone">Phone:</span>
+                    <div class="col-md-12">
+                        <input ng-readonly="isCompleted" class="form-control" id="I_phone" name="phone" ng-required="InlandStaff.lname || InlandStaff.email || InlandStaff.fname || InlandStaff.phone"
+                               type="text" my-input-mask="{mask: '(999) 999-9999[ x99999]', greedy:false}" ng-model="InlandStaff.phone" />
+                    </div>
+                </div>
+
+                <div class="col-md-3 form-group">
+                    <span class="col-md-12 control-label" for="alternate_phone">Alternate Phone:</span>
+                    <div class="col-md-12">
+                        <input ng-readonly="isCompleted" class="form-control" id="I_alternate_phone" name="alternate_phone"
+                               type="text" my-input-mask="{mask: '(999) 999-9999[ x99999]', greedy:false}" ng-model="InlandStaff.alternate_phone" />
+                    </div>
+                </div>
+            </div>
+
+            <!-- ------------------------- Coastal Flood--------------------------------- -->
+            <div><b>Coastal Flood (optional)</b></div>
+            <div class="col-sm-12" style="margin-bottom:15px;">
+                <div class="col-md-3 form-group" ng-class="{'required':CoastStaff.fname || CoastStaff.lname || CoastStaff.email || CoastStaff.phone}">
+                    <span class="col-md-12 control-label" ng-class="{'req':CoastStaff.fname || CoastStaff.lname || CoastStaff.email || CoastStaff.phone}" for="fname">First Name:</span>
+                    <div class="col-md-12">
+                        <input ng-readonly="isCompleted" class="form-control" id="C_fname" name="fname" type="text" ng-model="CoastStaff.fname" ng-required="CoastStaff.fname || CoastStaff.lname || CoastStaff.email || CoastStaff.phone" />
+                    </div>
+                </div>
+
+                <div class="col-md-3 form-group" ng-class="{'required':CoastStaff.fname || CoastStaff.lname || CoastStaff.email || CoastStaff.phone}">
+                    <span class="col-md-12 control-label" ng-class="{'req':CoastStaff.fname || CoastStaff.lname || CoastStaff.email || CoastStaff.phone}" for="lname">Last Name:</span>
+                    <div class="col-md-12">
+                        <input ng-readonly="isCompleted" class="form-control" id="C_lname" name="lname" type="text" ng-model="CoastStaff.lname" ng-required="CoastStaff.fname || CoastStaff.lname || CoastStaff.email || CoastStaff.phone" />
+                    </div>
+                </div>
+
+                <div class="col-md-4 form-group" ng-class="{'required':CoastStaff.lname || CoastStaff.fname || CoastStaff.email || CoastStaff.phone}">
+                    <span class="col-md-12 control-label" ng-class="{'req':CoastStaff.lname || CoastStaff.fname || CoastStaff.email || CoastStaff.phone}" for="email">Email:</span>
+                    <div class="col-md-12">
+                        <input ng-readonly="isCompleted" class="form-control" id="C_email" name="email" type="email" ng-model="CoastStaff.email" ng-required="CoastStaff.lname || CoastStaff.fname || CoastStaff.email || CoastStaff.phone" />
+                    </div>
+                </div>
+
+                <div class="col-md-3 form-group" ng-class="{'required':CoastStaff.lname || CoastStaff.email || CoastStaff.fname || CoastStaff.phone}">
+                    <span class="col-md-12 control-label" ng-class="{'req':CoastStaff.lname || CoastStaff.email || CoastStaff.fname || CoastStaff.phone}" for="phone">Phone:</span>
+                    <div class="col-md-12">
+                        <input ng-readonly="isCompleted" class="form-control" id="C_phone" name="phone" ng-required="CoastStaff.lname || CoastStaff.email || CoastStaff.fname || CoastStaff.phone"
+                               type="text" my-input-mask="{mask: '(999) 999-9999[ x99999]', greedy:false}" ng-model="CoastStaff.phone" />
+                    </div>
+                </div>
+
+                <div class="col-md-3 form-group">
+                    <span class="col-md-12 control-label" for="alternate_phone">Alternate Phone:</span>
+                    <div class="col-md-12">
+                        <input ng-readonly="isCompleted" class="form-control" id="C_alternate_phone" name="alternate_phone"
+                               type="text" my-input-mask="{mask: '(999) 999-9999[ x99999]', greedy:false}" ng-model="CoastStaff.alternate_phone" />
+                    </div>
+                </div>
+            </div>
+
+            <!-- ------------------------- Water Quality--------------------------------- -->
+            <div><b>Water Quality (optional)</b></div>
+            <div class="col-sm-12" style="margin-bottom:15px;">
+                <div class="col-md-3 form-group" ng-class="{'required':WaterStaff.fname || WaterStaff.lname || WaterStaff.email || WaterStaff.phone}">
+                    <span class="col-md-12 control-label req" ng-class="{'req':WaterStaff.fname || WaterStaff.lname || WaterStaff.email || WaterStaff.phone}" for="fname">First Name:</span>
+                    <div class="col-md-12">
+                        <input ng-readonly="isCompleted" class="form-control" id="W_fname" name="fname" type="text" ng-model="WaterStaff.fname" ng-required="WaterStaff.fname || WaterStaff.lname || WaterStaff.email || WaterStaff.phone" />
+                    </div>
+                </div>
+
+                <div class="col-md-3 form-group" ng-class="{'required':WaterStaff.fname || WaterStaff.lname || WaterStaff.email || WaterStaff.phone}">
+                    <span class="col-md-12 control-label" ng-class="{'req':WaterStaff.fname || WaterStaff.lname || WaterStaff.email || WaterStaff.phone}" for="lname">Last Name:</span>
+                    <div class="col-md-12">
+                        <input ng-readonly="isCompleted" class="form-control" id="W_lname" name="lname" type="text" ng-model="WaterStaff.lname" ng-required="WaterStaff.fname || WaterStaff.lname || WaterStaff.email || WaterStaff.phone" />
+                    </div>
+                </div>
+
+                <div class="col-md-4 form-group" ng-class="{'required':WaterStaff.lname || WaterStaff.fname || WaterStaff.email || WaterStaff.phone}">
+                    <span class="col-md-12 control-label" ng-class="{'req':WaterStaff.lname || WaterStaff.fname || WaterStaff.email || WaterStaff.phone}" for="email">Email:</span>
+                    <div class="col-md-12">
+                        <input ng-readonly="isCompleted" class="form-control" id="W_email" name="email" type="email" ng-model="WaterStaff.email" ng-required="WaterStaff.lname || WaterStaff.fname || WaterStaff.email || WaterStaff.phone" />
+                    </div>
+                </div>
+
+                <div class="col-md-3 form-group" ng-class="{'required':WaterStaff.lname || WaterStaff.email || WaterStaff.fname || WaterStaff.phone}">
+                    <span class="col-md-12 control-label" ng-class="{'req':WaterStaff.lname || WaterStaff.email || WaterStaff.fname || WaterStaff.phone}" for="phone">Phone:</span>
+                    <div class="col-md-12">
+                        <input ng-readonly="isCompleted" class="form-control" id="W_phone" name="phone" ng-required="WaterStaff.lname || WaterStaff.email || WaterStaff.fname || WaterStaff.phone"
+                               type="text" my-input-mask="{mask: '(999) 999-9999[ x99999]', greedy:false}" ng-model="WaterStaff.phone" />
+                    </div>
+                </div>
+
+                <div class="col-md-3 form-group">
+                    <span class="col-md-12 control-label" for="alternate_phone">Alternate Phone:</span>
+                    <div class="col-md-12">
+                        <input ng-readonly="isCompleted" class="form-control" id="W_alternate_phone" name="alternate_phone"
+                               type="text" my-input-mask="{mask: '(999) 999-9999[ x99999]', greedy:false}" ng-model="WaterStaff.alternate_phone" />
+                    </div>
+                </div>
+            </div>
+        </uib-accordion-group>
+
+        <div ng-hide="isCompleted">
+            <input type="checkbox" name="complete" ng-model="newReport.complete" ng-true-value="'1'" ng-false-value="'0'" />
+            <span>Check if this Report is Complete. Incompleted reports will not be compiled for Generate Report tab.<br/>
+                (If left unchecked, you may come back later to finish it)</span>
+        </div>
+        <div ng-hide="isCompleted" class="form-group">
+            <div class="col-md-4 col-md-offset-2">
+                <span>
+                    <button type="submit" ng-disabled="disabled" class="btn btn-primary" ng-click="saveReport(fullReportForm.submit.$valid)">
+                        <span>Save</span>
+                    </button>
+                </span>
+            </div>
+        </div>
+    </form>
+</uib-accordion>
+
+

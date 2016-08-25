@@ -233,7 +233,7 @@
                         $scope.selectedMarkerNum = 0;
                         $scope.paths = {};
                         //below gets sites using simple angular $http service
-                        // $scope.sitesPromise = $http.get('https://stntest.wim.usgs.gov/STNServices2/Events/' + evID + '/Sites.json')
+                        // $scope.sitesPromise = $http.get('https://stn.wim.usgs.gov/STNServices/Events/' + evID + '/Sites.json')
                         //                     .then(showEventSites, onError);
                         //below gets sites using the SITE 'factory'
                         $scope.sitesPromise = EVENT.getEventSites({id: evID},// SITE.getAll({  Event: evID},
@@ -619,7 +619,7 @@
                                 visible: false,
                                 layerOptions : {
                                     layers: [28],
-                                    opacity: 1
+                                    opacity: 0.7
                                 }
                             }
                         }
