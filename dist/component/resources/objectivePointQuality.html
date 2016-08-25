@@ -1,0 +1,85 @@
+<div ng-if="accountRole == 'Admin'">
+    <table class="table">
+        <thead>
+            <tr>
+                <th style="width:0"></th>
+                <th>Objective Point Quality</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr ng-repeat="opq in opQualList | orderBy: 'quality'">
+                <td style="white-space: nowrap">
+                    <!-- form -->
+                    <form editable-form name="OPQrowform" onaftersave="saveOPQuality($data, opq.op_quality_id)" ng-show="OPQrowform.$visible" class="form-buttons form-inline" shown="inserted == opq">
+                        <button type="submit" ng-disabled="OPQrowform.$waiting" class="btn btn-primary">
+                            save
+                        </button>
+                        <button type="button" ng-disabled="OPQrowform.$waiting" ng-click="OPQrowform.$cancel()" class="btn btn-default">
+                            cancel
+                        </button>
+                    </form>
+                    <div class="buttons" ng-show="!OPQrowform.$visible">
+                        <button class="btn btn-primary" ng-click="OPQrowform.$show()">edit</button>
+                        <button class="btn btn-danger" ng-click="deleteOPQuality(opq)">del</button>
+                    </div>
+                </td>
+                <td>
+                    <div style="display:none"><span editable-text="opq.op_quality_id" e-form="OPQrowform" e-name="op_quality_id">{{opq.op_quality_id}}</span></div>
+                    <span editable-text="opq.quality" e-name="quality" e-form="OPQrowform">{{ opq.quality || '' }}</span>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+    <hr />
+
+    <button ng-show="addOPQButtonShowing" class="btn btn-primary" ng-click="showAddOPQClicked()">Add New Objective Point Quality</button>
+
+    <div ng-show="showAddOPQForm">
+        <form class="form-horizontal" name="lookupForm.opQualFm">
+            <fieldset>
+
+                <div class="form-group required">
+                    <label class="col-md-3 control-label req" for="quality">Objective Point Quality:</label>
+                    <div class="col-md-6">
+                        <input class="form-control" id="quality" name="quality" type="text" placeholder="" ng-model="newOPQ.quality" required />
+                    </div>
+                </div>
+
+
+                <!--submit button-->
+                <div class="form-group">
+                    <div class="col-md-2 col-md-offset-2">
+                        <span>
+                            <button class="btn btn-primary" ng-click="AddOPQuality(lookupForm.opQualFm.$valid, newOPQ)">
+                                Add
+                            </button>
+                        </span>
+                    </div>
+                </div>
+
+            </fieldset>
+        </form><button class="btn btn-default center-block" style="margin-top:-48px;" ng-click="NeverMindOPQ()">
+            Never Mind
+        </button>
+    </div>
+</div><!--end admin view-->
+<div ng-if="accountRole !='Admin'">
+    <script>
+        var sortingOrder = 'quality';
+    </script>
+
+    <table class="table table-striped table-condensed">
+        <thead>
+            <tr>
+                <th class="quality">Objective Point Quality&nbsp;<a ng-click="sort_by('quality')"><i class="glyphicon glyphicon-sort"></i></a></th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr ng-repeat="opq in opQualList | orderBy:sortingOrder:reverse">
+                <td>{{ opq.quality || '' }}</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
