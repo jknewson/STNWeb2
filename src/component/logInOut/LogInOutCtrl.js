@@ -3,8 +3,8 @@
 
     var LogInOutController = angular.module('LogInOutController', []);
 
-    LogInOutController.controller('loginCtrl', ['$scope', '$state', '$location', '$uibModal', '$http', '$cookies', '$rootScope', 'SERVER_URL', 'Login', 
-        function ($scope, $state, $location, $uibModal, $http, $cookies, $rootScope, SERVER_URL, Login) {
+    LogInOutController.controller('loginCtrl', ['$scope', '$state', '$location', '$uibModal', '$http', '$cookies', '$rootScope', '$document', 'SERVER_URL', 'Login', 
+        function ($scope, $state, $location, $uibModal, $http, $cookies, $rootScope, $document, SERVER_URL, Login) {
             //login //
             //#region CAP lock Check
             $('[type=password]').keypress(function (e) {
@@ -27,6 +27,20 @@
             });
             //#endregion CAP lock Check
 
+            if ($document[0].documentMode !== undefined) {
+                var browserInstance = $uibModal.open({
+                    template: '<div class="modal-header"><h3 class="modal-title">Warning</h3></div>' +
+                               '<div class="modal-body"><p>This application uses functionality that is not completely supported by Internet Explorer. The preferred browser is Chrome (bison connect).</p></div>' +
+                               '<div class="modal-footer"><button class="btn btn-primary" ng-click="ok()">OK</button></div>',
+                    controller: ['$scope', '$uibModalInstance', function ($scope, $uibModalInstance) {
+                        $scope.ok = function () {
+                            $uibModalInstance.close();
+                        };                        
+                    }],
+                    size: 'sm'
+                });
+            }
+            
             $scope.serverURL = SERVER_URL;
             $scope.submit = function () {
                 //$scope.sub = true;

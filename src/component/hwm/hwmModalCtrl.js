@@ -32,13 +32,7 @@
             $scope.showChangeEventDD = function () {
                 $scope.showEventDD = !$scope.showEventDD;
             };
-
-            //hwm Uncertainty populated, choose appropriate hwm quality
-            //$scope.updateHWMQuality = function () {
-            //    //TODO//////////////////////////////
-            //    var test = $scope.hwmQualList.filter(function (h) { return h.range == $scope.aHWM.hwm_uncertainty; })[0];
-            //    $scope.aHWM.hwm_quality_id = test.hwm_quality_id;
-            //}
+                        
             //change event = apply it to the $scope.EventName
             $scope.ChangeEvent = function () {
                 $scope.EventName = $scope.eventList.filter(function (el) { return el.event_id == $scope.adminChanged.event_id; })[0].event_name;
@@ -218,7 +212,44 @@
                     if (theEvent.preventDefault) theEvent.preventDefault();
                 }
             };
-
+            //hwm_uncertainty typed in, choose cooresponding hwm_environment
+            $scope.chooseQuality = function () {
+                var h = $scope.view.HWMval == 'edit' ? $scope.hwmCopy : $scope.aHWM;
+                if (h.hwm_uncertainty !== "") {
+                    var x = Number(h.hwm_uncertainty);
+                    //                    Excellent    +-0.05       0      -  0.050
+                    //                    Good         +-0.10       0.051  -  0.100
+                    //                    Fair         +-0.20       0.101  -  0.200
+                    //                    Poor         +-0.40       0.201  -  0.400
+                    //                    V Poor       > 0.40       0.401  -  infinity
+                    h.hwm_quality_id = $scope.hwmQualList.filter(function (h) { return h.min_range <= x && h.max_range >= x; })[0].hwm_quality_id;
+                }
+            };
+            //hwm quality chosen (or it changed from above), check to make sure it is congruent with input above
+            $scope.compareToUncertainty = function () {
+                var h = $scope.view.HWMval == 'edit' ? $scope.hwmCopy : $scope.aHWM;
+                if (h.hwm_uncertainty !== "" && h.hwm_uncertainty !== undefined) {
+                    var x = Number(h.hwm_uncertainty);
+                    var matchingQualId = $scope.hwmQualList.filter(function (h) { return h.min_range <= x && h.max_range >= x; })[0].hwm_quality_id;
+                    if (h.hwm_quality_id !== matchingQualId) {
+                        //show warning modal and focus in uncertainty
+                        var incongruentModal = $uibModal.open({
+                            template: '<div class="modal-header"><h3 class="modal-title">Warning</h3></div>' +
+                                '<div class="modal-body"><p>There is a mismatch between the hwm quality chosen and the hwm uncertainty above. Please correct your hwm uncertainty.</p></div>' +
+                                '<div class="modal-footer"><button class="btn btn-primary" ng-enter="ok()" ng-click="ok()">OK</button></div>',
+                            controller: ['$scope', '$uibModalInstance', function ($scope, $uibModalInstance) {
+                                $scope.ok = function () {
+                                    $uibModalInstance.close();
+                                };
+                            }],
+                            size: 'sm'
+                        });
+                        incongruentModal.result.then(function () {
+                            angular.element("[name='hwm_uncertainty']").focus();
+                        });
+                    }
+                }
+            };
             //called a few times to format just the date (no time)
             var makeAdate = function (d) {
                 var aDate = new Date();
@@ -264,7 +295,7 @@
                 //date formatting
                 $scope.aHWM.flag_date = makeAdate($scope.aHWM.flag_date);                
                 //if this is surveyed, date format and get survey member's name
-                if ($scope.aHWM.survey_date !== null) {
+                if ($scope.aHWM.survey_date !== null && $scope.aHWM.survey_date !== undefined) {
                     $scope.aHWM.survey_date = makeAdate($scope.aHWM.survey_date);
                     $scope.SurveyMember = allMembers.filter(function (m) { return m.member_id == $scope.aHWM.survey_member_id; })[0];
                 }
@@ -415,6 +446,7 @@
                     hwm_environment: h.hwm_environment,
                     hwm_locationdescription: h.hwm_locationdescription,
                     hwm_notes: h.hwm_notes,
+                    hwm_uncertainty: h.hwm_uncertainty,
                     hwm_quality_id: h.hwm_quality_id,
                     hwm_type_id: h.hwm_type_id,
                     latitude_dd: h.latitude_dd,
@@ -483,7 +515,7 @@
 
                         }
                         //if this is surveyed, date format and get survey member's name
-                        if ($scope.aHWM.survey_date !== null) {
+                        if ($scope.aHWM.survey_date !== null && $scope.aHWM.survey_date !== undefined) {
                             $scope.aHWM.survey_date = makeAdate($scope.aHWM.survey_date);
                             $scope.SurveyMember = allMembers.filter(function (m) { return m.member_id == $scope.aHWM.survey_member_id; })[0];
                         }
