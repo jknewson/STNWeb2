@@ -19360,17 +19360,30 @@ div.fixed-table-scroll-outer {
 
 
 /*Sidebar item*/
+<<<<<<< HEAD
 .sitebar-item{
 
 }
 .sitebar-item input[type=radio]{
+=======
+.sidebar-item{
+    clear: both;
+}
+.sidebar-item input[type=radio]{
+>>>>>>> 936d8b16cc57cfd3acf9468032baa232456f15b5
     position: absolute;
     visibility: hidden;
     margin: 0;
 }
+<<<<<<< HEAD
 .sitebar-item label{
     box-sizing: border-box;
     padding: 2px 0 !important;
+=======
+.sidebar-item label{
+    box-sizing: border-box;
+    padding: 5px 0 !important;
+>>>>>>> 936d8b16cc57cfd3acf9468032baa232456f15b5
     font-weight: 400 !important;
     font-size: 8pt !important;
     letter-spacing: 1px;
@@ -19378,16 +19391,28 @@ div.fixed-table-scroll-outer {
     color: #707280;
     transition: 0.15s;
 }
+<<<<<<< HEAD
 .sitebar-item label:hover{
+=======
+.sidebar-item label:hover{
+>>>>>>> 936d8b16cc57cfd3acf9468032baa232456f15b5
     cursor: pointer;
     color: #3E4144;
     transition: 0.15s;
 }
+<<<<<<< HEAD
 .sitebar-item label.hasRadio:hover:before{
     border-color: #0071BC;
     transition: 0.15s;
 }
 .sitebar-item label.hasRadio:before{
+=======
+.sidebar-item label.hasRadio:hover:before{
+    border-color: #0071BC;
+    transition: 0.15s;
+}
+.sidebar-item label.hasRadio:before{
+>>>>>>> 936d8b16cc57cfd3acf9468032baa232456f15b5
     content: '\f111';
     font-family: FontAwesome;
     display: inline-block;
@@ -19410,7 +19435,11 @@ div.fixed-table-scroll-outer {
     padding: 0 0 3px 1px;
     line-height: 17px;
 }
+<<<<<<< HEAD
 .sitebar-item label.hasRadio.radioSelected:before{
+=======
+.sidebar-item label.hasRadio.radioSelected:before{
+>>>>>>> 936d8b16cc57cfd3acf9468032baa232456f15b5
     color: #0071BC !important;
     font-size: 8pt;
 }

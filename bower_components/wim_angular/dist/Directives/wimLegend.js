@@ -20,7 +20,7 @@ var WiM;
                 this.style = style;
             }
             return LegendLayerAddedEventArgs;
-        })(WiM.Event.EventArgs);
+        }(WiM.Event.EventArgs));
         Directives.LegendLayerAddedEventArgs = LegendLayerAddedEventArgs;
         var LegendLayerChangedEventArgs = (function (_super) {
             __extends(LegendLayerChangedEventArgs, _super);
@@ -31,7 +31,7 @@ var WiM;
                 this.Value = value;
             }
             return LegendLayerChangedEventArgs;
-        })(WiM.Event.EventArgs);
+        }(WiM.Event.EventArgs));
         Directives.LegendLayerChangedEventArgs = LegendLayerChangedEventArgs;
         var LegendLayerRemovedEventArgs = (function (_super) {
             __extends(LegendLayerRemovedEventArgs, _super);
@@ -41,7 +41,7 @@ var WiM;
                 this.layerType = ltype;
             }
             return LegendLayerRemovedEventArgs;
-        })(WiM.Event.EventArgs);
+        }(WiM.Event.EventArgs));
         Directives.LegendLayerRemovedEventArgs = LegendLayerRemovedEventArgs;
         var wimLegendController = (function (_super) {
             __extends(wimLegendController, _super);
@@ -83,6 +83,7 @@ var WiM;
                             else {
                                 mlyr.layerArray = response.data.layers;
                             }
+                            console.log(mlyr);
                         }
                     }, function (error) {
                     });
@@ -103,6 +104,10 @@ var WiM;
                         }
                     }, function (error) {
                     });
+                }
+                if (mlyr.type == "wms") {
+                    mlyr.isOpen = true;
+                    mlyr.legendURL = mlyr.url + "?version=1.1.1&request=GetLegendGraphic&format=image/png&layer=" + mlyr.layerParams.layers;
                 }
             };
             wimLegendController.prototype.changeBaseLayer = function (key, evt) {
@@ -169,7 +174,7 @@ var WiM;
             };
             wimLegendController.$inject = ['$scope', '$http', 'leafletData', 'WiM.Event.EventManager'];
             return wimLegendController;
-        })(WiM.Services.HTTPServiceBase);
+        }(WiM.Services.HTTPServiceBase));
         var wimLegend = (function () {
             function wimLegend() {
                 this.scope = {
@@ -178,7 +183,7 @@ var WiM;
                     showGroups: '=?',
                     title: '@',
                     baseTitle: '@',
-                    overlaysTitle: '@',
+                    overlaysTitle: '@'
                 };
                 this.restrict = 'E';
                 this.require = '^leaflet';
@@ -194,7 +199,7 @@ var WiM;
                     '                <i ng-class="!vm.baselayers.isOpen ? \'fa fa-chevron-up pull-right\': \'fa fa-chevron-down pull-right\'"></i>' +
                     '            </div> ' +
                     '            <div ng-hide="vm.baselayers.isOpen" class="list-group-body wimLegend-list-group-body">' +
-                    '                <div class="sitebar-item" ng-repeat="(key, layer) in vm.baselayers.layergroup">' +
+                    '                <div class="sidebar-item" ng-repeat="(key, layer) in vm.baselayers.layergroup">' +
                     '                    <input type="radio" id="baselayerRadio{{$id}}" ng-checked="$parent.vm.baselayers.selectedlayerName === key.toString()" ng-value="key.toString()" /><label class="hasRadio" ng-class="{ \'radioSelected\': $parent.vm.baselayers.selectedlayerName === key.toString() }" for="baselayerRadio{{$id}}" ng-click="vm.changeBaseLayer(key, $event)">{{layer.name}}</label>' +
                     '                </div>' +
                     '            </div>  ' +
@@ -230,6 +235,9 @@ var WiM;
                     '                                <i>{{leg.label}}</i>' +
                     '                            </div>' +
                     '                        </div>' +
+                    '                    </div>' +
+                    '                    <div class="legendGroup" ng-if="layer.type == \'wms\'">' +
+                    '                       <img class="legendSwatch" alt="Embedded Image" src="{{layer.legendURL}}" />' +
                     '                    </div>' +
                     '                </div>' +
                     '            </div>' +
@@ -267,7 +275,7 @@ var WiM;
                 });
             };
             return wimLegend;
-        })();
+        }());
         angular.module('wim_angular')
             .directive('wimLegend', wimLegend.instance);
     })(Directives = WiM.Directives || (WiM.Directives = {}));

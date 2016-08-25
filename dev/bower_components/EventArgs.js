@@ -13,7 +13,7 @@ var WiM;
                 configurable: true
             });
             return EventArgs;
-        })();
+        }());
         Event.EventArgs = EventArgs;
     })(Event = WiM.Event || (WiM.Event = {}));
 })(WiM || (WiM = {}));

@@ -209,17 +209,17 @@
 
 
 /*Sidebar item*/
-.sitebar-item{
-
+.sidebar-item{
+    clear: both;
 }
-.sitebar-item input[type=radio]{
+.sidebar-item input[type=radio]{
     position: absolute;
     visibility: hidden;
     margin: 0;
 }
-.sitebar-item label{
+.sidebar-item label{
     box-sizing: border-box;
-    padding: 2px 0 !important;
+    padding: 5px 0 !important;
     font-weight: 400 !important;
     font-size: 8pt !important;
     letter-spacing: 1px;
@@ -227,16 +227,16 @@
     color: #707280;
     transition: 0.15s;
 }
-.sitebar-item label:hover{
+.sidebar-item label:hover{
     cursor: pointer;
     color: #3E4144;
     transition: 0.15s;
 }
-.sitebar-item label.hasRadio:hover:before{
+.sidebar-item label.hasRadio:hover:before{
     border-color: #0071BC;
     transition: 0.15s;
 }
-.sitebar-item label.hasRadio:before{
+.sidebar-item label.hasRadio:before{
     content: '\f111';
     font-family: FontAwesome;
     display: inline-block;
@@ -259,7 +259,7 @@
     padding: 0 0 3px 1px;
     line-height: 17px;
 }
-.sitebar-item label.hasRadio.radioSelected:before{
+.sidebar-item label.hasRadio.radioSelected:before{
     color: #0071BC !important;
     font-size: 8pt;
 }

@@ -1,10 +1,16 @@
 <div class="settings-list">
     <h3>Events</h3>
+<<<<<<< HEAD
     <div ng-show="loggedInRole == 'Admin'">
         <a ng-click="showEventModal(0)"><i class="glyphicon glyphicon-plus"></i>Create New Event</a>
     </div>
     <script>
         var sortingOrder = 'Name';
+=======
+    <div ng-show="loggedInRole == 'Admin'"><a ui-sref="events.EventInfo({id:0})"><i class="glyphicon glyphicon-plus"></i>Create New Event</a></div>
+    <script>
+            var sortingOrder = 'Name';
+>>>>>>> 936d8b16cc57cfd3acf9468032baa232456f15b5
     </script>
     <table class="table table-striped table-condensed">
         <thead>
@@ -19,7 +25,11 @@
         </thead>
         <tbody>
             <tr ng-repeat="e in eventList | orderBy:sortingOrder:reverse">
+<<<<<<< HEAD
                 <td><a ng-click="showEventModal(e)">{{e.Name}}</a></td>
+=======
+                <td><a ui-sref="events.EventInfo({id: e.event_id})">{{e.Name}}</a></td>
+>>>>>>> 936d8b16cc57cfd3acf9468032baa232456f15b5
                 <td>{{e.Type}}</td>
                 <td>{{e.Status}}</td>
                 <td>{{e.StartDate | date: "MM/dd/yyyy"}}</td>
@@ -29,6 +39,7 @@
         </tbody>
     </table>
 </div>
+<<<<<<< HEAD
 
 <script type="text/ng-template" id="eventModal.html">
     <div class="modal-header">
@@ -205,3 +216,5 @@
         </div><!-- end modal-footer -->
     </div>
 </script>
+=======
+>>>>>>> 936d8b16cc57cfd3acf9468032baa232456f15b5
