@@ -124,11 +124,11 @@
                 $scope.ProjectAlertParts = {};
                 $scope.ProjectAlertParts.Report = rep;
                 //2. total of YEST FIELDPERS
-                $scope.ProjectAlertParts.totYestFieldPers = rep.sw_yest_fieldpers + rep.wq_yest_fieldpers;
+                $scope.ProjectAlertParts.totYestFieldPers = rep.yest_fieldpers;
                 //3. total of OFFICEPERS
-                $scope.ProjectAlertParts.totYestOfficPers = rep.sw_yest_officepers + rep.wq_yest_officepers;
-                //4. total tot_check_meas+tot_discharge_meas
-                $scope.ProjectAlertParts.measureCts = rep.tot_check_meas + rep.tot_discharge_meas;
+                $scope.ProjectAlertParts.totYestOfficPers = rep.yest_officepers;
+                //4. total tot_discharge_meas
+                $scope.ProjectAlertParts.measureCts = rep.tot_discharge_meas;
                 //5. total states responding (all reports with this event_id, count of each state)
                 var eventReports = $scope.reportsToDate.filter(function (r) { return r.event_id == rep.event_id; });
                 var test = $filter('countBy')(eventReports, 'state');

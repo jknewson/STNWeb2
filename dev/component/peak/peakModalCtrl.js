@@ -214,6 +214,7 @@
                 fhwm.hwm_id = h.hwm_id;
                 fhwm.hwm_locationdescription = h.hwm_locationdescription;
                 fhwm.hwm_notes = h.hwm_notes;
+                fhwm.hwm_uncertainty = h.hwm_uncertainty;
                 fhwm.hwm_quality_id = h.hwm_quality_id;
                 fhwm.hwm_type_id = h.hwm_type_id;
                 fhwm.latitude_dd = h.latitude;

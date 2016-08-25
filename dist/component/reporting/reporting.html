@@ -16,6 +16,23 @@
         width: 90%;
         font-size: smaller;
     }
+<<<<<<< HEAD
+
+    @media print {
+        body * {
+            visibility: hidden;
+        }
+
+        .hidden-print {
+            display: none !important;
+        }
+
+        #print-content * {
+            visibility: visible;
+        }
+
+        .modal {
+=======
      @media print {
         body * {
             visibility: hidden;
@@ -27,28 +44,50 @@
             visibility: visible;
         }
         .modal{
+>>>>>>> 936d8b16cc57cfd3acf9468032baa232456f15b5
             position: absolute;
             left: 0;
             top: 0;
             margin: 0;
+<<<<<<< HEAD
+            padding-right: 20px;
+            /*padding: 0;*/
+            min-height: 550px;
+=======
             padding-right:20px;
             /*padding: 0;*/
             min-height:550px;
+>>>>>>> 936d8b16cc57cfd3acf9468032baa232456f15b5
             visibility: visible;
             /**Remove scrollbar for printing.**/
             overflow: visible !important;
         }
+<<<<<<< HEAD
+
+        .modal-dialog {
+            width: 100%;
+            padding: 0;
+            margin: 20px;
+=======
         .modal-dialog {            
             width: 100%;
             padding: 0;
             margin:20px;                
+>>>>>>> 936d8b16cc57cfd3acf9468032baa232456f15b5
             visibility: visible !important;
             /**Remove scrollbar for printing.**/
             overflow: visible !important;
         }
+<<<<<<< HEAD
+
+        .modal-footer {
+            border-top: 0;
+        }
+=======
         .modal-footer {
             border-top:0;
         }        
+>>>>>>> 936d8b16cc57cfd3acf9468032baa232456f15b5
     }
 </style>
 
@@ -60,7 +99,11 @@
             <h3 class="modal-title">Short Term Network Modeling</h3>
         </div>
         <div class="modal-body">
+<<<<<<< HEAD
+            <div class="" id="jobSetupPrintPdf">
+=======
             <div class="container" id="jobSetupPrintPdf">
+>>>>>>> 936d8b16cc57cfd3acf9468032baa232456f15b5
                 <div class="col-lg-12">
                     <table id="Sec1PDF" class="table">
                         <tr><th>Section 1: Report Parameters</th></tr>
@@ -73,24 +116,50 @@
                 </div>
 
                 <div class="col-lg-6 pull-left">
+<<<<<<< HEAD
+                    <table id="Sec2aPDF" class="table">
+                        <tr><label>Section 2a: Personnel Unaccounted for</label></tr>
+=======
                     <table id="Sec2PDF" class="table">
                         <tr><label>Section 2: Personnel and Vehicle Counts</label></tr>
+>>>>>>> 936d8b16cc57cfd3acf9468032baa232456f15b5
                         <tr>
                             <td></td>
                             <td></td>
                             <td style="font-family: 'BryantBold';">Surfacewater</td>
+<<<<<<< HEAD
+                            <td style="font-family: 'BryantBold';">Water Quality &amp; Other</td>
+=======
                             <td style="font-family: 'BryantBold';">Water Quality and Other</td>
+>>>>>>> 936d8b16cc57cfd3acf9468032baa232456f15b5
                         </tr>
                         <tr>
                             <td colspan="2">Employees not accounted for</td>
                             <td style="text-align:center">{{ReportView.Report.sw_fieldpers_notacct}}</td>
                             <td style="text-align:center">{{ReportView.Report.wq_fieldpers_notacct}}</td>
                         </tr>
+<<<<<<< HEAD
+                    </table>
+                    <table class="table" id="Sec2bPDF">
+                        <tr><label>Section 2b: Personnel Out</label></tr>
+=======
+>>>>>>> 936d8b16cc57cfd3acf9468032baa232456f15b5
                         <tr>
                             <td rowspan="3">
                                 <span>Personnel in the field</span>
                             </td>
                             <td>Yesterday</td>
+<<<<<<< HEAD
+                            <td style="text-align:center">{{ReportView.Report.yest_fieldpers}}</td>                            
+                        </tr>
+                        <tr>
+                            <td>Today</td>
+                            <td style="text-align:center">{{ReportView.Report.tod_fieldpers}}</td>
+                        </tr>
+                        <tr>
+                            <td>Tomorrow</td>
+                            <td style="text-align:center">{{ReportView.Report.tmw_fieldpers}}</td>
+=======
                             <td style="text-align:center">{{ReportView.Report.sw_yest_fieldpers}}</td>
                             <td style="text-align:center">{{ReportView.Report.wq_yest_fieldpers}}</td>
                         </tr>
@@ -103,10 +172,22 @@
                             <td>Tomorrow</td>
                             <td style="text-align:center">{{ReportView.Report.sw_tmw_fieldpers}}</td>
                             <td style="text-align:center">{{ReportView.Report.wq_tmw_fieldpers}}</td>
+>>>>>>> 936d8b16cc57cfd3acf9468032baa232456f15b5
                         </tr>
                         <tr>
                             <td rowspan="3">Personnel in the office</td>
                             <td>Yesterday</td>
+<<<<<<< HEAD
+                            <td style="text-align:center">{{ReportView.Report.yest_officepers}}</td>
+                        </tr>
+                        <tr>
+                            <td>Today</td>
+                            <td style="text-align:center">{{ReportView.Report.tod_officepers}}</td>
+                        </tr>
+                        <tr>
+                            <td>Tomorrow</td>
+                            <td style="text-align:center">{{ReportView.Report.tmw_officepers}}</td>
+=======
                             <td style="text-align:center">{{ReportView.Report.sw_yest_officepers}}</td>
                             <td style="text-align:center">{{ReportView.Report.wq_yest_officepers}}</td>
                         </tr>
@@ -135,6 +216,7 @@
                             <td>Other</td>
                             <td style="text-align:center">{{ReportView.Report.sw_other_depl}}</td>
                             <td style="text-align:center">{{ReportView.Report.wq_other_depl}}</td>
+>>>>>>> 936d8b16cc57cfd3acf9468032baa232456f15b5
                         </tr>
                     </table>
 
@@ -142,7 +224,11 @@
                         <tr><label>Section 3: Instrumentation & Sampling Counts</label></tr>
                         <tr>
                             <td colspan="2" class="col-md-5">Gage visits (cumulative)</td>
+<<<<<<< HEAD
+                            <td colspan="2" style="text-align:center" class="col-md-3">{{ReportView.Report.gage_visit}}</td>
+=======
                             <td colspan="2" style="text-align:center" class="col-md-3">{{ReportView.Report.GAGE_VISIT}}</td>
+>>>>>>> 936d8b16cc57cfd3acf9468032baa232456f15b5
                         </tr>
                         <tr>
                             <td colspan="2">Gages down at present</td>
@@ -156,6 +242,9 @@
                         <tr>
                             <td>Planned</td>
                             <td style="text-align:center" colspan="2">{{ReportView.Report.plan_discharge_meas}}</td>
+<<<<<<< HEAD
+                        </tr>                        
+=======
                         </tr>
                         <tr>
                             <td rowspan="2">Check measurements</td>
@@ -166,6 +255,7 @@
                             <td>Planned</td>
                             <td style="text-align:center" colspan="2">{{ReportView.Report.plan_check_meas}}</td>
                         </tr>
+>>>>>>> 936d8b16cc57cfd3acf9468032baa232456f15b5
                         <tr>
                             <td colspan="2">Indirect measurements planned</td>
                             <td style="text-align:center" colspan="2">{{ReportView.Report.plan_indirect_meas}}</td>
@@ -271,6 +361,9 @@
                         <tr>
                             <td>Collected</td>
                             <td style="text-align:center" colspan="2">{{ReportView.Report.hwm_collected}}</td>
+<<<<<<< HEAD
+                        </tr>                        
+=======
                         </tr>
                         <tr>
                             <td colspan="2">QW Gage visits (cumulative)</td>
@@ -284,6 +377,7 @@
                             <td colspan="2">Continuous QW Gages down</td>
                             <td style="text-align:center" colspan="2">{{ReportView.Report.qw_gage_down}}</td>
                         </tr>
+>>>>>>> 936d8b16cc57cfd3acf9468032baa232456f15b5
                         <tr>
                             <td colspan="2">Discrete QW samples collected</td>
                             <td style="text-align:center" colspan="2">{{ReportView.Report.qw_discr_samples}}</td>
@@ -398,6 +492,36 @@
                 </div>
 
                 <div class="col-lg-12">
+<<<<<<< HEAD
+                    <label>Deployed Personnel</label>
+                    <table class="table table-bordered">
+                        <tr>
+                            <td colspan="2"></td>
+                            <td>Employees not accounted for</td>
+                        </tr>                        
+                        <tbody ng-repeat="r in Report">
+                            <tr>
+                                <td style="vertical-align:middle" rowspan="2">{{r.report.state}}</td>
+                                <td class="col-lg-2">SW</td>
+                                <td style="text-align:center">{{r.report.sw_fieldpers_notacct}}</td><!-- Not accounted for -->
+                            </tr>
+                            <tr>
+                                <td>WQ & Other</td>
+                                <td style="text-align:center">{{r.report.wq_fieldpers_notacct}}</td><!-- Not accounted for -->                                
+                            </tr>
+                        </tbody>
+                        <tfoot>
+                        <th colspan="2">TOTALS</th>
+                        <th style="text-align:center">{{totals.notAcctForEmps}}</th>                        
+                        </tfoot>
+                    </table>
+                    <table class="table table-bordered">
+                        <tr><td></td><!--spot for state name-->
+                            <td colspan="4">Personnel in the Field</td>
+                            <td colspan="4">Personnel in the Office</td>
+                        </tr>
+                        <tr><td></td><!--spot for state name-->
+=======
                     <table id="PeopleAssets" class="table table-bordered">
                         <tr><label>Deployed Personnel and Assets</label></tr>
                         <tr>
@@ -409,6 +533,7 @@
                         </tr>
                         <tr>
                             <td colspan="3"></td>
+>>>>>>> 936d8b16cc57cfd3acf9468032baa232456f15b5
                             <td>Cumulative Person Days</td>
                             <td>Yesterday</td>
                             <td>Today</td>
@@ -417,6 +542,24 @@
                             <td>Yesterday</td>
                             <td>Today</td>
                             <td>Tomorrow</td>
+<<<<<<< HEAD
+                        </tr>
+                        <tbody ng-repeat="r in Report">
+                            <tr>
+                                <td style="vertical-align:middle">{{r.report.state}}</td>
+                                <td style="text-align:center">{{r.report.yest_fieldpers + r.report.tod_fieldpers + r.report.tmw_fieldpers}}</td><!-- cumulative field-->
+                                <td style="text-align:center">{{r.report.yest_fieldpers}}</td><!-- yest field-->
+                                <td style="text-align:center">{{r.report.tod_fieldpers}}</td><!-- today field-->
+                                <td style="text-align:center">{{r.report.tmw_fieldpers}}</td><!-- tomorrow field-->
+                                <td style="text-align:center">{{r.report.yest_officepers + r.report.tod_officepers + r.report.tmw_officepers}}</td><!-- cumulative office-->
+                                <td style="text-align:center">{{r.report.yest_officepers}}</td><!-- yest office-->
+                                <td style="text-align:center">{{r.report.tod_officepers}}</td><!-- today office-->
+                                <td style="text-align:center">{{r.report.tmw_officepers}}</td><!-- tomorrow office -->
+                            </tr>
+                        </tbody>
+                        <tfoot>
+                        <th>TOTALS</th>
+=======
                             <td>Trucks & Cars</td>
                             <td>Boats</td>
                             <td>Other</td>
@@ -457,6 +600,7 @@
                         <tfoot>
                         <th colspan="2">TOTALS</th>
                         <th style="text-align:center">{{totals.notAcctForEmps}}</th>
+>>>>>>> 936d8b16cc57cfd3acf9468032baa232456f15b5
                         <th style="text-align:center">{{totals.cumPField}}</th>
                         <th style="text-align:center">{{totals.yesPField}}</th>
                         <th style="text-align:center">{{totals.todPField}}</th>
@@ -465,9 +609,12 @@
                         <th style="text-align:center">{{totals.yesPOffice}}</th>
                         <th style="text-align:center">{{totals.todPOffice}}</th>
                         <th style="text-align:center">{{totals.tomPOffice}}</th>
+<<<<<<< HEAD
+=======
                         <th style="text-align:center">{{totals.truck}}</th>
                         <th style="text-align:center">{{totals.boat}}</th>
                         <th style="text-align:center">{{totals.other}}</th>
+>>>>>>> 936d8b16cc57cfd3acf9468032baa232456f15b5
                         </tfoot>
                     </table>
                 </div>
@@ -478,9 +625,13 @@
                         <tr>
                             <td colspan="3"></td>
                             <td>To Date</td>
+<<<<<<< HEAD
+                            <td>Planned</td>                            
+=======
                             <td>Planned</td>
                             <td>To Date</td>
                             <td>Planned</td>
+>>>>>>> 936d8b16cc57cfd3acf9468032baa232456f15b5
                             <td colspan="8"></td>
                         </tr>
                         <tr>
@@ -488,6 +639,11 @@
                             <td>Gage Visits</td>
                             <td>Gages Down at Present</td>
                             <td colspan="2">Discharge Measurements</td>
+<<<<<<< HEAD
+                            <td>Indirect Measurements</td>
+                            <td>Rate Extensions</td>
+                            <td>Peaks of Record</td>
+=======
                             <td colspan="2">Check Measurements</td>
                             <td>Indirect Measurements</td>
                             <td>Rate Extensions</td>
@@ -495,6 +651,7 @@
                             <td>QW Gage Visits</td>
                             <td>Continuous QW Gages Visited</td>
                             <td>Continuous QW Gages Down</td>
+>>>>>>> 936d8b16cc57cfd3acf9468032baa232456f15b5
                             <td>Discrete QW Samples Collected</td>
                             <td>Sediment Samples Collected</td>
                         </tr>
@@ -505,6 +662,11 @@
                                 <td style="text-align:center">{{r.report.gage_down}}</td>
                                 <td style="text-align:center">{{r.report.tot_discharge_meas}}</td>
                                 <td style="text-align:center">{{r.report.plan_discharge_meas}}</td>
+<<<<<<< HEAD
+                                <td style="text-align:center">{{r.report.plan_indirect_meas}}</td>
+                                <td style="text-align:center">{{r.report.rating_extens}}</td>
+                                <td style="text-align:center">{{r.report.gage_peak_record}}</td>
+=======
                                 <td style="text-align:center">{{r.report.tot_check_meas}}</td>
                                 <td style="text-align:center">{{r.report.plan_check_meas}}</td>
                                 <td style="text-align:center">{{r.report.plan_indirect_meas}}</td>
@@ -513,6 +675,7 @@
                                 <td style="text-align:center">{{r.report.qw_gage_visit}}</td>
                                 <td style="text-align:center">{{r.report.qw_cont_gagevisit}}</td>
                                 <td style="text-align:center">{{r.report.qw_gage_down}}</td>
+>>>>>>> 936d8b16cc57cfd3acf9468032baa232456f15b5
                                 <td style="text-align:center">{{r.report.qw_discr_samples}}</td>
                                 <td style="text-align:center">{{r.report.coll_sedsamples}}</td>
                             </tr>
@@ -523,6 +686,11 @@
                         <th style="text-align:center">{{totals.gagesDown}}</th>
                         <th style="text-align:center">{{totals.disCtoDate}}</th>
                         <th style="text-align:center">{{totals.disCPlanned}}</th>
+<<<<<<< HEAD
+                        <th style="text-align:center">{{totals.indMeas}}</th>
+                        <th style="text-align:center">{{totals.ratExt}}</th>
+                        <th style="text-align:center">{{totals.peaksOfRec}}</th>
+=======
                         <th style="text-align:center">{{totals.CheckMeasToDate}}</th>
                         <th style="text-align:center">{{totals.CheckMeasPlanned}}</th>
                         <th style="text-align:center">{{totals.indMeas}}</th>
@@ -531,6 +699,7 @@
                         <th style="text-align:center">{{totals.QWGageVis}}</th>
                         <th style="text-align:center">{{totals.contQWGageVis}}</th>
                         <th style="text-align:center">{{totals.contQWGageDown}}</th>
+>>>>>>> 936d8b16cc57cfd3acf9468032baa232456f15b5
                         <th style="text-align:center">{{totals.disQWSamples}}</th>
                         <th style="text-align:center">{{totals.sedSamples}}</th>
                         </tfoot>
@@ -541,6 +710,11 @@
                     <table id="instrumentCounts2" class="table table-bordered table-condensed">
                         <tr>
                             <td></td>
+<<<<<<< HEAD
+                            <td colspan="4">Rapid Deployment Gages</td>
+                            <td colspan="4">Water Level Sensors</td>
+                            <td colspan="4">Wave Sensors</td>                            
+=======
 
                             <td colspan="4">Rapid Deployment Gages</td>
                             <td colspan="4">Water Level Sensors</td>
@@ -548,6 +722,7 @@
                             <td colspan="4">Barometers</td>
                             <td colspan="4">Meteorological Sensors</td>
                             <td colspan="2">Highwater Marks</td>
+>>>>>>> 936d8b16cc57cfd3acf9468032baa232456f15b5
                         </tr>
                         <tr>
                             <td></td>
@@ -562,6 +737,9 @@
                             <td>Planned</td>
                             <td>Deployed</td>
                             <td>Recovered</td>
+<<<<<<< HEAD
+                            <td>Lost</td>                            
+=======
                             <td>Lost</td>
                             <td>Planned</td>
                             <td>Deployed</td>
@@ -573,6 +751,7 @@
                             <td>Lost</td>
                             <td>Flagged</td>
                             <td>Collected</td>
+>>>>>>> 936d8b16cc57cfd3acf9468032baa232456f15b5
                         </tr>
                         <tbody ng-repeat="r in Report">
                             <tr>
@@ -589,6 +768,8 @@
                                 <td style="text-align:center">{{r.report.dep_wv_sens}}</td>
                                 <td style="text-align:center">{{r.report.rec_wv_sens}}</td>
                                 <td style="text-align:center">{{r.report.lost_wv_sens}}</td>
+<<<<<<< HEAD
+=======
                                 <td style="text-align:center">{{r.report.plan_barometric}}</td>
                                 <td style="text-align:center">{{r.report.dep_barometric}}</td>
                                 <td style="text-align:center">{{r.report.rec_barometric}}</td>
@@ -599,6 +780,7 @@
                                 <td style="text-align:center">{{r.report.lost_meteorological}}</td>
                                 <td style="text-align:center">{{r.report.hwm_flagged}}</td>
                                 <td style="text-align:center">{{r.report.hwm_collected}}</td>
+>>>>>>> 936d8b16cc57cfd3acf9468032baa232456f15b5
                             </tr>
                         </tbody>
                         <tfoot>
@@ -615,6 +797,50 @@
                         <th style="text-align:center">{{totals.waveDep}}</th>
                         <th style="text-align:center">{{totals.waveRec}}</th>
                         <th style="text-align:center">{{totals.waveLost}}</th>
+<<<<<<< HEAD
+                        </tfoot>
+                    </table>
+                </div>
+                <div class="col-lg-12">
+                    <table id="instrumentCounts3" class="table table-bordered table-condensed">
+                        <tr>
+                            <td></td>                           
+                            <td colspan="4">Barometers</td>
+                            <td colspan="4">Meteorological Sensors</td>
+                            <td colspan="2">Highwater Marks</td>
+                        </tr>
+                        <tr>
+                            <td></td>
+                            <td>Planned</td>
+                            <td>Deployed</td>
+                            <td>Recovered</td>
+                            <td>Lost</td>
+                            <td>Planned</td>
+                            <td>Deployed</td>
+                            <td>Recovered</td>
+                            <td>Lost</td>
+                            <td>Flagged</td>
+                            <td>Collected</td>
+                        </tr>
+                        <tbody ng-repeat="r in Report">
+                            <tr>
+                                <td>{{r.report.state}}</td>                                
+                                <td style="text-align:center">{{r.report.plan_barometric}}</td>
+                                <td style="text-align:center">{{r.report.dep_barometric}}</td>
+                                <td style="text-align:center">{{r.report.rec_barometric}}</td>
+                                <td style="text-align:center">{{r.report.lost_barometric}}</td>
+                                <td style="text-align:center">{{r.report.plan_meteorological}}</td>
+                                <td style="text-align:center">{{r.report.dep_meteorological}}</td>
+                                <td style="text-align:center">{{r.report.rec_meteorological}}</td>
+                                <td style="text-align:center">{{r.report.lost_meteorological}}</td>
+                                <td style="text-align:center">{{r.report.hwm_flagged}}</td>
+                                <td style="text-align:center">{{r.report.hwm_collected}}</td>
+                            </tr>
+                        </tbody>
+                        <tfoot>
+                        <th>TOTALS</th>                        
+=======
+>>>>>>> 936d8b16cc57cfd3acf9468032baa232456f15b5
                         <th style="text-align:center">{{totals.baroPlan}}</th>
                         <th style="text-align:center">{{totals.baroDep}}</th>
                         <th style="text-align:center">{{totals.baroRec}}</th>
@@ -678,7 +904,11 @@
                 <div class="col-lg-12" ng-repeat="r in Reports">
                     <table class="table">
                         <tr>
+<<<<<<< HEAD
+                            <td colspan="6" style="text-align:center;border:thin solid black;background:steelblue"><label><b>{{r.State}}</b></label></td>
+=======
                             <td colspan="6" style="text-align:center;border:thin solid black;background:steelblue"><label>{{r.state}}</label></td>
+>>>>>>> 936d8b16cc57cfd3acf9468032baa232456f15b5
                         </tr>
                         <tr>
                             <td colspan="2" style="text-align:center;border:thin solid black"><label>Submitter</label></td>

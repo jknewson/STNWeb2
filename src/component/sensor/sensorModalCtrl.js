@@ -933,8 +933,8 @@
                        INSTRUMENT.save($scope.aSensor).$promise.then(function (response) {
                            //create instrumentstatus too need: status_type_id and instrument_id
                            createdSensor = response;
-                           createdSensor.deploymentType = response.deployment_type_id !== null ? $scope.depTypeList.filter(function (d) { return d.deployment_type_id == response.deployment_type_id; })[0].method : "";
-                           createdSensor.housingType = response.housing_type_id > 0 ? $scope.houseTypeList.filter(function (h) { return h.housing_type_id == response.housing_type_id; })[0].type_name : '';
+                           createdSensor.deploymentType = response.deployment_type_id !== null && response.deployment_type_id !== undefined ? $scope.depTypeList.filter(function (d) { return d.deployment_type_id == response.deployment_type_id; })[0].method : "";
+                           createdSensor.housingType = response.housing_type_id !== null && response.housing_type_id !== undefined ? $scope.houseTypeList.filter(function (h) { return h.housing_type_id == response.housing_type_id; })[0].type_name : '';
                            createdSensor.sensorBrand = $scope.sensorBrandList.filter(function (s) { return s.sensor_brand_id == response.sensor_brand_id; })[0].brand_name;
                            createdSensor.sensorType = $scope.sensorTypeList.filter(function (t) { return t.sensor_type_id == response.sensor_type_id; })[0].sensor;
                            $scope.aSensStatus.instrument_id = response.instrument_id;

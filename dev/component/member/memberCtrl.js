@@ -64,11 +64,10 @@
                                 //update the list
                                 $scope.memberList[indexClicked] = createdMember[0];
                             }
-                            //if (createdMember[1] == 'deleted') {
-                            //    var indexClicked1 = $scope.SiteObjectivePoints.indexOf(OPclicked);
-                            //    $scope.SiteObjectivePoints.splice(indexClicked1, 1);
-                            //    $scope.opCount.total = $scope.SiteObjectivePoints.length;
-                            //}
+                            if (createdMember[1] == 'deleted') {
+                               // var indexClicked1 = $scope.memberList.indexOf(createdMember[0]);
+                                $scope.memberList.splice(indexClicked, 1);
+                            }
                         }
                     });
                 };

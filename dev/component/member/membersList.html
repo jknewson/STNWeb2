@@ -39,7 +39,6 @@
                         <input class="form-control" name="fname" ng-model="aMember.fname" type="text" placeholder="First Name" required />
                     </div>
                 </div>
-
                 <!-- Last Name -->
                 <div class="form-group required" ng-class="{'has-error':accountForm.lname.$invalid && accountForm.lname.$dirty}">
                     <label class="col-md-4 control-label req" for="lname">Last Name:</label>
@@ -47,7 +46,6 @@
                         <input class="form-control" name="lname" ng-model="aMember.lname" type="text" placeholder="Last Name" required />
                     </div>
                 </div>
-
                 <!-- Username-->
                 <div class="form-group required">
                     <label class="col-md-4 control-label req" for="username">Username:</label>
@@ -58,7 +56,6 @@
                         <span class="glyphicon glyphicon-question-sign"></span>
                     </button>
                 </div>
-
                 <!-- Agency -->
                 <div class="form-group required">
                     <label class="col-md-4 control-label req" for="agency_id">Agency:</label>
@@ -72,7 +69,6 @@
                         <span class="glyphicon glyphicon-question-sign"></span>
                     </button>
                 </div>
-
                 <!-- Role-->
                 <div class="form-group required">
                     <label class="col-md-4 control-label req" for="ROLE">Role:</label>
@@ -81,10 +77,12 @@
                                 ng-options="r.role_id as r.role_name for r in roleList | orderBy: 'role_id'" required>
                             <option value=""></option>
                         </select>
-                        <span ng-show="loggedInUser.Role !== 'Admin'">{{roleList[0].role_name}}</span>
+                        <!-- not admin and this is new member-->
+                        <span ng-show="loggedInUser.Role !== 'Admin' && aMember.member_id == undefined">{{roleList[0].role_name}}</span>
+                        <!-- not admin and editing member-->
+                        <span ng-show="loggedInUser.Role !== 'Admin' && aMember.member_id !== undefined">{{aMember.Role}}</span>
                     </div>
                 </div>
-
                 <!-- Phone -->
                 <div class="form-group required">
                     <label class="col-md-4 control-label req" for="phone">Phone:</label>
@@ -95,7 +93,6 @@
                         <span class="glyphicon glyphicon-question-sign"></span>
                     </button>
                 </div>
-
                 <!-- Email -->
                 <div class="form-group required">
                     <label class="col-md-4 control-label req" for="email">Email:</label>
@@ -106,7 +103,6 @@
                         <span class="glyphicon glyphicon-question-sign"></span>
                     </button>
                 </div>
-
                 <!-- Emergency Contact Name -->
                 <div class="form-group">
                     <label class="col-md-4 control-label" for="emergency_contact_name">Emergency Contact Name:</label>
@@ -114,7 +110,6 @@
                         <input class="form-control" name="emergency_contact_name" type="text" placeholder="" ng-model="aMember.emergency_contact_name" />
                     </div>
                 </div>
-
                 <!-- Emergency Contact phone -->
                 <div class="form-group">
                     <label class="col-md-4 control-label" for="emergency_contact_phone">Emergency Contact Phone:</label>
@@ -125,7 +120,6 @@
                         <span class="glyphicon glyphicon-question-sign"></span>
                     </button>
                 </div>
-
                 <!-- start existing password change section -->
                 <div class="form-group" ng-hide="aMember.member_id == undefined">
                     <label class="col-md-4 control-label">
@@ -194,7 +188,6 @@
                     </div>
                 </div>
                 <!--end new member password section-->
-
 
             </div> <!-- end modalBody-->
             <div class="modal-footer">

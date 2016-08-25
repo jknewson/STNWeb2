@@ -1,8 +1,9 @@
 <!DOCTYPE html>
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml" >
 <head>
-    <!--<link rel="icon" href="data:;base64,="><link rel="icon" href="data:;base64,iVBORw0KGgo=">-->
-    <link rel="shortcut icon" type="image/x-icon" href="http://wim.usgs.gov/img/faviconsmall.png" />
+    <!--<link rel="icon" href="data:;base64,="><link rel="icon" href="data:;base64,iVBORw0KGgo=">
+    <link rel="shortcut icon" type="image/x-icon" href="http://wim.usgs.gov/img/faviconsmall.png" />-->
+    <link rel="shortcut icon" type="image/x-icon" href="http://wim.usgs.gov/favicon-wim.png" />
     <title>STNWeb</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
@@ -103,8 +104,6 @@
     <script src="component/site/siteMapCtrl.js"></script>
     <script src="component/site/siteCtrl.js"></script>
     <script src="component/site/quickCreateCtrl.js"></script>
-    <script src="component/settings/settingsCtrl.js"></script>
-    <script src="component/resources/resourcesCtrl.js"></script>
     <script src="component/sensor/sensorModalCtrl.js"></script>
     <script src="component/sensor/sensorCtrl.js"></script>
     <script src="component/reporting/submitReportCtrl.js"></script>
@@ -113,10 +112,12 @@
     <script src="component/reporting/reportingCtrl.js"></script>
     <script src="component/reporting/projectAlertModalCtrl.js"></script>
     <script src="component/reporting/confirmReportModalCtrl.js"></script>
+    <script src="component/resources/resourcesCtrl.js"></script>
+    <script src="component/settings/settingsCtrl.js"></script>
+    <script src="component/objectivePoint/objectivePointModalCtrl.js"></script>
+    <script src="component/objectivePoint/objectivePointCtrl.js"></script>
     <script src="component/peak/peakModalCtrl.js"></script>
     <script src="component/peak/peakCtrl.js"></script>
-    <script src="component/objectivePoint/ObjectivePointModalCtrl.js"></script>
-    <script src="component/objectivePoint/objectivePointCtrl.js"></script>
     <script src="component/member/memberModalCtrl.js"></script>
     <script src="component/member/memberInfoCtrl.js"></script>
     <script src="component/member/memberCtrl.js"></script>
@@ -126,20 +127,20 @@
     <script src="component/map/MapFiltersController.js"></script>
     <script src="component/map/mapCtrl.js"></script>
     <script src="component/main/mainCtrl.js"></script>
-    <script src="component/logInOut/LogInOutCtrl.js"></script>
+    <script src="component/logInOut/logInOutCtrl.js"></script>
     <script src="component/hwm/quickHWMCtrl.js"></script>
     <script src="component/hwm/hwmModalCtrl.js"></script>
     <script src="component/hwm/hwmCtrl.js"></script>
-    <script src="component/help/helpCtrl.js"></script>
     <script src="component/home/homeCtrl.js"></script>
+    <script src="component/help/helpCtrl.js"></script>
     <script src="component/file/fileUploadCtrl.js"></script>
     <script src="component/file/fileModalCtrl.js"></script>
     <script src="component/file/fileCtrl.js"></script>
+    <script src="component/approval/approvalCtrl.js"></script>
     <script src="component/event/eventSessionModalCtrl.js"></script>
     <script src="component/event/eventSessionCtrl.js"></script>
-    <script src="component/event/eventInfoCtrl.js"></script>
+    <script src="component/event/eventModalCtrl.js"></script>
     <script src="component/event/eventCtrl.js"></script>
-    <script src="component/approval/approvalCtrl.js"></script>
     <script src="services/STNResource.js"></script>
     <script src="services/businessServices.js"></script>
     <script src="component/ModalsCtrl.js"></script>
@@ -154,7 +155,7 @@
     <script src="//d3js.org/d3.v3.min.js" charset="utf-8"></script>
 
     <!-- Not working in Bower -->
-    <link rel="stylesheet" href="http://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+    <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
     <script src="bower_components/angular-ui-router.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-router/0.3.0/angular-ui-router.js"></script>
 
@@ -167,12 +168,10 @@
 
     <!--HEADER START navCtrl-->
     <div ng-controller="mainCtrl" class="app-nav">
-        <!--<h2 class="testing-alert"><b>TESTING ONLY! DATA WILL BE OVERRIDDEN FOLLOWING TESTING PHASE</b></h2>-->
-        <h1 class="nav-header">Short-Term Network<span ng-if="thisPage"> - {{thisPage}}</span></h1><!--
-        --><i  ng-show="isAuth.val" class="mobile-menu-btn ion-navicon" id="mobile-menu-btn"></i><!--
+        <h1 class="nav-header">Short-Term Network<span ng-if="thisPage"> - {{thisPage}}</span></h1>
+        <i  ng-show="isAuth.val" class="mobile-menu-btn ion-navicon" id="mobile-menu-btn"></i>
 
-
-        --><button type="button" ng-show="isAuth.val" ng-controller="eventSessionCtrl" class="btn-wim btn-sm btn-white nav-change-session" ng-click="openEventModal()">
+        <button type="button" ng-show="isAuth.val" ng-controller="eventSessionCtrl" class="btn-wim btn-sm btn-white nav-change-session" ng-click="openEventModal()">
             <span ng-show="!sessionEvent">Choose Event</span>
             <span ng-show="sessionEvent">Change Event</span>
         </button>
@@ -192,7 +191,6 @@
         </script>
 
         <div class="nav-userctrl" ng-show="isAuth.val">
-            <!--<span>Welcome, <a ui-sref="members.MemberInfo({id: userID})">{{usersName}}</a></span>-->
             <span>Welcome, <a ui-sref="members.MembersList({id: userID})">{{usersName}}</a></span>
             <button type="button" ng-controller="logoutCtrl" ng-click="logout()">LOG OFF</button>
         </div>

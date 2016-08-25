@@ -5,7 +5,7 @@
             'angular.filter', 'xeditable', 'checklist-model', 'ngFileUpload', 'STNResource', 'ui.bootstrap.datetimepicker','leaflet-directive',
             'STNControllers', 'LogInOutController', 'ModalControllers', 'SettingsControllers', 'WiM.Services', 'WiM.Event', 'wim_angular', 'angularSpinners']);
     app.constant('SERVER_URL', 'https://stn.wim.usgs.gov/STNServices');
-   // app.constant('SERVER_URL', 'https://stn.wim.usgs.gov/STNServices');
+   // app.constant('SERVER_URL', 'https://stntest.wim.usgs.gov/STNServices2');
     
     app.run(['$rootScope', '$uibModalStack', '$cookies', '$state', function ($rootScope, $uibModalStack, $cookies, $state) {
         $rootScope.$on('$stateChangeStart', function (event, toState, toParams, fromState, fromParams) {
@@ -54,6 +54,8 @@
                 })
 
                 //#endregion entryPoint
+
+                //#region map
                 .state("map", {
                     url: "/Map",
                     //templateUrl: "component/map/map.html",
@@ -111,7 +113,7 @@
                         }
                     }
                 })
-                //#endregion
+                //#endregion map
 
                 //#region approval page
                 .state("approval", {
@@ -274,30 +276,10 @@
                 .state("members.MembersList", {
                     url: "/MembersList",
                     templateUrl: "component/member/membersList.html",
-                    authenticate: true,                  
+                    authenticate: true
                  })
                 //#endregion members.MembersList
-
-                //#region members.MemberInfo
-                .state("members.MemberInfo", {
-                    url: "/memberInfo/:id",
-                    templateUrl: "component/member/memberInfo.html",
-                    controller: "memberInfoCtrl",
-                    authenticate: true,
-                    resolve: {
-                        m: 'MEMBER',
-                        thisMember: function (m, $stateParams, $http, $cookies) {
-                            var memberId = $stateParams.id;
-                            if (memberId > 0) {
-                                $http.defaults.headers.common.Authorization = 'Basic ' + $cookies.get('STNCreds');
-                                $http.defaults.headers.common.Accept = 'application/json';
-                                return m.query(
-                                    { id: memberId }).$promise;
-                            }
-                        }
-                    }
-                })//#endregion members.MemberInfo
-                //#endregion members
+                 //#endregion members
 
                 //#region events
                 //#region events
