@@ -52,11 +52,7 @@
                     </div>
                 </div>
             </div>
-<<<<<<< HEAD
             <div ng-hide="isCompleted" style="border-left: solid thin black;padding-left:3em" class="col-md-5 pull-right">
-=======
-            <div ng-hide="isCompleted" style="border-left: solid thin black;padding-left:3em" class="container container-fluid col-md-5 pull-right">
->>>>>>> 936d8b16cc57cfd3acf9468032baa232456f15b5
                 <label>Incomplete Reports</label>
                 <ul ng-show="memberIncompletes.length > 0">
                     <li ng-repeat="ir in memberIncompletes | orderBy: '-report_date'">
@@ -69,26 +65,18 @@
 
         <!-- Section 2: Personnel and vehcle counts -->
         <!--<form name="fullReportForm">-->
-<<<<<<< HEAD
         <uib-accordion-group heading="Section 2: Personnel and Vehicle Counts" is-disabled="disabled" is-open="status.openPersonnel">
-=======
-        <uib-accordion-group heading="Section 2: Personnel and Vehicle Counts" is-disabled="disabled">
->>>>>>> 936d8b16cc57cfd3acf9468032baa232456f15b5
             <table class="table">
                 <tr>
                     <td></td>
                     <td></td>
-<<<<<<< HEAD
                     <td style="font-family: 'BryantBold';">Total</td>
-=======
->>>>>>> 936d8b16cc57cfd3acf9468032baa232456f15b5
                     <td style="font-family: 'BryantBold';">Surfacewater</td>
                     <td style="font-family: 'BryantBold';">Water Quality and Other</td>
                 </tr>
                 <tr>
                     <td colspan="2">
                         <span ng-if="!isCompleted"><input type="hidden" name="newReport.reporting_metrics_id" ng-model="newReport.reporting_metrics_id" /></span>
-<<<<<<< HEAD
                         <label class="required">
                             Employees not accounted for
                             <button type="button" class="help-btn" tooltip-placement="right" tooltip-append-to-body="false" uib-tooltip="If we have a number other than 0 here, please call XYZ people.">
@@ -97,10 +85,6 @@
                         </label>
                     </td>
                     <td></td>
-=======
-                        <span class="required">Employees not accounted for</span>
-                    </td>
->>>>>>> 936d8b16cc57cfd3acf9468032baa232456f15b5
                     <td>
                         <input ng-readonly="isCompleted" class="form-control" id="SW_empl" name="newReport.sw_fieldpers_notacct"
                                ng-model="newReport.sw_fieldpers_notacct" type="text" numeric-only ng-required="newReport.complete == 1" />
@@ -112,7 +96,6 @@
                 </tr>
                 <tr>
                     <td rowspan="3">
-<<<<<<< HEAD
                         <label>
                             Personnel in <br />the field
                             <button type="button" class="help-btn" tooltip-placement="right" tooltip-append-to-body="false" uib-tooltip="Please list the number of people working directly on this event. Your entries from yesterday will populate as a courtesy.">
@@ -224,148 +207,17 @@
                     <td></td>
                     <td></td>
                     <td></td>
-=======
-                        <span>Personnel in <br />the field</span>
-                    </td>
-                    <td>
-                        <span class="required">Yesterday</span>
-                    </td>
-                    <td>
-                        <input ng-readonly="isCompleted" class="form-control" id="pInFieldYestSurf" name="newReport.sw_yest_fieldpers"
-                               ng-model="newReport.sw_yest_fieldpers" type="text" numeric-only ng-required="newReport.complete == 1" />
-                    </td>
-                    <td>
-                        <input ng-readonly="isCompleted" class="form-control" id="pInFieldYestWQ" name="newReport.wq_yest_fieldpers"
-                               ng-model="newReport.wq_yest_fieldpers" type="text" numeric-only ng-required="newReport.complete == 1" />
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <span class="required">Today</span>
-                    </td>
-                    <td>
-                        <input ng-readonly="isCompleted" class="form-control" id="pInFieldTodaySurf" name="newReport.sw_tod_fieldpers"
-                               ng-model="newReport.sw_tod_fieldpers" type="text" numeric-only ng-required="newReport.complete == 1" />
-                    </td>
-                    <td>
-                        <input ng-readonly="isCompleted" class="form-control" id="pInFieldTodayWQ" name="newReport.wq_tod_fieldpers"
-                               ng-model="newReport.wq_tod_fieldpers" type="text" numeric-only ng-required="newReport.complete == 1" />
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <span class="required">Tomorrow</span>
-                    </td>
-                    <td>
-                        <input ng-readonly="isCompleted" class="form-control" id="pInFieldTomorrowSurf" name="newReport.sw_tmw_fieldpers"
-                               ng-model="newReport.sw_tmw_fieldpers" type="text" numeric-only ng-required="newReport.complete == 1" />
-                    </td>
-                    <td>
-                        <input ng-readonly="isCompleted" class="form-control" id="pInFieldTomorrowWQ" name="newReport.wq_tmw_fieldpers"
-                               ng-model="newReport.wq_tmw_fieldpers" type="text" numeric-only ng-required="newReport.complete == 1" />
-                    </td>
-                </tr>
-                <tr>
-                    <td rowspan="3">
-                        <span>Personnel in <br />the office</span>
-                    </td>
-                    <td>
-                        <span class="required">Yesterday</span>
-                    </td>
-                    <td>
-                        <input ng-readonly="isCompleted" class="form-control" id="pInOfficeYestSurf" name="newReport.sw_yest_officepers"
-                               ng-model="newReport.sw_yest_officepers" type="text" numeric-only ng-required="newReport.complete == 1" />
-                    </td>
-                    <td>
-                        <input ng-readonly="isCompleted" class="form-control" id="pInOfficeYestWQ" name="newReport.wq_yest_officepers"
-                               ng-model="newReport.wq_yest_officepers" type="text" numeric-only ng-required="newReport.complete == 1" />
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <span class="required">Today</span>
-                    </td>
-                    <td>
-                        <input ng-readonly="isCompleted" class="form-control" id="pInOfficeTodaySurf" name="newReport.sw_tod_officepers"
-                               ng-model="newReport.sw_tod_officepers" type="text" numeric-only ng-required="newReport.complete == 1" />
-                    </td>
-                    <td>
-                        <input ng-readonly="isCompleted" class="form-control" id="pInOfficeTodayWQ" name="newReport.wq_tod_officepers"
-                               ng-model="newReport.wq_tod_officepers" type="text" numeric-only ng-required="newReport.complete == 1" />
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <span class="required">Tomorrow</span>
-                    </td>
-                    <td>
-                        <input ng-readonly="isCompleted" class="form-control" id="pInOfficeTomorrowSurf" name="newReport.sw_tmw_officepers"
-                               ng-model="newReport.sw_tmw_officepers" type="text" numeric-only ng-required="newReport.complete == 1" />
-                    </td>
-                    <td>
-                        <input ng-readonly="isCompleted" class="form-control" id="pInOfficeTomorrowWQ" name="newReport.wq_tmw_officepers"
-                               ng-model="newReport.wq_tmw_officepers" type="text" numeric-only ng-required="newReport.complete == 1" />
-
-                    </td>
-                </tr>
-                <tr>
-                    <td rowspan="3">
-                        <span>Vehicles <br /> deployed</span>
-                    </td>
-                    <td>
-                        <span class="required">Trucks & Cars</span>
-                    </td>
-                    <td>
-                        <input ng-readonly="isCompleted" class="form-control" id="trNcarsSurf" name="newReport.sw_autos_depl"
-                               ng-model="newReport.sw_autos_depl" type="text" numeric-only ng-required="newReport.complete == 1" />
-                    </td>
-                    <td>
-                        <input ng-readonly="isCompleted" class="form-control" id="trNcarsWQ" name="newReport.wq_autos_depl"
-                               ng-model="newReport.wq_autos_depl" type="text" numeric-only ng-required="newReport.complete == 1" />
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <span class="required">Boats</span>
-                    </td>
-                    <td>
-                        <input ng-readonly="isCompleted" class="form-control" id="boatsSurf" name="newReport.sw_boats_depl"
-                               ng-model="newReport.sw_boats_depl" type="text" numeric-only ng-required="newReport.complete == 1" />
-                    </td>
-                    <td>
-                        <input ng-readonly="isCompleted" class="form-control" id="boatsWQ" name="newReport.wq_boats_depl"
-                               ng-model="newReport.wq_boats_depl" type="text" numeric-only ng-required="newReport.complete == 1" />
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <span class="required">Other</span>
-                    </td>
-                    <td>
-                        <input ng-readonly="isCompleted" class="form-control" id="otherVehSurf" name="newReport.sw_other_depl"
-                               ng-model="newReport.sw_other_depl" type="text" numeric-only ng-required="newReport.complete == 1" />
-                    </td>
-                    <td>
-                        <input ng-readonly="isCompleted" class="form-control" id="otherVehWQ" name="newReport.wq_other_depl"
-                               ng-model="newReport.wq_other_depl" type="text" numeric-only ng-required="newReport.complete == 1" />
-                    </td>
->>>>>>> 936d8b16cc57cfd3acf9468032baa232456f15b5
                 </tr>
             </table>
 
         </uib-accordion-group>
 
         <!-- Section 3: Instrumentation & Sampling Counts-->
-<<<<<<< HEAD
         <uib-accordion-group heading="Section 3: Instrumentation & Sampling Counts" is-disabled="disabled" is-open="status.openCounts">
-=======
-        <uib-accordion-group heading="Section 3: Instrumentation & Sampling Counts" is-disabled="disabled">
->>>>>>> 936d8b16cc57cfd3acf9468032baa232456f15b5
 
             <table class="table">
                 <tr>
                     <td colspan="2" class="col-md-5">
-<<<<<<< HEAD
                         <label class="control-label req">
                             Gage visits (cumulative)
                             <button type="button" class="help-btn" tooltip-placement="right" tooltip-append-to-body="false" uib-tooltip="Total number of special gage visits to date during this flood.">
@@ -376,18 +228,10 @@
                     <td colspan="2" class="col-md-3">
                         <input ng-readonly="isCompleted" class="form-control" id="gageVisits" name="gage_visit"
                                ng-model="newReport.gage_visit" type="text" numeric-only ng-required="newReport.complete == 1" />
-=======
-                        <span class="required">Gage visits (cumulative)</span>
-                    </td>
-                    <td colspan="2" class="col-md-3">
-                        <input ng-readonly="isCompleted" class="form-control" id="gageVisits" name="newReport.gage_visit"
-                               ng-model="newReport.GAGE_VISIT" type="text" numeric-only ng-required="newReport.complete == 1" />
->>>>>>> 936d8b16cc57cfd3acf9468032baa232456f15b5
                     </td>
                 </tr>
                 <tr>
                     <td colspan="2">
-<<<<<<< HEAD
                         <label class="required">
                             Gages down at present
                             <button type="button" class="help-btn" tooltip-placement="right" tooltip-append-to-body="false" uib-tooltip="Total number of gages down at the moment.">
@@ -397,18 +241,11 @@
                     </td>
                     <td colspan="2">
                         <input ng-readonly="isCompleted" class="form-control" id="gagesDown" name="gage_down"
-=======
-                        <span class="required">Gages down at present</span>
-                    </td>
-                    <td colspan="2">
-                        <input ng-readonly="isCompleted" class="form-control" id="gagesDown" name="newReport.gage_down"
->>>>>>> 936d8b16cc57cfd3acf9468032baa232456f15b5
                                ng-model="newReport.gage_down" type="text" numeric-only ng-required="newReport.complete == 1" />
                     </td>
                 </tr>
                 <tr>
                     <td rowspan="2">
-<<<<<<< HEAD
                         <label>
                             Discharge measurements
                         </label>
@@ -420,12 +257,6 @@
                                 <span class="glyphicon glyphicon-question-sign"></span>
                             </button>
                         </label>
-=======
-                        <span>Discharge measurements</span>
-                    </td>
-                    <td>
-                        <span class="required">To date</span>
->>>>>>> 936d8b16cc57cfd3acf9468032baa232456f15b5
                     </td>
                     <td colspan="2">
                         <input ng-readonly="isCompleted" class="form-control" id="dischMeasToDate" name="newReport.tot_discharge_meas"
@@ -434,16 +265,12 @@
                 </tr>
                 <tr>
                     <td>
-<<<<<<< HEAD
                         <label class="required">
                             Planned
                             <button type="button" class="help-btn" tooltip-placement="right" tooltip-append-to-body="false" uib-tooltip="How many additional special discharge measurements do you anticipate.">
                                 <span class="glyphicon glyphicon-question-sign"></span>
                             </button>
                         </label>
-=======
-                        <span class="required">Planned</span>
->>>>>>> 936d8b16cc57cfd3acf9468032baa232456f15b5
                     </td>
                     <td colspan="2">
                         <input ng-readonly="isCompleted" class="form-control" id="dischMeasPlanned" name="newReport.plan_discharge_meas"
@@ -451,7 +278,6 @@
                     </td>
                 </tr>
                 <tr>
-<<<<<<< HEAD
                     <td colspan="2">
                         <label class="required">
                             Indirect measurements planned
@@ -459,31 +285,6 @@
                                 <span class="glyphicon glyphicon-question-sign"></span>
                             </button>
                         </label>
-=======
-                    <td rowspan="2">
-                        <span>Check measurements</span>
-                    </td>
-                    <td>
-                        <span class="required">To Date</span>
-                    </td>
-                    <td colspan="2">
-                        <input ng-readonly="isCompleted" class="form-control" id="chkMeasToDate" name="newReport.tot_check_meas"
-                               ng-model="newReport.tot_check_meas" type="text" numeric-only ng-required="newReport.complete == 1" />
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <span class="required">Planned</span>
-                    </td>
-                    <td colspan="2">
-                        <input ng-readonly="isCompleted" class="form-control" id="chkMeasPlanned" name="newReport.plan_check_meas"
-                               ng-model="newReport.plan_check_meas" type="text" numeric-only ng-required="newReport.complete == 1" />
-                    </td>
-                </tr>
-                <tr>
-                    <td colspan="2">
-                        <span class="required">Indirect measurements planned</span>
->>>>>>> 936d8b16cc57cfd3acf9468032baa232456f15b5
                     </td>
                     <td colspan="2">
                         <input ng-readonly="isCompleted" class="form-control" id="indMeasPlan" name="newReport.plan_indirect_meas"
@@ -492,16 +293,12 @@
                 </tr>
                 <tr>
                     <td colspan="2">
-<<<<<<< HEAD
                         <label class="required">
                             Rating extensions
                             <button type="button" class="help-btn" tooltip-placement="right" tooltip-append-to-body="false" uib-tooltip="Total number of rating extensions you have done.">
                                 <span class="glyphicon glyphicon-question-sign"></span>
                             </button>
                         </label>
-=======
-                        <span class="required">Rating extensions</span>
->>>>>>> 936d8b16cc57cfd3acf9468032baa232456f15b5
                     </td>
                     <td colspan="2">
                         <input ng-readonly="isCompleted" class="form-control" id="rateExt" name="newReport.rating_extens"
@@ -510,16 +307,12 @@
                 </tr>
                 <tr>
                     <td colspan="2">
-<<<<<<< HEAD
                         <label class="required">
                             Peaks of record on gages to date<br /> ( &#62; 20 years of record)
                             <button type="button" class="help-btn" tooltip-placement="right" tooltip-append-to-body="false" uib-tooltip="Total number of peaks of record experienced.">
                                 <span class="glyphicon glyphicon-question-sign"></span>
                             </button>
                         </label>
-=======
-                        <span class="required">Peaks of record on gages to date<br /> ( &#62; 20 years of record)</span>
->>>>>>> 936d8b16cc57cfd3acf9468032baa232456f15b5
                     </td>
                     <td colspan="2">
                         <input ng-readonly="isCompleted" class="form-control" id="peaks" name="newReport.gage_peak_record"
@@ -528,7 +321,6 @@
                 </tr>
                 <tr>
                     <td rowspan="4">
-<<<<<<< HEAD
                         <label>Rapid Deployment gages to date</label>
                     </td>
                     <td>
@@ -538,12 +330,6 @@
                                 <span class="glyphicon glyphicon-question-sign"></span>
                             </button>
                         </label>
-=======
-                        <span>Rapid Deployment gages to date</span>
-                    </td>
-                    <td>
-                        <span class="required">Planned</span>
->>>>>>> 936d8b16cc57cfd3acf9468032baa232456f15b5
                     </td>
                     <td colspan="2">
                         <input ng-readonly="isCompleted" class="form-control" id="rdgPlanned" name="newReport.plan_rapdepl_gage"
@@ -552,16 +338,12 @@
                 </tr>
                 <tr>
                     <td>
-<<<<<<< HEAD
                         <label>
                             Deployed
                             <button type="button" class="help-btn" tooltip-placement="right" tooltip-append-to-body="false" uib-tooltip="RDG's deployed and transmitting in the field for this flood:  NOTE: RDG have the ability to sense the parameter and transmit in real time.">
                                 <span class="glyphicon glyphicon-question-sign"></span>
                             </button>
                         </label>
-=======
-                        <span>Deployed</span>
->>>>>>> 936d8b16cc57cfd3acf9468032baa232456f15b5
                     </td>
                     <td colspan="2">
                         <input class="form-control" id="rdgDeployed" name="newReport.dep_rapdepl_gage" readonly="readonly"
@@ -570,16 +352,12 @@
                 </tr>
                 <tr>
                     <td>
-<<<<<<< HEAD
                         <label>
                             Recovered
                             <button type="button" class="help-btn" tooltip-placement="right" tooltip-append-to-body="false" uib-tooltip="RDG's that were deployed in the field for this flood and have now been successfully recovered:  NOTE: RDG have the ability to sense the parameter and transmit in real time.">
                                 <span class="glyphicon glyphicon-question-sign"></span>
                             </button>
                         </label>
-=======
-                        <span>Recovered</span>
->>>>>>> 936d8b16cc57cfd3acf9468032baa232456f15b5
                     </td>
                     <td colspan="2">
                         <input class="form-control" id="rdgRecovered" name="newReport.rec_rapdepl_gage" readonly="readonly"
@@ -588,16 +366,12 @@
                 </tr>
                 <tr>
                     <td>
-<<<<<<< HEAD
                         <label>
                             Lost
                             <button type="button" class="help-btn" tooltip-placement="right" tooltip-append-to-body="false" uib-tooltip="RDG's lost/destroyed during this flood.">
                                 <span class="glyphicon glyphicon-question-sign"></span>
                             </button>
                         </label>
-=======
-                        <span>Lost</span>
->>>>>>> 936d8b16cc57cfd3acf9468032baa232456f15b5
                     </td>
                     <td colspan="2">
                         <input class="form-control" id="rdgLost" name="newReport.lost_rapdepl_gage" readonly="readonly"
@@ -606,7 +380,6 @@
                 </tr>
                 <tr>
                     <td rowspan="4">
-<<<<<<< HEAD
                         <label>Water Level Sensors to date</label>
                     </td>
                     <td>
@@ -616,12 +389,6 @@
                                 <span class="glyphicon glyphicon-question-sign"></span>
                             </button>
                         </label>
-=======
-                        <span>Water Level Sensors to date</span>
-                    </td>
-                    <td>
-                        <span class="required">Planned</span>
->>>>>>> 936d8b16cc57cfd3acf9468032baa232456f15b5
                     </td>
                     <td colspan="2">
                         <input ng-readonly="isCompleted" class="form-control" id="wlsPlanned" name="newReport.plan_wtrlev_sensor"
@@ -630,16 +397,12 @@
                 </tr>
                 <tr>
                     <td>
-<<<<<<< HEAD
                         <label>
                             Deployed
                             <button type="button" class="help-btn" tooltip-placement="right" tooltip-append-to-body="false" uib-tooltip="Water Level Sensor currently deployed in the field for this flood.  NOTE: Water Level Sensors have no ability to  transmit in real time.">
                                 <span class="glyphicon glyphicon-question-sign"></span>
                             </button>
                         </label>
-=======
-                        <span>Deployed</span>
->>>>>>> 936d8b16cc57cfd3acf9468032baa232456f15b5
                     </td>
                     <td colspan="2">
                         <input class="form-control" id="wlsDeployed" name="newReport.dep_wtrlev_sensor" readonly="readonly"
@@ -648,16 +411,12 @@
                 </tr>
                 <tr>
                     <td>
-<<<<<<< HEAD
                         <label>
                             Recovered
                             <button type="button" class="help-btn" tooltip-placement="right" tooltip-append-to-body="false" uib-tooltip="Water Level Sensor successfully recovered from deployment in the field for this flood.  NOTE: Water Level Sensors have no ability to  transmit in real time.">
                                 <span class="glyphicon glyphicon-question-sign"></span>
                             </button>
                         </label>
-=======
-                        <span>Recovered</span>
->>>>>>> 936d8b16cc57cfd3acf9468032baa232456f15b5
                     </td>
                     <td colspan="2">
                         <input class="form-control" id="wlsRecovered" name="newReport.rec_wtrlev_sensor" readonly="readonly"
@@ -666,16 +425,12 @@
                 </tr>
                 <tr>
                     <td>
-<<<<<<< HEAD
                         <label>
                             Lost
                             <button type="button" class="help-btn" tooltip-placement="right" tooltip-append-to-body="false" uib-tooltip="Water Level Sensor lost/destroyed for this flood.  NOTE: Water Level Sensors have no ability to  transmit in real time.">
                                 <span class="glyphicon glyphicon-question-sign"></span>
                             </button>
                         </label>
-=======
-                        <span>Lost</span>
->>>>>>> 936d8b16cc57cfd3acf9468032baa232456f15b5
                     </td>
                     <td colspan="2">
                         <input class="form-control" id="wlsLost" name="newReport.lost_wtrlev_sensor" readonly="readonly"
@@ -684,7 +439,6 @@
                 </tr>
                 <tr>
                     <td rowspan="4">
-<<<<<<< HEAD
                         <label>Wave Sensors to date</label>
                     </td>
                     <td>
@@ -694,12 +448,6 @@
                                 <span class="glyphicon glyphicon-question-sign"></span>
                             </button>
                         </label>
-=======
-                        <span>Wave Sensors to date</span>
-                    </td>
-                    <td>
-                        <span class="required">Planned</span>
->>>>>>> 936d8b16cc57cfd3acf9468032baa232456f15b5
                     </td>
                     <td colspan="2">
                         <input ng-readonly="isCompleted" class="form-control" id="wsPlanned" name="newReport.plan_wv_sens"
@@ -708,16 +456,12 @@
                 </tr>
                 <tr>
                     <td>
-<<<<<<< HEAD
                         <label>
                             Deployed
                             <button type="button" class="help-btn" tooltip-placement="right" tooltip-append-to-body="false" uib-tooltip="Wave Sensor currently deployed for this event.  NOTE: Wave Sensors collect at sufficient frequency to determine wave action.">
                                 <span class="glyphicon glyphicon-question-sign"></span>
                             </button>
                         </label>
-=======
-                        <span>Deployed</span>
->>>>>>> 936d8b16cc57cfd3acf9468032baa232456f15b5
                     </td>
                     <td colspan="2">
                         <input class="form-control" id="wsDeployed" name="newReport.dep_wv_sens" readonly="readonly"
@@ -726,16 +470,12 @@
                 </tr>
                 <tr>
                     <td>
-<<<<<<< HEAD
                         <label>
                             Recovered
                             <button type="button" class="help-btn" tooltip-placement="right" tooltip-append-to-body="false" uib-tooltip="Wave Sensor successfully recovered from deployment in the field for this event.  NOTE: Wave Sensors collect at sufficient frequency to determine wave action.">
                                 <span class="glyphicon glyphicon-question-sign"></span>
                             </button>
                         </label>
-=======
-                        <span>Recovered</span>
->>>>>>> 936d8b16cc57cfd3acf9468032baa232456f15b5
                     </td>
                     <td colspan="2">
                         <input class="form-control" id="wsRecovered" name="newReport.rec_wv_sens" readonly="readonly"
@@ -744,16 +484,12 @@
                 </tr>
                 <tr>
                     <td>
-<<<<<<< HEAD
                         <label>
                             Lost
                             <button type="button" class="help-btn" tooltip-placement="right" tooltip-append-to-body="false" uib-tooltip="Wave Sensor lost/destroyed for this event. NOTE: Wave Sensors collect at sufficient frequency to determine wave action.">
                                 <span class="glyphicon glyphicon-question-sign"></span>
                             </button>
                         </label>
-=======
-                        <span>Lost</span>
->>>>>>> 936d8b16cc57cfd3acf9468032baa232456f15b5
                     </td>
                     <td colspan="2">
                         <input class="form-control" id="wsLost" name="newReport.lost_wv_sens" readonly="readonly"
@@ -762,7 +498,6 @@
                 </tr>
                 <tr>
                     <td rowspan="4">
-<<<<<<< HEAD
                         <label>Barometers to date</label>
                     </td>
                     <td>
@@ -772,12 +507,6 @@
                                 <span class="glyphicon glyphicon-question-sign"></span>
                             </button>
                         </label>
-=======
-                        <span>Barometers to date</span>
-                    </td>
-                    <td>
-                        <span class="required">Planned</span>
->>>>>>> 936d8b16cc57cfd3acf9468032baa232456f15b5
                     </td>
                     <td colspan="2">
                         <input ng-readonly="isCompleted" class="form-control" id="barPlanned" name="newReport.plan_barometric"
@@ -786,16 +515,12 @@
                 </tr>
                 <tr>
                     <td>
-<<<<<<< HEAD
                         <label>
                             Deployed
                             <button type="button" class="help-btn" tooltip-placement="right" tooltip-append-to-body="false" uib-tooltip="Baro Sensor currently deployed for this event.">
                                 <span class="glyphicon glyphicon-question-sign"></span>
                             </button>
                         </label>
-=======
-                        <span>Deployed</span>
->>>>>>> 936d8b16cc57cfd3acf9468032baa232456f15b5
                     </td>
                     <td colspan="2">
                         <input class="form-control" id="barDeployed" name="newReport.dep_barometric" readonly="readonly"
@@ -804,16 +529,12 @@
                 </tr>
                 <tr>
                     <td>
-<<<<<<< HEAD
                         <label>
                             Recovered
                             <button type="button" class="help-btn" tooltip-placement="right" tooltip-append-to-body="false" uib-tooltip="Baro Sensor successfully recovered from deployment in the field for this event.">
                                 <span class="glyphicon glyphicon-question-sign"></span>
                             </button>
                         </label>
-=======
-                        <span>Recovered</span>
->>>>>>> 936d8b16cc57cfd3acf9468032baa232456f15b5
                     </td>
                     <td colspan="2">
                         <input class="form-control" id="barRecovered" name="newReport.rec_barometric" readonly="readonly"
@@ -822,16 +543,12 @@
                 </tr>
                 <tr>
                     <td>
-<<<<<<< HEAD
                         <label>
                             Lost
                             <button type="button" class="help-btn" tooltip-placement="right" tooltip-append-to-body="false" uib-tooltip="Baro Sensor lost/destroyed for this event.">
                                 <span class="glyphicon glyphicon-question-sign"></span>
                             </button>
                         </label>
-=======
-                        <span>Lost</span>
->>>>>>> 936d8b16cc57cfd3acf9468032baa232456f15b5
                     </td>
                     <td colspan="2">
                         <input class="form-control" id="barLost" name="newReport.lost_barometric" readonly="readonly"
@@ -840,7 +557,6 @@
                 </tr>
                 <tr>
                     <td rowspan="4">
-<<<<<<< HEAD
                         <label>Meteorological Sensors to date</label>
                     </td>
                     <td>
@@ -850,12 +566,6 @@
                                 <span class="glyphicon glyphicon-question-sign"></span>
                             </button>
                         </label>
-=======
-                        <span>Meteorological Sensors to date</span>
-                    </td>
-                    <td>
-                        <span class="required">Planned</span>
->>>>>>> 936d8b16cc57cfd3acf9468032baa232456f15b5
                     </td>
                     <td colspan="2">
                         <input ng-readonly="isCompleted" class="form-control" id="msPlanned" name="newReport.plan_meteorological"
@@ -864,16 +574,12 @@
                 </tr>
                 <tr>
                     <td>
-<<<<<<< HEAD
                         <label>
                             Deployed
                             <button type="button" class="help-btn" tooltip-placement="right" tooltip-append-to-body="false" uib-tooltip="Met Sensor currently deployed for this event.">
                                 <span class="glyphicon glyphicon-question-sign"></span>
                             </button>
                         </label>
-=======
-                        <span>Deployed</span>
->>>>>>> 936d8b16cc57cfd3acf9468032baa232456f15b5
                     </td>
                     <td colspan="2">
                         <input class="form-control" id="msDeployed" name="newReport.dep_meteorological" readonly="readonly"
@@ -882,16 +588,12 @@
                 </tr>
                 <tr>
                     <td>
-<<<<<<< HEAD
                         <label>
                             Recovered
                             <button type="button" class="help-btn" tooltip-placement="right" tooltip-append-to-body="false" uib-tooltip="Met Sensor successfully recovered from deployment in the field for this event.">
                                 <span class="glyphicon glyphicon-question-sign"></span>
                             </button>
                         </label>
-=======
-                        <span>Recovered</span>
->>>>>>> 936d8b16cc57cfd3acf9468032baa232456f15b5
                     </td>
                     <td colspan="2">
                         <input class="form-control" id="msRecovered" name="newReport.rec_meteorological" readonly="readonly"
@@ -900,16 +602,12 @@
                 </tr>
                 <tr>
                     <td>
-<<<<<<< HEAD
                         <label>
                             Lost
                             <button type="button" class="help-btn" tooltip-placement="right" tooltip-append-to-body="false" uib-tooltip="Met Sensor lost/destroyed for this event.">
                                 <span class="glyphicon glyphicon-question-sign"></span>
                             </button>
                         </label>
-=======
-                        <span>Lost</span>
->>>>>>> 936d8b16cc57cfd3acf9468032baa232456f15b5
                     </td>
                     <td colspan="2">
                         <input class="form-control" id="msLost" name="newReport.lost_meteorological" readonly="readonly"
@@ -918,7 +616,6 @@
                 </tr>
                 <tr>
                     <td rowspan="2">
-<<<<<<< HEAD
                         <label>Highwater Mark to date</label>
                     </td>
                     <td>
@@ -928,12 +625,6 @@
                                 <span class="glyphicon glyphicon-question-sign"></span>
                             </button>
                         </label>
-=======
-                        <span>Highwater Mark to date</span>
-                    </td>
-                    <td>
-                        <span>Flagged</span>
->>>>>>> 936d8b16cc57cfd3acf9468032baa232456f15b5
                     </td>
                     <td colspan="2">
                         <input class="form-control" id="hwmFlagged" name="newReport.hwm_flagged" readonly="readonly"
@@ -942,23 +633,18 @@
                 </tr>
                 <tr>
                     <td>
-<<<<<<< HEAD
                         <label>
                             Collected
                             <button type="button" class="help-btn" tooltip-placement="right" tooltip-append-to-body="false" uib-tooltip="Total number of HWM surveyed into a datum for this event.">
                                 <span class="glyphicon glyphicon-question-sign"></span>
                             </button>
                         </label>
-=======
-                        <span>Collected</span>
->>>>>>> 936d8b16cc57cfd3acf9468032baa232456f15b5
                     </td>
                     <td colspan="2">
                         <input class="form-control" id="hwmCollected" name="newReport.hwm_collected" readonly="readonly"
                                ng-model="newReport.hwm_collected" type="text" numeric-only ng-required="newReport.complete == 1" />
                     </td>
                 </tr>
-<<<<<<< HEAD
                 <tr>
                     <td colspan="2">
                         <label class="required">
@@ -967,39 +653,6 @@
                                 <span class="glyphicon glyphicon-question-sign"></span>
                             </button>
                         </label>
-=======
-
-                <tr>
-                    <td colspan="2">
-                        <span class="required">QW Gage visits (cumulative)</span>
-                    </td>
-                    <td colspan="2">
-                        <input ng-readonly="isCompleted" class="form-control" id="qwGageVisit" name="newReport.qw_gage_visit"
-                               ng-model="newReport.qw_gage_visit" type="text" numeric-only ng-required="newReport.complete == 1" />
-                    </td>
-                </tr>
-                <tr>
-                    <td colspan="2">
-                        <span class="required">Continuous QW Gages visited</span>
-                    </td>
-                    <td colspan="2">
-                        <input ng-readonly="isCompleted" class="form-control" id="contQwGageVisit" name="newReport.qw_cont_gagevisit"
-                               ng-model="newReport.qw_cont_gagevisit" type="text" numeric-only ng-required="newReport.complete == 1" />
-                    </td>
-                </tr>
-                <tr>
-                    <td colspan="2">
-                        <span class="required">Continuous QW Gages down</span>
-                    </td>
-                    <td colspan="2">
-                        <input ng-readonly="isCompleted" class="form-control" id="qwGagesDown" name="newReport.qw_gage_down"
-                               ng-model="newReport.qw_gage_down" type="text" numeric-only ng-required="newReport.complete == 1" />
-                    </td>
-                </tr>
-                <tr>
-                    <td colspan="2">
-                        <span class="required">Discrete QW samples collected</span>
->>>>>>> 936d8b16cc57cfd3acf9468032baa232456f15b5
                     </td>
                     <td colspan="2">
                         <input ng-readonly="isCompleted" class="form-control" id="qwSamplesCol" name="newReport.qw_discr_samples"
@@ -1008,16 +661,12 @@
                 </tr>
                 <tr>
                     <td colspan="2">
-<<<<<<< HEAD
                         <label class="required">
                             Sediment samples collected
                             <button type="button" class="help-btn" tooltip-placement="right" tooltip-append-to-body="false" uib-tooltip="Total number of sediment samples collected for this event.">
                                 <span class="glyphicon glyphicon-question-sign"></span>
                             </button>
                         </label>
-=======
-                        <span class="required">Sediment samples collected</span>
->>>>>>> 936d8b16cc57cfd3acf9468032baa232456f15b5
                     </td>
                     <td colspan="2">
                         <input ng-readonly="isCompleted" class="form-control" id="sedSamplesCol" name="newReport.coll_sedsamples"
@@ -1030,18 +679,13 @@
 
         <!--Section 4: Notes-->
         <uib-accordion-group heading="Section 4: Notes" is-disabled="disabled">
-<<<<<<< HEAD
             <div><label>Notes detailing the day's field activities (optional)</label></div>
-=======
-            <div>Notes detailing the day's field activities (optional)</div>
->>>>>>> 936d8b16cc57cfd3acf9468032baa232456f15b5
             <textarea ng-readonly="isCompleted" class="form-control" id="notes" type="text" rows="5" cols="90" ng-model="newReport.notes" />
             <div>*Limit 2000 characters</div>
         </uib-accordion-group>
 
         <!-- Section 5: Contacts -->
         <uib-accordion-group heading="Section 5: Contact Information" is-disabled="disabled" is-open="status.openContacts">
-<<<<<<< HEAD
             <div>
                 <label>
                     Submitter
@@ -1050,15 +694,11 @@
                     </button>
                 </label>
             </div>
-=======
-            <div><b>Submitter</b></div>
->>>>>>> 936d8b16cc57cfd3acf9468032baa232456f15b5
             <div><span class="col-md-3">Name:</span><span>{{MemberLoggedIn.fname}} {{MemberLoggedIn.lname}}</span></div>
             <div><span class="col-md-3">Phone</span><span>{{MemberLoggedIn.phone}}</span></div>
             <div><span class="col-md-3">Email</span><span>{{MemberLoggedIn.email}}</span></div>
             <div><span class="col-md-3">Office Name</span><span>{{MemberLoggedIn.agency_name}}</span></div>
             <div><span class="col-md-3">Office Address</span><span>{{MemberLoggedIn.agency_address}}</span></div>
-<<<<<<< HEAD
             <br />
             <h3>Event Contacts</h3>
 
@@ -1069,13 +709,6 @@
                     <button type="button" style="padding:0" ng-click="populateDeployer()" class="btn btn-primary">Same as submitter</button>
                 </label>
             </div>
-=======
-
-            <h3>Event Contacts</h3>
-
-            <!-- ------------------------- Deployed--------------------------------- -->
-            <div><span class="col-md-2"><label>Deployed Staff (required)</label></span><a sref="#" style="cursor:pointer" ng-click="populateDeployer()">(Same as submitter)</a></div>
->>>>>>> 936d8b16cc57cfd3acf9468032baa232456f15b5
             <div class="col-sm-12" style="margin-bottom:15px;">
                 <div class="col-md-3 form-group required">
                     <span class="col-md-12 control-label req" for="fname">First Name:</span>
@@ -1115,7 +748,6 @@
                 </div>
             </div>
 
-<<<<<<< HEAD
             <!-- ------------------------- General--------------------------------- -->
             <div>
                 <label>
@@ -1125,10 +757,6 @@
                     </button>
                 </label>
             </div>
-=======
-            <!-- ------------------------- General--------------------------------- --> 
-            <div><b>General (optional)</b></div>
->>>>>>> 936d8b16cc57cfd3acf9468032baa232456f15b5
             <div class="col-sm-12" style="margin-bottom:15px;">
                 <div class="col-md-3 form-group" ng-class="{'required':GenStaff.fname || GenStaff.lname || GenStaff.email || GenStaff.phone}">
                     <span class="col-md-12 control-label" for="fname" ng-class="{'req':GenStaff.fname ||GenStaff.lname || GenStaff.email || GenStaff.phone}">First Name:</span>
@@ -1169,7 +797,6 @@
             </div>
 
             <!-- ------------------------- Inland Flood--------------------------------- -->
-<<<<<<< HEAD
             <div>
                 <label>
                     Inland Flood (optional)
@@ -1178,9 +805,6 @@
                     </button>
                 </label>
             </div>
-=======
-            <div><b>Inland Flood (optional)</b></div>
->>>>>>> 936d8b16cc57cfd3acf9468032baa232456f15b5
             <div class="col-sm-12" style="margin-bottom:15px;">
                 <div class="col-md-3 form-group" ng-class="{'required':InlandStaff.fname || InlandStaff.lname || InlandStaff.email || InlandStaff.phone}">
                     <span class="col-md-12 control-label" ng-class="{'req':InlandStaff.fname || InlandStaff.lname || InlandStaff.email || InlandStaff.phone}" for="fname">First Name:</span>
@@ -1221,7 +845,6 @@
             </div>
 
             <!-- ------------------------- Coastal Flood--------------------------------- -->
-<<<<<<< HEAD
             <div>
                 <label>
                     Coastal Flood (optional)
@@ -1230,9 +853,6 @@
                     </button>
                 </label>
             </div>
-=======
-            <div><b>Coastal Flood (optional)</b></div>
->>>>>>> 936d8b16cc57cfd3acf9468032baa232456f15b5
             <div class="col-sm-12" style="margin-bottom:15px;">
                 <div class="col-md-3 form-group" ng-class="{'required':CoastStaff.fname || CoastStaff.lname || CoastStaff.email || CoastStaff.phone}">
                     <span class="col-md-12 control-label" ng-class="{'req':CoastStaff.fname || CoastStaff.lname || CoastStaff.email || CoastStaff.phone}" for="fname">First Name:</span>
@@ -1273,7 +893,6 @@
             </div>
 
             <!-- ------------------------- Water Quality--------------------------------- -->
-<<<<<<< HEAD
             <div>
                 <label>
                     Water Quality (optional)
@@ -1282,9 +901,6 @@
                     </button>
                 </label>
             </div>
-=======
-            <div><b>Water Quality (optional)</b></div>
->>>>>>> 936d8b16cc57cfd3acf9468032baa232456f15b5
             <div class="col-sm-12" style="margin-bottom:15px;">
                 <div class="col-md-3 form-group" ng-class="{'required':WaterStaff.fname || WaterStaff.lname || WaterStaff.email || WaterStaff.phone}">
                     <span class="col-md-12 control-label req" ng-class="{'req':WaterStaff.fname || WaterStaff.lname || WaterStaff.email || WaterStaff.phone}" for="fname">First Name:</span>
@@ -1327,15 +943,10 @@
 
         <div ng-hide="isCompleted">
             <input type="checkbox" name="complete" ng-model="newReport.complete" ng-true-value="'1'" ng-false-value="'0'" />
-<<<<<<< HEAD
             <span>
                 Check if this Report is Complete. Incompleted reports will not be compiled for Generate Report tab.<br />
                 (If left unchecked, you may come back later to finish it)
             </span>
-=======
-            <span>Check if this Report is Complete. Incompleted reports will not be compiled for Generate Report tab.<br/>
-                (If left unchecked, you may come back later to finish it)</span>
->>>>>>> 936d8b16cc57cfd3acf9468032baa232456f15b5
         </div>
         <div ng-hide="isCompleted" class="form-group">
             <div class="col-md-4 col-md-offset-2">

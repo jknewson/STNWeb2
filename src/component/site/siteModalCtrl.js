@@ -795,13 +795,12 @@
                             '<div class="modal-body"><p>{{message}}</p></div>' +
                             '<div class="modal-footer"><button type="button" class="btn btn-primary" ng-click="ok()">Cancel</button></div>',
                             controller: ['$scope', '$uibModalInstance', function ($scope, $uibModalInstance) {
-                                $scope.message = errorResponse.data;
+                                $scope.message = errorResponse.headers("usgswim-messages");
                                 $scope.ok = function () {
                                     $uibModalInstance.dismiss('cancel');
                                 };
                             }], size: 'sm'
-                        });
-                        toastr.error("Error: " + errorResponse.data);
+                        });                       
                     });
                 }, function () {
                     //logic for cancel
