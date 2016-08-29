@@ -568,7 +568,7 @@
                 getProximitySites: {method: 'GET', isArray: true, params: { Latitude: '@latitude', Longitude: '@longitude', Buffer: '@buffer' }},
                 getAll: { method: 'GET', isArray: true },
                 getSearchedSite: { method: 'GET', isArray: false, url: rootURL + '/Sites/Search' }, //?bySiteNo={siteNo}&bySiteName={siteName}&bySiteId={siteId} (only going to populate 1 of these params
-                getFilteredSites: { method: 'GET', isArray: true, url: rootURL + '/Sites/FilteredSites.json' }, //accepts optional parameters: Event={eventId}&State={stateNames}&SensorType={sensorTypeId}&NetworkName={networkNameId}&OPDefined={opDefined}&HWMOnly={hwmOnlySites}
+                getFilteredSites: { method: 'GET', isArray: true, url: rootURL + '/Sites/FilteredSites.json' }, //accepts optional parameters: Event={eventId}&State={stateNames}&SensorType={sensorTypeId}&NetworkName={networkNameId}&OPDefined={opDefined}&HWMOnly={hwmOnlySites}&&HWMSurveyed={surveyedHWMs}
                 //landowner
                 getSiteLandOwner: { method: 'GET', url: rootURL + '/Sites/:id/LandOwner.json' },
                 //Site NetworkTypes

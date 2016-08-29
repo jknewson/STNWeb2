@@ -8,7 +8,7 @@
 
         <form name="siteSearchForm" class="map-filters-form">
 
-            <div class="form-group col-md-6" >
+            <div class="form-group col-md-6">
                 <div ng-if="sessionEventExists" class="flex-group">
                     <div>
                         <div class="chx">
@@ -49,6 +49,21 @@
                     <option value=""></option>
                 </select>
             </div>
+
+            <div class="form-group col-md-6">
+                <label>HWMs Surveyed:</label>
+                <div class="btn-group">
+                    <button type="button" class="btn" ng-model="Chosen.survey" uib-btn-radio="'true'" uncheckable>Surveyed</button>
+                    <button type="button" class="btn" ng-model="Chosen.survey" uib-btn-radio="'false'" uncheckable>Unsurveyed</button>                   
+                </div>                
+            </div>
+            <!--<div class="form-group col-md-6">
+                <label>HWMs Surveyed:</label>
+                <select class="form-control" id="network_name_id" name="network_name_id" ng-model="Chosen.survey"
+                        ng-options="s.id as s.value for s in surveyOptions">
+                    <option value=""></option>
+                </select>
+            </div>-->
 
             <div>
                 <div class="form-group col-md-3">
