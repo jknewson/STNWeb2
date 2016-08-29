@@ -68,6 +68,7 @@
                     $scope.chosenStates = thisSearch.state;
                     $scope.Chosen.sensor = thisSearch.SensorType;
                     $scope.Chosen.network = thisSearch.NetworkName;
+                    $scope.Chosen.survey = thisSearch.HWMSurveyed;
                     $scope.checkboxModel.hwmOnly = thisSearch.HWMOnly;
                     $scope.checkboxModel.senOnly = thisSearch.SensorOnly;
                     $scope.checkboxModel.rdgOnly = thisSearch.RDGOnly;
@@ -78,6 +79,7 @@
                         SensorType: $scope.Chosen.sensor,
                         NetworkName: $scope.Chosen.network,
                         HWMOnly: $scope.checkboxModel.hwmOnly,
+                        HWMSurveyed: $scope.Chosen.survey,
                         SensorOnly: $scope.checkboxModel.senOnly,
                         RDGOnly: $scope.checkboxModel.rdgOnly,
                         OPDefined: $scope.checkboxModel.opDefined
@@ -106,6 +108,7 @@
                         SensorType: $scope.Chosen.sensor,
                         NetworkName: $scope.Chosen.network,
                         HWMOnly: $scope.checkboxModel.hwmOnly,
+                        HWMSurveyed: $scope.Chosen.survey,
                         SensorOnly: $scope.checkboxModel.senOnly,
                         RDGOnly: $scope.checkboxModel.rdgOnly,
                         OPDefined: $scope.checkboxModel.opDefined
@@ -116,6 +119,7 @@
                         SensorType: $scope.Chosen.sensor,
                         NetworkName: $scope.Chosen.network,
                         HWMOnly: $scope.checkboxModel.hwmOnly,
+                        HWMSurveyed: $scope.Chosen.survey,
                         SensorOnly: $scope.checkboxModel.senOnly,
                         RDGOnly: $scope.checkboxModel.rdgOnly,
                         OPDefined: $scope.checkboxModel.opDefined
