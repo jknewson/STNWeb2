@@ -4,7 +4,7 @@
     //look up common service module, and register the new factory with that module 
     var STNResource = angular.module('STNResource', ['ngResource']);
     var rootURL = "https://stn.wim.usgs.gov/STNServices";
-   //  var rootURL = "https://stntest.wim.usgs.gov/STNServices2";
+    // var rootURL = "https://stntest.wim.usgs.gov/STNServices2";
     // var rootURL = "http://localhost/STNServices2";
    
     //#region GEOCODE https://geocoding.geo.census.gov/geocoder/geographies/coordinates?benchmark=4&vintage=4&format=json

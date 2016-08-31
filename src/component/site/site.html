@@ -1756,11 +1756,11 @@
                         </button>
                     </div>
 
-                    <!-- Surveyed Elevation (ft): -->
-                    <div class="form-group" ng-class="{'required': aHWM.survey_date}">
-                        <label class="col-md-4 control-label" ng-class="{'req': aHWM.survey_date}" for="elev_ft">Surveyed Elevation (ft):</label>
+                    <!-- Surveyed Elevation (ft): ng-class="{'required': aHWM.survey_date}"  ng-class="{'req': aHWM.survey_date}" ng-required="aHWM.survey_date"-->
+                    <div class="form-group">
+                        <label class="col-md-4 control-label" for="elev_ft">Surveyed Elevation (ft):</label>
                         <div class="col-md-6">
-                            <input class="form-control" ng-keypress="isNum($event)" name="elev_ft" ng-model="aHWM.elev_ft" type="text" ng-required="aHWM.survey_date" />
+                            <input class="form-control" ng-keypress="isNum($event)" name="elev_ft" ng-model="aHWM.elev_ft" type="text" />
                         </div>
                     </div>
 
@@ -2220,11 +2220,11 @@
                                 <div class="col-md-4"><label>Surveyed Elevation (ft):</label></div>
                                 <div class="col-md-6"><span>{{aHWM.elev_ft || '---'}}</span></div>
                             </div>
-                            <!-- Surveyed Elevation (ft): (edit) -->
-                            <div class="form-group" ng-class="{'required': hwmCopy.survey_date}" ng-if="view.HWMval== 'edit'">
-                                <label class="col-md-4 control-label" ng-class="{'req': hwmCopy.survey_date}" for="elev_ft">Surveyed Elevation (ft):</label>
+                            <!-- Surveyed Elevation (ft): (edit)  ng-class="{'required': hwmCopy.survey_date}"ng-class="{'req': hwmCopy.survey_date}"ng-required='hwmCopy.survey_date'-->
+                            <div class="form-group" ng-if="view.HWMval== 'edit'">
+                                <label class="col-md-4 control-label" for="elev_ft">Surveyed Elevation (ft):</label>
                                 <div class="col-md-6">
-                                    <input class="form-control" ng-keypress="isNum($event)" name="elev_ft" ng-model="hwmCopy.elev_ft" type="text" ng-required='hwmCopy.survey_date' />
+                                    <input class="form-control" ng-keypress="isNum($event)" name="elev_ft" ng-model="hwmCopy.elev_ft" type="text" />
                                 </div>
                                 <button ng-show="hwmCopy.survey_date" type="button" class="col-md-2 borderLess" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Elevation required if survey date is populated.">
                                     <span class="glyphicon glyphicon-question-sign"></span>

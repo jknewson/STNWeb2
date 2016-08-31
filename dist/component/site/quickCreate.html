@@ -622,11 +622,11 @@
 
                             </div>
 
-                            <!-- Surveyed Elevation (ft): -->
-                            <div class="form-group" ng-class="{'required': aHWM.survey_date}">
-                                <label class="col-md-4 control-label" ng-class="{'req': aHWM.survey_date}" for="elev_ft">Surveyed Elevation (ft):</label>
+                            <!-- Surveyed Elevation (ft): ng-class="{'required': aHWM.survey_date}"  ng-class="{'req': aHWM.survey_date}" ng-required="aHWM.survey_date"-->
+                            <div class="form-group">
+                                <label class="col-md-4 control-label" for="elev_ft">Surveyed Elevation (ft):</label>
                                 <div class="col-md-7">
-                                    <input class="form-control" ng-keypress="isNum($event)" name="elev_ft" ng-model="aHWM.elev_ft" ng-required="aHWM.survey_date" type="text" />
+                                    <input class="form-control" ng-keypress="isNum($event)" name="elev_ft" ng-model="aHWM.elev_ft" type="text" />
                                 </div>
                             </div>
 
