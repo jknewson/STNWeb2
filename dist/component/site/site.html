@@ -35,6 +35,47 @@
     .redText {
         color: red;
     }
+
+    .custom-file-input::-webkit-file-upload-button, .custom-file-inputChange::-webkit-file-upload-button {
+        visibility: hidden;
+    }
+
+    .custom-file-input::before {
+        content: 'Re-Upload File';
+        display: inline-block;
+        background: -webkit-linear-gradient(top, #f9f9f9, #e3e3e3);
+        border: 1px solid #999;
+        border-radius: 3px;
+        padding: 5px 8px;
+        outline: none;
+        white-space: nowrap;
+        -webkit-user-select: none;
+        cursor: pointer;
+        text-shadow: 1px 1px #fff;
+        font-weight: 700;
+        font-size: 10pt;
+    }
+    .custom-file-inputChange::before {
+        content: 'Replace Associated File';
+        display: inline-block;
+        background: -webkit-linear-gradient(top, #f9f9f9, #e3e3e3);
+        border: 1px solid #999;
+        border-radius: 3px;
+        padding: 5px 8px;
+        outline: none;
+        white-space: nowrap;
+        -webkit-user-select: none;
+        cursor: pointer;
+        text-shadow: 1px 1px #fff;
+        font-weight: 700;
+        font-size: 10pt;
+    }
+    .custom-file-input:hover::before, .custom-file-inputChange::before {
+        border-color: black;
+    }
+    .custom-file-input:active::before, .custom-file-inputChange::before {
+        background: -webkit-linear-gradient(top, #e3e3e3, #f9f9f9);
+    }   
 </style>
 
 <!-- MODAL for Site Create/edit-->
@@ -1322,7 +1363,7 @@
                             <div class="col-md-6" ng-if="opImageFiles.length > 0" style="height:120px;">
                                 <uib-carousel interval="4000">
                                     <uib-slide ng-repeat="f in opImageFiles">
-                                        <img ng-click="showImageModal(f.file_id)" ng-src="{{serverURL}}/Files/{{f.file_id}}/Item" />
+                                        <img ng-click="showImageModal(f.file_id)" ng-src="{{serverURL}}/Files/{{f.file_id}}/Item{{stamp}}" />
                                         <div class="carousel-caption">
                                             <p>{{f.name || f.file_id}}</p>
                                         </div>
@@ -1346,12 +1387,13 @@
                                         <!-- File Type* -->
                                         <div class="form-group required" ng-class="{'has-error':OPFILEForm.filetype_id.$invalid && OPFILEForm.filetype_id.$dirty}" style="margin:0;padding:0">
                                             <label class="col-md-4 control-label req" for="filetype_id">File Type:</label>
-                                            <div class="col-md-6">
+                                            <div class="col-md-6" ng-if="aFile.file_id == undefined">
                                                 <select class="form-control" name="filetype_id" ng-model="aFile.filetype_id" ng-change="updateAgencyForCaption()"
                                                         ng-options="ft.filetype_id as ft.filetype for ft in fileTypes" required>
                                                     <option value=""></option>
                                                 </select>
                                             </div>
+                                            <div class="col-md-6" ng-if="aFile.file_id != undefined">{{aFile.fileType}}</div>
                                         </div>
 
                                         <br clear="all" />
@@ -1468,13 +1510,48 @@
                                             </div>
                                         </div>
 
-                                        <div ng-show="aFile.file_id !== undefined && aFile.filetype_id !== 8" class="form-group" style="margin:0;padding:0">
+                                        <!-- associated files (OBJECTIVE POINT FILES)-->
+                                        <div ng-show="aFile.file_id !== undefined && aFile.filetype_id !== 8" class="form-group" style="margin:0;padding:0;padding-top:12px;">
                                             <label class="col-md-4 control-label">Associated File:</label>
                                             <div class="col-md-6">
-                                                <a target="_blank" title="Download File" ng-href="{{serverURL}}/Files/{{aFile.file_id}}/Item">
-                                                    <span class="glyphicon glyphicon-download"></span>
-                                                </a>
-                                                <img ng-if="aFile.filetype_id === 1" style="height:80px;" ng-src="{{serverURL}}/Files/{{aFile.file_id}}/Item" />
+                                                <span ng-if="fileItemExists">
+                                                    <a target="_blank" title="Download File" ng-href="{{serverURL}}/Files/{{aFile.file_id}}/Item">
+                                                        <!--<span class="glyphicon glyphicon-download"></span>-->
+                                                        <span>{{aFile.name}}</span>
+                                                    </a><br/>
+                                                    <img ng-if="isPhoto" style="height:80px;" ng-src="{{src}}" />
+                                                </span>
+                                                <span ng-if="!fileItemExists">-- Missing --</span>
+                                                <!--ReUpload Single Image with validations -->
+                                                <div ng-if="!fileItemExists" class="form-group">
+                                                    <div class="col-md-7">
+                                                        <label class="custom-file-input" for="Upload" />
+                                                        <input id="Upload" type="file" max="500000" file-model="aFile.File" style="visibility: hidden">
+                                                        <div class="col-md-7 pull-left" ng-if="aFile.File.type == 'image/png' || aFile.File.type == 'image/jpeg' || aFile.File.type == 'image/gif'"><img ngf-thumbnail="aFile.File" style="height:60px" class="thumbnail"></div>
+                                                        <div class="col-md-7 pull-left" ng-if="aFile.File.type !== 'image/png' && aFile.File.type !== 'image/jpeg' && aFile.File.type !== 'image/gif'" style="overflow:auto"><span>{{aFile.File.name}}</span></div>
+                                                        <div class="col-md-5">
+                                                            <span ng-if="aFile.File">
+                                                                Correct File?
+                                                                <button ng-if="aFile.File" type="button" ng-click="saveFileUpload()">Upload</button>
+                                                            </span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <!-- change out the existing fileItem with a different one-->
+                                                <div ng-if="fileItemExists" class="form-group">
+                                                    <div class="col-md-9">
+                                                        <label class="custom-file-inputChange" for="Upload" />
+                                                        <input id="Upload" type="file" max="500000" file-model="aFile.File1" style="visibility: hidden">
+                                                        <div class="col-md-7 pull-left" ng-if="aFile.File1.type == 'image/png' || aFile.File1.type == 'image/jpeg' || aFile.File1.type == 'image/gif'"><img ngf-thumbnail="aFile.File1" style="height:60px" class="thumbnail"></div>
+                                                        <div class="col-md-7 pull-left" ng-if="aFile.File1.type !== 'image/png' && aFile.File1.type !== 'image/jpeg' && aFile.File1.type !== 'image/gif'" style="overflow:auto"><span>{{aFile.File1.name}}</span></div>
+                                                        <div class="col-md-5">
+                                                            <span ng-if="aFile.File1">
+                                                                Correct File?
+                                                                <button ng-if="aFile.File1" type="button" ng-click="saveFileUpload()">Replace</button>
+                                                            </span>
+                                                        </div>
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
 
@@ -2396,7 +2473,7 @@
                             <div class="col-md-6" ng-if="hwmImageFiles.length > 0" style="height:120px;">
                                 <uib-carousel interval="4000">
                                     <uib-slide ng-repeat="f in hwmImageFiles">
-                                        <img ng-click="showImageModal(f.file_id)" ng-src="{{serverURL}}/Files/{{f.file_id}}/Item" />
+                                        <img ng-click="showImageModal(f.file_id)" ng-src="{{serverURL}}/Files/{{f.file_id}}/Item{{stamp}}" />
                                         <div class="carousel-caption">
                                             <p>{{f.name || f.file_id}}</p>
                                         </div>
@@ -2412,11 +2489,12 @@
                                         <!-- File Type* -->
                                         <div class="form-group required" ng-class="{'has-error':HWMFILEForm.filetype_id.$invalid && HWMFILEForm.filetype_id.$dirty}" style="margin:0;padding:0">
                                             <label class="col-md-3 control-label req" for="filetype_id">File Type:</label>
-                                            <div class="col-md-6">
+                                            <div class="col-md-6" ng-if="aFile.file_id == undefined">
                                                 <select class="form-control" name="filetype_id" ng-model="aFile.filetype_id" ng-change="updateAgencyForCaption()" ng-options="ft.filetype_id as ft.filetype for ft in fileTypes" required>
                                                     <option value=""></option>
                                                 </select>
                                             </div>
+                                            <div class="col-md-6" ng-if="aFile.file_id != undefined">{{aFile.fileType}}</div>
                                         </div>
 
                                         <!--Upload Single Image with validations*-->
@@ -2540,13 +2618,48 @@
                                             </div>
                                         </div>
 
-                                        <div ng-if="aFile.file_id !== undefined && aFile.filetype_id !== 8" class="form-group" style="margin:0;padding:0">
+                                        <!-- associated files (HWM FILES)-->
+                                        <div ng-if="aFile.file_id !== undefined && aFile.filetype_id !== 8" class="form-group" style="margin:0;padding:0;padding-top:12px;">
                                             <label class="col-md-3 control-label">Associated File:</label>
                                             <div class="col-md-6">
-                                                <a target="_blank" title="Download File" ng-href="{{serverURL}}/Files/{{aFile.file_id}}/Item">
-                                                    <span class="glyphicon glyphicon-download"></span>
-                                                </a>
-                                                <img ng-if="aFile.filetype_id === 1" style="height:80px;" ng-src="{{serverURL}}/Files/{{aFile.file_id}}/Item" />
+                                                <span ng-if="fileItemExists">
+                                                    <a target="_blank" title="Download File" ng-href="{{serverURL}}/Files/{{aFile.file_id}}/Item">
+                                                        <!--<span class="glyphicon glyphicon-download"></span>-->
+                                                        <span>{{aFile.name}}</span>
+                                                    </a><br />
+                                                    <img ng-if="isPhoto" style="height:80px;" ng-src="{{src}}" />
+                                                </span>
+                                                <span ng-if="!fileItemExists">-- Missing --</span>                                                
+                                                <!--ReUpload Single Image with validations*-->
+                                                <div ng-if="!fileItemExists" class="form-group">
+                                                    <div class="col-md-7">
+                                                        <label class="custom-file-input" for="Upload" />
+                                                        <input id="Upload" type="file" max="500000" file-model="aFile.File" style="visibility: hidden">
+                                                        <div class="col-md-7 pull-left" ng-if="aFile.File.type == 'image/png' || aFile.File.type == 'image/jpeg' || aFile.File.type == 'image/gif'"><img ngf-thumbnail="aFile.File" style="height:60px" class="thumbnail"></div>
+                                                        <div class="col-md-7 pull-left" ng-if="aFile.File.type !== 'image/png' && aFile.File.type !== 'image/jpeg' && aFile.File.type !== 'image/gif'" style="overflow:auto"><span>{{aFile.File.name}}</span></div>
+                                                        <div class="col-md-5">
+                                                            <span ng-if="aFile.File">
+                                                                Correct File?
+                                                                <button ng-if="aFile.File" type="button" ng-click="saveFileUpload()">Upload</button>
+                                                            </span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <!-- change out the existing fileItem with a different one-->
+                                                <div ng-if="fileItemExists" class="form-group">
+                                                    <div class="col-md-9">
+                                                        <label class="custom-file-inputChange" for="Upload" />
+                                                        <input id="Upload" type="file" max="500000" file-model="aFile.File1" style="visibility: hidden">
+                                                        <div class="col-md-7 pull-left" ng-if="aFile.File1.type == 'image/png' || aFile.File1.type == 'image/jpeg' || aFile.File1.type == 'image/gif'" "><img ngf-thumbnail=" afile.file1" style="height:60px" class="thumbnail"></div>
+                                                        <div class="col-md-7 pull-left" ng-if="aFile.File1.type !== 'image/png' && aFile.File1.type !== 'image/jpeg' && aFile.File1.type !== 'image/gif'" style="overflow:auto"><span>{{aFile.File1.name}}</span></div>
+                                                        <div class="col-md-5">
+                                                            <span ng-if="aFile.File1">
+                                                                Correct File?
+                                                                <button ng-if="aFile.File1" type="button" ng-click="saveFileUpload()">Replace</button>
+                                                            </span>
+                                                        </div>
+                                                    </div>                                                    
+                                                </div>
                                             </div>
                                         </div>
                                         <div ng-show="!HWMfileIsUploading">
@@ -3436,7 +3549,7 @@
                     <div class="col-md-6" ng-if="depSensImageFiles.length > 0" style="height:120px;">
                         <uib-carousel interval="4000">
                             <uib-slide ng-repeat="f in depSensImageFiles">
-                                <img ng-click="showImageModal(f.file_id)" ng-src="{{serverURL}}/Files/{{f.file_id}}/Item" />
+                                <img ng-click="showImageModal(f.file_id)" ng-src="{{serverURL}}/Files/{{f.file_id}}/Item{{stamp}}" />
                                 <div class="carousel-caption">
                                     <p>{{f.name || f.file_id}}</p>
                                 </div>
@@ -3453,11 +3566,12 @@
                                 <!-- File Type* -->
                                 <div class="form-group required" ng-class="{'has-error':DepSenFILEForm.filetype_id.$invalid && DepSenFILEForm.filetype_id.$dirty}" style="margin:0;padding:0">
                                     <label class="col-md-4 control-label req" for="filetype_id">File Type:</label>
-                                    <div class="col-md-6">
+                                    <div class="col-md-6" ng-if="aFile.file_id == undefined">
                                         <select class="form-control" name="filetype_id" ng-model="aFile.filetype_id" ng-change="updateAgencyForCaption()" ng-options="ft.filetype_id as ft.filetype for ft in fileTypes" required>
                                             <option value=""></option>
                                         </select>
                                     </div>
+                                    <div class="col-md-6">{{aFile.fileType}}</div>
                                 </div>
 
                                 <!--Upload Single Image with validations*-->
@@ -3652,15 +3766,49 @@
                                         </span>
                                     </div>
                                 </div>
-
-
-                                <div ng-if="aFile.file_id !== undefined && aFile.filetype_id !== 8" class="form-group" style="margin:0;padding:0">
-                                    <label class="col-md-4 control-label">Download File:</label>
+                                
+                                <!-- associated file (Deployed Sensor edit)-->
+                                <div ng-if="aFile.file_id !== undefined && aFile.filetype_id !== 8" class="form-group" style="margin:0;padding:0;padding-top:12px;">
+                                    <label class="col-md-4 control-label">Associated File:</label>
                                     <div class="col-md-6" style="padding-top: 12px;">
-                                        <a target="_blank" title="Download file" ng-href="{{serverURL}}/Files/{{aFile.file_id}}/Item">
-                                            <span class="glyphicon glyphicon-download"></span>
-                                        </a>
-                                        <img ng-if="aFile.filetype_id === 1" style="height:80px;" ng-src="{{serverURL}}/Files/{{aFile.file_id}}/Item" />
+                                        <span ng-if="fileItemExists">
+                                            <a target="_blank" title="Download file" ng-href="{{serverURL}}/Files/{{aFile.file_id}}/Item">
+                                                <!--<span class="glyphicon glyphicon-download"></span>-->
+                                                <span>{{aFile.name}}</span>
+                                            </a><br/>
+                                            <img ng-if="isPhoto" style="height:80px;" ng-src="{{src}}" />
+                                        </span>
+                                        <span ng-if="!fileItemExists">-- Missing --</span>
+                                        <!--ReUpload Single Image with validations*-->
+                                        <div ng-if="!fileItemExists" class="form-group">
+                                            <div class="col-md-7">
+                                                <label class="custom-file-input" for="Upload" />
+                                                <input id="Upload" type="file" max="500000" file-model="aFile.File" style="visibility: hidden">
+                                                <div class="col-md-7 pull-left" ng-if="aFile.File.type == 'image/png' || aFile.File.type == 'image/jpeg' || aFile.File.type == 'image/gif'"><img ngf-thumbnail="aFile.File" style="height:60px" class="thumbnail"></div>
+                                                <div class="col-md-7 pull-left" ng-if="aFile.File.type !== 'image/png' && aFile.File.type !== 'image/jpeg' && aFile.File.type !== 'image/gif'" style="overflow:auto"><span>{{aFile.File.name}}</span></div>
+                                                <div class="col-md-5">
+                                                    <span ng-if="aFile.File">
+                                                        Correct File?
+                                                        <button ng-if="aFile.File" type="button" ng-click="saveFileUpload()">Upload</button>
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!-- change out the existing fileItem with a different one-->
+                                        <div ng-if="fileItemExists" class="form-group">
+                                            <div class="col-md-9">
+                                                <label class="custom-file-inputChange" for="Upload" />
+                                                <input id="Upload" type="file" max="500000" file-model="aFile.File1" style="visibility: hidden">
+                                                <div class="col-md-7 pull-left" ng-if="aFile.File1.type == 'image/png' || aFile.File1.type == 'image/jpeg' || aFile.File1.type == 'image/gif'"><img ngf-thumbnail="aFile.File1" style="height:60px" class="thumbnail"></div>
+                                                <div class="col-md-7 pull-left" ng-if="aFile.File1.type !== 'image/png' && aFile.File1.type !== 'image/jpeg' && aFile.File1.type !== 'image/gif'" style="overflow:auto"><span>{{aFile.File1.name}}</span></div>
+                                                <div class="col-md-5">
+                                                    <span ng-if="aFile.File1">
+                                                        Correct File?
+                                                        <button ng-if="aFile.File1" type="button" ng-click="saveFileUpload()">Replace</button>
+                                                    </span>
+                                                </div>
+                                            </div>                                            
+                                        </div>
                                     </div>
                                 </div>
                                 <div ng-show="!depSenfileIsUploading">
@@ -4932,7 +5080,7 @@
                     <div class="col-md-6" ng-if="sensImageFiles.length > 0" style="height:120px;">
                         <uib-carousel interval="4000">
                             <uib-slide ng-repeat="f in sensImageFiles">
-                                <img ng-click="showImageModal(f.file_id)" ng-src="{{serverURL}}/Files/{{f.file_id}}/Item" />
+                                <img ng-click="showImageModal(f.file_id)" ng-src="{{serverURL}}/Files/{{f.file_id}}/Item{{stamp}}" />
                                 <div class="carousel-caption">
                                     <p>{{f.name || f.file_id}}</p>
                                 </div>
@@ -4948,11 +5096,12 @@
                                 <!-- File Type* -->
                                 <div class="form-group required" ng-class="{'has-error':DepSenFILEForm.filetype_id.$invalid && DepSenFILEForm.filetype_id.$dirty}" style="margin:0;padding:0">
                                     <label class="col-md-4 control-label req" for="filetype_id">File Type:</label>
-                                    <div class="col-md-6">
+                                    <div class="col-md-6" ng-if="aFile.file_id == undefined">
                                         <select class="form-control" name="filetype_id" ng-model="aFile.filetype_id" ng-change="updateAgencyForCaption()" ng-options="ft.filetype_id as ft.filetype for ft in fileTypes" required>
                                             <option value=""></option>
                                         </select>
                                     </div>
+                                    <div class="col-md-6" ng-if="aFile.file_id != undefined">{{aFile.fileType}}</div>
                                 </div>
 
                                 <!--Upload Single Image with validations*-->
@@ -5149,7 +5298,7 @@
                                     </div>
                                 </div>
 
-                                <div ng-if="aFile.filetype_id === 1" class="form-group" style="margin:0;padding:0">
+                                <div ng-if="aFile.filetype_id === 1" class="form-group" style="margin:0;padding:0;">
                                     <label class="col-md-4 control-label" for="Caption">Preview Caption:</button></label>
                                     <div class="col-md-6">
                                         <span>
@@ -5158,13 +5307,49 @@
                                     </div>
                                 </div>
 
-                                <div ng-if="aFile.file_id !== undefined && aFile.filetype_id !== 8" class="form-group" style="margin:0;padding:0">
-                                    <label class="col-md-4 control-label">Download File:</label>
+                                <!-- Associated Files FULL SENSOR PAGE -->
+                                <div ng-if="aFile.file_id !== undefined && aFile.filetype_id !== 8" class="form-group" style="margin:0;padding:0;padding-top:12px;">
+                                    <label class="col-md-4 control-label">Associated File:</label>
                                     <div class="col-md-6">
-                                        <a target="_blank" title="Download file" ng-href="{{serverURL}}/Files/{{aFile.file_id}}/Item">
-                                            <span class="glyphicon glyphicon-download"></span>
-                                        </a>
-                                        <img ng-if="aFile.filetype_id === 1" style="height:80px;" ng-src="{{serverURL}}/Files/{{aFile.file_id}}/Item" />
+                                        <span ng-if="fileItemExists">
+                                            <a target="_blank" title="Download file" ng-href="{{serverURL}}/Files/{{aFile.file_id}}/Item">
+                                                <!--<span class="glyphicon glyphicon-download"></span>-->
+                                                <span>{{aFile.name}}</span>
+                                            </a><br/>
+                                            <img ng-if="isPhoto" style="height:80px;" ng-src="{{src}}" />
+                                        </span>
+                                        <span ng-if="!fileItemExists">-- Missing --</span>
+                                        <!--ReUpload Single Image with validations*-->
+                                        <div ng-if="!fileItemExists" class="form-group">
+                                            <div class="col-md-9">
+                                                <label class="custom-file-input" for="Upload" />
+                                                <input id="Upload" type="file" max="500000" file-model="aFile.File" style="visibility: hidden">
+                                                <div class="col-md-7 pull-left" ng-if="aFile.File.type == 'image/png' || aFile.File.type == 'image/jpeg' || aFile.File.type == 'image/gif'"><img ngf-thumbnail="aFile.File" style="height:60px" class="thumbnail"></div>
+                                                <div class="col-md-7 pull-left" ng-if="aFile.File.type !== 'image/png' && aFile.File.type !== 'image/jpeg' && aFile.File.type !== 'image/gif'" style="overflow:auto"><span>{{aFile.File.name}}</span></div>
+                                                <div class="col-md-5">
+                                                    <span ng-if="aFile.File">
+                                                        Correct File?
+                                                        <button ng-if="aFile.File" type="button" ng-click="saveFileUpload()">Upload</button>
+                                                    </span>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                        <!-- change out the existing fileItem with a different one-->
+                                        <div ng-if="fileItemExists" class="form-group">
+                                            <div class="col-md-9">
+                                                <label class="custom-file-inputChange" for="Upload" />
+                                                <input id="Upload" type="file" max="500000" file-model="aFile.File1" style="visibility: hidden">
+                                                <div class="col-md-7 pull-left" ng-if="aFile.File1.type == 'image/png' || aFile.File1.type == 'image/jpeg' || aFile.File1.type == 'image/gif'"><img ngf-thumbnail="aFile.File1" style="height:60px" class="thumbnail"></div>
+                                                <div class="col-md-7 pull-left" ng-if="aFile.File1.type !== 'image/png' && aFile.File1.type !== 'image/jpeg' && aFile.File1.type !== 'image/gif'" style="overflow:auto"><span>{{aFile.File1.name}}</span></div>
+                                                <div class="col-md-5">
+                                                    <span ng-if="aFile.File1">
+                                                        Correct File?
+                                                        <button ng-if="aFile.File1" type="button" ng-click="saveFileUpload()">Replace</button>
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                                 <div ng-show="!fullSenfileIsUploading">
@@ -5630,9 +5815,10 @@
                 <div class="form-group required" ng-if="view.FILEval == 'edit'" ng-class="{'has-error':FILEForm.filetype_id.$invalid && FILEForm.filetype_id.$dirty}">
                     <label class="col-md-4 control-label req" for="filetype_id">File Type:</label>
                     <div class="col-md-6">
-                        <select class="form-control" name="filetype_id" ng-model="fileCopy.filetype_id" ng-change="updateAgencyForCaption()" ng-options="ft.filetype_id as ft.filetype for ft in fileTypes" required>
+                        <div class="col-md-6"><span>{{aFile.fileType || '---'}}</span></div>
+                        <!--<select class="form-control" name="filetype_id" ng-model="fileCopy.filetype_id" ng-change="updateAgencyForCaption()" ng-options="ft.filetype_id as ft.filetype for ft in fileTypes" required>
                             <option value=""></option>
-                        </select>
+                        </select>-->
                     </div>
                 </div>
 
@@ -5649,13 +5835,13 @@
 
                 <!-- photo file upload fileType==1-->  <!-- all other file upload fileType > 2-->    <!--data file upload fileType==2 (NOT DEALT WITH IN THIS MODAL -- only in Sensor Modals) -->
                 <!--File URL (link) (detail)-->
-                <div ng-if="view.FILEval == 'detail' && ((aFile.filetype_id === 8 || fileCopy.filetype_id === 8) || (aFile.is_nwis === 1 || fileCopy.is_nwis === 1))" class="col-md-12">
+                <div ng-if="view.FILEval == 'detail' && (aFile.filetype_id === 8 || aFile.is_nwis === 1)" class="col-md-12">
                     <div class="col-md-4"><label>File URL:</label></label></div>
                     <div class="col-md-6"><span>{{aFile.name || '---'}}</span></div>
                 </div>
 
                 <!--File URL (link) (edit)-->
-                <div ng-if="view.FILEval == 'edit' && ((aFile.filetype_id === 8 || fileCopy.filetype_id === 8) || (aFile.is_nwis === 1 || fileCopy.is_nwis === 1))" class="form-group">
+                <div ng-if="view.FILEval == 'edit' && (fileCopy.filetype_id === 8 || fileCopy.is_nwis === 1)" class="form-group">
                     <label class="col-md-4 control-label" for="name">File URL:</label>
                     <div class="col-md-6">
                         <input class="form-control" title="{{fileCopy.name}}" nam name="name" ng-model="fileCopy.name" type="text" />
@@ -5666,25 +5852,25 @@
                 </div>
 
                 <!--Data Processed by (Data) (detail)-->
-                <div ng-if="view.FILEval == 'detail' && (aFile.filetype_id === 2 || fileCopy.filetype_id === 2)" class="col-md-12">
+                <div ng-if="view.FILEval == 'detail' && aFile.filetype_id === 2" class="col-md-12">
                     <div class="col-md-4"><label>Data Process By:</label></div>
                     <div class="col-md-6"><span>{{processor}}</span></div>
                 </div>
                 <!--Data Processed by (Data) (edit)-->
-                <div ng-if="view.FILEval == 'edit' && (aFile.filetype_id === 2 || fileCopy.filetype_id === 2)" class="form-group">
+                <div ng-if="view.FILEval == 'edit' && fileCopy.filetype_id === 2" class="form-group">
                     <label class="col-md-4 control-label" for="processor_id">Data Process By:</label>
-                    <div class="col-md-6"><span>{{processor}}</span></div>
+                    <div class="col-md-6"><span>{{processor || usersName}}</span></div>
                 </div>
 
                 <!-- Date Collected/Processed* (data) (detail) -->
-                <div ng-if="view.FILEval == 'detail' && (aFile.filetype_id === 2 || fileCopy.filetype_id === 2)" class="col-md-12">
+                <div ng-if="view.FILEval == 'detail' && aFile.filetype_id === 2" class="col-md-12">
                     <div class="col-md-4"><label>Date Collected/Processed:</label></div>
                     <div class="col-md-3 input-group" style="padding-right:14px;padding-left:14px">
                         <span>{{datafile.collect_date | date: 'MM/dd/yyyy' || '---'}}</span>
                     </div>
                 </div>
                 <!-- Date Collected/Processed* (data)  (edit)-->
-                <div ng-if="view.FILEval == 'edit' && (aFile.filetype_id === 2 || fileCopy.filetype_id === 2)" class="form-group required" ng-class="{'has-error':FILEForm.collect_date.$invalid && FILEForm.collect_date.$dirty}">
+                <div ng-if="view.FILEval == 'edit' && fileCopy.filetype_id === 2" class="form-group required" ng-class="{'has-error':FILEForm.collect_date.$invalid && FILEForm.collect_date.$dirty}">
                     <label class="col-md-4 control-label req" for="collect_date">Date Collected/Processed:</label>
                     <div class="col-md-3 input-group" style="padding-right:14px;padding-left:14px">
                         <input class="form-control dateInputStyle" type="date" name="dfcd" uib-datepicker-popup="MM/dd/yyyy" show-weeks="false" is-open="datepickrs.dfcd" ng-model="dfCopy.collect_date" required />
@@ -5697,12 +5883,12 @@
                 </div>
 
                 <!--Source Name (Photo) (detail) -->
-                <div class="col-md-12" ng-if="view.FILEval == 'detail' && (aFile.filetype_id === 1 || fileCopy.filetype_id === 1)">
+                <div class="col-md-12" ng-if="view.FILEval == 'detail' && aFile.filetype_id === 1">
                     <div class="col-md-4"><label>Source Photographer:</label></div>
                     <div class="col-md-6"><span>{{aSource.FULLname || '---'}}</span></div>
                 </div>
                 <!--Source Name (Photo) (edit)-->
-                <div class="form-group required" ng-if="view.FILEval == 'edit' && (aFile.filetype_id === 1 || fileCopy.filetype_id === 1)" ng-class="{'has-error':FILEForm.FULLname.$invalid && FILEForm.FULLname.$dirty}">
+                <div class="form-group required" ng-if="view.FILEval == 'edit' && fileCopy.filetype_id === 1" ng-class="{'has-error':FILEForm.FULLname.$invalid && FILEForm.FULLname.$dirty}">
                     <label class="col-md-4 control-label req" for="source_id">Source Photographer:</label>
                     <div class="col-md-6">
                         <input class="form-control" name="FULLname" ng-model="sourceCopy.FULLname" type="text" required />
@@ -5710,12 +5896,12 @@
                 </div>
 
                 <!--Source Name (allOther) (detail)-->
-                <div class="col-md-12" ng-if="view.FILEval == 'detail' && (aFile.filetype_id  > 2 || fileCopy.filetype_id  > 2)">
+                <div class="col-md-12" ng-if="view.FILEval == 'detail' && aFile.filetype_id  > 2">
                     <div class="col-md-4"><label>Source Name:</label></div>
                     <div class="col-md-6"><span>{{aSource.FULLname || '---'}}</span></div>
                 </div>
                 <!--Source Name (allOther) (edit)-->
-                <div class="form-group required" ng-if="view.FILEval == 'edit' && (aFile.filetype_id  > 2 || fileCopy.filetype_id  > 2)" ng-class="{'has-error':FILEForm.FULLname.$invalid && FILEForm.FULLname.$dirty}">
+                <div class="form-group required" ng-if="view.FILEval == 'edit' && fileCopy.filetype_id  > 2" ng-class="{'has-error':FILEForm.FULLname.$invalid && FILEForm.FULLname.$dirty}">
                     <label class="col-md-4 control-label req" for="source_id">Source Name:</label>
                     <div class="col-md-6">
                         <input class="form-control" name="FULLname" ng-model="sourceCopy.FULLname" type="text" required />
@@ -5723,12 +5909,12 @@
                 </div>
 
                 <!--Source Agency* (photo, allOther) (detail)-->
-                <div ng-if="view.FILEval == 'detail' && ((aFile.filetype_id === 1 || aFile.filetype_id > 2) || (fileCopy.filetype_id === 1 || fileCopy.filetype_id > 2))" class="col-md-12">
+                <div ng-if="view.FILEval == 'detail' && (aFile.filetype_id === 1 || aFile.filetype_id > 2)" class="col-md-12">
                     <div class="col-md-4"><label>Source Agency:</label></div>
                     <div class="col-md-6"><span>{{aSource.agencyName || '---'}}</span></div>
                 </div>
                 <!--Source Agency* (photo, allOther) (edit)-->
-                <div ng-if="view.FILEval == 'edit' && ((aFile.filetype_id === 1 || aFile.filetype_id > 2) || (fileCopy.filetype_id === 1 || fileCopy.filetype_id > 2))" class="form-group required" ng-class="{'has-error':FILEForm.agency_id.$invalid && FILEForm.agency_id.$dirty}">
+                <div ng-if="view.FILEval == 'edit' && (fileCopy.filetype_id === 1 || fileCopy.filetype_id > 2)" class="form-group required" ng-class="{'has-error':FILEForm.agency_id.$invalid && FILEForm.agency_id.$dirty}">
                     <label class="col-md-4 control-label req" for="agency_id">Source Agency:</label>
                     <div class="col-md-6">
                         <select class="form-control" name="agency_id" ng-model="sourceCopy.agency_id" ng-change="updateAgencyForCaption()"
@@ -5739,14 +5925,14 @@
                 </div>
 
                 <!-- Photo Date* (photo)  (detail)-->
-                <div ng-if="view.FILEval == 'detail' && (aFile.filetype_id === 1 || fileCopy.filetype_id === 1)" class="col-md-12">
+                <div ng-if="view.FILEval == 'detail' && aFile.filetype_id === 1" class="col-md-12">
                     <div class="col-md-4"><label>Photo Date:</label></div>
                     <div class="col-md-3 input-group" style="padding-right:14px;padding-left:14px">
                         <span>{{aFile.photo_date | date: 'MM/dd/yyyy' || '---'}}</span>
                     </div>
                 </div>
                 <!-- Photo Date* (photo) (edit) -->
-                <div ng-if="view.FILEval == 'edit' && (aFile.filetype_id === 1 || fileCopy.filetype_id === 1)" class="form-group required" ng-class="{'has-error':FILEForm.photo_date.$invalid && FILEForm.photo_date.$dirty}">
+                <div ng-if="view.FILEval == 'edit' && fileCopy.filetype_id === 1" class="form-group required" ng-class="{'has-error':FILEForm.photo_date.$invalid && FILEForm.photo_date.$dirty}">
                     <label class="col-md-4 control-label req" for="photo_date">Photo Date:</label>
                     <div class="col-md-3 input-group" style="padding-right:14px;padding-left:14px">
                         <input class="form-control dateInputStyle" type="date" name="sd" uib-datepicker-popup="MM/dd/yyyy" show-weeks="false" is-open="datepickrs.sd" ng-model="fileCopy.photo_date" required />
@@ -5759,14 +5945,14 @@
                 </div>
 
                 <!-- Date Uploaded* (photo, data, allother) (detail) -->
-                <div ng-if="view.FILEval == 'detail' && (aFile.filetype_id > 0 || fileCopy.filetype_id > 0)" class="col-md-12">
+                <div ng-if="view.FILEval == 'detail' && aFile.filetype_id > 0" class="col-md-12">
                     <div class="col-md-4"><label>Date Uploaded:</label></div>
                     <div class="col-md-3 input-group" style="padding-right:14px;padding-left:14px">
                         <span>{{aFile.file_date | date: 'MM/dd/yyyy' || '---'}}</span>
                     </div>
                 </div>
                 <!-- Date Uploaded* (photo, data, allother) (edit) -->
-                <div ng-if="view.FILEval == 'edit' && (aFile.filetype_id > 0 || fileCopy.filetype_id > 0)" class="form-group required" ng-class="{'has-error':FILEForm.file_date.$invalid && FILEForm.file_date.$dirty}">
+                <div ng-if="view.FILEval == 'edit' && fileCopy.filetype_id > 0" class="form-group required" ng-class="{'has-error':FILEForm.file_date.$invalid && FILEForm.file_date.$dirty}">
                     <label class="col-md-4 control-label req" for="file_date">Date Uploaded:</label>
                     <div class="col-md-3 input-group" style="padding-right:14px;padding-left:14px">
                         <input class="form-control dateInputStyle" type="date" name="fd" uib-datepicker-popup="MM/dd/yyyy" show-weeks="false" is-open="datepickrs.fd" ng-model="fileCopy.file_date" required />
@@ -5779,12 +5965,12 @@
                 </div>
 
                 <!--Description*(photo, data, allother) (detail)-->
-                <div ng-if="view.FILEval == 'detail' && (aFile.filetype_id > 0 || fileCopy.filetype_id > 0)" class="col-md-12">
+                <div ng-if="view.FILEval == 'detail' && aFile.filetype_id > 0" class="col-md-12">
                     <div class="col-md-4"><label>Description:</label></div>
                     <div class="col-md-6"><span>{{aFile.description || '---'}}</span></div>
                 </div>
                 <!--Description*(photo, data, allother) (edit)-->
-                <div ng-if="view.FILEval == 'edit' && (aFile.filetype_id > 0 || fileCopy.filetype_id > 0)" class="form-group required" ng-class="{'has-error':FILEForm.description.$invalid && FILEForm.description.$dirty}">
+                <div ng-if="view.FILEval == 'edit' && fileCopy.filetype_id > 0" class="form-group required" ng-class="{'has-error':FILEForm.description.$invalid && FILEForm.description.$dirty}">
                     <label class="col-md-4 control-label req" for="description">Description:</label>
                     <div class="col-md-6">
                         <textarea class="form-control" id="description" type="text" rows="3" placeholder="Description" ng-model="fileCopy.description" required />
@@ -5792,12 +5978,12 @@
                 </div>
 
                 <!-- Good Data Start Time* (data) (detail) -->
-                <div ng-if="view.FILEval == 'detail' && (aFile.filetype_id === 2 || fileCopy.filetype_id === 2)" class="col-md-12">
+                <div ng-if="view.FILEval == 'detail' && aFile.filetype_id === 2" class="col-md-12">
                     <div class="col-md-4"><label>Good Data Start Time:</label></div>
                     <div class="col-md-6"><span>{{datafile.good_start | date: 'MM/dd/yyyy hh:mm a' || '---'}}</span></div>
                 </div>
                 <!-- Good Data Start Time* (data) (edit)-->
-                <div ng-if="view.FILEval == 'edit' && (aFile.filetype_id === 2 || fileCopy.filetype_id === 2)" class="form-group required" ng-class="{'has-error':FILEForm.good_start.$invalid && FILEForm.good_start.$dirty}">
+                <div ng-if="view.FILEval == 'edit' && fileCopy.filetype_id === 2" class="form-group required" ng-class="{'has-error':FILEForm.good_start.$invalid && FILEForm.good_start.$dirty}">
                     <label class="col-md-4 control-label req" style="padding-top:4em;" for="good_start">Good Data Start Time:</label>
                     <div class="col-md-6">
                         <datetimepicker ng-model="dfCopy.good_start" show-meridian="true" date-format="MM/dd/yyyy" readonly-date="false" date-options="dateOptions"
@@ -5810,12 +5996,12 @@
                 </div>
 
                 <!-- Good Data End Time* (data) (detail) -->
-                <div ng-if="view.FILEval == 'detail' && (aFile.filetype_id === 2 || fileCopy.filetype_id === 2)" class="col-md-12">
+                <div ng-if="view.FILEval == 'detail' && aFile.filetype_id === 2" class="col-md-12">
                     <div class="col-md-4"><label>Good Data End Time:</label></div>
                     <div class="col-md-6"><span>{{datafile.good_end | date: 'MM/dd/yyyy hh:mm a' || '---'}}</span></div>
                 </div>
                 <!-- Good Data End Time* (data) (edit)-->
-                <div ng-if="view.FILEval == 'edit' && (aFile.filetype_id === 2 || fileCopy.filetype_id === 2)" class="form-group required" ng-class="{'has-error':FILEForm.good_end.$invalid && FILEForm.good_end.$dirty}">
+                <div ng-if="view.FILEval == 'edit' && fileCopy.filetype_id === 2" class="form-group required" ng-class="{'has-error':FILEForm.good_end.$invalid && FILEForm.good_end.$dirty}">
                     <label class="col-md-4 control-label req" style="padding-top:4em;" for="good_end">Good Data End Time:</label>
                     <div class="col-md-6">
                         <datetimepicker ng-model="dfCopy.good_end" show-meridian="true" date-format="MM/dd/yyyy" readonly-date="false" date-options="dateOptions"
@@ -5828,12 +6014,12 @@
                 </div>
 
                 <!-- Timezone*: (detail) -->
-                <div ng-if="view.FILEval == 'detail' && (aFile.filetype_id === 2 || fileCopy.filetype_id === 2)" class="col-md-12">
+                <div ng-if="view.FILEval == 'detail' && aFile.filetype_id === 2" class="col-md-12">
                     <div class="col-md-4"><label>Time Zone:</label></div>
                     <div class="col-md-6"><span>{{datafile.time_zone}}</span></div>
                 </div>
                 <!-- Timezone*: (edit)-->
-                <div ng-if="view.FILEval == 'edit' && (aFile.filetype_id === 2 || fileCopy.filetype_id === 2)" class="form-group required">
+                <div ng-if="view.FILEval == 'edit' && fileCopy.filetype_id === 2" class="form-group required">
                     <label class="col-md-4 control-label req">Time Zone:</label>
                     <div class="col-md-6">
                         <select class="form-control" name="time_zone" ng-model="dfCopy.time_zone" ng-options="vcm for vcm in timeZoneList" required>
@@ -5846,12 +6032,12 @@
                 </div>
 
                 <!--elevation (detail)-->
-                <div ng-if="view.FILEval == 'detail' && (aFile.filetype_id === 2 || fileCopy.filetype_id === 2)" class="col-md-12">
+                <div ng-if="view.FILEval == 'detail' && aFile.filetype_id === 2" class="col-md-12">
                     <div class="col-md-4"><label>Elevation:</label></div>
                     <div class="col-md-6"><span>{{datafile.elevation_status || '---'}}</span></div>
                 </div>
                 <!--elevation (edit)-->
-                <div ng-if="view.FILEval == 'edit' && (aFile.filetype_id === 2 || fileCopy.filetype_id === 2)" class="form-group">
+                <div ng-if="view.FILEval == 'edit' && fileCopy.filetype_id === 2" class="form-group">
                     <label class="col-md-4 control-label">Elevation:</label>
                     <div class="col-md-6">
                         <span class="radio-inline">
@@ -5888,12 +6074,12 @@
 
                 <!-- This is where Other ends, rest is for Photo -->
                 <!--Photo Direction (photo) (detail)-->
-                <div ng-if="view.FILEval == 'detail' && (aFile.filetype_id === 1 || fileCopy.filetype_id === 1)" class="col-md-12">
+                <div ng-if="view.FILEval == 'detail' && aFile.filetype_id === 1" class="col-md-12">
                     <div class="col-md-4"><label>Photo Direction:</label></div>
                     <div class="col-md-6"><span>{{aFile.photo_direction || '---'}}</span></div>
                 </div>
                 <!--Photo Direction (photo) (edit)-->
-                <div ng-if="view.FILEval == 'edit' && (aFile.filetype_id === 1 || fileCopy.filetype_id === 1)" class="form-group">
+                <div ng-if="view.FILEval == 'edit' && fileCopy.filetype_id === 1" class="form-group">
                     <label class="col-md-4 control-label" for="photo_direction">Photo Direction:</label>
                     <div class="col-md-6">
                         <input class="form-control" id="photo_direction" name="photo_direction" ng-model="fileCopy.photo_direction" type="text" />
@@ -5901,12 +6087,12 @@
                 </div>
 
                 <!-- Photo Latitude (photo) (detail)-->
-                <div ng-if="view.FILEval == 'detail' && (aFile.filetype_id === 1 || fileCopy.filetype_id === 1)" class="col-md-12">
+                <div ng-if="view.FILEval == 'detail' && aFile.filetype_id === 1" class="col-md-12">
                     <div class="col-md-4"><label>Photo Latitude <br /> (if different):</label></div>
                     <div class="col-md-6"><span>{{aFile.latitude_dd || '---'}}</span></div>
                 </div>
                 <!-- Photo Latitude (photo) (edit)-->
-                <div ng-if="view.FILEval == 'edit' && (aFile.filetype_id === 1 || fileCopy.filetype_id === 1)" class="form-group">
+                <div ng-if="view.FILEval == 'edit' && fileCopy.filetype_id === 1" class="form-group">
                     <label class="col-md-4 control-label" for="latitude_dd">Photo Latitude <br /> (if different):</label>
                     <div class="col-md-6">
                         <input class="form-control" ng-keypress="isNum($event)" name="latitude_dd" id="latitude_dd" ng-model="fileCopy.latitude_dd" type="text" />
@@ -5914,12 +6100,12 @@
                 </div>
 
                 <!--Photo Longitude (photo) (detail)-->
-                <div ng-if="view.FILEval == 'detail' && (aFile.filetype_id === 1 || fileCopy.filetype_id === 1)" class="col-md-12">
+                <div ng-if="view.FILEval == 'detail' && aFile.filetype_id === 1" class="col-md-12">
                     <div class="col-md-4"><label>Photo Longitude <br /> (if different):</label></div>
                     <div class="col-md-6"><span>{{aFile.longitude_dd || '---'}}</span></div>
                 </div>
                 <!--Photo Longitude (photo) (edit)-->
-                <div ng-if="view.FILEval == 'edit' && (aFile.filetype_id === 1 || fileCopy.filetype_id === 1)" class="form-group">
+                <div ng-if="view.FILEval == 'edit' && fileCopy.filetype_id === 1" class="form-group">
                     <label class="col-md-4 control-label" for="longitude_dd">Photo Longitude <br /> (if different):</label>
                     <div class="col-md-6">
                         <input class="form-control" ng-keypress="isNum($event)" id="longitude_dd" name="longitude_dd" ng-model="fileCopy.longitude_dd" type="text" />
@@ -5927,7 +6113,7 @@
                 </div>
 
                 <!-- caption (detail)-->
-                <div ng-if="view.FILEval == 'detail' && (aFile.filetype_id === 1 || fileCopy.filetype_id === 1)" class="col-md-12">
+                <div ng-if="view.FILEval == 'detail' && aFile.filetype_id === 1" class="col-md-12" style="padding-bottom: 12px;">
                     <div class="col-md-4"><label>Preview Caption:</label></div>
                     <div class="col-md-6">
                         <span>
@@ -5936,7 +6122,7 @@
                     </div>
                 </div>
                 <!-- caption (edit)-->
-                <div ng-if="view.FILEval == 'edit' && (aFile.filetype_id === 1 || fileCopy.filetype_id === 1)" class="form-group">
+                <div ng-if="view.FILEval == 'edit' && fileCopy.filetype_id === 1" class="form-group" style="padding-bottom: 12px;">
                     <label class="col-md-4 control-label" for="Caption">Preview Caption:</button></label>
                     <div class="col-md-6">
                         <span>
@@ -5945,16 +6131,50 @@
                     </div>
                 </div>
 
-                <!-- associated files (detail)-->
+                <!-- associated files (detail) FILE ACCORDION -->
                 <div ng-if="view.FILEval == 'detail' && ((aFile.file_id !== undefined && aFile.filetype_id !== 8 && aFile.is_nwis !== 1) || (fileCopy.file_id !== undefined && fileCopy.filetype_id !== 8 && fileCopy.is_nwis !== 1))" class="col-md-12">
                     <div class="col-md-4"><label>Associated File:</label></div>
                     <div class="col-md-6">
-                        <span>
+                        <span ng-if="fileItemExists">
                             <a target="_blank" title="Download File" ng-href="{{serverURL}}/Files/{{aFile.file_id}}/Item">
-                                <span class="glyphicon glyphicon-download"></span>
-                            </a>
-                            <img ng-if="aFile.filetype_id === 1" style="height:80px;" ng-src="{{serverURL}}/Files/{{aFile.file_id}}/Item" />
+                                <!--<span class="glyphicon glyphicon-download"></span>-->
+                                <span>{{aFile.name}}</span>
+                            </a><br/>
+                            <img ng-if="isPhoto" style="height:80px;" ng-src="{{src}}"></img>
                         </span>
+
+                        <span ng-if="!fileItemExists">-- Missing --</span>
+
+                        <!--ReUpload Single Image-->
+                        <div ng-if="!fileItemExists" class="form-group">
+                            <div class="col-md-7">
+                                <label class="custom-file-input" for="Upload" />
+                                <input id="Upload" type="file" max="500000" file-model="aFile.File" style="visibility: hidden">
+                                <div class="col-md-7 pull-left" ng-if="aFile.File.type == 'image/png' || aFile.File.type == 'image/jpeg' || aFile.File.type == 'image/gif'"><img ngf-thumbnail="aFile.File" style="height:60px" class="thumbnail"></div>
+                                <div class="col-md-7 pull-left" ng-if="aFile.File.type !== 'image/png' && aFile.File.type !== 'image/jpeg' && aFile.File.type !== 'image/gif'" style="overflow:auto"><span>{{aFile.File.name}}</span></div>
+                                <div class="col-md-5">
+                                    <span ng-if="aFile.File">
+                                        Correct File?
+                                        <button ng-if="aFile.File" type="button" ng-click="saveFileUpload()">Upload</button>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- change out the existing fileItem with a different one-->
+                        <div ng-if="fileItemExists" class="form-group">
+                            <div class="col-md-9">
+                                <label class="custom-file-inputChange" for="Upload" />
+                                <input id="Upload" type="file" max="500000" file-model="aFile.File1" style="visibility: hidden">
+                                <div class="col-md-7 pull-left" ng-if="aFile.File1.type == 'image/png' || aFile.File1.type == 'image/jpeg' || aFile.File1.type == 'image/gif'"><img ngf-thumbnail="aFile.File1" style="height:60px" class="thumbnail"></div>
+                                <div class="col-md-7 pull-left" ng-if="aFile.File1.type !== 'image/png' && aFile.File1.type !== 'image/jpeg' && aFile.File1.type !== 'image/gif'" style="overflow:auto"><span>{{aFile.File1.name}}</span></div>
+                                <div class="col-md-5">
+                                    <span ng-if="aFile.File1">
+                                        Correct File?
+                                        <button ng-if="aFile.File1" type="button" ng-click="saveFileUpload()">Replace</button>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
                 <!-- associated files (edit)-->

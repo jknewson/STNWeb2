@@ -2,11 +2,11 @@
     "use strict"; 
     var app = angular.module('app',
         ['ngResource', 'ui.router', 'ngCookies', 'ui.mask', 'ui.bootstrap', 'isteven-multi-select', 'ngInputModified', 'ui.validate', 'cgBusy',
-            'angular.filter', 'xeditable', 'checklist-model', 'ngFileUpload', 'STNResource', 'ui.bootstrap.datetimepicker','leaflet-directive',
+            'angular.filter', 'xeditable', 'checklist-model', 'ngFileUpload', 'STNResource', 'ui.bootstrap.datetimepicker','leaflet-directive','ngHandsontable',
             'STNControllers', 'LogInOutController', 'ModalControllers', 'SettingsControllers', 'WiM.Services', 'WiM.Event', 'wim_angular', 'angularSpinners']);
     app.constant('SERVER_URL', 'https://stn.wim.usgs.gov/STNServices');
-  //  app.constant('SERVER_URL', 'https://stntest.wim.usgs.gov/STNServices2');
- //   app.constant('SERVER_URL', 'http://localhost/STNServices2');
+   // app.constant('SERVER_URL', 'https://stntest.wim.usgs.gov/STNServices2');
+    //app.constant('SERVER_URL', 'http://localhost/STNServices2');
     
     app.run(['$rootScope', '$uibModalStack', '$cookies', '$state', function ($rootScope, $uibModalStack, $cookies, $state) {
         $rootScope.$on('$stateChangeStart', function (event, toState, toParams, fromState, fromParams) {
@@ -642,6 +642,55 @@
 
                 //#endregion all lookup htmls
                 //#endregion resources
+
+                //#region historicHWM upload
+                .state("historicHWMs", {
+                    url: "/Events/:id/HistoricHWMs",
+             //       params:{id:null},
+                    templateUrl: "component/hwm/historic.html",
+                    authenticate: true,
+                    controller: "historicHWMCtrl",
+                    resolve: {
+                        e: 'EVENT',
+                        thisEvent: function (e, $stateParams) {
+                            if ($stateParams.id > 0) {
+                                return e.query({ id: $stateParams.id }).$promise;
+                            }
+                        },
+                        hd: 'HORIZONTAL_DATUM',
+                        HDatums: function (hd){
+                            return hd.getAll().$promise;
+                        },
+                        hc: 'HORIZONTAL_COLL_METHODS',
+                        HCollectMeths: function (hc){
+                            return hc.getAll().$promise;
+                        },
+                        s: 'STATE',
+                        States: function (s){
+                            return s.getAll().$promise;
+                        },
+                        c: 'COUNTIES',
+                        Counties: function (c){
+                            return c.getAll().$promise;
+                        },
+                        opt: 'OP_TYPE',
+                        OPTypes: function (opt){
+                            return opt.getAll().$promise;
+                        },
+                        vd: 'VERTICAL_DATUM',
+                        VDatums: function (vd){
+                            return vd.getAll().$promise;
+                        },
+                        ht: 'HWM_TYPE',
+                        HTypes: function (ht) {
+                            return ht.getAll().$promise;
+                        },
+                        hqu: 'HWM_QUALITY',
+                        HWMQuals: function (hqu) {
+                            return hqu.getAll().$promise;
+                        }
+                    }
+                })
 
                 //#region site (abstract)
                 .state("site", {

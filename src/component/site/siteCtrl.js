@@ -137,7 +137,7 @@
                         }
 
                         //get the landownerCOntact with getCreds
-                        if ($scope.aSite.landownercontact_id !== null && $scope.aSite.landownercontact_id !== undefined) {
+                        if ($scope.aSite.landownercontact_id !== null && $scope.aSite.landownercontact_id !== undefined && $scope.aSite.landownercontact_id > 0) {
                             $http.defaults.headers.common.Authorization = 'Basic ' + $cookies.get('STNCreds');
                             $http.defaults.headers.common.Accept = 'application/json';
                             SITE.getSiteLandOwner({ id: $scope.aSite.site_id }, function success(response) {
