@@ -36,13 +36,13 @@
     </div>
     <!-- If this is admin view -->
     <form class="form-horizontal" ng-show="loggedInRole == 'Admin'" id="eventForm" name="eventForm">
-        <fieldset>            
+        <fieldset>
             <div class="modal-body">
                 <!-- Event Name -->
                 <div class="form-group required" ng-class="{'has-error':eventForm.event_name.$invalid && eventForm.event_name.$dirty}">
                     <label class="col-md-4 control-label req" for="event_name">Event Name:</label>
                     <div class="col-md-5">
-                        <input class="form-control" name="event_name" ng-model="anEvent.event_name" type="text" required />                        
+                        <input class="form-control" name="event_name" ng-model="anEvent.event_name" type="text" required />
                     </div>
                 </div>
 
@@ -50,7 +50,7 @@
                 <div class="form-group">
                     <label class="col-md-4 control-label" for="event_description">Description:</label>
                     <div class="col-md-5">
-                        <textarea class="form-control" type="text" rows="3" ng-model="anEvent.event_description" />                        
+                        <textarea class="form-control" type="text" rows="3" ng-model="anEvent.event_description" />
                     </div>
                 </div>
 
@@ -144,59 +144,62 @@
                             <button type="button" class="btn btn-warning" ng-click="cancel()">Close/Cancel</button>
                         </span>
                     </div>
-                </div>           
+                </div>
             </div><!-- end modal-footer -->
         </fieldset>
     </form>
     <!-- If this is field and manager view -->
     <div ng-show="loggedInRole != 'Admin'">
         <div class="modal-body">
-                <!-- Event Name -->
-                <div class="col-md-12">
-                    <label class="col-md-4 control-label">Event Name:</label>
-                    <div class="col-md-6"><span>{{anEvent.event_name || '---'}}</span></div>
-                </div>
+            <!-- Event Name -->
+            <div class="col-md-12">
+                <label class="col-md-4 control-label">Event Name:</label>
+                <div class="col-md-6"><span>{{anEvent.event_name || '---'}}</span></div>
+            </div>
 
-                <!-- Event Description -->
-                <div class="col-md-12">
-                    <label class="col-md-4 control-label">Description:</label>
-                    <div class="col-md-6"><span>{{anEvent.event_description || '---'}}</span></div>
-                </div>
+            <!-- Event Description -->
+            <div class="col-md-12">
+                <label class="col-md-4 control-label">Description:</label>
+                <div class="col-md-6"><span>{{anEvent.event_description || '---'}}</span></div>
+            </div>
 
-                <!-- Event Start Date -->
-                <div class="col-md-12">
-                    <label class="col-md-4 control-label">Event Start Date:</label>
-                    <div class="col-md-6"><span>{{anEvent.event_start_date || '---' | date: "MM/dd/yyyy"}}</span></div>
-                </div>
+            <!-- Event Start Date -->
+            <div class="col-md-12">
+                <label class="col-md-4 control-label">Event Start Date:</label>
+                <div class="col-md-6"><span>{{anEvent.event_start_date || '---' | date: "MM/dd/yyyy"}}</span></div>
+            </div>
 
-                <!-- Event End Date -->
-                <div class="col-md-12">
-                    <label class="col-md-4 control-label">Event End Date:</label>
-                    <div class="col-md-6"><span>{{anEvent.event_end_date || '---' | date: "MM/dd/yyyy"}}</span></div>
-                </div>
+            <!-- Event End Date -->
+            <div class="col-md-12">
+                <label class="col-md-4 control-label">Event End Date:</label>
+                <div class="col-md-6"><span>{{anEvent.event_end_date || '---' | date: "MM/dd/yyyy"}}</span></div>
+            </div>
 
-                <!-- Event Type -->
-                <div class="col-md-12">
-                    <label class="col-md-4 control-label">Event Type:</label>
-                    <div class="col-md-6"><span>{{anEvent.Type || '---'}}</span></div>
-                </div>
+            <!-- Event Type -->
+            <div class="col-md-12">
+                <label class="col-md-4 control-label">Event Type:</label>
+                <div class="col-md-6"><span>{{anEvent.Type || '---'}}</span></div>
+            </div>
 
-                <!-- Event Status -->
-                <div class="col-md-12">
-                    <label class="col-md-4 control-label">Event Status:</label>
-                    <div class="col-md-6"><span>{{anEvent.Status || '---'}}</span></div>
-                </div>
+            <!-- Event Status -->
+            <div class="col-md-12">
+                <label class="col-md-4 control-label">Event Status:</label>
+                <div class="col-md-6"><span>{{anEvent.Status || '---'}}</span></div>
+            </div>
 
-                <!-- Event Coordinator -->
-                <div class="col-md-12">
-                    <label class="col-md-4 control-label">Event Coordinator:</label>
-                    <div class="col-md-6"><span>{{anEvent.Coord || '---'}}</span></div>
-                </div>
-            </div><!-- end modal-body-->
-        <br clear="all"/>
+            <!-- Event Coordinator -->
+            <div class="col-md-12">
+                <label class="col-md-4 control-label">Event Coordinator:</label>
+                <div class="col-md-6"><span>{{anEvent.Coord || '---'}}</span></div>
+            </div>
+        </div><!-- end modal-body-->
+        <br clear="all" />
         <div class="modal-footer">
             <div class="form-group">
-                <div class="col-md-12">                    
+                <div class="col-md-12">
+                    <!--<span>
+                        <a class="btn btn-primary" ui-sref="historicHWMs({id: anEvent.event_id })">Upload Historic HWMs</a>
+                    </span>-->
                     <span>
                         <button type="button" class="btn btn-warning" ng-click="cancel()">Close/Cancel</button>
                     </span>

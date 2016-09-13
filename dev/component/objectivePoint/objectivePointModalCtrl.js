@@ -2,8 +2,8 @@
     'use strict';
 
     var ModalControllers = angular.module('ModalControllers');
-    ModalControllers.controller('OPmodalCtrl', ['$scope', '$rootScope', '$cookies', '$http', '$sce', '$uibModalInstance', '$uibModal', 'SERVER_URL', 'Site_Files', 'allDropdowns', 'thisOP', 'thisOPControls', 'opSite', 'agencyList', 'allMembers', 'OBJECTIVE_POINT', 'OP_CONTROL_IDENTIFIER', 'OP_MEASURE', 'SOURCE', 'FILE',
-        function ($scope, $rootScope, $cookies, $http, $sce, $uibModalInstance, $uibModal, SERVER_URL, Site_Files, allDropdowns, thisOP, thisOPControls, opSite, agencyList, allMembers, OBJECTIVE_POINT, OP_CONTROL_IDENTIFIER, OP_MEASURE, SOURCE, FILE) {
+    ModalControllers.controller('OPmodalCtrl', ['$scope', '$rootScope', '$cookies', '$http', '$sce', '$uibModalInstance', '$uibModal', 'SERVER_URL', 'FILE_STAMP', 'Site_Files', 'allDropdowns', 'thisOP', 'thisOPControls', 'opSite', 'agencyList', 'allMembers', 'OBJECTIVE_POINT', 'OP_CONTROL_IDENTIFIER', 'OP_MEASURE', 'SOURCE', 'FILE',
+        function ($scope, $rootScope, $cookies, $http, $sce, $uibModalInstance, $uibModal, SERVER_URL, FILE_STAMP, Site_Files, allDropdowns, thisOP, thisOPControls, opSite, agencyList, allMembers, OBJECTIVE_POINT, OP_CONTROL_IDENTIFIER, OP_MEASURE, SOURCE, FILE) {
             //defaults for radio buttons
             //dropdowns
             $scope.serverURL = SERVER_URL;
@@ -36,6 +36,70 @@
             };
             
             //#region FILE STUFF
+            $scope.stamp = FILE_STAMP.getStamp(); $scope.fileItemExists = true;
+            //need to reupload fileItem to this existing file OR Change out existing fileItem for new one
+            $scope.saveFileUpload = function () {
+                $http.defaults.headers.common.Authorization = 'Basic ' + $cookies.get('STNCreds');
+                $http.defaults.headers.common.Accept = 'application/json';
+                $scope.sFileIsUploading = true;
+                var fileParts = {
+                    FileEntity: {
+                        file_id: $scope.aFile.file_id,
+                        name: $scope.aFile.name,
+                        description: $scope.aFile.description,
+                        photo_direction: $scope.aFile.photo_direction,
+                        latitude_dd: $scope.aFile.latitude_dd,
+                        longitude_dd: $scope.aFile.longitude_dd,
+                        file_date: $scope.aFile.file_date,
+                        hwm_id: $scope.aFile.hwm_id,
+                        site_id: $scope.aFile.site_id,
+                        filetype_id: $scope.aFile.filetype_id,
+                        source_id: $scope.aFile.source_id,
+                        path: $scope.aFile.path,
+                        data_file_id: $scope.aFile.data_file_id,
+                        instrument_id: $scope.aFile.instrument_id,
+                        photo_date: $scope.aFile.photo_date,
+                        is_nwis: $scope.aFile.is_nwis,
+                        objective_point_id: $scope.aFile.objective_point_id
+                    },
+                    File: $scope.aFile.File1 !== undefined ? $scope.aFile.File1 : $scope.aFile.File
+                };
+                //need to put the fileParts into correct format for post
+                var fd = new FormData();
+                fd.append("FileEntity", JSON.stringify(fileParts.FileEntity));
+                fd.append("File", fileParts.File);
+                //now POST it (fileparts)
+                FILE.uploadFile(fd).$promise.then(function (fresponse) {
+                    toastr.success("File Uploaded");
+                    fresponse.fileBelongsTo = "Objective Point File";
+                    $scope.src = $scope.serverURL + '/Files/' + $scope.aFile.file_id + '/Item' + FILE_STAMP.getStamp();
+                    FILE_STAMP.setStamp();
+                    $scope.stamp = FILE_STAMP.getStamp();
+                    if ($scope.aFile.File1.type.indexOf("image") > -1) {
+                        $scope.isPhoto = true;
+                    } else $scope.isPhoto = false;
+                    $scope.aFile.name = fresponse.name; $scope.aFile.path = fresponse.path;
+                    if ($scope.aFile.File1 !== undefined) {
+                        $scope.aFile.File = $scope.aFile.File1;
+                        $scope.aFile.File1 = undefined; //put it as file and remove it from 1
+                    }
+                    $scope.OPFiles.splice($scope.existFileIndex, 1);
+                    $scope.OPFiles.push(fresponse);
+                    if (fresponse.filetype_id === 1) {
+                        $scope.opImageFiles.splice($scope.existFileIndex, 1);
+                        $scope.opImageFiles.push(fresponse);
+
+                    }
+                    $scope.allSFiles[$scope.allSFileIndex] = fresponse;
+                    Site_Files.setAllSiteFiles($scope.allSFiles); //updates the file list on the sitedashboard
+                    $scope.sFileIsUploading = false;
+                    $scope.fileItemExists = true;
+                }, function (errorResponse) {
+                    $scope.sFileIsUploading = false;
+                    toastr.error("Error saving file: " + errorResponse.statusText);
+                });
+            };
+
             //show a modal with the larger image as a preview on the photo file for this op
             $scope.showImageModal = function (image) {
                 var imageModal = $uibModal.open({
@@ -66,6 +130,19 @@
                     $scope.existFileIndex = $scope.OPFiles.indexOf(file); $scope.allSFileIndex = $scope.allSFiles.indexOf(file);
                     $scope.existIMGFileIndex = $scope.opImageFiles.length > 0 ? $scope.opImageFiles.indexOf(file) : -1;
                     $scope.aFile = angular.copy(file);
+                    $scope.aFile.fileType = $scope.fileTypeList.filter(function (ft) { return ft.filetype_id == $scope.aFile.filetype_id; })[0].filetype;
+                    FILE.getFileItem({ id: $scope.aFile.file_id }).$promise.then(function (response) {
+                        $scope.fileItemExists = response.Length > 0 ? true : false;
+                    });
+                    //determine if existing file is a photo (even if type is not )
+                    if ($scope.aFile.name !== undefined) {
+                        var fI = $scope.aFile.name.lastIndexOf(".");
+                        var fileExt = $scope.aFile.name.substring(fI + 1);
+                        if (fileExt.match(/(jpg|JPG|jpeg|JPEG|png|PNG|gif|GIF)$/)) {
+                            $scope.isPhoto = true;
+                        } else $scope.isPhoto = false;
+                    }
+                    $scope.src = $scope.serverURL + '/Files/' + $scope.aFile.file_id + '/Item' + FILE_STAMP.getStamp();
                     $scope.aFile.file_date = new Date($scope.aFile.file_date); //date for validity of form on PUT
                     if ($scope.aFile.photo_date !== undefined) $scope.aFile.photo_date = new Date($scope.aFile.photo_date); //date for validity of form on PUT
                     if (file.source_id !== null) {
@@ -129,6 +206,7 @@
                                 $scope.OPFiles.push(fresponse);
                                 $scope.allSFiles.push(fresponse);
                                 Site_Files.setAllSiteFiles($scope.allSFiles); //updates the file list on the sitedashboard
+                                FILE_STAMP.setStamp(); //hopefully update the files in the carousel ???
                                 if (fresponse.filetype_id === 1) $scope.opImageFiles.push(fresponse);
                                 $scope.showFileForm = false; $scope.fileIsUploading = false;
                             }, function (errorResponse) {

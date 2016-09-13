@@ -37,7 +37,7 @@
                 var dateWOtime = new Date(monthNames[month] + " " + day + ", " + year);
                 return dateWOtime;
             }; //end makeAdate()
-
+            
             if (thisEvent != "empty") {
                 $scope.anEvent = angular.copy(thisEvent);
                 $scope.anEvent.event_start_date = $scope.anEvent.event_start_date !== undefined ? makeAdate($scope.anEvent.event_start_date) : '';

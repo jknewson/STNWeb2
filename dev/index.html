@@ -15,6 +15,7 @@
     <link rel="stylesheet" href="bower_components/bootstrap-theme.css">
     <link rel="stylesheet" href="bower_components/bootstrap.css">
     <link rel="stylesheet" href="bower_components/datetimepicker.css">
+    <link rel="stylesheet" href="bower_components/handsontable.full.css">
     <link rel="stylesheet" href="bower_components/isteven-multi-select.css">
     <link rel="stylesheet" href="bower_components/l.geosearch.css">
     <link rel="stylesheet" href="bower_components/ladda.min.css">
@@ -25,6 +26,7 @@
     <link rel="stylesheet" href="bower_components/mobile-angular-ui-desktop.css">
     <link rel="stylesheet" href="bower_components/mobile-angular-ui-hover.css">
     <link rel="stylesheet" href="bower_components/ng-tags-input.min.css">
+    <link rel="stylesheet" href="bower_components/pikaday.css">
     <link rel="stylesheet" href="bower_components/select.css">
     <link rel="stylesheet" href="bower_components/toaster.css">
     <link rel="stylesheet" href="bower_components/toastr.css">
@@ -68,6 +70,7 @@
     <script src="bower_components/datetimepicker.js"></script>
     <script src="bower_components/event.js"></script>
     <script src="bower_components/EventHandler.js"></script>
+    <script src="bower_components/handsontable.full.js"></script>
     <script src="bower_components/indeterminate.js"></script>
     <script src="bower_components/index.js"></script>
     <script src="bower_components/isteven-multi-select.js"></script>
@@ -82,8 +85,11 @@
     <script src="bower_components/mask.js"></script>
     <script src="bower_components/mobile-angular-ui.gestures.js"></script>
     <script src="bower_components/mobile-angular-ui.js"></script>
+    <script src="bower_components/moment.js"></script>
     <script src="bower_components/ng-file-upload.js"></script>
     <script src="bower_components/ng-tags-input.min.js"></script>
+    <script src="bower_components/ngHandsontable.js"></script>
+    <script src="bower_components/pikaday.js"></script>
     <script src="bower_components/scrollpoint.js"></script>
     <script src="bower_components/select.js"></script>
     <script src="bower_components/spin.js"></script>
@@ -94,6 +100,7 @@
     <script src="bower_components/uploader.js"></script>
     <script src="bower_components/validate.js"></script>
     <script src="bower_components/xeditable.js"></script>
+    <script src="bower_components/ZeroClipboard.js"></script>
     <!-- endinject -->
 
     <!-- inject:js -->
@@ -108,16 +115,17 @@
     <script src="component/sensor/sensorModalCtrl.js"></script>
     <script src="component/sensor/sensorCtrl.js"></script>
     <script src="component/resources/resourcesCtrl.js"></script>
+    <script src="component/peak/peakModalCtrl.js"></script>
+    <script src="component/peak/peakCtrl.js"></script>
     <script src="component/reporting/submitReportCtrl.js"></script>
     <script src="component/reporting/reportModalCtrl.js"></script>
     <script src="component/reporting/reportingDashboardCtrl.js"></script>
     <script src="component/reporting/reportingCtrl.js"></script>
     <script src="component/reporting/projectAlertModalCtrl.js"></script>
     <script src="component/reporting/confirmReportModalCtrl.js"></script>
-    <script src="component/peak/peakModalCtrl.js"></script>
-    <script src="component/peak/peakCtrl.js"></script>
     <script src="component/objectivePoint/objectivePointModalCtrl.js"></script>
     <script src="component/objectivePoint/objectivePointCtrl.js"></script>
+    <script src="component/main/mainCtrl.js"></script>
     <script src="component/member/memberModalCtrl.js"></script>
     <script src="component/member/memberInfoCtrl.js"></script>
     <script src="component/member/memberCtrl.js"></script>
@@ -126,13 +134,12 @@
     <script src="component/map/MapPeaksController.js"></script>
     <script src="component/map/MapFiltersController.js"></script>
     <script src="component/map/mapCtrl.js"></script>
-    <script src="component/main/mainCtrl.js"></script>
     <script src="component/logInOut/logInOutCtrl.js"></script>
     <script src="component/hwm/quickHWMCtrl.js"></script>
     <script src="component/hwm/hwmModalCtrl.js"></script>
     <script src="component/hwm/hwmCtrl.js"></script>
+    <script src="component/hwm/historicHWMCtrl.js"></script>
     <script src="component/home/homeCtrl.js"></script>
-    <script src="component/help/helpCtrl.js"></script>
     <script src="component/file/fileUploadCtrl.js"></script>
     <script src="component/file/fileModalCtrl.js"></script>
     <script src="component/file/fileCtrl.js"></script>
@@ -140,6 +147,7 @@
     <script src="component/event/eventSessionCtrl.js"></script>
     <script src="component/event/eventModalCtrl.js"></script>
     <script src="component/event/eventCtrl.js"></script>
+    <script src="component/help/helpCtrl.js"></script>
     <script src="component/approval/approvalCtrl.js"></script>
     <script src="services/STNResource.js"></script>
     <script src="services/businessServices.js"></script>
@@ -154,12 +162,11 @@
     <!--<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?v=3.exp"></script>-->
     <script src="//d3js.org/d3.v3.min.js" charset="utf-8"></script>
 
+  
     <!-- Not working in Bower -->
     <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
     <script src="bower_components/angular-ui-router.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-router/0.3.0/angular-ui-router.js"></script>
-
-
 
 
 </head>

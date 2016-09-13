@@ -4,7 +4,7 @@
     //look up common service module, and register the new factory with that module 
     var STNResource = angular.module('STNResource', ['ngResource']);
     var rootURL = "https://stn.wim.usgs.gov/STNServices";
-    // var rootURL = "https://stntest.wim.usgs.gov/STNServices2";
+   //  var rootURL = "https://stntest.wim.usgs.gov/STNServices2";
     // var rootURL = "http://localhost/STNServices2";
    
     //#region GEOCODE https://geocoding.geo.census.gov/geocoder/geographies/coordinates?benchmark=4&vintage=4&format=json
@@ -105,7 +105,21 @@
                 delete: { method: 'DELETE', cache: false, isArray: false }
             });
     }]);
-    //#endregion of DEPLOYMENT_TYPE
+    //#endregion of DEPLOYMENT_TYPE    
+    //#region EVENT
+    STNResource.factory('EVENT', ['$resource', function ($resource) {
+        return $resource(rootURL + '/Events/:id.json',
+            {}, {
+                query: {},
+                getAll: { method: 'GET', isArray: true },
+                getEventSites: {method: 'GET', isArray:true, url: rootURL + '/Events/:id/Sites.json'},
+                getFilteredEvents: {method: 'GET', isArray: true, url: rootURL + '/Events/FilteredEvents.json'}, //?Date: null, Type: 0, State: null
+                update: { method: 'PUT', cache: false, isArray: false },
+                save: { method: 'POST', cache: false, isArray: false },
+                delete: { method: 'DELETE', cache: false, isArray: false }
+            });
+    }]);
+    //#endregion of EVENT
     //#region EVENT_STATUS
     STNResource.factory('EVENT_STATUS', ['$resource', function ($resource) {
         return $resource(rootURL + '/EventStatus/:id.json',
@@ -129,33 +143,7 @@
                 delete: { method: 'DELETE', cache: false, isArray: false }
             });
     }]);
-    //#endregion of EVENT_TYPE
-    //#region FILE_TYPE
-    STNResource.factory('FILE_TYPE', ['$resource', function ($resource) {
-        return $resource(rootURL + '/FileTypes/:id.json',
-            {}, {
-                query: {},
-                getAll: { method: 'GET', isArray: true },
-                update: { method: 'PUT', cache: false, isArray: false },
-                save: { method: 'POST', cache: false, isArray: false },
-                delete: { method: 'DELETE', cache: false, isArray: false }
-            });
-    }]);
-    //#endregion of FILE_TYPE   
-    //#region EVENT
-    STNResource.factory('EVENT', ['$resource', function ($resource) {
-        return $resource(rootURL + '/Events/:id.json',
-            {}, {
-                query: {},
-                getAll: { method: 'GET', isArray: true },
-                getEventSites: {method: 'GET', isArray:true, url: rootURL + '/Events/:id/Sites.json'},
-                getFilteredEvents: {method: 'GET', isArray: true, url: rootURL + '/Events/FilteredEvents.json'}, //?Date: null, Type: 0, State: null
-                update: { method: 'PUT', cache: false, isArray: false },
-                save: { method: 'POST', cache: false, isArray: false },
-                delete: { method: 'DELETE', cache: false, isArray: false }
-            });
-    }]);
-    //#endregion of EVENT
+    //#endregion of EVENT_TYPE   
     //#region FILE
     STNResource.factory('FILE', ['$resource', function ($resource) {
         return $resource(rootURL + '/Files/:id.json',
@@ -169,7 +157,34 @@
                 delete: { method: 'DELETE', cache: false, isArray: false }
             });
     }]);
-    //#endregion of FILE
+    //#endregion of FILE 
+    //#region photoFileStamp
+    STNResource.factory('FILE_STAMP', ['$rootScope', function ($rootScope) {
+        //need to update the ng-src on photo files if one changes, update the stamp part of the image to refresh the link        
+        return {
+            getStamp: function () {
+                var stamp = '?' + new Date().getTime();
+                return stamp;
+            },
+            setStamp: function () {
+                var stamp = '?' + new Date().getTime();
+                $rootScope.$broadcast('fileStampSet', stamp);
+            }
+        };
+    }]);
+    //#endregion of HWM_Service
+    //#region FILE_TYPE
+    STNResource.factory('FILE_TYPE', ['$resource', function ($resource) {
+        return $resource(rootURL + '/FileTypes/:id.json',
+            {}, {
+                query: {},
+                getAll: { method: 'GET', isArray: true },
+                update: { method: 'PUT', cache: false, isArray: false },
+                save: { method: 'POST', cache: false, isArray: false },
+                delete: { method: 'DELETE', cache: false, isArray: false }
+            });
+    }]);
+    //#endregion of FILE_TYPE   
     //#region HORIZONTAL_COLL_METHODS
     STNResource.factory('HORIZONTAL_COLL_METHODS', ['$resource', function ($resource) {
         return $resource(rootURL + '/HorizontalMethods/:id.json',

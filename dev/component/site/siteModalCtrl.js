@@ -383,11 +383,9 @@
                     $http.defaults.headers.common.Authorization = 'Basic ' + $cookies.get('STNCreds');
                     $http.defaults.headers.common.Accept = 'application/json';
                     //did they add or edit the landowner
-                    //TODO :: check if the landowner fields are $dirty first..
-                
                     if ($scope.addLandowner === true) {
                         //there's a landowner.. edit or add?
-                        if ($scope.aSite.landownercontact_id !== null && $scope.aSite.landownercontact_id !== undefined) {
+                        if ($scope.aSite.landownercontact_id !== null && $scope.aSite.landownercontact_id !== undefined && $scope.aSite.landownercontact_id > 0) {
                             //did they change anything to warrent a put
                             LANDOWNER_CONTACT.update({ id: $scope.aSite.landownercontact_id }, $scope.landowner).$promise.then(function () {
                                 putSiteAndParts();
@@ -406,7 +404,10 @@
             var putSiteAndParts = function () {
                 if ($scope.DMS.LADeg !== undefined) $scope.aSite.latitude_dd = azimuth($scope.DMS.LADeg, $scope.DMS.LAMin, $scope.DMS.LASec);
                 if ($scope.DMS.LODeg !== undefined) $scope.aSite.longitude_dd = azimuth($scope.DMS.LODeg, $scope.DMS.LOMin, $scope.DMS.LOSec);
-                SITE.update({ id: $scope.aSite.site_id }, $scope.aSite, function success(response) {
+                var updateSite = angular.copy($scope.aSite);
+                delete updateSite.Creator; delete updateSite.HorizontalCollectMethod; delete updateSite.HorizontalDatum; delete updateSite.PriorityName;
+                delete updateSite.decDegORdms; 
+                SITE.update({ id: $scope.aSite.site_id }, updateSite, function success(response) {
                     //update site housings
                     var defer = $q.defer();
                     var RemovePromises = [];
