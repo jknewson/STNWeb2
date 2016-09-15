@@ -24,7 +24,7 @@
             $scope.showFileForm = false; //hidden form to add file to hwm
             $scope.userRole = $cookies.get('usersRole');
             $scope.FlagMember = ""; //just for show on page
-            $scope.SurveyMember = ""; //just for show on page
+            //$scope.SurveyMember = ""; //just for show on page
             $scope.showEventDD = false; //toggle to show/hide event dd (admin only)
             $scope.adminChanged = {}; //will hold event_id if admin changes it. apply when PUTting
             $scope.serverURL = SERVER_URL; //constant with stntest.wim.usgs.gov/STNServices2 

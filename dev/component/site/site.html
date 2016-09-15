@@ -2100,7 +2100,7 @@
                                 </div>
                                 <button type="button" class="col-md-1 borderLess pull-left" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="For continuity with older data, a shorthand quality is auto-populated here based on a numeric uncertainty entered above. In addition, three qualities with undefined uncertainties are available.">
                                     <span class="glyphicon glyphicon-question-sign"></span>
-                                </button>                                
+                                </button>
                             </div>
 
                             <!-- Bank: (details) -->
@@ -2238,7 +2238,7 @@
                             <!-- Height above ground (ft):  (details)-->
                             <div class="col-md-12" ng-if="view.HWMval== 'detail'">
                                 <div class="col-md-4"><label>Height above ground (ft):</label></div>
-                                <div class="col-md-6"><span>{{aHWM.height_above_gnd || '---'}}</span></div>
+                                <div class="col-md-6"><span>{{aHWM.height_above_gnd == '0' ? '0.00' : aHWM.height_above_gnd}}</span></div>
                             </div>
                             <!-- Height above ground (ft): (edit) -->
                             <div class="form-group" ng-if="view.HWMval== 'edit'">
@@ -2268,7 +2268,21 @@
                                     </span>
                                 </div>
                             </div>
+                            <!-- Flagging Member: (detail) -->
+                            <div class="col-md-12" ng-if="view.HWMval== 'detail'">
+                                <div class="col-md-4"><label>Flagging Member:</label></div>
+                                <div class="col-md-6"><span>{{FlagMember.fname}} {{FlagMember.lname}}</span></div>
+                            </div>
+                            <!-- Flagging Member: (edit) -->
+                            <div class="form-group" ng-if="view.HWMval== 'edit'">
+                                <label class="col-md-4 control-label" for="flag_member_id">Flagging Member:</label>
+                                <div class="col-md-6">
+                                    <span>{{FlagMember.fname}} {{FlagMember.lname}}</span>
+                                </div>
+                            </div>
+
                             <br clear="all" /><hr />
+
                             <!-- Surveyed Date: (details) -->
                             <div class="col-md-12" ng-if="view.HWMval== 'detail'">
                                 <div class="col-md-4"><label>Surveyed Date:</label></div>
@@ -2290,6 +2304,19 @@
                                 <button type="button" class="col-md-2 borderLess pull-right" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Elevation required below if survey date is populated.">
                                     <span class="glyphicon glyphicon-question-sign"></span>
                                 </button>
+                            </div>
+
+                            <!-- Survey Member: (detail)-->
+                            <div class="col-md-12" ng-if="SurveyMember && view.HWMval == 'detail'">
+                                <div class="col-md-4"><label>Survey Member:</label></div>
+                                <div class="col-md-6"><span>{{SurveyMember.fname}} {{SurveyMember.lname}}</span></div>
+                            </div>
+                            <!-- Survey Member: (edit) -->
+                            <div class="form-group" ng-if="SurveyMember && view.HWMval == 'edit'">
+                                <label class="col-md-4 control-label" for="survey_member_id">Survey Member:</label>
+                                <div class="col-md-6">
+                                    <span>{{SurveyMember.fname}} {{SurveyMember.lname}}</span>
+                                </div>
                             </div>
 
                             <!-- Surveyed Elevation (ft): (details) -->
@@ -2399,33 +2426,7 @@
                                     <span class="glyphicon glyphicon-question-sign"></span>
                                 </button>
                             </div>
-
-                            <!-- Flagging Member: (detail) -->
-                            <div class="col-md-12" ng-if="view.HWMval== 'detail'">
-                                <div class="col-md-4"><label>Flagging Member:</label></div>
-                                <div class="col-md-6"><span>{{FlagMember.fname}} {{FlagMember.lname}}</span></div>
-                            </div>
-                            <!-- Flagging Member: (edit) -->
-                            <div class="form-group" ng-if="view.HWMval== 'edit'">
-                                <label class="col-md-4 control-label" for="flag_member_id">Flagging Member:</label>
-                                <div class="col-md-6">
-                                    <span>{{FlagMember.fname}} {{FlagMember.lname}}</span>
-                                </div>
-                            </div>
-
-                            <!-- Survey Member: (detail)-->
-                            <div class="form-group" ng-show="SurveyMember.fname && view.hwmval == 'detail'">
-                                <div class=" col-md-4"><label>Survey Member:</label></div>
-                                <div class="col-md-6"><span>{{SurveyMember.fname}} {{SurveyMember.lname}}</span></div>
-                            </div>
-                            <!-- Survey Member: (edit) -->
-                            <div class="form-group" ng-show="SurveyMember.fname && view.HWMval == 'edit'">
-                                <label class="col-md-4 control-label" for="survey_member_id">Survey Member:</label>
-                                <div class="col-md-6">
-                                    <span>{{SurveyMember.fname}} {{SurveyMember.lname}}</span>
-                                </div>
-                            </div>
-
+                                                       
                             <!-- Approval info (detail) -->
                             <div class="form-group" ng-show="ApprovalInfo.Member !==undefined">
                                 <label class="col-md-4 control-label" for="approval_id">Approval Info:</label>
