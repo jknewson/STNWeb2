@@ -473,7 +473,7 @@
                         $scope.hwmCopy.event_id = $scope.adminChanged.event_id;
                     }
                     //if they added a survey date, apply survey member as logged in member
-                    if ($scope.hwmCopy.survey_date !== undefined)
+                    if ($scope.hwmCopy.survey_date !== undefined && $scope.hwmCopy.survey_member_id === undefined)
                         $scope.hwmCopy.survey_member_id = $cookies.get('mID');
 
                     if ($scope.FTorCM == "cm") {
@@ -487,7 +487,8 @@
                         if ($scope.hwmCopy.survey_date === undefined)
                             $scope.hwmCopy.survey_date = makeAdate("");
 
-                        $scope.hwmCopy.survey_member_id = $cookies.get('mID');
+                        if ($scope.hwmCopy.survey_member_id === undefined)
+                            $scope.hwmCopy.survey_member_id = $cookies.get('mID');
                     }
 
                     $http.defaults.headers.common.Authorization = 'Basic ' + $cookies.get('STNCreds');

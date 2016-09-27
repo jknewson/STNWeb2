@@ -87,7 +87,7 @@
                 if (valid) {
                     $http.defaults.headers.common.Authorization = 'Basic ' + $cookies.get('STNCreds');
                     $http.defaults.headers.common.Accept = 'application/json';
-                    if ($scope.pass.newP !== undefined) $scope.aMember.password = btoa($scope.pass.newP);
+                    if ($scope.pass.newP !== "") $scope.aMember.password = btoa($scope.pass.newP);
                     var updatedMember = {};
                     var formattedMember = angular.copy($scope.aMember);
                     
@@ -103,7 +103,9 @@
                         if ($scope.loggedInUser.ID == response.member_id) {
                             if ($scope.aMember.password !== undefined) {
                                 var enc = btoa(updatedMember.username.concat(":", $scope.pass.newP));
-                                $cookies.put('STNCreds', enc);
+                                //set expiration on cookies
+                                var expireDate = new Date().addHours(8);
+                                $cookies.put('STNCreds', enc, { expires: expireDate });                                
                             }
                             $cookies.put('STNUsername', updatedMember.username);
                             var usersNAME = updatedMember.fname + " " + updatedMember.lname;
