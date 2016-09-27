@@ -137,7 +137,8 @@
                             <input class="form-control" ng-model="pass.newP" name="NPASSWORD" type="password" password-validate />
                         </div>
                         <span class="ui-state-error h5-message" ng-show="(accountForm.NPASSWORD.$error.passwordValidate)">
-                            <span class="h5-arrow"></span><span style="display:inline-block" class="h5-content">For password requirement, click the '?' icon.</span>
+                            <span class="h5-arrow"></span>
+                            <span style="display:inline-block" class="h5-content">For password requirement, click the '?' icon.</span>
                         </span>
                     </div>
                     <div class="form-group">
@@ -150,7 +151,7 @@
                             <span class="glyphicon glyphicon-question-sign"></span>
                         </button>
                     </div>
-                    
+
                     <!--END new password inputs-->
                     <!--START update/cancel button-->
                     <div class="form-group">
@@ -173,7 +174,10 @@
                     <label class="col-md-4 control-label" for="Password">Password:</label>
                     <div class="col-md-5">
                         <input class="form-control" ng-model="pass.newP" name="NPASSWORD" id="NPASSWORD" type="password" password-validate required />
-                        <span class="ui-state-error h5-message" ng-show="(accountForm.NPASSWORD.$error.passwordValidate)"><span class="h5-arrow"></span><span class="h5-content">For password requirement, hover over the '?' icon.</span></span>
+                        <span class="ui-state-error h5-message" ng-show="(accountForm.NPASSWORD.$error.passwordValidate)">
+                            <span class="h5-arrow"></span>
+                            <span class="h5-content">For password requirement, hover over the '?' icon.</span>
+                        </span>
                     </div>&nbsp;
                     <button type="button" class="borderLess" tooltip-placement="right" tooltip-append-to-body="false" uib-tooltip="Password must be at least 8 characters long, contain at least 1 uppercase, 1 lowercase and 1 numeric. Passwords may contain any of these special characters ONLY: '_', '$', '#'">
                         <span class="glyphicon glyphicon-question-sign"></span>
