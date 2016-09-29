@@ -1440,7 +1440,7 @@
                                         <!-- Photo Date* (photo) -->
                                         <div ng-if="aFile.filetype_id === 1" class="form-group required" ng-class="{'has-error':OPFILEForm.photo_date.$invalid && OPFILEForm.photo_date.$dirty}" style="margin:0;padding:0">
                                             <label class="col-md-4 control-label req" for="photo_date">Photo Date:</label>
-                                            <div class="col-md-3 input-group" style="padding-right:14px;padding-left:14px">
+                                            <div class="col-md-4 input-group" style="padding-right:14px;padding-left:14px">
                                                 <input class="form-control dateInputStyle" type="date" name="sd" uib-datepicker-popup="MM/dd/yyyy" show-weeks="false" is-open="datepickrs.sd" ng-model="aFile.photo_date" required />
                                                 <span class="input-group-btn">
                                                     <button type="button" class="btn btn-default" ng-click="open($event, 'sd')">
@@ -1453,7 +1453,7 @@
                                         <!-- Date Uploaded* (photo, data, allother) -->
                                         <div ng-if="aFile.filetype_id > 0" class="form-group required" ng-class="{'has-error':OPFILEForm.file_date.$invalid && OPFILEForm.file_date.$dirty}" style="margin:0;padding:0">
                                             <label class="col-md-4 control-label req" for="file_date">Date Uploaded:</label>
-                                            <div class="col-md-3 input-group" style="padding-right:14px;padding-left:14px">
+                                            <div class="col-md-4 input-group" style="padding-right:14px;padding-left:14px">
                                                 <input class="form-control dateInputStyle" type="date" name="fd" uib-datepicker-popup="MM/dd/yyyy" show-weeks="false" is-open="datepickrs.fd" ng-model="aFile.file_date" required />
                                                 <span class="input-group-btn">
                                                     <button type="button" class="btn btn-default" ng-click="open($event, 'fd')">
@@ -2251,14 +2251,14 @@
                             <!-- Flag/Found Date: * (details) -->
                             <div class="col-md-12" ng-if="view.HWMval== 'detail'">
                                 <div class="col-md-4"><label>Flag/Found Date:</label></div>
-                                <div class="col-md-3 input-group" style="padding-right:14px;padding-left:14px">
+                                <div class="col-md-4 input-group" style="padding-right:14px;padding-left:14px">
                                     <span>{{aHWM.flag_date | date: 'MM/dd/yyyy'}}</span>
                                 </div>
                             </div>
                             <!-- Flag/Found Date: * (edit) -->
                             <div class="form-group required" ng-class="{'has-error':HWMEditForm.flag_date.$invalid && HWMEditForm.flag_date.$dirty}" ng-if="view.HWMval== 'edit'">
                                 <label class="col-md-4 control-label req" for="flag_date">Flag/Found Date:</label>
-                                <div class="col-md-3 input-group" style="padding-right:14px;padding-left:14px">
+                                <div class="col-md-4 input-group" style="padding-right:14px;padding-left:14px">
                                     <input show-weeks="false" class="form-control dateInputStyle" type="date" id="flag_date" name="fd" uib-datepicker-popup="MM/dd/yyyy"
                                            is-open="datepickrs.fd" ng-model="hwmCopy.flag_date" required />
                                     <span class="input-group-btn">
@@ -2286,14 +2286,14 @@
                             <!-- Surveyed Date: (details) -->
                             <div class="col-md-12" ng-if="view.HWMval== 'detail'">
                                 <div class="col-md-4"><label>Surveyed Date:</label></div>
-                                <div class="col-md-3">
+                                <div class="col-md-4">
                                     <span>{{aHWM.survey_date || '---' | date: 'MM/dd/yyyy' }}</span>
                                 </div>
                             </div>
                             <!-- Surveyed Date: (edit) -->
                             <div class="form-group" ng-class="{'has-error':HWMEditForm.survey_date.$invalid && HWMEditForm.survey_date.$dirty}" ng-if="view.HWMval== 'edit'">
                                 <label class="col-md-4 control-label" for="survey_date">Surveyed Date:</label>
-                                <div class="col-md-3 input-group" style="padding-right:14px;padding-left:14px">
+                                <div class="col-md-4 input-group" style="padding-right:14px;padding-left:14px">
                                     <input show-weeks="false" class="form-control dateInputStyle" type="date" id="survey_date" name="sd" uib-datepicker-popup="MM/dd/yyyy" is-open="datepickrs.sd" ng-model="hwmCopy.survey_date" />
                                     <span class="input-group-btn">
                                         <button class="btn btn-default" ng-click="open($event, 'sd')" type="button">
@@ -2549,7 +2549,7 @@
                                         <!-- Photo Date* (photo) -->
                                         <div ng-if="aFile.filetype_id === 1" class="form-group required" ng-class="{'has-error':HWMFILEForm.photo_date.$invalid && HWMFILEForm.photo_date.$dirty}" style="margin:0;padding:0">
                                             <label class="col-md-3 control-label req" for="photo_date">Photo Date:</label>
-                                            <div class="col-md-3 input-group" style="padding-right:14px;padding-left:14px">
+                                            <div class="col-md-4 input-group" style="padding-right:14px;padding-left:14px">
                                                 <input class="form-control dateInputStyle" type="date" name="sd" uib-datepicker-popup="MM/dd/yyyy" show-weeks="false" is-open="datepickrs.sd" ng-model="aFile.photo_date" required />
                                                 <span class="input-group-btn">
                                                     <button type="button" class="btn btn-default" ng-click="open($event, 'sd')">
@@ -2562,7 +2562,7 @@
                                         <!-- Date Uploaded* (photo, data, allother) -->
                                         <div ng-if="aFile.filetype_id > 0" class="form-group required" ng-class="{'has-error':HWMFILEForm.file_date.$invalid && HWMFILEForm.file_date.$dirty}" style="margin:0;padding:0">
                                             <label class="col-md-3 control-label req" for="file_date">Date Uploaded:</label>
-                                            <div class="col-md-3 input-group" style="padding-right:14px;padding-left:14px">
+                                            <div class="col-md-4 input-group" style="padding-right:14px;padding-left:14px">
                                                 <input class="form-control dateInputStyle" type="date" name="fd" uib-datepicker-popup="MM/dd/yyyy" show-weeks="false" is-open="datepickrs.fd" ng-model="aFile.file_date" required />
                                                 <span class="input-group-btn">
                                                     <button type="button" class="btn btn-default" ng-click="open($event, 'fd')">
@@ -3605,7 +3605,7 @@
                                 <!-- Date Collected/Processed* (data)-->
                                 <div ng-if="aFile.filetype_id === 2" class="form-group required" ng-class="{'has-error':DepSenFILEForm.collect_date.$invalid && DepSenFILEForm.collect_date.$dirty}" style="margin:0;padding:0">
                                     <label class="col-md-4 control-label req" for="collect_date">Date Collected/Processed:</label>
-                                    <div class="col-md-3 input-group" style="padding-right:14px;padding-left:14px">
+                                    <div class="col-md-4 input-group" style="padding-right:14px;padding-left:14px">
                                         <input class="form-control dateInputStyle" type="date" name="dfcd" uib-datepicker-popup="MM/dd/yyyy" show-weeks="false" is-open="datepickrs.dfcd" ng-model="datafile.collect_date" required />
                                         <span class="input-group-btn">
                                             <button class="btn btn-default" type="button" ng-click="open($event, 'dfcd')">
@@ -3645,7 +3645,7 @@
                                 <!-- Photo Date * (photo) -->
                                 <div ng-if="aFile.filetype_id === 1" class="form-group required" ng-class="{'has-error':DepSenFILEForm.photo_date.$invalid && DepSenFILEForm.photo_date.$dirty}" style="margin:0;padding:0">
                                     <label class="col-md-4 control-label req" for="photo_date">Photo Date:</label>
-                                    <div class="col-md-3 input-group" style="padding-right:14px;padding-left:14px">
+                                    <div class="col-md-4 input-group" style="padding-right:14px;padding-left:14px">
                                         <input class="form-control dateInputStyle" type="date" name="sd" uib-datepicker-popup="MM/dd/yyyy" show-weeks="false" is-open="datepickrs.sd" ng-model="aFile.photo_date" required />
                                         <span class="input-group-btn">
                                             <button class="btn btn-default" type="button" ng-click="open($event, 'sd')">
@@ -3658,7 +3658,7 @@
                                 <!-- Date Uploaded* (photo, data, allother) -->
                                 <div ng-if="aFile.filetype_id > 0" class="form-group required" ng-class="{'has-error':DepSenFILEForm.file_date.$invalid && DepSenFILEForm.file_date.$dirty}" style="margin:0;padding:0">
                                     <label class="col-md-4 control-label req" for="file_date">Date Uploaded:</label>
-                                    <div class="col-md-3 input-group" style="padding-right:14px;padding-left:14px">
+                                    <div class="col-md-4 input-group" style="padding-right:14px;padding-left:14px">
                                         <input class="form-control dateInputStyle" type="date" name="fd" uib-datepicker-popup="MM/dd/yyyy" show-weeks="false" is-open="datepickrs.fd" ng-model="aFile.file_date" required />
                                         <span class="input-group-btn">
                                             <button class="btn btn-default" type="button" ng-click="open($event, 'fd')">
@@ -3890,7 +3890,7 @@
                                     <!-- Date Collected/Processed* (data)-->
                                     <div class="form-group required" ng-class="{'has-error':NWISSenFILEForm.collect_date.$invalid && NWISSenFILEForm.collect_date.$dirty}" style="margin:0;padding:0">
                                         <label class="col-md-4 control-label req" for="collect_date">Date Collected/Processed:</label>
-                                        <div class="col-md-3 input-group" style="padding-right:14px;padding-left:14px">
+                                        <div class="col-md-4 input-group" style="padding-right:14px;padding-left:14px">
                                             <input class="form-control dateInputStyle" type="date" name="dfcd" uib-datepicker-popup="MM/dd/yyyy" show-weeks="false" is-open="datepickrs.dfcd" ng-model="NWISDF.collect_date" required />
                                             <span class="input-group-btn">
                                                 <button class="btn btn-default" type="button" ng-click="open($event, 'dfcd')">
@@ -3903,7 +3903,7 @@
                                     <!-- Date Uploaded* -->
                                     <div class="form-group required" ng-class="{'has-error':NWISSenFILEForm.file_date.$invalid && NWISSenFILEForm.file_date.$dirty}" style="margin:0;padding:0">
                                         <label class="col-md-4 control-label req" for="file_date">Date Uploaded:</label>
-                                        <div class="col-md-3 input-group" style="padding-right:14px;padding-left:14px">
+                                        <div class="col-md-4 input-group" style="padding-right:14px;padding-left:14px">
                                             <input class="form-control dateInputStyle" type="date" name="fd" uib-datepicker-popup="MM/dd/yyyy" show-weeks="false" is-open="datepickrs.fd" ng-model="NWISFile.file_date" required />
                                             <span class="input-group-btn">
                                                 <button class="btn btn-default" type="button" ng-click="open($event, 'fd')">
@@ -5135,7 +5135,7 @@
                                 <!-- Date Collected/Processed* (data)-->
                                 <div ng-if="aFile.filetype_id === 2" class="form-group required" ng-class="{'has-error':DepSenFILEForm.collect_date.$invalid && DepSenFILEForm.collect_date.$dirty}" style="margin:0;padding:0">
                                     <label class="col-md-4 control-label req" for="collect_date">Date Collected/Processed:</label>
-                                    <div class="col-md-3 input-group" style="padding-right:14px;padding-left:14px">
+                                    <div class="col-md-4 input-group" style="padding-right:14px;padding-left:14px">
                                         <input class="form-control dateInputStyle" type="date" name="dfcd" uib-datepicker-popup="MM/dd/yyyy" show-weeks="false" is-open="datepickrs.dfcd" ng-model="datafile.collect_date" required />
                                         <span class="input-group-btn">
                                             <button class="btn btn-default" type="button" ng-click="open($event, 'dfcd')">
@@ -5175,7 +5175,7 @@
                                 <!-- Photo Date * (photo) -->
                                 <div ng-if="aFile.filetype_id === 1" class="form-group required" ng-class="{'has-error':DepSenFILEForm.photo_date.$invalid && DepSenFILEForm.photo_date.$dirty}" style="margin:0;padding:0">
                                     <label class="col-md-4 control-label req" for="photo_date">Photo Date:</label>
-                                    <div class="col-md-3 input-group" style="padding-right:14px;padding-left:14px">
+                                    <div class="col-md-4 input-group" style="padding-right:14px;padding-left:14px">
                                         <input class="form-control dateInputStyle" type="date" name="sd" uib-datepicker-popup="MM/dd/yyyy" show-weeks="false" is-open="datepickrs.sd" ng-model="aFile.photo_date" required />
                                         <span class="input-group-btn">
                                             <button class="btn btn-default" type="button" ng-click="open($event, 'sd')">
@@ -5188,7 +5188,7 @@
                                 <!-- Date Uploaded* (photo, data, allother) -->
                                 <div ng-if="aFile.filetype_id > 0" class="form-group required" ng-class="{'has-error':DepSenFILEForm.file_date.$invalid && DepSenFILEForm.file_date.$dirty}" style="margin:0;padding:0">
                                     <label class="col-md-4 control-label req" for="file_date">Date Uploaded:</label>
-                                    <div class="col-md-3 input-group" style="padding-right:14px;padding-left:14px">
+                                    <div class="col-md-4 input-group" style="padding-right:14px;padding-left:14px">
                                         <input class="form-control dateInputStyle" type="date" name="fd" uib-datepicker-popup="MM/dd/yyyy" show-weeks="false" is-open="datepickrs.fd" ng-model="aFile.file_date" required />
                                         <span class="input-group-btn">
                                             <button class="btn btn-default" type="button" ng-click="open($event, 'fd')">
@@ -5439,7 +5439,7 @@
                                     <!-- Date Collected/Processed* (data)-->
                                     <div class="form-group required" ng-class="{'has-error':NWISSenFILEForm.collect_date.$invalid && NWISSenFILEForm.collect_date.$dirty}" style="margin:0;padding:0">
                                         <label class="col-md-4 control-label req" for="collect_date">Date Collected/Processed:</label>
-                                        <div class="col-md-3 input-group" style="padding-right:14px;padding-left:14px">
+                                        <div class="col-md-4 input-group" style="padding-right:14px;padding-left:14px">
                                             <input class="form-control dateInputStyle" type="date" name="dfcd" uib-datepicker-popup="MM/dd/yyyy" show-weeks="false" is-open="datepickrs.dfcd" ng-model="NWISDF.collect_date" required />
                                             <span class="input-group-btn">
                                                 <button class="btn btn-default" type="button" ng-click="open($event, 'dfcd')">
@@ -5452,7 +5452,7 @@
                                     <!-- Date Uploaded* -->
                                     <div class="form-group required" ng-class="{'has-error':NWISSenFILEForm.file_date.$invalid && NWISSenFILEForm.file_date.$dirty}" style="margin:0;padding:0">
                                         <label class="col-md-4 control-label req" for="file_date">Date Uploaded:</label>
-                                        <div class="col-md-3 input-group" style="padding-right:14px;padding-left:14px">
+                                        <div class="col-md-4 input-group" style="padding-right:14px;padding-left:14px">
                                             <input class="form-control dateInputStyle" type="date" name="fd" uib-datepicker-popup="MM/dd/yyyy" show-weeks="false" is-open="datepickrs.fd" ng-model="NWISFile.file_date" required />
                                             <span class="input-group-btn">
                                                 <button class="btn btn-default" type="button" ng-click="open($event, 'fd')">
@@ -5596,7 +5596,7 @@
                 <!-- Date Collected/Processed* (data) -->
                 <div ng-if="aFile.filetype_id === 2" class="form-group required" ng-class="{'has-error':FILEcreateForm.collect_date.$invalid && FILEcreateForm.collect_date.$dirty}">
                     <label class="col-md-3 control-label req" for="collect_date">Date Collected/Processed:</label>
-                    <div class="col-md-3 input-group" style="padding-right:14px;padding-left:14px">
+                    <div class="col-md-4 input-group" style="padding-right:14px;padding-left:14px">
                         <input class="form-control dateInputStyle" type="date" name="dfcd" uib-datepicker-popup="MM/dd/yyyy" show-weeks="false" is-open="datepickrs.dfcd" ng-model="datafile.collect_date" required />
                         <span class="input-group-btn">
                             <button class="btn btn-default" type="button" ng-click="open($event, 'dfcd')">
@@ -5635,7 +5635,7 @@
                 <!-- Photo Date* (photo) -->
                 <div ng-if="aFile.filetype_id === 1" class="form-group required" ng-class="{'has-error':FILEcreateForm.photo_date.$invalid && FILEcreateForm.photo_date.$dirty}">
                     <label class="col-md-3 control-label req" for="photo_date">Photo Date:</label>
-                    <div class="col-md-3 input-group" style="padding-right:14px;padding-left:14px">
+                    <div class="col-md-4 input-group" style="padding-right:14px;padding-left:14px">
                         <input class="form-control dateInputStyle" type="date" name="sd" uib-datepicker-popup="MM/dd/yyyy" show-weeks="false" is-open="datepickrs.sd" ng-model="aFile.photo_date" required />
                         <span class="input-group-btn">
                             <button class="btn btn-default" type="button" ng-click="open($event, 'sd')">
@@ -5648,7 +5648,7 @@
                 <!-- Date Uploaded* (photo, data, allother) -->
                 <div ng-if="aFile.filetype_id > 0" class="form-group required" ng-class="{'has-error':FILEcreateForm.file_date.$invalid && FILEcreateForm.file_date.$dirty}">
                     <label class="col-md-3 control-label req" for="file_date">Date Uploaded:</label>
-                    <div class="col-md-3 input-group" style="padding-right:14px;padding-left:14px">
+                    <div class="col-md-4 input-group" style="padding-right:14px;padding-left:14px">
                         <input class="form-control dateInputStyle" type="date" name="fd" uib-datepicker-popup="MM/dd/yyyy" show-weeks="false" is-open="datepickrs.fd" ng-model="aFile.file_date" required />
                         <span class="input-group-btn">
                             <button class="btn btn-default" type="button" ng-click="open($event, 'fd')">
@@ -5866,14 +5866,14 @@
                 <!-- Date Collected/Processed* (data) (detail) -->
                 <div ng-if="view.FILEval == 'detail' && aFile.filetype_id === 2" class="col-md-12">
                     <div class="col-md-4"><label>Date Collected/Processed:</label></div>
-                    <div class="col-md-3 input-group" style="padding-right:14px;padding-left:14px">
+                    <div class="col-md-4 input-group" style="padding-right:14px;padding-left:14px">
                         <span>{{datafile.collect_date | date: 'MM/dd/yyyy' || '---'}}</span>
                     </div>
                 </div>
                 <!-- Date Collected/Processed* (data)  (edit)-->
                 <div ng-if="view.FILEval == 'edit' && fileCopy.filetype_id === 2" class="form-group required" ng-class="{'has-error':FILEForm.collect_date.$invalid && FILEForm.collect_date.$dirty}">
                     <label class="col-md-4 control-label req" for="collect_date">Date Collected/Processed:</label>
-                    <div class="col-md-3 input-group" style="padding-right:14px;padding-left:14px">
+                    <div class="col-md-4 input-group" style="padding-right:14px;padding-left:14px">
                         <input class="form-control dateInputStyle" type="date" name="dfcd" uib-datepicker-popup="MM/dd/yyyy" show-weeks="false" is-open="datepickrs.dfcd" ng-model="dfCopy.collect_date" required />
                         <span class="input-group-btn">
                             <button class="btn btn-default" type="button" ng-click="open($event, 'dfcd')">
@@ -5928,14 +5928,14 @@
                 <!-- Photo Date* (photo)  (detail)-->
                 <div ng-if="view.FILEval == 'detail' && aFile.filetype_id === 1" class="col-md-12">
                     <div class="col-md-4"><label>Photo Date:</label></div>
-                    <div class="col-md-3 input-group" style="padding-right:14px;padding-left:14px">
+                    <div class="col-md-4 input-group" style="padding-right:14px;padding-left:14px">
                         <span>{{aFile.photo_date | date: 'MM/dd/yyyy' || '---'}}</span>
                     </div>
                 </div>
                 <!-- Photo Date* (photo) (edit) -->
                 <div ng-if="view.FILEval == 'edit' && fileCopy.filetype_id === 1" class="form-group required" ng-class="{'has-error':FILEForm.photo_date.$invalid && FILEForm.photo_date.$dirty}">
                     <label class="col-md-4 control-label req" for="photo_date">Photo Date:</label>
-                    <div class="col-md-3 input-group" style="padding-right:14px;padding-left:14px">
+                    <div class="col-md-4 input-group" style="padding-right:14px;padding-left:14px">
                         <input class="form-control dateInputStyle" type="date" name="sd" uib-datepicker-popup="MM/dd/yyyy" show-weeks="false" is-open="datepickrs.sd" ng-model="fileCopy.photo_date" required />
                         <span class="input-group-btn">
                             <button class="btn btn-default" type="button" ng-click="open($event, 'sd')">
@@ -5948,14 +5948,14 @@
                 <!-- Date Uploaded* (photo, data, allother) (detail) -->
                 <div ng-if="view.FILEval == 'detail' && aFile.filetype_id > 0" class="col-md-12">
                     <div class="col-md-4"><label>Date Uploaded:</label></div>
-                    <div class="col-md-3 input-group" style="padding-right:14px;padding-left:14px">
+                    <div class="col-md-4 input-group" style="padding-right:14px;padding-left:14px">
                         <span>{{aFile.file_date | date: 'MM/dd/yyyy' || '---'}}</span>
                     </div>
                 </div>
                 <!-- Date Uploaded* (photo, data, allother) (edit) -->
                 <div ng-if="view.FILEval == 'edit' && fileCopy.filetype_id > 0" class="form-group required" ng-class="{'has-error':FILEForm.file_date.$invalid && FILEForm.file_date.$dirty}">
                     <label class="col-md-4 control-label req" for="file_date">Date Uploaded:</label>
-                    <div class="col-md-3 input-group" style="padding-right:14px;padding-left:14px">
+                    <div class="col-md-4 input-group" style="padding-right:14px;padding-left:14px">
                         <input class="form-control dateInputStyle" type="date" name="fd" uib-datepicker-popup="MM/dd/yyyy" show-weeks="false" is-open="datepickrs.fd" ng-model="fileCopy.file_date" required />
                         <span class="input-group-btn">
                             <button class="btn btn-default" type="button" ng-click="open($event, 'fd')">
