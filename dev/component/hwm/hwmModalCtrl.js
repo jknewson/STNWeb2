@@ -327,7 +327,7 @@
             }
             //radio button defaults
             $scope.aHWM.decDegORdms = 'dd';
-            $scope.FTorCM = 'ft';
+            $scope.aHWM.FTorCM = 'ft';
 
             $scope.create = function (valid) {
                 if (valid) {
@@ -338,10 +338,10 @@
                     if ($scope.aHWM.survey_date !== undefined && $scope.aHWM.survey_date !== null)
                         $scope.aHWM.survey_member_id = $scope.flag_member_id;
 
-                    if ($scope.FTorCM == "cm") {
-                        $scope.FTorCM = 'ft';
+                    if ($scope.aHWM.FTorCM == "cm") {
+                        $scope.aHWM.FTorCM = 'ft';
                         if ($scope.aHWM.uncertainty !== undefined)
-                            $scope.aHWM.uncertainty = $scope.aHWM.uncertainty / 30.48;
+                            $scope.aHWM.uncertainty = parseFloat($scope.aHWM.uncertainty / 30.48).toFixed(6);
                     }
 
                     if ($scope.aHWM.elev_ft !== undefined && $scope.aHWM.elev_ft !== null) {
@@ -435,30 +435,33 @@
             var formatHWM = function (h) {
                 var formattedHWM = {
                     hwm_id: h.hwm_id,
-                    bank: h.bank,
-                    elev_ft: h.elev_ft,
+                    waterbody: h.waterbody,
+                    site_id: h.site_id,
                     event_id: h.event_id,
-                    flag_date: h.flag_date,
-                    flag_member_id: h.flag_member_id,
-                    hcollect_method_id: h.hcollect_method_id,
-                    hdatum_id: h.hdatum_id,
-                    height_above_gnd: h.height_above_gnd,
-                    hwm_environment: h.hwm_environment,
-                    hwm_locationdescription: h.hwm_locationdescription,
-                    hwm_notes: h.hwm_notes,
-                    hwm_uncertainty: h.hwm_uncertainty,
-                    hwm_quality_id: h.hwm_quality_id,
                     hwm_type_id: h.hwm_type_id,
+                    hwm_quality_id: h.hwm_quality_id,
+                    hwm_locationdescription: h.hwm_locationdescription,
                     latitude_dd: h.latitude_dd,
                     longitude_dd: h.longitude_dd,
-                    marker_id: h.marker_id,
-                    site_id: h.site_id,
-                    stillwater: h.stillwater,
                     survey_date: h.survey_date,
-                    survey_member_id: h.survey_member_id,
-                    vcollect_method_id: h.vcollect_method_id,
+                    elev_ft: h.elev_ft,
                     vdatum_id: h.vdatum_id,
-                    waterbody: h.waterbody
+                    vcollect_method_id: h.vcollect_method_id,
+                    bank: h.bank,
+                    approval_id: h.approval_id,
+                    marker_id: h.marker_id,
+                    height_above_gnd: h.height_above_gnd,
+                    hcollect_method_id: h.hcollect_method_id,
+                    peak_summary_id: h.peak_summary_id,
+                    hwm_notes: h.hwm_notes,
+                    hwm_environment: h.hwm_environment,
+                    flag_date: h.flag_date,
+                    stillwater: h.stillwater,
+                    hdatum_id: h.hdatum_id,
+                    flag_member_id: h.flag_member_id,
+                    survey_member_id: h.survey_member_id,
+                    uncertainty: h.uncertainty,
+                    hwm_uncertainty: h.hwm_uncertainty                  
                 };
                 return formattedHWM;
             };
@@ -476,10 +479,10 @@
                     if ($scope.hwmCopy.survey_date !== undefined && $scope.hwmCopy.survey_member_id === undefined)
                         $scope.hwmCopy.survey_member_id = $cookies.get('mID');
 
-                    if ($scope.FTorCM == "cm") {
-                        $scope.FTorCM = 'ft';
+                    if ($scope.hwmCopy.FTorCM == "cm") {
+                        $scope.hwmCopy.FTorCM = 'ft';
                         if ($scope.hwmCopy.uncertainty !== undefined)
-                            $scope.hwmCopy.uncertainty = $scope.hwmCopy.uncertainty / 30.48;
+                            $scope.hwmCopy.uncertainty = parseFloat($scope.hwmCopy.uncertainty / 30.48).toFixed(6);
                     }
 
                     if ($scope.hwmCopy.elev_ft !== undefined && $scope.hwmCopy.elev_ft !== null) {
@@ -583,7 +586,7 @@
             $scope.wannaEditHWM = function () {
                 $scope.view.HWMval = 'edit'; 
                 $scope.hwmCopy = angular.copy($scope.aHWM);
-                $scope.hwmCopy.decDegORdms = 'dd';
+                $scope.hwmCopy.decDegORdms = 'dd'; $scope.hwmCopy.FTorCM = 'ft';
             };
             $scope.cancelHWMEdit = function () {
                 $scope.view.HWMval = 'detail';

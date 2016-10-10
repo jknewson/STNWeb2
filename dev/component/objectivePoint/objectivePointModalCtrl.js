@@ -31,8 +31,8 @@
             $scope.showFileForm = false; //hidden form to add file to op
             //make uncertainty cleared and disabled when 'unquantified' is checked
             $scope.UnquantChecked = function () {
-                if ($scope.OP.unquantified == 1)
-                    $scope.OP.uncertainty = "";
+                if ($scope.opCopy.unquantified == 1)
+                    $scope.opCopy.uncertainty = "";
             };
             
             //#region FILE STUFF
@@ -507,24 +507,45 @@
             };
 
             //fix default radios and lat/long
-            var formatDefaults = function (theOP) {
-                //$scope.OP.FTorMETER needs to be 'ft'. if 'meter' ==convert value to ft 
-                if (theOP.FTorMETER == "meter") {
-                    $scope.OP.FTorMETER = 'ft';
-                    $scope.OP.elev_ft = $scope.OP.elev_ft * 3.2808;
-                }
-                //$scope.OP.FTorCM needs to be 'ft'. if 'cm' ==convert value to ft 
-                if (theOP.FTorCM == "cm") {
-                    $scope.OP.FTorCM = 'ft';
-                    $scope.OP.uncertainty = $scope.OP.uncertainty / 30.48;
-                }
-                //$scope.OP.decDegORdms needs to be 'dd'. if 'dms' ==convert $scope.DMS values to dd
-                if (theOP.decDegORdms == "dms") {
-                    $scope.OP.decDegORdms = 'dd';
-                    $scope.OP.latitude_dd = azimuth($scope.DMS.LADeg, $scope.DMS.LAMin, $scope.DMS.LASec);
-                    $scope.OP.longitude_dd = azimuth($scope.DMS.LODeg, $scope.DMS.LOMin, $scope.DMS.LOSec);
-                    $scope.DMS = {};
-                    $scope.OP.site_id = $scope.thisOPsite.site_id;
+            var formatDefaults = function (theOP, fromWhere) {
+                if (fromWhere == "create") {
+                    //$scope.OP.FTorMETER needs to be 'ft'. if 'meter' ==convert value to ft 
+                    if (theOP.FTorMETER == "meter") {
+                        $scope.OP.FTorMETER = 'ft';
+                        $scope.OP.elev_ft = $scope.OP.elev_ft * 3.2808;
+                    }
+                    //$scope.OP.FTorCM needs to be 'ft'. if 'cm' ==convert value to ft 
+                    if (theOP.FTorCM == "cm") {
+                        $scope.OP.FTorCM = 'ft';
+                        $scope.OP.uncertainty = parseFloat($scope.OP.uncertainty / 30.48).toFixed(6);
+                    }
+                    //$scope.OP.decDegORdms needs to be 'dd'. if 'dms' ==convert $scope.DMS values to dd
+                    if (theOP.decDegORdms == "dms") {
+                        $scope.OP.decDegORdms = 'dd';
+                        $scope.OP.latitude_dd = azimuth($scope.DMS.LADeg, $scope.DMS.LAMin, $scope.DMS.LASec);
+                        $scope.OP.longitude_dd = azimuth($scope.DMS.LODeg, $scope.DMS.LOMin, $scope.DMS.LOSec);
+                        $scope.DMS = {};
+                        $scope.OP.site_id = $scope.thisOPsite.site_id;
+                    }
+                } else {
+                    //$scope.OP.FTorMETER needs to be 'ft'. if 'meter' ==convert value to ft 
+                    if (theOP.FTorMETER == "meter") {
+                        $scope.opCopy.FTorMETER = 'ft';
+                        $scope.opCopy.elev_ft = $scope.opCopy.elev_ft * 3.2808;
+                    }
+                    //$scope.OP.FTorCM needs to be 'ft'. if 'cm' ==convert value to ft 
+                    if (theOP.FTorCM == "cm") {
+                        $scope.opCopy.FTorCM = 'ft';
+                        $scope.opCopy.uncertainty = parseFloat($scope.opCopy.uncertainty / 30.48).toFixed(6);
+                    }
+                    //$scope.OP.decDegORdms needs to be 'dd'. if 'dms' ==convert $scope.DMS values to dd
+                    if (theOP.decDegORdms == "dms") {
+                        $scope.opCopy.decDegORdms = 'dd';
+                        $scope.opCopy.latitude_dd = azimuth($scope.DMS.LADeg, $scope.DMS.LAMin, $scope.DMS.LASec);
+                        $scope.opCopy.longitude_dd = azimuth($scope.DMS.LODeg, $scope.DMS.LOMin, $scope.DMS.LOSec);
+                        $scope.DMS = {};
+                        $scope.opCopy.site_id = $scope.thisOPsite.site_id;
+                    }
                 }
             };
 
@@ -535,7 +556,7 @@
                     $http.defaults.headers.common.Accept = 'application/json';
                     var createdOP = {};
                     //post
-                    formatDefaults($scope.OP); //$scope.OP.FTorMETER, FTorCM, decDegORdms                               
+                    formatDefaults($scope.OP, 'create'); //$scope.OP.FTorMETER, FTorCM, decDegORdms                               
                     var OPtoPOST = trimOP($scope.OP); //make it an OBJECTIVE_POINT for saving                    
 
                     OBJECTIVE_POINT.save(OPtoPOST, function success(response) {
@@ -615,7 +636,7 @@
                     }//end if there's removeOPCs
 
                     //look at OP.FTorMETER ("ft"), OP.FTorCM ("ft"), and OP.decDegORdms ("dd"), make sure site_ID is on there and send it to trim before PUT                
-                    formatDefaults($scope.opCopy); //$scope.OP.FTorMETER, FTorCM, decDegORdms
+                    formatDefaults($scope.opCopy, 'edit'); //$scope.OP.FTorMETER, FTorCM, decDegORdms
                     var OPtoPOST = trimOP($scope.opCopy);
                     OPtoPOST.objective_point_id = $scope.opCopy.objective_point_id;
                     //$http.defaults.headers.common['X-HTTP-Method-Override'] = 'PUT';
@@ -760,7 +781,7 @@
             $scope.wannaEditOP = function () {
                 $scope.view.OPval = 'edit';
                 $scope.opCopy = angular.copy($scope.OP);
-                $scope.opCopy.decDegORdms = 'dd';
+                $scope.opCopy.decDegORdms = 'dd'; $scope.opCopy.FTorMETER = 'ft'; $scope.opCopy.FTorCM = 'ft';
                 $scope.addedIdentifiersCopy = angular.copy($scope.addedIdentifiers);
             };
             $scope.cancelOPEdit = function () {
