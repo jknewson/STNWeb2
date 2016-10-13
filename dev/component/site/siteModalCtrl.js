@@ -118,7 +118,7 @@
             $scope.getAddress = function () {
                 if ($scope.DMS.LADeg !== undefined) $scope.aSite.latitude_dd = azimuth($scope.DMS.LADeg, $scope.DMS.LAMin, $scope.DMS.LASec);
                 if ($scope.DMS.LODeg !== undefined) $scope.aSite.longitude_dd = azimuth($scope.DMS.LODeg, $scope.DMS.LOMin, $scope.DMS.LOSec);
-                if ($scope.aSite.latitude_dd !== undefined && $scope.aSite.longitude_dd !== undefined) {
+                if ($scope.aSite.latitude_dd !== undefined && $scope.aSite.longitude_dd !== undefined && !isNaN($scope.aSite.latitude_dd) && !isNaN($scope.aSite.longitude_dd)) {
                     $scope.mapCenter = { lat: parseFloat($scope.aSite.latitude_dd), lng: parseFloat($scope.aSite.longitude_dd), zoom: 18 };
                     $scope.mapMarkers = [];
                     $rootScope.stateIsLoading.showLoading = true; //loading...
@@ -142,8 +142,8 @@
                                         for (var i = 0; i < $scope.closeSites.length; i++) {
                                             var a = $scope.closeSites[i];
                                             $scope.mapMarkers.push({
-                                                lat: a.latitude,
-                                                lng: a.longitude,
+                                                lat: a.latitude_dd,
+                                                lng: a.longitude_dd,
                                                 site_id: a.site_id,
                                                 site_no: a.site_no,
                                                 icon: icons.stn,
@@ -194,7 +194,7 @@
             };
 
             //globals 
-            $scope.houseDirty = false; $scope.netNameDirty = false; $scope.netTypeDirty = false;
+            $scope.houseDirty = false; $scope.netTypeDirty = false;
             $scope.siteHouseTypesTable = [];
             $scope.aSite = {};
 
@@ -218,6 +218,11 @@
             $scope.siteHouseTypesTable = []; //holder for when adding housing type to page from multiselect
             $scope.siteHousesModel = {};
             $scope.siteHousesToRemove = []; //holder for editing site to add removing house types to for PUT
+            $scope.NetworkNAMEToAdd = []; //holder for objective types added
+            $scope.NetworkNAMEToRemove = []; //holder for objective types removed on existing projects (edit)
+            $scope.NetworkTYPEToAdd = []; //holder for objective types added
+            $scope.NetworkTYPEToRemove = []; //holder for objective types removed on existing projects (edit)
+
             $scope.siteNetworkNames = []; //holds the NetworkName (list of strings) to pass back;
             $scope.siteNetworkTypes = []; //holds the NetworkType (list of strings) to pass back;
            
@@ -260,22 +265,46 @@
             };
 
             //make sure lat/long are right number range
-            $scope.checkValue = function (d) {
+            $scope.checkValue = function (d,direction) {
                 if (d == 'dms') {
                     //check the degree value
-                    if ($scope.DMS.LADeg < 0 || $scope.DMS.LADeg > 73) {
-                        openLatModal('dms');
+                    if (direction == 'lat') {
+                        if ($scope.DMS.LADeg < 0 || $scope.DMS.LADeg > 73 || (isNaN($scope.DMS.LADeg) && $scope.DMS.LADeg !== undefined) || (isNaN($scope.DMS.LAMin) && $scope.DMS.LAMin !== undefined) || (isNaN($scope.DMS.LASec) && $scope.DMS.LASec !== undefined)) {
+                            openLatModal('dms');
+                            //if not a number, clear the imputs to trigger the validation
+                            if (isNaN($scope.DMS.LADeg)) $scope.DMS.LADeg = undefined;
+                            if (isNaN($scope.DMS.LAMin)) $scope.DMS.LAMin = undefined;
+                            if (isNaN($scope.DMS.LASec)) $scope.DMS.LASec = undefined;
+                        }
                     }
-                    if ($scope.DMS.LODeg < -175 || $scope.DMS.LODeg > -60) {
-                        openLongModal('dms');
+                    if (direction == 'long') {
+                        if ($scope.DMS.LODeg < -175 || $scope.DMS.LODeg > -60 || (isNaN($scope.DMS.LODeg) && $scope.DMS.LODeg !== undefined) || (isNaN($scope.DMS.LOMin) && $scope.DMS.LOMin !== undefined) || (isNaN($scope.DMS.LOSec) && $scope.DMS.LOSec !== undefined)) {
+                            openLongModal('dms');
+                            //if not a number, clear the imputs to trigger the validation
+                            if (isNaN($scope.DMS.LODeg)) $scope.DMS.LODeg = undefined;
+                            if (isNaN($scope.DMS.LOMin)) $scope.DMS.LOMin = undefined;
+                            if (isNaN($scope.DMS.LOSec)) $scope.DMS.LOSec = undefined;
+                        }
                     }
                 } else {
                     //check the latitude/longitude
-                    if ($scope.aSite.latitude_dd < 0 || $scope.aSite.latitude_dd > 73) {
-                        openLatModal('latlong');
+                    if (direction == 'lat') {
+                        if ($scope.aSite.latitude_dd < 0 || $scope.aSite.latitude_dd > 73 || isNaN($scope.aSite.latitude_dd)) {
+                            openLatModal('latlong');
+                            //if not a number, clear the imputs to trigger the validation
+                            if (isNaN($scope.aSite.latitude_dd)) {
+                                $scope.aSite.latitude_dd = undefined;
+                            }
+                        }
                     }
-                    if ($scope.aSite.longitude_dd < -175 || $scope.aSite.longitude_dd > -60) {
-                        openLongModal('latlong');
+                    if (direction == 'long') {
+                        if ($scope.aSite.longitude_dd < -175 || $scope.aSite.longitude_dd > -60 || isNaN($scope.aSite.longitude_dd)) {
+                            openLongModal('latlong');
+                            //if not a number, clear the imputs to trigger the validation
+                            if (isNaN($scope.aSite.longitude_dd)) {
+                                $scope.aSite.longitude_dd = undefined;
+                            }
+                        }
                     }
                 }
             };
@@ -300,11 +329,31 @@
             $scope.latLongChange = function () {
                 if ($scope.aSite.decDegORdms == "dd") {
                     //they clicked Dec Deg..
-                    if ($scope.DMS.LADeg !== undefined) {
+                    if (($scope.DMS.LADeg !== undefined && $scope.DMS.LAMin !== undefined && $scope.DMS.LASec !== undefined) &&
+                        ($scope.DMS.LODeg !== undefined && $scope.DMS.LOMin !== undefined && $scope.DMS.LOSec !== undefined)) {
                         //convert what's here for each lat and long
                         $scope.aSite.latitude_dd = azimuth($scope.DMS.LADeg, $scope.DMS.LAMin, $scope.DMS.LASec);
-                        $scope.aSite.longitude_dd = azimuth($scope.DMS.LODeg, $scope.DMS.LOMin, $scope.DMS.LOSec);
-                        var test;
+                        $scope.aSite.longitude_dd = azimuth($scope.DMS.LODeg, $scope.DMS.LOMin, $scope.DMS.LOSec);                        
+                    } else {
+                        //show modal telling them to populate all three (DMS) for conversion to work
+                        var DMSModal = $uibModal.open({
+                            template: '<div class="modal-header"><h3 class="modal-title">Error</h3></div>' +
+                                '<div class="modal-body"><p>Please populate all three inputs for conversion from DMS to Decimal Degrees to work.</p></div>' +
+                                '<div class="modal-footer"><button type="button" class="btn btn-primary" ng-enter="ok()" ng-click="ok()">OK</button></div>',
+                            controller: ['$scope', '$uibModalInstance', function ($scope, $uibModalInstance) {
+                                $scope.ok = function () {
+                                    $uibModalInstance.close();
+                                };
+                            }],
+                            size: 'sm'
+                        });
+                        DMSModal.result.then(function () {
+                            if ($scope.DMS.LADeg !== undefined || $scope.DMS.LAMin !== undefined || $scope.DMS.LASec !== undefined)
+                                $("#LaDeg").focus();
+                            if ($scope.DMS.LODeg !== undefined || $scope.DMS.LOMin !== undefined || $scope.DMS.LOSec !== undefined)
+                                $("#LoDeg").focus();
+                            $scope.aSite.decDegORdms = "dms";
+                        });
                     }
                 } else {
                     //they clicked dms (convert lat/long to dms)
@@ -325,19 +374,55 @@
             };
 
             //networkType check event --trigger dirty
-            $scope.netTypeChg = function () {
-                $scope.netTypeDirty = true;
+            $scope.netTypeChg = function (nt) {
+                //store this to handle in PUT or POST
+                if (nt.selected) { //selected
+                    $scope.NetworkTYPEToAdd.push(nt); 
+                    if ($scope.aSite.site_id !== undefined) { //if this is edit
+                        //editing (remove from remove list if there)
+                        var i = $scope.NetworkTYPEToRemove.map(function (e) { return e.network_type_id; }).indexOf(nt.network_type_id);
+                        if (i >= 0) $scope.NetworkTYPEToRemove.splice(i, 1); //remove from removeList ..in case they removed and then added it back
+                    }
+                } else {
+                    //n.selected == false
+                    var ind = $scope.NetworkTYPEToAdd.map(function (e) { return e.network_type_id; }).indexOf(nt.network_type_id);
+                    if (ind >= 0) $scope.NetworkTYPEToAdd.splice(ind, 1); //remove it from addList if they added then removed
+
+                    if ($scope.aSite.site_id !== undefined) { //edit
+                        $scope.NetworkTYPEToRemove.push(nt); //add it to removeList
+                    }
+                }
             };
 
             //networkName check event.. if "Not Defined" chosen, disable the other 2 checkboxes
             $scope.whichOne = function (n) {
-                $scope.netNameDirty = true;
+                //store this to handle in PUT or POST
+                if (n.selected) { //selected
+                    $scope.NetworkNAMEToAdd.push(n); 
+                    if ($scope.aSite.site_id !== undefined) { //if this is edit
+                        //editing (remove from remove list if there)
+                        var i = $scope.NetworkNAMEToRemove.map(function (e) { return e.network_name_id; }).indexOf(n.network_name_id);
+                        if (i >= 0) $scope.NetworkNAMEToRemove.splice(i, 1); //remove from removeList ..in case they removed and then added it back
+                    }
+                } else {
+                    //n.selected == false
+                    var ind = $scope.NetworkNAMEToAdd.map(function (e) { return e.network_name_id; }).indexOf(n.network_name_id);
+                    if (ind >= 0) $scope.NetworkNAMEToAdd.splice(ind, 1); //remove it from addList if they added then removed
+
+                    if ($scope.aSite.site_id !== undefined) { //edit
+                        $scope.NetworkNAMEToRemove.push(n); //add it to removeList
+
+                    }
+                }
+                
                 if (n.name == "Not Defined" && n.selected === true) {
                     //they checked "not defined"
                     for (var nn = 0; nn < $scope.NetNameList.length; nn++) {
-                        //unselect all but not defined
-                        if ($scope.NetNameList[nn].name != "Not Defined")
+                        //unselect all but not defined TODO:::: If any, put them in NetworkNAMEToRemove list
+                        if ($scope.NetNameList[nn].name != "Not Defined" && $scope.NetNameList[nn].selected == true) {
+                            $scope.NetworkNAMEToRemove.push($scope.NetNameList[nn]);
                             $scope.NetNameList[nn].selected = false;
+                        }
                     }
                     //make these match so rest get disabled
                     $scope.checked = "Not Defined";
@@ -417,34 +502,16 @@
                         var delSHProm = SITE_HOUSING.delete({ id: shID }).$promise;
                         RemovePromises.push(delSHProm);
                     });
-
-                    //Remove NetNames
-                    if ($scope.netNameDirty === true) {
-                        angular.forEach($scope.NetNameList, function (nnL) {
-                            if (nnL.selected === false) {
-                                //delete it
-                                $http.defaults.headers.common['X-HTTP-Method-Override'] = 'DELETE';
-                                var delNNProm = SITE.deleteSiteNetworkName({ siteId: $scope.aSite.site_id, networkNameId: nnL.network_name_id }).$promise;
-                                RemovePromises.push(delNNProm);
-                                delete $http.defaults.headers.common['X-HTTP-Method-Override'];
-                            }
-                        });
-                    }//end netName dirty
-
+                    //Remove NetNames                   
+                    angular.forEach($scope.NetworkNAMEToRemove, function (nnL) {
+                        var delNNProm = SITE.deleteSiteNetworkName({ siteId: $scope.aSite.site_id, networkNameId: nnL.network_name_id }).$promise;
+                        RemovePromises.push(delNNProm);
+                    });                   
                     //Remove NetTypes
-                    if ($scope.netTypeDirty === true) {
-                        angular.forEach($scope.NetTypeList, function (ntL) {
-                            if (ntL.selected === false) {
-                                //delete it if they are removing it
-                                $http.defaults.headers.common['X-HTTP-Method-Override'] = 'DELETE';
-                                var NTtoDelete = { network_type_id: ntL.network_type_id, network_type_name: ntL.network_type_name };
-                                var delNTProm = SITE.deleteSiteNetworkType({ siteId: $scope.aSite.site_id, networkTypeId: ntL.network_type_id }).$promise;
-                                RemovePromises.push(delNTProm);
-                                delete $http.defaults.headers.common['X-HTTP-Method-Override'];
-                            }                        
-                        });
-                    }//end netType dirty
-
+                    angular.forEach($scope.NetworkTYPEToRemove, function (ntL) {
+                        var delNTProm = SITE.deleteSiteNetworkType({ siteId: $scope.aSite.site_id, networkTypeId: ntL.network_type_id }).$promise;
+                        RemovePromises.push(delNTProm);                                                
+                    });                    
                     //Add siteHousings
                     if ($scope.houseDirty === true) {
                         angular.forEach($scope.siteHouseTypesTable, function (ht) {
@@ -459,29 +526,30 @@
                             }
                             AddPromises.push(addHtProm);
                         });
-                    }//end they touched it
+                    }
                     //Add NetNames
-                    angular.forEach($scope.NetNameList, function (AnnL) {
-                        if (AnnL.selected === true) {
-                            $scope.siteNetworkNames.push(AnnL.name);
-                            //post it (if it's there already, it won't do anything)
-                            var addNNProm = SITE.postSiteNetworkName({ siteId: $scope.aSite.site_id, networkNameId: AnnL.network_name_id }).$promise;
-                            AddPromises.push(addNNProm);
-                        }
+                    angular.forEach($scope.NetworkNAMEToAdd, function (AnnL) {
+                        $scope.siteNetworkNames.push(AnnL.name);
+                        var addNNProm = SITE.postSiteNetworkName({ siteId: $scope.aSite.site_id, networkNameId: AnnL.network_name_id }).$promise;
+                        AddPromises.push(addNNProm);                    
                     });
                     //Add NetTypes
-                    angular.forEach($scope.NetTypeList, function (AnTL) {
-                        if (AnTL.selected === true) {
-                            $scope.siteNetworkTypes.push(AnTL.network_type_name);
-                          //  post it (if it's there already, it won't do anything)
-                            var addNTProm = SITE.postSiteNetworkType({ siteId: $scope.aSite.site_id, networkTypeId: AnTL.network_type_id }).$promise;
-                            AddPromises.push(addNTProm);
-                        }
+                    angular.forEach($scope.NetworkTYPEToAdd, function (AnTL) {
+                        $scope.siteNetworkTypes.push(AnTL.network_type_name);
+                        var addNTProm = SITE.postSiteNetworkType({ siteId: $scope.aSite.site_id, networkTypeId: AnTL.network_type_id }).$promise;
+                        AddPromises.push(addNTProm);                        
                     });
 
                     //ok now run the removes, then the adds and then pass the stuff back out of here.
                     $q.all(RemovePromises).then(function () {
                         $q.all(AddPromises).then(function (response) {
+                            $scope.siteNetworkNames = []; $scope.siteNetworkTypes = [];
+                            angular.forEach($scope.NetNameList, function (nn) {
+                                if (nn.selected == true) $scope.siteNetworkNames.push(nn.name);
+                            });
+                            angular.forEach($scope.NetTypeList, function (nt) {
+                                if (nt.selected == true) $scope.siteNetworkTypes.push(nt.network_type_name);
+                            });
                             var sendBack = [$scope.aSite, $scope.siteNetworkNames, $scope.siteNetworkTypes];
                             $uibModalInstance.close(sendBack);
                             $rootScope.stateIsLoading.showLoading = false; // loading..
@@ -660,18 +728,19 @@
 
                 //apply any site network names or types
                 if (thisSiteStuff[3].length > 0) {
+                    var projNNames = angular.copy(thisSiteStuff[3]);
                     //for each $scope.NetNameList .. add .selected property = true/false if thissitenetworknames ==
                     for (var a = 0; a < $scope.NetNameList.length; a++) {
-                        for (var e = 0; e < thisSiteStuff[3].length; e++) {
-                            if (thisSiteStuff[3][e].network_name_id == $scope.NetNameList[a].network_name_id) {
+                        for (var e = 0; e < projNNames.length; e++) {
+                            if (projNNames[e].network_name_id == $scope.NetNameList[a].network_name_id) {
                                 $scope.NetNameList[a].selected = true;
-                                e = thisSiteStuff[3].length;
+                                e = projNNames.length;
                             } else {
                                 $scope.NetNameList[a].selected = false;
-                            }
-                            if (thisSiteStuff[3].length === 0)
-                                $scope.NetNameList[a].selected = false;
+                            }                            
                         }
+                        if (projNNames.length === 0)
+                            $scope.NetNameList[a].selected = false;
                     }
                     if ($scope.NetNameList[0].selected === true) {
                         //make these match so rest get disabled
@@ -680,18 +749,19 @@
                 }//end if thisSiteNetworkNames != undefined
 
                 if (thisSiteStuff[4].length > 0) {
+                    var projNType = angular.copy(thisSiteStuff[4]);
                     //for each $scope.NetTypeList .. add .selected property = true/false if thissitenetworktypes ==
                     for (var ni = 0; ni < $scope.NetTypeList.length; ni++) {
-                        for (var ny = 0; ny < thisSiteStuff[4].length; ny++) {
-                            if (thisSiteStuff[4][ny].network_type_id == $scope.NetTypeList[ni].network_type_id) {
+                        for (var ny = 0; ny < projNType.length; ny++) {
+                            if (projNType[ny].network_type_id == $scope.NetTypeList[ni].network_type_id) {
                                 $scope.NetTypeList[ni].selected = true;
-                                ny = thisSiteStuff[4].length;
+                                ny = projNType.length;
                             } else {
                                 $scope.NetTypeList[ni].selected = false;
-                            }
-                            if (thisSiteStuff[4].length === 0)
-                                $scope.NetTypeList[ni].selected = false;
+                            }                            
                         }
+                        if (projNType.length === 0)
+                            $scope.NetTypeList[ni].selected = false;
                     }
                 }//end if thisSiteNetworkNames != undefined            
                 //#endregion existing site 

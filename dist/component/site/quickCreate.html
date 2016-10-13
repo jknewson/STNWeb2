@@ -43,16 +43,16 @@
                             <label class="col-md-4 control-label req" for="SITE_latitude_dd">Latitude:</label>
                             <div class="col-md-7" ng-if="decDegORdms.val == 'dd'">
                                 <input class="form-control" ng-keypress="isNum($event)" name="latitude_dd" id="SITE_latitude_dd" ng-model="aSite.latitude_dd"
-                                       ng-model-options="{ updateOn: 'blur' }" ng-change="checkValue()" type="text" placeholder="Latitude" required />
+                                       ng-model-options="{ updateOn: 'blur' }" ng-change="checkValue('dd', 'lat')" type="text" placeholder="Latitude" ng-required="decDegORdms.val == 'dd'" />
                             </div>
                             <div class="col-md-7" ng-if="decDegORdms.val == 'dms'">
                                 <table>
                                     <tr>
-                                        <td><input class="form-control" ng-keypress="isNum($event)" ng-change="checkValue('dms')" id="LaDeg" name="Deg" ng-model="DMS.LADeg" type="text" /></td>
+                                        <td><input class="form-control" ng-keypress="isNum($event)" ng-model-options="{ updateOn: 'blur' }" ng-change="checkValue('dms', 'lat')" id="LaDeg" name="Deg" ng-model="DMS.LADeg" type="text" ng-required="decDegORdms.val == 'dms'" /></td>
                                         <td>°</td>
-                                        <td><input class="form-control" ng-keypress="isNum($event)" name="Min" ng-model="DMS.LAMin" type="text" /></td>
+                                        <td><input class="form-control" ng-keypress="isNum($event)" ng-model-options="{ updateOn: 'blur' }" ng-change="checkValue('dms', 'lat')" name="Min" ng-model="DMS.LAMin" type="text" ng-required="decDegORdms.val == 'dms'" /></td>
                                         <td>′</td>
-                                        <td><input class="form-control" ng-keypress="isNum($event)" name="Sec" ng-model="DMS.LASec" type="text" /></td>
+                                        <td><input class="form-control" ng-keypress="isNum($event)" ng-model-options="{ updateOn: 'blur' }" ng-change="checkValue('dms', 'lat')" name="Sec" ng-model="DMS.LASec" type="text" ng-required="decDegORdms.val == 'dms'" /></td>
                                         <td>″</td>
                                     </tr>
                                 </table>
@@ -64,16 +64,16 @@
                             <label class="col-md-4 control-label req" for="SITE_longitude_dd">Longitude:</label>
                             <div class="col-md-7" ng-if="decDegORdms.val == 'dd'">
                                 <input class="form-control" ng-keypress="isNum($event)" ng-enter="getAddress()" id="SITE_longitude_dd" name="longitude_dd" ng-model="aSite.longitude_dd"
-                                       ng-model-options="{ updateOn: 'blur' }" ng-change="checkValue()" type="text" placeholder="Longitude" required />
+                                       ng-model-options="{ updateOn: 'blur' }" ng-change="checkValue('dd','long')" type="text" placeholder="Longitude" ng-required="decDegORdms.val == 'dd'" />
                             </div>
                             <div class="col-md-7" ng-if="decDegORdms.val == 'dms'">
                                 <table>
                                     <tr>
-                                        <td><input class="form-control" ng-keypress="isNum($event)" name="Deg" ng-model-options="{ updateOn: 'blur' }" ng-change="checkValue('dms')" id="LoDeg" ng-model="DMS.LODeg" type="text" /></td>
+                                        <td><input class="form-control" ng-keypress="isNum($event)" name="Deg" ng-model-options="{ updateOn: 'blur' }" ng-change="checkValue('dms','long')" id="LoDeg" ng-model="DMS.LODeg" type="text" ng-required="decDegORdms.val == 'dms'" /></td>
                                         <td>°</td>
-                                        <td><input class="form-control" ng-keypress="isNum($event)" name="Min" ng-model="DMS.LOMin" type="text" /></td>
+                                        <td><input class="form-control" ng-keypress="isNum($event)" name="Min" ng-model-options="{ updateOn: 'blur' }" ng-change="checkValue('dms','long')" ng-model="DMS.LOMin" type="text" ng-required="decDegORdms.val == 'dms'" /></td>
                                         <td>′</td>
-                                        <td><input class="form-control" ng-keypress="isNum($event)" name="Sec" ng-model="DMS.LOSec" type="text" /></td>
+                                        <td><input class="form-control" ng-keypress="isNum($event)" name="Sec" ng-model-options="{ updateOn: 'blur' }" ng-change="checkValue('dms','long')" ng-model="DMS.LOSec" type="text" ng-required="decDegORdms.val == 'dms'" /></td>
                                         <td>″</td>
                                     </tr>
                                 </table>
@@ -150,7 +150,7 @@
                         <div class="form-group">
                             <div class="panel panel-default">
                                 <div class="panel-body">
-                                    <!--<div class="form-group">
+                                    <div class="form-group">
                                         <label class="col-md-4 control-label" for="POPULATEBTN">
                                             Click to populate address fields:
                                             <button type="button" class="help-btn" tooltip-placement="left" tooltip-append-to-body="false" uib-tooltip="Also checks for nearby sites within x ft, and populates 5 fields below.">
@@ -160,8 +160,7 @@
                                         <div class="col-md-7">
                                             <button type="button" ng-click="getAddress()" class="btn-wim btn-inline btn-blue btn-md">Verify Location</button>
                                         </div>
-
-                                    </div>-->
+                                    </div>
 
                                     <!--Address-->
                                     <div class="form-group">

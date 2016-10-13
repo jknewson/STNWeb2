@@ -419,12 +419,33 @@
                 if ($scope.createOReditOP == 'edit') {
                     if ($scope.opCopy.decDegORdms == "dd") {
                         //they clicked Dec Deg..
-                        if ($scope.DMS.LADeg !== undefined) {
+                        if (($scope.DMS.LADeg !== undefined && $scope.DMS.LAMin !== undefined && $scope.DMS.LASec !== undefined) &&
+                            $scope.DMS.LODeg !== undefined && $scope.DMS.LOMin !== undefined && $scope.DMS.LOSec !== undefined) {
                             //convert what's here for each lat and long
                             $scope.opCopy.latitude_dd = azimuth($scope.DMS.LADeg, $scope.DMS.LAMin, $scope.DMS.LASec);
                             $scope.opCopy.longitude_dd = azimuth($scope.DMS.LODeg, $scope.DMS.LOMin, $scope.DMS.LOSec);
                             //clear
                             $scope.DMS = {};
+                        } else {
+                            //show modal telling them to populate all three (DMS) for conversion to work
+                            var DMSModal = $uibModal.open({
+                                template: '<div class="modal-header"><h3 class="modal-title">Error</h3></div>' +
+                                    '<div class="modal-body"><p>Please populate all three inputs for conversion from DMS to Decimal Degrees to work.</p></div>' +
+                                    '<div class="modal-footer"><button type="button" class="btn btn-primary" ng-enter="ok()" ng-click="ok()">OK</button></div>',
+                                controller: ['$scope', '$uibModalInstance', function ($scope, $uibModalInstance) {
+                                    $scope.ok = function () {
+                                        $uibModalInstance.close();
+                                    };
+                                }],
+                                size: 'sm'
+                            });
+                            DMSModal.result.then(function () {
+                                if ($scope.DMS.LADeg !== undefined || $scope.DMS.LAMin !== undefined || $scope.DMS.LASec !== undefined)
+                                    $("#LaDeg").focus();
+                                if ($scope.DMS.LODeg !== undefined || $scope.DMS.LOMin !== undefined || $scope.DMS.LOSec !== undefined)
+                                    $("#LoDeg").focus();
+                                $scope.opCopy.decDegORdms = "dms";
+                            });
                         }
                     } else {
                         //they clicked dms (convert lat/long to dms)
@@ -447,12 +468,33 @@
                 } else {
                     if ($scope.OP.decDegORdms == "dd") {
                         //they clicked Dec Deg..
-                        if ($scope.DMS.LADeg !== undefined) {
+                        if (($scope.DMS.LADeg !== undefined && $scope.DMS.LAMin !== undefined && $scope.DMS.LASec !== undefined) &&
+                            $scope.DMS.LODeg !== undefined && $scope.DMS.LOMin !== undefined && $scope.DMS.LOSec !== undefined) {  
                             //convert what's here for each lat and long
                             $scope.OP.latitude_dd = azimuth($scope.DMS.LADeg, $scope.DMS.LAMin, $scope.DMS.LASec);
                             $scope.OP.longitude_dd = azimuth($scope.DMS.LODeg, $scope.DMS.LOMin, $scope.DMS.LOSec);
                             //clear
                             $scope.DMS = {};
+                        } else {
+                        //show modal telling them to populate all three (DMS) for conversion to work
+                            var DMSModal = $uibModal.open({
+                                template: '<div class="modal-header"><h3 class="modal-title">Error</h3></div>' +
+                                    '<div class="modal-body"><p>Please populate all three inputs for conversion from DMS to Decimal Degrees to work.</p></div>' +
+                                    '<div class="modal-footer"><button type="button" class="btn btn-primary" ng-enter="ok()" ng-click="ok()">OK</button></div>',
+                                controller: ['$scope', '$uibModalInstance', function ($scope, $uibModalInstance) {
+                                    $scope.ok = function () {
+                                        $uibModalInstance.close();
+                                    };
+                                }],
+                                size: 'sm'
+                            });
+                            DMSModal.result.then(function () {
+                                if ($scope.DMS.LADeg !== undefined || $scope.DMS.LAMin !== undefined || $scope.DMS.LASec !== undefined)
+                                    $("#LaDeg").focus();
+                                if ($scope.DMS.LODeg !== undefined || $scope.DMS.LOMin !== undefined || $scope.DMS.LOSec !== undefined)
+                                    $("#LoDeg").focus();
+                                $scope.OP.decDegORdms = "dms";
+                            });
                         }
                     } else {
                         //they clicked dms (convert lat/long to dms)
@@ -759,20 +801,36 @@
             $scope.checkValue = function (d) {
                 if (d == 'dms') {
                     //check the degree value
-                    if ($scope.DMS.LADeg < 0 || $scope.DMS.LADeg > 73) {
+                    if ($scope.DMS.LADeg < 0 || $scope.DMS.LADeg > 73 || (isNaN($scope.DMS.LADeg) && $scope.DMS.LADeg !== undefined) || (isNaN($scope.DMS.LAMin) && $scope.DMS.LAMin !== undefined) || (isNaN($scope.DMS.LASec) && $scope.DMS.LASec !== undefined)) {
                         openLatModal('dms');
+                        //if not a number, clear the imputs to trigger the validation
+                        if (isNaN($scope.DMS.LADeg)) $scope.DMS.LADeg = undefined;
+                        if (isNaN($scope.DMS.LAMin)) $scope.DMS.LAMin = undefined;
+                        if (isNaN($scope.DMS.LASec)) $scope.DMS.LASec = undefined;
                     }
-                    if ($scope.DMS.LODeg < -175 || $scope.DMS.LODeg > -60) {
+                    if ($scope.DMS.LODeg < -175 || $scope.DMS.LODeg > -60 || (isNaN($scope.DMS.LODeg) && $scope.DMS.LODeg !== undefined) || (isNaN($scope.DMS.LOMin) && $scope.DMS.LOMin !== undefined) || (isNaN($scope.DMS.LOSec) && $scope.DMS.LOSec !== undefined)) {
                         openLongModal('dms');
+                        //if not a number, clear the imputs to trigger the validation
+                        if (isNaN($scope.DMS.LODeg)) $scope.DMS.LODeg = undefined;
+                        if (isNaN($scope.DMS.LOMin)) $scope.DMS.LOMin = undefined;
+                        if (isNaN($scope.DMS.LOSec)) $scope.DMS.LOSec = undefined;
                     }
                 } else {
                     //check the latitude/longitude
                     var op = $scope.view.OPval == 'edit' ? $scope.opCopy : $scope.OP;
-                    if (op.latitude_dd < 0 || op.latitude_dd > 73) {
+                    if (op.latitude_dd < 0 || op.latitude_dd > 73 || isNaN(op.latitude_dd)) {
                         openLatModal('latlong');
+                        //if not a number, clear the imputs to trigger the validation
+                        if (isNaN(op.latitude_dd)) {
+                            op.latitude_dd = undefined;
+                        }
                     }
-                    if (op.longitude_dd < -175 || op.longitude_dd > -60) {
+                    if (op.longitude_dd < -175 || op.longitude_dd > -60 || isNaN(op.longitude_dd)) {
                         openLongModal('latlong');
+                        //if not a number, clear the imputs to trigger the validation
+                        if (isNaN(op.longitude_dd)) {
+                            op.longitude_dd = undefined;
+                        }
                     }
                 }
             };

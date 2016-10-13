@@ -36,6 +36,7 @@
                         $('th.' + newSortingOrder + ' i').removeClass().addClass('glyphicon glyphicon-chevron-down');
                     }
                 };
+
                 $scope.lookupForm = {};
                 $scope.showAddAgForm = false; //add something new to a lookup clicked (will unhide form below it) False-> form: hidden, True-> form: visible
                 $scope.addAgButtonShowing = true; //start it at true..when clicked, show form, hide button

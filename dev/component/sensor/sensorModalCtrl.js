@@ -1607,7 +1607,7 @@
             } else {
                 $scope.mostRecentStatus = "Retrieved";
             }
-            if ($scope.RetrievedSensorStat.vdatum_id !== undefined) {
+            if ($scope.RetrievedSensorStat.vdatum_id !== undefined && $scope.RetrievedSensorStat.vdatum_id > 0) {
                 $scope.RetrievedSensorStat.vdatumName = $scope.vertDatumList.filter(function (vd) { return vd.datum_id == $scope.RetrievedSensorStat.vdatum_id; })[0].datum_abbreviation;
             }
             $scope.RetrievedSensorStat.time_stamp = getDateTimeParts($scope.RetrievedSensorStat.time_stamp); //this keeps it as utc in display

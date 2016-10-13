@@ -4,8 +4,8 @@
     //look up common service module, and register the new factory with that module 
     var STNResource = angular.module('STNResource', ['ngResource']);
     var rootURL = "https://stn.wim.usgs.gov/STNServices";
-     //var rootURL = "https://stntest.wim.usgs.gov/STNServices2";
-     //var rootURL = "http://localhost/STNServices2";
+    // var rootURL = "https://stntest.wim.usgs.gov/STNServices2";
+    // var rootURL = "http://localhost/STNServices2";
    
     //#region GEOCODE https://geocoding.geo.census.gov/geocoder/geographies/coordinates?benchmark=4&vintage=4&format=json
     STNResource.factory('GEOCODE', ['$resource', function ($resource) {          
@@ -589,11 +589,11 @@
                 //Site NetworkTypes
                 getSiteNetworkTypes: { method: 'GET', isArray: true, url: rootURL + '/sites/:id/networkTypes.json' },
                 postSiteNetworkType: { method: 'POST', cache: false, params: { siteId: '@siteId', NetworkTypeId: '@networkTypeId' }, isArray: true, url: rootURL + '/sites/:siteId/AddNetworkType' }, //?NetworkTypeId= {networkTypeId}
-                deleteSiteNetworkType: { method: 'DELETE', cache: false, isArray: false, url: rootURL + '/sites/:siteId/removeNetworkType?NetworkTypeId:networkTypeId' },
+                deleteSiteNetworkType: { method: 'DELETE', cache: false, isArray: false, url: rootURL + '/sites/:siteId/removeNetworkType?NetworkTypeId=:networkTypeId' },
                 //Site Network Names
                 getSiteNetworkNames: { method: 'GET', isArray: true, url: rootURL + '/sites/:id/networkNames.json' },
                 postSiteNetworkName: { method: 'POST', cache: false, params: { siteId: '@siteId', NetworkNameId: '@networkNameId' }, isArray: true, url: rootURL + '/sites/:siteId/AddNetworkName' }, //?NetworkNameId= {networkNameId}
-                deleteSiteNetworkName: { method: 'DELETE', cache: false, isArray: false, url: rootURL + '/sites/:siteId/removeNetworkName?NetworkNameId:networkNameId'},
+                deleteSiteNetworkName: { method: 'DELETE', cache: false, isArray: false, url: rootURL + '/sites/:siteId/removeNetworkName?NetworkNameId=:networkNameId'},
                 //Site Housings
                 getSiteHousings: { method: 'GET', isArray: true, url: rootURL + '/sites/:id/SiteHousings.json' },
               //  postSiteHousing: {method: 'POST', cache: false, isArray:true, url: rootURL + '/site/:id/AddSiteSiteHousing.json'},
