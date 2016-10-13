@@ -388,6 +388,8 @@
                     var datetime = new Date($scope.aPeak.peak_date.date.getFullYear(), $scope.aPeak.peak_date.date.getMonth(), $scope.aPeak.peak_date.date.getDate(),
                         $scope.aPeak.peak_date.time.getHours(), $scope.aPeak.peak_date.time.getMinutes(), $scope.aPeak.peak_date.time.getSeconds());
                     $scope.aPeak.peak_date = datetime;
+                    dealWithTimeStampb4Send(); //UTC or local?
+
                     $http.defaults.headers.common.Authorization = 'Basic ' + $cookies.get('STNCreds');
                     $http.defaults.headers.common.Accept = 'application/json';
                     PEAK.update({ id: $scope.aPeak.peak_summary_id }, $scope.aPeak).$promise.then(function (response) {
