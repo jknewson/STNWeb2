@@ -126,16 +126,16 @@
                     <label class="col-md-4 control-label req" for="latitude_dd">Latitude:</label>
                     <div class="col-md-7" ng-if="aSite.decDegORdms == 'dd'">
                         <input class="form-control" ng-keypress="isNum($event)" name="latitude_dd" id="latitude_dd" ng-model="aSite.latitude_dd"
-                               ng-model-options="{ updateOn: 'blur' }" ng-change="checkValue()" type="text" placeholder="Latitude" required />
+                               ng-model-options="{ updateOn: 'blur' }" ng-change="checkValue('dd','lat')" type="text" placeholder="Latitude" ng-required="aSite.decDegORdms == 'dd'" />
                     </div>
                     <div class="col-md-7" ng-if="aSite.decDegORdms == 'dms'">
                         <table>
                             <tr>
-                                <td><input class="form-control" ng-keypress="isNum($event)" ng-model-options="{ updateOn: 'blur' }" ng-change="checkValue('dms')" id="LaDeg" name="Deg" ng-model="DMS.LADeg" type="text" /></td>
+                                <td><input class="form-control" ng-keypress="isNum($event)" ng-model-options="{ updateOn: 'blur' }" ng-change="checkValue('dms','lat')" id="LaDeg" name="Deg" ng-model="DMS.LADeg" type="text" ng-required="aSite.decDegORdms == 'dms'" /></td>
                                 <td>°</td>
-                                <td><input class="form-control" ng-keypress="isNum($event)" name="Min" ng-model="DMS.LAMin" type="text" /></td>
+                                <td><input class="form-control" ng-keypress="isNum($event)" ng-model-options="{ updateOn: 'blur' }" ng-change="checkValue('dms','lat')" name="Min" ng-model="DMS.LAMin" type="text" ng-required="aSite.decDegORdms == 'dms'" /></td>
                                 <td>′</td>
-                                <td><input class="form-control" ng-keypress="isNum($event)" name="Sec" ng-model="DMS.LASec" type="text" /></td>
+                                <td><input class="form-control" ng-keypress="isNum($event)" ng-model-options="{ updateOn: 'blur' }" ng-change="checkValue('dms','lat')" name="Sec" ng-model="DMS.LASec" type="text" ng-required="aSite.decDegORdms == 'dms'" /></td>
                                 <td>″</td>
                             </tr>
                         </table>
@@ -147,16 +147,16 @@
                     <label class="col-md-4 control-label req" for="longitude_dd">Longitude:</label>
                     <div class="col-md-7" ng-if="aSite.decDegORdms == 'dd'">
                         <input class="form-control" ng-keypress="isNum($event)" ng-enter="getAddress()" id="longitude_dd" name="longitude_dd" ng-model="aSite.longitude_dd"
-                               ng-model-options="{ updateOn: 'blur' }" ng-change="checkValue()" type="text" placeholder="Longitude" required />
+                               ng-model-options="{ updateOn: 'blur' }" ng-change="checkValue('dd', 'long')" type="text" placeholder="Longitude" ng-required="aSite.decDegORdms == 'dd'" />
                     </div>
                     <div class="col-md-7" ng-if="aSite.decDegORdms == 'dms'">
                         <table>
                             <tr>
-                                <td><input class="form-control" ng-keypress="isNum($event)" ng-model-options="{ updateOn: 'blur' }" ng-change="checkValue('dms')" id="LoDeg" name="Deg" ng-model="DMS.LODeg" type="text" /></td>
+                                <td><input class="form-control" ng-keypress="isNum($event)" ng-model-options="{ updateOn: 'blur' }" ng-change="checkValue('dms', 'long')" id="LoDeg" name="Deg" ng-model="DMS.LODeg" type="text" ng-required="aSite.decDegORdms == 'dms'" /></td>
                                 <td>°</td>
-                                <td><input class="form-control" ng-keypress="isNum($event)" name="Min" ng-model="DMS.LOMin" type="text" /></td>
+                                <td><input class="form-control" ng-keypress="isNum($event)" ng-model-options="{ updateOn: 'blur' }" ng-change="checkValue('dms', 'long')" name="Min" ng-model="DMS.LOMin" type="text" ng-required="aSite.decDegORdms == 'dms'" /></td>
                                 <td>′</td>
-                                <td><input class="form-control" ng-keypress="isNum($event)" name="Sec" ng-model="DMS.LOSec" type="text" /></td>
+                                <td><input class="form-control" ng-keypress="isNum($event)" ng-model-options="{ updateOn: 'blur' }" ng-change="checkValue('dms', 'long')" name="Sec" ng-model="DMS.LOSec" type="text" ng-required="aSite.decDegORdms == 'dms'" /></td>
                                 <td>″</td>
                             </tr>
                         </table>
@@ -197,13 +197,12 @@
                             </h3>
                         </div>
                         <div class="panel-body">
-                            <!-- <div class="form-group required" ng-if="aSite.site_id == undefined">
+                            <div class="form-group required" ng-if="aSite.site_id == undefined">
                                 <label class="col-md-4 control-label" for="POPULATEBTN">Click here to populate location fields:</label>
                                 <div class="col-md-7">
                                     <button type="button" ng-click="getAddress()" class="btn-wim btn-inline btn-md btn-blue">Verify Location</button>
                                 </div>
-
-                            </div>-->
+                            </div>
 
                             <!-- map showing lat/long location-->
                             <div class="col-md-7 col-md-offset-3" style="height:300px;display:table;" ng-show="showMap">
@@ -404,7 +403,7 @@
                     <div class="col-md-7">
                         <ul style="padding-left:0">
                             <li style="list-style:none;" ng-repeat="nt in NetTypeList">
-                                <input type="checkbox" class="site-chx" ng-model="nt.selected" ng-change="netTypeChg()" />
+                                <input type="checkbox" class="site-chx" ng-model="nt.selected" ng-change="netTypeChg(nt)" />
                                 <label class="site-chx-label">{{nt.network_type_name}}</label>
                             </li>
                         </ul>
@@ -757,9 +756,9 @@
                                 <tr>
                                     <td><input class="form-control" ng-keypress="isNum($event)" ng-model-options="{ updateOn: 'blur' }" ng-change="checkValue('dms')" id="LaDeg" name="Deg" ng-model="DMS.LADeg" type="text" /></td>
                                     <td>°</td>
-                                    <td><input class="form-control" ng-keypress="isNum($event)" name="Min" ng-model="DMS.LAMin" type="text" /></td>
+                                    <td><input class="form-control" ng-keypress="isNum($event)" ng-model-options="{ updateOn: 'blur' }" ng-change="checkValue('dms')" name="Min" ng-model="DMS.LAMin" type="text" /></td>
                                     <td>′</td>
-                                    <td><input class="form-control" ng-keypress="isNum($event)" name="Sec" ng-model="DMS.LASec" type="text" /></td>
+                                    <td><input class="form-control" ng-keypress="isNum($event)" ng-model-options="{ updateOn: 'blur' }" ng-change="checkValue('dms')" name="Sec" ng-model="DMS.LASec" type="text" /></td>
                                     <td>″</td>
                                 </tr>
                             </table>
@@ -778,9 +777,9 @@
                                 <tr>
                                     <td><input class="form-control" ng-keypress="isNum($event)" ng-model-options="{ updateOn: 'blur' }" ng-change="checkValue('dms')" id="LoDeg" name="Deg" ng-model="DMS.LODeg" type="text" /></td>
                                     <td>°</td>
-                                    <td><input class="form-control" ng-keypress="isNum($event)" name="Min" ng-model="DMS.LOMin" type="text" /></td>
+                                    <td><input class="form-control" ng-keypress="isNum($event)" ng-model-options="{ updateOn: 'blur' }" ng-change="checkValue('dms')" name="Min" ng-model="DMS.LOMin" type="text" /></td>
                                     <td>′</td>
-                                    <td><input class="form-control" ng-keypress="isNum($event)" name="Sec" ng-model="DMS.LOSec" type="text" /></td>
+                                    <td><input class="form-control" ng-keypress="isNum($event)" ng-model-options="{ updateOn: 'blur' }" ng-change="checkValue('dms')" name="Sec" ng-model="DMS.LOSec" type="text" /></td>
                                     <td>″</td>
                                 </tr>
                             </table>
@@ -1088,9 +1087,9 @@
                                         <tr>
                                             <td><input class="form-control" ng-keypress="isNum($event)" ng-model-options="{ updateOn: 'blur' }" ng-change="checkValue('dms')" id="LaDeg" name="Deg" ng-model="DMS.LADeg" type="text" /></td>
                                             <td>°</td>
-                                            <td><input class="form-control" ng-keypress="isNum($event)" name="Min" ng-model="DMS.LAMin" type="text" /></td>
+                                            <td><input class="form-control" ng-keypress="isNum($event)" ng-model-options="{ updateOn: 'blur' }" ng-change="checkValue('dms')" name="Min" ng-model="DMS.LAMin" type="text" /></td>
                                             <td>′</td>
-                                            <td><input class="form-control" ng-keypress="isNum($event)" name="Sec" ng-model="DMS.LASec" type="text" /></td>
+                                            <td><input class="form-control" ng-keypress="isNum($event)" ng-model-options="{ updateOn: 'blur' }" ng-change="checkValue('dms')" name="Sec" ng-model="DMS.LASec" type="text" /></td>
                                             <td>″</td>
                                         </tr>
                                     </table>
@@ -1114,9 +1113,9 @@
                                         <tr>
                                             <td><input class="form-control" ng-keypress="isNum($event)" ng-model-options="{ updateOn: 'blur' }" ng-change="checkValue('dms')" id="LoDeg" name="Deg" ng-model="DMS.LODeg" type="text" /></td>
                                             <td>°</td>
-                                            <td><input class="form-control" ng-keypress="isNum($event)" name="Min" ng-model="DMS.LOMin" type="text" /></td>
+                                            <td><input class="form-control" ng-keypress="isNum($event)" ng-model-options="{ updateOn: 'blur' }" ng-change="checkValue('dms')" name="Min" ng-model="DMS.LOMin" type="text" /></td>
                                             <td>′</td>
-                                            <td><input class="form-control" ng-keypress="isNum($event)" name="Sec" ng-model="DMS.LOSec" type="text" /></td>
+                                            <td><input class="form-control" ng-keypress="isNum($event)" ng-model-options="{ updateOn: 'blur' }" ng-change="checkValue('dms')" name="Sec" ng-model="DMS.LOSec" type="text" /></td>
                                             <td>″</td>
                                         </tr>
                                     </table>
@@ -1730,20 +1729,20 @@
                     </div>
 
                     <!-- Latitude: -->
-                    <div class="form-group">
-                        <label class="col-md-4 control-label" for="latitude_dd">Latitude:</label>
+                    <div class="form-group required" ng-class="{'has-error':HWMForm.latitude_dd.$invalid && HWMForm.latitude_dd.$dirty}">
+                        <label class="col-md-4 control-label req" for="latitude_dd">Latitude:</label>
                         <div class="col-md-6" ng-if="aHWM.decDegORdms == 'dd'">
                             <input class="form-control" ng-keypress="isNum($event)" name="latitude_dd" id="latitude_dd" ng-model="aHWM.latitude_dd"
-                                   ng-model-options="{ updateOn: 'blur' }" ng-change="checkValue('dd')" type="text" />
+                                   ng-model-options="{ updateOn: 'blur' }" ng-change="checkValue('dd')" type="text" ng-required="aHWM.decDegORdms == 'dd'" />
                         </div>
                         <div class="col-md-6" ng-if="aHWM.decDegORdms == 'dms'">
                             <table>
                                 <tr>
-                                    <td><input class="form-control" ng-keypress="isNum($event)" ng-model-options="{ updateOn: 'blur' }" ng-change="checkValue('dms')" id="LaDeg" name="Deg" ng-model="DMS.LADeg" type="text" /></td>
+                                    <td><input class="form-control" ng-keypress="isNum($event)" ng-model-options="{ updateOn: 'blur' }" ng-change="checkValue('dms')" id="LaDeg" name="Deg" ng-model="DMS.LADeg" type="text" ng-required="aHWM.decDegORdms == 'dms'" /></td>
                                     <td>°</td>
-                                    <td><input class="form-control" ng-keypress="isNum($event)" name="Min" ng-model="DMS.LAMin" type="text" /></td>
+                                    <td><input class="form-control" ng-keypress="isNum($event)" ng-model-options="{ updateOn: 'blur' }" ng-change="checkValue('dms')" name="Min" ng-model="DMS.LAMin" type="text" ng-required="aHWM.decDegORdms == 'dms'" /></td>
                                     <td>′</td>
-                                    <td><input class="form-control" ng-keypress="isNum($event)" name="Sec" ng-model="DMS.LASec" type="text" /></td>
+                                    <td><input class="form-control" ng-keypress="isNum($event)" ng-model-options="{ updateOn: 'blur' }" ng-change="checkValue('dms')" name="Sec" ng-model="DMS.LASec" type="text" ng-required="aHWM.decDegORdms == 'dms'" /></td>
                                     <td>″</td>
                                 </tr>
                             </table>
@@ -1751,20 +1750,20 @@
                     </div>
 
                     <!-- Longitude: -->
-                    <div class="form-group">
-                        <label class="col-md-4 control-label" for="longitude_dd">Longitude:</label>
+                    <div class="form-group required" ng-class="{'has-error':HWMForm.longitude_dd.$invalid && HWMForm.longitude_dd.$dirty}">
+                        <label class="col-md-4 control-label req" for="longitude_dd">Longitude:</label>
                         <div class="col-md-6" ng-if="aHWM.decDegORdms == 'dd'">
                             <input class="form-control" ng-keypress="isNum($event)" id="longitude_dd" name="longitude_dd" ng-model="aHWM.longitude_dd"
-                                   ng-model-options="{ updateOn: 'blur' }" ng-change="checkValue('dd')" type="text" />
+                                   ng-model-options="{ updateOn: 'blur' }" ng-change="checkValue('dd')" type="text" ng-required="aHWM.decDegORdms == 'dd'" />
                         </div>
                         <div class="col-md-6" ng-if="aHWM.decDegORdms == 'dms'">
                             <table>
                                 <tr>
-                                    <td><input class="form-control" ng-keypress="isNum($event)" name="Deg" ng-model-options="{ updateOn: 'blur' }" ng-change="checkValue('dms')" id="LoDeg" ng-model="DMS.LODeg" type="text" /></td>
+                                    <td><input class="form-control" ng-keypress="isNum($event)" name="Deg" ng-model-options="{ updateOn: 'blur' }" ng-change="checkValue('dms')" id="LoDeg" ng-model="DMS.LODeg" type="text" ng-required="aHWM.decDegORdms == 'dms'" /></td>
                                     <td>°</td>
-                                    <td><input class="form-control" ng-keypress="isNum($event)" name="Min" ng-model="DMS.LOMin" type="text" /></td>
+                                    <td><input class="form-control" ng-keypress="isNum($event)" name="Min" ng-model-options="{ updateOn: 'blur' }" ng-change="checkValue('dms')" ng-model="DMS.LOMin" type="text" ng-required="aHWM.decDegORdms == 'dms'" /></td>
                                     <td>′</td>
-                                    <td><input class="form-control" ng-keypress="isNum($event)" name="Sec" ng-model="DMS.LOSec" type="text" /></td>
+                                    <td><input class="form-control" ng-keypress="isNum($event)" name="Sec" ng-model-options="{ updateOn: 'blur' }" ng-change="checkValue('dms')" ng-model="DMS.LOSec" type="text" ng-required="aHWM.decDegORdms == 'dms'" /></td>
                                     <td>″</td>
                                 </tr>
                             </table>
@@ -2044,21 +2043,7 @@
                                     </span>
                                 </div>
                             </div>
-
-                            <!-- Breakdown of categories
-        <div class="form-group">
-            <label class="col-md-4"></label>
-            <div class="col-md-6">
-                <table>
-                    <tr><td style="text-align: center;width: 81px">0.05</td><td style="text-align: center;width: 81px">0.02</td><td style="text-align: left;width: 81px">Excellent</td></tr>
-                    <tr><td style="text-align: center;width: 81px">0.1</td><td style="text-align: center;width: 81px">0.05</td><td style="text-align: left;width: 81px">Good</td></tr>
-                    <tr><td style="text-align: center;width: 81px">0.2</td><td style="text-align: center;width: 81px">0.1</td><td style="text-align: left;width: 81px">Fair</td></tr>
-                    <tr><td style="text-align: center;width: 81px">0.4</td><td style="text-align: center;width: 81px">0.2</td><td style="text-align: left;width: 81px">Poor</td></tr>
-                    <tr><td style="text-align: center;width: 81px">&#62;0.40</td><td style="text-align: center;width: 81px">&#62;0.20</td><td style="text-align: left;width: 81px">V. Poor</td></tr>
-                    <tr><td colspan="3"><a href="http://pubs.usgs.gov/tm/11d1/" target="_blank">USGS T&M 11-D1, Table 13</a></td></tr>
-                </table>
-            </div>
-        </div> -->
+                                                        
                             <!-- hwm_uncertainty: (details) -->
                             <div class="col-md-12" ng-if="view.HWMval== 'detail'">
                                 <div class="col-md-4"><label>HWM Uncertainty:</label></div>
@@ -2156,20 +2141,20 @@
                                 <div class="col-md-6"><span>{{aHWM.latitude_dd}}</span></div>
                             </div>
                             <!-- Latitude: (edit) -->
-                            <div class="form-group" ng-if="view.HWMval== 'edit'">
-                                <label class="col-md-4 control-label" for="latitude_dd">Latitude:</label>
+                            <div class="form-group required" ng-if="view.HWMval=='edit'">
+                                <label class="col-md-4 control-label req" for="latitude_dd">Latitude:</label>
                                 <div class="col-md-6" ng-if="hwmCopy.decDegORdms == 'dd'">
                                     <input class="form-control" ng-keypress="isNum($event)" name="latitude_dd" id="latitude_dd" ng-model="hwmCopy.latitude_dd"
-                                           ng-model-options="{ updateOn: 'blur' }" ng-change="checkValue('dd')" type="text" />
+                                           ng-model-options="{ updateOn: 'blur' }" ng-change="checkValue('dd')" type="text" ng-required="hwmCopy.decDegORdms == 'dd' && view.HWMval=='edit'" />
                                 </div>
                                 <div class="col-md-6" ng-if="hwmCopy.decDegORdms == 'dms'">
                                     <table>
                                         <tr>
-                                            <td><input class="form-control" ng-keypress="isNum($event)" ng-model-options="{ updateOn: 'blur' }" ng-change="checkValue('dms')" id="LaDeg" name="Deg" ng-model="DMS.LADeg" type="text" /></td>
+                                            <td><input class="form-control" ng-keypress="isNum($event)" ng-model-options="{ updateOn: 'blur' }" ng-change="checkValue('dms')" id="LaDeg" name="Deg" ng-model="DMS.LADeg" type="text" ng-required="hwmCopy.decDegORdms == 'dms' && view.HWMval=='edit'" /></td>
                                             <td>°</td>
-                                            <td><input class="form-control" ng-keypress="isNum($event)" name="Min" ng-model="DMS.LAMin" type="text" /></td>
+                                            <td><input class="form-control" ng-keypress="isNum($event)" ng-model-options="{ updateOn: 'blur' }" ng-change="checkValue('dms')" name="Min" ng-model="DMS.LAMin" type="text" ng-required="hwmCopy.decDegORdms == 'dms' && view.HWMval=='edit'" /></td>
                                             <td>′</td>
-                                            <td><input class="form-control" ng-keypress="isNum($event)" name="Sec" ng-model="DMS.LASec" type="text" /></td>
+                                            <td><input class="form-control" ng-keypress="isNum($event)" ng-model-options="{ updateOn: 'blur' }" ng-change="checkValue('dms')" name="Sec" ng-model="DMS.LASec" type="text" ng-required="hwmCopy.decDegORdms == 'dms' && view.HWMval=='edit'" /></td>
                                             <td>″</td>
                                         </tr>
                                     </table>
@@ -2182,20 +2167,20 @@
                                 <div class="col-md-6"><span>{{aHWM.longitude_dd}}</span></div>
                             </div>
                             <!-- Longitude:  (edit)-->
-                            <div class="form-group" ng-if="view.HWMval== 'edit'">
-                                <label class="col-md-4 control-label" for="longitude_dd">Longitude:</label>
+                            <div class="form-group required" ng-if="view.HWMval=='edit'">
+                                <label class="col-md-4 control-label req" for="longitude_dd">Longitude:</label>
                                 <div class="col-md-6" ng-if="hwmCopy.decDegORdms == 'dd'">
                                     <input class="form-control" ng-keypress="isNum($event)" id="longitude_dd" name="longitude_dd" ng-model="hwmCopy.longitude_dd"
-                                           ng-model-options="{ updateOn: 'blur' }" ng-change="checkValue('dd')" type="text" />
+                                           ng-model-options="{ updateOn: 'blur' }" ng-change="checkValue('dd')" type="text" ng-required="hwmCopy.decDegORdms == 'dd' && view.HWMval=='edit'" />
                                 </div>
                                 <div class="col-md-6" ng-if="hwmCopy.decDegORdms == 'dms'">
                                     <table>
                                         <tr>
-                                            <td><input class="form-control" ng-keypress="isNum($event)" ng-model-options="{ updateOn: 'blur' }" ng-change="checkValue('dms')" id="LoDeg" name="Deg" ng-model="DMS.LODeg" type="text" /></td>
+                                            <td><input class="form-control" ng-keypress="isNum($event)" ng-model-options="{ updateOn: 'blur' }" ng-change="checkValue('dms')" id="LoDeg" name="Deg" ng-model="DMS.LODeg" type="text" ng-required="hwmCopy.decDegORdms == 'dms' && view.HWMval=='edit'" /></td>
                                             <td>°</td>
-                                            <td><input class="form-control" ng-keypress="isNum($event)" name="Min" ng-model="DMS.LOMin" type="text" /></td>
+                                            <td><input class="form-control" ng-keypress="isNum($event)" ng-model-options="{ updateOn: 'blur' }" ng-change="checkValue('dms')" name="Min" ng-model="DMS.LOMin" type="text" ng-required="hwmCopy.decDegORdms == 'dms' && view.HWMval=='edit'" /></td>
                                             <td>′</td>
-                                            <td><input class="form-control" ng-keypress="isNum($event)" name="Sec" ng-model="DMS.LOSec" type="text" /></td>
+                                            <td><input class="form-control" ng-keypress="isNum($event)" ng-model-options="{ updateOn: 'blur' }" ng-change="checkValue('dms')" name="Sec" ng-model="DMS.LOSec" type="text" ng-required="hwmCopy.decDegORdms == 'dms' && view.HWMval=='edit'" /></td>
                                             <td>″</td>
                                         </tr>
                                     </table>

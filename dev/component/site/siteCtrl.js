@@ -24,6 +24,24 @@
                     $rootScope.stateIsLoading.showLoading = true; // loading..
                     var dropdownParts =[allHorDatums, allHorCollMethods, allStates, allCounties, allHousingTypes, allDeployPriorities,
                         allNetworkNames, allNetworkTypes, allDeployTypes, allSensorTypes];
+                    var siteNNamesToPass =[]; //make sure only passing to edit those that are on this site (in case they edit, save, edit again)
+                    if ($scope.siteNetworkNames !== undefined) {
+                        for (var aNN = 0; aNN < allNetworkNames.length; aNN++) {
+                            //if name matches any of the names in $scope.SiteNetworkNames, get the full network_name to pass to the modal
+                            var i = $scope.siteNetworkNames.map(function (e) { return e; }).indexOf(allNetworkNames[aNN].name);
+                            if (i > -1)
+                                siteNNamesToPass.push(allNetworkNames[aNN]);
+                        }
+                    }
+                    var siteNTypesToPass = []; //make sure only passing to edit those that are on this site (in case they edit, save, edit again)
+                    if ($scope.siteNetworkTypes !== undefined) {
+                        for (var aNT = 0; aNT < allNetworkTypes.length; aNT++) {
+                            //if name matches any of the names in $scope.SiteNetworkNames, get the full network_name to pass to the modal
+                            var i = $scope.siteNetworkTypes.map(function (e) { return e; }).indexOf(allNetworkTypes[aNT].network_type_name);
+                            if (i > -1)
+                                siteNTypesToPass.push(allNetworkTypes[aNT]);
+                        }
+                    }
                     //modal
                     var modalInstance = $uibModal.open({
                             templateUrl: 'SITEmodal.html',
@@ -40,8 +58,8 @@
                                     if ($scope.aSite.site_id !== undefined) {
                                         var origSiteHouses = $scope.originalSiteHousings !== undefined ? $scope.originalSiteHousings : []; //needed for multi select to set prop selected
                                         var sHouseTypeModel = $scope.thisSiteHouseTypeModel.length > 0 ? $scope.thisSiteHouseTypeModel : []; //here's what the site already has
-                                        var sNetNames = thisSiteNetworkNames !== undefined ? thisSiteNetworkNames : [];
-                                        var sNetTypes = thisSiteNetworkTypes !== undefined ? thisSiteNetworkTypes : [];
+                                        var sNetNames = siteNNamesToPass.length > 0 ? siteNNamesToPass : [];
+                                        var sNetTypes = siteNTypesToPass.length > 0 ? siteNTypesToPass : [];
                                         var lo = $scope.landowner !== undefined ? $scope.landowner : { };
                                         var siteRelatedStuff = [$scope.aSite, origSiteHouses, sHouseTypeModel, sNetNames, sNetTypes, lo];
                                     return siteRelatedStuff;

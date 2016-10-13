@@ -29,12 +29,16 @@
             //event has been chosen. Set it as session event
             $scope.setEvent = function () {
                 $scope.evID = $scope.event.EventChosen;
-                var eventName = allEvents.filter(function (x) { return x.event_id == $scope.evID; })[0];
-                $cookies.put('SessionEventID', $scope.evID);
-                $cookies.put('SessionEventName', eventName.event_name);               
+                if ($scope.evID !== "") {
+                    var eventName = allEvents.filter(function (x) { return x.event_id == $scope.evID; })[0];
+                    $cookies.put('SessionEventID', $scope.evID);
+                    $cookies.put('SessionEventName', eventName.event_name);
 
-                $rootScope.sessionEvent = "Session Event: " + eventName.event_name + ".";
-                $uibModalInstance.dismiss('cancel');
+                    $rootScope.sessionEvent = "Session Event: " + eventName.event_name + ".";
+                    $uibModalInstance.dismiss('cancel');
+                } else {
+                    toastr.error("You must choose an Event first.");
+                }
             };
 
             //they want to clear the session event
