@@ -3,7 +3,7 @@
     'use strict';
     var STNControllers = angular.module('STNControllers');
     //#region DIRECTIVES
-    
+
     //try this one Monday:::
     //http://www.ng-newsletter.com/posts/d3-on-angular.html
     STNControllers.directive('barsChart',['$parse', function ($parse) {
@@ -58,7 +58,7 @@
                     $scope.searchTerm = '';
                     $scope.searchBy = { val: 'bySiteNo' };
                     $scope.placeholder = '...';
-                    $scope.IndexSearchSites = function () {                       
+                    $scope.IndexSearchSites = function () {
                         if ($scope.searchTerm !== "") {
                             $http.defaults.headers.common.Accept = 'application/json';
                             switch ($scope.searchBy.val) {

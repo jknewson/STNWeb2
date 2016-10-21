@@ -35,10 +35,8 @@
     <!-- endinject -->
 
     <!-- inject:css -->
-    <link rel="stylesheet" href="css/app.css">
-    <link rel="stylesheet" href="css/stn.css">
-    <link rel="stylesheet" href="css/less/stn.css">
-    <link rel="stylesheet" href="css/less/stn.min.css">
+    <link rel="stylesheet" href="app.css">
+    <link rel="stylesheet" href="stn.css">
     <!-- endinject -->
 
     <!-- bower:js -->
@@ -127,14 +125,14 @@
     <script src="component/peak/peakCtrl.js"></script>
     <script src="component/objectivePoint/objectivePointModalCtrl.js"></script>
     <script src="component/objectivePoint/objectivePointCtrl.js"></script>
+    <script src="component/member/memberModalCtrl.js"></script>
+    <script src="component/member/memberInfoCtrl.js"></script>
+    <script src="component/member/memberCtrl.js"></script>
     <script src="component/map/MapSiteInfoController.js"></script>
     <script src="component/map/MapSensorProposeController.js"></script>
     <script src="component/map/MapPeaksController.js"></script>
     <script src="component/map/MapFiltersController.js"></script>
     <script src="component/map/mapCtrl.js"></script>
-    <script src="component/member/memberModalCtrl.js"></script>
-    <script src="component/member/memberInfoCtrl.js"></script>
-    <script src="component/member/memberCtrl.js"></script>
     <script src="component/main/mainCtrl.js"></script>
     <script src="component/logInOut/logInOutCtrl.js"></script>
     <script src="component/hwm/quickHWMCtrl.js"></script>
@@ -143,15 +141,15 @@
     <script src="component/hwm/historicHWMCtrl.js"></script>
     <script src="component/hwm/bulkHWMCtrl.js"></script>
     <script src="component/home/homeCtrl.js"></script>
-    <script src="component/file/fileUploadCtrl.js"></script>
-    <script src="component/file/fileModalCtrl.js"></script>
-    <script src="component/file/fileCtrl.js"></script>
+    <script src="component/help/helpCtrl.js"></script>
+    <script src="component/approval/approvalCtrl.js"></script>
     <script src="component/event/eventSessionModalCtrl.js"></script>
     <script src="component/event/eventSessionCtrl.js"></script>
     <script src="component/event/eventModalCtrl.js"></script>
     <script src="component/event/eventCtrl.js"></script>
-    <script src="component/help/helpCtrl.js"></script>
-    <script src="component/approval/approvalCtrl.js"></script>
+    <script src="component/file/fileUploadCtrl.js"></script>
+    <script src="component/file/fileModalCtrl.js"></script>
+    <script src="component/file/fileCtrl.js"></script>
     <script src="services/STNResource.js"></script>
     <script src="services/businessServices.js"></script>
     <script src="component/ModalsCtrl.js"></script>
@@ -165,7 +163,7 @@
     <!--<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?v=3.exp"></script>-->
     <script src="//d3js.org/d3.v3.min.js" charset="utf-8"></script>
 
-  
+
     <!-- Not working in Bower -->
     <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
     <script src="bower_components/angular-ui-router.js"></script>
@@ -237,8 +235,8 @@
                     <button id="single-button" ng-show="userRole == 'Admin' || userRole == 'Manager'" type="button" class="btn-subnav" uib-dropdown-toggle ng-disabled="disabled">
                         Review <span ng-show="status1.isopen" class="ion-arrow-up-b"></span><span ng-show="!status1.isopen" class="ion-arrow-down-b"></span>
                     </button>
-                    <ul ng-show="status1.isopen" class="dropdown-menu" role="menu" aria-labelledby="single-button">
-                        <li role="menuitem"><a ui-sref="bulkHWM()">Bulk HWM Adjustment</a></li>
+                    <ul ng-show="status1.isopen" class="dropdown-menu" role="menu" aria-labelledby="single-button" style="margin-left: 0;">
+                        <li role="menuitem"><a ui-sref="bulkHWM()" style="white-space: pre-wrap;">Bulk HWM Adjustment</a></li>
                     </ul>
                 </div>
 

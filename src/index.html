@@ -26,7 +26,7 @@
     <!--<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?v=3.exp"></script>-->
     <script src="//d3js.org/d3.v3.min.js" charset="utf-8"></script>
 
-  
+
     <!-- Not working in Bower -->
     <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
     <script src="bower_components/angular-ui-router.js"></script>
@@ -98,8 +98,8 @@
                     <button id="single-button" ng-show="userRole == 'Admin' || userRole == 'Manager'" type="button" class="btn-subnav" uib-dropdown-toggle ng-disabled="disabled">
                         Review <span ng-show="status1.isopen" class="ion-arrow-up-b"></span><span ng-show="!status1.isopen" class="ion-arrow-down-b"></span>
                     </button>
-                    <ul ng-show="status1.isopen" class="dropdown-menu" role="menu" aria-labelledby="single-button">
-                        <li role="menuitem"><a ui-sref="bulkHWM()">Bulk HWM Adjustment</a></li>
+                    <ul ng-show="status1.isopen" class="dropdown-menu" role="menu" aria-labelledby="single-button" style="margin-left: 0;">
+                        <li role="menuitem"><a ui-sref="bulkHWM()" style="white-space: pre-wrap;">Bulk HWM Adjustment</a></li>
                     </ul>
                 </div>
 
