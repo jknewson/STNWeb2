@@ -10,31 +10,29 @@
         <div class="form-item item-25">
             <label for="event">Event:</label>
             <div class="form-item-value">{{sessionEvent}}</div>
-        </div><!--
-
-        --><div class="form-item item-25">
+        </div>
+        <div class="form-item item-25">
             <label for="state">States:</label>
-               <select id="state_abbrev" name="state_abbrev" ng-model="ChosenState.id"
-                       ng-options="s.state_abbrev as s.state_name for s in allStates">
-                   <option value=""></option>
-               </select>
-        </div><!--
+            <select id="state_abbrev" name="state_abbrev" ng-model="ChosenState.id"
+                    ng-options="s.state_abbrev as s.state_name for s in allStates">
+                <option value=""></option>
+            </select>
+        </div>
 
-        --><div class="form-item item-25">
+        <div class="form-item item-25">
             <label for="member">Members:</label>
-               <select id="member_id" name="member_id" ng-model="ChosenMember.id"
-                       ng-options="m.member_id as (m.lname || '') + ', ' + (m.fname || '') for m in allMembers | orderBy: 'lname'">
-                   <option value=""></option>
-               </select>
-        </div><!--
-
-        --><div class="form-item item-25">
+            <select id="member_id" name="member_id" ng-model="ChosenMember.id"
+                    ng-options="m.member_id as (m.lname || '') + ', ' + (m.fname || '') for m in allMembers | orderBy: 'lname'">
+                <option value=""></option>
+            </select>
+        </div>
+       
+        <div class="form-item item-25">
             <label>&nbsp;</label>
             <button class="btn-wim btn-blue" ng-click="search()">
                 Search
             </button>
         </div>
-
 
     </form>
 

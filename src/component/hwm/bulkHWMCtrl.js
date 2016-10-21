@@ -3,17 +3,18 @@
 
     var STNControllers = angular.module('STNControllers');
 
-    STNControllers.controller('bulkHWMCtrl', ['$scope', '$rootScope', '$cookies', '$http', '$filter', '$uibModal', 'SITE', 'HWM', 'eventList', 'stateList', 'countyList', 
-        function ($scope, $rootScope, $cookies, $http, $filter, $uibModal, SITE, HWM, eventList, stateList, countyList) {
+    STNControllers.controller('bulkHWMCtrl', ['$scope', '$state', '$rootScope', '$cookies', '$http', '$filter', '$uibModal', 'SITE', 'HWM', 'HWM_Service', 'eventList', 'stateList', 'countyList', 
+        function ($scope, $state, $rootScope, $cookies, $http, $filter, $uibModal, SITE, HWM, HWM_Service, eventList, stateList, countyList) {
             if ($cookies.get('STNCreds') === undefined || $cookies.get('STNCreds') === "") {
                 $scope.auth = false;
                 $location.path('/login');
             } else {
                 //global vars
+                $scope.querySearch = {}; //holds what they searched for to get the adjustedHWMs again and have it shown to them
                 $scope.showLoading = false; //div holding loader and dynamic and max for progress bar
                 $scope.dynamic = 0; $scope.max = 0;
                 $scope.hotInstance;  //id   wtr sNO desc lat  long date elev unc  not 
-                $scope.columnWidths = [84, 120, 88, 220, 100, 120, 150, 130, 160, 180];
+                $scope.columnWidths = [84, 120, 120, 220, 120, 120, 150, 130, 160, 180];
                 $scope.Changes = []; //track changes made to compare for saving
                 $scope.invalids = []; //store when invalid thrown
                 $scope.events = eventList;
@@ -48,6 +49,7 @@
                     }
                 };
                                 
+                
                 //event,state,counties chosen, get hwms
                 $scope.getHWMs = function (valid) {
                     if (valid) {
@@ -59,7 +61,12 @@
                         });
                         var countiesCommaSep = countyNames.join(',')
                         $scope.adjustHWMs = []; $scope.eventStateHWMs = [];
-                        
+                        //store search for leave/come back
+                        $scope.querySearch = {};
+                        $scope.querySearch.Event = $scope.HWM_params.event_id;
+                        $scope.querySearch.State = $scope.HWM_params.state_abbrev;
+                        $scope.querySearch.Counties = countiesCommaSep;
+                        HWM_Service.setBulkHWMSearch($scope.querySearch);
                         HWM.getFilteredHWMs({ Event: $scope.HWM_params.event_id, States: $scope.HWM_params.state_abbrev, County: countiesCommaSep }, function (response) {
                             $scope.hwmCount = response.length;
                             $scope.result.isResponse = $scope.hwmCount > 0 ? true : false;
@@ -67,7 +74,8 @@
                                 var one = {};
                                 one.hwm_id = response[i].hwm_id;
                                 one.waterbody = response[i].waterbody;
-                                one.site_no = '<a ui-sref="site.dashboard({id: '+response[i].site_id +'})">'+response.site_no +'</a>',
+                                one.site_id = response[i].site_id;
+                                one.site_no = response[i].site_no,
                                 one.hwm_locationdescription = response[i].hwm_locationdescription;
                                 one.latitude_dd = response[i].latitude_dd;
                                 one.longitude_dd = response[i].longitude_dd;
@@ -84,7 +92,25 @@
                         });
                     }
                 }
-
+                
+                if (!angular.equals({}, HWM_Service.getBulkHWMSearch())) {
+                    var theSearch = HWM_Service.getBulkHWMSearch();
+                    $scope.HWM_params.event_id = theSearch.Event;
+                    $scope.HWM_params.state_abbrev = theSearch.State;
+                    $scope.UpdateCounties();
+                    if (theSearch.Counties !== "") {
+                        var counties = theSearch.Counties.split(",");
+                        $scope.HWM_params.counties = [];
+                        angular.forEach($scope.countyArray, function (c) {
+                            //make those selected if in counties
+                            if (counties.map(function (cA) { return cA; }).indexOf(c.county_name) > -1) {
+                                c.selected = true;
+                                $scope.HWM_params.counties.push(c);
+                            }
+                        });
+                    }
+                    $scope.getHWMs(true);
+                }
                 //#region renderers/validators
                 var requiredModal = function () {
                     var reqModal = $uibModal.open({
@@ -105,6 +131,13 @@
                 //make readonly grey
                 var colorRenderer = function (instance, td, row, col, prop, value, cellProperties) {
                     Handsontable.renderers.TextRenderer.apply(this, arguments);
+                    td.style.background = '#F7F5F5';
+                    return td;
+                };
+                //make site_no a link
+                var siteNoRenderer = function (instance, td, row, col, prop, value, cellProperties) {
+                    Handsontable.renderers.TextRenderer.apply(this, arguments);              
+                    td.innerHTML = '<a ng-click="goToSite()">' + value + '</a>';                   
                     td.style.background = '#F7F5F5';
                     return td;
                 };
@@ -173,7 +206,7 @@
                         size: 'sm'
                     });
                     resetModal.result.then(function () {
-                        $scope.adjustHWMs = [];
+                        $scope.adjustHWMs = []; HWM_Service.setBulkHWMSearch({});
                         $scope.invalids = [];
                         $scope.getHWMs(true);                        
                     });
@@ -181,7 +214,7 @@
 
                 //#region handsontable settings
                 $scope.tableSettings = {
-                    colHeaders: true,
+                  //  colHeaders: true,
                     rowHeaders: true,
                     //contextMenu: ['row_above', 'row_below', 'remove_row'],
                     minSpareRows: 0,
@@ -191,15 +224,15 @@
                     manualColumnResize: true,
                     manualRowResize: true,
                     wordWrap: false,
+                    preventOverflow: 'horizontal',
                     viewportColumnRenderingOffsetNumber: 1,
                     colWidths: $scope.columnWidths,
                     cells: function (row, col, prop) {
-                        //first 6 are readonly (grey)
-                        if (col <= 5) {
-                            var cellprops = {};
-                            cellprops.renderer = colorRenderer;
-                            return cellprops;
-                        }
+                        //first 6 are readonly (grey) and site_no is a link
+                        var cellprops = {};
+                        if (col <= 5) cellprops.renderer = colorRenderer;                         
+                        if (col == 2) cellprops.renderer = siteNoRenderer;                            
+                        return cellprops;                        
                     },
                     onBeforeChange: function (data) {
                         for (var i = data.length - 1; i >= 0; i--) {
@@ -224,7 +257,15 @@
                                 }
                             }
                         }                        
-                    },                   
+                    },
+                    afterOnCellMouseDown: function (event, coords, td) {
+                        //open multi-select modal for resources, media or frequencies
+                        if (coords.col == 2) {
+                            var site_number = $scope.hotInstance.getDataAtCell(coords.row, coords.col);
+                            var siteId = $scope.adjustHWMs.filter(function (h) { return h.site_no == site_number; })[0].site_id;
+                            $state.go("site.dashboard", {id: siteId});
+                        }
+                    },
                     onAfterValidate: function (isValid, value, row, prop, souce) {
                         if (!isValid)
                             $scope.invalids.push({ "isValid": isValid, "row": row, "prop": prop });

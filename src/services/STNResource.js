@@ -3,8 +3,8 @@
 
     //look up common service module, and register the new factory with that module 
     var STNResource = angular.module('STNResource', ['ngResource']);
-    //var rootURL = "https://stn.wim.usgs.gov/STNServices";
-      var rootURL = "https://stntest.wim.usgs.gov/STNServices2";
+    var rootURL = "https://stn.wim.usgs.gov/STNServices";
+     // var rootURL = "https://stntest.wim.usgs.gov/STNServices2";
     //var rootURL = "http://localhost/STNServices2";
    
     //#region GEOCODE https://geocoding.geo.census.gov/geocoder/geographies/coordinates?benchmark=4&vintage=4&format=json
@@ -242,14 +242,22 @@
     //#region HWM_Service
     STNResource.factory('HWM_Service', [function () {
         //when hwm is created or deleted, this gets updated so that filesCtrl will update it's list of siteHWMs
-        var allSiteHWMs = [];
+        var allSiteHWMs = []; var bulkSearch = {};
         return {
             getAllSiteHWMs: function () {
                 return allSiteHWMs;
             },
             setAllSiteHWMs: function (sh) {
                 allSiteHWMs = sh;               
+            },
+            setBulkHWMSearch: function (searchTerms)
+            {
+                bulkSearch = searchTerms;
+            },
+            getBulkHWMSearch: function () {
+                return bulkSearch;
             }
+
         };
     }]);
     //#endregion of HWM_Service
