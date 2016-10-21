@@ -12,8 +12,8 @@
                 //global vars
                 $scope.showLoading = false; //div holding loader and dynamic and max for progress bar
                 $scope.dynamic = 0; $scope.max = 0;
-                $scope.hotInstance;  //id   wtr sID desc lat  long date elev unc  not 
-                $scope.columnWidths = [84, 120, 84, 220, 100, 120, 150, 130, 160, 180];
+                $scope.hotInstance;  //id   wtr sNO desc lat  long date elev unc  not 
+                $scope.columnWidths = [84, 120, 88, 220, 100, 120, 150, 130, 160, 180];
                 $scope.Changes = []; //track changes made to compare for saving
                 $scope.invalids = []; //store when invalid thrown
                 $scope.events = eventList;
@@ -67,7 +67,7 @@
                                 var one = {};
                                 one.hwm_id = response[i].hwm_id;
                                 one.waterbody = response[i].waterbody;
-                                one.site_id = response[i].site_id;
+                                one.site_no = '<a ui-sref="site.dashboard({id: '+response[i].site_id +'})">'+response.site_no +'</a>',
                                 one.hwm_locationdescription = response[i].hwm_locationdescription;
                                 one.latitude_dd = response[i].latitude_dd;
                                 one.longitude_dd = response[i].longitude_dd;
