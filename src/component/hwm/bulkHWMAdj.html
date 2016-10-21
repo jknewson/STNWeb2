@@ -14,7 +14,7 @@
         background-image: linear-gradient(to bottom, #cccaca 0px, #cccaca 100%);
     }
     .checkBoxContainer{
-         display: block; min-height: 320px;
+         display: block; min-height: 220px;
     }
 </style>
 
@@ -41,7 +41,7 @@
         <br />
         <div class="form-item item-25">
             <label for="event" class="req">Event:<span style="color:#d00"> *</span></label>
-            <select name="event_id" ng-model="HWM_params.event_id" ng-options="e.event_id as e.event_name for e in events" required>
+            <select name="event_id" ng-model="HWM_params.event_id" ng-options="e.event_id as e.event_name for e in events | orderBy: 'event_name'" required>
                 <option value=""></option>
             </select>
         </div>
