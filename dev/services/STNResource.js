@@ -242,14 +242,22 @@
     //#region HWM_Service
     STNResource.factory('HWM_Service', [function () {
         //when hwm is created or deleted, this gets updated so that filesCtrl will update it's list of siteHWMs
-        var allSiteHWMs = [];
+        var allSiteHWMs = []; var bulkSearch = {};
         return {
             getAllSiteHWMs: function () {
                 return allSiteHWMs;
             },
             setAllSiteHWMs: function (sh) {
                 allSiteHWMs = sh;               
+            },
+            setBulkHWMSearch: function (searchTerms)
+            {
+                bulkSearch = searchTerms;
+            },
+            getBulkHWMSearch: function () {
+                return bulkSearch;
             }
+
         };
     }]);
     //#endregion of HWM_Service
