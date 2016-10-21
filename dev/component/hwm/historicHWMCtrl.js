@@ -244,8 +244,7 @@
                                     //if (change[i][1] == "state") {
                                     //    $scope.UpdateCounties(change[i]);
                                     //}
-                                }
-                                
+                                }                                
                             }
                         }
                     },

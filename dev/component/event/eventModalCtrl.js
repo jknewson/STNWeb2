@@ -10,7 +10,7 @@
             $scope.eventStatuses = eventStatusList;
             $scope.adminMembers = adminList;
             $scope.loggedInRole = $cookies.get('usersRole');
-
+            $scope.view = { EVval: 'detail' };
             //#region Datepicker
             $scope.datepickrs = {};
             $scope.open = function ($event, which) {
@@ -22,6 +22,15 @@
             //$scope.format = 'MMM dd, yyyy';
             //#endregion Datepicker
                        
+            //edit button clicked. make copy of hwm 
+            $scope.wannaEditEV = function () {
+                $scope.view.EVval = 'edit';
+                $scope.evCopy = angular.copy($scope.anEvent);                
+            };
+            $scope.cancelEVEdit = function () {
+                $scope.view.EVval = 'detail';
+                $scope.evCopy = [];
+            };
             //called a few times to format just the date (no time)
             var makeAdate = function (d) {
                 var aDate = new Date();
@@ -40,6 +49,7 @@
             
             if (thisEvent != "empty") {
                 $scope.createOReditOP = 'edit';
+                $scope.evModalHeader = "Event Information";
                 $scope.anEvent = angular.copy(thisEvent);
                 $scope.anEvent.event_start_date = $scope.anEvent.event_start_date !== undefined ? makeAdate($scope.anEvent.event_start_date) : '';
                 $scope.anEvent.event_end_date = $scope.anEvent.event_end_date !== undefined ? makeAdate($scope.anEvent.event_end_date) : '';
