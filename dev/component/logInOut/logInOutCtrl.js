@@ -3,8 +3,8 @@
 
     var LogInOutController = angular.module('LogInOutController', []);
 
-    LogInOutController.controller('loginCtrl', ['$scope', '$state', '$location', '$uibModal', '$http', '$cookies', '$rootScope', '$document', 'SERVER_URL', 'Login', 
-        function ($scope, $state, $location, $uibModal, $http, $cookies, $rootScope, $document, SERVER_URL, Login) {
+    LogInOutController.controller('loginCtrl', ['$scope', '$state', '$location', '$uibModal', '$http', '$cookies', '$rootScope', 'SERVER_URL', 'Login', 
+        function ($scope, $state, $location, $uibModal, $http, $cookies, $rootScope, SERVER_URL, Login) {
             //login //
             //#region CAP lock Check
             $('[type=password]').keypress(function (e) {
@@ -27,23 +27,6 @@
             });
             //#endregion CAP lock Check
 
-            if ($document[0].documentMode !== undefined) {
-                var browserInstance = $uibModal.open({
-                    template: '<div class="modal-header"><h3 class="modal-title">Warning</h3></div>' +
-                               '<div class="modal-body"><p>This application uses functionality that is not completely supported by Internet Explorer. The preferred browser is Chrome (bison connect).</p></div>' +
-                               '<div class="modal-footer"><button class="btn btn-primary" ng-click="ok()">OK</button></div>',
-                    controller: ['$scope', '$uibModalInstance', function ($scope, $uibModalInstance) {
-                        $scope.ok = function () {
-                            $uibModalInstance.close();
-                        };                        
-                    }],
-                    size: 'sm'
-                });
-            }
-            Date.prototype.addHours = function (h) {
-                this.setHours(this.getHours() + h);
-                return this;
-            };
             $scope.serverURL = SERVER_URL;
             $scope.submit = function () {
                 //$scope.sub = true;
@@ -55,7 +38,7 @@
                 var up = $scope.username + ":" + $scope.password;
                 $http.defaults.headers.common.Authorization = 'Basic ' + btoa(up);
                 $http.defaults.headers.common.Accept = 'application/json';
-                
+
                 Login.login({}, 
                     function success(response) {
                         var user = response;
@@ -63,9 +46,7 @@
                             //set user cookies (cred, username, name, role
                             var usersNAME = user.fname + " " + user.lname;
                             var enc = btoa($scope.username.concat(":", $scope.password));
-                            //set expiration on cookies
-                            var expireDate = new Date().addHours(8);
-                            $cookies.put('STNCreds', enc, { expires: expireDate });
+                            $cookies.put('STNCreds', enc);
                             $cookies.put('STNUsername', $scope.username);
                             $cookies.put('usersName', usersNAME);
                             $cookies.put('mID', user.member_id);
@@ -92,7 +73,6 @@
                             $rootScope.isAuth.val = true;
                             $rootScope.usersName = usersNAME;
                             $rootScope.userID = user.member_id;
-                            $rootScope.userRole = $cookies.get('usersRole');
                             if ($rootScope.returnToState !== undefined) {
                                 $state.go($rootScope.returnToState, {id: $rootScope.returnToStateParams});
                             } else {
@@ -151,11 +131,6 @@
                 $rootScope.searchTerm = undefined;
                 $rootScope.searchParams = undefined;
                 $rootScope.approvalSearch = undefined;
-                $rootScope.userID = undefined;
-                $rootScope.userRole = undefined;
-                $rootScope.usersName = undefined;
-
-
                 $location.path('/login');
             };
         }]);
