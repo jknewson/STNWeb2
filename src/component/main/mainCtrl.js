@@ -26,6 +26,7 @@
                 $rootScope.isAuth.val = true;
                 $rootScope.usersName = $cookies.get('usersName');
                 $rootScope.userID = $cookies.get('mID');
+                $rootScope.userRole = $cookies.get('usersRole');
                 var EventName = $cookies.get('SessionEventName');
                 if (EventName !== null && EventName !== undefined)
                     $rootScope.sessionEvent = "Session Event: " + EventName + ".";                

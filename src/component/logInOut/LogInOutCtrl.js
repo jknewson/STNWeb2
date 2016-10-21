@@ -92,6 +92,7 @@
                             $rootScope.isAuth.val = true;
                             $rootScope.usersName = usersNAME;
                             $rootScope.userID = user.member_id;
+                            $rootScope.userRole = $cookies.get('usersRole');
                             if ($rootScope.returnToState !== undefined) {
                                 $state.go($rootScope.returnToState, {id: $rootScope.returnToStateParams});
                             } else {
@@ -150,6 +151,11 @@
                 $rootScope.searchTerm = undefined;
                 $rootScope.searchParams = undefined;
                 $rootScope.approvalSearch = undefined;
+                $rootScope.userID = undefined;
+                $rootScope.userRole = undefined;
+                $rootScope.usersName = undefined;
+
+
                 $location.path('/login');
             };
         }]);

@@ -30,6 +30,8 @@
     <Content Include="src\component\file\fileModalCtrl.js" />
     <Content Include="src\component\file\fileList.html" />
     <Content Include="src\component\help\helpCtrl.js" />
+    <Content Include="src\component\hwm\bulkHWMCtrl.js" />
+    <Content Include="src\component\hwm\bulkHWMAdj.html" />
     <Content Include="src\component\hwm\historic.html" />
     <Content Include="src\component\hwm\historicHWMCtrl.js" />
     <Content Include="src\component\hwm\hwmCtrl.js" />

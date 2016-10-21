@@ -1,0 +1,117 @@
+<style type="text/css">
+    .dataTable th, .dataTable td {
+        text-overflow: ellipsis !important;
+        white-space: nowrap !important;
+    }
+
+    .maxWidth {
+        display: inline-block;
+        position: relative;
+        width: 80%;
+    }
+
+    .progress {
+        background-image: linear-gradient(to bottom, #cccaca 0px, #cccaca 100%);
+    }
+    .checkBoxContainer{
+         display: block; min-height: 320px;
+    }
+</style>
+
+<!--<div ng-class="{'hidden': !showLoading}" class="page-loading">
+    <div id="loading">
+        <div id="loadingcontent">
+            <p id="loadingspinner" style="">
+                <uib-progressbar class="maxWidth" max="max" value="dynamic">
+                    <span ng-if="dynamic <= 0">Processing...</span>
+                    <span ng-if="dynamic != max" style="color:white; white-space:nowrap;">{{dynamic}} / {{max}} HWMs Uploaded</span>
+                    <span ng-if="dynamic == max">Redirecting...</span>
+                </uib-progressbar>
+                <br />
+                <img src="images/loading1.gif" />
+            </p>
+        </div>
+    </div>
+</div>-->
+
+<div class="page-padding">
+    <div><h2>Bulk HWM Adjustments</h2></div>
+    <form name="bulkHWMForm" class="wim-form border-bottom">
+        <div>You must select an EVENT and a STATE.<br />Selecting no county gives you all counties.<br /> Multiple county selection is also allowed.</div>
+        <br />
+        <div class="form-item item-25" ng-class="{'has-error':bulkHWMForm.event_id.$invalid && bulkHWMForm.event_id.$dirty}">
+            <label for="event" class="req">Event:<span style="color:#d00"> *</span></label>
+            <select name="event_id" ng-model="HWM_params.event_id" ng-options="e.event_id as e.event_name for e in events" required>
+                <option value=""></option>
+            </select>
+        </div>
+        <div class="form-item item-25" ng-class="{'has-error':bulkHWMForm.state_abbrev.$invalid && bulkHWMForm.state_abbrev.$dirty}">
+            <label for="state" class="req">State:<span style="color:#d00"> *</span></label>
+            <select name="state_abbrev" ng-model="HWM_params.state_abbrev" ng-change="UpdateCounties()"
+                    ng-options="s.state_abbrev as s.state_name for s in states" required>
+                <option value=""></option>
+            </select>
+        </div>
+
+        <div class="form-item item-25" ng-if="HWM_params.state_abbrev">
+            <label class="col-md-12 control-label" for="counties">Counties:</label>
+            <div class="col-md-12">
+                <div isteven-multi-select
+                     input-model="countyArray"
+                     output-model="HWM_params.counties"
+                     button-label="county_name"
+                     item-label="county_name"
+                     max-height="600px"
+                     tick-property="selected"
+                     helper-elements="">
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="col-md-6">
+                <label>&nbsp;</label>
+                <button class="btn-wim btn-blue" ng-click="getHWMs(bulkHWMForm.$valid)">
+                    Search
+                </button>
+            </div>
+
+        </div><br clear="all" />
+    </form>
+
+    <div ng-show="hwmCount>0">
+
+        <div class="col-md-12" style="padding:0;margin:0;height:600px;overflow:hidden">
+            <div>
+                <b>
+                    <ul>
+                        <li>Copy/Paste is allowed but <i>BE CAREFUL</i> of sort order when pasting into the table.</li>
+                        <li>If you make a mistake, click Cancel or Reset or fix the mistake before clicking Save.</li>
+                        <li>If you click Save after making a mistake, you are responsible to fix the mistake and Save again. There is no UNDO feature.</li>
+                    </ul>
+                </b>
+            </div>
+            <div>HWM Count: {{hwmCount}}</div>
+
+            <br />
+
+            <hot-table datarows="adjustHWMs" column-sorting settings="tableSettings" hot-id="tableinstance" class="dataTable">
+                <hot-column read-only data="hwm_id" title="'hwm_id'"></hot-column><!-- 0 -->
+                <hot-column read-only data="waterbody" title="'waterbody'"></hot-column><!-- 1 -->
+                <hot-column read-only data="site_id" title="'site_id'"></hot-column><!--2-->
+                <hot-column read-only data="hwm_locationdescription" title="'HWM description'"></hot-column><!-- 3 -->
+                <hot-column read-only data="latitude_dd" title="'HWM latitude'"></hot-column><!-- 4 -->
+                <hot-column read-only data="longitude_dd" title="'HWM longitude'"></hot-column><!--5 -->
+                <hot-column data="survey_date" title="'Survey Date (UTC)'" correct-format type="'date'" date-format="'MM/DD/YYYY'"></hot-column><!-- 6 -->
+                <hot-column data="elev_ft" title="'Surveyed Elevation (ft)'" type="'numeric'" format="'0000.000000'" validator="numberValidator"></hot-column><!-- 7 -->
+                <hot-column data="uncertainty" title="'Surveyed Uncertainty'" type="'numeric'" format="'00.000000'" validator="numberValidator"></hot-column><!-- 8 -->
+                <hot-column data="hwm_notes" title="'Survey Notes'"></hot-column><!-- 9 -->
+            </hot-table>
+        </div>
+        <div>
+            <button class="btn btn-primary" ng-disabled="invalids.length" ng-click="save()">Save</button>
+            <button type="button" class="btn btn-warning" back-button>Cancel</button>
+            <button type="button" class="btn btn-danger" ng-click="reset()">Reset</button>
+        </div>
+    </div>
+    <div ng-if="result.searchClicked==true && result.isResponse==false"><h3>No HWMs match the provided search criteria.</h3></div>
+</div>

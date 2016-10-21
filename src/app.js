@@ -4,9 +4,9 @@
         ['ngResource', 'ui.router', 'ngCookies', 'ui.mask', 'ui.bootstrap', 'isteven-multi-select', 'ngInputModified', 'ui.validate', 'cgBusy',
             'angular.filter', 'xeditable', 'checklist-model', 'ngFileUpload', 'STNResource', 'ui.bootstrap.datetimepicker','leaflet-directive','ngHandsontable',
             'STNControllers', 'LogInOutController', 'ModalControllers', 'SettingsControllers', 'WiM.Services', 'WiM.Event', 'wim_angular', 'angularSpinners']);
-    app.constant('SERVER_URL', 'https://stn.wim.usgs.gov/STNServices');
-   // app.constant('SERVER_URL', 'https://stntest.wim.usgs.gov/STNServices2');
-    //app.constant('SERVER_URL', 'http://localhost/STNServices2');
+    //app.constant('SERVER_URL', 'https://stn.wim.usgs.gov/STNServices');
+    app.constant('SERVER_URL', 'https://stntest.wim.usgs.gov/STNServices2');
+   // app.constant('SERVER_URL', 'http://localhost/STNServices2');
     
     app.run(['$rootScope', '$uibModalStack', '$cookies', '$state', function ($rootScope, $uibModalStack, $cookies, $state) {
         $rootScope.$on('$stateChangeStart', function (event, toState, toParams, fromState, fromParams) {
@@ -340,7 +340,7 @@
                 //#endregion events
 
                 //#region resources
-                //#region resources
+                //#region resources main         
                 .state("resources", {
                     url: "/Resources",
                     abstract: true,
@@ -445,7 +445,7 @@
                             return vd.getAll().$promise;
                         }
                     }
-                })//#endregion resources
+                })//#endregion resources main
 
                 //#region resources.ResourcesList
                 .state("resources.ResourcesList", {
@@ -643,6 +643,28 @@
                 //#endregion all lookup htmls
                 //#endregion resources
 
+                //#region bulk hwm adjustment page                                 
+                .state("bulkHWM", {
+                    url: "/BulkHWM_adjustments",
+                    templateUrl: "component/hwm/bulkHWMAdj.html",
+                    authenticate: true,
+                    controller: "bulkHWMCtrl",
+                    resolve: {
+                        e: 'EVENT',
+                        eventList: function (e) {
+                            return e.getAll().$promise;
+                        },
+                        s: 'STATE',
+                        stateList: function (s) {
+                            return s.getAll().$promise;
+                        },
+                        c: 'COUNTIES',
+                        countyList: function (c) {
+                            return c.getAll().$promise;
+                        }
+                    }
+                })
+                //#endregion
                 //#region historicHWM upload
                 .state("historicHWMs", {
                     url: "/Events/:id/HistoricHWMs",
@@ -691,7 +713,8 @@
                         }
                     }
                 })
-
+                //#endregion
+                
                 //#region site (abstract)
                 .state("site", {
                     url: "/Site/:id",
