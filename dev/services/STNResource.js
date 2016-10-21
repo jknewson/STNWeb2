@@ -3,9 +3,9 @@
 
     //look up common service module, and register the new factory with that module 
     var STNResource = angular.module('STNResource', ['ngResource']);
-    var rootURL = "https://stn.wim.usgs.gov/STNServices";
-    // var rootURL = "https://stntest.wim.usgs.gov/STNServices2";
-    // var rootURL = "http://localhost/STNServices2";
+    //var rootURL = "https://stn.wim.usgs.gov/STNServices";
+      var rootURL = "https://stntest.wim.usgs.gov/STNServices2";
+    //var rootURL = "http://localhost/STNServices2";
    
     //#region GEOCODE https://geocoding.geo.census.gov/geocoder/geographies/coordinates?benchmark=4&vintage=4&format=json
     STNResource.factory('GEOCODE', ['$resource', function ($resource) {          
@@ -227,6 +227,7 @@
             {}, {
                 query: {},
                 getAll: { method: 'GET', isArray: true },
+                getEventStateHWMs:{method:'GET', isArray:true, url:rootURL +'/Events/:eventId/stateHWMs.json?State=:state"'},
                 getFilteredHWMs: { method: 'GET', isArray: true, url: rootURL + '/HWMs/FilteredHWMs.json' }, //Event={eventIds}&EventType={eventTypeIDs}&EventStatus={eventStatusID}&States={states}&County={counties}&HWMType={hwmTypeIDs}&HWMQuality={hwmQualIDs}&HWMEnvironment={hwmEnvironment}&SurveyComplete={surveyComplete}&StillWater={stillWater}
                 getUnapprovedHWMs: { method: 'GET', isArray: true, cache: false }, //IsApproved={'true'/'false'}&Event={eventId}&Member={memberId}&State={state}
                 getHWMApproval: {method: 'GET', cache: false, isArray: false, url: rootURL + '/hwms/:id/Approval.json'},

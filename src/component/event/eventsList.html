@@ -35,119 +35,134 @@
         <h3 class="modal-title">Event<button class="close" type="button" ng-click="cancel()" aria-hidden="true" style="color:gray;">&times;</button></h3>
     </div>
     <!-- If this is admin view -->
-    <form class="form-horizontal" ng-show="loggedInRole == 'Admin'" id="eventForm" name="eventForm">
-        <fieldset>
-            <div class="modal-body">
-                <!-- Event Name -->
-                <div class="form-group required" ng-class="{'has-error':eventForm.event_name.$invalid && eventForm.event_name.$dirty}">
-                    <label class="col-md-4 control-label req" for="event_name">Event Name:</label>
-                    <div class="col-md-5">
-                        <input class="form-control" name="event_name" ng-model="anEvent.event_name" type="text" required />
-                    </div>
-                </div>
-
-                <!-- Event Description -->
-                <div class="form-group">
-                    <label class="col-md-4 control-label" for="event_description">Description:</label>
-                    <div class="col-md-5">
-                        <textarea class="form-control" type="text" rows="3" ng-model="anEvent.event_description" />
-                    </div>
-                </div>
-
-                <!-- Event Start Date -->
-                <div class="form-group">
-                    <label class="col-md-4 control-label" for="event_start_date">Event Start Date:</label>
-                    <div class="col-md-5">
-                        <div class="input-group">
-                            <input show-weeks="false" class="form-control dateInputStyle" name="sd" type="date"
-                                   uib-datepicker-popup="MM/dd/yyyy" is-open="datepickrs.sd" ng-model="anEvent.event_start_date" />
-                            <span class="input-group-btn">
-                                <button class="btn btn-default" ng-click="open($event, 'sd')">
-                                    <i class="glyphicon glyphicon-calendar" />
-                                </button>
-                            </span>
+    <div class="modal-body">
+        <div ng-if="createOReditOP == 'create'">
+            <form class="form-horizontal" ng-show="loggedInRole == 'Admin'" id="eventForm" name="eventForm">
+                <fieldset>
+                    <!-- Event Name -->
+                    <div class="form-group required" ng-class="{'has-error':eventForm.event_name.$invalid && eventForm.event_name.$dirty}">
+                        <label class="col-md-4 control-label req" for="event_name">Event Name:</label>
+                        <div class="col-md-5">
+                            <input class="form-control" name="event_name" ng-model="anEvent.event_name" type="text" required />
                         </div>
                     </div>
-                </div>
-
-                <!-- Event End Date -->
-                <div class="form-group">
-                    <label class="col-md-4 control-label" for="event_end_date">Event End Date:</label>
-                    <div class="col-md-5">
-                        <div>
+                    <!-- Event Description -->
+                    <div class="form-group">
+                        <label class="col-md-4 control-label" for="event_description">Description:</label>
+                        <div class="col-md-5">
+                            <textarea class="form-control" type="text" rows="3" ng-model="anEvent.event_description" />
+                        </div>
+                    </div>
+                    <!-- Event Start Date -->
+                    <div class="form-group">
+                        <label class="col-md-4 control-label" for="event_start_date">Event Start Date:</label>
+                        <div class="col-md-5">
                             <div class="input-group">
-                                <input show-weeks="false" class="form-control dateInputStyle" name="ed" type="date"
-                                       uib-datepicker-popup="MM/dd/yyyy" is-open="datepickrs.ed" ng-model="anEvent.event_end_date" />
+                                <input show-weeks="false" class="form-control dateInputStyle" name="sd" type="date"
+                                       uib-datepicker-popup="MM/dd/yyyy" is-open="datepickrs.sd" ng-model="anEvent.event_start_date" />
                                 <span class="input-group-btn">
-                                    <button class="btn btn-default" ng-click="open($event, 'ed')">
+                                    <button class="btn btn-default" ng-click="open($event, 'sd')">
                                         <i class="glyphicon glyphicon-calendar" />
                                     </button>
                                 </span>
                             </div>
                         </div>
                     </div>
-                </div>
-
-                <!-- Event Type -->
-                <div class="form-group required" ng-class="{'has-error':eventForm.event_type_id.$invalid && eventForm.event_type_id.$dirty}">
-                    <label class="col-md-4 control-label req" for="event_type_id">Event Type:</label>
-                    <div class="col-md-5">
-                        <select class="form-control" name="event_type_id" ng-model="anEvent.event_type_id"
-                                ng-options="et.event_type_id as et.type for et in eventTypes | orderBy: 'type'" required>
-                            <option value=""></option>
-                        </select>
+                    <!-- Event End Date -->
+                    <div class="form-group">
+                        <label class="col-md-4 control-label" for="event_end_date">Event End Date:</label>
+                        <div class="col-md-5">
+                            <div>
+                                <div class="input-group">
+                                    <input show-weeks="false" class="form-control dateInputStyle" name="ed" type="date"
+                                           uib-datepicker-popup="MM/dd/yyyy" is-open="datepickrs.ed" ng-model="anEvent.event_end_date" />
+                                    <span class="input-group-btn">
+                                        <button class="btn btn-default" ng-click="open($event, 'ed')">
+                                            <i class="glyphicon glyphicon-calendar" />
+                                        </button>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                </div>
-
-                <!-- Event Status -->
-                <div class="form-group required" ng-class="{'has-error':eventForm.event_status_id.$invalid && eventForm.event_status_id.$dirty}">
-                    <label class="col-md-4 control-label req" for="event_status_id">Event Status:</label>
-                    <div class="col-md-5">
-                        <select class="form-control" name="event_status_id" ng-model="anEvent.event_status_id"
-                                ng-options="es.event_status_id as es.status for es in eventStatuses | orderBy: 'status'" required>
-                            <option value=""></option>
-                        </select>
+                    <!-- Event Type -->
+                    <div class="form-group required" ng-class="{'has-error':eventForm.event_type_id.$invalid && eventForm.event_type_id.$dirty}">
+                        <label class="col-md-4 control-label req" for="event_type_id">Event Type:</label>
+                        <div class="col-md-5">
+                            <select class="form-control" name="event_type_id" ng-model="anEvent.event_type_id"
+                                    ng-options="et.event_type_id as et.type for et in eventTypes | orderBy: 'type'" required>
+                                <option value=""></option>
+                            </select>
+                        </div>
                     </div>
-                </div>
-
-                <!-- Event Coordinator -->
-                <div class="form-group required" ng-class="{'has-error':eventForm.event_coordinator.$invalid && eventForm.event_coordinator.$dirty}">
-                    <label class="col-md-4 control-label req" for="event_coordinator">Event Coordinator:</label>
-                    <div class="col-md-5">
-                        <select class="form-control" name="even_coordinator" ng-model="anEvent.event_coordinator"
-                                ng-options="ec.member_id as ec.fname + ' ' + ec.lname for ec in adminMembers | orderBy: 'lname'" required>
-                            <option value=""></option>
-                        </select>
+                    <!-- Event Status -->
+                    <div class="form-group required" ng-class="{'has-error':eventForm.event_status_id.$invalid && eventForm.event_status_id.$dirty}">
+                        <label class="col-md-4 control-label req" for="event_status_id">Event Status:</label>
+                        <div class="col-md-5">
+                            <select class="form-control" name="event_status_id" ng-model="anEvent.event_status_id"
+                                    ng-options="es.event_status_id as es.status for es in eventStatuses | orderBy: 'status'" required>
+                                <option value=""></option>
+                            </select>
+                        </div>
                     </div>
-                </div>
-            </div><!-- end modal-body-->
-
-            <div class="modal-footer">
-                <div class="form-group">
-                    <div class="col-md-12">
-                        <span>
-                            <button ng-if="anEvent.event_id == undefined" class="btn btn-primary" style="width:80px;margin-right:10px" ng-click="create(eventForm.$valid)">
+                    <!-- Event Coordinator -->
+                    <div class="form-group required" ng-class="{'has-error':eventForm.event_coordinator.$invalid && eventForm.event_coordinator.$dirty}">
+                        <label class="col-md-4 control-label req" for="event_coordinator">Event Coordinator:</label>
+                        <div class="col-md-5">
+                            <select class="form-control" name="even_coordinator" ng-model="anEvent.event_coordinator"
+                                    ng-options="ec.member_id as ec.fname + ' ' + ec.lname for ec in adminMembers | orderBy: 'lname'" required>
+                                <option value=""></option>
+                            </select>
+                        </div>
+                    </div>
+                    <!--create button-->
+                    <div class="form-group">
+                        <div class="col-md-12">
+                            <button class="btn btn-primary" ng-click="create(eventForm.$valid)">
                                 Create
                             </button>
-                        </span>
-                        <span>
-                            <button ng-if="anEvent.event_id !== undefined" class="btn btn-primary" style="width:80px;margin-right:10px" ng-click="save(eventForm.$valid)">
-                                Save
-                            </button>
-                        </span>
-                        <span>
-                            <button ng-if="anEvent.event_id != undefined" class="btn btn-danger" style="width:80px;margin-right:10px" ng-click="DeleteEvent(anEvent)">
-                                Delete
-                            </button>
-                        </span>
-                        <span>
-                            <button type="button" class="btn btn-warning" ng-click="cancel()">Close/Cancel</button>
-                        </span>
+                        </div>
                     </div>
-                </div>
-            </div><!-- end modal-footer -->
-        </fieldset>
-    </form>
+
+                </fieldset>
+            </form>
+        </div><!-- end create -->
+
+        <div ng-if="createOReditOP == 'edit'">
+            <uib-accordion close-others="false">
+                <uib-accordion-group is-open="dl.dlOpen" panel-class="{{getPanelClass()}}">
+                    <uib-accordion-heading></uib-accordion-heading>
+                </uib-accordion-group>
+                </uib-accordion-group>
+            </uib-accordion>
+        </div> <!-- end edit -->
+
+    </div><!-- end modal-body-->
+
+    <div class="modal-footer">
+        <div class="form-group">
+            <div class="col-md-12">
+                <span>
+                    <button ng-if="anEvent.event_id == undefined" class="btn btn-primary" style="width:80px;margin-right:10px" ng-click="create(eventForm.$valid)">
+                        Create
+                    </button>
+                </span>
+                <span>
+                    <button ng-if="anEvent.event_id !== undefined" class="btn btn-primary" style="width:80px;margin-right:10px" ng-click="save(eventForm.$valid)">
+                        Save
+                    </button>
+                </span>
+                <span>
+                    <button ng-if="anEvent.event_id != undefined" class="btn btn-danger" style="width:80px;margin-right:10px" ng-click="DeleteEvent(anEvent)">
+                        Delete
+                    </button>
+                </span>
+                <span>
+                    <button type="button" class="btn btn-warning" ng-click="cancel()">Close/Cancel</button>
+                </span>
+            </div>
+        </div>
+    </div><!-- end modal-footer -->
     <!-- If this is field and manager view -->
     <div ng-show="loggedInRole != 'Admin'">
         <div class="modal-body">

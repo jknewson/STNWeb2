@@ -39,12 +39,14 @@
             }; //end makeAdate()
             
             if (thisEvent != "empty") {
+                $scope.createOReditOP = 'edit';
                 $scope.anEvent = angular.copy(thisEvent);
                 $scope.anEvent.event_start_date = $scope.anEvent.event_start_date !== undefined ? makeAdate($scope.anEvent.event_start_date) : '';
                 $scope.anEvent.event_end_date = $scope.anEvent.event_end_date !== undefined ? makeAdate($scope.anEvent.event_end_date) : '';
             }
             else {
                 //this is a new event being created
+                $scope.createOReditOP = 'create';
                 $scope.anEvent.event_start_date = makeAdate();
             }
 
