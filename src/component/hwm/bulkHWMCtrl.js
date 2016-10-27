@@ -59,7 +59,7 @@
                         angular.forEach($scope.HWM_params.counties, function (c) {
                             countyNames.push(c.county_name);
                         });
-                        var countiesCommaSep = countyNames.join(',')
+                        var countiesCommaSep = countyNames.join(',');
                         $scope.adjustHWMs = []; $scope.eventStateHWMs = [];
                         //store search for leave/come back
                         $scope.querySearch = {};
@@ -80,7 +80,7 @@
                                 one.latitude_dd = response[i].latitude_dd;
                                 one.longitude_dd = response[i].longitude_dd;
                                 if (response[i].survey_date !== "") {
-                                    one.survey_date = makeAdate(response[i].survey_date)
+                                    one.survey_date = makeAdate(response[i].survey_date);
                                 }
                                 one.elev_ft = response[i].elev_ft;
                                 one.uncertainty = response[i].uncertainty;
@@ -91,7 +91,7 @@
                             toastr.error("Error getting hwms.");
                         });
                     }
-                }
+                };
                 
                 if (!angular.equals({}, HWM_Service.getBulkHWMSearch())) {
                     var theSearch = HWM_Service.getBulkHWMSearch();
@@ -162,7 +162,7 @@
                         //look through $scope.eventStateHWMs and grab the ones that were on this adjustment page
                         var updateTheseHWMs = [];
                         for (var evH = 0; evH < $scope.eventStateHWMs.length; evH++) {
-                            var theyHaveItHere = $scope.adjustHWMs.filter(function (a) { return a.hwm_id == $scope.eventStateHWMs[evH].hwm_id })[0];
+                            var theyHaveItHere = $scope.adjustHWMs.filter(function (a) { return a.hwm_id == $scope.eventStateHWMs[evH].hwm_id; })[0];
                             if (theyHaveItHere !== undefined) {
                                 //update survey_date,elev_ft, uncertainty, and hwm_notes 
                                 $scope.eventStateHWMs[evH].survye_date = theyHaveItHere.survey_date;
@@ -176,7 +176,7 @@
                         $http.defaults.headers.common.Authorization = 'Basic ' + $cookies.get('STNCreds');
                         $http.defaults.headers.common.Accept = 'application/json';
                         angular.forEach(updateTheseHWMs, function (u) {
-                            HWM.update({ id: u.hwm_id }, u).$promise.then(function(){
+                            HWM.update({ id: u.hwm_id }, u).$promise.then(function () {
                                 toastr.success("HWMs updated");
                                 $scope.adjustHWMs = []; $scope.eventStateHWMs = [];
                                 $scope.invalids = [];
@@ -185,8 +185,8 @@
                                 toastr.error("Error updating HWMs");
                             });
                         });
-                    });                   
-                }
+                    });
+                };
                 //reset back 
                 $scope.reset = function () {
                     var resetModal = $uibModal.open({

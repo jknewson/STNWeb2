@@ -95,7 +95,7 @@
                             $scope.DMS = {};
                         } else {
                             //show modal telling them to populate all three (DMS) for conversion to work
-                            var DMSModal = $uibModal.open({
+                            var DMSddModal = $uibModal.open({
                                 template: '<div class="modal-header"><h3 class="modal-title">Error</h3></div>' +
                                     '<div class="modal-body"><p>Please populate all three inputs for conversion from DMS to Decimal Degrees to work.</p></div>' +
                                     '<div class="modal-footer"><button type="button" class="btn btn-primary" ng-enter="ok()" ng-click="ok()">OK</button></div>',
@@ -106,7 +106,7 @@
                                 }],
                                 size: 'sm'
                             });
-                            DMSModal.result.then(function () {
+                            DMSddModal.result.then(function () {
                                 if ($scope.DMS.LADeg !== undefined || $scope.DMS.LAMin !== undefined || $scope.DMS.LASec !== undefined)
                                     $("#LaDeg").focus();
                                 if ($scope.DMS.LODeg !== undefined || $scope.DMS.LOMin !== undefined || $scope.DMS.LOSec !== undefined)

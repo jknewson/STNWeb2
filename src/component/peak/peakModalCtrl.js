@@ -32,9 +32,9 @@
                 var sensorStatuses = allSiteSensors[s].instrument_status;
                 if (sensorStatuses.length > 1) {
                     //only care about order if there's more than 1
-                    var proposedStat = sensorStatuses.filter(function (ps) { return ps.status == "Proposed" })[0];
-                    var deployedStat = sensorStatuses.filter(function (ps) { return ps.status == "Deployed" })[0];
-                    var retLostStat = sensorStatuses.filter(function (ps) { return ps.status == "Retrieved" || ps.status == "Lost" })[0];
+                    var proposedStat = sensorStatuses.filter(function (ps) { return ps.status == "Proposed"; })[0];
+                    var deployedStat = sensorStatuses.filter(function (ps) { return ps.status == "Deployed"; })[0];
+                    var retLostStat = sensorStatuses.filter(function (ps) { return ps.status == "Retrieved" || ps.status == "Lost"; })[0];
                     //now add them back in correctly
                     if (retLostStat) correctOrderSS.push(retLostStat);
                     if (deployedStat) correctOrderSS.push(deployedStat);
@@ -70,7 +70,7 @@
                         if (!determineDFPresent($scope.eventSiteSensors[evSiteSen].files)) $scope.eventSiteSensors[evSiteSen].NeedDF = true;
                     }
                 }//end if this is a datafile requiring sensor
-            };//);
+            }//);
 
             
             // $scope.siteFilesForSensors = allSiteFiles.filter(function (f) { return f.instrument_id !== null && f.instrument_id > 0; });
@@ -183,9 +183,9 @@
                 }
                 //check off those hwms used for this peak
                 //for each eventSiteSensor.. for each file within each sensor... if dataFileID == any of the peakDFs datafileID ====> make that file.selected =true
-                for (var s = 0; s < $scope.eventSiteSensors.length; s++) {
+                for (var ess = 0; ess < $scope.eventSiteSensors.length; ess++) {
                     //for each eventSiteSensor
-                    var essI = s;
+                    var essI = ess;
                     for (var df = 0; df < $scope.eventSiteSensors[essI].files.length; df++) {
                         //for each file within this eventSiteSensor
                         var isThere = thisPeakDFs.filter(function (pdf) { return pdf.data_file_id == $scope.eventSiteSensors[essI].files[df].data_file_id; })[0];

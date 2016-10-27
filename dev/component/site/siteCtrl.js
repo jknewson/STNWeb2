@@ -37,8 +37,8 @@
                     if ($scope.siteNetworkTypes !== undefined) {
                         for (var aNT = 0; aNT < allNetworkTypes.length; aNT++) {
                             //if name matches any of the names in $scope.SiteNetworkNames, get the full network_name to pass to the modal
-                            var i = $scope.siteNetworkTypes.map(function (e) { return e; }).indexOf(allNetworkTypes[aNT].network_type_name);
-                            if (i > -1)
+                            var a = $scope.siteNetworkTypes.map(function (e) { return e; }).indexOf(allNetworkTypes[aNT].network_type_name);
+                            if (a > -1)
                                 siteNTypesToPass.push(allNetworkTypes[aNT]);
                         }
                     }
