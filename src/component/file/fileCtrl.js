@@ -64,10 +64,10 @@
                     var sensFiles = sitefiles.filter(function (sfi) { return sfi.instrument_id > 0 && sfi.instrument_id !== null; });
                     //only show files for this event (go through hwm files and match eventid
                     if ($cookies.get('SessionEventID') !== undefined) {
-                        for (var hf = 0; hf < hwmFiles.length; hf++) {
-                            for (var hwm = 0; hwm < $scope.siteHWMs.length; hwm++) {
-                                if (hwmFiles[hf].hwm_id == $scope.siteHWMs[hwm].hwm_id && $scope.siteHWMs[hwm].event_id == $cookies.get('SessionEventID'))
-                                    $scope.SiteFiles.push(hwmFiles[hf]);
+                        for (var Ehf = 0; Ehf < hwmFiles.length; Ehf++) {
+                            for (var Ehwm = 0; Ehwm < $scope.siteHWMs.length; Ehwm++) {
+                                if (hwmFiles[Ehf].hwm_id == $scope.siteHWMs[Ehwm].hwm_id && $scope.siteHWMs[Ehwm].event_id == $cookies.get('SessionEventID'))
+                                    $scope.SiteFiles.push(hwmFiles[Ehf]);
                             }
                         }
                     } else {
@@ -80,11 +80,11 @@
                     }
                     //only show files for this event (go through sensor files and match eventid
                     if ($cookies.get('SessionEventID') !== undefined) {
-                        for (var sf = 0; sf < sensFiles.length; sf++) {
-                            for (var inst = 0; inst < $scope.siteSensors.length; inst++) {
-                                if (sensFiles[sf].instrument_id == $scope.siteSensors[inst].instrument_id && $scope.siteSensors[inst].event_id == $cookies.get('SessionEventID')) {
-                                    sensFiles[sf].typeName = $scope.siteSensors[inst].serial_number;
-                                    $scope.SiteFiles.push(sensFiles[sf]);
+                        for (var Esf = 0; Esf < sensFiles.length; Esf++) {
+                            for (var Einst = 0; Einst < $scope.siteSensors.length; Einst++) {
+                                if (sensFiles[Esf].instrument_id == $scope.siteSensors[Einst].instrument_id && $scope.siteSensors[Einst].event_id == $cookies.get('SessionEventID')) {
+                                    sensFiles[Esf].typeName = $scope.siteSensors[Einst].serial_number;
+                                    $scope.SiteFiles.push(sensFiles[Esf]);
                                 }
                             }
                         }

@@ -743,7 +743,6 @@
                             </span>
                         </div>
                     </div>
-
                     <!-- Latitude: -->
                     <div class="form-group">
                         <label class="col-md-4 control-label" for="latitude_dd">Latitude:</label>
@@ -820,7 +819,6 @@
                             </span>
                         </div>
                     </div>
-
                     <!-- Elevation: -->
                     <div class="form-group">
                         <label class="col-md-4 control-label" for="elev_ft">Elevation:</label>
@@ -863,7 +861,6 @@
                             </span>
                         </div>
                     </div>
-
                     <!-- Uncertainty: -->
                     <div class="form-group">
                         <label class="col-md-4 control-label" for="uncertainty">Uncertainty:</label>
@@ -942,7 +939,7 @@
                     </div>
                 </fieldset>
             </form>
-        </div>
+        </div> <!-- end create -->
 
         <div ng-if="createOReditOP == 'edit'">
             <uib-accordion close-others="false">
@@ -959,7 +956,7 @@
                                 <div class="col-md-12">
                                     <span><button ng-show="view.OPval == 'detail'" type="button" class="btn btn-primary" ng-click="wannaEditOP()"><span>Edit Datum Location</span></button></span>
                                     <span><button ng-show="view.OPval == 'edit'" class="btn btn-primary" ng-click="save(OPEditForm.$valid)"><span>Save</span></button></span>
-                                    <span><button ng-show="view.OPval == 'edit'" type="button" class=" btn btn-primary" ng-click="cancelOPEdit()"><span>Cancel</span></button></span>
+                                    <span><button ng-show="view.OPval == 'edit'" type="button" class="btn btn-primary" ng-click="cancelOPEdit()"><span>Cancel</span></button></span>
                                 </div>
                             </div>
 
@@ -1001,7 +998,7 @@
                             <div ng-if="view.OPval == 'edit'" class="form-group required" ng-class="{'has-error':OPEditForm.description.$invalid && OPEditForm.description.$dirty && view.OPval =='edit'}">
                                 <label class="col-md-4 control-label req" for="description">Description:</label>
                                 <div class="col-md-6">
-                                    <textarea class="form-control" name="description" type=" text" rows="3" ng-model="opCopy.description" required />
+                                    <textarea class="form-control" name="description" type="text" rows="3" ng-model="opCopy.description" required />
                                 </div>
                                 <button type="button" class="col-md-1 borderLess pull-left" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip-html="htmlDescriptionTip">
                                     <span class="glyphicon glyphicon-question-sign"></span>

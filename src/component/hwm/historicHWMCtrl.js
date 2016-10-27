@@ -90,7 +90,7 @@
                             size: 'sm'
                         });
                     }//end if row values are there                    
-                }//end getStateCo()
+                };//end getStateCo()
                 $scope.UpdateCounties = function (theChange) {
                     var thisState = $scope.stateList.filter(function (s) { return s.state_name == theChange[3]; })[0];
                     var stateCountyList = $scope.countyList.filter(function (c) { return c.state_id == thisState.state_id; });

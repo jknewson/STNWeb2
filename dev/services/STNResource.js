@@ -3,9 +3,9 @@
 
     //look up common service module, and register the new factory with that module 
     var STNResource = angular.module('STNResource', ['ngResource']);
-    //var rootURL = "https://stn.wim.usgs.gov/STNServices";
-      var rootURL = "https://stntest.wim.usgs.gov/STNServices2";
-    //var rootURL = "http://localhost/STNServices2";
+    var rootURL = "https://stn.wim.usgs.gov/STNServices";
+     // var rootURL = "https://stntest.wim.usgs.gov/STNServices2";
+   // var rootURL = "http://localhost/STNServices2";
    
     //#region GEOCODE https://geocoding.geo.census.gov/geocoder/geographies/coordinates?benchmark=4&vintage=4&format=json
     STNResource.factory('GEOCODE', ['$resource', function ($resource) {          
@@ -145,6 +145,7 @@
     }]);
     //#endregion of EVENT_TYPE   
     //#region FILE
+    
     STNResource.factory('FILE', ['$resource', function ($resource) {
         return $resource(rootURL + '/Files/:id.json',
             {}, {
@@ -153,6 +154,9 @@
                 getFileItem: { method: 'GET', isArray: false, url: rootURL + '/Files/:id/Item' },
                 update: { method: 'PUT', cache: false, isArray: false },
                 uploadFile: { method: 'POST', url: rootURL + '/Files/bytes', headers: { 'Content-Type': undefined }, transformRequest: angular.identity, cache: false, isArray: false },
+                downloadZip: {
+                    method: 'GET', responseType: 'arraybuffer', cache: false, url: rootURL + '/Events/:eventId/EventFileItems'
+                },//?HWMFiles={hwmFiles}&HWMFileType={hwmFileTypes}&SensorFiles={sensorFiles}&SensorFileTypes={sensorFileTypes}"
                 save: { method: 'POST', cache: false, isArray: false },
                 delete: { method: 'DELETE', cache: false, isArray: false }
             });

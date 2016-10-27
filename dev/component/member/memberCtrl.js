@@ -33,7 +33,7 @@
                 $http.defaults.headers.common.Accept = 'application/json';
                 MEMBER.getEventPeople({ Eventid: '135' }).$promise.then(function (response) {
                     console.table(response);
-                })
+                });
                 //create/view member was clicked
                 $scope.showMemberModal = function (memberClicked) {
                     var indexClicked = $scope.memberList.indexOf(memberClicked);

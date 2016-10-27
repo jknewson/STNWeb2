@@ -25,7 +25,7 @@
                     if (theEvent.preventDefault) theEvent.preventDefault();
                 }
             };
-            $scope.fileItemExists = fileExists == undefined || fileExists.Length > 0 ? true:false;
+            $scope.fileItemExists = fileExists === undefined || fileExists.Length > 0 ? true:false;
 
             //#region Datepicker
             $scope.datepickrs = {};
@@ -192,7 +192,7 @@
                 //from data to other
                 //from photo to other
                 //from other to other
-            }
+            };
             //update this file
             $scope.save = function (valid) {                
                 if ($scope.fileCopy.filetype_id == 2) {

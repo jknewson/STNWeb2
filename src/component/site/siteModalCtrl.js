@@ -419,7 +419,7 @@
                     //they checked "not defined"
                     for (var nn = 0; nn < $scope.NetNameList.length; nn++) {
                         //unselect all but not defined TODO:::: If any, put them in NetworkNAMEToRemove list
-                        if ($scope.NetNameList[nn].name != "Not Defined" && $scope.NetNameList[nn].selected == true) {
+                        if ($scope.NetNameList[nn].name != "Not Defined" && $scope.NetNameList[nn].selected === true) {
                             $scope.NetworkNAMEToRemove.push($scope.NetNameList[nn]);
                             $scope.NetNameList[nn].selected = false;
                         }
@@ -545,10 +545,10 @@
                         $q.all(AddPromises).then(function (response) {
                             $scope.siteNetworkNames = []; $scope.siteNetworkTypes = [];
                             angular.forEach($scope.NetNameList, function (nn) {
-                                if (nn.selected == true) $scope.siteNetworkNames.push(nn.name);
+                                if (nn.selected === true) $scope.siteNetworkNames.push(nn.name);
                             });
                             angular.forEach($scope.NetTypeList, function (nt) {
-                                if (nt.selected == true) $scope.siteNetworkTypes.push(nt.network_type_name);
+                                if (nt.selected === true) $scope.siteNetworkTypes.push(nt.network_type_name);
                             });
                             var sendBack = [$scope.aSite, $scope.siteNetworkNames, $scope.siteNetworkTypes];
                             $uibModalInstance.close(sendBack);
