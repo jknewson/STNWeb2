@@ -1,6 +1,6 @@
 <div class="">
     <h3>Accounts</h3>
-    <div ng-show="loggedInUser.Role !== 'Field'"><a ng-click="showMemberModal(0)"><i class="glyphicon glyphicon-plus"></i>Create New Member</a></div>
+    <div ng-show="userRole !== 'Field'"><a ng-click="showMemberModal(0)"><i class="glyphicon glyphicon-plus"></i>Create New Member</a></div>
     <script>
         var sortingOrder = 'lname';
     </script>
@@ -9,6 +9,7 @@
             <tr>
                 <th class="lname">Last Name&nbsp;<a ng-click="sort_by('lname')"><i class="glyphicon glyphicon-sort"></i></a></th>
                 <th class="fname">First Name&nbsp;<a ng-click="sort_by('fname')"><i class="glyphicon glyphicon-sort"></i></a></th>
+                <th class="username">Username&nbsp;<a ng-click="sort_by('username')"><i class="glyphicon glyphicon-sort"></i></a></th>
                 <th class="Agency">Agency&nbsp;<a ng-click="sort_by('Agency')"><i class="glyphicon glyphicon-sort"></i></a></th>
                 <th class="Role">Role&nbsp;<a ng-click="sort_by('Role')"><i class="glyphicon glyphicon-sort"></i></a></th>
             </tr>
@@ -17,6 +18,7 @@
             <tr ng-repeat="m in memberList | orderBy:sortingOrder:reverse">
                 <td><a ng-click="showMemberModal(m)">{{m.lname}}</a></td>
                 <td>{{m.fname}}</td>
+                <td>{{m.username}}</td>
                 <td>{{m.Agency}}</td>
                 <td>{{m.Role}}</td>
             </tr>
