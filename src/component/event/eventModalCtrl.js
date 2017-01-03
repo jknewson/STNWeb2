@@ -187,13 +187,13 @@
             $scope.HWMfileTypes = fileTypes.filter(function (hft) {
                 //Photo (1), Historic (3), Field Sheets (4), Level Notes (5), Other (7), Link (8), Sketch (10)
                 return hft.filetype === 'Photo' || hft.filetype === 'Historic Citation' || hft.filetype === 'Field Sheets' || hft.filetype === 'Level Notes' ||
-                    hft.filetype === 'Other' || hft.filetype === 'Link' || hft.filetype === 'Sketch';
+                    hft.filetype === 'Other' || hft.filetype === 'Sketch';
             });
             //list of file types for sensors
             $scope.sensorfileTypes = fileTypes.filter(function (sft) {
                 //Photo (1), Data (2), Historic (3), Field Sheets (4), Level Notes (5), Other (7), Link (8), Sketch (10)
                 return sft.filetype === 'Photo' || sft.filetype === 'Data' || sft.filetype === 'Historic Citation' || sft.filetype === 'Field Sheets' || sft.filetype === 'Level Notes' ||
-                   sft.filetype === 'Other' || sft.filetype === 'Link' || sft.filetype === 'Sketch';
+                   sft.filetype === 'Other' || sft.filetype === 'Sketch';
             });
             //hwm or sensor was chosen, update file type checkboxlist
             $scope.updatefileTypeChecks = function (d) {

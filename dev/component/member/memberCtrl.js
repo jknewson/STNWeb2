@@ -86,7 +86,7 @@
                         var ag = $scope.agencyList.filter(function (a) { return a.agency_id == response[x].agency_id; })[0];
                         var ro = allRoles.filter(function (r) { return r.role_id == response[x].role_id; })[0];
                         eachM.Agency = ag.agency_name;
-                        eachM.Role = ro.role_name;
+                        eachM.Role = ro.role_name;                       
 
                         $scope.memberList.push(eachM);
                     }
