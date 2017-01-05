@@ -41,8 +41,13 @@
             <form class="form-horizontal" ng-show="loggedInRole == 'Admin'" id="eventForm" name="eventForm">
                 <fieldset>
                     <!-- Event Name -->
-                    <div class="form-group required" ng-class="{'has-error':eventForm.event_name.$invalid && eventForm.event_name.$dirty}">
-                        <label class="col-md-4 control-label req" for="event_name">Event Name:</label>
+                    <div class="form-group" ng-class="{'has-error':eventForm.event_name.$invalid && eventForm.event_name.$dirty}">
+                        <label class="col-md-4 control-label req" for="event_name">
+                            Event Name:
+                            <button type="button" class="help-btn" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Required">
+                                <span class="glyphicon glyphicon-asterisk" style="color:#d00;font-size:xx-small;"></span>
+                            </button>
+                        </label>
                         <div class="col-md-5">
                             <input class="form-control" name="event_name" ng-model="anEvent.event_name" type="text" required />
                         </div>
@@ -87,8 +92,13 @@
                         </div>
                     </div>
                     <!-- Event Type -->
-                    <div class="form-group required" ng-class="{'has-error':eventForm.event_type_id.$invalid && eventForm.event_type_id.$dirty}">
-                        <label class="col-md-4 control-label req" for="event_type_id">Event Type:</label>
+                    <div class="form-group" ng-class="{'has-error':eventForm.event_type_id.$invalid && eventForm.event_type_id.$dirty}">
+                        <label class="col-md-4 control-label req" for="event_type_id">
+                            Event Type:
+                            <button type="button" class="help-btn" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Required">
+                                <span class="glyphicon glyphicon-asterisk" style="color:#d00;font-size:xx-small;"></span>
+                            </button>
+                        </label>
                         <div class="col-md-5">
                             <select class="form-control" name="event_type_id" ng-model="anEvent.event_type_id"
                                     ng-options="et.event_type_id as et.type for et in eventTypes | orderBy: 'type'" required>
@@ -97,8 +107,13 @@
                         </div>
                     </div>
                     <!-- Event Status -->
-                    <div class="form-group required" ng-class="{'has-error':eventForm.event_status_id.$invalid && eventForm.event_status_id.$dirty}">
-                        <label class="col-md-4 control-label req" for="event_status_id">Event Status:</label>
+                    <div class="form-group" ng-class="{'has-error':eventForm.event_status_id.$invalid && eventForm.event_status_id.$dirty}">
+                        <label class="col-md-4 control-label req" for="event_status_id">
+                            Event Status:
+                            <button type="button" class="help-btn" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Required">
+                                <span class="glyphicon glyphicon-asterisk" style="color:#d00;font-size:xx-small;"></span>
+                            </button>
+                        </label>
                         <div class="col-md-5">
                             <select class="form-control" name="event_status_id" ng-model="anEvent.event_status_id"
                                     ng-options="es.event_status_id as es.status for es in eventStatuses | orderBy: 'status'" required>
@@ -107,8 +122,13 @@
                         </div>
                     </div>
                     <!-- Event Coordinator -->
-                    <div class="form-group required" ng-class="{'has-error':eventForm.event_coordinator.$invalid && eventForm.event_coordinator.$dirty}">
-                        <label class="col-md-4 control-label req" for="event_coordinator">Event Coordinator:</label>
+                    <div class="form-group" ng-class="{'has-error':eventForm.event_coordinator.$invalid && eventForm.event_coordinator.$dirty}">
+                        <label class="col-md-4 control-label req" for="event_coordinator">
+                            Event Coordinator:
+                            <button type="button" class="help-btn" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Required">
+                                <span class="glyphicon glyphicon-asterisk" style="color:#d00;font-size:xx-small;"></span>
+                            </button>
+                        </label>
                         <div class="col-md-5">
                             <select class="form-control" name="even_coordinator" ng-model="anEvent.event_coordinator"
                                     ng-options="ec.member_id as ec.fname + ' ' + ec.lname for ec in adminMembers | orderBy: 'lname'" required>
@@ -119,7 +139,7 @@
                     <!--create button-->
                     <div class="form-group">
                         <div class="col-md-12 text-center">
-                            <button class="btn btn-primary" ng-click="create(eventForm.$valid)"><span>Create</span></button>
+                            <button class="btn btn-primary" ng-click="create(eventForm.$valid)">Create</button>
                         </div>
                     </div>
 
@@ -139,19 +159,24 @@
                             <!--edit button-->
                             <div class="form-group">
                                 <div class="col-md-12">
-                                    <span ng-if="loggedInRole == 'Admin'"><button ng-show="view.EVval == 'detail'" type="button" class="btn btn-primary" ng-click="wannaEditEV()"><span>Edit Event</span></button></span>
-                                    <span><button ng-show="view.EVval == 'edit'" class="btn btn-primary" ng-click="save(EVEditForm.$valid)"><span>Save</span></button></span>
-                                    <span><button ng-show="view.EVval == 'edit'" type="button" class="btn btn-primary" ng-click="cancelEVEdit()"><span>Cancel</span></button></span>
+                                    <span ng-if="loggedInRole == 'Admin'"><button ng-show="view.EVval == 'detail'" type="button" class="btn btn-primary" ng-click="wannaEditEV()">Edit Event</button></span>
+                                    <button ng-show="view.EVval == 'edit'" class="btn btn-primary" ng-click="save(EVEditForm.$valid)">Save</button>
+                                    <button ng-show="view.EVval == 'edit'" type="button" class="btn btn-primary" ng-click="cancelEVEdit()">Cancel</button>
                                 </div>
                             </div>
                             <!-- Event Name (Detail) -->
                             <div ng-if="view.EVval == 'detail'" class="col-md-12">
                                 <label class="col-md-4">Event Name:</label>
-                                <div class="col-md-5"><span>{{anEvent.event_name}}</span></div>
+                                <div class="col-md-5">{{anEvent.event_name}}</div>
                             </div>
                             <!-- Event Name (Edit) -->
-                            <div ng-if="view.EVval == 'edit'" class="form-group required" ng-class="{'has-error':eventForm.event_name.$invalid && eventForm.event_name.$dirty}">
-                                <label class="col-md-4 control-label req" for="event_name">Event Name:</label>
+                            <div ng-if="view.EVval == 'edit'" class="form-group" ng-class="{'has-error':eventForm.event_name.$invalid && eventForm.event_name.$dirty}">
+                                <label class="col-md-4 control-label req" for="event_name">
+                                    Event Name:
+                                    <button type="button" class="help-btn" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Required">
+                                        <span class="glyphicon glyphicon-asterisk" style="color:#d00;font-size:xx-small;"></span>
+                                    </button>
+                                </label>
                                 <div class="col-md-5">
                                     <input class="form-control" name="event_name" ng-model="evCopy.event_name" type="text" required />
                                 </div>
@@ -160,7 +185,7 @@
                             <!-- Event Description (Detail) -->
                             <div ng-if="view.EVval == 'detail'" class="col-md-12">
                                 <label class="col-md-4">Description:</label>
-                                <div class="col-md-5"><span>{{anEvent.event_description || '---'}}</span></div>
+                                <div class="col-md-5">{{anEvent.event_description || '---'}}</div>
                             </div>
                             <!-- Event Description (Edit) -->
                             <div ng-if="view.EVval == 'edit'" class="form-group">
@@ -173,7 +198,7 @@
                             <!-- Event Start Date (Detail) -->
                             <div ng-if="view.EVval == 'detail'" class="col-md-12">
                                 <label class="col-md-4">Event Start Date:</label>
-                                <div class="col-md-5"><span>{{anEvent.event_start_date | date: 'MM/dd/yyyy' || '---' }}</span></div>
+                                <div class="col-md-5">{{anEvent.event_start_date | date: 'MM/dd/yyyy' || '---' }}</div>
                             </div>
                             <!-- Event Start Date (Edit) -->
                             <div ng-if="view.EVval == 'edit'" class="form-group">
@@ -194,7 +219,7 @@
                             <!-- Event End Date (Detail) -->
                             <div ng-if="view.EVval == 'detail'" class="col-md-12">
                                 <label class="col-md-4">Event End Date:</label>
-                                <div class="col-md-5"><span>{{anEvent.event_end_date | date: 'MM/dd/yyyy' || '---'}}</span></div>
+                                <div class="col-md-5">{{anEvent.event_end_date | date: 'MM/dd/yyyy' || '---'}}</div>
                             </div>
                             <!-- Event End Date (Edit) -->
                             <div ng-if="view.EVval == 'edit'" class="form-group">
@@ -217,11 +242,16 @@
                             <!-- Event Type: (detail) -->
                             <div class="col-md-12" ng-if="view.EVval == 'detail'">
                                 <div class="col-md-4"><label>Event Type:</label></div>
-                                <div class="col-md-5"><span>{{(eventTypes | filter: {event_type_id : anEvent.event_type_id})[0].type }}</span></div>
+                                <div class="col-md-5">{{(eventTypes | filter: {event_type_id : anEvent.event_type_id})[0].type }}</div>
                             </div>
                             <!-- Event Type (Edit) -->
-                            <div ng-if="view.EVval == 'edit'" class="form-group required" ng-class="{'has-error':eventForm.event_type_id.$invalid && eventForm.event_type_id.$dirty}">
-                                <label class="col-md-4 control-label req" for="event_type_id">Event Type:</label>
+                            <div ng-if="view.EVval == 'edit'" class="form-group" ng-class="{'has-error':eventForm.event_type_id.$invalid && eventForm.event_type_id.$dirty}">
+                                <label class="col-md-4 control-label req" for="event_type_id">
+                                    Event Type:
+                                    <button type="button" class="help-btn" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Required">
+                                        <span class="glyphicon glyphicon-asterisk" style="color:#d00;font-size:xx-small;"></span>
+                                    </button>
+                                </label>
                                 <div class="col-md-5">
                                     <select class="form-control" name="event_type_id" ng-model="evCopy.event_type_id"
                                             ng-options="et.event_type_id as et.type for et in eventTypes | orderBy: 'type'" required>
@@ -233,11 +263,16 @@
                             <!-- Event Status: (detail) -->
                             <div class="col-md-12" ng-if="view.EVval == 'detail'">
                                 <div class="col-md-4"><label>Event Status:</label></div>
-                                <div class="col-md-5"><span>{{(eventStatuses | filter: {event_status_id : anEvent.event_status_id})[0].status }}</span></div>
+                                <div class="col-md-5">{{(eventStatuses | filter: {event_status_id : anEvent.event_status_id})[0].status }}</div>
                             </div>
                             <!-- Event Status (Edit) -->
-                            <div ng-if="view.EVval == 'edit'" class="form-group required" ng-class="{'has-error':eventForm.event_status_id.$invalid && eventForm.event_status_id.$dirty}">
-                                <label class="col-md-4 control-label req" for="event_status_id">Event Status:</label>
+                            <div ng-if="view.EVval == 'edit'" class="form-group" ng-class="{'has-error':eventForm.event_status_id.$invalid && eventForm.event_status_id.$dirty}">
+                                <label class="col-md-4 control-label req" for="event_status_id">
+                                    Event Status:
+                                    <button type="button" class="help-btn" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Required">
+                                        <span class="glyphicon glyphicon-asterisk" style="color:#d00;font-size:xx-small;"></span>
+                                    </button>
+                                </label>
                                 <div class="col-md-5">
                                     <select class="form-control" name="event_status_id" ng-model="evCopy.event_status_id"
                                             ng-options="es.event_status_id as es.status for es in eventStatuses | orderBy: 'status'" required>
@@ -249,11 +284,16 @@
                             <!-- Event Coordinator: (detail) -->
                             <div class="col-md-12" ng-if="view.EVval == 'detail'">
                                 <div class="col-md-4"><label>Event Coordinator:</label></div>
-                                <div class="col-md-5"><span>{{(adminMembers | filter: {member_id : anEvent.event_coordinator})[0].lname }}</span></div>
+                                <div class="col-md-5">{{(adminMembers | filter: {member_id : anEvent.event_coordinator})[0].lname }}</div>
                             </div>
                             <!-- Event Coordinator (Edit) -->
-                            <div ng-if="view.EVval == 'edit'" class="form-group required" ng-class="{'has-error':eventForm.event_coordinator.$invalid && eventForm.event_coordinator.$dirty}">
-                                <label class="col-md-4 control-label req" for="event_coordinator">Event Coordinator:</label>
+                            <div ng-if="view.EVval == 'edit'" class="form-group" ng-class="{'has-error':eventForm.event_coordinator.$invalid && eventForm.event_coordinator.$dirty}">
+                                <label class="col-md-4 control-label req" for="event_coordinator">
+                                    Event Coordinator:
+                                    <button type="button" class="help-btn" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Required">
+                                        <span class="glyphicon glyphicon-asterisk" style="color:#d00;font-size:xx-small;"></span>
+                                    </button>
+                                </label>
                                 <div class="col-md-5">
                                     <select class="form-control" name="even_coordinator" ng-model="evCopy.event_coordinator"
                                             ng-options="ec.member_id as ec.fname + ' ' + ec.lname for ec in adminMembers | orderBy: 'lname'" required>
@@ -277,8 +317,13 @@
                         <br/>
                         <form name="fileZipForm">
                             <fieldset>
-                                <div class="form-group required">
-                                    <label class="col-md-4 control-label req" for="event_type_id">Files for:</label>
+                                <div class="form-group">
+                                    <label class="col-md-4 control-label req" for="event_type_id">
+                                        Files for:
+                                        <button type="button" class="help-btn" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Required">
+                                            <span class="glyphicon glyphicon-asterisk" style="color:#d00;font-size:xx-small;"></span>
+                                        </button>
+                                    </label>
                                     <div class="col-md-5">
                                         <select class="form-control" ng-change="updatefileTypeChecks(filesWanted)" name="filesWanted" ng-model="filesWanted" ng-options="v as v for v in objectChoices" required>
                                             <option value=""></option>
@@ -313,8 +358,8 @@
     <div class="modal-footer">
         <div class="form-group">
             <div class="col-md-12">
-                <button type="button" ng-show="anEvent.event_id !== undefined && loggedInRole == 'Admin'" class="btn btn-danger" ng-click="deleteEV(EVEditForm.$valid)"><span>Delete Event</span></button>
-                <button type="button" class="btn btn-warning" ng-click="cancel()"><span>Cancel/Close</span></button>
+                <button type="button" ng-show="anEvent.event_id !== undefined && loggedInRole == 'Admin'" class="btn btn-danger" ng-click="deleteEV(EVEditForm.$valid)">Delete Event</button>
+                <button type="button" class="btn btn-warning" ng-click="cancel()">Cancel/Close</button>
             </div>
         </div>       
     </div><!-- end modal-footer -->

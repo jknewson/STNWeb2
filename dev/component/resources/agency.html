@@ -61,8 +61,13 @@
         <form class="form-horizontal" name="lookupForm.agencyFm">
             <fieldset>
 
-                <div class="form-group required">
-                    <label class="col-md-3 control-label req" for="agency_name">Agency Name:</label>
+                <div class="form-group">
+                    <label class="col-md-3 control-label req" for="agency_name">
+                        Agency Name:
+                        <button type="button" class="help-btn" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Required">
+                            <span class="glyphicon glyphicon-asterisk" style="color:#d00;font-size:xx-small;"></span>
+                        </button>
+                    </label>
                     <div class="col-md-6">
                         <input class="form-control" id="agency_name" name="agency_name" type="text" placeholder="" ng-model="newAg.agency_name" required />
                     </div>                   
@@ -109,11 +114,7 @@
                 <!--submit button-->
                 <div class="form-group">
                     <div class="col-md-2 col-md-offset-2">
-                        <span>
-                            <button class="btn btn-primary" ng-click="AddAgency(lookupForm.agencyFm.$valid, newAg)">
-                                Add
-                            </button>
-                        </span>
+                        <button class="btn btn-primary" ng-click="AddAgency(lookupForm.agencyFm.$valid, newAg)">Add</button>
                     </div>
                 </div>
             </fieldset>

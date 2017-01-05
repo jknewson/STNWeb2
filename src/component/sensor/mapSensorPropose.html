@@ -30,21 +30,12 @@
                 <hr />
                 <ul style="padding-left:0">
                     <li style="list-style:none;" ng-repeat="ps in deployTypeList">
-                        <input type="checkbox" ng-model="ps.selected" ng-click="" ng-value="{{ps.selected}}" />
-                        <span>{{ps.method}}</span>
+                        <input type="checkbox" ng-model="ps.selected" ng-click="" ng-value="{{ps.selected}}" />{{ps.method}}
                     </li>
                 </ul>
                 <div class="col-md-12 center-block">
-                    <span>
-                        <button type="button" class="btn btn-primary" style="width:80px;margin-right:10px" ng-click="AddProposed()">
-                            <span>Add</span>
-                        </button>
-                    </span>
-                    <span>
-                        <button type="button" class="btn btn-warning" style="width:80px;margin-right:10px" ng-click="cancelProposing()">
-                            <span>Cancel</span>
-                        </button>
-                    </span>
+                    <button type="button" class="btn btn-primary" style="width:80px;margin-right:10px" ng-click="AddProposed()">Add</button>
+                    <button type="button" class="btn btn-warning" style="width:80px;margin-right:10px" ng-click="cancelProposing()">Cancel</button>                    
                 </div>
             </div>
         </div><!--end if there's a site clicked-->

@@ -3,7 +3,7 @@
         <thead>
             <tr>
                 <th style="width:0"></th>
-                <th>Objective Point Quality</th>
+                <th>Datum Location Quality</th>
             </tr>
         </thead>
         <tbody>
@@ -33,14 +33,19 @@
 
     <hr />
 
-    <button ng-show="addOPQButtonShowing" class="btn btn-primary" ng-click="showAddOPQClicked()">Add New Objective Point Quality</button>
+    <button ng-show="addOPQButtonShowing" class="btn btn-primary" ng-click="showAddOPQClicked()">Add New Datum Location Quality</button>
 
     <div ng-show="showAddOPQForm">
         <form class="form-horizontal" name="lookupForm.opQualFm">
             <fieldset>
 
-                <div class="form-group required">
-                    <label class="col-md-3 control-label req" for="quality">Objective Point Quality:</label>
+                <div class="form-group">
+                    <label class="col-md-3 control-label req" for="quality">
+                        Datum Location Quality:
+                        <button type="button" class="help-btn" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Required">
+                            <span class="glyphicon glyphicon-asterisk" style="color:#d00;font-size:xx-small;"></span>
+                        </button>
+                    </label>
                     <div class="col-md-6">
                         <input class="form-control" id="quality" name="quality" type="text" placeholder="" ng-model="newOPQ.quality" required />
                     </div>
@@ -49,12 +54,8 @@
 
                 <!--submit button-->
                 <div class="form-group">
-                    <div class="col-md-2 col-md-offset-2">
-                        <span>
-                            <button class="btn btn-primary" ng-click="AddOPQuality(lookupForm.opQualFm.$valid, newOPQ)">
-                                Add
-                            </button>
-                        </span>
+                    <div class="col-md-2 col-md-offset-2">                        
+                        <button class="btn btn-primary" ng-click="AddOPQuality(lookupForm.opQualFm.$valid, newOPQ)">Add</button>
                     </div>
                 </div>
 

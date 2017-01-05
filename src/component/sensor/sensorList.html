@@ -2,7 +2,7 @@
     <uib-accordion-group is-open="status.sensorOpen">
         <uib-accordion-heading>
             <i style="margin-right:10px" class="pull-left glyphicon" ng-class="{'glyphicon-chevron-down': status.sensorOpen, 'glyphicon-chevron-right': !status.sensorOpen}"></i>
-            <span>Sensors</span>
+            Sensors
             <span class="badge pull-right">{{sensorCount.total}}</span>
         </uib-accordion-heading>
         <div class="col-md-12" ng-show="!sessionEventExists" style="border:solid 1px red">To deploy or retrieve a sensor, first choose an Event above.</div>
@@ -36,12 +36,9 @@
                         </span>
                         <div ng-show="sessionEventExists" class="pull-right">
                             <button type="button" class="btn btn-primary" style="padding:0" ng-click="showSensorModal(s)" tooltip-placement="left"
-                                    tooltip-append-to-body="true" uib-tooltip="Deploy this proposed sensor">
-                                <span>Deploy</span>
-                            </button>
+                                    tooltip-append-to-body="true" uib-tooltip="Deploy this proposed sensor">Deploy</button>
                         </div>
                     </li>
-
                 </ul>
             </div>
         </div>
@@ -66,7 +63,7 @@
                         </span>
                         <div ng-show="sessionEventExists" class="pull-right">
                             <button type="button" class="btn btn-primary" style="padding:0" ng-click="showRetrieveModal(s)" tooltip-placement="left" tooltip-append-to-body="true" uib-tooltip="Retrieve this sensor">
-                                <span>Retrieve</span>
+                                Retrieve
                             </button>
                         </div>
                     </li>

@@ -106,11 +106,11 @@
     <!-- inject:js -->
     <script src="component/STNCtrl.js"></script>
     <script src="shared/directives/STNDirectives.js"></script>
-    <script src="component/siteSearch/siteSearchCtrl.js"></script>
     <script src="component/site/siteModalCtrl.js"></script>
     <script src="component/site/siteMapCtrl.js"></script>
     <script src="component/site/siteCtrl.js"></script>
     <script src="component/site/quickCreateCtrl.js"></script>
+    <script src="component/siteSearch/siteSearchCtrl.js"></script>
     <script src="component/settings/settingsCtrl.js"></script>
     <script src="component/sensor/sensorModalCtrl.js"></script>
     <script src="component/sensor/sensorCtrl.js"></script>
@@ -121,10 +121,10 @@
     <script src="component/reporting/reportingCtrl.js"></script>
     <script src="component/reporting/projectAlertModalCtrl.js"></script>
     <script src="component/reporting/confirmReportModalCtrl.js"></script>
-    <script src="component/peak/peakModalCtrl.js"></script>
-    <script src="component/peak/peakCtrl.js"></script>
     <script src="component/objectivePoint/objectivePointModalCtrl.js"></script>
     <script src="component/objectivePoint/objectivePointCtrl.js"></script>
+    <script src="component/peak/peakModalCtrl.js"></script>
+    <script src="component/peak/peakCtrl.js"></script>
     <script src="component/member/memberModalCtrl.js"></script>
     <script src="component/member/memberInfoCtrl.js"></script>
     <script src="component/member/memberCtrl.js"></script>
@@ -135,20 +135,20 @@
     <script src="component/map/mapCtrl.js"></script>
     <script src="component/main/mainCtrl.js"></script>
     <script src="component/logInOut/logInOutCtrl.js"></script>
-    <script src="component/home/homeCtrl.js"></script>
-    <script src="component/help/helpCtrl.js"></script>
     <script src="component/hwm/quickHWMCtrl.js"></script>
     <script src="component/hwm/hwmModalCtrl.js"></script>
     <script src="component/hwm/hwmCtrl.js"></script>
     <script src="component/hwm/historicHWMCtrl.js"></script>
     <script src="component/hwm/bulkHWMCtrl.js"></script>
+    <script src="component/home/homeCtrl.js"></script>
+    <script src="component/help/helpCtrl.js"></script>
+    <script src="component/file/fileUploadCtrl.js"></script>
+    <script src="component/file/fileModalCtrl.js"></script>
+    <script src="component/file/fileCtrl.js"></script>
     <script src="component/event/eventSessionModalCtrl.js"></script>
     <script src="component/event/eventSessionCtrl.js"></script>
     <script src="component/event/eventModalCtrl.js"></script>
     <script src="component/event/eventCtrl.js"></script>
-    <script src="component/file/fileUploadCtrl.js"></script>
-    <script src="component/file/fileModalCtrl.js"></script>
-    <script src="component/file/fileCtrl.js"></script>
     <script src="component/approval/approvalCtrl.js"></script>
     <script src="services/STNResource.js"></script>
     <script src="services/businessServices.js"></script>
@@ -232,10 +232,10 @@
                 <li><a ng-class="{active: activeMenu == 'report'}" ui-sref="reporting.reportDash" ng-click="activeMenu = 'report'">Reporting</a></li>
                 <li><a ng-class="{active: activeMenu == 'settings'}" ui-sref="settings" ng-click="activeMenu = 'settings'">Settings</a></li>
                 <div class="subnav-right" uib-dropdown is-open="status1.isopen" ng-show="isAuth.val">
-                    <button id="single-button" ng-show="userRole == 'Admin' || userRole == 'Manager'" type="button" class="btn-subnav" uib-dropdown-toggle ng-disabled="disabled">
+                    <button id="single-button1" ng-show="userRole == 'Admin' || userRole == 'Manager'" type="button" class="btn-subnav" uib-dropdown-toggle ng-disabled="disabled">
                         Review <span ng-show="status1.isopen" class="ion-arrow-up-b"></span><span ng-show="!status1.isopen" class="ion-arrow-down-b"></span>
                     </button>
-                    <ul ng-show="status1.isopen" class="dropdown-menu" role="menu" aria-labelledby="single-button" style="margin-left: 0;">
+                    <ul ng-show="status1.isopen" class="dropdown-menu" role="menu" aria-labelledby="single-button1" style="margin-left: 0;">
                         <li role="menuitem"><a ui-sref="bulkHWM()" style="white-space: pre-wrap;">Bulk HWM Adjustment</a></li>
                     </ul>
                 </div>

@@ -2,7 +2,7 @@
     <uib-accordion-group is-open="status.filesOpen">
         <uib-accordion-heading>
             <i style="margin-right:10px" class="pull-left glyphicon" ng-class="{'glyphicon-chevron-down': status.filesOpen, 'glyphicon-chevron-right': !status.filesOpen}"></i>
-            <span>Files</span>
+            Files
             <span class="badge pull-right">{{SiteFiles.length}}</span>
         </uib-accordion-heading>
         <div ng-if="!sessionEventExists" class="btn-group pull-right">
@@ -16,7 +16,6 @@
         <!-- ------ Site files here -------- -->
         <label class="col-md-9">-- Site Files --</label>
         <br clear="all" />
-
         <div ng-repeat="f in SiteFiles">
             <div ng-if="f.fileBelongsTo == 'Site File'">
                 <ul style="padding-left: 0">
