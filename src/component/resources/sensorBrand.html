@@ -11,12 +11,8 @@
                 <td style="white-space: nowrap">
                     <!-- form -->
                     <form editable-form name="ESrowform" onaftersave="saveSensorBrand($data, sb.sensor_brand_id)" ng-show="ESrowform.$visible" class="form-buttons form-inline" shown="inserted == sb">
-                        <button type="submit" ng-disabled="ESrowform.$waiting" class="btn btn-primary">
-                            save
-                        </button>
-                        <button type="button" ng-disabled="ESrowform.$waiting" ng-click="ESrowform.$cancel()" class="btn btn-default">
-                            cancel
-                        </button>
+                        <button type="submit" ng-disabled="ESrowform.$waiting" class="btn btn-primary">save</button>
+                        <button type="button" ng-disabled="ESrowform.$waiting" ng-click="ESrowform.$cancel()" class="btn btn-default">cancel</button>
                     </form>
                     <div class="buttons" ng-show="!ESrowform.$visible">
                         <button class="btn btn-primary" ng-click="ESrowform.$show()">edit</button>
@@ -39,8 +35,13 @@
         <form class="form-horizontal" name="lookupForm.senBrandFm">
             <fieldset>
 
-                <div class="form-group required">
-                    <label class="col-md-3 control-label req" for="brand_name">Sensor Brand:</label>
+                <div class="form-group">
+                    <label class="col-md-3 control-label req" for="brand_name">
+                        Sensor Brand:
+                        <button type="button" class="help-btn" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Required">
+                            <span class="glyphicon glyphicon-asterisk" style="color:#d00;font-size:xx-small;"></span>
+                        </button>
+                    </label>
                     <div class="col-md-6">
                         <input class="form-control" id="brand_name" name="brand_name" type="text" placeholder="" ng-model="newSB.brand_name" required />
                     </div>
@@ -50,11 +51,7 @@
                 <!--submit button-->
                 <div class="form-group">
                     <div class="col-md-2 col-md-offset-2">
-                        <span>
-                            <button class="btn btn-primary" ng-click="AddSensorBrand(lookupForm.senBrandFm.$valid, newSB)">
-                                Add
-                            </button>
-                        </span>
+                        <button class="btn btn-primary" ng-click="AddSensorBrand(lookupForm.senBrandFm.$valid, newSB)">Add</button>
                     </div>
                 </div>
 

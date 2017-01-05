@@ -6,7 +6,7 @@
 
     STNControllers.controller('siteMapCtrl', ['$scope', '$rootScope', '$cookies', '$location', '$state', 'SITE', 'leafletData', 'aSite',
         function ($scope, $rootScope, $cookies, $location, $state, SITE, leafletData, aSite) {
-            if (aSite != undefined) {
+            if (aSite !== undefined) {
                 $scope.mapStuff = "here's the map accordion content";
                 $scope.thisSite = aSite;
                 $scope.paths = {};

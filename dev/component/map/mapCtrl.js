@@ -265,7 +265,7 @@
                     $scope.error = "Could not fetch sites";
                 };
                 $scope.$on("leafletDirectiveMap.click", function(event, args){
-                    if ($scope.createSiteModeActive == true) {
+                    if ($scope.createSiteModeActive === true) {
                         //first, remove previously click-created site
                         removeUserCreatedSite();
                         var leafEvent = args.leafletEvent;

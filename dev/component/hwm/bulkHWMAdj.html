@@ -40,13 +40,21 @@
         <div>You must select an EVENT and a STATE.<br />Selecting no county gives you all counties.<br /> Multiple county selection is also allowed.</div>
         <br />
         <div class="form-item item-25">
-            <label for="event" class="req">Event:<span style="color:#d00"> *</span></label>
+            <label for="event" class="req">Event:
+                <button type="button" class="help-btn" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Required">
+                    <span class="glyphicon glyphicon-asterisk" style="color:#d00;font-size:xx-small;"></span>
+                </button>
+            </label>
             <select name="event_id" ng-model="HWM_params.event_id" ng-options="e.event_id as e.event_name for e in events | orderBy: 'event_name'" required>
                 <option value=""></option>
             </select>
         </div>
         <div class="form-item item-25">
-            <label for="state" class="req">State:<span style="color:#d00"> *</span></label>
+            <label for="state" class="req">State:
+                <button type="button" class="help-btn" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Required">
+                    <span class="glyphicon glyphicon-asterisk" style="color:#d00;font-size:xx-small;"></span>
+                </button>    
+            </label>
             <select name="state_abbrev" ng-model="HWM_params.state_abbrev" ng-change="UpdateCounties()"
                     ng-options="s.state_abbrev as s.state_name for s in states" required>
                 <option value=""></option>

@@ -33,7 +33,7 @@
                 //$rootScope.stateIsLoading.showLoading = true; // loading..
                 //store search in case they leave and click back
                 spinnerService.show("mapSpinner");
-                if ($scope.checkboxModel.eventSitesOnly === "1" && $scope.sessionEventExists == true ) {
+                if ($scope.checkboxModel.eventSitesOnly === "1" && $scope.sessionEventExists === true ) {
                     var stateString = $scope.chosenStates.join();
                     $scope.siteResponse = false;
                     $scope.siteList = [];
@@ -71,7 +71,7 @@
                             $rootScope.stateIsLoading.showLoading = false; // loading..
                             alert("Error: " + errorResponse.statusText);
                         });
-                } else if ($scope.checkboxModel.eventSitesOnly === "0" || $scope.sessionEventExists == false){
+                } else if ($scope.checkboxModel.eventSitesOnly === "0" || $scope.sessionEventExists === false){
 
 
                     var stateString = $scope.chosenStates.join();
@@ -90,7 +90,7 @@
                     };
 
                     var sp = $rootScope.searchParams;
-                    if (sp.HWMOnly === "0" && sp.HWMSurveyed == null && sp.NetworkName == null && sp.OPDefined === "0" && sp.RDGOnly === "0" && sp.SensorOnly === "0" && sp.SensorType === null && sp.state.length == 0) {
+                    if (sp.HWMOnly === "0" && sp.HWMSurveyed === null && sp.NetworkName === null && sp.OPDefined === "0" && sp.RDGOnly === "0" && sp.SensorOnly === "0" && sp.SensorType === null && sp.state.length === 0) {
                         spinnerService.hide("mapSpinner");
                         toastr.options.positionClass = "toast-bottom-right";
                         toastr.warning("Please select at least one search parameter.", "Map Filters");

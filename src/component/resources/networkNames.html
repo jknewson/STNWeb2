@@ -11,12 +11,8 @@
                 <td style="white-space: nowrap">
                     <!-- form -->
                     <form editable-form name="NNrowform" onaftersave="saveNetworkName($data, nn.network_name_id)" ng-show="NNrowform.$visible" class="form-buttons form-inline" shown="inserted == nn">
-                        <button type="submit" ng-disabled="NNrowform.$waiting" class="btn btn-primary">
-                            save
-                        </button>
-                        <button type="button" ng-disabled="NNrowform.$waiting" ng-click="NNrowform.$cancel()" class="btn btn-default">
-                            cancel
-                        </button>
+                        <button type="submit" ng-disabled="NNrowform.$waiting" class="btn btn-primary">save</button>
+                        <button type="button" ng-disabled="NNrowform.$waiting" ng-click="NNrowform.$cancel()" class="btn btn-default">cancel </button>
                     </form>
                     <div class="buttons" ng-show="!NNrowform.$visible">
                         <button class="btn btn-primary" ng-click="NNrowform.$show()">edit</button>
@@ -39,8 +35,13 @@
         <form class="form-horizontal" name="lookupForm.netNameFm">
             <fieldset>
 
-                <div class="form-group required">
-                    <label class="col-md-3 control-label req" for="name">Network Name:</label>
+                <div class="form-group">
+                    <label class="col-md-3 control-label req" for="name">
+                        Network Name:
+                        <button type="button" class="help-btn" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Required">
+                            <span class="glyphicon glyphicon-asterisk" style="color:#d00;font-size:xx-small;"></span>
+                        </button>
+                    </label>
                     <div class="col-md-6">
                         <input class="form-control" id="name" name="name" type="text" placeholder="" ng-model="newNN.name" required />
                     </div>
@@ -50,11 +51,7 @@
                 <!--submit button-->
                 <div class="form-group">
                     <div class="col-md-2 col-md-offset-2">
-                        <span>
-                            <button class="btn btn-primary" ng-click="AddNetworkName(lookupForm.netNameFm.$valid, newNN)">
-                                Add
-                            </button>
-                        </span>
+                        <button class="btn btn-primary" ng-click="AddNetworkName(lookupForm.netNameFm.$valid, newNN)">Add</button>
                     </div>
                 </div>
 

@@ -218,7 +218,7 @@
                     $scope.sPlease = "1";
                 }
                 $scope.filesWantedChosen = true;
-            }
+            };
             //holder of string array of filetypes wanted
 
             //oncheck event
@@ -238,15 +238,15 @@
                     });
                     $scope.sensorFileTypesString = $scope.sensorFileTypesWanted.join(",");
                 }
-            }
+            };
 
             //download zip clicked
             $scope.DownloadZip = function () {
                 //make sure they checked at least the hwm or sensor checkbox
                 //ng-href="{{serverURL}}/Events/{{anEvent.event_id}}/EventFileItems?HWMFiles={{hPlease}}&HWMFileType={{hwmFileTypesString}}&SensorFiles={{sPlease}}&SensorFileTypes={{sensorFileTypesString}}"
-                if ($scope.hPlease !== "" || $scope.sPlease !== "") {                  
+                if ($scope.hPlease !== "" || $scope.sPlease !== "") {
                     //  /Events/:eventId/EventFileItems' },//?HWMFiles={hwmFiles}&HWMFileType={hwmFileTypes}&SensorFiles={sensorFiles}&SensorFileTypes={sensorFileTypes}
-                    var filepath = $scope.serverURL+'/Events/'+ $scope.anEvent.event_id + '/EventFileItems?HWMFiles='+ $scope.hPlease +'&HWMFileType='+$scope.hwmFileTypesString+'&SensorFiles='+$scope.sPlease+'&SensorFileTypes='+$scope.sensorFileTypesString;
+                    var filepath = $scope.serverURL + '/Events/' + $scope.anEvent.event_id + '/EventFileItems?HWMFiles=' + $scope.hPlease + '&HWMFileType=' + $scope.hwmFileTypesString + '&SensorFiles=' + $scope.sPlease + '&SensorFileTypes=' + $scope.sensorFileTypesString;
                     var xhr = new XMLHttpRequest();
                     xhr.open('GET', filepath); //,true);       
 
@@ -256,11 +256,11 @@
                         "onclick": null,
                         "timeOut": "0",
                         "extendedTimeOut": "0"
-                    }
+                    };
                     toastr.warning("Zip file is downloading.");
                     xhr.responseType = "blob";
                     xhr.setRequestHeader("Content-type", "application/*; charset=utf-8");
-                    xhr.setRequestHeader("Authorization", 'Basic ' + $cookies.get('STNCreds'));                    
+                    xhr.setRequestHeader("Authorization", 'Basic ' + $cookies.get('STNCreds'));
                     xhr.onreadystatechange = function () {
                         if (xhr.readyState === 4) {
                             if (xhr.statusText !== "Internal Server Error") {
@@ -280,7 +280,7 @@
                                         size: 'sm'
                                     });
                                 } else {
-                                    var blob = new Blob([xhr.response], { type: 'application/octet-stream' });;
+                                    var blob = new Blob([xhr.response], { type: 'application/octet-stream' });
                                     var a = document.createElement('a');
                                     var urlCreator = window.URL || window.webkitURL || window.mozURL || window.msURL;
                                     var fileURL = urlCreator.createObjectURL(blob);
@@ -296,9 +296,9 @@
                             } else {
                                 //something went wrong
                                 toastr.clear();
-                                var errorModal = $uibModal.open({
+                                var errorModal1 = $uibModal.open({
                                     template: '<div class="modal-header"><h3 class="modal-title">Error</h3></div>' +
-                                        '<div class="modal-body"><p>Download was unsuccessful. Possible cause is that the zip file is too large to download.</p>'+
+                                        '<div class="modal-body"><p>Download was unsuccessful. Possible cause is that the zip file is too large to download.</p>' +
                                         '<p>Please narrow your search and try again.</p></div>' +
                                         '<div class="modal-footer"><button class="btn btn-primary" ng-enter="ok()" ng-click="ok()">OK</button></div>',
                                     controller: ['$scope', '$uibModalInstance', function ($scope, $uibModalInstance) {
@@ -325,8 +325,8 @@
                         }],
                         size: 'sm'
                     });
-                };
-            }
+                }
+            };
             //#endregion Zip File Download Section
         }]);
 

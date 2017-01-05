@@ -12,12 +12,8 @@
                 <td style="white-space: nowrap">
                     <!-- form -->
                     <form editable-form name="SENtrowform" onaftersave="saveSensorType($data, SenT.sensor_type_id)" ng-show="SENtrowform.$visible" class="form-buttons form-inline" shown="inserted == SenT">
-                        <button type="submit" ng-disabled="SENtrowform.$waiting" class="btn btn-primary">
-                            save
-                        </button>
-                        <button type="button" ng-disabled="SENtrowform.$waiting" ng-click="SENtrowform.$cancel()" class="btn btn-default">
-                            cancel
-                        </button>
+                        <button type="submit" ng-disabled="SENtrowform.$waiting" class="btn btn-primary">save</button>
+                        <button type="button" ng-disabled="SENtrowform.$waiting" ng-click="SENtrowform.$cancel()" class="btn btn-default">cancel</button>
                     </form>
                     <div class="buttons" ng-show="!SENtrowform.$visible">
                         <button class="btn btn-primary" ng-click="SENtrowform.$show()">edit</button>
@@ -45,20 +41,29 @@
         <form class="form-horizontal" name="lookupForm.sensTFm">
             <fieldset>
 
-                <div class="form-group required">
-                    <label class="col-md-3 control-label req" for="sensor">Sensor Type:</label>
+                <div class="form-group">
+                    <label class="col-md-3 control-label req" for="sensor">
+                        Sensor Type:
+                        <button type="button" class="help-btn" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Required">
+                            <span class="glyphicon glyphicon-asterisk" style="color:#d00;font-size:xx-small;"></span>
+                        </button>
+                    </label>
                     <div class="col-md-6">
                         <input class="form-control" id="sensor" name="sensor" type="text" placeholder="" ng-model="newSenT.sensor" required />
                     </div>
                 </div>
 
-                <div class="form-group required">
-                    <label class="col-md-3 control-label req">Related Deployment Type(s) (if any):</label>
+                <div class="form-group">
+                    <label class="col-md-3 control-label req">
+                        Related Deployment Type(s) (if any):
+                        <button type="button" class="help-btn" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Required">
+                            <span class="glyphicon glyphicon-asterisk" style="color:#d00;font-size:xx-small;"></span>
+                        </button>
+                    </label>
                     <div class="col-md-6">
                         <ul>
                             <li style="list-style:none;" ng-repeat="dt in depTypeList">
-                                <input type="checkbox" name="allDepTypes" ng-model="dt.selected" ng-click="addDepTypeToNewSenT(dt)" ng-value="{{dt.deployment_type_id}}" />
-                                <span>{{ dt.method }}</span>
+                                <input type="checkbox" name="allDepTypes" ng-model="dt.selected" ng-click="addDepTypeToNewSenT(dt)" ng-value="{{dt.deployment_type_id}}" class="col-md-1" />{{ dt.method }}
                             </li>
                         </ul>
                     </div>
@@ -67,11 +72,7 @@
                 <!--submit button-->
                 <div class="form-group">
                     <div class="col-md-2 col-md-offset-2">
-                        <span>
-                            <button class="btn btn-primary" ng-click="AddSensorType(lookupForm.sensTFm.$valid, newSenT)">
-                                Add
-                            </button>
-                        </span>
+                        <button class="btn btn-primary" ng-click="AddSensorType(lookupForm.sensTFm.$valid, newSenT)">Add</button>
                     </div>
                 </div>
 
