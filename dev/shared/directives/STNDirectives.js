@@ -270,21 +270,29 @@
         };
     }]);
 
-    //STNControllers.directive('datetimez', function () {
-    //    //http://tarruda.github.io/bootstrap-datetimepicker/#api  -- can't get it working right now
-    //    return {
-    //        restrict: 'A',
-    //        require: 'ngModel',
-    //        link: function (scope, element, attrs, ngModelCtrl) {
-    //            element.datetimepicker({
-    //                dateFormat: 'dd/MM/yyyy hh:mm:ss',
-    //                language: 'pt-BR'
-    //            }).on('changeDate', function (e) {
-    //                ngModelCtrl.$setViewValue(e.date);
-    //                scope.$apply();
-    //            });
-    //        }
-    //    };
-    //});
+    STNControllers.directive('inputRestrictor', [
+        function () {
+            return {
+                restrict: 'A',
+                require: 'ngModel',
+                link: function(scope, element, attr, ngModelCtrl) {
+                    var pattern = /[^a-zA-Z0-9-_]/g;
+
+                    function fromUser(text) {
+                        if (!text)
+                            return text;
+
+                        var transformedInput = text.replace(pattern, '');
+                        if (transformedInput !== text) {
+                            ngModelCtrl.$setViewValue(transformedInput);
+                            ngModelCtrl.$render();
+                        }
+                        return transformedInput;
+                    }
+                    ngModelCtrl.$parsers.push(fromUser);
+                }
+            };
+        }
+    ]);
     //#endregion DIRECTIVES
 })();

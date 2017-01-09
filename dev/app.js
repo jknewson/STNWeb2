@@ -644,11 +644,11 @@
                 //#endregion resources
 
                 //#region bulk hwm adjustment page                                 
-                .state("bulkHWM", {
+                .state("bulkHWMAdj", {
                     url: "/BulkHWM_adjustments",
                     templateUrl: "component/hwm/bulkHWMAdj.html",
                     authenticate: true,
-                    controller: "bulkHWMCtrl",
+                    controller: "bulkHWMAdjCtrl",
                     resolve: {
                         e: 'EVENT',
                         eventList: function (e) {
@@ -665,6 +665,58 @@
                     }
                 })
                 //#endregion
+
+                //#region bulk hwm adjustment page                                 
+                .state("bulkHWM", {
+                    url: "/BulkHWM_Upload",
+                    templateUrl: "component/hwm/bulkHWM.html",
+                    authenticate: true,
+                    controller: "bulkHWMCtrl",
+                    resolve: {
+                        e: 'EVENT',
+                        eventList: function (e) {
+                            return e.getAll().$promise;
+                        },
+                        s: 'STATE',
+                        stateList: function (s) {
+                            return s.getAll().$promise;
+                        },
+                        c: 'COUNTIES',
+                        countyList: function (c) {
+                            return c.getAll().$promise;
+                        },
+                        ht: 'HWM_TYPE',
+                        hwmTypeList: function (ht){
+                            return ht.getAll().$promise;
+                        },
+                        m: 'MARKER',
+                        markerList: function (m){
+                            return m.getAll().$promise;
+                        },
+                        hq: 'HWM_QUALITY',
+                        hwmQualList: function (hq){
+                            return hq.getAll().$promise;
+                        },
+                        hd: 'HORIZONTAL_DATUM',
+                        horizDatumList: function (hd){
+                            return hd.getAll().$promise;
+                        },
+                        hcm: 'HORIZONTAL_COLL_METHODS',
+                        horCollMethList: function (hcm){
+                            return hcm.getAll().$promise;
+                        },
+                        vd: 'VERTICAL_DATUM',
+                        vertDatumList: function (vd){
+                            return vd.getAll().$promise;
+                        },
+                        vcm: 'VERTICAL_COLL_METHOD',
+                        vertCollMethList: function (vcm) {
+                            return vcm.getAll().$promise;
+                        }
+                    }
+                })
+                //#endregion
+
                 //#region historicHWM upload
                 .state("historicHWMs", {
                     url: "/Events/:id/HistoricHWMs",

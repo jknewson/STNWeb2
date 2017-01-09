@@ -44,12 +44,15 @@
                     <div class="form-group" ng-class="{'has-error':eventForm.event_name.$invalid && eventForm.event_name.$dirty}">
                         <label class="col-md-4 control-label req" for="event_name">
                             Event Name:
+                            <button type="button" class="help-btn" tooltip-placement="right" tooltip-append-to-body="false" uib-tooltip="No special characters allowed in event name">
+                                <span class="glyphicon glyphicon-question-sign"></span>
+                            </button>
                             <button type="button" class="help-btn" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Required">
                                 <span class="glyphicon glyphicon-asterisk" style="color:#d00;font-size:xx-small;"></span>
                             </button>
                         </label>
                         <div class="col-md-5">
-                            <input class="form-control" name="event_name" ng-model="anEvent.event_name" type="text" required />
+                            <input class="form-control" name="event_name" ng-model="anEvent.event_name" type="text" required  input-restrictor />
                         </div>
                     </div>
                     <!-- Event Description -->
@@ -173,12 +176,15 @@
                             <div ng-if="view.EVval == 'edit'" class="form-group" ng-class="{'has-error':eventForm.event_name.$invalid && eventForm.event_name.$dirty}">
                                 <label class="col-md-4 control-label req" for="event_name">
                                     Event Name:
+                                    <button type="button" class="help-btn" tooltip-placement="right" tooltip-append-to-body="false" uib-tooltip="No special characters allowed in event name">
+                                        <span class="glyphicon glyphicon-question-sign"></span>
+                                    </button>
                                     <button type="button" class="help-btn" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Required">
                                         <span class="glyphicon glyphicon-asterisk" style="color:#d00;font-size:xx-small;"></span>
                                     </button>
                                 </label>
                                 <div class="col-md-5">
-                                    <input class="form-control" name="event_name" ng-model="evCopy.event_name" type="text" required />
+                                    <input class="form-control" name="event_name" ng-model="evCopy.event_name" type="text" required  input-restrictor />
                                 </div>
                             </div>
 

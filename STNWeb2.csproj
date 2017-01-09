@@ -16,6 +16,7 @@
     <IISExpressAnonymousAuthentication />
     <IISExpressWindowsAuthentication />
     <IISExpressUseClassicPipelineMode />
+    <UseGlobalApplicationHostFile />
   </PropertyGroup>
   <ItemGroup>
     <Content Include="src\app.js" />
@@ -30,7 +31,9 @@
     <Content Include="src\component\file\fileModalCtrl.js" />
     <Content Include="src\component\file\fileList.html" />
     <Content Include="src\component\help\helpCtrl.js" />
+    <Content Include="src\component\hwm\bulkHWM.html" />
     <Content Include="src\component\hwm\bulkHWMCtrl.js" />
+    <Content Include="src\component\hwm\bulkHWMAdjCtrl.js" />
     <Content Include="src\component\hwm\bulkHWMAdj.html" />
     <Content Include="src\component\hwm\historic.html" />
     <Content Include="src\component\hwm\historicHWMCtrl.js" />
@@ -171,7 +174,7 @@
     <VisualStudio>
       <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
         <WebProjectProperties>
-          <UseIIS>True</UseIIS>
+          <UseIIS>False</UseIIS>
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>60324</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>

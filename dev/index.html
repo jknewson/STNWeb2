@@ -106,14 +106,16 @@
     <!-- inject:js -->
     <script src="component/STNCtrl.js"></script>
     <script src="shared/directives/STNDirectives.js"></script>
+    <script src="component/siteSearch/siteSearchCtrl.js"></script>
     <script src="component/site/siteModalCtrl.js"></script>
     <script src="component/site/siteMapCtrl.js"></script>
     <script src="component/site/siteCtrl.js"></script>
     <script src="component/site/quickCreateCtrl.js"></script>
-    <script src="component/siteSearch/siteSearchCtrl.js"></script>
-    <script src="component/settings/settingsCtrl.js"></script>
     <script src="component/sensor/sensorModalCtrl.js"></script>
     <script src="component/sensor/sensorCtrl.js"></script>
+    <script src="component/settings/settingsCtrl.js"></script>
+    <script src="component/objectivePoint/objectivePointModalCtrl.js"></script>
+    <script src="component/objectivePoint/objectivePointCtrl.js"></script>
     <script src="component/resources/resourcesCtrl.js"></script>
     <script src="component/reporting/submitReportCtrl.js"></script>
     <script src="component/reporting/reportModalCtrl.js"></script>
@@ -121,8 +123,6 @@
     <script src="component/reporting/reportingCtrl.js"></script>
     <script src="component/reporting/projectAlertModalCtrl.js"></script>
     <script src="component/reporting/confirmReportModalCtrl.js"></script>
-    <script src="component/objectivePoint/objectivePointModalCtrl.js"></script>
-    <script src="component/objectivePoint/objectivePointCtrl.js"></script>
     <script src="component/peak/peakModalCtrl.js"></script>
     <script src="component/peak/peakCtrl.js"></script>
     <script src="component/member/memberModalCtrl.js"></script>
@@ -140,8 +140,9 @@
     <script src="component/hwm/hwmCtrl.js"></script>
     <script src="component/hwm/historicHWMCtrl.js"></script>
     <script src="component/hwm/bulkHWMCtrl.js"></script>
-    <script src="component/home/homeCtrl.js"></script>
+    <script src="component/hwm/bulkHWMAdjCtrl.js"></script>
     <script src="component/help/helpCtrl.js"></script>
+    <script src="component/home/homeCtrl.js"></script>
     <script src="component/file/fileUploadCtrl.js"></script>
     <script src="component/file/fileModalCtrl.js"></script>
     <script src="component/file/fileCtrl.js"></script>
@@ -236,7 +237,8 @@
                         Review <span ng-show="status1.isopen" class="ion-arrow-up-b"></span><span ng-show="!status1.isopen" class="ion-arrow-down-b"></span>
                     </button>
                     <ul ng-show="status1.isopen" class="dropdown-menu" role="menu" aria-labelledby="single-button1" style="margin-left: 0;">
-                        <li role="menuitem"><a ui-sref="bulkHWM()" style="white-space: pre-wrap;">Bulk HWM Adjustment</a></li>
+                        <li role="menuitem"><a ui-sref="bulkHWMAdj()" style="white-space: pre-wrap;">Bulk HWM Adjustment</a></li>
+                        <li role="menuitem"><a ui-sref="bulkHWM()" style="white-space: pre-wrap;">Bulk HWM Uploader</a></li>
                     </ul>
                 </div>
 
