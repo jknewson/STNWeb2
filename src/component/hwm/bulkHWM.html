@@ -1,0 +1,97 @@
+﻿<style type="text/css">
+    .dataTable th, .dataTable td {
+        text-overflow: ellipsis !important;
+        white-space: nowrap !important;
+    }
+
+    .maxWidth {
+        display: inline-block;
+        position: relative;
+        width: 80%;
+    }
+
+    .progress {
+        background-image: linear-gradient(to bottom, #cccaca 0px, #cccaca 100%);
+    }
+    .checkBoxContainer{
+         display: block; min-height: 220px;
+    }
+    .hidden {
+        display: none !important;
+        visibility: hidden !important;
+    }
+</style>
+
+
+<div class="page-padding">
+    <div ng-class="{'hidden': !showLoading}" class="page-loading">
+        <div class="loading">
+            <div class="loadingcontent"><p class="loadingspinner" style=""><img src="images/loading1.gif" /></p></div>
+        </div>
+    </div>
+    <div><h2>Bulk HWM Upload</h2></div>
+    <form name="bulkHWMForm" class="wim-form border-bottom">
+        <div>You must select an EVENT before uploading HWMs.</div>
+        <br />
+        <div class="form-item item-25">
+            <label for="event" class="req">Event:
+                <button type="button" class="help-btn" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Required">
+                    <span class="glyphicon glyphicon-asterisk" style="color:#d00;font-size:xx-small;"></span>
+                </button>
+            </label>
+            <select name="event_id" ng-model="chosenEvent" ng-options="e.event_id as e.event_name for e in events | orderBy: 'event_name'" required>
+                <option value=""></option>
+            </select>
+        </div>
+        <br clear="all" />
+    </form>
+
+    <div ng-show="chosenEvent !== 0">
+        <div class="col-md-12">
+            <!--<div>
+                <b>
+                    <ul>
+                        <li>If you make a mistake, click Cancel or Clear Table or fix the mistake before clicking Save.</li>
+                        <li>If you click Save after making a mistake, you are responsible to fix the mistake and Save again. There is no UNDO feature.</li>
+                    </ul>
+                </b>
+            </div>
+            <div>HWM Count: {{uploadHWMs}}</div>-->
+
+            <br />
+            <div class="col-md-12" style="padding:0;margin:0;height:600px;overflow:hidden">
+                <hot-table datarows="uploadHWMs" settings="tableSettings" hot-id="tableinstance" class="dataTable">
+                    <hot-column data="site_no" title="'Site No'"></hot-column>                                                                                                          <!-- 0 -->
+                    <hot-column data="waterbody" title="'Waterbody'"></hot-column>                                                                                                      <!-- 1 -->
+                    <hot-column data="hwm_type_id" title="'HWM Type *'" type="'dropdown'" source="hwmTypeArray" validator="matchingDDValue"></hot-column>                             <!-- 2 -->
+                    <hot-column data="marker_id" title="'Marker'" type="'dropdown'" source="markerArray"></hot-column>                                                                  <!-- 3 -->
+                    <hot-column data="hwm_environment" title="'HWM Environment *'" type="'dropdown'" source="envirArray" validator="matchingDDValue"></hot-column>                    <!-- 4 -->
+                    <hot-column data="hwm_uncertainty" title="'HWM Uncertainty (ft)'" validator="numericValidator"></hot-column>                                                        <!-- 5 -->
+                    <hot-column data="hwm_quality_id" title="'HWM Quality *'" type="'dropdown'" source="qualArray" validator="matchingDDValue"></hot-column>                          <!-- 6 -->
+                    <hot-column data="bank" title="'Bank'" type="'dropdown'" source="bankArray"></hot-column>                                                                           <!-- 7 -->
+                    <hot-column data="hwm_locationdescription" title="'Loc. Description'"></hot-column>                                                                                 <!-- 8 -->
+                    <hot-column data="latitude_dd" title="'HWM Latitude *'" validator="latValidator"></hot-column>                                                                      <!-- 9 -->
+                    <hot-column data="longitude_dd" title="'HWM Longitude *'" validator="longValidator"></hot-column>                                                                   <!-- 10 -->
+                    <hot-column data="hdatum_id" title="'Horizontal Datum *'" type="'dropdown'" source="hdatumArray" validator="matchingDDValue"></hot-column>                        <!-- 11 -->
+                    <hot-column data="hcollect_method_id" title="'Horizontal Collect Method *'" type="'dropdown'" source="hcollMethArray" validator="matchingDDValue"></hot-column>   <!-- 12 -->
+                    <hot-column data="height_above_gnd" title="'HAG (ft)'" validator="numericValidator"></hot-column>                                                                   <!-- 13 -->
+                    <hot-column data="flag_date" title="'Flag/Found Date *'" date-format="'MM/DD/YYYY'" correct-format type="'date'" validator="requiredValidator"></hot-column>        <!-- 14 -->
+                    <hot-column data="survey_date" title="'Survey Date'" date-format="'MM/DD/YYYY'" correct-format type="'date'"></hot-column>                                          <!-- 15 -->
+                    <hot-column data="elev_ft" title="'Surveyed Elev (ft)'" validator="numericValidator"></hot-column>                                                                  <!-- 16 -->
+                    <hot-column data="vdatum_id" title="'Vertical Datum'" type="'dropdown'" source="vdatumArray"></hot-column>                                                          <!-- 17 -->
+                    <hot-column data="vcollect_method_id" title="'Vertical Collect Method'" type="'dropdown'" source="vcollMethArray"></hot-column>                                     <!-- 18 -->
+                    <hot-column data="uncertainty" title="'Survey Uncertainty (ft)'" validator="numericValidator"></hot-column>                                                         <!-- 19 -->
+                    <hot-column data="hwm_notes" title="'Notes'"></hot-column>                                                                                                          <!-- 20 -->
+                    <hot-column data="stillwater" title="'Tranquil/Stillwater'" type="'dropdown'" source="tranqArray"></hot-column>                                                     <!-- 21 -->              
+                </hot-table>
+            </div>
+            <br clear="all"/>
+            <div>
+                <button type="button" class="btn btn-primary" ng-click="validateTable()">Validate Table</button>
+                <button class="btn btn-primary" ng-disabled="notValid" ng-click="save()">Upload HWMs</button>
+                <button type="button" class="btn btn-warning" back-button>Cancel</button>
+                <button type="button" class="btn btn-danger" ng-click="clearTable()">Clear Table</button>                
+            </div>
+        </div>       
+    </div>
+</div>
