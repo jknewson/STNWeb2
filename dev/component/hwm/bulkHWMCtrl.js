@@ -4,9 +4,9 @@
     var STNControllers = angular.module('STNControllers');
 
     STNControllers.controller('bulkHWMCtrl', ['$scope', '$state', '$rootScope', '$cookies', '$http', '$filter', '$uibModal', 'SITE', 'HWM', 'HWM_Service', 'eventList', 'stateList', 'countyList',
-        'hwmTypeList', 'markerList', 'hwmQualList', 'horizDatumList', 'horCollMethList', 'vertDatumList', 'vertCollMethList',
-        function ($scope, $state, $rootScope, $cookies, $http, $filter, $uibModal, SITE, HWM, HWM_Service, eventList, stateList, countyList,
-            hwmTypeList, markerList, hwmQualList, horizDatumList, horCollMethList, vertDatumList, vertCollMethList) {
+        'hwmTypeList', 'markerList', 'hwmQualList', 'horizDatumList', 'horCollMethList', 'vertDatumList', 'vertCollMethList', 'leafletData', 
+        function ($scope, $state, $rootScope, $cookies, $http, $filter, $uibModal, SITE, HWM, HWM_Service, eventList, stateList, countyList, 
+            hwmTypeList, markerList, hwmQualList, horizDatumList, horCollMethList, vertDatumList, vertCollMethList, leafletData) {
             if ($cookies.get('STNCreds') === undefined || $cookies.get('STNCreds') === "") {
                 $scope.auth = false;
                 $location.path('/login');
@@ -85,7 +85,154 @@
                         size: 'sm'
                     });
                 };
-               
+                var getFindSiteModal = function (r, c) {
+                    var dataAtRow = $scope.hotInstance.getDataAtRow(r); setTimeout(function () { $scope.hotInstance.deselectCell(); }, 100);
+                    if (dataAtRow[9] !== "" && dataAtRow[10] !== "" && dataAtRow[9] !== null && dataAtRow[10] !== null) {
+                        var siteModal = $uibModal.open({
+                            templateUrl: 'associateSitemodal.html',
+                            backdrop: 'static',
+                            keyboard: false,
+                            resolve: {
+                                nearBySites: function () {
+                                    return SITE.getProximitySites({ Latitude: dataAtRow[9], Longitude: dataAtRow[10], Buffer: 1.1 }).$promise;
+                                },
+                                siteNoAlreadyThere: function () {
+                                    return dataAtRow[0];
+                                }
+                            },
+                            controller: ['$scope', '$uibModalInstance', 'nearBySites','siteNoAlreadyThere', 'leafletData', function ($scope, $uibModalInstance, nearBySites, siteNoAlreadyThere, leafletData) {
+                                $scope.localSites = nearBySites;
+                                
+                                $scope.showSiteCreateArea = false; //create new site checkbox click toggle show/hide 
+                                $scope.createChecked = "0"; // default is unchecked on create new site
+                                $scope.showMap = false; //show map toggle (only shows if there are sites in the localSites list
+                                $scope.showHideMap = "Show";
+                                // show/hide create site area
+                                $scope.showHideCreateSiteDiv = function () {
+                                    $scope.showSiteCreateArea = !$scope.showSiteCreateArea;
+                                    angular.forEach($scope.localSites, function (s) {
+                                        delete s.selected;
+                                    });
+                                }
+                                //if they check a radio button (chose a site) make sure the checkbox for new site is unchecked.
+                                $scope.unchkCreate = function (checkedSite) {
+                                    $scope.createChecked = "0";
+                                    $scope.showSiteCreateArea = false;
+                                    //change icon color of that marker in map
+                                    angular.forEach($scope.markers, function (mm) { mm.icon = icons.stn; });
+                                    var selectedMarker = $scope.markers.filter(function (m) { return m.lat == checkedSite.latitude_dd && m.lng == checkedSite.longitude_dd; })[0];
+                                    selectedMarker.icon = icons.selectedStn;
+                                }
+                                // show/hide the map 
+                                $scope.showSitesOnMap = function () {
+                                    $scope.showMap = !$scope.showMap;
+                                    $scope.showHideMap = $scope.showHideMap == "Show" ? "Hide" : "Show";
+                                    if ($scope.showMap) fitMapBounds();
+                                }
+                                
+                                //map stuff
+                                $scope.markers = [];
+                                var icons = {
+                                    stn: {
+                                        type: 'div',
+                                        iconSize: [10, 10],
+                                        className: 'stnSiteIcon'
+                                    },
+                                    selectedStn: {
+                                        type: 'div',
+                                        iconSize: [10, 10],
+                                        className: 'newSiteIcon'
+                                    }
+                                };
+                                for (var i = 0; i < $scope.localSites.length; i++) {
+                                    var a = $scope.localSites[i];
+                                    $scope.markers.push({
+                                        layer: 'stnSites',
+                                        message: '<div><b>Site Number:</b> ' + a.site_no + '<br />' +
+                                                      '<b>Site Name:</b> ' + a.site_name + '<br />' +
+                                                      '<b>Waterbody:</b> ' + a.waterbody + '<br />' +
+                                                      '<b>Latitude/Longitude:</b> ' + a.latitude_dd + ' ' + a.longitude_dd + '<br /></div>',
+                                        lat: a.latitude_dd,
+                                        lng: a.longitude_dd,
+                                        site_id: a.site_id,
+                                        title: a.site_no,
+                                        icon: icons.stn
+                                    });                                    
+                                }
+
+                                //get bounds based on lat long of 2 points
+                                var bounds = [];
+                                angular.forEach($scope.localSites, function(s){
+                                    bounds.push([s.latitude_dd, s.longitude_dd]);
+                                });
+                                var fitMapBounds = function () {
+                                    leafletData.getMap("associatedSiteMap").then(function (map) {
+                                        map.fitBounds(bounds, { padding: [20, 20] });
+                                    });
+                                }
+                                fitMapBounds();
+                                angular.extend($scope, {                                    
+                                    layers: {
+                                        baselayers: {
+                                            topo: {
+                                                name: "World Topographic",
+                                                type: "agsBase",
+                                                layer: "Topographic",
+                                                visible: false
+                                            }
+                                        },
+                                        overlays: {
+                                            stnSites: {
+                                                type: 'group',
+                                                name: 'STN Sites',
+                                                visible: true
+                                            }
+                                        }
+                                    }
+                                });//end angular $scope.extend statement
+                                //end map part
+
+                                //if there's already been a site_no added to this row, get it from the localSites and select it
+                                if (siteNoAlreadyThere !== "" && siteNoAlreadyThere !== null) {
+                                    angular.forEach($scope.localSites, function (s) {
+                                        if (s.site_no == siteNoAlreadyThere) {
+                                            s.selected = 'true';
+                                            var selectedMarker = $scope.markers.filter(function (m) { return m.lat == s.latitude_dd && m.lng == s.longitude_dd; })[0];
+                                            selectedMarker.icon = icons.selectedStn;
+                                        }
+                                    });
+                                }
+                                $scope.ok = function () {
+                                    //send the selected one back so site_no shows
+                                    var selectedSite = nearBySites.filter(function (s) { return s.selected == "true"; })[0];
+                                    $uibModalInstance.close(selectedSite);
+                                };
+                                $scope.cancel = function () {
+                                    $uibModalInstance.dismiss();
+                                }
+                            }],
+                            size: 'sm'
+                        });
+                        siteModal.result.then(function (thisSite) {
+                            $scope.hotInstance.setDataAtCell(r, c, thisSite.site_no);
+                        });
+                    } else {
+                        var errorModal = $uibModal.open({
+                            template: '<div class="modal-header"><h3 class="modal-title">Error</h3></div>' +
+                                '<div class="modal-body"><p>Please populate this row\'s latitude and longitude before finding a site to associate.</p></div>' +
+                                '<div class="modal-footer"><button class="btn btn-primary" ng-enter="ok()" ng-click="ok()">OK</button></div>',
+                            backdrop: 'static',
+                            keyboard: false,
+                            controller: ['$scope', '$uibModalInstance', function ($scope, $uibModalInstance) {
+                                $scope.ok = function () {
+                                    $uibModalInstance.dismiss();
+                                };
+                            }],
+                            size: 'sm'
+                        });
+                    }
+                    
+                }
                 //make site_no a link
                 //var siteNoRenderer = function (instance, td, row, col, prop, value, cellProperties) {
                 //    Handsontable.renderers.TextRenderer.apply(this, arguments);              
@@ -337,6 +484,7 @@
                             //now post it
                             delete hwm.site_no;
                             HWM.save(hwm).$promise.then(function (response) {
+                                //TODO: instead of taking row away, add hwm_id and then check for presence before posting (already uploaded)
                                 toastr.success("HWM uploaded")
                                 deleteIndexes.push(index);
                                 //when the lengths match we are done here.
@@ -395,41 +543,13 @@
                     wordWrap: false,
                     preventOverflow: 'horizontal',
                     viewportColumnRenderingOffsetNumber: 1,
-                    colWidths: $scope.columnWidths,
-                    onBeforeChange: function (data) {
-                        //for (var i = data.length - 1; i >= 0; i--) {
-                        //    if ((data[i][1] == 'hwm_type_id' || data[i][1] == 'marker_id' || data[i][1] == 'hwm_environment') && data[i][3] !== "") // replace 0 by the number of the field to validate
-                        //    {
-                        //        switch (data[i][1]) {
-                        //            case 'hwm_type_id':
-
-                        //        }
-                    //                setTimeout(function () { $scope.hotInstance.deselectCell(); }, 100);
-                    //                var waterModal = $uibModal.open({
-                    //                    template: '<div class="modal-header"><h3 class="modal-title">Error</h3></div>' +
-                    //                        '<div class="modal-body"><p>Value must be a number.</p></div>' +
-                    //                        '<div class="modal-footer"><button class="btn btn-primary" ng-enter="ok()" ng-click="ok()">OK</button></div>',
-                    //                    backdrop: 'static',
-                    //                    keyboard: false,
-                    //                    controller: ['$scope', '$uibModalInstance', function ($scope, $uibModalInstance) {
-                    //                        $scope.ok = function () {
-                    //                            $uibModalInstance.dismiss();
-                    //                        };
-                    //                    }],
-                    //                    size: 'sm'
-                    //                });
-                    //            }
-                    //        }
-                    //    }                        
+                    colWidths: $scope.columnWidths,                    
+                    afterOnCellMouseDown: function (event, coords, td) {
+                        //open modal for siteNo
+                        //open multi-select modal for resources, media or frequencies
+                        if (coords.col == 0 && event.realTarget.className == "htAutocompleteArrow")
+                            getFindSiteModal(coords.col, coords.row);
                     },
-                    //afterOnCellMouseDown: function (event, coords, td) {
-                    //    //open multi-select modal for resources, media or frequencies
-                    //    if (coords.col == 2) {
-                    //        var site_number = $scope.hotInstance.getDataAtCell(coords.row, coords.col);
-                    //        var siteId = $scope.uploadHWMs.filter(function (h) { return h.site_no == site_number; })[0].site_id;
-                    //        $state.go("site.dashboard", {id: siteId});
-                    //    }
-                    //},
                     onAfterValidate: function (isValid, value, row, prop, souce) {
                         if (!isValid)
                             $scope.invalids.push({ "isValid": isValid, "row": row, "prop": prop });
