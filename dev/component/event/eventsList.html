@@ -112,7 +112,7 @@
                     <!-- Event Status -->
                     <div class="form-group" ng-class="{'has-error':eventForm.event_status_id.$invalid && eventForm.event_status_id.$dirty}">
                         <label class="col-md-4 control-label req" for="event_status_id">
-                            Event Status:
+                            Data Collection Status:
                             <button type="button" class="help-btn" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Required">
                                 <span class="glyphicon glyphicon-asterisk" style="color:#d00;font-size:xx-small;"></span>
                             </button>
@@ -268,13 +268,13 @@
 
                             <!-- Event Status: (detail) -->
                             <div class="col-md-12" ng-if="view.EVval == 'detail'">
-                                <div class="col-md-4"><label>Event Status:</label></div>
+                                <div class="col-md-4"><label>Data Collection Status:</label></div>
                                 <div class="col-md-5">{{(eventStatuses | filter: {event_status_id : anEvent.event_status_id})[0].status }}</div>
                             </div>
                             <!-- Event Status (Edit) -->
                             <div ng-if="view.EVval == 'edit'" class="form-group" ng-class="{'has-error':eventForm.event_status_id.$invalid && eventForm.event_status_id.$dirty}">
                                 <label class="col-md-4 control-label req" for="event_status_id">
-                                    Event Status:
+                                    Data Collection Status:
                                     <button type="button" class="help-btn" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Required">
                                         <span class="glyphicon glyphicon-asterisk" style="color:#d00;font-size:xx-small;"></span>
                                     </button>
