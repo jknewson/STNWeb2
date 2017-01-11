@@ -30,6 +30,7 @@
         </div>
     </div>
     <div><h2>Bulk HWM Upload</h2></div>
+    
     <form name="bulkHWMForm" class="wim-form border-bottom">
         <div>You must select an EVENT before uploading HWMs.</div>
         <br />
@@ -47,18 +48,31 @@
     </form>
 
     <div ng-show="chosenEvent !== 0">
-        <div class="col-md-12">
-            <!--<div>
-                <b>
-                    <ul>
-                        <li>If you make a mistake, click Cancel or Clear Table or fix the mistake before clicking Save.</li>
-                        <li>If you click Save after making a mistake, you are responsible to fix the mistake and Save again. There is no UNDO feature.</li>
-                    </ul>
-                </b>
-            </div>
-            <div>HWM Count: {{uploadHWMs}}</div>-->
-
+        <div><a ng-click="showTips=!showTips"><span ng-if="!showTips">Show</span><span ng-if="showTips">Hide</span></a> Bulk HWM Uploader tips.</div>
+        <div ng-if="showTips">
+            <b><ul>
+                <li style="list-style:none">Download the excel template (Coming soon)</li>
+                <li style="list-style:none">
+                    Copy/paste or manually populate the table below. If you know the Site Number (ex: 'FLPIN06064'), type or paste that into the Site No column.
+                    <br />If you do not know the Site Number, click the down arrow in the Site No cell to search for a nearby site or create a site to use for the hwm.
+                </li>
+                <li style="list-style:none">You mush click "Validate Table" after entering all your hwm data. Once you have validated the data, you may Upload the HWMs.</li>
+                <li style="list-style:none">
+                    Examples of invalid data are: empty Required fields, a Site Number that does not exist, latitude/longitude out of range or empty.
+                    <br />Fix any validation errors, and click Validate Table again.
+                </li>
+                <li style="list-style:none">If you make a change to the data after Validating, you will need to validate again before being able to upload.</li>
+                <li style="list-style:none">
+                    Once the HWMs have been uploaded successfully, they will be removed from the table and brought down below to the
+                    "Successfully Uploaded High Water Marks" section.<br /> You can upload files to each HWM in the Successfully Uploaded section.
+                </li>
+                <li style="list-style:none">Clicking the Cancel button will send you back to your previous page. Clear Table will remove all data from the table (start over).</li>
+            </ul></b>
             <br />
+        </div>
+
+        <div class="col-md-12">
+            
             <div class="col-md-12" style="padding:0;margin:0;height:600px;overflow:hidden">
                 <hot-table datarows="uploadHWMs" settings="tableSettings" hot-id="tableinstance" class="dataTable">
                     <hot-column data="site_no" title="'Site No'" type="'dropdown'"></hot-column>                                                                                     <!-- 0 -->
@@ -93,19 +107,91 @@
                 <button type="button" class="btn btn-danger" ng-click="clearTable()">Clear Table</button>                
             </div>
         </div>       
-    </div>
-</div>
+    </div> <!-- end chosenEvent !== 0 -->
+    <br clear="all" />
+    <div ng-if="postedHWMs.length > 0">
+        <uib-accordion close-others="false">
+            <uib-accordion-group is-open="status.hwmOpen">
+                <uib-accordion-heading>
+                    <i style="margin-right:10px" class="pull-left glyphicon" ng-class="{'glyphicon-chevron-down': status.hwmOpen, 'glyphicon-chevron-right': !status.hwmOpen}"></i>
+                    Successfully Uploaded High Water Marks
+                </uib-accordion-heading>                
+                <br clear="all" />
+                <script>
+                    var sortingOrder = 'site_no';
+                </script>
+                <div class="col-md-12">
+                    <table class="table table-striped table-condensed" style="display:block;overflow:auto;">
+                        <thead>
+                            <tr>
+                            <th class="site_no">Site No&nbsp;<a ng-click="sort_by('site_no')"><i class="glyphicon glyphicon-sort"></i></a></th>
+                            <th class="waterbody">Waterbody&nbsp;<a ng-click="sort_by('waterbody')"><i class="glyphicon glyphicon-sort"></i></a></th>
+                            <th class="hwm_type_id">HWM Type&nbsp;<a ng-click="sort_by('hwm_type_id')"><i class="glyphicon glyphicon-sort"></i></a></th>
+                            <th class="marker_id">Marker&nbsp;<a ng-click="sort_by('marker_id')"><i class="glyphicon glyphicon-sort"></i></a></th>
+                            <th class="hwm_environment">HWM Environment&nbsp;<a ng-click="sort_by('hwm_environment')"><i class="glyphicon glyphicon-sort"></i></a></th>
+                            <th class="hwm_uncertainty">HWM Uncertainty&nbsp;<a ng-click="sort_by('hwm_uncertainty')"><i class="glyphicon glyphicon-sort"></i></a></th>
+                            <th class="hwm_quality_id">HWM Quality&nbsp;<a ng-click="sort_by('hwm_quality_id')"><i class="glyphicon glyphicon-sort"></i></a></th>
+                            <th class="bank">Bank&nbsp;<a ng-click="sort_by('bank')"><i class="glyphicon glyphicon-sort"></i></a></th>
+                            <th class="hwm_locationdescription">Loc. Description&nbsp;<a ng-click="sort_by('hwm_locationdescription')"><i class="glyphicon glyphicon-sort"></i></a></th>
+                            <th class="latitude_dd">HWM Latitude&nbsp;<a ng-click="sort_by('latitude_dd')"><i class="glyphicon glyphicon-sort"></i></a></th>
+                            <th class="longitude_dd">HWM Longitude&nbsp;<a ng-click="sort_by('longitude_dd')"><i class="glyphicon glyphicon-sort"></i></a></th>
+                            <th class="hdatum_id">Horizontal Datum&nbsp;<a ng-click="sort_by('hdatum_id')"><i class="glyphicon glyphicon-sort"></i></a></th>
+                            <th class="hcollect_method_id">Horizontal Collect Method&nbsp;<a ng-click="sort_by('hcollect_method_id')"><i class="glyphicon glyphicon-sort"></i></a></th>
+                            <th class="height_above_gnd">HAG&nbsp;<a ng-click="sort_by('height_above_gnd')"><i class="glyphicon glyphicon-sort"></i></a></th>
+                            <th class="flag_date">Flag/Found Date&nbsp;<a ng-click="sort_by('flag_date')"><i class="glyphicon glyphicon-sort"></i></a></th>
+                            <th class="survey_date">Survey Date&nbsp;<a ng-click="sort_by('survey_date')"><i class="glyphicon glyphicon-sort"></i></a></th>
+                            <th class="elev_ft">Surveyed Elev&nbsp;<a ng-click="sort_by('elev_ft')"><i class="glyphicon glyphicon-sort"></i></a></th>
+                            <th class="vdatum_id">Vertical Datum&nbsp;<a ng-click="sort_by('vdatum_id')"><i class="glyphicon glyphicon-sort"></i></a></th>
+                            <th class="vcollect_method_id">Vertical Collect Method&nbsp;<a ng-click="sort_by('vcollect_method_id')"><i class="glyphicon glyphicon-sort"></i></a></th>
+                            <th class="uncertainty">Survey Uncertainty&nbsp;<a ng-click="sort_by('uncertainty')"><i class="glyphicon glyphicon-sort"></i></a></th>
+                            <th class="hwm_notes">Notes&nbsp;<a ng-click="sort_by('hwm_notes')"><i class="glyphicon glyphicon-sort"></i></a></th>
+                            <th class="stillwater">Tranquil/Stillwater&nbsp;<a ng-click="sort_by('stillwater')"><i class="glyphicon glyphicon-sort"></i></a></th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="h in postedHWMs | orderBy:sortingOrder:reverse">
+                            <td><a ui-sref="site.dashboard({id: h.site_id})">{{h.site_no}}</a></td>
+                            <td>{{h.waterbody}}</td>
+                            <td>{{(hwmTypes | filter: {hwm_type_id: h.hwm_type_id})[0].hwm_type}}</td>
+                            <td>{{h.marker_id > 0 ? (markers | filter: {marker_id: h.marker_id})[0].marker1 : ""}}</td>
+                            <td>{{h.hwm_environment}}</td>
+                            <td>{{h.hwm_uncertainty}}</td>
+                            <td>{{(hwmQuals | filter: {hwm_quality_id: h.hwm_quality_id})[0].hwm_quality}}</td>
+                            <td>{{h.bank}}</td>
+                            <td>{{h.hwm_locationdescription}}</td>
+                            <td>{{h.latitude_dd}}</td>
+                            <td>{{h.longitude_dd}}</td>
+                            <td>{{h.hdatum_id > 0 ? (horDatums | filter: { datum_id: h.hdatum_id})[0].datum_name : ""}}</td>
+                            <td>{{h.hcollect_method_id > 0 ? (horCollMeths | filter: {hcollect_method_id : h.hcollect_method_id})[0].hcollect_method : ""}}</td>
+                            <td>{{h.height_above_gnd}}</td>
+                            <td>{{h.flag_date | date: "MM/dd/yyyy"}}</td>
+                            <td>{{h.survey_date | date: "MM/dd/yyyy"}}</td>
+                            <td>{{h.elev_ft}}</td>
+                            <td>{{h.vdatum_id > 0 ? (vertDatums | filter: {datum_id: h.vdatum_id})[0].datum_abbreviation : ""}}</td>
+                            <td>{{h.vcollect_method_id > 0 ? (vertCollMeths | filter: {vcollect_method_id: h.vcollect_method_id})[0].vcollect_method : ""}}</td>
+                            <td>{{h.uncertainty}}</td>
+                            <td>{{h.hwm_notes}}</td>
+                            <td>{{h.stillwater}}</td>                            
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </uib-accordion-group>
+        </uib-accordion>
+    </div> <!--if postedHWMs.length > 0 -->
+</div> <!-- end page -->
 
+<!-- Modal for Site No-->
 <script type="text/ng-template" id="associateSitemodal.html">
     <div class="modal-header">
         <h3 class="modal-title">Associate Site</h3>
     </div>
     <div class="modal-body">
-        <div>Close sites:</div>
+        <div>Nearby sites:</div>
         <div ng-repeat="s in localSites" class="col-md-9">
             <input type="radio" name="selectedSite" class="pull-left col-sm-1" ng-model="s.selected" value="true" ng-click="unchkCreate(s)" /><span class="col-md-6">{{s.site_no || s.site_id}}</span>
         </div>
-        
+        <div ng-if="localSites.length == 0">There are no nearby sites.</div>
         <div ng-if="localSites.length > 0" class="col-md-12">See existing sites on a map: <button type="button" class="btn btn-blue" ng-click="showSitesOnMap()">{{showHideMap}} Map</button></div>
         <br clear="all"/>
         <div ng-if="showMap">
@@ -115,16 +201,224 @@
             </div>
         </div>
         <br/>
-        <div class="col-md-9">
+        <div class="col-md-12">
             <input type="checkbox" ng-model="createChecked" ng-true-value="'1'" ng-false-value="'0'" class="pull-left col-sm-1" ng-click="showHideCreateSiteDiv()" /><span class="col-md-8">Create new Site to Associate HWM to</span>
         </div>
         <div ng-if="showSiteCreateArea">
-            Here will reside new site create fields
-        </div>
+            <form class="form-horizontal" name="siteNewForm">
+                <fieldset class="fivepad">                   
+                    <!--Site Description*-->
+                    <div class="form-group" ng-class="{'has-error':siteNewForm.site_description.$invalid && siteNewForm.site_description.$dirty}">
+                        <label class="col-md-4 control-label req" for="site_description">
+                            <button type="button" class="help-btn" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Displayed publicly.">
+                                <span class="glyphicon glyphicon-eye-open"></span>
+                            </button> Site Description:
+                            <button type="button" class="help-btn" tooltip-placement="bottom" tooltip-append-to-body="false" uib-tooltip="Brief description of the site area.">
+                                <span class="glyphicon glyphicon-question-sign"></span>
+                            </button>
+                            <button type="button" class="help-btn" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Required">
+                                <span class="glyphicon glyphicon-asterisk" style="color:#d00;font-size:xx-small;"></span>
+                            </button>
+                        </label>
+                        <div class="col-md-7">
+                            <textarea class="form-control" type="text" rows="3" name="site_description" id="site_description" placeholder="Site Description" ng-model="newSite.site_description" required />
+                        </div>
+                    </div>
+
+                    <!--Latitude*-->
+                    <div class="form-group" ng-class="{'has-error':siteNewForm.latitude_dd.$invalid && siteNewForm.latitude_dd.$dirty}">
+                        <label class="col-md-4 control-label req" for="latitude_dd">
+                            <button type="button" class="help-btn" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Displayed publicly.">
+                                <span class="glyphicon glyphicon-eye-open"></span>
+                            </button> Latitude:
+                            <button type="button" class="help-btn" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Required">
+                                <span class="glyphicon glyphicon-asterisk" style="color:#d00;font-size:xx-small;"></span>
+                            </button>
+                        </label>
+                        <div class="col-md-7">
+                            <input class="form-control" ng-keypress="isNum($event)" name="latitude_dd" ng-model="newSite.latitude_dd" id="latitude_dd"
+                                    ng-model-options="{ updateOn: 'blur' }" ng-change="checkValue('lat')" type="text" placeholder="Latitude" required />
+                        </div>                            
+                    </div>
+
+                    <!--Longitude*-->
+                    <div class="form-group" ng-class="{'has-error':siteNewForm.longitude_dd.$invalid && siteNewForm.longitude_dd.$dirty}">
+                        <label class="col-md-4 control-label req" for="longitude_dd">
+                            <button type="button" class="help-btn" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Displayed publicly.">
+                                <span class="glyphicon glyphicon-eye-open"></span>
+                            </button> Longitude:
+                            <button type="button" class="help-btn" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Required">
+                                <span class="glyphicon glyphicon-asterisk" style="color:#d00;font-size:xx-small;"></span>
+                            </button>
+                        </label>
+                        <div class="col-md-7">
+                            <input class="form-control" ng-keypress="isNum($event)" ng-enter="getAddress()" id="longitude_dd" name="longitude_dd" ng-model="newSite.longitude_dd"
+                                    ng-model-options="{ updateOn: 'blur' }" ng-change="checkValue('long')" type="text" placeholder="Longitude" required />
+                        </div>                            
+                    </div>
+
+                    <!--Horizontal Datum*-->
+                    <div class="form-group" ng-class="{'has-error':siteNewForm.hdatum_id.$invalid && siteNewForm.hdatum_id.$dirty}">
+                        <label class="col-md-4 control-label req" for="hdatum_id">
+                            <button type="button" class="help-btn" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Displayed publicly.">
+                                <span class="glyphicon glyphicon-eye-open"></span>
+                            </button> Horizontal Datum:
+                            <button type="button" class="help-btn" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Required">
+                                <span class="glyphicon glyphicon-asterisk" style="color:#d00;font-size:xx-small;"></span>
+                            </button>
+                        </label>
+                        <div class="col-md-7">
+                            <select class="form-control" id="hdatum_id" name="hdatum_id" ng-model="newSite.hdatum_id" ng-options="hd.datum_id as hd.datum_name for hd in horDatums" required>
+                                <option value=""></option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!--Horizontal Collection Method*-->
+                    <div class="form-group" ng-class="{'has-error':siteNewForm.hcollect_method_id.$invalid && siteNewForm.hcollect_method_id.$dirty}">
+                        <label class="col-md-4 control-label req" for="hcollect_method_id">
+                            <button type="button" class="help-btn" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Displayed publicly.">
+                                <span class="glyphicon glyphicon-eye-open"></span>
+                            </button> Horizontal Collection Method:
+                            <button type="button" class="help-btn" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Required">
+                                <span class="glyphicon glyphicon-asterisk" style="color:#d00;font-size:xx-small;"></span>
+                            </button>
+                        </label>
+                        <div class="col-md-7">
+                            <select class="form-control" id="hcollect_method_id" name="hcollect_method_id" ng-model="newSite.hcollect_method_id"
+                                    ng-options="hc.hcollect_method_id as hc.hcollect_method for hc in horCollMeths" required>
+                                <option value=""></option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!--Waterbody*-->
+                    <div class="form-group" ng-class="{'has-error':siteNewForm.waterbody.$invalid && siteNewForm.waterbody.$dirty}">
+                        <label class="col-md-4 control-label req" for="SITE_waterbody">
+                            <button type="button" class="help-btn" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Displayed publicly.">
+                                <span class="glyphicon glyphicon-eye-open"></span>
+                            </button> Waterbody:
+                            <button type="button" class="help-btn" tooltip-placement="bottom" tooltip-append-to-body="false" uib-tooltip-html="htmlDescriptionTip">
+                                <span class="glyphicon glyphicon-question-sign"></span>
+                            </button>
+                            <button type="button" class="help-btn" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Required">
+                                <span class="glyphicon glyphicon-asterisk" style="color:#d00;font-size:xx-small;"></span>
+                            </button>
+                        </label>
+                        <div class="col-md-7">
+                            <input class="form-control" id="waterbody" name="waterbody" ng-model="newSite.waterbody" type="text" required />
+                        </div>
+
+                    </div>
+
+                    <!--populate button*-->
+                    <div class="form-group">
+                        <div class="panel panel-default">
+                            <div class="panel-body">
+                                <div class="form-group">
+                                    <label class="col-md-4 control-label" for="POPULATEBTN">
+                                        Click to populate address fields:
+                                        <button type="button" class="help-btn" tooltip-placement="left" tooltip-append-to-body="false" uib-tooltip="Also checks for nearby sites within x ft, and populates 5 fields below.">
+                                            <span class="glyphicon glyphicon-question-sign"></span>
+                                        </button>
+                                    </label>
+                                    <div class="col-md-7">
+                                        <button type="button" ng-click="getAddress()" class="btn-wim btn-inline btn-blue btn-md">Verify Location</button>
+                                    </div>
+                                </div>
+
+                                <!--Address-->
+                                <div class="form-group">
+                                    <label class="col-md-4 control-label" for="address">
+                                        <button type="button" class="help-btn" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Displayed publicly.">
+                                            <span class="glyphicon glyphicon-eye-open"></span>
+                                        </button> Address:
+                                    </label>
+                                    <div class="col-md-7">
+                                        <input class="form-control" id="address" name="address" ng-model="newSite.address" type="text" />
+                                    </div>
+                                </div>
+
+                                <!--City-->
+                                <div class="form-group">
+                                    <label class="col-md-4 control-label" for="city">
+                                        <button type="button" class="help-btn" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Displayed publicly.">
+                                            <span class="glyphicon glyphicon-eye-open"></span>
+                                        </button> City:
+                                    </label>
+                                    <div class="col-md-7">
+                                        <input class="form-control" id="city" name="city" ng-model="newSite.city" type="text" />
+                                    </div>
+                                </div>
+
+                                <!--State*-->
+                                <div class="form-group" ng-class="{'has-error':siteNewForm.state.$invalid && siteNewForm.state.$dirty}">
+                                    <label class="col-md-4 control-label req" for="state">
+                                        <button type="button" class="help-btn" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Displayed publicly.">
+                                            <span class="glyphicon glyphicon-eye-open"></span>
+                                        </button> State:
+                                        <button type="button" class="help-btn" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Used to autogenerate the Site Number.">
+                                            <span class="glyphicon glyphicon-question-sign"></span>
+                                        </button>
+                                        <button type="button" class="help-btn" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Required">
+                                            <span class="glyphicon glyphicon-asterisk" style="color:#d00;font-size:xx-small;"></span>
+                                        </button>
+                                    </label>
+                                    <div class="col-md-7">
+                                        <select class="form-control" id="state" name="state" ng-model="newSite.state" ng-change="updateCountyList(aSite.state)"
+                                                ng-options="state.state_abbrev as state.state_name for state in states" required>
+                                            <option value=""></option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <!--Zip-->
+                                <div class="form-group">
+                                    <label class="col-md-4 control-label" for="zip">
+                                        <button type="button" class="help-btn" tooltip-placement="bottom" tooltip-append-to-body="false" uib-tooltip="Displayed publicly.">
+                                            <span class="glyphicon glyphicon-eye-open"></span>
+                                        </button> Zip:
+                                    </label>
+                                    <div class="col-md-7">
+                                        <input class="form-control" id="zip" name="zip" ng-model="newSite.zip" type="text" ui-mask="{{'99999'}}" />
+                                    </div>
+                                </div>
+
+                                <!--County*-->
+                                <div class="form-group" ng-class="{'has-error':siteNewForm.county.$invalid && siteNewForm.county.$dirty}">
+                                    <label class="col-md-4 control-label req" for="county">
+                                        <button type="button" class="help-btn" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Displayed publicly.">
+                                            <span class="glyphicon glyphicon-eye-open"></span>
+                                        </button> County:
+                                        <button type="button" class="help-btn" tooltip-placement="left" tooltip-append-to-body="false" uib-tooltip="Used to autogenerate the Site Number. Use the verify location to populate.">
+                                            <span class="glyphicon glyphicon-question-sign"></span>
+                                        </button>
+                                        <button type="button" class="help-btn" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Required">
+                                            <span class="glyphicon glyphicon-asterisk" style="color:#d00;font-size:xx-small;"></span>
+                                        </button>
+                                    </label>
+                                    <div class="col-md-7">
+                                        <select class="form-control" id="county" name="county" ng-model="newSite.county" ng-options="c.county_name as c.county_name for c in stateCountyList" required>
+                                            <option value=""></option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>                       
+                    
+                    <div class="form-group">
+                        <div style="display: block; text-align: center;">
+                            <button class="btn-wim btn-blue btn-inline btn-lg" ng-click="createNewSite(siteNewForm.$valid)">Create and Associate this Site</button>  
+                        </div>
+                    </div>
+                </fieldset>
+            </form>
+        </div><!-- end site create section -->
         <br clear="all" />
     </div>
     <div class="modal-footer center-all">
-        <button type="button" class="btn-wim btn-blue btn-inline" ng-click="ok()">OK</button>
+        <button ng-if="!disableOK" type="button" class="btn-wim btn-blue btn-inline" ng-click="ok()">OK</button>
         <button type="button" class="btn-wim btn-inline btn-orange" ng-click="cancel()">Cancel</button>
     </div>
 </script>
