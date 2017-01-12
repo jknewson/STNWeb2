@@ -13,9 +13,12 @@
     .progress {
         background-image: linear-gradient(to bottom, #cccaca 0px, #cccaca 100%);
     }
-    .checkBoxContainer{
-         display: block; min-height: 220px;
+
+    .checkBoxContainer {
+        display: block;
+        min-height: 220px;
     }
+
     .hidden {
         display: none !important;
         visibility: hidden !important;
@@ -30,12 +33,13 @@
         </div>
     </div>
     <div><h2>Bulk HWM Upload</h2></div>
-    
+
     <form name="bulkHWMForm" class="wim-form border-bottom">
         <div>You must select an EVENT before uploading HWMs.</div>
         <br />
         <div class="form-item item-25">
-            <label for="event" class="req">Event:
+            <label for="event" class="req">
+                Event:
                 <button type="button" class="help-btn" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Required">
                     <span class="glyphicon glyphicon-asterisk" style="color:#d00;font-size:xx-small;"></span>
                 </button>
@@ -50,32 +54,34 @@
     <div ng-show="chosenEvent !== 0">
         <div><a ng-click="showTips=!showTips"><span ng-if="!showTips">Show</span><span ng-if="showTips">Hide</span></a> Bulk HWM Uploader tips.</div>
         <div ng-if="showTips">
-            <b><ul>
-                <li style="list-style:none">Download the excel template (Coming soon)</li>
-                <li style="list-style:none">
-                    Copy/paste or manually populate the table below. If you know the Site Number (ex: 'FLPIN06064'), type or paste that into the Site No column.
-                    <br />If you do not know the Site Number, click the down arrow in the Site No cell to search for a nearby site or create a site to use for the hwm.
-                </li>
-                <li style="list-style:none">You mush click "Validate Table" after entering all your hwm data. Once you have validated the data, you may Upload the HWMs.</li>
-                <li style="list-style:none">
-                    Examples of invalid data are: empty Required fields, a Site Number that does not exist, latitude/longitude out of range or empty.
-                    <br />Fix any validation errors, and click Validate Table again.
-                </li>
-                <li style="list-style:none">If you make a change to the data after Validating, you will need to validate again before being able to upload.</li>
-                <li style="list-style:none">
-                    Once the HWMs have been uploaded successfully, they will be removed from the table and brought down below to the
-                    "Successfully Uploaded High Water Marks" section.<br /> You can upload files to each HWM in the Successfully Uploaded section.
-                </li>
-                <li style="list-style:none">Clicking the Cancel button will send you back to your previous page. Clear Table will remove all data from the table (start over).</li>
-            </ul></b>
+            <b>
+                <ul>
+                    <li style="list-style:none">Download the excel template (Coming soon)</li>
+                    <li style="list-style:none">
+                        Copy/paste or manually populate the table below. If you know the Site Number (ex: 'FLPIN06064'), type or paste that into the Site No column.
+                        <br />If you do not know the Site Number, click the down arrow in the Site No cell to search for a nearby site or create a site to use for the hwm.
+                    </li>
+                    <li style="list-style:none">You mush click "Validate Table" after entering all your hwm data. Once you have validated the data, you may Upload the HWMs.</li>
+                    <li style="list-style:none">
+                        Examples of invalid data are: empty Required fields, a Site Number that does not exist, latitude/longitude out of range or empty.
+                        <br />Fix any validation errors, and click Validate Table again.
+                    </li>
+                    <li style="list-style:none">If you make a change to the data after Validating, you will need to validate again before being able to upload.</li>
+                    <li style="list-style:none">
+                        Once the HWMs have been uploaded successfully, they will be removed from the table and brought down below to the
+                        "Successfully Uploaded High Water Marks" section.<br /> You can upload files to each HWM in the Successfully Uploaded section.
+                    </li>
+                    <li style="list-style:none">Clicking the Cancel button will send you back to your previous page. Clear Table will remove all data from the table (start over).</li>
+                </ul>
+            </b>
             <br />
         </div>
 
         <div class="col-md-12">
-            
+            <!-- Hot table -->
             <div class="col-md-12" style="padding:0;margin:0;height:600px;overflow:hidden">
                 <hot-table datarows="uploadHWMs" settings="tableSettings" hot-id="tableinstance" class="dataTable">
-                    <hot-column data="site_no" title="'Site No'" type="'dropdown'"></hot-column>                                                                                     <!-- 0 -->
+                    <hot-column data="site_no" title="'Site No'" type="'dropdown'" validator="requiredValidator"></hot-column>                                                                                     <!-- 0 -->
                     <hot-column data="waterbody" title="'Waterbody'"></hot-column>                                                                                                  <!-- 1 -->
                     <hot-column data="hwm_type_id" title="'HWM Type *'" type="'dropdown'" source="hwmTypeArray" validator="matchingDDValue"></hot-column>                           <!-- 2 -->
                     <hot-column data="marker_id" title="'Marker'" type="'dropdown'" source="markerArray"></hot-column>                                                              <!-- 3 -->
@@ -96,17 +102,17 @@
                     <hot-column data="vcollect_method_id" title="'Vertical Collect Method'" type="'dropdown'" source="vcollMethArray"></hot-column>                                 <!-- 18 -->
                     <hot-column data="uncertainty" title="'Survey Uncertainty (ft)'" validator="numericValidator"></hot-column>                                                     <!-- 19 -->
                     <hot-column data="hwm_notes" title="'Notes'"></hot-column>                                                                                                      <!-- 20 -->
-                    <hot-column data="stillwater" title="'Tranquil/Stillwater'" type="'dropdown'" source="tranqArray"></hot-column>                                                 <!-- 21 -->              
+                    <hot-column data="stillwater" title="'Tranquil/Stillwater'" type="'dropdown'" source="tranqArray"></hot-column>                                                 <!-- 21 -->
                 </hot-table>
             </div>
-            <br clear="all"/>
+            <br clear="all" />
             <div>
                 <button type="button" class="btn btn-primary" ng-click="validateTable()">Validate Table</button>
                 <button class="btn btn-primary" ng-disabled="notValid" ng-click="save()">Upload HWMs</button>
                 <button type="button" class="btn btn-warning" back-button>Cancel</button>
-                <button type="button" class="btn btn-danger" ng-click="clearTable()">Clear Table</button>                
+                <button type="button" class="btn btn-danger" ng-click="clearTable()">Clear Table</button>
             </div>
-        </div>       
+        </div>
     </div> <!-- end chosenEvent !== 0 -->
     <br clear="all" />
     <div ng-if="postedHWMs.length > 0">
@@ -115,7 +121,7 @@
                 <uib-accordion-heading>
                     <i style="margin-right:10px" class="pull-left glyphicon" ng-class="{'glyphicon-chevron-down': status.hwmOpen, 'glyphicon-chevron-right': !status.hwmOpen}"></i>
                     Successfully Uploaded High Water Marks
-                </uib-accordion-heading>                
+                </uib-accordion-heading>
                 <br clear="all" />
                 <script>
                     var sortingOrder = 'site_no';
@@ -124,55 +130,72 @@
                     <table class="table table-striped table-condensed" style="display:block;overflow:auto;">
                         <thead>
                             <tr>
-                            <th class="site_no">Site No&nbsp;<a ng-click="sort_by('site_no')"><i class="glyphicon glyphicon-sort"></i></a></th>
-                            <th class="waterbody">Waterbody&nbsp;<a ng-click="sort_by('waterbody')"><i class="glyphicon glyphicon-sort"></i></a></th>
-                            <th class="hwm_type_id">HWM Type&nbsp;<a ng-click="sort_by('hwm_type_id')"><i class="glyphicon glyphicon-sort"></i></a></th>
-                            <th class="marker_id">Marker&nbsp;<a ng-click="sort_by('marker_id')"><i class="glyphicon glyphicon-sort"></i></a></th>
-                            <th class="hwm_environment">HWM Environment&nbsp;<a ng-click="sort_by('hwm_environment')"><i class="glyphicon glyphicon-sort"></i></a></th>
-                            <th class="hwm_uncertainty">HWM Uncertainty&nbsp;<a ng-click="sort_by('hwm_uncertainty')"><i class="glyphicon glyphicon-sort"></i></a></th>
-                            <th class="hwm_quality_id">HWM Quality&nbsp;<a ng-click="sort_by('hwm_quality_id')"><i class="glyphicon glyphicon-sort"></i></a></th>
-                            <th class="bank">Bank&nbsp;<a ng-click="sort_by('bank')"><i class="glyphicon glyphicon-sort"></i></a></th>
-                            <th class="hwm_locationdescription">Loc. Description&nbsp;<a ng-click="sort_by('hwm_locationdescription')"><i class="glyphicon glyphicon-sort"></i></a></th>
-                            <th class="latitude_dd">HWM Latitude&nbsp;<a ng-click="sort_by('latitude_dd')"><i class="glyphicon glyphicon-sort"></i></a></th>
-                            <th class="longitude_dd">HWM Longitude&nbsp;<a ng-click="sort_by('longitude_dd')"><i class="glyphicon glyphicon-sort"></i></a></th>
-                            <th class="hdatum_id">Horizontal Datum&nbsp;<a ng-click="sort_by('hdatum_id')"><i class="glyphicon glyphicon-sort"></i></a></th>
-                            <th class="hcollect_method_id">Horizontal Collect Method&nbsp;<a ng-click="sort_by('hcollect_method_id')"><i class="glyphicon glyphicon-sort"></i></a></th>
-                            <th class="height_above_gnd">HAG&nbsp;<a ng-click="sort_by('height_above_gnd')"><i class="glyphicon glyphicon-sort"></i></a></th>
-                            <th class="flag_date">Flag/Found Date&nbsp;<a ng-click="sort_by('flag_date')"><i class="glyphicon glyphicon-sort"></i></a></th>
-                            <th class="survey_date">Survey Date&nbsp;<a ng-click="sort_by('survey_date')"><i class="glyphicon glyphicon-sort"></i></a></th>
-                            <th class="elev_ft">Surveyed Elev&nbsp;<a ng-click="sort_by('elev_ft')"><i class="glyphicon glyphicon-sort"></i></a></th>
-                            <th class="vdatum_id">Vertical Datum&nbsp;<a ng-click="sort_by('vdatum_id')"><i class="glyphicon glyphicon-sort"></i></a></th>
-                            <th class="vcollect_method_id">Vertical Collect Method&nbsp;<a ng-click="sort_by('vcollect_method_id')"><i class="glyphicon glyphicon-sort"></i></a></th>
-                            <th class="uncertainty">Survey Uncertainty&nbsp;<a ng-click="sort_by('uncertainty')"><i class="glyphicon glyphicon-sort"></i></a></th>
-                            <th class="hwm_notes">Notes&nbsp;<a ng-click="sort_by('hwm_notes')"><i class="glyphicon glyphicon-sort"></i></a></th>
-                            <th class="stillwater">Tranquil/Stillwater&nbsp;<a ng-click="sort_by('stillwater')"><i class="glyphicon glyphicon-sort"></i></a></th>
-                        </tr>
+                                <th></th><!-- edit icon -->
+                                <th ng-if="HWMFiles.length > 0">Files Uploaded</th>
+                                <th class="site_no">Site No&nbsp;<a ng-click="sort_by('site_no')"><i class="glyphicon glyphicon-sort"></i></a></th>
+                                <th class="waterbody">Waterbody&nbsp;<a ng-click="sort_by('waterbody')"><i class="glyphicon glyphicon-sort"></i></a></th>
+                                <th class="hwm_type_id">HWM Type&nbsp;<a ng-click="sort_by('hwm_type_id')"><i class="glyphicon glyphicon-sort"></i></a></th>
+                                <th class="marker_id">Marker&nbsp;<a ng-click="sort_by('marker_id')"><i class="glyphicon glyphicon-sort"></i></a></th>
+                                <th class="hwm_environment">HWM Environment&nbsp;<a ng-click="sort_by('hwm_environment')"><i class="glyphicon glyphicon-sort"></i></a></th>
+                                <th class="hwm_uncertainty">HWM Uncertainty&nbsp;<a ng-click="sort_by('hwm_uncertainty')"><i class="glyphicon glyphicon-sort"></i></a></th>
+                                <th class="hwm_quality_id">HWM Quality&nbsp;<a ng-click="sort_by('hwm_quality_id')"><i class="glyphicon glyphicon-sort"></i></a></th>
+                                <th class="bank">Bank&nbsp;<a ng-click="sort_by('bank')"><i class="glyphicon glyphicon-sort"></i></a></th>
+                                <th class="hwm_locationdescription">Loc. Description&nbsp;<a ng-click="sort_by('hwm_locationdescription')"><i class="glyphicon glyphicon-sort"></i></a></th>
+                                <th class="latitude_dd">HWM Latitude&nbsp;<a ng-click="sort_by('latitude_dd')"><i class="glyphicon glyphicon-sort"></i></a></th>
+                                <th class="longitude_dd">HWM Longitude&nbsp;<a ng-click="sort_by('longitude_dd')"><i class="glyphicon glyphicon-sort"></i></a></th>
+                                <th class="hdatum_id">Horizontal Datum&nbsp;<a ng-click="sort_by('hdatum_id')"><i class="glyphicon glyphicon-sort"></i></a></th>
+                                <th class="hcollect_method_id">Horizontal Collect Method&nbsp;<a ng-click="sort_by('hcollect_method_id')"><i class="glyphicon glyphicon-sort"></i></a></th>
+                                <th class="height_above_gnd">HAG&nbsp;<a ng-click="sort_by('height_above_gnd')"><i class="glyphicon glyphicon-sort"></i></a></th>
+                                <th class="flag_date">Flag/Found Date&nbsp;<a ng-click="sort_by('flag_date')"><i class="glyphicon glyphicon-sort"></i></a></th>
+                                <th class="survey_date">Survey Date&nbsp;<a ng-click="sort_by('survey_date')"><i class="glyphicon glyphicon-sort"></i></a></th>
+                                <th class="elev_ft">Surveyed Elev&nbsp;<a ng-click="sort_by('elev_ft')"><i class="glyphicon glyphicon-sort"></i></a></th>
+                                <th class="vdatum_id">Vertical Datum&nbsp;<a ng-click="sort_by('vdatum_id')"><i class="glyphicon glyphicon-sort"></i></a></th>
+                                <th class="vcollect_method_id">Vertical Collect Method&nbsp;<a ng-click="sort_by('vcollect_method_id')"><i class="glyphicon glyphicon-sort"></i></a></th>
+                                <th class="uncertainty">Survey Uncertainty&nbsp;<a ng-click="sort_by('uncertainty')"><i class="glyphicon glyphicon-sort"></i></a></th>
+                                <th class="hwm_notes">Notes&nbsp;<a ng-click="sort_by('hwm_notes')"><i class="glyphicon glyphicon-sort"></i></a></th>
+                                <th class="stillwater">Tranquil/Stillwater&nbsp;<a ng-click="sort_by('stillwater')"><i class="glyphicon glyphicon-sort"></i></a></th>
+                            </tr>
                         </thead>
                         <tbody>
-                            <tr ng-repeat="h in postedHWMs | orderBy:sortingOrder:reverse">
-                            <td><a ui-sref="site.dashboard({id: h.site_id})">{{h.site_no}}</a></td>
-                            <td>{{h.waterbody}}</td>
-                            <td>{{(hwmTypes | filter: {hwm_type_id: h.hwm_type_id})[0].hwm_type}}</td>
-                            <td>{{h.marker_id > 0 ? (markers | filter: {marker_id: h.marker_id})[0].marker1 : ""}}</td>
-                            <td>{{h.hwm_environment}}</td>
-                            <td>{{h.hwm_uncertainty}}</td>
-                            <td>{{(hwmQuals | filter: {hwm_quality_id: h.hwm_quality_id})[0].hwm_quality}}</td>
-                            <td>{{h.bank}}</td>
-                            <td>{{h.hwm_locationdescription}}</td>
-                            <td>{{h.latitude_dd}}</td>
-                            <td>{{h.longitude_dd}}</td>
-                            <td>{{h.hdatum_id > 0 ? (horDatums | filter: { datum_id: h.hdatum_id})[0].datum_name : ""}}</td>
-                            <td>{{h.hcollect_method_id > 0 ? (horCollMeths | filter: {hcollect_method_id : h.hcollect_method_id})[0].hcollect_method : ""}}</td>
-                            <td>{{h.height_above_gnd}}</td>
-                            <td>{{h.flag_date | date: "MM/dd/yyyy"}}</td>
-                            <td>{{h.survey_date | date: "MM/dd/yyyy"}}</td>
-                            <td>{{h.elev_ft}}</td>
-                            <td>{{h.vdatum_id > 0 ? (vertDatums | filter: {datum_id: h.vdatum_id})[0].datum_abbreviation : ""}}</td>
-                            <td>{{h.vcollect_method_id > 0 ? (vertCollMeths | filter: {vcollect_method_id: h.vcollect_method_id})[0].vcollect_method : ""}}</td>
-                            <td>{{h.uncertainty}}</td>
-                            <td>{{h.hwm_notes}}</td>
-                            <td>{{h.stillwater}}</td>                            
-                        </tr>
+                            <tr ng-repeat="h in postedHWMs | orderBy:sortingOrder:reverse"> <!--ui-sref="site.dashboard({id: h.site_id})"-->
+                                <td>
+                                    <div style="width:65px">
+                                        <label class="col-md-1">
+                                            <button type="button" ng-click="OpenHWMEdit(h)" class="help-btn" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Edit HWM and/or Add Files">
+                                                <span style="color:#007aff;" class="glyphicon glyphicon-pencil"></span>
+                                            </button>
+                                        </label>                                        
+                                        <label class="col-md-1">
+                                            <button type="button" ng-click="DeleteHWM(h)" class="help-btn" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Delete HWM">
+                                                <span style="color:#ff3b30;" class="glyphicon glyphicon-remove"></span>
+                                            </button>
+                                        </label>                                        
+                                    </div>
+                                </td>
+                                <td ng-if="h.HWMFiles.length > 0">{{h.HWMFiles.length}}</td>
+                                <td><a ng-click="goToSiteDash(h.site_id)">{{h.site_no}}</a></td>
+                                <td>{{h.waterbody}}</td>
+                                <td>{{(hwmTypes | filter: {hwm_type_id: h.hwm_type_id})[0].hwm_type}}</td>
+                                <td>{{h.marker_id > 0 ? (markers | filter: {marker_id: h.marker_id})[0].marker1 : ""}}</td>
+                                <td>{{h.hwm_environment}}</td>
+                                <td>{{h.hwm_uncertainty}}</td>
+                                <td>{{(hwmQuals | filter: {hwm_quality_id: h.hwm_quality_id})[0].hwm_quality}}</td>
+                                <td>{{h.bank}}</td>
+                                <td>{{h.hwm_locationdescription}}</td>
+                                <td>{{h.latitude_dd}}</td>
+                                <td>{{h.longitude_dd}}</td>
+                                <td>{{h.hdatum_id > 0 ? (horDatums | filter: { datum_id: h.hdatum_id})[0].datum_name : ""}}</td>
+                                <td>{{h.hcollect_method_id > 0 ? (horCollMeths | filter: {hcollect_method_id : h.hcollect_method_id})[0].hcollect_method : ""}}</td>
+                                <td>{{h.height_above_gnd}}</td>
+                                <td>{{h.flag_date | date: "MM/dd/yyyy"}}</td>
+                                <td>{{h.survey_date | date: "MM/dd/yyyy"}}</td>
+                                <td>{{h.elev_ft}}</td>
+                                <td>{{h.vdatum_id > 0 ? (vertDatums | filter: {datum_id: h.vdatum_id})[0].datum_abbreviation : ""}}</td>
+                                <td>{{h.vcollect_method_id > 0 ? (vertCollMeths | filter: {vcollect_method_id: h.vcollect_method_id})[0].vcollect_method : ""}}</td>
+                                <td>{{h.uncertainty}}</td>
+                                <td>{{h.hwm_notes}}</td>
+                                <td>{{h.stillwater}}</td>
+                            </tr>
                         </tbody>
                     </table>
                 </div>
@@ -193,20 +216,20 @@
         </div>
         <div ng-if="localSites.length == 0">There are no nearby sites.</div>
         <div ng-if="localSites.length > 0" class="col-md-12">See existing sites on a map: <button type="button" class="btn btn-blue" ng-click="showSitesOnMap()">{{showHideMap}} Map</button></div>
-        <br clear="all"/>
+        <br clear="all" />
         <div ng-if="showMap">
             <div>
                 <leaflet id="associatedSiteMap" ng-style="mapStyle" markers="markers" layers="layers" width="100%" height="300px">
                 </leaflet>
             </div>
         </div>
-        <br/>
+        <br />
         <div class="col-md-12">
             <input type="checkbox" ng-model="createChecked" ng-true-value="'1'" ng-false-value="'0'" class="pull-left col-sm-1" ng-click="showHideCreateSiteDiv()" /><span class="col-md-8">Create new Site to Associate HWM to</span>
         </div>
         <div ng-if="showSiteCreateArea">
             <form class="form-horizontal" name="siteNewForm">
-                <fieldset class="fivepad">                   
+                <fieldset class="fivepad">
                     <!--Site Description*-->
                     <div class="form-group" ng-class="{'has-error':siteNewForm.site_description.$invalid && siteNewForm.site_description.$dirty}">
                         <label class="col-md-4 control-label req" for="site_description">
@@ -237,8 +260,8 @@
                         </label>
                         <div class="col-md-7">
                             <input class="form-control" ng-keypress="isNum($event)" name="latitude_dd" ng-model="newSite.latitude_dd" id="latitude_dd"
-                                    ng-model-options="{ updateOn: 'blur' }" ng-change="checkValue('lat')" type="text" placeholder="Latitude" required />
-                        </div>                            
+                                   ng-model-options="{ updateOn: 'blur' }" ng-change="checkValue('lat')" type="text" placeholder="Latitude" required />
+                        </div>
                     </div>
 
                     <!--Longitude*-->
@@ -253,8 +276,8 @@
                         </label>
                         <div class="col-md-7">
                             <input class="form-control" ng-keypress="isNum($event)" ng-enter="getAddress()" id="longitude_dd" name="longitude_dd" ng-model="newSite.longitude_dd"
-                                    ng-model-options="{ updateOn: 'blur' }" ng-change="checkValue('long')" type="text" placeholder="Longitude" required />
-                        </div>                            
+                                   ng-model-options="{ updateOn: 'blur' }" ng-change="checkValue('long')" type="text" placeholder="Longitude" required />
+                        </div>
                     </div>
 
                     <!--Horizontal Datum*-->
@@ -405,11 +428,11 @@
                                 </div>
                             </div>
                         </div>
-                    </div>                       
-                    
+                    </div>
+
                     <div class="form-group">
                         <div style="display: block; text-align: center;">
-                            <button class="btn-wim btn-blue btn-inline btn-lg" ng-click="createNewSite(siteNewForm.$valid)">Create and Associate this Site</button>  
+                            <button class="btn-wim btn-blue btn-inline btn-lg" ng-click="createNewSite(siteNewForm.$valid)">Create and Associate this Site</button>
                         </div>
                     </div>
                 </fieldset>
@@ -421,4 +444,831 @@
         <button ng-if="!disableOK" type="button" class="btn-wim btn-blue btn-inline" ng-click="ok()">OK</button>
         <button type="button" class="btn-wim btn-inline btn-orange" ng-click="cancel()">Cancel</button>
     </div>
+</script>
+
+<!-- EDIT HWM / Add Files MODAL-->
+<script type="text/ng-template" id="HWM_Modal.html">
+    <div class="modal-header">
+        <h3 class="modal-title">HWM<button class="close" type="button" ng-click="cancel()" aria-hidden="true" style="color:gray;">&times;</button></h3>
+    </div>
+
+    <div class="modal-body">
+        <uib-accordion close-others="false">
+                <!--HWM Part-->
+                <uib-accordion-group is-open="h.hOpen">
+                    <uib-accordion-heading>
+                        <i style="margin-right:10px" class="pull-left glyphicon" ng-class="{'glyphicon-chevron-down': h.hOpen, 'glyphicon-chevron-right': !h.hOpen}"></i>
+                        <span ng-class="{'redText':view.HWMval == 'edit'}">HWM Information</span>
+                    </uib-accordion-heading>
+                    <form class="form-horizontal" name="HWMEditForm">
+                        <fieldset>
+                            <!-- Waterbody: (details) -->
+                            <div class="col-md-12" ng-if="view.HWMval== 'detail'">
+                                <div class="col-md-4"><label>Waterbody:</label></div>
+                                <div class="col-md-6">{{aHWM.waterbody || '---'}}</div>
+                            </div>
+                            <!-- Waterbody: (edit) -->
+                            <div class="form-group" ng-if="view.HWMval== 'edit'">
+                                <label class="col-md-4 control-label" for="waterbody">
+                                    <button type="button" class="help-btn" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Displayed publicly.">
+                                        <span class="glyphicon glyphicon-eye-open"></span>
+                                    </button> Waterbody:
+                                </label>
+                                <div class="col-md-6">
+                                    <input class="form-control" name="waterbody" ng-model="hwmCopy.waterbody" type="text" />
+                                </div>
+                            </div>
+
+                            <!-- Event:  (details)-->
+                            <div class="col-md-12" ng-if="view.HWMval== 'detail'">
+                                <div class="col-md-4"><label>Event:</label></div>
+                                <div class="col-md-6">{{(eventList | filter: { event_id: aHWM.event_id})[0].event_name}}</div>
+                            </div>
+                            <!-- Event: (edit) -->
+                            <div class="form-group" ng-if="view.HWMval== 'edit'" ng-class="{'has-error':HWMEditForm.event_id.$invalid && HWMEditForm.event_id.$dirty}">
+                                <label class="col-md-4 control-label">
+                                    <button type="button" class="help-btn" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Displayed publicly.">
+                                        <span class="glyphicon glyphicon-eye-open"></span>
+                                    </button> Event:
+                                </label>
+                                <div class="col-md-6">
+                                    <div class="col-md-8">{{(eventList | filter: { event_id: adminChanged.event_id})[0].event_name}}</div>
+                                    <div class="col-md-3" ng-show="userRole == 'Admin'">
+                                        <button type="button" ng-click="showChangeEventDD()" class="btn btn-primary">Change Event</button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!--Event dropdown for admin -->
+                            <div ng-show="showEventDD && view.HWMval == 'edit'">
+                                <div class="form-group">
+                                    <label class="col-md-4 control-label" for="event_id">
+                                        <button type="button" class="help-btn" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Displayed publicly.">
+                                            <span class="glyphicon glyphicon-eye-open"></span>
+                                        </button> Events:
+                                    </label>
+                                    <div class="col-md-6">
+                                        <select class="form-control" name="event_id" ng-model="adminChanged.event_id" ng-change="ChangeEvent()"
+                                                ng-options="e.event_id as (e.event_name + ' --- ' + (e.event_start_date | date: 'MM/dd/yyyy') + ' to ' + ((e.event_end_date || '-Not Set-') | date: 'MM/dd/yyyy'))  for e in eventList | orderBy: '-event_start_date'"
+                                            <option value=""></option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- HWM Type:*  (details)-->
+                            <div class="col-md-12" ng-if="view.HWMval== 'detail'">
+                                <div class="col-md-4"><label>HWM Type:</label></div>
+                                <div class="col-md-6">{{(hwmTypeList | filter: { hwm_type_id: aHWM.hwm_type_id})[0].hwm_type}}</div>
+                            </div>
+                            <!-- HWM Type:* (edit) -->
+                            <div class="form-group" ng-if="view.HWMval== 'edit'" ng-class="{'has-error':HWMEditForm.hwm_type_id.$invalid && HWMEditForm.hwm_type_id.$dirty}">
+                                <label class="col-md-4 control-label req" for="hwm_type_id">
+                                    <button type="button" class="help-btn" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Displayed publicly.">
+                                        <span class="glyphicon glyphicon-eye-open"></span>
+                                    </button> HWM Type:
+                                    <button type="button" class="help-btn" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Required">
+                                        <span class="glyphicon glyphicon-asterisk" style="color:#d00;font-size:xx-small;"></span>
+                                    </button>
+                                </label>
+                                <div class="col-md-6">
+                                    <select class="form-control" name="hwm_type_id" ng-model="hwmCopy.hwm_type_id" ng-options="htype.hwm_type_id as htype.hwm_type for htype in hwmTypeList" required>
+                                        <option value=""></option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <!-- Marker: (details) -->
+                            <div class="col-md-12" ng-if="view.HWMval== 'detail'">
+                                <div class="col-md-4"><label>Marker:</label></div>
+                                <div class="col-md-6">{{((markerList | filter: {marker_id: aHWM.marker_id})[0].marker1) || '---'}}</div>
+                            </div>
+                            <!-- Marker: (edit) -->
+                            <div class="form-group" ng-if="view.HWMval== 'edit'">
+                                <label class="col-md-4 control-label" for="marker_id">
+                                    <button type="button" class="help-btn" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Displayed publicly.">
+                                        <span class="glyphicon glyphicon-eye-open"></span>
+                                    </button> Marker:
+                                </label>
+                                <div class="col-md-6">
+                                    <select class="form-control" name="marker_id" ng-model="hwmCopy.marker_id"
+                                            ng-options="vd.marker_id as vd.marker1 for vd in markerList">
+                                        <option value=""></option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <!-- HWM Environment:* (details) -->
+                            <div class="col-md-12" ng-if="view.HWMval== 'detail'">
+                                <div class="col-md-4"><label>HWM Environment:</label></div>
+                                <div class="col-md-6">{{aHWM.hwm_environment || '---'}}</div>
+                            </div>
+                            <!-- HWM Environment:* (edit) -->
+                            <div class="form-group" ng-class="{'has-error':HWMEditForm.hwm_environment.$invalid && HWMEditForm.hwm_environment.$dirty}" ng-if="view.HWMval== 'edit'">
+                                <label class="col-md-4 control-label req">
+                                    <button type="button" class="help-btn" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Displayed publicly.">
+                                        <span class="glyphicon glyphicon-eye-open"></span>
+                                    </button> HWM Environment:
+                                    <button type="button" class="help-btn" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Required">
+                                        <span class="glyphicon glyphicon-asterisk" style="color:#d00;font-size:xx-small;"></span>
+                                    </button>
+                                </label>
+                                <div class="col-md-6">
+                                    <span class="radio-inline">
+                                        <input type="radio" name="hwm_environment" ng-model="hwmCopy.hwm_environment" value="Coastal" />Coastal
+                                    </span>
+                                    <span class="radio-inline">
+                                        <input type="radio" name="hwm_environment" ng-model="hwmCopy.hwm_environment" value="Riverine" />Riverine
+                                    </span>
+                                </div>
+                            </div>
+
+                            <!-- hwm_uncertainty: (details) -->
+                            <div class="col-md-12" ng-if="view.HWMval== 'detail'">
+                                <div class="col-md-4"><label>HWM Uncertainty:</label></div>
+                                <div class="col-md-6">{{aHWM.hwm_uncertainty || '---'}}</div>
+                            </div>
+                            <!-- hwm_uncertainty: (edit) -->
+                            <div class="form-group" ng-if="view.HWMval== 'edit'">
+                                <label class="col-md-4 control-label">
+                                    <button type="button" class="help-btn" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Displayed publicly.">
+                                        <span class="glyphicon glyphicon-eye-open"></span>
+                                    </button> HWM Uncertainty:
+                                </label>
+                                <div class="col-md-6">
+                                    <div class="col-md-8 input-group">
+                                        <span class="input-group-addon">&#177;</span>
+                                        <input class="form-control" ng-keypress="isNum($event)" name="hwm_uncertainty" id="hwm_uncertainty" ng-model="hwmCopy.hwm_uncertainty"
+                                               ng-model-options="{ updateOn: 'blur' }" ng-change="chooseQuality()" type="text" />
+                                        <span class="input-group-addon"> ft</span>
+                                    </div>
+                                </div>
+                                <button type="button" class="col-md-1 borderLess pull-left" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="A numeric uncertainty entered here is the preferred method of recording uncertainty and represents the vertical range of peak surfaces that could be described by the HWM evidence (see TM3-A24, p.27).  Do not include any survey uncertainty, which is entered further below.">
+                                    <span class="glyphicon glyphicon-question-sign"></span>
+                                </button>
+                            </div>
+                            <!-- HWM Quality:* (details) -->
+                            <div class="col-md-12" ng-if="view.HWMval== 'detail'">
+                                <div class="col-md-4"><label>HWM Quality:</label></div>
+                                <div class="col-md-6">{{((hwmQualList | filter: {hwm_quality_id: aHWM.hwm_quality_id})[0].hwm_quality) || '---'}}</div>
+                            </div>
+                            <!-- HWM Quality:* (edit) -->
+                            <div class="form-group" ng-class="{'has-error':HWMEditForm.hwm_quality_id.$invalid && HWMEditForm.hwm_quality_id.$dirty}" ng-if="view.HWMval== 'edit'">
+                                <label class="col-md-4 control-label req">
+                                    <button type="button" class="help-btn" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Displayed publicly.">
+                                        <span class="glyphicon glyphicon-eye-open"></span>
+                                    </button> HWM Quality:
+                                    <button type="button" class="help-btn" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Required">
+                                        <span class="glyphicon glyphicon-asterisk" style="color:#d00;font-size:xx-small;"></span>
+                                    </button>
+                                </label>
+                                <div class="col-md-6">
+                                    <div>
+                                        <select class="form-control" name="hwm_quality_id" ng-model="hwmCopy.hwm_quality_id" ng-change="compareToUncertainty()"
+                                                ng-options="hqual.hwm_quality_id as hqual.hwm_quality for hqual in hwmQualList" required>
+                                            <option value=""></option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <button type="button" class="col-md-1 borderLess pull-left" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="For continuity with older data, a shorthand quality is auto-populated here based on a numeric uncertainty entered above. In addition, three qualities with undefined uncertainties are available.">
+                                    <span class="glyphicon glyphicon-question-sign"></span>
+                                </button>
+                            </div>
+
+                            <!-- Bank: (details) -->
+                            <div class="col-md-12" ng-if="view.HWMval== 'detail'">
+                                <div class="col-md-4"><label>Bank:</label></div>
+                                <div class="col-md-6">{{aHWM.bank || '---'}}</div>
+                            </div>
+                            <!-- Bank: (edit) -->
+                            <div class="form-group" ng-if="view.HWMval== 'edit'">
+                                <label class="col-md-4 control-label">
+                                    <button type="button" class="help-btn" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Displayed publicly.">
+                                        <span class="glyphicon glyphicon-eye-open"></span>
+                                    </button> Bank:
+                                </label>
+                                <div class="col-md-6">
+                                    <span class="radio-inline">
+                                        <input type="radio" name="bank" ng-model="hwmCopy.bank" value="Left" />Left
+                                    </span>
+                                    <span class="radio-inline">
+                                        <input type="radio" name="bank" ng-model="hwmCopy.bank" value="Right" />Right
+                                    </span>
+                                    <span class="radio-inline">
+                                        <input type="radio" name="bank" ng-model="hwmCopy.bank" value="N/A" />N/A
+                                    </span>
+                                </div>
+                            </div>
+
+                            <!-- Location Description: (details) -->
+                            <div class="col-md-12" ng-if="view.HWMval== 'detail'">
+                                <div class="col-md-4"><label>Location Description:</label></div>
+                                <div class="col-md-6">{{aHWM.hwm_locationdescription || '---'}}</div>
+                            </div>
+                            <!-- Location Description: (edit) -->
+                            <div class="form-group" ng-if="view.HWMval== 'edit'">
+                                <label class="col-md-4 control-label" for="hwm_locationdescription">
+                                    <button type="button" class="help-btn" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Displayed publicly.">
+                                        <span class="glyphicon glyphicon-eye-open"></span>
+                                    </button> Location Description:
+                                </label>
+                                <div class="col-md-6">
+                                    <textarea class="form-control" name="hwm_locationdescription" type="text" rows="3" ng-model="hwmCopy.hwm_locationdescription" />
+                                </div>
+                                <button type="button" class="col-md-1 borderLess pull-left" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Please be specific so someone else can find this sensor later. This field is public.">
+                                    <span class="glyphicon glyphicon-question-sign"></span>
+                                </button>
+                            </div>
+
+                            <!-- Latitude: (details) -->
+                            <div class="col-md-12" ng-if="view.HWMval== 'detail'">
+                                <div class="col-md-4"><label>Latitude:</label></div>
+                                <div class="col-md-6">{{aHWM.latitude_dd}}</div>
+                            </div>
+                            <!-- Latitude: (edit) -->
+                            <div class="form-group" ng-if="view.HWMval=='edit'">
+                                <label class="col-md-4 control-label req" for="latitude_dd">
+                                    <button type="button" class="help-btn" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Displayed publicly.">
+                                        <span class="glyphicon glyphicon-eye-open"></span>
+                                    </button> Latitude:
+                                    <button type="button" class="help-btn" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Required">
+                                        <span class="glyphicon glyphicon-asterisk" style="color:#d00;font-size:xx-small;"></span>
+                                    </button>
+                                </label>
+                                <div class="col-md-6">
+                                    <input class="form-control" ng-keypress="isNum($event)" name="latitude_dd" id="latitude_dd" ng-model="hwmCopy.latitude_dd"
+                                           ng-model-options="{ updateOn: 'blur' }" ng-change="checkValue('dd')" type="text" ng-required="view.HWMval=='edit'" />
+                                </div>                                
+                            </div>
+
+                            <!-- Longitude: (details) -->
+                            <div class="col-md-12" ng-if="view.HWMval== 'detail'">
+                                <div class="col-md-4"><label>Longitude:</label></div>
+                                <div class="col-md-6">{{aHWM.longitude_dd}}</div>
+                            </div>
+                            <!-- Longitude:  (edit)-->
+                            <div class="form-group" ng-if="view.HWMval=='edit'">
+                                <label class="col-md-4 control-label req" for="longitude_dd">
+                                    <button type="button" class="help-btn" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Displayed publicly.">
+                                        <span class="glyphicon glyphicon-eye-open"></span>
+                                    </button> Longitude:
+                                    <button type="button" class="help-btn" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Required">
+                                        <span class="glyphicon glyphicon-asterisk" style="color:#d00;font-size:xx-small;"></span>
+                                    </button>
+                                </label>
+                                <div class="col-md-6">
+                                    <input class="form-control" ng-keypress="isNum($event)" id="longitude_dd" name="longitude_dd" ng-model="hwmCopy.longitude_dd"
+                                           ng-model-options="{ updateOn: 'blur' }" ng-change="checkValue('dd')" type="text" ng-required="view.HWMval=='edit'" />
+                                </div>                                
+                            </div>
+
+                            <!-- Horizontal Datum:* (details) -->
+                            <div class="col-md-12" ng-if="view.HWMval== 'detail'">
+                                <div class="col-md-4"><label>Horizontal Datum:</label></div>
+                                <div class="col-md-6">{{((HDatumsList |filter: {datum_id: aHWM.hdatum_id})[0].datum_name) || '---'}}</div>
+                            </div>
+                            <!-- Horizontal Datum:*  (edit)-->
+                            <div class="form-group" ng-class="{'has-error':HWMEditForm.hdatum_id.$invalid && HWMEditForm.hdatum_id.$dirty}" ng-if="view.HWMval== 'edit'">
+                                <label class="col-md-4 control-label req">
+                                    <button type="button" class="help-btn" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Displayed publicly.">
+                                        <span class="glyphicon glyphicon-eye-open"></span>
+                                    </button> Horizontal Datum:
+                                    <button type="button" class="help-btn" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Required">
+                                        <span class="glyphicon glyphicon-asterisk" style="color:#d00;font-size:xx-small;"></span>
+                                    </button>
+                                </label>
+                                <div class="col-md-6">
+                                    <select class="form-control" name="hdatum_id" ng-model="hwmCopy.hdatum_id" ng-options="hd.datum_id as hd.datum_name for hd in HDatumsList" required>
+                                        <option value=""></option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <!-- Horizontal Collection Method: * (details) -->
+                            <div class="col-md-12" ng-if="view.HWMval== 'detail'">
+                                <div class="col-md-4"><label>Horizontal Collection Method:</label></div>
+                                <div class="col-md-6">{{((hCollMList | filter: {hcollect_method_id: aHWM.hcollect_method_id})[0].hcollect_method) || '---'}}</div>
+                            </div>
+                            <!-- Horizontal Collection Method: * (edit) -->
+                            <div class="form-group" ng-class="{'has-error':HWMEditForm.hcollect_method_id.$invalid && HWMEditForm.hcollect_method_id.$dirty}" ng-if="view.HWMval== 'edit'">
+                                <label class="col-md-4 control-label req">
+                                    <button type="button" class="help-btn" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Displayed publicly.">
+                                        <span class="glyphicon glyphicon-eye-open"></span>
+                                    </button> Horizontal Collection Method:
+                                    <button type="button" class="help-btn" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Required">
+                                        <span class="glyphicon glyphicon-asterisk" style="color:#d00;font-size:xx-small;"></span>
+                                    </button>
+                                </label>
+                                <div class="col-md-6">
+                                    <select class="form-control" name="hcollect_method_id" ng-model="hwmCopy.hcollect_method_id" ng-options="hcm.hcollect_method_id as hcm.hcollect_method for hcm in hCollMList" required>
+                                        <option value=""></option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <!-- Height above ground (ft):  (details)-->
+                            <div class="col-md-12" ng-if="view.HWMval== 'detail'">
+                                <div class="col-md-4"><label>Height above ground (ft):</label></div>
+                                <div class="col-md-6">{{aHWM.height_above_gnd == '0' ? '0.00' : aHWM.height_above_gnd}}</div>
+                            </div>
+                            <!-- Height above ground (ft): (edit) -->
+                            <div class="form-group" ng-if="view.HWMval== 'edit'">
+                                <label class="col-md-4 control-label" for="height_above_gnd">
+                                    <button type="button" class="help-btn" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Displayed publicly.">
+                                        <span class="glyphicon glyphicon-eye-open"></span>
+                                    </button> Height above ground (ft):
+                                </label>
+                                <div class="col-md-6">
+                                    <input class="form-control" ng-keypress="isNum($event)" name="height_above_gnd" ng-model="hwmCopy.height_above_gnd" type="text" />
+                                </div>
+                            </div>
+
+                            <!-- Flag/Found Date: * (details) -->
+                            <div class="col-md-12" ng-if="view.HWMval== 'detail'">
+                                <div class="col-md-4"><label>Flag/Found Date:</label></div>
+                                <div class="col-md-4 input-group" style="padding-right:14px;padding-left:14px">{{aHWM.flag_date | date: 'MM/dd/yyyy'}}</div>
+                            </div>
+                            <!-- Flag/Found Date: * (edit) -->
+                            <div class="form-group" ng-class="{'has-error':HWMEditForm.flag_date.$invalid && HWMEditForm.flag_date.$dirty}" ng-if="view.HWMval== 'edit'">
+                                <label class="col-md-4 control-label req" for="flag_date">
+                                    <button type="button" class="help-btn" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Displayed publicly.">
+                                        <span class="glyphicon glyphicon-eye-open"></span>
+                                    </button> Flag/Found Date:
+                                    <button type="button" class="help-btn" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Required">
+                                        <span class="glyphicon glyphicon-asterisk" style="color:#d00;font-size:xx-small;"></span>
+                                    </button>
+                                </label>
+                                <div class="col-md-4 input-group" style="padding-right:14px;padding-left:14px">
+                                    <input show-weeks="false" class="form-control dateInputStyle" type="date" id="flag_date" name="fd" uib-datepicker-popup="MM/dd/yyyy"
+                                           is-open="datepickrs.fd" ng-model="hwmCopy.flag_date" required />
+                                    <span class="input-group-btn">
+                                        <button class="btn btn-default" ng-click="open($event, 'fd')" type="button">
+                                            <i class="glyphicon glyphicon-calendar" />
+                                        </button>
+                                    </span>
+                                </div>
+                            </div>
+                          
+                            <br clear="all" /><hr />
+
+                            <!-- Surveyed Date: (details) -->
+                            <div class="col-md-12" ng-if="view.HWMval== 'detail'">
+                                <div class="col-md-4"><label>Surveyed Date:</label></div>
+                                <div class="col-md-4">{{aHWM.survey_date || '---' | date: 'MM/dd/yyyy' }}</div>
+                            </div>
+                            <!-- Surveyed Date: (edit) -->
+                            <div class="form-group" ng-class="{'has-error':HWMEditForm.survey_date.$invalid && HWMEditForm.survey_date.$dirty}" ng-if="view.HWMval== 'edit'">
+                                <label class="col-md-4 control-label" for="survey_date">
+                                    <button type="button" class="help-btn" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Displayed publicly.">
+                                        <span class="glyphicon glyphicon-eye-open"></span>
+                                    </button> Surveyed Date:
+                                </label>
+                                <div class="col-md-4 input-group" style="padding-right:14px;padding-left:14px">
+                                    <input show-weeks="false" class="form-control dateInputStyle" type="date" id="survey_date" name="sd" uib-datepicker-popup="MM/dd/yyyy" is-open="datepickrs.sd" ng-model="hwmCopy.survey_date" />
+                                    <span class="input-group-btn">
+                                        <button class="btn btn-default" ng-click="open($event, 'sd')" type="button">
+                                            <i class="glyphicon glyphicon-calendar" />
+                                        </button>
+                                    </span>
+                                </div>
+                                <button type="button" class="col-md-2 borderLess pull-right" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Elevation required below if survey date is populated.">
+                                    <span class="glyphicon glyphicon-question-sign"></span>
+                                </button>
+                            </div>
+
+                            <!-- Surveyed Elevation (ft): (details) -->
+                            <div class="col-md-12" ng-if="view.HWMval== 'detail'">
+                                <div class="col-md-4"><label>Surveyed Elevation (ft):</label></div>
+                                <div class="col-md-6">{{aHWM.elev_ft || '---'}}</div>
+                            </div>
+                            <!-- Surveyed Elevation (ft): (edit)  ng-class="{'required': hwmCopy.survey_date}"ng-class="{'req': hwmCopy.survey_date}"ng-required='hwmCopy.survey_date'-->
+                            <div class="form-group" ng-if="view.HWMval== 'edit'">
+                                <label class="col-md-4 control-label" for="elev_ft">
+                                    <button type="button" class="help-btn" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Displayed publicly.">
+                                        <span class="glyphicon glyphicon-eye-open"></span>
+                                    </button> Surveyed Elevation (ft):
+                                </label>
+                                <div class="col-md-6">
+                                    <input class="form-control" ng-keypress="isNum($event)" name="elev_ft" ng-model="hwmCopy.elev_ft" type="text" />
+                                </div>
+                                <button ng-show="hwmCopy.survey_date" type="button" class="col-md-2 borderLess" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Elevation required if survey date is populated.">
+                                    <span class="glyphicon glyphicon-question-sign"></span>
+                                </button>
+                            </div>
+
+                            <!-- Vertical Datum: (details) -->
+                            <div class="col-md-12" ng-if="view.HWMval== 'detail'">
+                                <div class="col-md-4"><label>Vertical Datum:</label></div>
+                                <div class="col-md-6">{{((VDatumsList | filter: {datum_id: aHWM.vdatum_id})[0].datum_abbreviation) || '---'}}</div>
+                            </div>
+                            <!-- Vertical Datum: (edit) -->
+                            <div class="form-group" ng-if="view.HWMval== 'edit'">
+                                <label class="col-md-4 control-label" for="vdatum_id">
+                                    <button type="button" class="help-btn" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Displayed publicly.">
+                                        <span class="glyphicon glyphicon-eye-open"></span>
+                                    </button> Vertical Datum:
+                                </label>
+                                <div class="col-md-6">
+                                    <select class="form-control" name="vdatum_id" ng-model="hwmCopy.vdatum_id" ng-options="vd.datum_id as vd.datum_name for vd in VDatumsList">
+                                        <option value=""></option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <!-- Vertical Collection Method: (details) -->
+                            <div class="col-md-12" ng-if="view.HWMval== 'detail'">
+                                <div class="col-md-4"><label>Vertical Collection Method:</label></div>
+                                <div class="col-md-6">{{aHWM.vCollectMethod || '---'}}</div>
+                            </div>
+                            <!-- Vertical Collection Method: (edit) -->
+                            <div class="form-group" ng-if="view.HWMval== 'edit'">
+                                <label class="col-md-4 control-label" for="vdatum_id">
+                                    <button type="button" class="help-btn" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Displayed publicly.">
+                                        <span class="glyphicon glyphicon-eye-open"></span>
+                                    </button> Vertical Collection Method:
+                                </label>
+                                <div class="col-md-6">
+                                    <select class="form-control" name="vcollect_method_id" ng-model="hwmCopy.vcollect_method_id" ng-options="vcm.vcollect_method_id as vcm.vcollect_method for vcm in vCollMList">
+                                        <option value=""></option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <!-- Uncertainty: (details) -->
+                            <div class="col-md-12" ng-if="view.HWMval== 'detail'">
+                                <div class="col-md-4"><label>Survey Uncertainty:</label></div>
+                                <div class="col-md-6">{{aHWM.uncertainty || '---'}}<span ng-show="aHWM.uncertainty"> ft.</span></div>
+                            </div>
+                            <!-- Uncertainty: (edit) -->
+                            <div class="form-group" ng-if="view.HWMval== 'edit'">
+                                <label class="col-md-4 control-label" for="uncertainty">
+                                    <button type="button" class="help-btn" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Displayed publicly.">
+                                        <span class="glyphicon glyphicon-eye-open"></span>
+                                    </button> Survey Uncertainty (ft):
+                                </label>
+                                <div class="col-md-6">
+                                    <input class="form-control" ng-keypress="isNum($event)" ng-model="hwmCopy.uncertainty" type="text" />
+                                </div>
+                            </div>
+
+                            <!-- Notes: (details) -->
+                            <div class="col-md-12" ng-if="view.HWMval== 'detail'">
+                                <div class="col-md-4"><label>Notes:</label></div>
+                                <div class="col-md-6">{{aHWM.hwm_notes || '---'}}</div>
+                            </div>
+                            <!-- Notes: (edit) -->
+                            <div class="form-group" ng-if="view.HWMval== 'edit'">
+                                <label class="col-md-4 control-label" for="hwm_notes">
+                                    <button type="button" class="help-btn" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Displayed publicly.">
+                                        <span class="glyphicon glyphicon-eye-open"></span>
+                                    </button> Notes:
+                                </label>
+                                <div class="col-md-6">
+                                    <textarea class="form-control" name="hwm_notes" type="text" rows="3" ng-model="hwmCopy.hwm_notes" />
+                                </div>
+                            </div>
+
+                            <!-- Tranquil/Stillwater HWM (details) -->
+                            <div class="col-md-12" ng-if="view.HWMval== 'detail'">
+                                <div class="col-md-4"><label>Tranquil/Stillwater HWM:</label></div>
+                                <div class="col-md-6">{{aHWM.Tranquil || '---'}}</div>
+                            </div>
+                            <!-- Tranquil/Stillwater HWM (edit) -->
+                            <div class="form-group" ng-if="view.HWMval== 'edit'">
+                                <label class="col-md-4 control-label">
+                                    <button type="button" class="help-btn" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Displayed publicly.">
+                                        <span class="glyphicon glyphicon-eye-open"></span>
+                                    </button> Tranquil/Stillwater HWM:
+                                </label>
+                                <div class="col-md-6">
+                                    <span class="radio-inline">
+                                        <input type="radio" name="stillwater" ng-model="hwmCopy.stillwater" value="1" />Yes
+                                    </span>
+                                    <span class="radio-inline">
+                                        <input type="radio" name="stillwater" ng-model="hwmCopy.stillwater" value="0" />No
+                                    </span>
+                                </div>
+                                <button type="button" class="col-md-1 borderLess pull-left" tooltip-placement="bottom" tooltip-append-to-body="false" uib-tooltip="For modelling purposes, all high-water marks are assumed to be rapid-water high-water marks unless the user is confident that the mark being entered here was formed in tranquil water. See TM3-A24 for a discussion on rapid versus tranquil high-water marks.">
+                                    <span class="glyphicon glyphicon-question-sign"></span>
+                                </button>
+                            </div>
+
+                            <!-- Approval info (detail) -->
+                            <div class="form-group" ng-show="ApprovalInfo.Member !==undefined">
+                                <label class="col-md-4 control-label" for="approval_id">
+                                    <span ng-if="view.HWMval == 'edit'">
+                                        <button type="button" class="help-btn" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Displayed publicly.">
+                                            <span class="glyphicon glyphicon-eye-open"></span>
+                                        </button>
+                                    </span> Approval Info:
+                                </label>
+                                <div class="col-md-6">
+                                    Approved By:<span ng-if="ApprovalInfo.Member"> {{ApprovalInfo.Member.fname || '---'}} {{ApprovalInfo.Member.lname || '---'}}</span><br />
+                                    On:<span ng-if="ApprovalInfo.approvalDate"> {{ApprovalInfo.approvalDate | date: 'MM/dd/yyyy hh:mm a' || '---'}}</span>
+                                    <button ng-if="ApprovalInfo.approvalDate" type="button" class="borderLess" tooltip-placement="right" uib-tooltip="Time displayed as local, stored in UTC.">
+                                        <span class="glyphicon glyphicon-question-sign"></span>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- edit button -->
+                            <div class="form-group">
+                                <div class="col-md-12">
+                                    <button type="button" ng-show="view.HWMval == 'detail'" class="btn btn-primary" ng-click="wannaEditHWM()">Edit HWM</button>
+                                    <button ng-show="view.HWMval == 'edit'" class="btn btn-primary" ng-click="save(HWMEditForm.$valid)">Save</button>
+                                    <button type="button" ng-show="view.HWMval == 'edit'" class="btn btn-warning" ng-click="cancelHWMEdit()">Cancel Edit</button>
+                                    <button type="button" ng-show="((ApprovalInfo.approvalDate == undefined && view.HWMval == 'detail') && (userRole == 'Admin' || userRole == 'Manager'))" class="btn btn-primary" ng-click="approveHWM()">Approve</button>
+                                    <button type="button" ng-show="((ApprovalInfo.approvalDate != undefined && view.HWMval == 'detail') && (userRole == 'Admin' || userRole == 'Manager'))" class="btn btn-primary" ng-click="unApproveHWM()">UnApprove</button>
+                                </div>
+                            </div>
+
+                        </fieldset>
+                    </form>
+                </uib-accordion-group>
+                <!-- HWM FILES SECTION -->
+                <div ng-if="aHWM.hwm_id !== undefinfed">
+                    <!--HWM File Part-->
+                    <uib-accordion-group is-open="h.hFileOpen">
+                        <uib-accordion-heading>
+                            <i style="margin-right:10px" class="pull-left glyphicon" ng-class="{'glyphicon-chevron-down': h.hFileOpen, 'glyphicon-chevron-right': !h.hFileOpen}"></i>
+                            <span ng-class="{'redText':showFileForm}">HWM File Information</span>
+                        </uib-accordion-heading>
+                        <div class="col-md-12">
+                            <div class="col-md-4"><h3>HWM Files</h3></div>
+                            <div class="col-md-6" ng-if="!showFileForm" style="margin-top:14px">
+                                <button type="button" class="borderLess" ng-click="showFile(0)" tooltip-placement="right" uib-tooltip="Upload a new File to this HWM">
+                                    <span class="glyphicon glyphicon-plus"></span>
+                                </button>
+                            </div>
+                            <br clear="all" />
+                            <!-- list of existing files for this hwm -->
+                            <div class="col-md-6" ng-if="HWMFiles.length > 0">
+                                <ul style="padding-left: 0">
+                                    <li ng-repeat="f in HWMFiles" style="list-style:none;padding-bottom: 15px;">
+                                        <span class="col-sm-9 borderLess" style="padding:0">
+                                            <a class="btn borderLess" style="padding:0" title="{{f.file_date | date: 'MM/dd/yyyy'}} ({{f.name || f.file_id}})" ng-click="showFile(f)">{{f.file_date | date: 'MM/dd/yyyy'}} ({{f.name || f.file_id}})</a>
+                                        </span>
+                                    </li>
+                                </ul>
+                            </div>
+                            <!-- carousel of photo files -->
+                            <div class="col-md-6" ng-if="hwmImageFiles.length > 0" style="height:120px;">
+                                <uib-carousel interval="4000">
+                                    <uib-slide ng-repeat="f in hwmImageFiles">
+                                        <img ng-click="showImageModal(f.file_id)" ng-src="{{serverURL}}/Files/{{f.file_id}}/Item{{stamp}}" />
+                                        <div class="carousel-caption">
+                                            <p>{{f.name || f.file_id}}</p>
+                                        </div>
+                                    </uib-slide>
+                                </uib-carousel>
+                            </div>
+                            <br clear="all" />
+
+                            <div ng-if="showFileForm">
+                                <hr />
+                                <form class="form-horizontal" name="HWMFILEForm">
+                                    <fieldset>
+                                        <!-- File Type* -->
+                                        <div class="form-group" ng-class="{'has-error':HWMFILEForm.filetype_id.$invalid && HWMFILEForm.filetype_id.$dirty}" style="margin:0;padding:0">
+                                            <label class="col-md-3 control-label req" for="filetype_id">
+                                                File Type:
+                                                <button type="button" class="help-btn" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Required">
+                                                    <span class="glyphicon glyphicon-asterisk" style="color:#d00;font-size:xx-small;"></span>
+                                                </button>
+                                            </label>
+                                            <div class="col-md-6" ng-if="aFile.file_id == undefined">
+                                                <select class="form-control" name="filetype_id" ng-model="aFile.filetype_id" ng-change="updateAgencyForCaption()" ng-options="ft.filetype_id as ft.filetype for ft in fileTypes" required>
+                                                    <option value=""></option>
+                                                </select>
+                                            </div>
+                                            <div class="col-md-6" ng-if="aFile.file_id != undefined">{{aFile.fileType}}</div>
+                                        </div>
+
+                                        <!--Upload Single Image with validations*-->
+                                        <div ng-if="aFile.file_id === undefined && aFile.filetype_id !== 8" class="form-group" style="margin:0;padding:0">
+                                            <label class="col-md-3 control-label" for="FILE">
+                                                Upload File:
+                                                <button type="button" class="help-btn" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Required">
+                                                    <span class="glyphicon glyphicon-asterisk" style="color:#d00;font-size:xx-small;"></span>
+                                                </button>
+                                            </label>
+                                            <div class="col-md-9">
+                                                <input type="file" max="500000" file-model="aFile.File" />
+                                                <img ngf-thumbnail="aFile.File" style="height:60px" class="thumbnail">
+                                            </div>
+                                        </div>
+                                        <br clear="all" />
+
+                                        <!--File URL (LINK file)-->
+                                        <div ng-if="aFile.filetype_id === 8" class="form-group" style="margin:0;padding:0">
+                                            <label class="col-md-3 control-label" for="name">File URL:</label>
+                                            <div class="col-md-6">
+                                                <input class="form-control" name="name" ng-model="aFile.name" type="text" />
+                                            </div>
+                                            <button type="button" class="col-md-1 borderLess pull-left" tooltip-placement="bottom" tooltip-append-to-body="false" uib-tooltip="Please link to persistent URLs or digital object identifier (doi) urls.">
+                                                <span class="glyphicon glyphicon-question-sign"></span>
+                                            </button>
+                                        </div>
+
+                                        <!--Source Name (photo)-->
+                                        <div class="form-group" ng-if="aFile.filetype_id === 1" ng-class="{'has-error':HWMFILEForm.FULLname.$invalid && HWMFILEForm.FULLname.$dirty}" style="margin:0;padding:0">
+                                            <label class="col-md-3 control-label req" for="source_id">
+                                                Source Photographer:
+                                                <button type="button" class="help-btn" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Required">
+                                                    <span class="glyphicon glyphicon-asterisk" style="color:#d00;font-size:xx-small;"></span>
+                                                </button>
+                                            </label>
+                                            <div class="col-md-6">
+                                                <input class="form-control" name="FULLname" ng-model="aSource.FULLname" type="text" required />
+                                            </div>
+                                        </div>
+
+                                        <!--Source Name (all other)-->
+                                        <div class="form-group" ng-if="aFile.filetype_id  > 2" ng-class="{'has-error':HWMFILEForm.FULLname.$invalid && HWMFILEForm.FULLname.$dirty}" style="margin:0;padding:0">
+                                            <label class="col-md-3 control-label req" for="source_id">
+                                                Source Name:
+                                                <button type="button" class="help-btn" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Required">
+                                                    <span class="glyphicon glyphicon-asterisk" style="color:#d00;font-size:xx-small;"></span>
+                                                </button>
+                                            </label>
+                                            <div class="col-md-6">
+                                                <input class="form-control" name="FULLname" ng-model="aSource.FULLname" type="text" required />
+                                            </div>
+                                        </div>
+
+                                        <!--Source Agency* (photo, allOther)-->
+                                        <div ng-if="aFile.filetype_id === 1 || aFile.filetype_id > 2" class="form-group" ng-class="{'has-error':HWMFILEForm.agency_id.$invalid && HWMFILEForm.agency_id.$dirty}" style="margin:0;padding:0">
+                                            <label class="col-md-3 control-label req" for="agency_id">
+                                                Source Agency:
+                                                <button type="button" class="help-btn" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Required">
+                                                    <span class="glyphicon glyphicon-asterisk" style="color:#d00;font-size:xx-small;"></span>
+                                                </button>
+                                            </label>
+                                            <div class="col-md-6">
+                                                <select class="form-control" name="agency_id" ng-model="aSource.agency_id" ng-change="updateAgencyForCaption()"
+                                                        ng-options="a.agency_id as a.agency_name for a in agencies" required>
+                                                    <option value=""></option>
+                                                </select>
+                                            </div>
+                                        </div>
+
+                                        <!-- Photo Date* (photo) -->
+                                        <div ng-if="aFile.filetype_id === 1" class="form-group" ng-class="{'has-error':HWMFILEForm.photo_date.$invalid && HWMFILEForm.photo_date.$dirty}" style="margin:0;padding:0">
+                                            <label class="col-md-3 control-label req" for="photo_date">
+                                                Photo Date:
+                                                <button type="button" class="help-btn" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Required">
+                                                    <span class="glyphicon glyphicon-asterisk" style="color:#d00;font-size:xx-small;"></span>
+                                                </button>
+                                            </label>
+                                            <div class="col-md-4 input-group" style="padding-right:14px;padding-left:14px">
+                                                <input class="form-control dateInputStyle" type="date" name="sd" uib-datepicker-popup="MM/dd/yyyy" show-weeks="false" is-open="datepickrs.sd" ng-model="aFile.photo_date" required />
+                                                <span class="input-group-btn">
+                                                    <button type="button" class="btn btn-default" ng-click="open($event, 'sd')">
+                                                        <i class="glyphicon glyphicon-calendar" />
+                                                    </button>
+                                                </span>
+                                            </div>
+                                        </div>
+
+                                        <!-- Date Uploaded* (photo, data, allother) -->
+                                        <div ng-if="aFile.filetype_id > 0" class="form-group" ng-class="{'has-error':HWMFILEForm.file_date.$invalid && HWMFILEForm.file_date.$dirty}" style="margin:0;padding:0">
+                                            <label class="col-md-3 control-label req" for="file_date">
+                                                Date Uploaded:
+                                                <button type="button" class="help-btn" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Required">
+                                                    <span class="glyphicon glyphicon-asterisk" style="color:#d00;font-size:xx-small;"></span>
+                                                </button>
+                                            </label>
+                                            <div class="col-md-4 input-group" style="padding-right:14px;padding-left:14px">
+                                                <input class="form-control dateInputStyle" type="date" name="fd" uib-datepicker-popup="MM/dd/yyyy" show-weeks="false" is-open="datepickrs.fd" ng-model="aFile.file_date" required />
+                                                <span class="input-group-btn">
+                                                    <button type="button" class="btn btn-default" ng-click="open($event, 'fd')">
+                                                        <i class="glyphicon glyphicon-calendar" />
+                                                    </button>
+                                                </span>
+                                            </div>
+                                        </div>
+
+                                        <!--Description*(photo, data, allother)-->
+                                        <div ng-if="aFile.filetype_id > 0" class="form-group" ng-class="{'has-error':HWMFILEForm.description.$invalid && HWMFILEForm.description.$dirty}" style="margin:0;padding:0">
+                                            <label class="col-md-3 control-label req" for="description">
+                                                Description:
+                                                <button type="button" class="help-btn" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Required">
+                                                    <span class="glyphicon glyphicon-asterisk" style="color:#d00;font-size:xx-small;"></span>
+                                                </button>
+                                            </label>
+                                            <div class="col-md-6">
+                                                <textarea class="form-control" id="description" type="text" rows="3" placeholder="Description" ng-model="aFile.description" required />
+                                            </div>
+                                            <button type="button" ng-show="aFile.filetype_id == 1" class="col-md-1 borderLess pull-left" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Populates in Photo caption below.">
+                                                <span class="glyphicon glyphicon-question-sign"></span>
+                                            </button>
+                                        </div>
+
+                                        <!-- This is where Other ends, rest is for Photo -->
+                                        <!--Photo Direction (photo)-->
+                                        <div ng-if="aFile.filetype_id === 1" class="form-group" style="margin:0;padding:0;padding-top:5px;">
+                                            <label class="col-md-3 control-label" for="photo_direction">Photo Direction:</label>
+                                            <div class="col-md-6">
+                                                <input class="form-control" id="photo_direction" name="photo_direction" ng-model="aFile.photo_direction" type="text" />
+                                            </div>
+                                        </div>
+
+                                        <!-- Photo Latitude (photo)-->
+                                        <div ng-if="aFile.filetype_id === 1" class="form-group" style="margin:0;padding:0">
+                                            <label class="col-md-3 control-label" for="latitude_dd">Photo Latitude <br /> (if different):</label>
+                                            <div class="col-md-6">
+                                                <input class="form-control" ng-keypress="isNum($event)" name="latitude_dd" id="latitude_dd" ng-model="aFile.latitude_dd"
+                                                       type="text" />
+                                            </div>
+                                        </div>
+
+                                        <!--Photo Longitude (photo)-->
+                                        <div ng-if="aFile.filetype_id === 1" class="form-group" style="margin:0;padding:0">
+                                            <label class="col-md-3 control-label" for="longitude_dd">Photo Longitude <br /> (if different):</label>
+                                            <div class="col-md-6">
+                                                <input class="form-control" ng-keypress="isNum($event)" id="longitude_dd" name="longitude_dd" ng-model="aFile.longitude_dd"
+                                                       type="text" />
+                                            </div>
+                                        </div>
+
+                                        <div ng-if="aFile.filetype_id === 1" class="form-group" style="margin:0;padding:0">
+                                            <label class="col-md-3 control-label" for="Caption">Preview Caption:</button></label>
+                                            <div class="col-md-6">
+                                                <span>
+                                                    Photo of {{aFile.description || ' (Description HERE) '}} at {{thisHWMsite.site_description}}, {{thisHWMsite.county}}, {{thisHWMsite.state}}, {{aFile.photo_date | date: 'MM/dd/yyyy' || ' Date taken HERE '}}. Photograph by {{aSource.FULLname || ' Source Name HERE ' }}, {{agencyNameForCap || ' Agency HERE '}}.
+                                                </span>
+                                            </div>
+                                        </div>
+
+                                        <!-- associated files (HWM FILES)-->
+                                        <div ng-if="aFile.file_id !== undefined && aFile.filetype_id !== 8" class="form-group" style="margin:0;padding:0;padding-top:12px;">
+                                            <label class="col-md-3 control-label">Associated File:</label>
+                                            <div class="col-md-6">
+                                                <span ng-if="fileItemExists">
+                                                    <a target="_blank" title="Download File" ng-href="{{serverURL}}/Files/{{aFile.file_id}}/Item">{{aFile.name}}</a>
+                                                    <br />
+                                                    <img ng-if="isPhoto" style="height:80px;" ng-src="{{src}}" />
+                                                </span>
+                                                <span ng-if="!fileItemExists">-- Missing --</span>
+                                                <!--ReUpload Single Image with validations*-->
+                                                <div ng-if="!fileItemExists" class="form-group">
+                                                    <div class="col-md-7">
+                                                        <label class="custom-file-input" for="Upload" />
+                                                        <input id="Upload" type="file" max="500000" file-model="aFile.File" style="visibility: hidden">
+                                                        <div class="col-md-7 pull-left" ng-if="aFile.File.type == 'image/png' || aFile.File.type == 'image/jpeg' || aFile.File.type == 'image/gif'"><img ngf-thumbnail="aFile.File" style="height:60px" class="thumbnail"></div>
+                                                        <div class="col-md-7 pull-left" ng-if="aFile.File.type !== 'image/png' && aFile.File.type !== 'image/jpeg' && aFile.File.type !== 'image/gif'" style="overflow:auto">{{aFile.File.name}}</div>
+                                                        <div class="col-md-5">
+                                                            <span ng-if="aFile.File">
+                                                                Correct File?
+                                                                <button ng-if="aFile.File" type="button" ng-click="saveFileUpload()">Upload</button>
+                                                            </span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <!-- change out the existing fileItem with a different one-->
+                                                <div ng-if="fileItemExists" class="form-group">
+                                                    <div class="col-md-9">
+                                                        <label class="custom-file-inputChange" for="Upload" />
+                                                        <input id="Upload" type="file" max="500000" file-model="aFile.File1" style="visibility: hidden">
+                                                        <div class="col-md-7 pull-left" ng-if="aFile.File1.type == 'image/png' || aFile.File1.type == 'image/jpeg' || aFile.File1.type == 'image/gif'">
+                                                            <img ngf-thumbnail="afile.file1" style="height:60px" class="thumbnail">
+                                                        </div>
+                                                        <div class="col-md-7 pull-left" ng-if="aFile.File1.type !== 'image/png' && aFile.File1.type !== 'image/jpeg' && aFile.File1.type !== 'image/gif'" style="overflow:auto">
+                                                            {{aFile.File1.name}}
+                                                        </div>
+                                                        <div class="col-md-5">
+                                                            <span ng-if="aFile.File1">
+                                                                Correct File?
+                                                                <button ng-if="aFile.File1" type="button" ng-click="saveFileUpload()">Replace</button>
+                                                            </span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div ng-show="!HWMfileIsUploading">
+                                            <button class="btn btn-primary" ng-if="aFile.file_id != undefined" ng-click="saveFile(HWMFILEForm.$valid)">Save File</button>
+                                            <button type="button" class="btn btn-danger" ng-if="aFile.file_id != undefined" ng-click="deleteFile()">Delete File</button>
+                                            <button class="btn btn-primary" ng-if="aFile.file_id == undefined" ng-click="createFile(HWMFILEForm.$valid)">Create File</button>
+                                            <button type="button" class="btn btn-warning" ng-click="cancelFile()">Close/Cancel File</button>
+                                        </div>
+                                        <div ng-show="HWMfileIsUploading"><img src="images/fileUpload.gif" /></div>
+                                    </fieldset>
+                                </form>
+                            </div>
+                        </div>
+                    </uib-accordion-group>
+                </div>
+            </uib-accordion>
+    </div> <!-- end modal-body -->
+    <br clear="all" />
+
+    <div class="modal-footer">
+        <div class="form-group">
+            <div class="col-md-12">
+                <button type="button" ng-show="aHWM.hwm_id !== undefined" ng-disabled="showFileForm" class="btn btn-danger" ng-click="deleteHWM(HWMEditForm.$valid)">Delete HWM</button>
+                <button type="button" class="btn btn-warning" ng-disabled="showFileForm" ng-click="cancel()">Cancel/Close</button>
+            </div>
+        </div>
+    </div> <!-- end modal-footer -->
 </script>
