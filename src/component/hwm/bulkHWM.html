@@ -49,14 +49,17 @@
             </select>
         </div>
         <br clear="all" />
+        <div class="col-md-9">
+            <img height="45" src="images/bulkHWMsteps.PNG" />
+        </div>
+        <br clear="all" />
     </form>
-
+    
     <div ng-show="chosenEvent !== 0">
         <div><a ng-click="showTips=!showTips"><span ng-if="!showTips">Show</span><span ng-if="showTips">Hide</span></a> Bulk HWM Uploader tips.</div>
         <div ng-if="showTips">
             <b>
                 <ul>
-                    <li style="list-style:none">Download the excel template (Coming soon)</li>
                     <li style="list-style:none">
                         Copy/paste or manually populate the table below. If you know the Site Number (ex: 'FLPIN06064'), type or paste that into the Site No column.
                         <br />If you do not know the Site Number, click the down arrow in the Site No cell to search for a nearby site or create a site to use for the hwm.
@@ -131,7 +134,7 @@
                         <thead>
                             <tr>
                                 <th></th><!-- edit icon -->
-                                <th ng-if="HWMFiles.length > 0">Files Uploaded</th>
+                                <th>Files Uploaded</th>
                                 <th class="site_no">Site No&nbsp;<a ng-click="sort_by('site_no')"><i class="glyphicon glyphicon-sort"></i></a></th>
                                 <th class="waterbody">Waterbody&nbsp;<a ng-click="sort_by('waterbody')"><i class="glyphicon glyphicon-sort"></i></a></th>
                                 <th class="hwm_type_id">HWM Type&nbsp;<a ng-click="sort_by('hwm_type_id')"><i class="glyphicon glyphicon-sort"></i></a></th>
@@ -172,11 +175,11 @@
                                         </label>                                        
                                     </div>
                                 </td>
-                                <td ng-if="h.HWMFiles.length > 0">{{h.HWMFiles.length}}</td>
+                                <td>{{h.HWMFiles.length || '0'}}</td>
                                 <td><a ng-click="goToSiteDash(h.site_id)">{{h.site_no}}</a></td>
                                 <td>{{h.waterbody}}</td>
                                 <td>{{(hwmTypes | filter: {hwm_type_id: h.hwm_type_id})[0].hwm_type}}</td>
-                                <td>{{h.marker_id > 0 ? (markers | filter: {marker_id: h.marker_id})[0].marker1 : ""}}</td>
+                                <td ng-if="h.marker_id > 0">{{(markers | filter: {marker_id: h.marker_id})[0].marker1}}</td><td ng-if="h.marker_id == 0"></td>
                                 <td>{{h.hwm_environment}}</td>
                                 <td>{{h.hwm_uncertainty}}</td>
                                 <td>{{(hwmQuals | filter: {hwm_quality_id: h.hwm_quality_id})[0].hwm_quality}}</td>
@@ -184,14 +187,14 @@
                                 <td>{{h.hwm_locationdescription}}</td>
                                 <td>{{h.latitude_dd}}</td>
                                 <td>{{h.longitude_dd}}</td>
-                                <td>{{h.hdatum_id > 0 ? (horDatums | filter: { datum_id: h.hdatum_id})[0].datum_name : ""}}</td>
-                                <td>{{h.hcollect_method_id > 0 ? (horCollMeths | filter: {hcollect_method_id : h.hcollect_method_id})[0].hcollect_method : ""}}</td>
+                                <td ng-if="h.hdatum_id > 0">{{(horDatums | filter: { datum_id: h.hdatum_id})[0].datum_name}}</td><td ng-if="h.hdatum_id == 0"></td>
+                                <td ng-if="h.hcollect_method_id > 0">{{(horCollMeths | filter: {hcollect_method_id : h.hcollect_method_id})[0].hcollect_method}}</td><td ng-if="h.hcollect_method_id == 0"></td>
                                 <td>{{h.height_above_gnd}}</td>
                                 <td>{{h.flag_date | date: "MM/dd/yyyy"}}</td>
                                 <td>{{h.survey_date | date: "MM/dd/yyyy"}}</td>
                                 <td>{{h.elev_ft}}</td>
-                                <td>{{h.vdatum_id > 0 ? (vertDatums | filter: {datum_id: h.vdatum_id})[0].datum_abbreviation : ""}}</td>
-                                <td>{{h.vcollect_method_id > 0 ? (vertCollMeths | filter: {vcollect_method_id: h.vcollect_method_id})[0].vcollect_method : ""}}</td>
+                                <td ng-if="h.vdatum_id > 0">{{(vertDatums | filter: {datum_id: h.vdatum_id})[0].datum_abbreviation}}</td><td ng-if="h.vdatum_id == 0"></td>
+                                <td ng-if="h.vcollect_method_id > 0">{{(vertCollMeths | filter: {vcollect_method_id: h.vcollect_method_id})[0].vcollect_method}}</td><td ng-if="h.vcollect_method_id == 0"></td>
                                 <td>{{h.uncertainty}}</td>
                                 <td>{{h.hwm_notes}}</td>
                                 <td>{{h.stillwater}}</td>
@@ -878,7 +881,7 @@
                             <!-- Vertical Collection Method: (details) -->
                             <div class="col-md-12" ng-if="view.HWMval== 'detail'">
                                 <div class="col-md-4"><label>Vertical Collection Method:</label></div>
-                                <div class="col-md-6">{{aHWM.vCollectMethod || '---'}}</div>
+                                <div class="col-md-6">{{((vCollMList | filter: {vcollect_method_id: aHWM.vcollect_method_id})[0].vcollect_method) || '---'}}</div>
                             </div>
                             <!-- Vertical Collection Method: (edit) -->
                             <div class="form-group" ng-if="view.HWMval== 'edit'">
@@ -954,7 +957,7 @@
                             </div>
 
                             <!-- Approval info (detail) -->
-                            <div class="form-group" ng-show="ApprovalInfo.Member !==undefined">
+                            <!--<div class="form-group" ng-show="ApprovalInfo.Member !==undefined">
                                 <label class="col-md-4 control-label" for="approval_id">
                                     <span ng-if="view.HWMval == 'edit'">
                                         <button type="button" class="help-btn" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Displayed publicly.">
@@ -969,7 +972,7 @@
                                         <span class="glyphicon glyphicon-question-sign"></span>
                                     </button>
                                 </div>
-                            </div>
+                            </div>-->
 
                             <!-- edit button -->
                             <div class="form-group">
@@ -977,14 +980,15 @@
                                     <button type="button" ng-show="view.HWMval == 'detail'" class="btn btn-primary" ng-click="wannaEditHWM()">Edit HWM</button>
                                     <button ng-show="view.HWMval == 'edit'" class="btn btn-primary" ng-click="save(HWMEditForm.$valid)">Save</button>
                                     <button type="button" ng-show="view.HWMval == 'edit'" class="btn btn-warning" ng-click="cancelHWMEdit()">Cancel Edit</button>
-                                    <button type="button" ng-show="((ApprovalInfo.approvalDate == undefined && view.HWMval == 'detail') && (userRole == 'Admin' || userRole == 'Manager'))" class="btn btn-primary" ng-click="approveHWM()">Approve</button>
-                                    <button type="button" ng-show="((ApprovalInfo.approvalDate != undefined && view.HWMval == 'detail') && (userRole == 'Admin' || userRole == 'Manager'))" class="btn btn-primary" ng-click="unApproveHWM()">UnApprove</button>
+                                    <!--<button type="button" ng-show="((ApprovalInfo.approvalDate == undefined && view.HWMval == 'detail') && (userRole == 'Admin' || userRole == 'Manager'))" class="btn btn-primary" ng-click="approveHWM()">Approve</button>
+                                    <button type="button" ng-show="((ApprovalInfo.approvalDate != undefined && view.HWMval == 'detail') && (userRole == 'Admin' || userRole == 'Manager'))" class="btn btn-primary" ng-click="unApproveHWM()">UnApprove</button>-->
                                 </div>
                             </div>
 
                         </fieldset>
                     </form>
                 </uib-accordion-group>
+ 
                 <!-- HWM FILES SECTION -->
                 <div ng-if="aHWM.hwm_id !== undefinfed">
                     <!--HWM File Part-->
@@ -1265,8 +1269,7 @@
 
     <div class="modal-footer">
         <div class="form-group">
-            <div class="col-md-12">
-                <button type="button" ng-show="aHWM.hwm_id !== undefined" ng-disabled="showFileForm" class="btn btn-danger" ng-click="deleteHWM(HWMEditForm.$valid)">Delete HWM</button>
+            <div class="col-md-12">                
                 <button type="button" class="btn btn-warning" ng-disabled="showFileForm" ng-click="cancel()">Cancel/Close</button>
             </div>
         </div>

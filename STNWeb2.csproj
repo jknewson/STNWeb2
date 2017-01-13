@@ -130,6 +130,7 @@
     <Content Include="src\css\toastr.css" />
     <Content Include="src\css\xeditable.css" />
     <Content Include="src\fonts\glyphicons-halflings-regular.svg" />
+    <Content Include="src\images\bulkHWMsteps.PNG" />
     <Content Include="src\images\Events1.png" />
     <Content Include="src\images\fileUpload.gif" />
     <Content Include="src\images\fileUpload1.gif" />

@@ -489,6 +489,7 @@
                     //logic for cancel
                 });//end modal
             };
+
             var formatHWM = function (h) {
                 var formattedHWM = {
                     hwm_id: h.hwm_id,
