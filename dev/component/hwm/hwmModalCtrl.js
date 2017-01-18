@@ -274,11 +274,11 @@
                 var h = $scope.view.HWMval == 'edit' ? $scope.hwmCopy : $scope.aHWM;
                 if (h.hwm_uncertainty !== "") {
                     var x = Number(h.hwm_uncertainty);
-                    //                    Excellent    +-0.05       0      -  0.050
-                    //                    Good         +-0.10       0.051  -  0.100
-                    //                    Fair         +-0.20       0.101  -  0.200
-                    //                    Poor         +-0.40       0.201  -  0.400
-                    //                    V Poor       > 0.40       0.401  -  infinity
+                    //  Excellent    +-0.05       0      -  0.050
+                    //  Good         +-0.10       0.051  -  0.100
+                    //  Fair         +-0.20       0.101  -  0.200
+                    //  Poor         +-0.40       0.201  -  0.400
+                    //  V Poor       > 0.40       0.401  -  infinity
                     h.hwm_quality_id = $scope.hwmQualList.filter(function (h) { return h.min_range <= x && h.max_range >= x; })[0].hwm_quality_id;
                 }
             };
