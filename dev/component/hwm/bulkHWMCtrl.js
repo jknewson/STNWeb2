@@ -55,22 +55,6 @@
                 $scope.chosenEvent = 0;
                 $scope.delIndex = -1; //if they delete a hwm from the DONE table, need index they clicked so closing warning modal will know which one to remove from postedHWMs list
                 //#region renderers/validators
-                var requiredModal = function () {
-                    var reqModal = $uibModal.open({
-                        template: '<div class="modal-header"><h3 class="modal-title">Error</h3></div>' +
-                            '<div class="modal-body"><p>This field is required.</p></div>' +
-                            '<div class="modal-footer"><button class="btn btn-primary" ng-enter="ok()" ng-click="ok()">OK</button></div>',
-                        backdrop: 'static',
-                        keyboard: false,
-                        controller: ['$scope', '$uibModalInstance', function ($scope, $uibModalInstance) {
-                            $scope.ok = function () {
-                                $uibModalInstance.dismiss();
-                            };
-                        }],
-                        size: 'sm'
-                    });
-                };
-                
                 $scope.requiredValidator = function (value, callback) {
                     //if this is the dropdown arrow being clicked in siteNo cell, don't show error message
                     if ($scope.siteNoArrowClicked) {
@@ -88,7 +72,10 @@
                                 otherDataInRow = true;
                         });
                         if (!value && otherDataInRow) {
-                            requiredModal();
+                            var whichOne = $scope.hotInstance.getColHeader(col);
+                            toastr.options.timeOut = "6000";
+                            toastr.options.closeButton = true;
+                            toastr.error(whichOne + " is a required field."); //  requiredModal();
                             callback(false);
                         } else {
                             callback(true);
@@ -106,22 +93,17 @@
                     });
                     if (((value < 22 || value > 55) || isNaN(value)) && otherDataInRow) {
                         setTimeout(function () { $scope.hotInstance.deselectCell(); }, 100);
-                        var latModal = $uibModal.open({
-                            template: '<div class="modal-header"><h3 class="modal-title">Error</h3></div>' +
-                                '<div class="modal-body"><p>Latitude must be between 22.0 and 55.0 (NAD83 decimal degrees).</p></div>' +
-                                '<div class="modal-footer"><button class="btn btn-primary" ng-enter="ok()" ng-click="ok()">OK</button></div>',
-                            backdrop: 'static',
-                            keyboard: false,
-                            controller: ['$scope', '$uibModalInstance', function ($scope, $uibModalInstance) {
-                                $scope.ok = function () {
-                                    $uibModalInstance.dismiss();
-                                };
-                            }],
-                            size: 'sm'
-                        });
+                        
+                        toastr.options.timeOut = "6000";
+                        toastr.options.closeButton = true;
+                        toastr.error("Latitude must be between 22.0 and 55.0 (dec deg).");                       
                         callback(false);
                     } else if (!value && otherDataInRow) {
-                        requiredModal();
+                        var whichOne = $scope.hotInstance.getColHeader(col);
+                        toastr.options.timeOut = "6000";
+                        toastr.options.closeButton = true;
+                        toastr.error(whichOne + " is a required field.");
+                        //  requiredModal();
                         callback(false);
                     } else {
                         callback(true);
@@ -138,22 +120,29 @@
                     });
                     if (((value < -130 || value > -55) || isNaN(value)) && otherDataInRow) {
                         setTimeout(function () { $scope.hotInstance.deselectCell(); }, 100);
-                        var longModal = $uibModal.open({
-                            template: '<div class="modal-header"><h3 class="modal-title">Error</h3></div>' +
-                                '<div class="modal-body"><p>Longitude must be between -130.0 and -55.0 (NAD83 digital degrees).</p></div>' +
-                                '<div class="modal-footer"><button class="btn btn-primary" ng-enter="ok()" ng-click="ok()">OK</button></div>',
-                            backdrop: 'static',
-                            keyboard: false,
-                            controller: ['$scope', '$uibModalInstance', function ($scope, $uibModalInstance) {
-                                $scope.ok = function () {
-                                    $uibModalInstance.dismiss();
-                                };
-                            }],
-                            size: 'sm'
-                        });
+                        toastr.options.timeOut = "6000";
+                        toastr.options.closeButton = true;
+                        toastr.error("Longitude must be between -130.0 and -55.0 (dec deg).");
+                        //var longModal = $uibModal.open({
+                        //    template: '<div class="modal-header"><h3 class="modal-title">Error</h3></div>' +
+                        //        '<div class="modal-body"><p>Longitude must be between -130.0 and -55.0 (NAD83 digital degrees).</p></div>' +
+                        //        '<div class="modal-footer"><button class="btn btn-primary" ng-enter="ok()" ng-click="ok()">OK</button></div>',
+                        //    backdrop: 'static',
+                        //    keyboard: false,
+                        //    controller: ['$scope', '$uibModalInstance', function ($scope, $uibModalInstance) {
+                        //        $scope.ok = function () {
+                        //            $uibModalInstance.dismiss();
+                        //        };
+                        //    }],
+                        //    size: 'sm'
+                        //});
                         callback(false);
                     } else if (!value && otherDataInRow) {
-                        requiredModal();
+                        var whichOne = $scope.hotInstance.getColHeader(col);
+                        toastr.options.timeOut = "6000";
+                        toastr.options.closeButton = true;
+                        toastr.error(whichOne + " is a required field.");
+                        //  requiredModal();
                         callback(false);
                     }
                     else {
@@ -161,22 +150,30 @@
                     }
                 };
                 $scope.numericValidator = function (value, callback) {
-                    if (value !== "" && value !== null && (isNaN(parseInt(value)))) {
-                        setTimeout(function () { $scope.hotInstance.deselectCell(); }, 100);
-                        var numModal = $uibModal.open({
-                            template: '<div class="modal-header"><h3 class="modal-title">Error</h3></div>' +
-                                '<div class="modal-body"><p>Please enter a numeric value.</p></div>' +
-                                '<div class="modal-footer"><button class="btn btn-primary" ng-enter="ok()" ng-click="ok()">OK</button></div>',
-                            backdrop: 'static',
-                            keyboard: false,
-                            controller: ['$scope', '$uibModalInstance', function ($scope, $uibModalInstance) {
-                                $scope.ok = function () {
-                                    $uibModalInstance.dismiss();
-                                };
-                            }],
-                            size: 'sm'
-                        });
+                    var whichOne = $scope.hotInstance.getColHeader(this.col);
+                    if (value !== "" && value !== null && (isNaN(Number(value)))) {
+                        setTimeout(function () { $scope.hotInstance.deselectCell(); }, 100);                        
+                        toastr.options.timeOut = "6000";
+                        toastr.options.closeButton = true;
+                        toastr.error(whichOne + " must be an numeric value (ex: 0.03).");                       
                         callback(false);
+                    } else if (whichOne == "HWM Uncertainty (ft)") {
+                        //check if hwmQuality has value. if so, see if it's within proper range
+                        var hwmQualValue = $scope.hotInstance.getDataAtCell(this.row, 6);
+                        if (hwmQualValue !== null && hwmQualValue !== "") {
+                            var appropriateHWMQual = "";
+                            if (value > 0.4) appropriateHWMQual = "VP: > 0.40 ft";
+                            else if (value < 0.05) appropriateHWMQual = "Excellent: +/- 0.05 ft";
+                            else {
+                                appropriateHWMQual = $scope.hwmQuals.filter(function (h) { return h.min_range <= value && h.max_range >= value; })[0].hwm_quality;
+                            }
+                            if (appropriateHWMQual !== hwmQualValue) {
+                                toastr.options.timeOut = "6000";
+                                toastr.options.closeButton = true;
+                                toastr.error(whichOne + " does not have a matching HWM Quality for row " + Number(this.row + 1));
+                                callback(false);
+                            } else callback(true);
+                        } else callback(true);
                     } else {
                         callback(true);
                     }
@@ -220,16 +217,32 @@
                                 }
                                 break;
                         }
-                        //if this one isn't in the hwm-types, callback(false)
-                        //if (hwmTypeList.map(function (hwT) { return hwT.hwm_type; }).indexOf(value) < 0) {
-                        //    hasError = true; which = value;
-                        //}
+                        
                         if (hasError) {
                             callback(false);
+                        } else if (prop == "hwm_quality_id") {
+                            //check if hwm uncertainty has value. if so, see if it's within proper range
+                            var uncertValue = $scope.hotInstance.getDataAtCell(row, 5);
+                            if (uncertValue !== null && uncertValue !== "") {
+                                var appropriatequal = "";
+                                if (uncertValue > 0.4) appropriatequal = "VP: > 0.40 ft";
+                                else if (uncertValue < 0.05) appropriatequal = "Excellent: +/- 0.05 ft";
+                                else {
+                                    appropriatequal = $scope.hwmQuals.filter(function (h) { return h.min_range <= uncertValue && h.max_range >= uncertValue; })[0].hwm_quality;
+                                }
+                                if (appropriatequal !== value) {
+                                    toastr.options.timeOut = "6000";
+                                    toastr.options.closeButton = true;
+                                    toastr.error("HWM Quality does not have a matching HWM uncertainty range value for row " + Number(row + 1));
+                                    callback(false);
+                                } else { callback(true); }
+                            } else callback(true);
                         } else callback(true);
-
                     } else if (!value && otherDataInRow) {
-                        requiredModal();
+                        var whichOne = $scope.hotInstance.getColHeader(col);
+                        toastr.options.timeOut = "6000";
+                        toastr.options.closeButton = true;
+                        toastr.error(whichOne + " is a required field.");                      
                         callback(false);
                     } else callback(true);
                 };
@@ -269,38 +282,41 @@
                     }
                     var removeI = 'test';//indices.sort(function (a, b) { return a - b });
 
-                    $scope.showLoading = false; // loading..
+                    $scope.showLoading = 'false'; // loading..
                 };
-
+                                
                 //validate before allowing save 
                 $scope.validateTable = function () {
                     $scope.showLoading = true; // loading..
+                    angular.element('#loadingDiv').removeClass('noShow');
                     var haveData = $scope.hotInstance.getDataAtCell(0, 1);
                     if (haveData !== null) {
-                        $scope.hotInstance.validateCells(function (valid) {
-                            if (valid) {
-                                $scope.showLoading = false; // loading..
+                        $scope.hotInstance.validateCells(function (valid) {                            
+                            if (valid) {                                
                                 var validModal = $uibModal.open({
                                     template: '<div class="modal-header"><h3 class="modal-title">Valid</h3></div>' +
                                         '<div class="modal-body"><p>Good to go!</p></div>' +
                                         '<div class="modal-footer"><button class="btn btn-primary" ng-enter="ok()" ng-click="ok()">OK</button></div>',
                                     //   backdrop: 'static',
                                     //   keyboard: false,
-                                    controller: ['$scope', '$uibModalInstance', function ($scope, $uibModalInstance) {
+                                    controller: ['$scope','$rootScope', '$uibModalInstance', function ($scope, $rootScope, $uibModalInstance) {
                                         $scope.ok = function () {
                                             $uibModalInstance.dismiss();
                                         };
+                                       // $scope.showLoading = false; // loading..
+                                        angular.element('#loadingDiv').addClass('noShow'); //addClass =false, removeClass =true                                        
                                     }],
                                     size: 'sm'
                                 });
                                 $scope.notValid = false;
-                            } else {
-                                $scope.showLoading = false; // loading..
+                                
+                            } else {                             
                                 $scope.notValid = true;
+                                angular.element('#loadingDiv').addClass('noShow'); //need to do this way for some reason changing boolean isn't working . $rootScope either
+                                //$scope.showLoading = false; // loading..
                             }
                         });
-                    } else {
-                        $scope.showLoading = false; // loading..
+                    } else {                        
                         var validModal = $uibModal.open({
                             template: '<div class="modal-header"><h3 class="modal-title">Error</h3></div>' +
                                 '<div class="modal-body"><p>No data in table to validate</p></div>' +
@@ -312,6 +328,8 @@
                             }],
                             size: 'sm'
                         });
+                        angular.element('#loadingDiv').addClass('noShow'); //addClass =false, removeClass =true
+                       // $scope.showLoading = false; // loading..
                     }
                 };
                 //save updates
@@ -323,7 +341,7 @@
                             pastedHWMs.splice(i, 1);
                         }
                     }
-                    $scope.showLoading = true; // loading..
+                    $scope.showLoading = 'true'; // loading..
                     $scope.notValid = true; //reset so they don't click it again before having to validate
                     $http.defaults.headers.common.Authorization = 'Basic ' + $cookies.get('STNCreds');
                     $http.defaults.headers.common.Accept = 'application/json';
@@ -359,13 +377,13 @@
                                 else toastr.error("HWM " + response.hwm_id + " is already in the successfully uploaded list below.");                                
                                 removeThisUploadHWM(response); //remove it from the handsontable                                
                             }, function (errorResponse) {
-                                $scope.showLoading = false; // loading..
+                                $scope.showLoading = 'false'; // loading..
                                 toastr.options.timeOut = "0";
                                 toastr.options.closeButton = true;
                                 toastr.error("Error uploading hwm: " + errorResponse.statusText);
                             });                            
                         }, function (errorResponse) {
-                            $scope.showLoading = false; // loading..
+                            $scope.showLoading = 'false'; // loading..
                             toastr.options.timeOut = "0";
                             toastr.options.closeButton = true;
                             toastr.error("Error getting site information for " + hwm.site_no + ". Site does not exist.");
@@ -526,7 +544,7 @@
                 //End DONE Table stuff -------------------------------------------------------------------------------------------------------------
                 
                 //#region SITE NO dropdown arrow Click MODAL part ------------------------------------------------------------------------
-                var getFindSiteModal = function (r, c) {
+                var getFindSiteModal = function (r, c, hwmParts) {
                     var dataAtRow = $scope.hotInstance.getDataAtRow(r); setTimeout(function () { $scope.hotInstance.deselectCell(); }, 100);
                     if (dataAtRow[9] !== "" && dataAtRow[10] !== "" && dataAtRow[9] !== null && dataAtRow[10] !== null) {
                         var siteModal = $uibModal.open({
@@ -536,6 +554,9 @@
                             resolve: {
                                 nearBySites: function () {
                                     return SITE.getProximitySites({ Latitude: dataAtRow[9], Longitude: dataAtRow[10], Buffer: 1.1 }).$promise;
+                                },
+                                HWMparts: function(){
+                                    return hwmParts;
                                 },
                                 siteNoAlreadyThere: function () {
                                     return dataAtRow[0];
@@ -587,6 +608,12 @@
 
                 //#region handsontable settings
                 $scope.tableSettings = {
+                    //colHeaders: true,
+                    colHeaders: [
+                        '<span title="Site Number, if known"> Site No </span>',"Waterbody", "HWM Type *", "Marker", "HWM Environment *","HWM Uncertainty (ft)","HWM Quality *", "Bank", "Loc. Description", "HWM Latitude *",
+                        "HWM Longitude *", "Horizontal Datum *", "Horizontal Collect Method *", "HAG (ft)", "Flag/Found Date *", "Survey Date", "Surveyed Elev (ft)", "Vertical Datum",
+                        "Vertical Collect Method", "Survey Uncertainty (ft)", "Notes", "Tranquil/Stillwater"
+                    ],
                     rowHeaders: true,
                     minSpareRows: 15,
                     afterInit: function () {
@@ -598,13 +625,24 @@
                     wordWrap: false,
                     preventOverflow: 'horizontal',
                     viewportColumnRenderingOffsetNumber: 1,
-                    colWidths: $scope.columnWidths,                    
+                    colWidths: $scope.columnWidths,
+                    //interesting-- could use this for hover text on invalids maybe
+                    //afterOnCellMouseOver:function (event, coords, td) {
+                    //    var test = 'hi';
+                    //},
                     afterOnCellMouseDown: function (event, coords, td) {
                         //open modal for siteNo
                         //open multi-select modal for resources, media or frequencies
                         if (coords.col === 0 && event.realTarget.className == "htAutocompleteArrow") {
                             $scope.siteNoArrowClicked = true;
-                            getFindSiteModal(coords.col, coords.row);
+                            var passHWMvals = [];
+                            passHWMvals.push($scope.hotInstance.getDataAtCell(coords.row, 1)); //waterbody
+                            passHWMvals.push($scope.hotInstance.getDataAtCell(coords.row, 9)); //lat
+                            passHWMvals.push($scope.hotInstance.getDataAtCell(coords.row, 10)); //long
+                            passHWMvals.push($scope.hotInstance.getDataAtCell(coords.row, 11)); //hdatum
+                            passHWMvals.push($scope.hotInstance.getDataAtCell(coords.row, 12)); //hcollectmethd
+
+                            getFindSiteModal(coords.row, coords.col, passHWMvals);
                         }
                     },
                     contextMenu: ['remove_row'],
@@ -625,12 +663,13 @@
                         }
                     }, 
                     onAfterChange: function (change, source) {
+                        //source can be 'loadData' (first time), 'edit' (one cell at a time), 'paste' (bunch at a time)
                         //change is an array containing arrays for each column affected: [0] = row, [1] = dataName, [2] = value it was, [3] = value it is         
                         if (source != 'loadData') {
                             for (var i = 0; i < change.length; i++) {
                                 //only care if it was actually changed -- make them validate again
-                                if (change[i][2] !== change[i][3] && $scope.notValid === false) $scope.notValid = true;                               
-                            }
+                                if (change[i][2] !== change[i][3] && $scope.notValid === false) $scope.notValid = true;                                
+                            }//end foreach change
                         }
                     },
                     onAfterRemoveRow: function (index, amount) {
@@ -662,8 +701,8 @@
         }]);
 
     //controller for the hwm site No modal that comes up when clicking the dropdown arrow in the site no cell in the handsontable
-    STNControllers.controller('hwmSiteModalCtrl', ['$scope', '$http', '$cookies', '$uibModalInstance', 'nearBySites', 'siteNoAlreadyThere', 'hdatums', 'hcolMeths', 'vdatums', 'vcolMeths', 'states', 'counties', 'leafletData', 'GEOCODE', 'SITE',
-        function ($scope, $http, $cookies, $uibModalInstance, nearBySites, siteNoAlreadyThere, hdatums, hcolMeths, vdatums, vcolMeths, states, counties, leafletData, GEOCODE, SITE) {
+    STNControllers.controller('hwmSiteModalCtrl', ['$scope', '$rootScope', '$http', '$cookies', '$uibModalInstance', 'nearBySites', 'HWMparts', 'siteNoAlreadyThere', 'hdatums', 'hcolMeths', 'vdatums', 'vcolMeths', 'states', 'counties', 'leafletData', 'leafletMarkerEvents', 'GEOCODE', 'SITE',
+        function ($scope, $rootScope, $http, $cookies, $uibModalInstance, nearBySites, HWMparts, siteNoAlreadyThere, hdatums, hcolMeths, vdatums, vcolMeths, states, counties, leafletData, leafletMarkerEvents, GEOCODE, SITE) {
             $scope.localSites = nearBySites;
             $scope.horDatums = hdatums;
             $scope.horCollMeths = hcolMeths;
@@ -684,7 +723,19 @@
                     delete s.selected;
                 });
                 //remove/show OK button from bottom of modal
-                if ($scope.showSiteCreateArea) $scope.disableOK = true;
+                if ($scope.showSiteCreateArea) {
+                    $scope.disableOK = true;
+                    $scope.showMap = false;
+                    //populate newSite with hwm parts if present  0:waterbody, 1:lat, 2:long, 3:hdatum, 4:hcollectmethd
+                    $scope.newSite.waterbody = HWMparts[0] !== "" || HWMparts[0] !== null ? HWMparts[0] : "";
+                    $scope.newSite.latitude_dd = HWMparts[1] !== "" || HWMparts[1] !== null ? HWMparts[1] : "";
+                    $scope.newSite.longitude_dd = HWMparts[2] !== "" || HWMparts[2] !== null ? HWMparts[2] : "";
+                    $scope.newSite.hdatum_id = HWMparts[3] !== "" || HWMparts[3] !== null ? $scope.horDatums.filter(function (hd) { return hd.datum_name == HWMparts[3]; })[0].datum_id : "";
+                    $scope.newSite.hcollect_method_id = HWMparts[4] !== "" || HWMparts[4] !== null ? $scope.horCollMeths.filter(function (hd) { return hd.hcollect_method == HWMparts[4]; })[0].hcollect_method_id : "";
+
+                    //getAddress with lat/long
+                    $scope.getAddress();
+                }
                 else $scope.disableOK = false;
                 //make all markers (if any) default blue (unselected)
                 angular.forEach($scope.markers, function (mm) { mm.icon = icons.stn; });
@@ -694,10 +745,11 @@
                 $scope.createChecked = "0";
                 $scope.showSiteCreateArea = false;
                 //change icon color of that marker in map
-                //angular.forEach($scope.markers, function (mm) { mm.icon = icons.stn; });
                 angular.forEach($scope.markers, function (m) {
-                    if (m.lat == checkedSite.latitude_dd && m.lng == checkedSite.longitude_dd)
-                        m.icon = icons.selectedStn;
+                    if (m.lat == checkedSite.latitude_dd && m.lng == checkedSite.longitude_dd) {
+                        delete m.icon;
+                        m.icon = icons.selectedStn;                        
+                    }
                     else m.icon = icons.stn;
                 });
                 
@@ -712,6 +764,7 @@
 
             //map stuff
             $scope.markers = [];
+           
             var icons = {
                 stn: {
                     type: 'div',
@@ -720,7 +773,7 @@
                 },
                 selectedStn: {
                     type: 'div',
-                    iconSize: [10, 10],
+                    iconSize: [14, 14],
                     className: 'newSiteIcon'
                 }
             };
@@ -752,6 +805,7 @@
             };
             fitMapBounds();
             angular.extend($scope, {
+                markers: $scope.markers,
                 layers: {
                     baselayers: {
                         topo: {
@@ -1049,7 +1103,9 @@
                 var h = $scope.view.HWMval == 'edit' ? $scope.hwmCopy : $scope.aHWM;
                 if (h.hwm_uncertainty !== "") {
                     var x = Number(h.hwm_uncertainty);
-                    if (x > 0.4) h.hwm_quality_id = 5; else if (x < 0.05) h.hwm_quality_id = 1; else {
+                    if (x > 0.4) h.hwm_quality_id = 5;
+                    else if (x < 0.05) h.hwm_quality_id = 1;
+                    else {
                         h.hwm_quality_id = $scope.hwmQualList.filter(function (h) { return h.min_range <= x && h.max_range >= x; })[0].hwm_quality_id;
                     }
                 }
