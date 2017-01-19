@@ -33,13 +33,7 @@
                 //called a to format just the date (no time) '2013-05-16T05:00:00'
                 var makeAdate = function (d) {
                     var Tindex = d.indexOf("T");
-                    var theDate = d.substring(0, Tindex); //2013-05-16
-                    //want it like 'MM/dd/yyyy'
-                    var year = theDate.substring(0, theDate.indexOf("-"));
-                    //var month = aDate.getMonth();
-                    //var day = ('0' + aDate.getDate()).slice(-2);
-                    //var monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-                    //var dateWOtime = new Date(monthNames[month] + " " + day + ", " + year);
+                    var theDate = d.substring(0, Tindex);                    
                     return theDate;
                 };//end makeAdate()
 

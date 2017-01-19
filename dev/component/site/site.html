@@ -16,8 +16,8 @@
         <div ui-view="op"></div>
         <div ui-view="sensor"></div>
         <div ui-view="hwm"></div>
-        <div ui-view="file"></div>
         <div ui-view="peak"></div>
+        <div ui-view="file"></div>
     </div>
 </div>
 
@@ -83,646 +83,904 @@
     <div class="modal-header">
         <h3 class="modal-title">Site<button class="close" type="button" ng-click="cancel()" aria-hidden="true" style="color:gray;">&times;</button></h3>
     </div>
-    <form class="form-horizontal" name="siteForm">
-        <fieldset>
-            <div class="modal-body">
-                <!--Site Description*-->
-                <div class="form-group">
-                    <label class="col-md-4 control-label req" for="site_description">
-                        <button type="button" class="help-btn" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Displayed publicly.">
-                            <span class="glyphicon glyphicon-eye-open"></span>
-                        </button> Site Description:
-                        <button type="button" class="help-btn" tooltip-placement="right" tooltip-append-to-body="false" uib-tooltip="Brief description of the site area. Displayed publicly.">
-                            <span class="glyphicon glyphicon-question-sign"></span>
-                        </button>
-                        <button type="button" class="help-btn" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Required">
-                            <span class="glyphicon glyphicon-asterisk" style="color:#d00;font-size:xx-small;"></span>
-                        </button>
-                    </label>
-                    <div class="col-md-7">
-                        <textarea class="form-control" id="site_description" type="text" rows="3" placeholder="Site Description" ng-model="aSite.site_description" required />
-                    </div>
-
-                </div>
-
-                <!--Internal Notes-->
-                <div class="form-group">
-                    <label class="col-md-4 control-label" for="site_notes">Internal Notes:</label>
-                    <div class="col-md-7">
-                        <textarea class="form-control" id="site_notes" type="text" rows="3" placeholder="Internal Notes" ng-model="aSite.site_notes" />
-                    </div>
-                </div>
-
-                <!-- dec deg or dms: -->
-                <div>
-                    <label class="col-md-4 control-label"></label>
-                    <div class="col-md-7">
-                        <span class="radio-inline">
-                            <input type="radio" name="decDegORdms" ng-model="aSite.decDegORdms" ng-change="latLongChange()" value="dd" /> Dec Deg
-                        </span>
-                        <span class="radio-inline">
-                            <input type="radio" name="decDegORdms" ng-model="aSite.decDegORdms" ng-change="latLongChange()" value="dms" /> DMS
-                        </span>
-                    </div>
-                </div>
-
-                <!--Latitude*-->
-                <div class="form-group" ng-class="{'has-error':siteForm.latitude_dd.$invalid && siteForm.latitude_dd.$dirty}">
-                    <label class="col-md-4 control-label req" for="latitude_dd">
-                        <button type="button" class="help-btn" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Displayed publicly.">
-                            <span class="glyphicon glyphicon-eye-open"></span>
-                        </button> Latitude:
-                        <button type="button" class="help-btn" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Required">
-                            <span class="glyphicon glyphicon-asterisk" style="color:#d00;font-size:xx-small;"></span>
-                        </button>
-                    </label>
-                    <div class="col-md-7" ng-if="aSite.decDegORdms == 'dd'">
-                        <input class="form-control" ng-keypress="isNum($event)" name="latitude_dd" id="latitude_dd" ng-model="aSite.latitude_dd"
-                               ng-model-options="{ updateOn: 'blur' }" ng-change="checkValue('dd','lat')" type="text" placeholder="Latitude" ng-required="aSite.decDegORdms == 'dd'" />
-                    </div>
-                    <div class="col-md-7" ng-if="aSite.decDegORdms == 'dms'">
-                        <table>
-                            <tr>
-                                <td><input class="form-control" ng-keypress="isNum($event)" ng-model-options="{ updateOn: 'blur' }" ng-change="checkValue('dms','lat')" id="LaDeg" name="Deg" ng-model="DMS.LADeg" type="text" ng-required="aSite.decDegORdms == 'dms'" /></td>
-                                <td>°</td>
-                                <td><input class="form-control" ng-keypress="isNum($event)" ng-model-options="{ updateOn: 'blur' }" ng-change="checkValue('dms','lat')" name="Min" ng-model="DMS.LAMin" type="text" ng-required="aSite.decDegORdms == 'dms'" /></td>
-                                <td>′</td>
-                                <td><input class="form-control" ng-keypress="isNum($event)" ng-model-options="{ updateOn: 'blur' }" ng-change="checkValue('dms','lat')" name="Sec" ng-model="DMS.LASec" type="text" ng-required="aSite.decDegORdms == 'dms'" /></td>
-                                <td>″</td>
-                            </tr>
-                        </table>
-                    </div>
-                </div>
-
-                <!--Longitude*-->
-                <div class="form-group" ng-class="{'has-error':siteForm.longitude_dd.$invalid && siteForm.longitude_dd.$dirty}">
-                    <label class="col-md-4 control-label req" for="longitude_dd">
-                        <button type="button" class="help-btn" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Displayed publicly.">
-                            <span class="glyphicon glyphicon-eye-open"></span>
-                        </button> Longitude:
-                        <button type="button" class="help-btn" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Required">
-                            <span class="glyphicon glyphicon-asterisk" style="color:#d00;font-size:xx-small;"></span>
-                        </button>
-                    </label>
-                    <div class="col-md-7" ng-if="aSite.decDegORdms == 'dd'">
-                        <input class="form-control" ng-keypress="isNum($event)" ng-enter="getAddress()" id="longitude_dd" name="longitude_dd" ng-model="aSite.longitude_dd"
-                               ng-model-options="{ updateOn: 'blur' }" ng-change="checkValue('dd', 'long')" type="text" placeholder="Longitude" ng-required="aSite.decDegORdms == 'dd'" />
-                    </div>
-                    <div class="col-md-7" ng-if="aSite.decDegORdms == 'dms'">
-                        <table>
-                            <tr>
-                                <td><input class="form-control" ng-keypress="isNum($event)" ng-model-options="{ updateOn: 'blur' }" ng-change="checkValue('dms', 'long')" id="LoDeg" name="Deg" ng-model="DMS.LODeg" type="text" ng-required="aSite.decDegORdms == 'dms'" /></td>
-                                <td>°</td>
-                                <td><input class="form-control" ng-keypress="isNum($event)" ng-model-options="{ updateOn: 'blur' }" ng-change="checkValue('dms', 'long')" name="Min" ng-model="DMS.LOMin" type="text" ng-required="aSite.decDegORdms == 'dms'" /></td>
-                                <td>′</td>
-                                <td><input class="form-control" ng-keypress="isNum($event)" ng-model-options="{ updateOn: 'blur' }" ng-change="checkValue('dms', 'long')" name="Sec" ng-model="DMS.LOSec" type="text" ng-required="aSite.decDegORdms == 'dms'" /></td>
-                                <td>″</td>
-                            </tr>
-                        </table>
-                    </div>
-                </div>
-
-                <!--Horizontal Datum*-->
-                <div class="form-group" ng-class="{'has-error':siteForm.hdatum_id.$invalid && siteForm.hdatum_id.$dirty}">
-                    <label class="col-md-4 control-label req" for="hdatum_id">
-                        <button type="button" class="help-btn" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Displayed publicly.">
-                            <span class="glyphicon glyphicon-eye-open"></span>
-                        </button> Horizontal Datum:
-                        <button type="button" class="help-btn" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Required">
-                            <span class="glyphicon glyphicon-asterisk" style="color:#d00;font-size:xx-small;"></span>
-                        </button>
-                    </label>
-                    <div class="col-md-7">
-                        <select class="form-control" name="hdatum_id" ng-model="aSite.hdatum_id"
-                                ng-options="hd.datum_id as hd.datum_name for hd in HorizontalDatumList" required>
-                            <option value=""></option>
-                        </select>
-                    </div>
-                </div>
-
-                <!--Horizontal Collection Method*-->
-                <div class="form-group" ng-class="{'has-error':siteForm.hcollect_method_id.$invalid && siteForm.hcollect_method_id.$dirty}">
-                    <label class="col-md-4 control-label req" for="hcollect_method_id">
-                        <button type="button" class="help-btn" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Displayed publicly.">
-                            <span class="glyphicon glyphicon-eye-open"></span>
-                        </button> Horizontal Collection Method:
-                        <button type="button" class="help-btn" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Required">
-                            <span class="glyphicon glyphicon-asterisk" style="color:#d00;font-size:xx-small;"></span>
-                        </button>
-                    </label>
-                    <div class="col-md-7">
-                        <select class="form-control" name="hcollect_method_id" ng-model="aSite.hcollect_method_id"
-                                ng-options="hc.hcollect_method_id as hc.hcollect_method for hc in HorCollMethodList" required>
-                            <option value=""></option>
-                        </select>
-                    </div>
-                </div>
-
-                <!--populate button*-->
-                <div class="form-group">
-                    <div class="panel panel-default site-panel">
-                        <div class="panel-heading">
-                            <h3 class="panel-title">
-                                Location Information
-                                <button type="button" class="col-md-1 borderLess pull-right" tooltip-placement="right" tooltip-append-to-body="false" uib-tooltip="Also checks for nearby sites within x ft, and populates 5 fields below.">
+    <div class="modal-body">
+        <uib-accordion close-others="false">
+            <!--SITE Part-->
+            <uib-accordion-group is-open="s.sOpen">
+                <uib-accordion-heading>
+                    <i style="margin-right:10px" class="pull-left glyphicon" ng-class="{'glyphicon-chevron-down': s.sOpen, 'glyphicon-chevron-right': !s.sOpen}"></i>
+                    <span>Site Information</span>
+                </uib-accordion-heading>
+                <form class="form-horizontal" name="siteForm">
+                    <fieldset>
+                        <!--Site Description*-->
+                        <div class="form-group">
+                            <label class="col-md-4 control-label req" for="site_description">
+                                <button type="button" class="help-btn" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Displayed publicly.">
+                                    <span class="glyphicon glyphicon-eye-open"></span>
+                                </button> Site Description:
+                                <button type="button" class="help-btn" tooltip-placement="right" tooltip-append-to-body="false" uib-tooltip="Brief description of the site area. Displayed publicly.">
                                     <span class="glyphicon glyphicon-question-sign"></span>
                                 </button>
-                            </h3>
-                        </div>
-                        <div class="panel-body">
-                            <div class="form-group" ng-if="aSite.site_id == undefined">
-                                <label class="col-md-4 control-label" for="POPULATEBTN">
-                                    Click here to populate location fields:
-                                    <button type="button" class="help-btn" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Required">
-                                        <span class="glyphicon glyphicon-asterisk" style="color:#d00;font-size:xx-small;"></span>
-                                    </button>
-                                </label>
-                                <div class="col-md-7">
-                                    <button type="button" ng-click="getAddress()" class="btn-wim btn-inline btn-md btn-blue">Verify Location</button>
-                                </div>
-                            </div>
-
-                            <!-- map showing lat/long location-->
-                            <div class="col-md-7 col-md-offset-3" style="height:300px;display:table;" ng-show="showMap">
-                                <div><label>There are: {{closeSites.length}} sites nearby.</label></div>
-                                <p ng-if="closeSites.length > 0">
-                                    To use one of these sites (shown as blue dot) instead, click on the site name.
-                                    <ul style="max-height:50px;overflow:auto;">
-                                        <li ng-repeat="s in closeSites" style="list-style:none">
-                                            <a ui-sref="site.dashboard({id: s.site_id})" ng-click="$dismiss()">{{s.site_no}}</a>
-                                        </li>
-                                    </ul>
-                                </p>
-                                <p>Click and drag the point to relocate this site (all related fields will update).</p>
-                                <div class="panel panel-primary" style="height:inherit">
-                                    <leaflet lf-center="mapCenter" width="100%" height="100%" markers="mapMarkers"></leaflet>
-                                </div>
-                            </div>
-                            <br clear="all" />
-                            <!--Address-->
-                            <div class="form-group">
-                                <label class="col-md-4 control-label" for="address">
-                                    <button type="button" class="help-btn" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Displayed publicly.">
-                                        <span class="glyphicon glyphicon-eye-open"></span>
-                                    </button> Address:
-                                </label>
-                                <div class="col-md-7">
-                                    <input class="form-control" name="address" ng-model="aSite.address" type="text" />
-                                </div>
-                            </div>
-                            <!--City-->
-                            <div class="form-group">
-                                <label class="col-md-4 control-label" for="city">
-                                    <button type="button" class="help-btn" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Displayed publicly.">
-                                        <span class="glyphicon glyphicon-eye-open"></span>
-                                    </button> City:
-                                </label>
-                                <div class="col-md-7">
-                                    <input class="form-control" name="city" ng-model="aSite.city" type="text" />
-                                </div>
-                            </div>
-                            <!--State*-->
-                            <div class="form-group" ng-class="{'has-error':siteForm.state.$invalid && siteForm.state.$dirty}">
-                                <label class="col-md-4 control-label req" for="state">
-                                    <button type="button" class="help-btn" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Displayed publicly.">
-                                        <span class="glyphicon glyphicon-eye-open"></span>
-                                    </button> State:
-                                    <button type="button" class="help-btn" tooltip-placement="right" tooltip-append-to-body="false" uib-tooltip="Used to autogenerate the Site Number.">
-                                        <span class="glyphicon glyphicon-question-sign"></span>
-                                    </button>
-                                    <button type="button" class="help-btn" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Required">
-                                        <span class="glyphicon glyphicon-asterisk" style="color:#d00;font-size:xx-small;"></span>
-                                    </button>
-                                </label>
-                                <div class="col-md-7">
-                                    <select class="form-control" name="state" ng-model="aSite.state" ng-change="updateCountyList(aSite.state)"
-                                            ng-options="state.state_abbrev as state.state_name for state in StateList" required>
-                                        <option value=""></option>
-                                    </select>
-                                </div>
-
-                            </div>
-
-                            <!--Zip-->
-                            <div class="form-group">
-                                <label class="col-md-4 control-label" for="zip">
-                                    <button type="button" class="help-btn" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Displayed publicly.">
-                                        <span class="glyphicon glyphicon-eye-open"></span>
-                                    </button> Zip:
-                                </label>
-                                <div class="col-md-7">
-                                    <input class="form-control" name="zip" ng-model="aSite.zip" type="text" ui-mask="{{'99999'}}" />
-                                </div>
-                            </div>
-
-                            <!--County*-->
-                            <div class="form-group" ng-class="{'has-error':siteForm.county.$invalid && siteForm.county.$dirty}">
-                                <label class="col-md-4 control-label req" for="county">
-                                    <button type="button" class="help-btn" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Displayed publicly.">
-                                        <span class="glyphicon glyphicon-eye-open"></span>
-                                    </button> County:
-                                    <button type="button" class="help-btn" tooltip-placement="right" tooltip-append-to-body="false" uib-tooltip="Used to autogenerate the Site Number. Use the verify location to populate.">
-                                        <span class="glyphicon glyphicon-question-sign"></span>
-                                    </button>
-                                    <button type="button" class="help-btn" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Required">
-                                        <span class="glyphicon glyphicon-asterisk" style="color:#d00;font-size:xx-small;"></span>
-                                    </button>
-                                </label>
-                                <div class="col-md-7">
-                                    <select class="form-control" name="county" ng-model="aSite.county" ng-options="c.county_name as c.county_name for c in stateCountyList" required>
-                                        <option value=""></option>
-                                    </select>
-                                </div>
-
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <!--Waterbody*-->
-                <div class="form-group" ng-class="{'has-error':siteForm.waterbody.$invalid && siteForm.waterbody.$dirty}">
-                    <label class="col-md-4 control-label req" for="waterbody">
-                        <button type="button" class="help-btn" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Displayed publicly.">
-                            <span class="glyphicon glyphicon-eye-open"></span>
-                        </button> Waterbody:
-                        <button type="button" class="help-btn" tooltip-placement="right" tooltip-append-to-body="false" uib-tooltip-html="htmlDescriptionTip">
-                            <span class="glyphicon glyphicon-question-sign"></span>
-                        </button>
-                        <button type="button" class="help-btn" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Required">
-                            <span class="glyphicon glyphicon-asterisk" style="color:#d00;font-size:xx-small;"></span>
-                        </button>
-                    </label>
-                    <div class="col-md-7">
-                        <input class="form-control" name="waterbody" ng-model="aSite.waterbody" type="text" required />
-                    </div>
-
-                </div>
-
-                <!--Drainage Area-->
-                <div class="form-group">
-                    <label class="col-md-4 control-label" for="drainage_area_sqmi">
-                        <button type="button" class="help-btn" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Displayed publicly.">
-                            <span class="glyphicon glyphicon-eye-open"></span>
-                        </button> Drainage Area (sq mi):
-                    </label>
-                    <div class="col-md-7">
-                        <input class="form-control" name="drainage_area_sqmi" ng-model="aSite.drainage_area_sqmi" type="text" />
-                    </div>
-                </div>
-
-                <!--Station ID for USGS gage-->
-                <div class="form-group">
-                    <label class="col-md-4 control-label" for="usgs_sid">
-                        <button type="button" class="help-btn" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Displayed publicly.">
-                            <span class="glyphicon glyphicon-eye-open"></span>
-                        </button> Station ID for USGS gage:
-                    </label>
-                    <div class="col-md-7">
-                        <input class="form-control" name="usgs_sid" ng-model="aSite.usgs_sid" type="text" />
-                    </div>
-                </div>
-
-                <!--Station ID for NOAA gage-->
-                <div class="form-group">
-                    <label class="col-md-4 control-label" for="noaa_sid">
-                        <button type="button" class="help-btn" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Displayed publicly.">
-                            <span class="glyphicon glyphicon-eye-open"></span>
-                        </button> Station ID for NOAA gage:
-                    </label>
-                    <div class="col-md-7">
-                        <input class="form-control" name="noaa_sid" ng-model="aSite.noaa_sid" type="text" />
-                    </div>
-                </div>
-
-                <!--Other Station ID-->
-                <div class="form-group">
-                    <label class="col-md-4 control-label" for="other_sid">
-                        <button type="button" class="help-btn" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Displayed publicly.">
-                            <span class="glyphicon glyphicon-eye-open"></span>
-                        </button> Other Station ID:
-                    </label>
-                    <div class="col-md-7">
-                        <input class="form-control" name="other_sid" placeholder="Please add details in the Site Description" ng-model="aSite.other_sid" type="text" />
-                    </div>
-                </div>
-
-                <!--Safety Notes-->
-                <div class="form-group">
-                    <label class="col-md-4 control-label" for="safety_notes">Safety Notes:</label>
-                    <div class="col-md-7">
-                        <textarea class="form-control" type="text" rows="3" ng-model="aSite.safety_notes" />
-                    </div>
-                </div>
-
-                <hr />
-
-                <!--Site Housing section-->
-                <div class="form-group">
-                    <div style="padding:0" class="panel panel-default site-panel">
-                        <div class="panel-heading">
-                            <h3 class="panel-title">
-                                <span>Site Housing</span>
-                                <button type="button" class="col-md-1 borderLess pull-right" tooltip-placement="left" tooltip-append-to-body="false" uib-tooltip="Housing needed at this site. Think about what it would take to pack your truck.">
-                                    <span class="glyphicon glyphicon-question-sign"></span>
+                                <button type="button" class="help-btn" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Required">
+                                    <span class="glyphicon glyphicon-asterisk" style="color:#d00;font-size:xx-small;"></span>
                                 </button>
-                            </h3>
-
-                        </div>
-                        <div class="panel-body">
-                            <label class="col-md-4 control-label" for="HOUSING_TYPE">Site Housing(s):</label>
+                            </label>
                             <div class="col-md-7">
-                                <div isteven-multi-select
-                                     input-model="allHousingTypeList"
-                                     output-model="houseType.value"
-                                     button-label="type_name"
-                                     item-label="type_name"
-                                     max-height="300px"
-                                     on-item-click="HouseTypeClick(data)"
-                                     tick-property="selected"
-                                     helper-elements="filter">
-                                </div>
+                                <textarea class="form-control" id="site_description" type="text" rows="3" placeholder="Site Description" ng-model="aSite.site_description" required />
                             </div>
-                            <br clear="all" />
-                            <div ng-show="siteHouseTypesTable.length > 0">
-                                <table class="table">
-                                    <thead>
-                                        <tr>
-                                            <th class="col-sm-3">House Type</th>
-                                            <th class="col-sm-1">Housing Length (ft)</th>
-                                            <th class="col-sm-3">Housing Material</th>
-                                            <th class="col-sm-3">Housing Notes</th>
-                                            <th class="col-sm-1">Amount</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr ng-repeat="house in siteHouseTypesTable" class="whitebginput">
-                                            <td>{{house.type_name}}<input type="hidden" ng-model="house.housing_type_id" /><input type="hidden" ng-model="house.site_housing_id" /></td>
-                                            <td><input style="width:70%" ng-keypress="isNum($event)" ng-model="house.length" /></td>
-                                            <td><input ng-model="house.material" /></td>
-                                            <td><input ng-model="house.notes" /></td>
-                                            <td><input style="width:70%" ng-keypress="isNum($event)" ng-model="house.amount" /></td>
-                                        </tr>
-                                    </tbody>
+
+                        </div>
+                        <!--Internal Notes-->
+                        <div class="form-group">
+                            <label class="col-md-4 control-label" for="site_notes">Internal Notes:</label>
+                            <div class="col-md-7">
+                                <textarea class="form-control" id="site_notes" type="text" rows="3" placeholder="Internal Notes" ng-model="aSite.site_notes" />
+                            </div>
+                        </div>
+                        <!-- dec deg or dms: -->
+                        <div>
+                            <label class="col-md-4 control-label"></label>
+                            <div class="col-md-7">
+                                <span class="radio-inline">
+                                    <input type="radio" name="decDegORdms" ng-model="aSite.decDegORdms" ng-change="latLongChange()" value="dd" /> Dec Deg
+                                </span>
+                                <span class="radio-inline">
+                                    <input type="radio" name="decDegORdms" ng-model="aSite.decDegORdms" ng-change="latLongChange()" value="dms" /> DMS
+                                </span>
+                            </div>
+                        </div>
+                        <!--Latitude*-->
+                        <div class="form-group" ng-class="{'has-error':siteForm.latitude_dd.$invalid && siteForm.latitude_dd.$dirty}">
+                            <label class="col-md-4 control-label req" for="latitude_dd">
+                                <button type="button" class="help-btn" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Displayed publicly.">
+                                    <span class="glyphicon glyphicon-eye-open"></span>
+                                </button> Latitude:
+                                <button type="button" class="help-btn" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Required">
+                                    <span class="glyphicon glyphicon-asterisk" style="color:#d00;font-size:xx-small;"></span>
+                                </button>
+                            </label>
+                            <div class="col-md-7" ng-if="aSite.decDegORdms == 'dd'">
+                                <input class="form-control" ng-keypress="isNum($event)" name="latitude_dd" id="latitude_dd" ng-model="aSite.latitude_dd"
+                                       ng-model-options="{ updateOn: 'blur' }" ng-change="checkValue('dd','lat')" type="text" placeholder="Latitude" ng-required="aSite.decDegORdms == 'dd'" />
+                            </div>
+                            <div class="col-md-7" ng-if="aSite.decDegORdms == 'dms'">
+                                <table>
+                                    <tr>
+                                        <td><input class="form-control" ng-keypress="isNum($event)" ng-model-options="{ updateOn: 'blur' }" ng-change="checkValue('dms','lat')" id="LaDeg" name="Deg" ng-model="DMS.LADeg" type="text" ng-required="aSite.decDegORdms == 'dms'" /></td>
+                                        <td>°</td>
+                                        <td><input class="form-control" ng-keypress="isNum($event)" ng-model-options="{ updateOn: 'blur' }" ng-change="checkValue('dms','lat')" name="Min" ng-model="DMS.LAMin" type="text" ng-required="aSite.decDegORdms == 'dms'" /></td>
+                                        <td>′</td>
+                                        <td><input class="form-control" ng-keypress="isNum($event)" ng-model-options="{ updateOn: 'blur' }" ng-change="checkValue('dms','lat')" name="Sec" ng-model="DMS.LASec" type="text" ng-required="aSite.decDegORdms == 'dms'" /></td>
+                                        <td>″</td>
+                                    </tr>
                                 </table>
                             </div>
-                        </div><!-- end panel-body-->
-                    </div>
-                </div>
-
-                <!--Priority-->
-                <div class="form-group">
-                    <label class="col-md-4 control-label" for="priority_id">Priority:</label>
-                    <div class="col-md-7">
-                        <select class="form-control" name="priority_id" ng-model="aSite.priority_id" ng-options="p.priority_id as p.priority_name for p in DepPriorityList">
-                            <option value=""></option>
-                        </select>
-                    </div>
-                </div>
-
-                <!--Network Type-->
-                <div class="form-group">
-                    <label class="col-md-4 control-label" for="NETWORK_TYPE">Site Location Type in the Network:</label>
-                    <div class="col-md-7">
-                        <ul style="padding-left:0">
-                            <li style="list-style:none;" ng-repeat="nt in NetTypeList">
-                                <input type="checkbox" class="site-chx" ng-model="nt.selected" ng-change="netTypeChg(nt)" />
-                                <label class="site-chx-label">{{nt.network_type_name}}</label>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-
-                <!--Network NAME-->
-                <div class="form-group">
-                    <label class="col-md-4 control-label" for="NETWORK_NAME">Network Name:</label>
-                    <div class="col-md-7">
-                        <ul style="padding-left:0">
-                            <li style="list-style:none;" ng-repeat="nn in NetNameList">
-                                <input type="checkbox" class="site-chx" ng-model="nn.selected" ng-change="whichOne(nn)" ng-disabled="(checked == checkedName) && (nn.name != checkedName)" />
-                                <label class="site-chx-label">{{nn.name}}</label>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-
-                <!--Zone-->
-                <div class="form-group">
-                    <label class="col-md-4 control-label" for="zone">
-                        Zone:
-                        <button type="button" class="help-btn" tooltip-placement="right" tooltip-append-to-body="false" uib-tooltip="For Water Science Center specific planning.">
-                            <span class="glyphicon glyphicon-question-sign"></span>
-                        </button></label>
-
-                    <div class="col-md-7">
-                        <input class="form-control" name="zone" ng-model="aSite.zone" type="text" />
-                    </div>
-
-                </div>
-
-                <!--Sensor Not Appropriate-->
-                <div class="form-group">
-                    <label class="col-md-4 control-label" for="sensor_not_appropriate">
-                        Check if Sensor is not appropriate here:
-                        <button type="button" class="help-btn" tooltip-placement="right" tooltip-append-to-body="false" uib-tooltip="Only HWMs can be flagged at this site. Sensors can not be or do not have permission to be deployed.">
-                            <span class="glyphicon glyphicon-question-sign"></span>
-                        </button>
-                    </label>
-                    <div class="col-md-7">
-                        <ul style="padding-left:0">
-                            <li style="list-style:none; box-sizing: border-box; padding-top: 8px;">
-                                <input type="checkbox" name="sensor_not_appropriate" ng-click="dimAction()" ng-model="aSite.sensor_not_appropriate" ng-true-value="1" ng-false-value="0" />
-                            </li>
-                        </ul>
-                    </div>
-
-                </div>
-
-                <!--Permanent Sensor Housing?-->
-                <div class="form-group sensorInfo" ng-class="{darkClass:disableSensorParts}">
-                    <label class="col-md-4 control-label" for="is_permanent_housing_installed">Permanent Sensor Housing Installed?</label>
-                    <div class="col-md-7">
-                        <span class="radio-inline">
-                            <input ng-disabled="disableSensorParts" type="radio" name="is_permanent_housing_installed" ng-model="aSite.is_permanent_housing_installed" value="Yes"> Yes
-                        </span>
-                        <span class="radio-inline">
-                            <input ng-disabled="disableSensorParts" type="radio" name="is_permanent_housing_installed" ng-model="aSite.is_permanent_housing_installed" value="No"> No
-                        </span>
-                    </div>
-                </div>
-
-                <!--Add Proposed Sensor-->
-                <div class="form-group sensorInfo" ng-class="{darkClass:disableSensorParts}" ng-show="aSite.site_id == undefined">
-                    <label class="col-md-4 control-label" for="PROPOSED_SENSOR">
-                        Add Proposed Sensor:
-                        <button type="button" class="help-btn" tooltip-placement="right" tooltip-append-to-body="false" uib-tooltip="Sensors desired or appropriate for this site should be targeted in the next deployment.">
-                            <span class="glyphicon glyphicon-question-sign"></span>
-                        </button>
-                    </label>
-                    <div class="col-md-7">
-                        <ul style="padding-left:0">
-                            <li style="list-style:none;" ng-repeat="ps in ProposedSens">
-                                <input ng-disabled="disableSensorParts" class="site-chx" type="checkbox" ng-model="ps.selected" ng-value="{{ps.selected}}" />
-                                <label class="site-chx-label">{{ps.method}}</label>
-                            </li>
-                        </ul>
-                    </div>
-
-                </div>
-
-                <!--Site creator-->
-                <div class="form-group">
-                    <label class="col-md-4 control-label" for="member_id">Site Creator:</label>
-                    <div class="col-md-7">{{aSite.Creator}}</div>
-                </div>
-
-                <!--Add Landowner button-->
-                <div class="form-group" ng-show="aSite.landownercontact_id == null">
-                    <label class="col-md-4 control-label" for="LANDOWNERBTN">
-                        Landowner Contact:
-                        <button type="button" class="help-btn" tooltip-placement="right" tooltip-append-to-body="false" uib-tooltip="Do not record information that private citizens have a reasonable expectation of privacy about. No names or phone numbers of private citizens. Business contact information is acceptable.">
-                            <span class="glyphicon glyphicon-question-sign"></span>
-                        </button>
-                    </label>
-                    <div class="col-md-7">
-                        <button type="button" ng-click="showLandOwnerPart()" class="btn-wim btn-blue btn-inline btn-md">Add Landowner</button>
-                    </div>
-
-                </div>
-
-                <!--start Landowner contact area -->
-
-
-                <div ng-show="addLandowner">
-                    <div class="col-md-9 col-md-offset-1" style="border:solid 1px red">Do not record information that private citizens have a reasonable expectation of privacy about. No names or phone numbers of private citizens. Business contact information is acceptable.</div>
-                    <div class="panel panel-default site-panel col-md-9 col-md-offset-1" style="padding:0">
-                        <div class="panel-heading">
-                            <h3 class="panel-title">Land Owner Information</h3>
                         </div>
-                        <div class="panel-body">
-                            <!--First Name:-->
-                            <div class="form-group">
-                                <label class="col-md-4 control-label" ng-class="{'req': addLandownder}" for="fname">
-                                    First Name:
-                                    <button type="button" class="help-btn" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Required">
-                                        <span class="glyphicon glyphicon-asterisk" style="color:#d00;font-size:xx-small;"></span>
-                                    </button>
-                                </label>
-                                <div class="col-md-7">
-                                    <input class="form-control" id="LOfname" name="fname" ng-model="landowner.fname" type="text" ng-required="addLandowner" />
-                                </div>
+                        <!--Longitude*-->
+                        <div class="form-group" ng-class="{'has-error':siteForm.longitude_dd.$invalid && siteForm.longitude_dd.$dirty}">
+                            <label class="col-md-4 control-label req" for="longitude_dd">
+                                <button type="button" class="help-btn" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Displayed publicly.">
+                                    <span class="glyphicon glyphicon-eye-open"></span>
+                                </button> Longitude:
+                                <button type="button" class="help-btn" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Required">
+                                    <span class="glyphicon glyphicon-asterisk" style="color:#d00;font-size:xx-small;"></span>
+                                </button>
+                            </label>
+                            <div class="col-md-7" ng-if="aSite.decDegORdms == 'dd'">
+                                <input class="form-control" ng-keypress="isNum($event)" ng-enter="getAddress()" id="longitude_dd" name="longitude_dd" ng-model="aSite.longitude_dd"
+                                       ng-model-options="{ updateOn: 'blur' }" ng-change="checkValue('dd', 'long')" type="text" placeholder="Longitude" ng-required="aSite.decDegORdms == 'dd'" />
                             </div>
-                            <!--Last Name:-->
-                            <div class="form-group" ng-class="{'required': addlandowner}">
-                                <label class="col-md-4 control-label" ng-class="{'req': addLandownder}" for="lname">Last Name:</label>
-                                <div class="col-md-7">
-                                    <input class="form-control" id="LOlname" name="lname" ng-model="landowner.lname" type="text" ng-required="addLandowner" />
-                                </div>
+                            <div class="col-md-7" ng-if="aSite.decDegORdms == 'dms'">
+                                <table>
+                                    <tr>
+                                        <td><input class="form-control" ng-keypress="isNum($event)" ng-model-options="{ updateOn: 'blur' }" ng-change="checkValue('dms', 'long')" id="LoDeg" name="Deg" ng-model="DMS.LODeg" type="text" ng-required="aSite.decDegORdms == 'dms'" /></td>
+                                        <td>°</td>
+                                        <td><input class="form-control" ng-keypress="isNum($event)" ng-model-options="{ updateOn: 'blur' }" ng-change="checkValue('dms', 'long')" name="Min" ng-model="DMS.LOMin" type="text" ng-required="aSite.decDegORdms == 'dms'" /></td>
+                                        <td>′</td>
+                                        <td><input class="form-control" ng-keypress="isNum($event)" ng-model-options="{ updateOn: 'blur' }" ng-change="checkValue('dms', 'long')" name="Sec" ng-model="DMS.LOSec" type="text" ng-required="aSite.decDegORdms == 'dms'" /></td>
+                                        <td>″</td>
+                                    </tr>
+                                </table>
                             </div>
-                            <!--Affiliation/Title:-->
-                            <div class="form-group">
-                                <label class="col-md-4 control-label" for="title">Affiliation/Title:</label>
-                                <div class="col-md-7">
-                                    <input class="form-control" id="LOtitle" name="title" ng-model="landowner.title" type="text" />
-                                </div>
+                        </div>
+                        <!--Horizontal Datum*-->
+                        <div class="form-group" ng-class="{'has-error':siteForm.hdatum_id.$invalid && siteForm.hdatum_id.$dirty}">
+                            <label class="col-md-4 control-label req" for="hdatum_id">
+                                <button type="button" class="help-btn" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Displayed publicly.">
+                                    <span class="glyphicon glyphicon-eye-open"></span>
+                                </button> Horizontal Datum:
+                                <button type="button" class="help-btn" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Required">
+                                    <span class="glyphicon glyphicon-asterisk" style="color:#d00;font-size:xx-small;"></span>
+                                </button>
+                            </label>
+                            <div class="col-md-7">
+                                <select class="form-control" name="hdatum_id" ng-model="aSite.hdatum_id"
+                                        ng-options="hd.datum_id as hd.datum_name for hd in HorizontalDatumList" required>
+                                    <option value=""></option>
+                                </select>
                             </div>
+                        </div>
+                        <!--Horizontal Collection Method*-->
+                        <div class="form-group" ng-class="{'has-error':siteForm.hcollect_method_id.$invalid && siteForm.hcollect_method_id.$dirty}">
+                            <label class="col-md-4 control-label req" for="hcollect_method_id">
+                                <button type="button" class="help-btn" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Displayed publicly.">
+                                    <span class="glyphicon glyphicon-eye-open"></span>
+                                </button> Horizontal Collection Method:
+                                <button type="button" class="help-btn" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Required">
+                                    <span class="glyphicon glyphicon-asterisk" style="color:#d00;font-size:xx-small;"></span>
+                                </button>
+                            </label>
+                            <div class="col-md-7">
+                                <select class="form-control" name="hcollect_method_id" ng-model="aSite.hcollect_method_id"
+                                        ng-options="hc.hcollect_method_id as hc.hcollect_method for hc in HorCollMethodList" required>
+                                    <option value=""></option>
+                                </select>
+                            </div>
+                        </div>
+                        <!--populate button*-->
+                        <div class="form-group">
+                            <div class="panel panel-default site-panel">
+                                <div class="panel-heading">
+                                    <h3 class="panel-title">
+                                        Location Information
+                                        <button type="button" class="col-md-1 borderLess pull-right" tooltip-placement="right" tooltip-append-to-body="false" uib-tooltip="Also checks for nearby sites within x ft, and populates 5 fields below.">
+                                            <span class="glyphicon glyphicon-question-sign"></span>
+                                        </button>
+                                    </h3>
+                                </div>
+                                <div class="panel-body">
+                                    <div class="form-group" ng-if="aSite.site_id == undefined">
+                                        <label class="col-md-4 control-label" for="POPULATEBTN">
+                                            Click here to populate location fields:
+                                            <button type="button" class="help-btn" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Required">
+                                                <span class="glyphicon glyphicon-asterisk" style="color:#d00;font-size:xx-small;"></span>
+                                            </button>
+                                        </label>
+                                        <div class="col-md-7">
+                                            <button type="button" ng-click="getAddress()" class="btn-wim btn-inline btn-md btn-blue">Verify Location</button>
+                                        </div>
+                                    </div>
 
-                            <div>
-                                <label class="col-md-4 control-label"></label>
-                                <div class="col-md-7">
-                                    <input type="checkbox" class="site-chx" ng-model="useSiteAddress" ng-click="useAddressforLO()" /><label class="site-chx-label">Address same as Site address</label>
-                                </div>
-                            </div>
-                            <!--Address:-->
-                            <div class="form-group">
-                                <label class="col-md-4 control-label" for="address">Address:</label>
-                                <div class="col-md-7">
-                                    <input class="form-control" id="LOaddress" name="address" ng-model="landowner.address" type="text" />
-                                </div>
-                            </div>
-                            <!--City:-->
-                            <div class="form-group">
-                                <label class="col-md-4 control-label" for="city">City:</label>
-                                <div class="col-md-7">
-                                    <input class="form-control" id="LOcity" name="city" ng-model="landowner.city" type="text" />
-                                </div>
-                            </div>
-                            <!--State-->
-                            <div class="form-group">
-                                <label class="col-md-4 control-label" for="state">State:</label>
-                                <div class="col-md-7">
-                                    <select class="form-control" id="LOstate" name="state" ng-model="landowner.state" ng-options="state.state_abbrev as state.state_name for state in StateList">
-                                        <option value=""></option>
-                                    </select>
-                                </div>
-                            </div>
-                            <!--Zip:-->
-                            <div class="form-group">
-                                <label class="col-md-4 control-label" for="zip">Zip:</label>
-                                <div class="col-md-7">
-                                    <input class="form-control" id="LOzip" name="zip" ng-model="landowner.zip" type="text" ui-mask="{{'99999'}}" />
-                                </div>
-                            </div>
-                            <!--Primary Phone:-->
-                            <div class="form-group">
-                                <label class="col-md-4 control-label" for="primaryphone">Primary Phone:</label>
-                                <div class="col-md-7">
-                                    <input class="form-control" id="LOprimaryphone" name="primaryphone"
-                                           type="text" my-input-mask="{mask: '(999) 999-9999[ x99999]', greedy: false}"
-                                           ng-model="landowner.primaryphone" />
-                                </div>
-                            </div>
-                            <!--Secondary Phone:-->
-                            <div class="form-group">
-                                <label class="col-md-4 control-label" for="secondaryphone">Secondary Phone:</label>
-                                <div class="col-md-7">
-                                    <input class="form-control" id="LOsecondaryphone" name="secondaryphone"
-                                           type="text" my-input-mask="{mask: '(999) 999-9999[ x99999]', greedy:false}"
-                                           ng-model="landowner.secondaryphone" />
-                                </div>
-                            </div>
-                            <!--Email:-->
-                            <div class="form-group">
-                                <label class="col-md-4 control-label" for="email">Email:</label>
-                                <div class="col-md-7">
-                                    <input class="form-control" id="LOemail" name="email" ng-model="landowner.email" type="email" />
+                                    <!-- map showing lat/long location-->
+                                    <div class="col-md-7 col-md-offset-3" style="height:300px;display:table;" ng-show="showMap">
+                                        <div><label>There are: {{closeSites.length}} sites nearby.</label></div>
+                                        <p ng-if="closeSites.length > 0">
+                                            To use one of these sites (shown as blue dot) instead, click on the site name.
+                                            <ul style="max-height:50px;overflow:auto;">
+                                                <li ng-repeat="s in closeSites" style="list-style:none">
+                                                    <a ui-sref="site.dashboard({id: s.site_id})" ng-click="$dismiss()">{{s.site_no}}</a>
+                                                </li>
+                                            </ul>
+                                        </p>
+                                        <p>Click and drag the point to relocate this site (all related fields will update).</p>
+                                        <div class="panel panel-primary" style="height:inherit">
+                                            <leaflet lf-center="mapCenter" width="100%" height="100%" markers="mapMarkers"></leaflet>
+                                        </div>
+                                    </div>
+                                    <br clear="all" />
+                                    <!--Address-->
+                                    <div class="form-group">
+                                        <label class="col-md-4 control-label" for="address">
+                                            <button type="button" class="help-btn" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Displayed publicly.">
+                                                <span class="glyphicon glyphicon-eye-open"></span>
+                                            </button> Address:
+                                        </label>
+                                        <div class="col-md-7">
+                                            <input class="form-control" name="address" ng-model="aSite.address" type="text" />
+                                        </div>
+                                    </div>
+                                    <!--City-->
+                                    <div class="form-group">
+                                        <label class="col-md-4 control-label" for="city">
+                                            <button type="button" class="help-btn" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Displayed publicly.">
+                                                <span class="glyphicon glyphicon-eye-open"></span>
+                                            </button> City:
+                                        </label>
+                                        <div class="col-md-7">
+                                            <input class="form-control" name="city" ng-model="aSite.city" type="text" />
+                                        </div>
+                                    </div>
+                                    <!--State*-->
+                                    <div class="form-group" ng-class="{'has-error':siteForm.state.$invalid && siteForm.state.$dirty}">
+                                        <label class="col-md-4 control-label req" for="state">
+                                            <button type="button" class="help-btn" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Displayed publicly.">
+                                                <span class="glyphicon glyphicon-eye-open"></span>
+                                            </button> State:
+                                            <button type="button" class="help-btn" tooltip-placement="right" tooltip-append-to-body="false" uib-tooltip="Used to autogenerate the Site Number.">
+                                                <span class="glyphicon glyphicon-question-sign"></span>
+                                            </button>
+                                            <button type="button" class="help-btn" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Required">
+                                                <span class="glyphicon glyphicon-asterisk" style="color:#d00;font-size:xx-small;"></span>
+                                            </button>
+                                        </label>
+                                        <div class="col-md-7">
+                                            <select class="form-control" name="state" ng-model="aSite.state" ng-change="updateCountyList(aSite.state)"
+                                                    ng-options="state.state_abbrev as state.state_name for state in StateList" required>
+                                                <option value=""></option>
+                                            </select>
+                                        </div>
+
+                                    </div>
+
+                                    <!--Zip-->
+                                    <div class="form-group">
+                                        <label class="col-md-4 control-label" for="zip">
+                                            <button type="button" class="help-btn" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Displayed publicly.">
+                                                <span class="glyphicon glyphicon-eye-open"></span>
+                                            </button> Zip:
+                                        </label>
+                                        <div class="col-md-7">
+                                            <input class="form-control" name="zip" ng-model="aSite.zip" type="text" ui-mask="{{'99999'}}" />
+                                        </div>
+                                    </div>
+
+                                    <!--County*-->
+                                    <div class="form-group" ng-class="{'has-error':siteForm.county.$invalid && siteForm.county.$dirty}">
+                                        <label class="col-md-4 control-label req" for="county">
+                                            <button type="button" class="help-btn" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Displayed publicly.">
+                                                <span class="glyphicon glyphicon-eye-open"></span>
+                                            </button> County:
+                                            <button type="button" class="help-btn" tooltip-placement="right" tooltip-append-to-body="false" uib-tooltip="Used to autogenerate the Site Number. Use the verify location to populate.">
+                                                <span class="glyphicon glyphicon-question-sign"></span>
+                                            </button>
+                                            <button type="button" class="help-btn" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Required">
+                                                <span class="glyphicon glyphicon-asterisk" style="color:#d00;font-size:xx-small;"></span>
+                                            </button>
+                                        </label>
+                                        <div class="col-md-7">
+                                            <select class="form-control" name="county" ng-model="aSite.county" ng-options="c.county_name as c.county_name for c in stateCountyList" required>
+                                                <option value=""></option>
+                                            </select>
+                                        </div>
+
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                </div>
-                <br clear="all" />
-                <!--end Landowner contact area-->
-                <!--Access Permission Granted-->
-                <div class="form-group">
-                    <label class="col-md-4 control-label" for="access_granted">Access Permission Granted:</label>
-                    <div class="col-md-7">
-                        <span class="radio-inline">
-                            <input type="radio" name="access_granted" ng-model="aSite.access_granted" value="Yes"> Yes
-                        </span>
-                        <span class="radio-inline">
-                            <input type="radio" name="access_granted" ng-model="aSite.access_granted" value="No"> No
-                        </span>
-                        <span class="radio-inline">
-                            <input type="radio" name="access_granted" ng-model="aSite.access_granted" value="Not Needed"> Not Needed
-                        </span>
-                    </div>
-                </div>
+                        <!--Waterbody*-->
+                        <div class="form-group" ng-class="{'has-error':siteForm.waterbody.$invalid && siteForm.waterbody.$dirty}">
+                            <label class="col-md-4 control-label req" for="waterbody">
+                                <button type="button" class="help-btn" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Displayed publicly.">
+                                    <span class="glyphicon glyphicon-eye-open"></span>
+                                </button> Waterbody:
+                                <button type="button" class="help-btn" tooltip-placement="right" tooltip-append-to-body="false" uib-tooltip-html="htmlDescriptionTip">
+                                    <span class="glyphicon glyphicon-question-sign"></span>
+                                </button>
+                                <button type="button" class="help-btn" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Required">
+                                    <span class="glyphicon glyphicon-asterisk" style="color:#d00;font-size:xx-small;"></span>
+                                </button>
+                            </label>
+                            <div class="col-md-7">
+                                <input class="form-control" name="waterbody" ng-model="aSite.waterbody" type="text" required />
+                            </div>
 
-                <br clear="all" />
+                        </div>
+                        <!--Drainage Area-->
+                        <div class="form-group">
+                            <label class="col-md-4 control-label" for="drainage_area_sqmi">
+                                <button type="button" class="help-btn" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Displayed publicly.">
+                                    <span class="glyphicon glyphicon-eye-open"></span>
+                                </button> Drainage Area (sq mi):
+                            </label>
+                            <div class="col-md-7">
+                                <input class="form-control" name="drainage_area_sqmi" ng-model="aSite.drainage_area_sqmi" type="text" />
+                            </div>
+                        </div>
+                        <!--Station ID for USGS gage-->
+                        <div class="form-group">
+                            <label class="col-md-4 control-label" for="usgs_sid">
+                                <button type="button" class="help-btn" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Displayed publicly.">
+                                    <span class="glyphicon glyphicon-eye-open"></span>
+                                </button> Station ID for USGS gage:
+                            </label>
+                            <div class="col-md-7">
+                                <input class="form-control" name="usgs_sid" ng-model="aSite.usgs_sid" type="text" />
+                            </div>
+                        </div>
+                        <!--Station ID for NOAA gage-->
+                        <div class="form-group">
+                            <label class="col-md-4 control-label" for="noaa_sid">
+                                <button type="button" class="help-btn" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Displayed publicly.">
+                                    <span class="glyphicon glyphicon-eye-open"></span>
+                                </button> Station ID for NOAA gage:
+                            </label>
+                            <div class="col-md-7">
+                                <input class="form-control" name="noaa_sid" ng-model="aSite.noaa_sid" type="text" />
+                            </div>
+                        </div>
+                        <!--Other Station ID-->
+                        <div class="form-group">
+                            <label class="col-md-4 control-label" for="other_sid">
+                                <button type="button" class="help-btn" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Displayed publicly.">
+                                    <span class="glyphicon glyphicon-eye-open"></span>
+                                </button> Other Station ID:
+                            </label>
+                            <div class="col-md-7">
+                                <input class="form-control" name="other_sid" placeholder="Please add details in the Site Description" ng-model="aSite.other_sid" type="text" />
+                            </div>
+                        </div>
+                        <!--Safety Notes-->
+                        <div class="form-group">
+                            <label class="col-md-4 control-label" for="safety_notes">Safety Notes:</label>
+                            <div class="col-md-7">
+                                <textarea class="form-control" type="text" rows="3" ng-model="aSite.safety_notes" />
+                            </div>
+                        </div>
+                        <hr />
+                        <!--Site Housing section-->
+                        <div class="form-group">
+                            <div style="padding:0" class="panel panel-default site-panel">
+                                <div class="panel-heading">
+                                    <h3 class="panel-title">
+                                        <span>Site Housing</span>
+                                        <button type="button" class="col-md-1 borderLess pull-right" tooltip-placement="left" tooltip-append-to-body="false" uib-tooltip="Housing needed at this site. Think about what it would take to pack your truck.">
+                                            <span class="glyphicon glyphicon-question-sign"></span>
+                                        </button>
+                                    </h3>
 
-                <!--submit and cancel buttons-->
-                <div class="form-group">
-                    <div style="display: block; text-align: center;">
-                        <button ng-show="aSite.site_id == undefined" class="btn-wim btn-blue btn-inline btn-lg" ng-click="create(siteForm.$valid)">Create</button>
-                        <button ng-show="aSite.site_id != undefined" class="btn-wim btn-green btn-inline btn-lg"  ng-click="save(siteForm.$valid)">Save</button>
-                        <span ng-if="userRole == 'Admin'">
-                            <button ng-show="aSite.site_id != undefined" class="btn-wim btn-red btn-inline btn-lg"  ng-click="deleteSite()">Delete</button>
-                        </span>
-                       <button type="button" class="btn-wim btn-orange btn-inline btn-lg" ng-click="cancel()">Cancel</button>
+                                </div>
+                                <div class="panel-body">
+                                    <label class="col-md-4 control-label" for="HOUSING_TYPE">Site Housing(s):</label>
+                                    <div class="col-md-7">
+                                        <div isteven-multi-select
+                                             input-model="allHousingTypeList"
+                                             output-model="houseType.value"
+                                             button-label="type_name"
+                                             item-label="type_name"
+                                             max-height="300px"
+                                             on-item-click="HouseTypeClick(data)"
+                                             tick-property="selected"
+                                             helper-elements="filter">
+                                        </div>
+                                    </div>
+                                    <br clear="all" />
+                                    <div ng-show="siteHouseTypesTable.length > 0">
+                                        <table class="table">
+                                            <thead>
+                                                <tr>
+                                                    <th class="col-sm-3">House Type</th>
+                                                    <th class="col-sm-1">Housing Length (ft)</th>
+                                                    <th class="col-sm-3">Housing Material</th>
+                                                    <th class="col-sm-3">Housing Notes</th>
+                                                    <th class="col-sm-1">Amount</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr ng-repeat="house in siteHouseTypesTable" class="whitebginput">
+                                                    <td>{{house.type_name}}<input type="hidden" ng-model="house.housing_type_id" /><input type="hidden" ng-model="house.site_housing_id" /></td>
+                                                    <td><input style="width:70%" ng-keypress="isNum($event)" ng-model="house.length" /></td>
+                                                    <td><input ng-model="house.material" /></td>
+                                                    <td><input ng-model="house.notes" /></td>
+                                                    <td><input style="width:70%" ng-keypress="isNum($event)" ng-model="house.amount" /></td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div><!-- end panel-body-->
+                            </div>
+                        </div>
+                        <!--Priority-->
+                        <div class="form-group">
+                            <label class="col-md-4 control-label" for="priority_id">Priority:</label>
+                            <div class="col-md-7">
+                                <select class="form-control" name="priority_id" ng-model="aSite.priority_id" ng-options="p.priority_id as p.priority_name for p in DepPriorityList">
+                                    <option value=""></option>
+                                </select>
+                            </div>
+                        </div>
+                        <!--Network Type-->
+                        <div class="form-group">
+                            <label class="col-md-4 control-label" for="NETWORK_TYPE">Site Location Type in the Network:</label>
+                            <div class="col-md-7">
+                                <ul style="padding-left:0">
+                                    <li style="list-style:none;" ng-repeat="nt in NetTypeList">
+                                        <input type="checkbox" class="site-chx" ng-model="nt.selected" ng-change="netTypeChg(nt)" />
+                                        <label class="site-chx-label">{{nt.network_type_name}}</label>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        <!--Network NAME-->
+                        <div class="form-group">
+                            <label class="col-md-4 control-label" for="NETWORK_NAME">Network Name:</label>
+                            <div class="col-md-7">
+                                <ul style="padding-left:0">
+                                    <li style="list-style:none;" ng-repeat="nn in NetNameList">
+                                        <input type="checkbox" class="site-chx" ng-model="nn.selected" ng-change="whichOne(nn)" ng-disabled="(checked == checkedName) && (nn.name != checkedName)" />
+                                        <label class="site-chx-label">{{nn.name}}</label>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        <!--Zone-->
+                        <div class="form-group">
+                            <label class="col-md-4 control-label" for="zone">
+                                Zone:
+                                <button type="button" class="help-btn" tooltip-placement="right" tooltip-append-to-body="false" uib-tooltip="For Water Science Center specific planning.">
+                                    <span class="glyphicon glyphicon-question-sign"></span>
+                                </button>
+                            </label>
+
+                            <div class="col-md-7">
+                                <input class="form-control" name="zone" ng-model="aSite.zone" type="text" />
+                            </div>
+
+                        </div>
+                        <!--Sensor Not Appropriate-->
+                        <div class="form-group">
+                            <label class="col-md-4 control-label" for="sensor_not_appropriate">
+                                Check if Sensor is not appropriate here:
+                                <button type="button" class="help-btn" tooltip-placement="right" tooltip-append-to-body="false" uib-tooltip="Only HWMs can be flagged at this site. Sensors can not be or do not have permission to be deployed.">
+                                    <span class="glyphicon glyphicon-question-sign"></span>
+                                </button>
+                            </label>
+                            <div class="col-md-7">
+                                <ul style="padding-left:0">
+                                    <li style="list-style:none; box-sizing: border-box; padding-top: 8px;">
+                                        <input type="checkbox" name="sensor_not_appropriate" ng-click="dimAction()" ng-model="aSite.sensor_not_appropriate" ng-true-value="1" ng-false-value="0" />
+                                    </li>
+                                </ul>
+                            </div>
+
+                        </div>
+                        <!--Permanent Sensor Housing?-->
+                        <div class="form-group sensorInfo" ng-class="{darkClass:disableSensorParts}">
+                            <label class="col-md-4 control-label" for="is_permanent_housing_installed">Permanent Sensor Housing Installed?</label>
+                            <div class="col-md-7">
+                                <span class="radio-inline">
+                                    <input ng-disabled="disableSensorParts" type="radio" name="is_permanent_housing_installed" ng-model="aSite.is_permanent_housing_installed" value="Yes"> Yes
+                                </span>
+                                <span class="radio-inline">
+                                    <input ng-disabled="disableSensorParts" type="radio" name="is_permanent_housing_installed" ng-model="aSite.is_permanent_housing_installed" value="No"> No
+                                </span>
+                            </div>
+                        </div>
+                        <!--Add Proposed Sensor-->
+                        <div class="form-group sensorInfo" ng-class="{darkClass:disableSensorParts}" ng-show="aSite.site_id == undefined">
+                            <label class="col-md-4 control-label" for="PROPOSED_SENSOR">
+                                Add Proposed Sensor:
+                                <button type="button" class="help-btn" tooltip-placement="right" tooltip-append-to-body="false" uib-tooltip="Sensors desired or appropriate for this site should be targeted in the next deployment.">
+                                    <span class="glyphicon glyphicon-question-sign"></span>
+                                </button>
+                            </label>
+                            <div class="col-md-7">
+                                <ul style="padding-left:0">
+                                    <li style="list-style:none;" ng-repeat="ps in ProposedSens">
+                                        <input ng-disabled="disableSensorParts" class="site-chx" type="checkbox" ng-model="ps.selected" ng-value="{{ps.selected}}" />
+                                        <label class="site-chx-label">{{ps.method}}</label>
+                                    </li>
+                                </ul>
+                            </div>
+
+                        </div>
+                        <!--Site creator-->
+                        <div class="form-group">
+                            <label class="col-md-4 control-label" for="member_id">Site Creator:</label>
+                            <div class="col-md-7">{{aSite.Creator}}</div>
+                        </div>
+                        <!--Add Landowner button-->
+                        <div class="form-group" ng-show="aSite.landownercontact_id == null">
+                            <label class="col-md-4 control-label" for="LANDOWNERBTN">
+                                Landowner Contact:
+                                <button type="button" class="help-btn" tooltip-placement="right" tooltip-append-to-body="false" uib-tooltip="Do not record information that private citizens have a reasonable expectation of privacy about. No names or phone numbers of private citizens. Business contact information is acceptable.">
+                                    <span class="glyphicon glyphicon-question-sign"></span>
+                                </button>
+                            </label>
+                            <div class="col-md-7">
+                                <button type="button" ng-click="showLandOwnerPart()" class="btn-wim btn-blue btn-inline btn-md">Add Landowner</button>
+                            </div>
+
+                        </div>
+                        <!--start Landowner contact area -->
+                        <div ng-show="addLandowner">
+                            <div class="col-md-9 col-md-offset-1" style="border:solid 1px red">Do not record information that private citizens have a reasonable expectation of privacy about. No names or phone numbers of private citizens. Business contact information is acceptable.</div>
+                            <div class="panel panel-default site-panel col-md-9 col-md-offset-1" style="padding:0">
+                                <div class="panel-heading">
+                                    <h3 class="panel-title">Land Owner Information</h3>
+                                </div>
+                                <div class="panel-body">
+                                    <!--First Name:-->
+                                    <div class="form-group">
+                                        <label class="col-md-4 control-label" ng-class="{'req': addLandownder}" for="fname">
+                                            First Name:
+                                            <button type="button" class="help-btn" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Required">
+                                                <span class="glyphicon glyphicon-asterisk" style="color:#d00;font-size:xx-small;"></span>
+                                            </button>
+                                        </label>
+                                        <div class="col-md-7">
+                                            <input class="form-control" id="LOfname" name="fname" ng-model="landowner.fname" type="text" ng-required="addLandowner" />
+                                        </div>
+                                    </div>
+                                    <!--Last Name:-->
+                                    <div class="form-group" ng-class="{'required': addlandowner}">
+                                        <label class="col-md-4 control-label" ng-class="{'req': addLandownder}" for="lname">Last Name:</label>
+                                        <div class="col-md-7">
+                                            <input class="form-control" id="LOlname" name="lname" ng-model="landowner.lname" type="text" ng-required="addLandowner" />
+                                        </div>
+                                    </div>
+                                    <!--Affiliation/Title:-->
+                                    <div class="form-group">
+                                        <label class="col-md-4 control-label" for="title">Affiliation/Title:</label>
+                                        <div class="col-md-7">
+                                            <input class="form-control" id="LOtitle" name="title" ng-model="landowner.title" type="text" />
+                                        </div>
+                                    </div>
+
+                                    <div>
+                                        <label class="col-md-4 control-label"></label>
+                                        <div class="col-md-7">
+                                            <input type="checkbox" class="site-chx" ng-model="useSiteAddress" ng-click="useAddressforLO()" /><label class="site-chx-label">Address same as Site address</label>
+                                        </div>
+                                    </div>
+                                    <!--Address:-->
+                                    <div class="form-group">
+                                        <label class="col-md-4 control-label" for="address">Address:</label>
+                                        <div class="col-md-7">
+                                            <input class="form-control" id="LOaddress" name="address" ng-model="landowner.address" type="text" />
+                                        </div>
+                                    </div>
+                                    <!--City:-->
+                                    <div class="form-group">
+                                        <label class="col-md-4 control-label" for="city">City:</label>
+                                        <div class="col-md-7">
+                                            <input class="form-control" id="LOcity" name="city" ng-model="landowner.city" type="text" />
+                                        </div>
+                                    </div>
+                                    <!--State-->
+                                    <div class="form-group">
+                                        <label class="col-md-4 control-label" for="state">State:</label>
+                                        <div class="col-md-7">
+                                            <select class="form-control" id="LOstate" name="state" ng-model="landowner.state" ng-options="state.state_abbrev as state.state_name for state in StateList">
+                                                <option value=""></option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <!--Zip:-->
+                                    <div class="form-group">
+                                        <label class="col-md-4 control-label" for="zip">Zip:</label>
+                                        <div class="col-md-7">
+                                            <input class="form-control" id="LOzip" name="zip" ng-model="landowner.zip" type="text" ui-mask="{{'99999'}}" />
+                                        </div>
+                                    </div>
+                                    <!--Primary Phone:-->
+                                    <div class="form-group">
+                                        <label class="col-md-4 control-label" for="primaryphone">Primary Phone:</label>
+                                        <div class="col-md-7">
+                                            <input class="form-control" id="LOprimaryphone" name="primaryphone"
+                                                   type="text" my-input-mask="{mask: '(999) 999-9999[ x99999]', greedy: false}"
+                                                   ng-model="landowner.primaryphone" />
+                                        </div>
+                                    </div>
+                                    <!--Secondary Phone:-->
+                                    <div class="form-group">
+                                        <label class="col-md-4 control-label" for="secondaryphone">Secondary Phone:</label>
+                                        <div class="col-md-7">
+                                            <input class="form-control" id="LOsecondaryphone" name="secondaryphone"
+                                                   type="text" my-input-mask="{mask: '(999) 999-9999[ x99999]', greedy:false}"
+                                                   ng-model="landowner.secondaryphone" />
+                                        </div>
+                                    </div>
+                                    <!--Email:-->
+                                    <div class="form-group">
+                                        <label class="col-md-4 control-label" for="email">Email:</label>
+                                        <div class="col-md-7">
+                                            <input class="form-control" id="LOemail" name="email" ng-model="landowner.email" type="email" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <br clear="all" />
+                        <!--end Landowner contact area-->
+                        <!--Access Permission Granted-->
+                        <div class="form-group">
+                            <label class="col-md-4 control-label" for="access_granted">Access Permission Granted:</label>
+                            <div class="col-md-7">
+                                <span class="radio-inline">
+                                    <input type="radio" name="access_granted" ng-model="aSite.access_granted" value="Yes"> Yes
+                                </span>
+                                <span class="radio-inline">
+                                    <input type="radio" name="access_granted" ng-model="aSite.access_granted" value="No"> No
+                                </span>
+                                <span class="radio-inline">
+                                    <input type="radio" name="access_granted" ng-model="aSite.access_granted" value="Not Needed"> Not Needed
+                                </span>
+                            </div>
+                        </div>
+                        <br clear="all" />
+                        <!--submit and cancel buttons-->
+                        <div class="form-group">
+                            <div style="display: block; text-align: center;">
+                                <button ng-show="aSite.site_id == undefined" class="btn-wim btn-blue btn-inline btn-lg" ng-click="create(siteForm.$valid)">Create</button>
+                                <button ng-show="aSite.site_id != undefined" class="btn-wim btn-green btn-inline btn-lg" ng-click="save(siteForm.$valid)">Save</button>
+                                <span ng-if="userRole == 'Admin'">
+                                    <button ng-show="aSite.site_id != undefined" class="btn-wim btn-red btn-inline btn-lg" ng-click="deleteSite()">Delete</button>
+                                </span>
+                                <button type="button" class="btn-wim btn-orange btn-inline btn-lg" ng-click="cancel()">Cancel</button>
+                            </div>
+                        </div>
+                    </fieldset>
+                </form>
+            </uib-accordion-group>
+            <!-- SITE FILES SECTION -->
+            <div ng-if="aSite.site_id !== undefined">
+                <!--SITE File Part-->
+                <uib-accordion-group is-open="s.sFileOpen">
+                    <uib-accordion-heading>
+                        <i style="margin-right:10px" class="pull-left glyphicon" ng-class="{'glyphicon-chevron-down': s.sFileOpen, 'glyphicon-chevron-right': !s.sFileOpen}"></i>
+                        <span ng-class="{'redText':showFileForm}">Site Files</span>
+                    </uib-accordion-heading>
+                    <div class="col-md-12">
+                        <div class="col-md-12" ng-if="!showFileForm">
+                            <div class="col-md-4"><h3>Add File</h3></div>
+                            <div class="col-md-6" style="margin-top:5px">
+                                <button type="button" class="borderLess" ng-click="showFile(0)" tooltip-placement="right" uib-tooltip="Upload a new File to this Site">
+                                    <span class="glyphicon glyphicon-plus"></span>
+                                </button>
+                            </div>
+                        </div>
+                        <br clear="all" />
+                        <!-- list of existing files for this hwm -->
+                        <div class="col-md-6" ng-if="SITEFiles.length > 0">
+                            <ul style="padding-left: 0">
+                                <li ng-repeat="f in SITEFiles" style="list-style:none;padding-bottom: 15px;">
+                                    <span class="col-sm-9 borderLess" style="padding:0">
+                                        <a class="btn borderLess" style="padding:0" title="{{f.file_date | date: 'MM/dd/yyyy'}} ({{f.name || f.file_id}})" ng-click="showFile(f)">{{f.file_date | date: 'MM/dd/yyyy'}} ({{f.name || f.file_id}})</a>
+                                    </span>
+                                </li>
+                            </ul>
+                        </div>
+                        <!-- carousel of photo files -->
+                        <div class="col-md-6" ng-if="siteImageFiles.length > 0" style="height:120px;">
+                            <uib-carousel interval="4000">
+                                <uib-slide ng-repeat="f in siteImageFiles">
+                                    <img ng-click="showImageModal(f.file_id)" ng-src="{{serverURL}}/Files/{{f.file_id}}/Item{{stamp}}" />
+                                    <div class="carousel-caption">
+                                        <p>{{f.name || f.file_id}}</p>
+                                    </div>
+                                </uib-slide>
+                            </uib-carousel>
+                        </div>
+                        <br clear="all" />
+
+                        <div ng-if="showFileForm">
+                            <hr />
+                            <form class="form-horizontal" name="SITEFILEForm">
+                                <fieldset>
+                                    <!-- File Type* -->
+                                    <div class="form-group" ng-class="{'has-error':SITEFILEForm.filetype_id.$invalid && SITEFILEForm.filetype_id.$dirty}" style="margin:0;padding:0">
+                                        <label class="col-md-4 control-label req" for="filetype_id">
+                                            File Type:
+                                            <button type="button" class="help-btn" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Required">
+                                                <span class="glyphicon glyphicon-asterisk" style="color:#d00;font-size:xx-small;"></span>
+                                            </button>
+                                        </label>
+                                        <div class="col-md-6" ng-if="aFile.file_id == undefined">
+                                            <select class="form-control" name="filetype_id" ng-model="aFile.filetype_id" ng-change="updateAgencyForCaption()" ng-options="ft.filetype_id as ft.filetype for ft in fileTypes" required>
+                                                <option value=""></option>
+                                            </select>
+                                        </div>
+                                        <div class="col-md-6" ng-if="aFile.file_id != undefined">{{aFile.fileType}}</div>
+                                    </div>
+
+                                    <!--Upload Single Image with validations*-->
+                                    <div ng-if="aFile.file_id === undefined && aFile.filetype_id !== 8" class="form-group" style="margin:0;padding:0">
+                                        <label class="col-md-4 control-label" for="FILE">
+                                            Upload File:
+                                            <button type="button" class="help-btn" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Required">
+                                                <span class="glyphicon glyphicon-asterisk" style="color:#d00;font-size:xx-small;"></span>
+                                            </button>
+                                        </label>
+                                        <div class="col-md-7">
+                                            <input type="file" max="500000" file-model="aFile.File" />
+                                            <img ngf-thumbnail="aFile.File" style="height:60px" class="thumbnail">
+                                        </div>
+                                    </div>
+                                    <br clear="all" />
+
+                                    <!--File URL (LINK file)-->
+                                    <div ng-if="aFile.filetype_id === 8" class="form-group" style="margin:0;padding:0">
+                                        <label class="col-md-4 control-label" for="name">File URL:</label>
+                                        <div class="col-md-6">
+                                            <input class="form-control" name="name" ng-model="aFile.name" type="text" />
+                                        </div>
+                                        <button type="button" class="col-md-1 borderLess pull-left" tooltip-placement="bottom" tooltip-append-to-body="false" uib-tooltip="Please link to persistent URLs or digital object identifier (doi) urls.">
+                                            <span class="glyphicon glyphicon-question-sign"></span>
+                                        </button>
+                                    </div>
+
+                                    <!--Source Name (photo)-->
+                                    <div class="form-group" ng-if="aFile.filetype_id === 1" ng-class="{'has-error':SITEFILEForm.FULLname.$invalid && SITEFILEForm.FULLname.$dirty}" style="margin:0;padding:0">
+                                        <label class="col-md-4 control-label req" for="source_id">
+                                            Source Photographer:
+                                            <button type="button" class="help-btn" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Required">
+                                                <span class="glyphicon glyphicon-asterisk" style="color:#d00;font-size:xx-small;"></span>
+                                            </button>
+                                        </label>
+                                        <div class="col-md-6">
+                                            <input class="form-control" name="FULLname" ng-model="aSource.FULLname" type="text" required />
+                                        </div>
+                                    </div>
+
+                                    <!--Source Name (all other)-->
+                                    <div class="form-group" ng-if="aFile.filetype_id  > 2" ng-class="{'has-error':SITEFILEForm.FULLname.$invalid && SITEFILEForm.FULLname.$dirty}" style="margin:0;padding:0">
+                                        <label class="col-md-4 control-label req" for="source_id">
+                                            Source Name:
+                                            <button type="button" class="help-btn" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Required">
+                                                <span class="glyphicon glyphicon-asterisk" style="color:#d00;font-size:xx-small;"></span>
+                                            </button>
+                                        </label>
+                                        <div class="col-md-6">
+                                            <input class="form-control" name="FULLname" ng-model="aSource.FULLname" type="text" required />
+                                        </div>
+                                    </div>
+
+                                    <!--Source Agency* (photo, allOther)-->
+                                    <div ng-if="aFile.filetype_id === 1 || aFile.filetype_id > 2" class="form-group" ng-class="{'has-error':SITEFILEForm.agency_id.$invalid && SITEFILEForm.agency_id.$dirty}" style="margin:0;padding:0">
+                                        <label class="col-md-4 control-label req" for="agency_id">
+                                            Source Agency:
+                                            <button type="button" class="help-btn" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Required">
+                                                <span class="glyphicon glyphicon-asterisk" style="color:#d00;font-size:xx-small;"></span>
+                                            </button>
+                                        </label>
+                                        <div class="col-md-6">
+                                            <select class="form-control" name="agency_id" ng-model="aSource.agency_id" ng-change="updateAgencyForCaption()"
+                                                    ng-options="a.agency_id as a.agency_name for a in agencies" required>
+                                                <option value=""></option>
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <!-- Photo Date* (photo) -->
+                                    <div ng-if="aFile.filetype_id === 1" class="form-group" ng-class="{'has-error':SITEFILEForm.photo_date.$invalid && SITEFILEForm.photo_date.$dirty}" style="margin:0;padding:0">
+                                        <label class="col-md-4 control-label req" for="photo_date">
+                                            Photo Date:
+                                            <button type="button" class="help-btn" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Required">
+                                                <span class="glyphicon glyphicon-asterisk" style="color:#d00;font-size:xx-small;"></span>
+                                            </button>
+                                        </label>
+                                        <div class="col-md-4 input-group" style="padding-right:14px;padding-left:14px">
+                                            <input class="form-control dateInputStyle" type="date" name="sd" uib-datepicker-popup="MM/dd/yyyy" show-weeks="false" is-open="datepickrs.sd" ng-model="aFile.photo_date" required />
+                                            <span class="input-group-btn">
+                                                <button type="button" class="btn btn-default" ng-click="open($event, 'sd')">
+                                                    <i class="glyphicon glyphicon-calendar" />
+                                                </button>
+                                            </span>
+                                        </div>
+                                    </div>
+
+                                    <!-- Date Uploaded* (photo, data, allother) -->
+                                    <div ng-if="aFile.filetype_id > 0" class="form-group" ng-class="{'has-error':SITEFILEForm.file_date.$invalid && SITEFILEForm.file_date.$dirty}" style="margin:0;padding:0">
+                                        <label class="col-md-4 control-label req" for="file_date">
+                                            Date Uploaded:
+                                            <button type="button" class="help-btn" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Required">
+                                                <span class="glyphicon glyphicon-asterisk" style="color:#d00;font-size:xx-small;"></span>
+                                            </button>
+                                        </label>
+                                        <div class="col-md-4 input-group" style="padding-right:14px;padding-left:14px">
+                                            <input class="form-control dateInputStyle" type="date" name="fd" uib-datepicker-popup="MM/dd/yyyy" show-weeks="false" is-open="datepickrs.fd" ng-model="aFile.file_date" required />
+                                            <span class="input-group-btn">
+                                                <button type="button" class="btn btn-default" ng-click="open($event, 'fd')">
+                                                    <i class="glyphicon glyphicon-calendar" />
+                                                </button>
+                                            </span>
+                                        </div>
+                                    </div>
+
+                                    <!--Description*(photo, data, allother)-->
+                                    <div ng-if="aFile.filetype_id > 0" class="form-group" ng-class="{'has-error':SITEFILEForm.description.$invalid && SITEFILEForm.description.$dirty}" style="margin:0;padding:0">
+                                        <label class="col-md-4 control-label req" for="description">
+                                            Description:
+                                            <button type="button" class="help-btn" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Required">
+                                                <span class="glyphicon glyphicon-asterisk" style="color:#d00;font-size:xx-small;"></span>
+                                            </button>
+                                        </label>
+                                        <div class="col-md-6">
+                                            <textarea class="form-control" id="description" type="text" rows="3" placeholder="Description" ng-model="aFile.description" required />
+                                        </div>
+                                        <button type="button" ng-show="aFile.filetype_id == 1" class="col-md-1 borderLess pull-left" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Populates in Photo caption below.">
+                                            <span class="glyphicon glyphicon-question-sign"></span>
+                                        </button>
+                                    </div>
+
+                                    <!-- This is where Other ends, rest is for Photo -->
+                                    <!--Photo Direction (photo)-->
+                                    <div ng-if="aFile.filetype_id === 1" class="form-group" style="margin:0;padding:0;padding-top:5px;">
+                                        <label class="col-md-4 control-label" for="photo_direction">Photo Direction:</label>
+                                        <div class="col-md-6">
+                                            <input class="form-control" id="photo_direction" name="photo_direction" ng-model="aFile.photo_direction" type="text" />
+                                        </div>
+                                    </div>
+
+                                    <!-- Photo Latitude (photo)-->
+                                    <div ng-if="aFile.filetype_id === 1" class="form-group" style="margin:0;padding:0">
+                                        <label class="col-md-4 control-label" for="latitude_dd">Photo Latitude <br /> (if different):</label>
+                                        <div class="col-md-6">
+                                            <input class="form-control" ng-keypress="isNum($event)" name="latitude_dd" id="latitude_dd" ng-model="aFile.latitude_dd"
+                                                   type="text" />
+                                        </div>
+                                    </div>
+
+                                    <!--Photo Longitude (photo)-->
+                                    <div ng-if="aFile.filetype_id === 1" class="form-group" style="margin:0;padding:0">
+                                        <label class="col-md-4 control-label" for="longitude_dd">Photo Longitude <br /> (if different):</label>
+                                        <div class="col-md-6">
+                                            <input class="form-control" ng-keypress="isNum($event)" id="longitude_dd" name="longitude_dd" ng-model="aFile.longitude_dd"
+                                                   type="text" />
+                                        </div>
+                                    </div>
+
+                                    <div ng-if="aFile.filetype_id === 1" class="form-group" style="margin:0;padding:0">
+                                        <label class="col-md-4 control-label" for="Caption">Preview Caption:</button></label>
+                                        <div class="col-md-6">
+                                            <span>
+                                                Photo of {{aFile.description || ' (Description HERE) '}} at {{aSite.site_description}}, {{aSite.county}}, {{aSite.state}}, {{aFile.photo_date | date: 'MM/dd/yyyy' || ' Date taken HERE '}}. Photograph by {{aSource.FULLname || ' Source Name HERE ' }}, {{agencyNameForCap || ' Agency HERE '}}.
+                                            </span>
+                                        </div>
+                                    </div>
+
+                                    <!-- associated files (HWM FILES)-->
+                                    <div ng-if="aFile.file_id !== undefined && aFile.filetype_id !== 8" class="form-group" style="margin:0;padding:0;padding-top:12px;">
+                                        <label class="col-md-4 control-label">Associated File:</label>
+                                        <div class="col-md-6">
+                                            <span ng-if="fileItemExists">
+                                                <a target="_blank" title="Download File" ng-href="{{serverURL}}/Files/{{aFile.file_id}}/Item">{{aFile.name}}</a>
+                                                <br />
+                                                <img ng-if="isPhoto" style="height:80px;" ng-src="{{src}}" />
+                                            </span>
+                                            <span ng-if="!fileItemExists">-- Missing --</span>
+                                            <!--ReUpload Single Image with validations*-->
+                                            <div ng-if="!fileItemExists" class="form-group">
+                                                <div class="col-md-7">
+                                                    <label class="custom-file-input" for="Upload" />
+                                                    <input id="Upload" type="file" max="500000" file-model="aFile.File" style="visibility: hidden">
+                                                    <div class="col-md-7 pull-left" ng-if="aFile.File.type == 'image/png' || aFile.File.type == 'image/jpeg' || aFile.File.type == 'image/gif'"><img ngf-thumbnail="aFile.File" style="height:60px" class="thumbnail"></div>
+                                                    <div class="col-md-7 pull-left" ng-if="aFile.File.type !== 'image/png' && aFile.File.type !== 'image/jpeg' && aFile.File.type !== 'image/gif'" style="overflow:auto">{{aFile.File.name}}</div>
+                                                    <div class="col-md-5">
+                                                        <span ng-if="aFile.File">
+                                                            Correct File?
+                                                            <button ng-if="aFile.File" type="button" ng-click="saveFileUpload()">Upload</button>
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <!-- change out the existing fileItem with a different one-->
+                                            <div ng-if="fileItemExists" class="form-group">
+                                                <div class="col-md-9">
+                                                    <label class="custom-file-inputChange" for="Upload" />
+                                                    <input id="Upload" type="file" max="500000" file-model="aFile.File1" style="visibility: hidden">
+                                                    <div class="col-md-7 pull-left" ng-if="aFile.File1.type == 'image/png' || aFile.File1.type == 'image/jpeg' || aFile.File1.type == 'image/gif'">
+                                                        <img ngf-thumbnail="afile.file1" style="height:60px" class="thumbnail">
+                                                    </div>
+                                                    <div class="col-md-7 pull-left" ng-if="aFile.File1.type !== 'image/png' && aFile.File1.type !== 'image/jpeg' && aFile.File1.type !== 'image/gif'" style="overflow:auto">
+                                                        {{aFile.File1.name}}
+                                                    </div>
+                                                    <div class="col-md-5">
+                                                        <span ng-if="aFile.File1">
+                                                            Correct File?
+                                                            <button ng-if="aFile.File1" type="button" ng-click="saveFileUpload()">Replace</button>
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div ng-show="!SITEfileIsUploading">
+                                        <button class="btn btn-primary" ng-if="aFile.file_id != undefined" ng-click="saveFile(SITEFILEForm.$valid)">Save File</button>
+                                        <button type="button" class="btn btn-danger" ng-if="aFile.file_id != undefined" ng-click="deleteFile()">Delete File</button>
+                                        <button class="btn btn-primary" ng-if="aFile.file_id == undefined" ng-click="createFile(SITEFILEForm.$valid)">Create File</button>
+                                        <button type="button" class="btn btn-warning" ng-click="cancelFile()">Close/Cancel File</button>
+                                    </div>
+                                    <div ng-show="SITEfileIsUploading"><img src="images/fileUpload.gif" /></div>
+                                </fieldset>
+                            </form>
+                        </div>
                     </div>
-                </div>
-            </div><!--end modal-body -->
-        </fieldset>
-    </form>
+                </uib-accordion-group>
+            </div>
+        </uib-accordion>
+    </div><!--end modal-body -->
 </script>
 
 <!-- MODAL for Objective Point -->
@@ -2824,7 +3082,7 @@
                     </form>
                 </uib-accordion-group>
                 <!-- HWM FILES SECTION -->
-                <div ng-if="aHWM.hwm_id !== undefinfed">
+                <div ng-if="aHWM.hwm_id !== undefined">
                     <!--HWM File Part-->
                     <uib-accordion-group is-open="h.hFileOpen">
                         <uib-accordion-heading>

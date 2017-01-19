@@ -4,8 +4,8 @@
     var STNControllers = angular.module('STNControllers');
 
     STNControllers.controller('siteCtrl', ['$scope', '$state', '$rootScope', '$cookies', '$location', '$http', '$uibModal', '$filter', 'thisSite', 'latlong', 'thisSiteNetworkNames', 'thisSiteNetworkTypes', 'thisSiteHousings',
-        'SITE', 'MEMBER', 'allHorDatums', 'allHorCollMethods', 'allStates', 'allCounties', 'allDeployPriorities', 'allHousingTypes', 'allNetworkNames', 'allNetworkTypes', 'allDeployTypes', 'allSensorTypes',
-        function ($scope, $state, $rootScope, $cookies, $location, $http, $uibModal, $filter, thisSite, latlong, thisSiteNetworkNames, thisSiteNetworkTypes, thisSiteHousings, SITE, MEMBER, allHorDatums,
+        'SITE', 'MEMBER', 'FILE_TYPE', 'AGENCY', 'allHorDatums', 'allHorCollMethods', 'allStates', 'allCounties', 'allDeployPriorities', 'allHousingTypes', 'allNetworkNames', 'allNetworkTypes', 'allDeployTypes', 'allSensorTypes',
+        function ($scope, $state, $rootScope, $cookies, $location, $http, $uibModal, $filter, thisSite, latlong, thisSiteNetworkNames, thisSiteNetworkTypes, thisSiteHousings, SITE, MEMBER, FILE_TYPE, AGENCY, allHorDatums,
             allHorCollMethods, allStates, allCounties, allDeployPriorities, allHousingTypes, allNetworkNames, allNetworkTypes, allDeployTypes, allSensorTypes) {
             if ($cookies.get('STNCreds') === undefined || $cookies.get('STNCreds') === "") {
                 $scope.auth = false;
@@ -63,6 +63,21 @@
                                         var lo = $scope.landowner !== undefined ? $scope.landowner : { };
                                         var siteRelatedStuff = [$scope.aSite, origSiteHouses, sHouseTypeModel, sNetNames, sNetTypes, lo];
                                     return siteRelatedStuff;
+                                    }
+                                },
+                                fileTypes: function(){
+                                    if ($scope.aSite.site_id !== undefined){
+                                        return FILE_TYPE.getAll().$promise;
+                                    }
+                                },
+                                allMembers: function () {
+                                    $http.defaults.headers.common.Authorization = 'Basic ' + $cookies.get('STNCreds');
+                                    $http.defaults.headers.common.Accept = 'application/json';
+                                    return MEMBER.getAll().$promise;
+                                },
+                                agencyList: function(){
+                                    if ($scope.aSite.site_id !== undefined){
+                                        return AGENCY.getAll().$promise;
                                     }
                                 },
                                 latlong: function () {
@@ -144,7 +159,7 @@
 
 
                         //get member name for display
-                        if ($scope.aSite.member_id !== undefined) {
+                        if ($scope.aSite.member_id !== undefined && $scope.aSite.member_id > 0) {
                             $http.defaults.headers.common.Authorization = 'Basic ' + $cookies.get('STNCreds');
                             $http.defaults.headers.common.Accept = 'application/json';
                             MEMBER.query({ id: $scope.aSite.member_id }).$promise.then(function (response) {
@@ -152,7 +167,7 @@
                             }, function (error) {
                                 $scope.aSite.Creator = "Not recorded";
                             }).$promise;
-                        }
+                        } else $scope.aSite.Creator = "Not recorded";
 
                         //get the landownerCOntact with getCreds
                         if ($scope.aSite.landownercontact_id !== null && $scope.aSite.landownercontact_id !== undefined && $scope.aSite.landownercontact_id > 0) {
