@@ -30,6 +30,18 @@
                         $('th.' + newSortingOrder + ' i').removeClass().addClass('glyphicon glyphicon-chevron-down');
                     }
                 };
+                //called a to format just the date (no time) '2013-05-16T05:00:00'
+                var makeAdate = function (d) {
+                    var Tindex = d.indexOf("T");
+                    var theDate = d.substring(0, Tindex); //2013-05-16
+                    //want it like 'MM/dd/yyyy'
+                    var year = theDate.substring(0, theDate.indexOf("-"));
+                    //var month = aDate.getMonth();
+                    //var day = ('0' + aDate.getDate()).slice(-2);
+                    //var monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+                    //var dateWOtime = new Date(monthNames[month] + " " + day + ", " + year);
+                    return theDate;
+                };//end makeAdate()
 
                 $scope.eventTypeList = allEventTypes;
                 $scope.eventStatList = allEventStats;
@@ -43,8 +55,8 @@
                     E.Type = $scope.eventTypeList.filter(function (a) { return a.event_type_id == allEvents[x].event_type_id; })[0].type;
                     E.Status = $scope.eventStatList.filter(function (r) { return r.event_status_id == allEvents[x].event_status_id; })[0].status;
                     var coord = $scope.eventCoordList.filter(function (c) { return c.member_id == allEvents[x].event_coordinator; })[0];
-                    E.StartDate = allEvents[x].event_start_date;
-                    E.EndDate = allEvents[x].event_end_date;
+                    E.StartDate = allEvents[x].event_start_date !== undefined ?  makeAdate(allEvents[x].event_start_date) : "";
+                    E.EndDate = allEvents[x].event_end_date !== undefined ? makeAdate(allEvents[x].event_end_date) : "";
                     E.Coord = coord !== undefined ? coord.fname + " " + coord.lname : "";
 
                     $scope.eventList.push(E);
