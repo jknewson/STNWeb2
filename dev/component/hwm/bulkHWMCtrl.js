@@ -157,7 +157,7 @@
                         toastr.options.closeButton = true;
                         toastr.error(whichOne + " must be an numeric value (ex: 0.03).");                       
                         callback(false);
-                    } else if (whichOne == "HWM Uncertainty (ft)") {
+                    } else if (whichOne == "HWM Uncertainty (ft)" && value !== "" && value !== null) {
                         //check if hwmQuality has value. if so, see if it's within proper range
                         var hwmQualValue = $scope.hotInstance.getDataAtCell(this.row, 6);
                         if (hwmQualValue !== null && hwmQualValue !== "") {
@@ -610,9 +610,27 @@
                 $scope.tableSettings = {
                     //colHeaders: true,
                     colHeaders: [
-                        '<span title="Site Number, if known"> Site No </span>',"Waterbody", "HWM Type *", "Marker", "HWM Environment *","HWM Uncertainty (ft)","HWM Quality *", "Bank", "Loc. Description", "HWM Latitude *",
-                        "HWM Longitude *", "Horizontal Datum *", "Horizontal Collect Method *", "HAG (ft)", "Flag/Found Date *", "Survey Date", "Surveyed Elev (ft)", "Vertical Datum",
-                        "Vertical Collect Method", "Survey Uncertainty (ft)", "Notes", "Tranquil/Stillwater"
+                        '<span title="Site Number, if known"> Site No </span>',
+                        "Waterbody",
+                        '<span title="Required">HWM Type *</span>',
+                        "Marker",
+                        '<span title="Required">HWM Environment *</span>',
+                        "HWM Uncertainty (ft)",
+                        '<span title="Required">HWM Quality *</span>',
+                        "Bank",
+                        "Loc. Description",
+                        '<span title="Required">HWM Latitude *</span>',
+                        '<span title="Required">HWM Longitude *</span>',
+                        '<span title="Required">Horizontal Datum *</span>',
+                        '<span title="Required">Horizontal Collect Method *</span>',
+                        "HAG (ft)",
+                        '<span title="Required">Flag/Found Date *</span>',
+                        "Survey Date",
+                        "Surveyed Elev (ft)",
+                        "Vertical Datum",
+                        "Vertical Collect Method",
+                        "Survey Uncertainty (ft)",
+                        "Notes", "Tranquil/Stillwater"
                     ],
                     rowHeaders: true,
                     minSpareRows: 15,
@@ -777,6 +795,8 @@
                     className: 'newSiteIcon'
                 }
             };
+
+            //push each localSite into the markers array
             for (var i = 0; i < $scope.localSites.length; i++) {
                 var a = $scope.localSites[i];
                 $scope.markers.push({
@@ -792,7 +812,17 @@
                     icon: icons.stn
                 });
             }
-
+            //push the hwm into the markers
+            $scope.markers.push({
+                layer: 'stnHWM',
+                message: '<div><b>HWM</b><br/>' +
+                              '<b>Latitude:</b> ' + HWMparts[1] + '<br/>' +
+                              '<b>Lontitude:</b> ' + HWMparts[2] + '<br/></div>',
+                lat: Number(HWMparts[1]),
+                lng: Number(HWMparts[2]),
+                title: 'HWM',
+                icon: {}
+            });
             //get bounds based on lat long of 2 points
             var bounds = [];
             angular.forEach($scope.localSites, function (s) {
@@ -819,6 +849,11 @@
                         stnSites: {
                             type: 'group',
                             name: 'STN Sites',
+                            visible: true
+                        },
+                        stnHWM: {
+                            type: 'group',
+                            name: 'HWM',
                             visible: true
                         }
                     }

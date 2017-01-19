@@ -135,10 +135,12 @@
             </div>
             <br clear="all" />
             <div>
-                <button type="button" class="btn btn-primary" ng-click="validateTable()">Validate Table</button>
-                <button class="btn btn-primary" ng-disabled="notValid" ng-click="save()">Upload HWMs</button>               
-                <button type="button" class="btn btn-danger" ng-click="clearTable()">Clear Table</button>
-            </div>
+                <div class="btn-group">
+                    <button type="button" class="btn btn-primary" ng-click="validateTable()">Validate Table</button>
+                    <button class="btn btn-primary" ng-disabled="notValid" ng-click="save()">Upload HWMs</button>
+                </div>
+                    <button type="button" class="btn btn-danger" ng-click="clearTable()">Clear Table</button>
+                </div>
         </div>
     </div> <!-- end chosenEvent !== 0 -->
     <br clear="all" />
@@ -237,12 +239,12 @@
         <h3 class="modal-title">Associate Site</h3>
     </div>
     <div class="modal-body">
-        <div>Nearby sites:</div>
+        <div class="col-md-12"><b>Choose a nearby site:</b></div>
         <div ng-repeat="s in localSites" class="col-md-9">
             <input type="radio" name="selectedSite" class="pull-left col-sm-1" ng-model="s.selected" value="true" ng-click="unchkCreate(s)" /><span class="col-md-6">{{s.site_no || s.site_id}}</span>
         </div>
         <div ng-if="localSites.length == 0">There are no nearby sites.</div>
-        <div ng-if="localSites.length > 0" class="col-md-12">See existing sites on a map: <button type="button" class="btn btn-blue" ng-click="showSitesOnMap()">{{showHideMap}} Map</button></div>
+        <div ng-if="localSites.length > 0" class="col-md-11 col-md-offset-1">See existing sites on a map: <button type="button" class="btn btn-blue" ng-click="showSitesOnMap()">{{showHideMap}} Map</button></div>
         <br clear="all" />
         <div ng-if="showMap"><!-- --> 
             <div>
@@ -251,9 +253,11 @@
             </div>
         </div>
         <br />
-        <div class="col-md-12">
-            <input type="checkbox" ng-model="createChecked" ng-true-value="'1'" ng-false-value="'0'" class="pull-left col-sm-1" ng-click="showHideCreateSiteDiv()" /><span class="col-md-8">Create new Site to Associate HWM to</span>
+        <div class="col-md-12"><b>OR</b></div><br />
+        <div class="col-md-9">
+            <input type="radio" ng-model="createChecked" ng-true-value="'1'" ng-false-value="'0'" class="pull-left col-sm-1" ng-click="showHideCreateSiteDiv()" /><span class="col-md-8">Create new Site to Associate HWM to</span>
         </div>
+        <br clear="all"/>
         <div ng-if="showSiteCreateArea">
             <form class="form-horizontal" name="siteNewForm">
                 <fieldset class="fivepad">
