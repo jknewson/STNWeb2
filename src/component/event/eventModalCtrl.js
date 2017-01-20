@@ -82,6 +82,9 @@
                     fixDate.result.then(function () {
                         v = false;
                     });
+                } else if (ed == "" || sd == "") {
+                    //they entered an invalid date
+                    v = false;
                 }
                 return v;
             };
