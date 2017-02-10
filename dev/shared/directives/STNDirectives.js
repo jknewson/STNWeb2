@@ -2,8 +2,7 @@
     /* controllers.js, 'leaflet-directive''ui.unique','ngTagsInput',*/
     'use strict';
     var STNControllers = angular.module('STNControllers');
-    //#region DIRECTIVES
-
+    
     //try this one Monday:::
     //http://www.ng-newsletter.com/posts/d3-on-angular.html
     STNControllers.directive('barsChart',['$parse', function ($parse) {
@@ -270,6 +269,7 @@
         };
     }]);
 
+    //used on event name to make sure no special characters
     STNControllers.directive('inputRestrictor', [
         function () {
             return {
@@ -294,5 +294,17 @@
             };
         }
     ]);
-    //#endregion DIRECTIVES
+
+    STNControllers.directive('labelLimitLength', function () {
+        return {
+            restrict: "A",
+            link: function(scope, elem, attrs) {
+                var limit = parseInt(attrs.labelLimitLength);
+                angular.element(elem).on("keypress", function(e) {
+                    if (this.value.length == limit) e.preventDefault();
+                });
+            }
+        }
+    });
+    
 })();

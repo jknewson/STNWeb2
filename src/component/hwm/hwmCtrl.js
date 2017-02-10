@@ -52,6 +52,9 @@
                                 thisHWM: function () {
                                     return HWMclicked !== 0 ? HWMclicked: "empty";
                                 },
+                                allSiteHWMs: function(){
+                                    return $scope.SiteHWMs;
+                                },
                                 hwmApproval: function () {
                                     if (HWMclicked !== 0 && (HWMclicked.approval_id !== undefined && HWMclicked.approval_id > 0)) {
                                         return HWM.getHWMApproval({ id: HWMclicked.hwm_id }).$promise;

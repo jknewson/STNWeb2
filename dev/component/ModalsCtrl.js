@@ -96,6 +96,9 @@
                 case "Sensor":
                     $scope.nameToRmv = nameToRemove.deploymentType;
                     break;
+                case "Proposed Sensor":
+                    $scope.nameToRmv = "Proposed Sensor";
+                    break;
                 case "File":
                     var f = nameToRemove.name !== undefined || nameToRemove.name !== null ? nameToRemove.name : nameToRemove.file_date;
                     f = f !== null || f !== undefined ? f : nameToRemove.file_id;

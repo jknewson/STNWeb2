@@ -1713,6 +1713,9 @@
                         <uib-accordion-heading>
                             <i style="margin-right:10px" class="pull-left glyphicon" ng-class="{'glyphicon-chevron-down': dl.dlFileOpen, 'glyphicon-chevron-right': !dl.dlFileOpen}"></i>
                             <span ng-class="{'redText':showFileForm}">Datum Location File Information</span>
+                            <button type="button" class="col-md-1 borderLess pull-right" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Files uploaded to Datum Location are not tied to an event. To associate a file with an event, please upload through a sensor or hwm instead of here.">
+                                <span class="glyphicon glyphicon-question-sign"></span>
+                            </button>
                         </uib-accordion-heading>
                         <div class="col-md-12">
                             <div class="col-md-5"><h3>Datum Location Files</h3></div>
@@ -2078,6 +2081,24 @@
                                 <option value=""></option>
                             </select>
                         </div>
+                    </div>
+
+                    <!-- Label*: -->
+                    <div class="form-group">
+                        <label class="col-md-4 control-label req" for="label">
+                            <button type="button" class="help-btn" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Displayed publicly.">
+                                <span class="glyphicon glyphicon-eye-open"></span>
+                            </button> label:
+                            <button type="button" class="help-btn" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Required">
+                                <span class="glyphicon glyphicon-asterisk" style="color:#d00;font-size:xx-small;"></span>
+                            </button>
+                        </label>
+                        <div class="col-md-6">
+                            <input class="form-control" name="label" ng-model="aHWM.label" type="text" label-limit-length="12" ng-model-options="{ updateOn: 'blur' }" ng-change="ensurehwmLabelUnique()" required />
+                        </div>
+                        <button type="button" class="col-md-1 borderLess pull-left" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Label for distinguishing hwm from other hwms at this site-event. Limited to 12 characters.">
+                            <span class="glyphicon glyphicon-question-sign"></span>
+                        </button>
                     </div>
 
                     <!-- HWM Environment:* -->
@@ -2576,6 +2597,29 @@
                                 </div>
                             </div>
 
+                            <!-- Label*:  (details)-->
+                            <div class="col-md-12" ng-if="view.HWMval== 'detail'">
+                                <div class="col-md-4"><label>Label:</label></div>
+                                <div class="col-md-6">{{aHWM.label}}</div>
+                            </div>
+                            <!-- Label: (edit) -->
+                            <div class="form-group" ng-if="view.HWMval== 'edit'">
+                                <label class="col-md-4 control-label req" for="label">
+                                    <button type="button" class="help-btn" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Displayed publicly." required>
+                                        <span class="glyphicon glyphicon-eye-open"></span>
+                                    </button> Label:
+                                    <button type="button" class="help-btn" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Required">
+                                        <span class="glyphicon glyphicon-asterisk" style="color:#d00;font-size:xx-small;"></span>
+                                    </button>
+                                </label>
+                                <div class="col-md-6">
+                                    <input type="text" class="form-control" ng-model="hwmCopy.label" label-limit-length="12"  ng-model-options="{ updateOn: 'blur' }" ng-change="ensurehwmLabelUnique()"/>
+                                </div>
+                                <button type="button" class="col-md-1 borderLess pull-left" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Label for distinguishing hwm from other hwms at this site-event. Limited to 12 characters.">
+                                    <span class="glyphicon glyphicon-question-sign"></span>
+                                </button>
+                            </div>
+                            
                             <!-- HWM Environment:* (details) -->
                             <div class="col-md-12" ng-if="view.HWMval== 'detail'">
                                 <div class="col-md-4"><label>HWM Environment:</label></div>

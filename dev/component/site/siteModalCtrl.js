@@ -245,7 +245,7 @@
                 : [];// holder for site files added
             $scope.siteImageFiles = $scope.SITEFiles.filter(function (hf) { return hf.filetype_id === 1; }); //image files for carousel
             $scope.showFileForm = false; //hidden form to add file to site
-            $scope.s = { sOpen: false, sFileOpen: false }; //accordions
+            
             //#region FILE STUFF
             $scope.stamp = FILE_STAMP.getStamp(); $scope.fileItemExists = true;
             //need to reupload fileItem to this existing file OR Change out existing fileItem for new one
@@ -1045,7 +1045,8 @@
                         if (projNType.length === 0)
                             $scope.NetTypeList[ni].selected = false;
                     }
-                }//end if thisSiteNetworkNames != undefined            
+                }//end if thisSiteNetworkNames != undefined   
+                $scope.s = { sOpen: false, sFileOpen: false }; //accordions
                 //#endregion existing site 
             }
             else {
@@ -1062,6 +1063,7 @@
                 }, function error(errorResponse) {
                     toastr.error("Error getting Member info: " + errorResponse.statusText);
                 });
+                $scope.s = { sOpen: true }; //accordions
                 //#endregion this is a NEW SITE CREATE (site == undefined)
             }//end new site
 

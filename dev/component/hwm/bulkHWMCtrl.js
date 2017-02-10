@@ -553,7 +553,7 @@
                             keyboard: false,
                             resolve: {
                                 nearBySites: function () {
-                                    return SITE.getProximitySites({ Latitude: dataAtRow[9], Longitude: dataAtRow[10], Buffer: 1.1 }).$promise;
+                                    return SITE.getProximitySites({ Latitude: dataAtRow[9], Longitude: dataAtRow[10], Buffer: 0.0005 }).$promise;
                                 },
                                 HWMparts: function(){
                                     return hwmParts;
@@ -745,11 +745,11 @@
                     $scope.disableOK = true;
                     $scope.showMap = false;
                     //populate newSite with hwm parts if present  0:waterbody, 1:lat, 2:long, 3:hdatum, 4:hcollectmethd
-                    $scope.newSite.waterbody = HWMparts[0] !== "" || HWMparts[0] !== null ? HWMparts[0] : "";
-                    $scope.newSite.latitude_dd = HWMparts[1] !== "" || HWMparts[1] !== null ? HWMparts[1] : "";
-                    $scope.newSite.longitude_dd = HWMparts[2] !== "" || HWMparts[2] !== null ? HWMparts[2] : "";
-                    $scope.newSite.hdatum_id = HWMparts[3] !== "" || HWMparts[3] !== null ? $scope.horDatums.filter(function (hd) { return hd.datum_name == HWMparts[3]; })[0].datum_id : "";
-                    $scope.newSite.hcollect_method_id = HWMparts[4] !== "" || HWMparts[4] !== null ? $scope.horCollMeths.filter(function (hd) { return hd.hcollect_method == HWMparts[4]; })[0].hcollect_method_id : "";
+                    $scope.newSite.waterbody = HWMparts[0] !== "" && HWMparts[0] !== null ? HWMparts[0] : "";
+                    $scope.newSite.latitude_dd = HWMparts[1] !== "" && HWMparts[1] !== null ? HWMparts[1] : "";
+                    $scope.newSite.longitude_dd = HWMparts[2] !== "" && HWMparts[2] !== null ? HWMparts[2] : "";
+                    $scope.newSite.hdatum_id = HWMparts[3] !== "" && HWMparts[3] !== null ? $scope.horDatums.filter(function (hd) { return hd.datum_name == HWMparts[3]; })[0].datum_id : "";
+                    $scope.newSite.hcollect_method_id = HWMparts[4] !== "" && HWMparts[4] !== null ? $scope.horCollMeths.filter(function (hd) { return hd.hcollect_method == HWMparts[4]; })[0].hcollect_method_id : "";
 
                     //getAddress with lat/long
                     $scope.getAddress();

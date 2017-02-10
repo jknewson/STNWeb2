@@ -325,6 +325,11 @@ a.disabled {
     opacity: .75;
     background-color: #0000FF;
 }
+.stnHWMIcon {
+   /*border-radius: 120px;*/
+    opacity: .75;
+    background-image:url('../images/HighWaterMark.png');
+}
 
 .stnSiteGray {
     border-radius: 120px;

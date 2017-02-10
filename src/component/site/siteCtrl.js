@@ -66,9 +66,7 @@
                                     }
                                 },
                                 fileTypes: function(){
-                                    if ($scope.aSite.site_id !== undefined){
-                                        return FILE_TYPE.getAll().$promise;
-                                    }
+                                        return FILE_TYPE.getAll().$promise;                                    
                                 },
                                 allMembers: function () {
                                     $http.defaults.headers.common.Authorization = 'Basic ' + $cookies.get('STNCreds');
@@ -76,9 +74,7 @@
                                     return MEMBER.getAll().$promise;
                                 },
                                 agencyList: function(){
-                                    if ($scope.aSite.site_id !== undefined){
-                                        return AGENCY.getAll().$promise;
-                                    }
+                                        return AGENCY.getAll().$promise;                                    
                                 },
                                 latlong: function () {
                                     if (latlong !== undefined) {

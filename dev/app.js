@@ -962,6 +962,12 @@
                                     if (thisSite !== undefined) {
                                         return thisSite;
                                     }
+                                },
+                                h: 'SITE',
+                                siteHWMs: function (thisSite, h) {
+                                    if (thisSite !== undefined) {
+                                        return h.getSiteHWMs({ id: thisSite.site_id }).$promise;
+                                    }
                                 }
                             }
                         },

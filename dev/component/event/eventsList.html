@@ -29,8 +29,16 @@
         </tbody>
     </table>
 </div>
-
-<!-- eventModal.html WORKING ON -->
+<style>
+    .tooltip-inner {
+        /* for giant tooltip on start and end date*/
+        max-width: 350px;
+        /* If max-width does not work, try using width instead 
+         width: 350px;*/
+    }
+}
+</style>
+<!-- eventModal.html -->
 <script type="text/ng-template" id="eventModal.html">
     <div class="modal-header">
         <h3 class="modal-title">Event<button class="close" type="button" ng-click="cancel()" aria-hidden="true" style="color:gray;">&times;</button></h3>
@@ -54,6 +62,9 @@
                         <div class="col-md-5">
                             <input class="form-control" name="event_name" ng-model="anEvent.event_name" type="text" required  input-restrictor />
                         </div>
+                        <button type="button" class="borderLess pull-left" tooltip-placement="right" tooltip-append-to-body="false" uib-tooltip="Event names should follow this convention: named storm, or location of storm in absence of name, followed by month year (ex: Matthew Oct 2016)">
+                            <span class="glyphicon glyphicon-question-sign"></span>
+                        </button>
                     </div>
                     <!-- Event Description -->
                     <div class="form-group">
@@ -76,6 +87,12 @@
                                 </span>
                             </div>
                         </div>
+                        <button type="button" class="borderLess pull-left" tooltip-placement="left" tooltip-append-to-body="false" uib-tooltip="**The Start Date of an Event is when water starts rising. It does not include when equipment is pre-deployed to the study area even though flooding is imminent. 
+                                The End Date is when the water recedes to near-normal levels in the entire study area. Data collection will likely continue past this date. When creating an Event, estimate the end date so that the NWSI graphs in FEV operate correctly. The Start and End date range is used once the end date is passed. Make a best guess and come back to finalize it. 
+                                For example, if we are documenting a spring melt in the Mississippi Basin, the Start Date could be sometime in March for the upper tributaries and the Event would remain open until the flood crest had attenuated in the system, likely months after the upper tributaries return to low-flow conditions. In the case of estimated historical events, choose the first date of the month around when the flood may have started and end the flood at least 30 days later if no other information is available. Cite your sources in the comments box for all dates when the flooding occurs outside of the instrumented record.
+                                Events may not start and end on the same day. Short floods will have a minimum duration of two consecutive days for graphing and filtering ease. The Event Dates shall never be determined by anything other than the hydrologic record (i.e. DON'T use funding agreements as Start and End dates)">
+                            <span class="glyphicon glyphicon-question-sign"></span>
+                        </button>
                     </div>
                     <!-- Event End Date -->
                     <div class="form-group">
