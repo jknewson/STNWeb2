@@ -192,7 +192,22 @@
                                 $uibModalInstance.dismiss();
                             };
                             $scope.deleteProposed = function () {
-                                $uibModalInstance.close('delete');
+                                var DeleteModalInstance = $uibModal.open({
+                                    templateUrl: 'removemodal.html',
+                                    controller: 'ConfirmModalCtrl',
+                                    size: 'sm',
+                                    resolve: {
+                                        nameToRemove: function () {
+                                            return 'Proposed Sensor';
+                                        },
+                                        what: function () {
+                                            return "Proposed Sensor";
+                                        }
+                                    }
+                                });
+                                DeleteModalInstance.result.then(function () {
+                                    $uibModalInstance.close('delete');
+                                });
                             };
                         }],
                         size: 'sm',
@@ -211,6 +226,7 @@
                             INSTRUMENT.delete({ id: proposedSensorClicked.instrument_id }).$promise.then(function () {
                                 thisSiteSensors.splice(propIndex, 1);
                                 $scope.SiteSensors = thisSiteSensors;
+                                $scope.sensorCount.total = $scope.SiteSensors.length;
                                 Instrument_Service.setAllSiteSensors($scope.SiteSensors);
                                 toastr.success("Proposed sensor deleted");
                             }, function (errorResponse) {

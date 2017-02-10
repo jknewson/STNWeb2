@@ -134,6 +134,7 @@
     <Content Include="src\images\Events1.png" />
     <Content Include="src\images\fileUpload.gif" />
     <Content Include="src\images\fileUpload1.gif" />
+    <Content Include="src\images\HighWaterMark.png" />
     <Content Include="src\images\loading1.gif" />
     <Content Include="src\images\Members1.png" />
     <Content Include="src\images\Tables1.png" />

@@ -3,8 +3,8 @@
     'use strict';
 
     var ModalControllers = angular.module('ModalControllers');
-    ModalControllers.controller('hwmModalCtrl', ['$scope', '$rootScope', '$cookies', '$http', '$sce', '$uibModalInstance', '$uibModal', 'SERVER_URL','FILE_STAMP', 'allDropdowns', 'Site_Files', 'thisHWM', 'hwmApproval', 'agencyList', 'hwmSite', 'allMembers', 'HWM', 'SOURCE', 'FILE',
-        function ($scope, $rootScope, $cookies, $http, $sce, $uibModalInstance, $uibModal, SERVER_URL, FILE_STAMP, allDropdowns, Site_Files, thisHWM, hwmApproval, agencyList, hwmSite, allMembers, HWM, SOURCE, FILE) {
+    ModalControllers.controller('hwmModalCtrl', ['$scope', '$rootScope', '$cookies', '$http', '$sce', '$uibModalInstance', '$uibModal', 'SERVER_URL','FILE_STAMP', 'allDropdowns', 'Site_Files', 'thisHWM', 'allSiteHWMs', 'hwmApproval', 'agencyList', 'hwmSite', 'allMembers', 'HWM', 'SOURCE', 'FILE',
+        function ($scope, $rootScope, $cookies, $http, $sce, $uibModalInstance, $uibModal, SERVER_URL, FILE_STAMP, allDropdowns, Site_Files, thisHWM, allSiteHWMs, hwmApproval, agencyList, hwmSite, allMembers, HWM, SOURCE, FILE) {
             //dropdowns
             $scope.view = { HWMval: 'detail' };
             $scope.h = { hOpen: true, hFileOpen: false }; //accordions
@@ -186,15 +186,23 @@
             };
 
             //lat modal 
-            var openLatModal = function (w) {
+            var openLatModal = function (w, message) {
                 var latModal = $uibModal.open({
                     template: '<div class="modal-header"><h3 class="modal-title">Error</h3></div>' +
-                        '<div class="modal-body"><p>The Latitude must be between 0 and 73.0</p></div>' +
+                        '<div class="modal-body"><p>{{message}}</p></div>' +
                         '<div class="modal-footer"><button class="btn btn-primary" ng-enter="ok()" ng-click="ok()">OK</button></div>',
-                    controller: ['$scope', '$uibModalInstance', function ($scope, $uibModalInstance) {
+                    resolve: {
+                        show: function () {
+                            return message
+                        }
+                    },
+                    controller: ['$scope', '$uibModalInstance', 'show', function ($scope, $uibModalInstance, show) {
                         $scope.ok = function () {
                             $uibModalInstance.close();
                         };
+                        if (show == 'range') $scope.message = 'The Latitude must be between 0 and 73.0';
+
+                        if (show == 'distance') $scope.message = 'Latitude must be within 232 ft from the site\'s latitude.';
                     }],
                     size: 'sm'
                 });
@@ -205,15 +213,23 @@
             };
 
             //long modal
-            var openLongModal = function (w) {
+            var openLongModal = function (w, message) {
                 var longModal = $uibModal.open({
                     template: '<div class="modal-header"><h3 class="modal-title">Error</h3></div>' +
-                        '<div class="modal-body"><p>The Longitude must be between -175.0 and -60.0</p></div>' +
+                        '<div class="modal-body"><p>{{message}}</p></div>' +
                         '<div class="modal-footer"><button class="btn btn-primary" ng-enter="ok()" ng-click="ok()">OK</button></div>',
-                    controller: ['$scope', '$uibModalInstance', function ($scope, $uibModalInstance) {
+                    resolve: {
+                        show: function () {
+                            return message;
+                        }
+                    },
+                    controller: ['$scope', '$uibModalInstance', 'show', function ($scope, $uibModalInstance, show) {
                         $scope.ok = function () {
                             $uibModalInstance.close();
                         };
+                        if (show == 'range') $scope.message = 'The Longitude must be between -175.0 and -60.0';
+                        
+                        if (show == 'distance') $scope.message = 'Longitude must be within 232 ft from the site\'s longitude.';
                     }],
                     size: 'sm'
                 });
@@ -228,35 +244,58 @@
                 if (d == 'dms') {
                     //check the degree value (less than/greater than and if it's a number
                     if ($scope.DMS.LADeg < 0 || $scope.DMS.LADeg > 73 || (isNaN($scope.DMS.LADeg) && $scope.DMS.LADeg !== undefined) || (isNaN($scope.DMS.LAMin) && $scope.DMS.LAMin !== undefined) || (isNaN($scope.DMS.LASec) && $scope.DMS.LASec !== undefined)) {
-                        openLatModal('dms');
+                        openLatModal('dms', 'range');
                         //if not a number, clear the imputs to trigger the validation
                         if (isNaN($scope.DMS.LADeg)) $scope.DMS.LADeg = undefined;  
                         if (isNaN($scope.DMS.LAMin)) $scope.DMS.LAMin = undefined;
                         if (isNaN($scope.DMS.LASec)) $scope.DMS.LASec = undefined;
+                    } else {
+                        //check if distance is farther than 232 ft from site's lat
+                        var lat = azimuth($scope.DMS.LADeg, $scope.DMS.LAMin, $scope.DMS.LASec);
+                        var latDis = hwmSite.latitude_dd - lat;
+                        if (Math.abs(latDis) > .0005)  openLatModal('dms', 'distance');
                     }
                     if ($scope.DMS.LODeg < -175 || $scope.DMS.LODeg > -60 || (isNaN($scope.DMS.LODeg) && $scope.DMS.LODeg !== undefined) || (isNaN($scope.DMS.LOMin) && $scope.DMS.LOMin !== undefined) || (isNaN($scope.DMS.LOSec) && $scope.DMS.LOSec !== undefined)) {
-                        openLongModal('dms');
+                        openLongModal('dms', 'range');
                         //if not a number, clear the imputs to trigger the validation
                         if (isNaN($scope.DMS.LODeg)) $scope.DMS.LODeg = undefined;
                         if (isNaN($scope.DMS.LOMin)) $scope.DMS.LOMin = undefined;
                         if (isNaN($scope.DMS.LOSec)) $scope.DMS.LOSec = undefined;
+                    } else {
+                        //check if distance is farther than 232 ft from site's long
+                        var lo = azimuth($scope.DMS.LODeg, $scope.DMS.LOMin, $scope.DMS.LOSec);
+                        var loDis = hwmSite.longitude_dd - lo;
+                        if (Math.abs(loDis) > .0005) openLongModal('dms', 'distance');
                     }
                 } else {
                     //check the latitude/longitude
                     var h = $scope.view.HWMval == 'edit' ? $scope.hwmCopy : $scope.aHWM;
+                    //check range
                     if (h.latitude_dd < 0 || h.latitude_dd > 73 || isNaN(h.latitude_dd)) {
-                        openLatModal('latlong');
+                        openLatModal('latlong', 'range');
                         //if not a number, clear the imputs to trigger the validation
                         if (isNaN(h.latitude_dd)) {
                             h.latitude_dd = undefined;
                         }
+                    } else {
+                        //check distance from site's lat/long
+                        var latDistance = hwmSite.latitude_dd - h.latitude_dd;
+                        if (Math.abs(latDistance) > .0005) {
+                            openLatModal('latlong', 'distance');                            
+                        };
                     }
                     if (h.longitude_dd < -175 || h.longitude_dd > -60 || isNaN(h.longitude_dd)) {
-                        openLongModal('latlong');
+                        openLongModal('latlong', 'range');
                         //if not a number, clear the imputs to trigger the validation
                         if (isNaN(h.longitude_dd)) {
                             h.longitude_dd = undefined;
                         }
+                    } else {
+                        //check distance from site's lat/long
+                        var longDistance = hwmSite.longitude_dd - h.longitude_dd;
+                        if (Math.abs(longDistance) > .0005) {
+                            openLongModal('latlong', 'distance');                           
+                        };
                     }
                 }
             };
@@ -322,6 +361,30 @@
                 return dateWOtime;
             };//end makeAdate()
 
+            $scope.ensurehwmLabelUnique = function () {
+                var h = $scope.view.HWMval == 'edit' ? $scope.hwmCopy : $scope.aHWM;
+                angular.forEach(allSiteHWMs, function (hwm) {
+                    if (hwm.label == h.label) {
+                        //not unique, clear it and show warning
+                        h.label = h.hwm_id !== undefined ? $scope.aHWM.label : 'hwm-'+ (parseFloat(allSiteHWMs.length)+1);
+                        var uniqueModal = $uibModal.open({
+                            template: '<div class="modal-header"><h3 class="modal-title">Warning</h3></div>' +
+                                '<div class="modal-body"><p>The hwm label must be unique from all other hwms at this site for this event.</p></div>' +
+                                '<div class="modal-footer"><button class="btn btn-primary" ng-enter="ok()" ng-click="ok()">OK</button></div>',
+                            controller: ['$scope', '$uibModalInstance', function ($scope, $uibModalInstance) {
+                                $scope.ok = function () {
+                                    $uibModalInstance.close();
+                                };
+                            }],
+                            size: 'sm'
+                        });
+                        uniqueModal.result.then(function () {
+                            angular.element("[name='label']").focus();
+                        });
+                    }
+                })
+            };
+
             if (thisHWM != "empty") {
                 //#region existing HWM
                 $scope.createOReditHWM = 'edit';
@@ -369,6 +432,7 @@
                     event_id: $cookies.get('SessionEventID'),
                     hwm_environment: 'Riverine',
                     bank: 'N/A',
+                    label: 'hwm-'+ (parseFloat(allSiteHWMs.length)+1),
                     stillwater: 0,
                     latitude_dd: hwmSite.latitude_dd,
                     longitude_dd: hwmSite.longitude_dd,
@@ -519,7 +583,8 @@
                     flag_member_id: h.flag_member_id,
                     survey_member_id: h.survey_member_id,
                     uncertainty: h.uncertainty,
-                    hwm_uncertainty: h.hwm_uncertainty                  
+                    hwm_uncertainty: h.hwm_uncertainty,
+                    label: h.label
                 };
                 return formattedHWM;
             };
