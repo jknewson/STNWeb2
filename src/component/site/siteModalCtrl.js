@@ -238,9 +238,9 @@
             $scope.SITEFiles = thisSiteStuff !== undefined ?
                 $scope.allSFiles.filter(function (sf) {
                     return sf.site_id == thisSiteStuff[0].site_id &&
-                        (sf.hwm_id == undefined || sf.hwm_id == 0) &&
-                        (sf.instrument_id == undefined || sf.instrument_id == 0) &&
-                        (sf.objective_point_id == undefined || sf.objective_point_id == 0);
+                        (sf.hwm_id === undefined || sf.hwm_id === 0) &&
+                        (sf.instrument_id === undefined || sf.instrument_id === 0) &&
+                        (sf.objective_point_id === undefined || sf.objective_point_id === 0);
                 })
                 : [];// holder for site files added
             $scope.siteImageFiles = $scope.SITEFiles.filter(function (hf) { return hf.filetype_id === 1; }); //image files for carousel

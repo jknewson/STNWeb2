@@ -611,6 +611,24 @@
                                 </div>
                             </div>
 
+                            <!-- Label*: -->
+                            <div class="form-group">
+                                <label class="col-md-4 control-label req" for="hwm_label">
+                                    <button type="button" class="help-btn" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Displayed publicly.">
+                                        <span class="glyphicon glyphicon-eye-open"></span>
+                                    </button> label:
+                                    <button type="button" class="help-btn" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Required">
+                                        <span class="glyphicon glyphicon-asterisk" style="color:#d00;font-size:xx-small;"></span>
+                                    </button>
+                                    <button type="button" class="help-btn" tooltip-placement="left" tooltip-append-to-body="false" uib-tooltip="Label for distinguishing hwm from other hwms at this site-event. Limited to 12 characters.">
+                                        <span class="glyphicon glyphicon-question-sign"></span>
+                                    </button>
+                                </label>
+                                <div class="col-md-7">
+                                    <input class="form-control" name="hwm_label" ng-model="aHWM.hwm_label" type="text" label-limit-length="12" required />
+                                </div>                                
+                            </div>
+
                             <!-- HWM Environment:* -->
                             <div class="form-group" style="padding-bottom:0;margin-bottom:0" ng-class="{'has-error':quickForm.quick.hwm_environment.$invalid && quickForm.quick.hwm_environment.$dirty}">
                                 <label class="col-md-4 control-label req">

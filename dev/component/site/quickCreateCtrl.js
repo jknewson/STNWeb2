@@ -57,7 +57,7 @@
 
                 //hwm dropdowns
                 if (whichQuick == 'HWM') {
-                    $scope.aHWM = { hwm_environment: 'Riverine', event_id: $cookies.get('SessionEventID'), bank: 'N/A', flag_date: makeAdate(""), stillwater: 0, flag_member_id: $cookies.get('mID') };
+                    $scope.aHWM = { hwm_label: 'hwm-1', hwm_environment: 'Riverine', event_id: $cookies.get('SessionEventID'), bank: 'N/A', flag_date: makeAdate(""), stillwater: 0, flag_member_id: $cookies.get('mID') };
                     $scope.hwmTypeList = allHWMTypes; $scope.hwmQualList = allHWMQualities; $scope.markerList = allMarkers;
                 }
                 //sensor dropdowns

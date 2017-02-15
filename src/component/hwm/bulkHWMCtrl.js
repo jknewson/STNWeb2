@@ -256,21 +256,31 @@
                     var hdName = horizDatumList.filter(function (hd) { return hd.datum_id == successfulHWM.hdatum_id; })[0].datum_name;
                     var hwmQName = hwmQualList.filter(function (hq) { return hq.hwm_quality_id == successfulHWM.hwm_quality_id; })[0].hwm_quality;
                     var hwmTName = hwmTypeList.filter(function (ht) { return ht.hwm_type_id == successfulHWM.hwm_type_id; })[0].hwm_type;
-                    var mark = successfulHWM.marker_id !== 0 && successfulHWM.marker_id !== undefined ? markerList.filter(function (m) { return m.marker_id == successfulHWM.marker_id; })[0].marker1 : "";
-                    var vcmName = successfulHWM.vcollect_method_id !== 0 && successfulHWM.vcollect_method_id !== undefined ? vertCollMethList.filter(function (vcm) { return vcm.vcollect_method_id == successfulHWM.vcollect_method_id; })[0].vcollect_method : "";
-                    var vdName = successfulHWM.vdatum_id !== 0 && successfulHWM.vdatum_id !== undefined ? vertDatumList.filter(function (vd) { return vd.datum_id == successfulHWM.vdatum_id; })[0].datum_abbreviation : "";
-                    var elFt = successfulHWM.elev_ft !== undefined ? successfulHWM.elev_ft.toString() : "";
-
+                    var mark = successfulHWM.marker_id !== 0 && successfulHWM.marker_id !== undefined ? markerList.filter(function (m) { return m.marker_id == successfulHWM.marker_id; })[0].marker1 : undefined;
+                    var vcmName = successfulHWM.vcollect_method_id !== 0 && successfulHWM.vcollect_method_id !== undefined ? vertCollMethList.filter(function (vcm) { return vcm.vcollect_method_id == successfulHWM.vcollect_method_id; })[0].vcollect_method : undefined;
+                    var vdName = successfulHWM.vdatum_id !== 0 && successfulHWM.vdatum_id !== undefined ? vertDatumList.filter(function (vd) { return vd.datum_id == successfulHWM.vdatum_id; })[0].datum_abbreviation : undefined;
+                    var hag = successfulHWM.height_above_gnd !== undefined ? successfulHWM.height_above_gnd.toString() : undefined;
+                    var elFt = successfulHWM.elev_ft !== undefined ? successfulHWM.elev_ft.toString() : undefined;
+                    var unc = successfulHWM.uncertainty !== undefined ? successfulHWM.uncertainty.toString() : undefined;
                     for (var hwmI = 0; hwmI < $scope.uploadHWMs.length; hwmI++) {
                         if ($scope.uploadHWMs[hwmI].site_no !== undefined) {
                             //not a null row
-                            if ($scope.uploadHWMs[hwmI].site_no == successfulHWM.site_no && $scope.uploadHWMs[hwmI].waterbody == successfulHWM.waterbody && $scope.uploadHWMs[hwmI].hwm_uncertainty == successfulHWM.hwm_uncertainty &&
-                                $scope.uploadHWMs[hwmI].bank == successfulHWM.bank && $scope.uploadHWMs[hwmI].hwm_locationdescription == successfulHWM.hwm_locationdescription &&
+                            if ($scope.uploadHWMs[hwmI].site_no == successfulHWM.site_no &&
+                                $scope.uploadHWMs[hwmI].waterbody == successfulHWM.waterbody &&
+                                $scope.uploadHWMs[hwmI].hwm_uncertainty == successfulHWM.hwm_uncertainty &&
+                                $scope.uploadHWMs[hwmI].bank == successfulHWM.bank &&
+                                $scope.uploadHWMs[hwmI].hwm_locationdescription == successfulHWM.hwm_locationdescription &&
                                 $scope.uploadHWMs[hwmI].latitude_dd == successfulHWM.latitude_dd.toString() && $scope.uploadHWMs[hwmI].longitude_dd == successfulHWM.longitude_dd.toString() &&
-                                $scope.uploadHWMs[hwmI].height_above_gnd == successfulHWM.height_above_gnd.toString() && $scope.uploadHWMs[hwmI].hcollect_method_id == hcmName &&
-                                $scope.uploadHWMs[hwmI].hdatum_id == hdName && $scope.uploadHWMs[hwmI].hwm_quality_id == hwmQName && $scope.uploadHWMs[hwmI].hwm_type_id == hwmTName &&
-                                $scope.uploadHWMs[hwmI].marker_id == mark && $scope.uploadHWMs[hwmI].vcollect_method_id == vcmName && $scope.uploadHWMs[hwmI].vdatum_id == vdName &&
-                                $scope.uploadHWMs[hwmI].elev_ft == elFt && $scope.uploadHWMs[hwmI].uncertainty == successfulHWM.uncertainty.toString() &&
+                                $scope.uploadHWMs[hwmI].height_above_gnd == hag &&
+                                $scope.uploadHWMs[hwmI].hcollect_method_id == hcmName &&
+                                $scope.uploadHWMs[hwmI].hdatum_id == hdName &&
+                                $scope.uploadHWMs[hwmI].hwm_quality_id == hwmQName &&
+                                $scope.uploadHWMs[hwmI].hwm_type_id == hwmTName &&
+                                $scope.uploadHWMs[hwmI].marker_id == mark &&
+                                $scope.uploadHWMs[hwmI].vcollect_method_id == vcmName &&
+                                $scope.uploadHWMs[hwmI].vdatum_id == vdName &&
+                                $scope.uploadHWMs[hwmI].elev_ft == elFt &&
+                                $scope.uploadHWMs[hwmI].uncertainty == unc &&
                                 $scope.uploadHWMs[hwmI].hwm_notes == successfulHWM.hwm_notes) {
                                 spliceIndex = hwmI;
                             }
@@ -303,7 +313,7 @@
                                         $scope.ok = function () {
                                             $uibModalInstance.dismiss();
                                         };
-                                       // $scope.showLoading = false; // loading..
+                                        $scope.showLoading = false; // loading..
                                         angular.element('#loadingDiv').addClass('noShow'); //addClass =false, removeClass =true                                        
                                     }],
                                     size: 'sm'
@@ -316,10 +326,12 @@
                                 //$scope.showLoading = false; // loading..
                             }
                         });
-                    } else {                        
+                    } else {
+                        angular.element('#loadingDiv').addClass('noShow'); //addClass =false, removeClass =true
+                        $scope.showLoading = false; // loading..                 
                         var validModal = $uibModal.open({
                             template: '<div class="modal-header"><h3 class="modal-title">Error</h3></div>' +
-                                '<div class="modal-body"><p>No data in table to validate</p></div>' +
+                                '<div class="modal-body"><p>Not enough data in the table to validate.</p></div>' +
                                 '<div class="modal-footer"><button class="btn btn-primary" ng-enter="ok()" ng-click="ok()">OK</button></div>',
                             controller: ['$scope', '$uibModalInstance', function ($scope, $uibModalInstance) {
                                 $scope.ok = function () {
@@ -328,8 +340,7 @@
                             }],
                             size: 'sm'
                         });
-                        angular.element('#loadingDiv').addClass('noShow'); //addClass =false, removeClass =true
-                       // $scope.showLoading = false; // loading..
+                        
                     }
                 };
                 //save updates
@@ -346,7 +357,7 @@
                     $http.defaults.headers.common.Authorization = 'Basic ' + $cookies.get('STNCreds');
                     $http.defaults.headers.common.Accept = 'application/json';
                     //no go thru each and get rest of fields needed and post hwms
-                    angular.forEach(pastedHWMs, function (hwm) {
+                    angular.forEach(pastedHWMs, function (hwm, index) {
                         SITE.getSearchedSite({ bySiteNo: hwm.site_no }).$promise.then(function (response) {
                             hwm.site_id = response.site_id;
                             hwm.event_id = $scope.chosenEvent;
@@ -355,14 +366,15 @@
                             hwm.hdatum_id = horizDatumList.filter(function (hd) { return hd.datum_name == hwm.hdatum_id; })[0].datum_id;
                             hwm.hwm_quality_id = hwmQualList.filter(function (hq) { return hq.hwm_quality == hwm.hwm_quality_id; })[0].hwm_quality_id;
                             hwm.hwm_type_id = hwmTypeList.filter(function (ht) { return ht.hwm_type == hwm.hwm_type_id; })[0].hwm_type_id;
-                            hwm.marker_id = hwm.marker_id !== "" ? markerList.filter(function (m) { return m.marker1 == hwm.marker_id; })[0].marker_id : "0";
-                            if (hwm.stillwater !== "") hwm.stillwater = hwm.stillwater == "No" ? "0" : "1";
-                            hwm.vcollect_method_id = hwm.vcollect_method_id !== "" ? vertCollMethList.filter(function (vcm) { return vcm.vcollect_method == hwm.vcollect_method_id; })[0].vcollect_method_id : "0";
-                            hwm.vdatum_id = hwm.vdatum_id !== "" ? vertDatumList.filter(function (vd) { return vd.datum_abbreviation == hwm.vdatum_id; })[0].datum_id : "0";
-                            if (hwm.survey_date !== "") hwm.survey_member_id = $scope.$parent.userID;
+                            hwm.marker_id = hwm.marker_id !== "" && hwm.marker_id !== undefined ? markerList.filter(function (m) { return m.marker1 == hwm.marker_id; })[0].marker_id : "0";
+                            if (hwm.stillwater !== "" && hwm.stillwater !== undefined) hwm.stillwater = hwm.stillwater == "No" ? "0" : "1";
+                            hwm.vcollect_method_id = hwm.vcollect_method_id !== "" && hwm.vcollect_method_id !== undefined ? vertCollMethList.filter(function (vcm) { return vcm.vcollect_method == hwm.vcollect_method_id; })[0].vcollect_method_id : "0";
+                            hwm.vdatum_id = hwm.vdatum_id !== "" && hwm.vdatum_id !== undefined ? vertDatumList.filter(function (vd) { return vd.datum_abbreviation == hwm.vdatum_id; })[0].datum_id : "0";
+                            if (hwm.survey_date !== "" && hwm.survey_date !== undefined) hwm.survey_member_id = $scope.$parent.userID;
                             //now post it
                             var siteNo = hwm.site_no;
                             delete hwm.site_no;
+                            hwm.hwm_label = "hwm-" + parseInt(index + 1);
                             HWM.save(hwm).$promise.then(function (response) {
                                 
                                 response.site_no = siteNo;
@@ -508,7 +520,10 @@
                                 return passAllLists;
                             },
                             thisHWM: function () {
-                                return HWMclicked !== 0 ? HWMclicked : "empty";
+                                return HWMclicked;
+                            },
+                            siteHMWs: function () {
+                                return HWM.getEventSiteHWMs({ siteId: HWMclicked.site_id, Event: HWMclicked.event_id }).$promise;
                             },
                             hwmSite: function (){
                                 return SITE.query({ id: HWMclicked.site_id }).$promise;
@@ -743,7 +758,7 @@
                 //remove/show OK button from bottom of modal
                 if ($scope.showSiteCreateArea) {
                     $scope.disableOK = true;
-                    $scope.showMap = false;
+                    $scope.showMap = false; $scope.showHideMap = $scope.showHideMap == "Show" ? "Hide" : "Show";
                     //populate newSite with hwm parts if present  0:waterbody, 1:lat, 2:long, 3:hdatum, 4:hcollectmethd
                     $scope.newSite.waterbody = HWMparts[0] !== "" && HWMparts[0] !== null ? HWMparts[0] : "";
                     $scope.newSite.latitude_dd = HWMparts[1] !== "" && HWMparts[1] !== null ? HWMparts[1] : "";
@@ -756,7 +771,7 @@
                 }
                 else $scope.disableOK = false;
                 //make all markers (if any) default blue (unselected)
-                angular.forEach($scope.markers, function (mm) { mm.icon = icons.stn; });
+                angular.forEach($scope.markers, function (mm) { if (mm.layer == 'stnSites') mm.icon = icons.stn; });
             };
             //if they check a radio button (chose a site) make sure the checkbox for new site is unchecked.
             $scope.unchkCreate = function (checkedSite) {
@@ -764,11 +779,13 @@
                 $scope.showSiteCreateArea = false;
                 //change icon color of that marker in map
                 angular.forEach($scope.markers, function (m) {
-                    if (m.lat == checkedSite.latitude_dd && m.lng == checkedSite.longitude_dd) {
-                        delete m.icon;
-                        m.icon = icons.selectedStn;                        
+                    if (m.layer == 'stnSites') {
+                        if (m.lat == checkedSite.latitude_dd && m.lng == checkedSite.longitude_dd) {
+                            delete m.icon;
+                            m.icon = icons.selectedStn;
+                        }
+                        else m.icon = icons.stn;
                     }
-                    else m.icon = icons.stn;
                 });
                 
                 $scope.disableOK = false;
@@ -793,6 +810,11 @@
                     type: 'div',
                     iconSize: [14, 14],
                     className: 'newSiteIcon'
+                },
+                hwmIcon: {
+                    type: 'div',
+                    iconSize: [16, 20],
+                    className: 'stnHWMIcon'
                 }
             };
 
@@ -821,7 +843,7 @@
                 lat: Number(HWMparts[1]),
                 lng: Number(HWMparts[2]),
                 title: 'HWM',
-                icon: {}
+                icon: icons.hwmIcon
             });
             //get bounds based on lat long of 2 points
             var bounds = [];
@@ -1021,9 +1043,9 @@
             };
         }]);//end Modal controller
 
-    STNControllers.controller('hwmEditModalCtrl', ['$scope', '$rootScope', '$http', '$cookies', '$uibModal', '$uibModalInstance', 'allDropdowns', 'thisHWM', 'agencyList', 'allMembers', 'fileTypes', 'hwmSite',
+    STNControllers.controller('hwmEditModalCtrl', ['$scope', '$rootScope', '$http', '$cookies', '$uibModal', '$uibModalInstance', 'allDropdowns', 'thisHWM', 'siteHMWs', 'agencyList', 'allMembers', 'fileTypes', 'hwmSite',
         'SERVER_URL', 'HWM', 'FILE', 'SOURCE', 'FILE_STAMP',
-        function ($scope, $rootScope, $http, $cookies, $uibModal, $uibModalInstance, allDropdowns, thisHWM, agencyList, allMembers, fileTypes, hwmSite, SERVER_URL, HWM, FILE, SOURCE, FILE_STAMP) {
+        function ($scope, $rootScope, $http, $cookies, $uibModal, $uibModalInstance, allDropdowns, thisHWM, siteHMWs, agencyList, allMembers, fileTypes, hwmSite, SERVER_URL, HWM, FILE, SOURCE, FILE_STAMP) {
             //dropdowns
             $scope.view = { HWMval: 'detail' };
             $scope.h = { hOpen: true, hFileOpen: false }; //accordions
@@ -1214,9 +1236,9 @@
                         $scope.hwmCopy.survey_member_id = $cookies.get('mID');
 
                     //fix stillwater before put
-                    if ($scope.hwmCopy.stillwater == "Yes") $scope.hwmCopy.stillwater = 1;
-                    else if ($scope.hwmCopy.stillwater == "No") $scope.hwmCopy.stillwater = 0;
-                    else $scope.hwmCopy.stillwater = null;
+                    //if ($scope.hwmCopy.stillwater == "1") $scope.hwmCopy.stillwater = "Yes";
+                    //else if ($scope.hwmCopy.stillwater == "0") $scope.hwmCopy.stillwater = "No";
+                    //else $scope.hwmCopy.stillwater = null;
 
                     if ($scope.hwmCopy.elev_ft !== undefined && $scope.hwmCopy.elev_ft !== null) {
                         //make sure they added the survey date if they added an elevation
@@ -1226,7 +1248,7 @@
                         if ($scope.hwmCopy.survey_member_id === undefined)
                             $scope.hwmCopy.survey_member_id = $cookies.get('mID');
                     }
-
+                    
                     $http.defaults.headers.common.Authorization = 'Basic ' + $cookies.get('STNCreds');
                     $http.defaults.headers.common.Accept = 'application/json';
                     //var cleanHWM = formatHWM($scope.hwmCopy);
@@ -1235,7 +1257,7 @@
                         $scope.aHWM = response; thisHWM = response;
                         //get all the names for details view
                         // $scope.aHWM.hwm_type = $scope.hwmTypeList.filter(function (ht) { return ht.hwm_type_id == $scope.aHWM.hwm_type_id; })[0].hwm_type;
-                        if ($scope.aHWM.stillwater !== null) 
+                        if ($scope.aHWM.stillwater !== undefined) 
                             $scope.aHWM.Tranquil = $scope.aHWM.stillwater > 0 ? 'Yes' : 'No';
                             
                         $scope.aHWM.flag_date = makeAdate($scope.aHWM.flag_date);
@@ -1269,6 +1291,30 @@
                 $scope.adminChanged = {};
                 $scope.EventName = $scope.eventList.filter(function (e) { return e.event_id == $scope.aHWM.event_id; })[0].event_name;
             };
+            $scope.ensurehwmLabelUnique = function () {
+                var h = $scope.view.HWMval == 'edit' ? $scope.hwmCopy : $scope.aHWM;
+                angular.forEach(siteHMWs, function (hwm) {
+                    if (hwm.hwm_label == h.hwm_label) {
+                        //not unique, clear it and show warning
+                        h.hwm_label = h.hwm_id !== undefined ? $scope.aHWM.hwm_label : 'hwm-' + (parseFloat(siteHMWs.length) + 1);
+                        var uniqueModal = $uibModal.open({
+                            template: '<div class="modal-header"><h3 class="modal-title">Warning</h3></div>' +
+                                '<div class="modal-body"><p>The hwm label must be unique from all other hwms at this site for this event.</p></div>' +
+                                '<div class="modal-footer"><button class="btn btn-primary" ng-enter="ok()" ng-click="ok()">OK</button></div>',
+                            controller: ['$scope', '$uibModalInstance', function ($scope, $uibModalInstance) {
+                                $scope.ok = function () {
+                                    $uibModalInstance.close();
+                                };
+                            }],
+                            size: 'sm'
+                        });
+                        uniqueModal.result.then(function () {
+                            angular.element("[name='label']").focus();
+                        });
+                    }
+                });
+            };
+
             //#region FILE STUFF
             $scope.stamp = FILE_STAMP.getStamp(); $scope.fileItemExists = true;
             //need to reupload fileItem to this existing file OR Change out existing fileItem for new one

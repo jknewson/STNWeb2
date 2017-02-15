@@ -193,7 +193,7 @@
                         '<div class="modal-footer"><button class="btn btn-primary" ng-enter="ok()" ng-click="ok()">OK</button></div>',
                     resolve: {
                         show: function () {
-                            return message
+                            return message;
                         }
                     },
                     controller: ['$scope', '$uibModalInstance', 'show', function ($scope, $uibModalInstance, show) {
@@ -253,7 +253,7 @@
                         //check if distance is farther than 232 ft from site's lat
                         var lat = azimuth($scope.DMS.LADeg, $scope.DMS.LAMin, $scope.DMS.LASec);
                         var latDis = hwmSite.latitude_dd - lat;
-                        if (Math.abs(latDis) > .0005)  openLatModal('dms', 'distance');
+                        if (Math.abs(latDis) > 0.0005)  openLatModal('dms', 'distance');
                     }
                     if ($scope.DMS.LODeg < -175 || $scope.DMS.LODeg > -60 || (isNaN($scope.DMS.LODeg) && $scope.DMS.LODeg !== undefined) || (isNaN($scope.DMS.LOMin) && $scope.DMS.LOMin !== undefined) || (isNaN($scope.DMS.LOSec) && $scope.DMS.LOSec !== undefined)) {
                         openLongModal('dms', 'range');
@@ -265,7 +265,7 @@
                         //check if distance is farther than 232 ft from site's long
                         var lo = azimuth($scope.DMS.LODeg, $scope.DMS.LOMin, $scope.DMS.LOSec);
                         var loDis = hwmSite.longitude_dd - lo;
-                        if (Math.abs(loDis) > .0005) openLongModal('dms', 'distance');
+                        if (Math.abs(loDis) > 0.0005) openLongModal('dms', 'distance');
                     }
                 } else {
                     //check the latitude/longitude
@@ -280,9 +280,9 @@
                     } else {
                         //check distance from site's lat/long
                         var latDistance = hwmSite.latitude_dd - h.latitude_dd;
-                        if (Math.abs(latDistance) > .0005) {
+                        if (Math.abs(latDistance) > 0.0005) {
                             openLatModal('latlong', 'distance');                            
-                        };
+                        }
                     }
                     if (h.longitude_dd < -175 || h.longitude_dd > -60 || isNaN(h.longitude_dd)) {
                         openLongModal('latlong', 'range');
@@ -293,9 +293,9 @@
                     } else {
                         //check distance from site's lat/long
                         var longDistance = hwmSite.longitude_dd - h.longitude_dd;
-                        if (Math.abs(longDistance) > .0005) {
+                        if (Math.abs(longDistance) > 0.0005) {
                             openLongModal('latlong', 'distance');                           
-                        };
+                        }
                     }
                 }
             };
@@ -364,9 +364,9 @@
             $scope.ensurehwmLabelUnique = function () {
                 var h = $scope.view.HWMval == 'edit' ? $scope.hwmCopy : $scope.aHWM;
                 angular.forEach(allSiteHWMs, function (hwm) {
-                    if (hwm.label == h.label) {
+                    if (hwm.hwm_label == h.hwm_label) {
                         //not unique, clear it and show warning
-                        h.label = h.hwm_id !== undefined ? $scope.aHWM.label : 'hwm-'+ (parseFloat(allSiteHWMs.length)+1);
+                        h.hwm_label = h.hwm_id !== undefined ? $scope.aHWM.hwm_label : 'hwm-' + (parseFloat(allSiteHWMs.length) + 1);
                         var uniqueModal = $uibModal.open({
                             template: '<div class="modal-header"><h3 class="modal-title">Warning</h3></div>' +
                                 '<div class="modal-body"><p>The hwm label must be unique from all other hwms at this site for this event.</p></div>' +
@@ -382,7 +382,7 @@
                             angular.element("[name='label']").focus();
                         });
                     }
-                })
+                });
             };
 
             if (thisHWM != "empty") {
@@ -584,7 +584,7 @@
                     survey_member_id: h.survey_member_id,
                     uncertainty: h.uncertainty,
                     hwm_uncertainty: h.hwm_uncertainty,
-                    label: h.label
+                    hwm_label: h.hwm_label
                 };
                 return formattedHWM;
             };
