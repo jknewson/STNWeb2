@@ -144,8 +144,7 @@
             });
     }]);
     //#endregion of EVENT_TYPE   
-    //#region FILE
-    
+    //#region FILE    
     STNResource.factory('FILE', ['$resource', function ($resource) {
         return $resource(rootURL + '/Files/:id.json',
             {}, {
@@ -231,7 +230,8 @@
             {}, {
                 query: {},
                 getAll: { method: 'GET', isArray: true },
-                getEventStateHWMs: { method: 'GET', isArray: true, url: rootURL + '/Events/:eventId/stateHWMs.json?State=:state"' },
+                getEventStateHWMs: { method: 'GET', isArray: true, url: rootURL + '/Events/:eventId/stateHWMs.json?State=:state' },
+                getEventSiteHWMs: { method: 'GET', isArray: true, url: rootURL + '/Sites/:siteId/EventHWMs.json' },//?Event=:eventId
                 getFilteredHWMs: { method: 'GET', isArray: true, url: rootURL + '/HWMs/FilteredHWMs.json' }, //Event={eventIds}&EventType={eventTypeIDs}&EventStatus={eventStatusID}&States={states}&County={counties}&HWMType={hwmTypeIDs}&HWMQuality={hwmQualIDs}&HWMEnvironment={hwmEnvironment}&SurveyComplete={surveyComplete}&StillWater={stillWater}
                 getUnapprovedHWMs: { method: 'GET', isArray: true, cache: false }, //IsApproved={'true'/'false'}&Event={eventId}&Member={memberId}&State={state}
                 getHWMApproval: {method: 'GET', cache: false, isArray: false, url: rootURL + '/hwms/:id/Approval.json'},
@@ -295,7 +295,8 @@
             {}, {
                 query: {},
                 getAll: { method: 'GET', isArray: true },
-                getstatusInstruments: { method: 'GET', isArray: true, url: rootURL + '/Instruments.json/' }, //CurrentStatus: 1, Event: $scope.evID 
+                getSensorView: {method: 'GET', isArray:true, url: rootURL + '/SensorViews.json'}, //?ViewType={}&Event={}
+                getstatusInstruments: { method: 'GET', isArray: true, url: rootURL + '/Instruments.json' }, //CurrentStatus: 1, Event: $scope.evID 
                 getFullInstrument: { method: 'GET', url: rootURL + '/Instruments/:id/FullInstrument.json' }, //gets instrument and it's stats together
                 getInstrumentStatus: { method: 'GET', url: rootURL + '/Instruments/:id/InstrumentStatus.json' },
                 update: { method: 'PUT', cache: false, isArray: false },

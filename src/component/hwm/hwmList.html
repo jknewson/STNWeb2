@@ -14,7 +14,7 @@
         <ul>
             <li style="list-style:none" ng-repeat="h in SiteHWMs  | orderBy: 'label'">
                 <a ng-click="showHWMModal(h)">
-                    {{h.label}} - {{(h.flag_date | date: "MM/dd/yyyy") || (h.survey_date | date: "MM/dd/yyyy")}}
+                    {{h.hwm_label}} - {{(h.flag_date | date: "MM/dd/yyyy") || (h.survey_date | date: "MM/dd/yyyy")}}
                     <span ng-if="h.elev_ft"> - ({{h.elev_ft}} ft.)</span>
                 </a>
             </li>

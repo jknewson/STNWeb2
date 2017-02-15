@@ -298,13 +298,13 @@
     STNControllers.directive('labelLimitLength', function () {
         return {
             restrict: "A",
-            link: function(scope, elem, attrs) {
+            link: function (scope, elem, attrs) {
                 var limit = parseInt(attrs.labelLimitLength);
-                angular.element(elem).on("keypress", function(e) {
+                angular.element(elem).on("keypress", function (e) {
                     if (this.value.length == limit) e.preventDefault();
                 });
             }
-        }
+        };
     });
     
 })();

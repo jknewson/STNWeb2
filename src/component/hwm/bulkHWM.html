@@ -162,6 +162,7 @@
                                 <th></th><!-- edit icon -->
                                 <th>Files Uploaded</th>
                                 <th class="site_no">Site No&nbsp;<a ng-click="sort_by('site_no')"><i class="glyphicon glyphicon-sort"></i></a></th>
+                                <th class="hwm_label">HWM Label&nbsp;<a ng-click="sort_by('hwm_label')"><i class="glyphicon glyphicon-sort"></i></a></th>
                                 <th class="waterbody">Waterbody&nbsp;<a ng-click="sort_by('waterbody')"><i class="glyphicon glyphicon-sort"></i></a></th>
                                 <th class="hwm_type_id">HWM Type&nbsp;<a ng-click="sort_by('hwm_type_id')"><i class="glyphicon glyphicon-sort"></i></a></th>
                                 <th class="marker_id">Marker&nbsp;<a ng-click="sort_by('marker_id')"><i class="glyphicon glyphicon-sort"></i></a></th>
@@ -203,6 +204,7 @@
                                 </td>
                                 <td>{{h.HWMFiles.length || '0'}}</td>
                                 <td><a ng-click="goToSiteDash(h.site_id)">{{h.site_no}}</a></td>
+                                <td>{{h.hwm_label}}</td>
                                 <td>{{h.waterbody}}</td>
                                 <td>{{(hwmTypes | filter: {hwm_type_id: h.hwm_type_id})[0].hwm_type}}</td>
                                 <td ng-if="h.marker_id > 0">{{(markers | filter: {marker_id: h.marker_id})[0].marker1}}</td><td ng-if="h.marker_id == 0"></td>
@@ -587,6 +589,29 @@
                                         <option value=""></option>
                                     </select>
                                 </div>
+                            </div>
+
+                            <!-- Label*:  (details)-->
+                            <div class="col-md-12" ng-if="view.HWMval== 'detail'">
+                                <div class="col-md-4"><label>Label:</label></div>
+                                <div class="col-md-6">{{aHWM.hwm_label}}</div>
+                            </div>
+                            <!-- Label: (edit) -->
+                            <div class="form-group" ng-if="view.HWMval== 'edit'">
+                                <label class="col-md-4 control-label req" for="hwm_label">
+                                    <button type="button" class="help-btn" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Displayed publicly." required>
+                                        <span class="glyphicon glyphicon-eye-open"></span>
+                                    </button> Label:
+                                    <button type="button" class="help-btn" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Required">
+                                        <span class="glyphicon glyphicon-asterisk" style="color:#d00;font-size:xx-small;"></span>
+                                    </button>
+                                </label>
+                                <div class="col-md-6">
+                                    <input type="text" class="form-control" ng-model="hwmCopy.hwm_label" label-limit-length="12" ng-model-options="{ updateOn: 'blur' }" ng-change="ensurehwmLabelUnique()" />
+                                </div>
+                                <button type="button" class="col-md-1 borderLess pull-left" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Label for distinguishing hwm from other hwms at this site-event. Limited to 12 characters.">
+                                    <span class="glyphicon glyphicon-question-sign"></span>
+                                </button>
                             </div>
 
                             <!-- HWM Environment:* (details) -->
@@ -983,24 +1008,6 @@
                                     <span class="glyphicon glyphicon-question-sign"></span>
                                 </button>
                             </div>
-
-                            <!-- Approval info (detail) -->
-                            <!--<div class="form-group" ng-show="ApprovalInfo.Member !==undefined">
-                                <label class="col-md-4 control-label" for="approval_id">
-                                    <span ng-if="view.HWMval == 'edit'">
-                                        <button type="button" class="help-btn" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Displayed publicly.">
-                                            <span class="glyphicon glyphicon-eye-open"></span>
-                                        </button>
-                                    </span> Approval Info:
-                                </label>
-                                <div class="col-md-6">
-                                    Approved By:<span ng-if="ApprovalInfo.Member"> {{ApprovalInfo.Member.fname || '---'}} {{ApprovalInfo.Member.lname || '---'}}</span><br />
-                                    On:<span ng-if="ApprovalInfo.approvalDate"> {{ApprovalInfo.approvalDate | date: 'MM/dd/yyyy hh:mm a' || '---'}}</span>
-                                    <button ng-if="ApprovalInfo.approvalDate" type="button" class="borderLess" tooltip-placement="right" uib-tooltip="Time displayed as local, stored in UTC.">
-                                        <span class="glyphicon glyphicon-question-sign"></span>
-                                    </button>
-                                </div>
-                            </div>-->
 
                             <!-- edit button -->
                             <div class="form-group">

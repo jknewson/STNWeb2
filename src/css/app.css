@@ -326,11 +326,45 @@ a.disabled {
     background-color: #0000FF;
 }
 .stnHWMIcon {
-   /*border-radius: 120px;*/
     opacity: .75;
     background-image:url('../images/HighWaterMark.png');
 }
-
+.stnBaroSensorIcon {
+    opacity: .75;
+    background-image:url('../images/BarometricPressureSensor.png');
+}
+.stnMetSensorIcon {
+    opacity: .75;
+    background-image:url('../images/MeteorologicalSensor.png');
+}
+.stnRDGSensorIcon {
+    opacity: .75;
+    background-image:url('../images/RapidDeploymentGage.png');
+}
+.stnStormSensorIcon {
+    opacity: .75;
+    background-image:url('../images/StormTideSensor.png');
+}
+.stnWaveSensorIcon {
+    opacity: .75;
+    background-image:url('../images/WaveHeightSensor.png');
+}
+.stnPressureSensorIcon {
+    opacity: .75;
+    background-image:url('../images/RealTimeStreamGage.png');
+}
+.stnThermSensorIcon {
+    opacity: .75;
+    background-image: url('../images/thermometer.png');
+}
+.stnWebcamSensorIcon {
+    opacity: .75;
+    background-image:url('../images/webcam.png');
+}
+.stnRaingageSensorIcon {
+    opacity: .75;
+    background-image:url('../images/raingage.png');
+}
 .stnSiteGray {
     border-radius: 120px;
     opacity: .75;

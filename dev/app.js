@@ -963,10 +963,60 @@
                                         return thisSite;
                                     }
                                 },
-                                h: 'SITE',
-                                siteHWMs: function (thisSite, h) {
+                                dt: 'DEPLOYMENT_TYPE',
+                                deploymentTypes: function(thisSite, dt){
+                                    if (thisSite !== undefined) return dt.getAll().$promise;
+                                },
+                                s: 'SITE',
+                                siteHWMs: function (thisSite, s) {
                                     if (thisSite !== undefined) {
-                                        return h.getSiteHWMs({ id: thisSite.site_id }).$promise;
+                                        return s.getSiteHWMs({ id: thisSite.site_id }).$promise;
+                                    }
+                                },
+                                i: 'INSTRUMENT',
+                                baroSensors: function (thisSite, i) {
+                                    if (thisSite !== undefined) {
+                                        return i.getSensorView({ ViewType: 'baro_view' }).$promise;
+                                    }
+                                },
+                                metSensors: function (thisSite, i) {
+                                    if (thisSite !== undefined) {
+                                        return i.getSensorView({ ViewType: 'met_view' }).$promise;
+                                    }
+                                },
+                                rdgSensors: function (thisSite, i) {
+                                    if (thisSite !== undefined) {
+                                        return i.getSensorView({ ViewType: 'rdg_view' }).$promise;
+                                    }
+                                },
+                                stormSensors: function (thisSite, i) {
+                                    if (thisSite !== undefined) {
+                                        return i.getSensorView({ ViewType: 'stormtide_view' }).$promise;
+                                    }
+                                },
+                                waveSensors: function (thisSite, i) {
+                                    if (thisSite !== undefined) {
+                                        return i.getSensorView({ ViewType: 'waveheight_view' }).$promise;
+                                    }
+                                },
+                                presTempSensors: function (thisSite, i) {
+                                    if (thisSite !== undefined) {
+                                        return i.getSensorView({ ViewType: 'pressuretemp_view' }).$promise;
+                                    }
+                                },
+                                thermSensors: function (thisSite, i) {
+                                    if (thisSite !== undefined) {
+                                        return i.getSensorView({ ViewType: 'therm_view' }).$promise;
+                                    }
+                                },
+                                webcamSensors: function (thisSite, i) {
+                                    if (thisSite !== undefined) {
+                                        return i.getSensorView({ ViewType: 'webcam_view' }).$promise;
+                                    }
+                                },
+                                raingageSensors: function (thisSite, i) {
+                                    if (thisSite !== undefined) {
+                                        return i.getSensorView({ ViewType: 'raingage_view' }).$promise;
                                     }
                                 }
                             }
