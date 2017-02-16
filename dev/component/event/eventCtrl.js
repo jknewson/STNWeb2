@@ -3,8 +3,8 @@
 
     var SettingsControllers = angular.module('SettingsControllers');
 
-    SettingsControllers.controller('eventCtrl', ['$scope', '$rootScope', '$cookies', '$location', '$http', '$filter', '$uibModal', 'MEMBER', 'FILE_TYPE', 'allCoordMembers', 'allEvents', 'allEventTypes', 'allEventStats',
-        function ($scope, $rootScope, $cookies, $location, $http, $filter, $uibModal, MEMBER, FILE_TYPE, allCoordMembers, allEvents, allEventTypes, allEventStats) {
+    SettingsControllers.controller('eventCtrl', ['$scope', '$rootScope', '$cookies', '$location', '$http', '$filter', '$uibModal', 'MEMBER', 'FILE_TYPE', 'EVENT', 'STATE', 'COUNTIES', 'allCoordMembers', 'allEvents', 'allEventTypes', 'allEventStats',
+        function ($scope, $rootScope, $cookies, $location, $http, $filter, $uibModal, MEMBER, FILE_TYPE, EVENT, STATE, COUNTIES, allCoordMembers, allEvents, allEventTypes, allEventStats) {
             if ($cookies.get('STNCreds') === undefined || $cookies.get('STNCreds') === "") {
                 $scope.auth = false;
                 $location.path('/login');
@@ -83,7 +83,18 @@
                             },
                             fileTypes: function () {
                                 return FILE_TYPE.getAll().$promise;
+                            },
+                            eventSites: function(){
+                                if (eventClicked !== 0)
+                                    return EVENT.getEventSites({id:eventClicked.event_id}).$promise;
+                            },
+                            allStates: function(){
+                                return STATE.getAll().$promise;
+                            },
+                            allCounties: function () {
+                                return COUNTIES.getAll().$promise;
                             }
+                            
                         }
                     });
                     modalInstance.result.then(function (createdEvent) {
