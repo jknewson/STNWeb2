@@ -3,11 +3,13 @@
 
     var SettingsControllers = angular.module('SettingsControllers');
 
-    SettingsControllers.controller('eventModalCtrl', ['$scope', '$rootScope', '$cookies', '$http', '$uibModal', '$uibModalInstance', '$filter', 'thisEvent', 'eventTypeList', 'eventStatusList', 'adminList', 'fileTypes', 'EVENT', 'FILE', 'SERVER_URL',
-        function ($scope, $rootScope, $cookies, $http, $uibModal, $uibModalInstance, $filter, thisEvent, eventTypeList, eventStatusList, adminList, fileTypes, EVENT, FILE, SERVER_URL) {
+    SettingsControllers.controller('eventModalCtrl', ['$scope', '$rootScope', '$cookies', '$http', '$uibModal', '$uibModalInstance', '$filter', 'thisEvent', 'eventTypeList',
+        'eventStatusList', 'adminList', 'fileTypes', 'eventSites', 'allStates', 'allCounties', 'EVENT', 'FILE', 'SERVER_URL',
+        function ($scope, $rootScope, $cookies, $http, $uibModal, $uibModalInstance, $filter, thisEvent, eventTypeList, eventStatusList, adminList, fileTypes, eventSites, allStates, allCounties,
+            EVENT, FILE, SERVER_URL) {
             $scope.serverURL = SERVER_URL;
             $scope.downloadZipUrl = ""; //tack on end of url for getting zip file
-            $scope.objectChoices = ["HWM", "Sensor"];
+            $scope.objectChoices = ["HWMs", "Sensors"];
             $scope.anEvent = {};
             $scope.eventTypes = eventTypeList;
             $scope.eventStatuses = eventStatusList;
@@ -35,6 +37,7 @@
                 $scope.view.EVval = 'detail';
                 $scope.evCopy = [];
             };
+
             //called a few times to format just the date (no time)
             var makeAdate = function (d) {
                 var aDate = new Date();
@@ -50,7 +53,15 @@
                 var dateWOtime = new Date(monthNames[month] + " " + day + ", " + year);
                 return dateWOtime;
             }; //end makeAdate()
-
+            //called a to format just the date (no time) '2013-05-16T05:00:00'
+            var dateWOtime = function (d) {
+                var year = d.getFullYear();
+                var month = d.getMonth();
+                var day = ('0' + d.getDate()).slice(-2);
+                var monthNames = ["01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12"];
+                var dateWOtime = monthNames[month] + "/" + day + "/" + year;
+                return dateWOtime;
+            };//end makeAdate()
             if (thisEvent != "empty") {
                 $scope.createOReditEV = 'edit';
                 $scope.evModalHeader = "Event Information";
@@ -186,6 +197,38 @@
             $rootScope.stateIsLoading = { showLoading: false }; //Loading...
 
             //#region Zip File Download Section
+            $scope.zipFileParams = { filesFor:"", stateName: "", countyName: "", fromDate:"", toDate:"" };
+           // $scope.states = allStates;
+            $scope.siteCountyList = []; //holds counties were there are eventsites   allCounties;
+            $scope.countyArray = [];
+            $scope.eventStates = []; //holds the states just for this event
+            //loop through eventSites and loop thru states, when matching one, add to eventStates (need state_id for county filtering)
+            if (eventSites !== undefined) {
+                for (var st = 0; st < allStates.length; st++) {
+                    //foreach loop to populate eventStates
+                    for (var es = 0; es < eventSites.length; es++) {
+                        if (eventSites[es].state == allStates[st].state_abbrev){
+                            $scope.eventStates.push(allStates[st]);
+                            es = eventSites.length;
+                        }    
+                    }                    
+                }
+            } else $scope.eventStates = allStates;
+            //populate countyarray with just those counties where we have eventSItes
+            for (var ci = 0; ci < eventSites.length; ci++) {
+                if ($scope.siteCountyList.map(function (scl) { return scl.county_name; }).indexOf(eventSites[ci].county) < 0)
+                    $scope.siteCountyList.push({ state_abbrev: eventSites[ci].state, county_name: eventSites[ci].county, state_id: allStates.filter(function (s) { return s.state_abbrev == eventSites[ci].state; })[0].state_id });
+            }
+            //filter counties by state chosen
+            $scope.UpdateCounties = function () {
+                if ($scope.zipFileParams.stateName !== undefined) {
+                    var thisState = $scope.eventStates.filter(function (st) { return st.state_abbrev == $scope.zipFileParams.stateName; })[0];
+                    //only show counties that are on the sites for this event
+                    $scope.countyArray = $scope.siteCountyList.filter(function (c) { return c.state_id == thisState.state_id; });
+                } else {
+                    $scope.countyArray = [];
+                }
+            };
             //list of file types for hwm
             $scope.HWMfileTypes = fileTypes.filter(function (hft) {
                 //Photo (1), Historic (3), Field Sheets (4), Level Notes (5), Other (7), Link (8), Sketch (10)
@@ -199,7 +242,7 @@
                    sft.filetype === 'Other' || sft.filetype === 'Sketch';
             });
             //hwm or sensor was chosen, update file type checkboxlist
-            $scope.updatefileTypeChecks = function (d) {
+            $scope.updatefileTypeChecks = function () {
                 //depending on which they chose (HWM OR SENSOR), update checkbox scope list
                 $scope.hwmFileTypesWanted = []; var sensorFileTypesWanted = []; //reset each time this changes
                 $scope.hwmFileTypesString = ""; $scope.sensorFileTypesString = ""; //reset each time this changes
@@ -209,16 +252,12 @@
                 });
                 angular.forEach($scope.sensorfileTypes, function (senFT) {
                     senFT.selected = false;
-                });
-                $scope.filesWanted = d;
-                $scope.hPlease = ""; $scope.sPlease = "";
-                if (d == "HWM") {
-                    $scope.fileTypeCheckList = $scope.HWMfileTypes;
-                    $scope.hPlease = "1";
+                });              
+                if ($scope.zipFileParams.filesFor == "HWMs"){
+                    $scope.fileTypeCheckList = $scope.HWMfileTypes;             
                 }
-                if (d == "Sensor") {
+                if ($scope.zipFileParams.filesFor == "Sensors") {
                     $scope.fileTypeCheckList = $scope.sensorfileTypes;
-                    $scope.sPlease = "1";
                 }
                 $scope.filesWantedChosen = true;
             };
@@ -227,14 +266,14 @@
             //oncheck event
             $scope.checkedFile = function (f) {
                 //fileType checked/unchecked == add/remove it from string array to pass into url
-                if ($scope.filesWanted == "HWM") {
+                if ($scope.zipFileParams.filesFor == "HWMs"){
                     $scope.hwmFileTypesWanted = [];
                     angular.forEach($scope.HWMfileTypes, function (hf) {
                         if (hf.selected) $scope.hwmFileTypesWanted.push(hf.filetype_id);
                     });
                     $scope.hwmFileTypesString = $scope.hwmFileTypesWanted.join(",");
                 }
-                if ($scope.filesWanted == "Sensor") {
+                if ($scope.zipFileParams.filesFor == "Sensors"){
                     $scope.sensorFileTypesWanted = [];
                     angular.forEach($scope.sensorfileTypes, function (sf) {
                         if (sf.selected) $scope.sensorFileTypesWanted.push(sf.filetype_id);
@@ -246,10 +285,14 @@
             //download zip clicked
             $scope.DownloadZip = function () {
                 //make sure they checked at least the hwm or sensor checkbox
-                //ng-href="{{serverURL}}/Events/{{anEvent.event_id}}/EventFileItems?HWMFiles={{hPlease}}&HWMFileType={{hwmFileTypesString}}&SensorFiles={{sPlease}}&SensorFileTypes={{sensorFileTypesString}}"
-                if ($scope.hPlease !== "" || $scope.sPlease !== "") {
-                    //  /Events/:eventId/EventFileItems' },//?HWMFiles={hwmFiles}&HWMFileType={hwmFileTypes}&SensorFiles={sensorFiles}&SensorFileTypes={sensorFileTypes}
-                    var filepath = $scope.serverURL + '/Events/' + $scope.anEvent.event_id + '/EventFileItems?HWMFiles=' + $scope.hPlease + '&HWMFileType=' + $scope.hwmFileTypesString + '&SensorFiles=' + $scope.sPlease + '&SensorFileTypes=' + $scope.sensorFileTypesString;
+                var formattedFromDate = ""; var formattedToDate = "";
+                if ($scope.zipFileParams.fromDate !== "") formattedFromDate = dateWOtime($scope.zipFileParams.fromDate);
+                if ($scope.zipFileParams.toDate !== "") formattedToDate = dateWOtime($scope.zipFileParams.toDate);
+                //Events/{{anEvent.event_id}}/EventFileItems?State={stateName}&County={county}&FromDate={fromDate}&ToDate={toDate}&FilesFor={filesFor}&HWMFileType={hwmFileTypes}&SensorFileTypes={sensorFileTypes}"
+                if ($scope.zipFileParams.filesFor !== "") {
+                    var filepath = $scope.serverURL + '/Events/' + $scope.anEvent.event_id + '/EventFileItems?State=' + $scope.zipFileParams.stateName + '&County=' + $scope.zipFileParams.countyName +
+                        '&FromDate=' + formattedFromDate + '&ToDate=' + formattedToDate + '&FilesFor=' + $scope.zipFileParams.filesFor +
+                        '&HWMFileType=' + $scope.hwmFileTypesString + '&SensorFileTypes=' + $scope.sensorFileTypesString;
                     var xhr = new XMLHttpRequest();
                     xhr.open('GET', filepath); //,true);       
 

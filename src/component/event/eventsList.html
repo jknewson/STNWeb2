@@ -340,6 +340,64 @@
                         <br/>
                         <form name="fileZipForm">
                             <fieldset>
+                                <!-- state -->
+                                <div class="form-group">
+                                    <label  class="col-md-4 control-label" for="state">Filter by State:</label>
+                                    <div class="col-md-5">
+                                        <select name="state_abbrev" class="form-control" ng-model="zipFileParams.stateName" ng-change="UpdateCounties()"
+                                                ng-options="s.state_abbrev as s.state_name for s in eventStates" required>
+                                            <option value=""></option>
+                                        </select>
+                                    </div>
+                                </div>                                
+                                <!-- county -->
+                                <div  ng-if="zipFileParams.stateName">
+                                    <br/>
+                                    <div class="form-group">
+                                        <label class="col-md-4 control-label" for="counties">Filter by County:</label>
+                                        <div class="col-md-5">
+                                            <select name="countyName" class="form-control" ng-model="zipFileParams.countyName" ng-options="c.county_name as c.county_name for c in countyArray | orderBy:'county_name'">
+                                                <option value=""></option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <br />
+                                <!-- date range -->                               
+                                <div class="form-group">
+                                    <label class="col-md-4 control-label" for="event_start_date">Filter by Start Date:</label>
+                                    <div class="col-md-5">
+                                        <div class="input-group">
+                                            <input show-weeks="false" class="form-control dateInputStyle" name="fsd" type="date"
+                                                   uib-datepicker-popup="MM/dd/yyyy" is-open="datepickrs.fsd" ng-model="zipFileParams.fromDate" />
+                                            <span class="input-group-btn">
+                                                <button class="btn btn-default" ng-click="open($event, 'fsd')">
+                                                    <i class="glyphicon glyphicon-calendar" />
+                                                </button>
+                                            </span>
+                                        </div>
+                                    </div>                                    
+                                </div>
+                                <br />
+                                <!-- Event End Date -->
+                                <div class="form-group">
+                                    <label class="col-md-4 control-label" for="event_end_date">Filter by End Date:</label>
+                                    <div class="col-md-5">
+                                        <div>
+                                            <div class="input-group">
+                                                <input show-weeks="false" class="form-control dateInputStyle" name="fed" type="date"
+                                                       uib-datepicker-popup="MM/dd/yyyy" is-open="datepickrs.fed" ng-model="zipFileParams.toDate" />
+                                                <span class="input-group-btn">
+                                                    <button class="btn btn-default" ng-click="open($event, 'fed')">
+                                                        <i class="glyphicon glyphicon-calendar" />
+                                                    </button>
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <br />
+                                <!-- Files for -->
                                 <div class="form-group">
                                     <label class="col-md-4 control-label req" for="event_type_id">
                                         Files for:
@@ -348,13 +406,15 @@
                                         </button>
                                     </label>
                                     <div class="col-md-5">
-                                        <select class="form-control" ng-change="updatefileTypeChecks(filesWanted)" name="filesWanted" ng-model="filesWanted" ng-options="v as v for v in objectChoices" required>
+                                        <select class="form-control" ng-change="updatefileTypeChecks()" name="filesFor" ng-model="zipFileParams.filesFor" 
+                                                ng-options="v as v for v in objectChoices" required>
                                             <option value=""></option>
                                         </select>
                                     </div>
                                 </div>
-                                <div ng-if="filesWanted" class="form-group">
-                                    <label class="col-md-4 control-label">{{filesWanted}} File Types:</label>
+                                <br />
+                                <div ng-if="filesWantedChosen" class="form-group">
+                                    <label class="col-md-4 control-label">Filter by File Types:</label>
                                     <div class="col-md-6">
                                         <ul class="col-md-12">
                                             <li style="list-style:none" ng-repeat="f in fileTypeCheckList">
@@ -364,11 +424,9 @@
                                         </ul>
                                     </div>
                                 </div>
-                                <br/>
+                                <br />
                                 <div class="form-group">
-                                    <button ng-disabled="!filesWantedChosen" class="btn btn-primary" ng-click="DownloadZip()">Download Zip
-                                    </button>
-                                    <!--<a ng-disabled="!filesWantedChosen" class="btn btn-primary" title="Download Zip File" ng-href="{{serverURL}}/Events/{{anEvent.event_id}}/EventFileItems?HWMFiles={{hPlease}}&HWMFileType={{hwmFileTypesString}}&SensorFiles={{sPlease}}&SensorFileTypes={{sensorFileTypesString}}" target="_blank">Download Zip</a>-->
+                                    <button ng-disabled="!filesWantedChosen" class="btn btn-primary" ng-click="DownloadZip()">Download Zip</button>                                   
                                 </div>
                             </fieldset>
                         </form>
