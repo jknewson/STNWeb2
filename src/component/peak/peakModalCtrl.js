@@ -221,8 +221,9 @@
 
             //#region hwm list stuff
             var formatSelectedHWM = function (h) {
-                var fhwm = {};
+                var fhwm = {};                
                 fhwm.approval_id = h.approval_id;
+                fhwm.hwm_label = h.hwm_label;
                 fhwm.bank = h.bank;
                 fhwm.elev_ft = h.elev_ft;
                 fhwm.event_id = h.event_id;
