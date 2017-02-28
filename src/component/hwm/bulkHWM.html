@@ -184,6 +184,7 @@
                                 <th class="uncertainty">Survey Uncertainty&nbsp;<a ng-click="sort_by('uncertainty')"><i class="glyphicon glyphicon-sort"></i></a></th>
                                 <th class="hwm_notes">Notes&nbsp;<a ng-click="sort_by('hwm_notes')"><i class="glyphicon glyphicon-sort"></i></a></th>
                                 <th class="stillwater">Tranquil/Stillwater&nbsp;<a ng-click="sort_by('stillwater')"><i class="glyphicon glyphicon-sort"></i></a></th>
+                                <th>Peak</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -205,27 +206,45 @@
                                 <td>{{h.HWMFiles.length || '0'}}</td>
                                 <td><a ng-click="goToSiteDash(h.site_id)">{{h.site_no}}</a></td>
                                 <td>{{h.hwm_label}}</td>
-                                <td>{{h.waterbody}}</td>
-                                <td>{{(hwmTypes | filter: {hwm_type_id: h.hwm_type_id})[0].hwm_type}}</td>
-                                <td ng-if="h.marker_id > 0">{{(markers | filter: {marker_id: h.marker_id})[0].marker1}}</td><td ng-if="h.marker_id == 0"></td>
-                                <td>{{h.hwm_environment}}</td>
-                                <td>{{h.hwm_uncertainty}}</td>
-                                <td>{{(hwmQuals | filter: {hwm_quality_id: h.hwm_quality_id})[0].hwm_quality}}</td>
-                                <td>{{h.bank}}</td>
-                                <td>{{h.hwm_locationdescription}}</td>
-                                <td>{{h.latitude_dd}}</td>
-                                <td>{{h.longitude_dd}}</td>
-                                <td ng-if="h.hdatum_id > 0">{{(horDatums | filter: { datum_id: h.hdatum_id})[0].datum_name}}</td><td ng-if="h.hdatum_id == 0"></td>
-                                <td ng-if="h.hcollect_method_id > 0">{{(horCollMeths | filter: {hcollect_method_id : h.hcollect_method_id})[0].hcollect_method}}</td><td ng-if="h.hcollect_method_id == 0"></td>
-                                <td>{{h.height_above_gnd}}</td>
-                                <td>{{h.flag_date | date: "MM/dd/yyyy"}}</td>
-                                <td>{{h.survey_date | date: "MM/dd/yyyy"}}</td>
-                                <td>{{h.elev_ft}}</td>
-                                <td ng-if="h.vdatum_id > 0">{{(vertDatums | filter: {datum_id: h.vdatum_id})[0].datum_abbreviation}}</td><td ng-if="h.vdatum_id == 0"></td>
-                                <td ng-if="h.vcollect_method_id > 0">{{(vertCollMeths | filter: {vcollect_method_id: h.vcollect_method_id})[0].vcollect_method}}</td><td ng-if="h.vcollect_method_id == 0"></td>
-                                <td>{{h.uncertainty}}</td>
-                                <td>{{h.hwm_notes}}</td>
-                                <td>{{h.stillwater}}</td>
+                                <td>{{h.waterbody || '---'}}</td>
+                                <td>{{(hwmTypes | filter: {hwm_type_id: h.hwm_type_id})[0].hwm_type || '---'}}</td>
+                                <td ng-if="h.marker_id">{{(markers | filter: {marker_id: h.marker_id})[0].marker1}}</td><td ng-if="!h.marker_id">---</td>
+                                <td>{{h.hwm_environment || '---'}}</td>
+                                <td>{{h.hwm_uncertainty || '---'}}</td>
+                                <td>{{(hwmQuals | filter: {hwm_quality_id: h.hwm_quality_id})[0].hwm_quality || '---'}}</td>
+                                <td>{{h.bank || '---'}}</td>
+                                <td>{{h.hwm_locationdescription || '---'}}</td>
+                                <td>{{h.latitude_dd || '---'}}</td>
+                                <td>{{h.longitude_dd || '---'}}</td>
+                                <td>{{(horDatums | filter: { datum_id: h.hdatum_id})[0].datum_name || '---'}}</td>
+                                <td>{{(horCollMeths | filter: {hcollect_method_id : h.hcollect_method_id})[0].hcollect_method || '---'}}</td>
+                                <td>{{h.height_above_gnd || '---'}}</td>
+                                <td>{{h.flag_date | date: "MM/dd/yyyy" || '---'}}</td>
+                                <td>{{h.survey_date | date: "MM/dd/yyyy" || '---'}}</td>
+                                <td>{{h.elev_ft || '---'}}</td>
+                                <td ng-if="h.vdatum_id">{{(vertDatums | filter: {datum_id: h.vdatum_id})[0].datum_abbreviation}}</td><td ng-if="!h.vdatum_id">---</td>
+                                <td ng-if="h.vcollect_method_id">{{(vertCollMeths | filter: {vcollect_method_id: h.vcollect_method_id})[0].vcollect_method}}</td><td ng-if="!h.vcollect_method_id">---</td>
+                                <td>{{h.uncertainty || '---'}}</td>
+                                <td>{{h.hwm_notes || '---'}}</td>
+                                <td>{{h.stillwater || '---'}}</td>
+                                <td ng-if="h.peak_summary_id">
+                                    <div style="width:65px">
+                                        <label class="col-md-1">
+                                            <button type="button" ng-click="OpenPeakEdit(h.peak_summary_id,h.site_id, h.event_id)" class="help-btn" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Edit Peak Summary.">
+                                                Edit Peak
+                                            </button>
+                                        </label>
+                                    </div>
+                                </td>
+                                <td ng-if="!h.peak_summary_id">
+                                    <div style="width:65px">
+                                        <label class="col-md-1">
+                                            <button type="button" ng-click="OpenPeakCreate(h.site_id, h.event_id)" class="help-btn" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Create Peak Summary.">
+                                                Add Peak
+                                            </button>
+                                        </label>
+                                    </div>
+                                </td>
                             </tr>
                         </tbody>
                     </table>
@@ -1309,4 +1328,347 @@
             </div>
         </div>
     </div> <!-- end modal-footer -->
+</script>
+
+<!-- hwm PEAK (1 peak for all hwms on same site)-->
+<script type="text/ng-template" id="PeakEdit_Modal.html">
+    <div class="modal-header">
+        <h3 class="modal-title">Peak Summary<button class="close" type="button" ng-click="cancel()" aria-hidden="true" style="color:gray;">&times;</button></h3>
+    </div>
+    <form class="form-horizontal" name="peakForm" role="form">
+        <fieldset>
+            <div class="modal-body">
+                <!-- Start SENSORs and HWMs used for Peak -->
+                <label class="col-md-6 text-center">Select Data used for Interpretation</label>
+                <!-- HWM list-->
+                <div class="col-md-9" ng-repeat="h in eventSiteHWMs">
+                    <input type="checkbox" class="col-sm-1 pull-left" ng-model="h.selected" ng-click="addHWM(h)" />
+                    <span class="col-md-7">
+                        HWM {{h.hwm_label}} - {{h.elev_ft || '--'}} ft
+                    </span>
+                    <button type="button" class="borderLess" tooltip-placement="top" uib-tooltip="Show Details" ng-click="showHWMDetails(h)"><span class="glyphicon glyphicon-info-sign"></span></button>
+                    <button ng-if="h.elev_ft" type="button" class="borderLess" tooltip-placement="top" uib-tooltip="Set as Primary" ng-click="primaryHWM(h)"><span class="glyphicon glyphicon-check"></span></button>
+                    <button ng-if="!h.elev_ft" type="button" class="borderLess" tooltip-placement="top" uib-tooltip="Incomplete" ng-click="showIncompleteHWMInfo()"><span class="glyphicon glyphicon-alert"></span></button>
+                </div>
+                <!-- Sensor list -->
+                <div class="col-md-9" ng-repeat="s in eventSiteSensors">
+                    <span class="col-sm-1"> </span>
+                    <span class="col-md-7">
+                        {{s.deploymentType || s.sensorType}} Sensor
+                    </span>
+                    <button type="button" class="borderLess" tooltip-placement="top" uib-tooltip="Show Details" ng-click="showSensorDetails(s)"><span class="glyphicon glyphicon-info-sign"></span></button>
+                    <button ng-if="s.NeedDF" type="button" class="borderLess" tooltip-placement="top" uib-tooltip="Incomplete" ng-click="showIncompleteDFInfo()"><span class="glyphicon glyphicon-alert"></span></button>
+                    <button ng-if="!s.isRetrieved" type="button" class="borderLess" tooltip-placement="top" uib-tooltip="Needs to be Retrieved" ng-click="showRetrieveInfo()"><span class="needRetrieve glyphicon glyphicon-alert"></span></button>
+                    <!-- Sensor FILES list -->
+                    <div ng-repeat="f in s.files | where:{filetype_id: 2}">
+                        <span class="col-sm-1"> </span>
+                        <input type="checkbox" class="pull-left col-sm-1" ng-model="f.selected" ng-click="addDataFile(f)" />
+                        <span class="col-md-6">{{f.name || '---'}}</span>
+                        <button type="button" class="borderLess" tooltip-placement="top" uib-tooltip="Show Details" ng-click="showDataFileDetails(f)"><span class="glyphicon glyphicon-info-sign"></span></button>
+                        <button type="button" class="borderLess" tooltip-placement="top" uib-tooltip="Set as Primary" ng-click="primaryDataFile(f)"><span class="glyphicon glyphicon-check"></span></button>
+                    </div>
+                </div>
+
+                <br clear="all" />
+
+                <!-- hwm box of meta data and files -->
+                <div style="border:solid 1px black;padding-bottom:10px;" class="col-md-12" ng-if="hwmDetail">
+                    <!-- only show if they click showHWMDetails() above -->
+                    <label>HWM {{HWMBox.hwm_label}} Details</label>
+                    <button class="close" type="button" ng-click="closeDetail()" aria-hidden="true" style="color:gray;">&times;</button>
+                    <ul>
+                        <li style="list-style:none">Location Description: {{HWMBox.hwm_locationdescription || '--'}}</li>
+                        <li style="list-style:none">Bank: {{HWMBox.bank}}</li>
+                        <li style="list-style:none">Flag Date: {{HWMBox.flag_date | date:'MM/dd/yyyy'}}</li>
+                        <li style="list-style:none">Elevation: {{HWMBox.elev_ft}} ft</li>
+                        <li style="list-style:none">Elevation above ground: {{HWMBox.height_above_gnd}} ft</li>
+                        <li style="list-style:none">Quality: {{HWMBox.hwmQualityName}}</li>
+                        <li style="list-style:none">Type: {{HWMBox.hwmTypeName}}</li>
+                        <li style="list-style:none">Stillwater: <span ng-if="HWMBox.stillwater == 1">Yes</span><span ng-if="HWMBox.stillwater == 0">No</span><span ng-if="!HWMBox.stillwater">---</span></li>
+                    </ul><br clear="all" />
+                    <div class="col-md-12" ng-if="HWMBox.files.length > 0">
+                        <label>HWM Files</label>
+                        <ul style="padding-left: 0">
+                            <li ng-repeat="f in HWMBox.files" style="list-style:none;padding-bottom: 15px;">
+                                <span class="col-sm-9 borderLess" style="padding:0">
+                                    <a class="borderLess" style="padding:0" target="_blank" ng-href="{{serverURL}}/Files/{{f.file_id}}/Item">
+                                        {{f.file_date | date: 'MM/dd/yyyy'}} ({{f.name || f.file_id}})
+                                    </a>
+                                </span>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <!-- carousel of photo files -->
+                    <div class="col-md-6" ng-if="HWMBox.files.length > 0" style="height:120px;">
+                        <uib-carousel interval="4000">
+                            <uib-slide ng-repeat="f in HWMBox.files | where:{filetype_id:1}">
+                                <img ng-click="showImageModal(f.file_id)" ng-src="{{serverURL}}/Files/{{f.file_id}}/Item" />
+                                <div class="carousel-caption">
+                                    <p>{{f.name || f.file_id}}</p>
+                                </div>
+                            </uib-slide>
+                        </uib-carousel>
+                    </div>
+                </div>
+                <!-- sensor box of meta data and files -->
+                <div style="border:solid 1px black;padding-bottom:10px" class="col-md-12" ng-if="sensorDetail">
+                    <!-- only show if they click showSensorDetails() above -->
+                    <label>{{SensorBox.deploymentType || SensorBox.sensorType}} Sensor Details</label>
+                    <button class="close" type="button" ng-click="closeDetail()" aria-hidden="true" style="color:gray;">&times;</button>
+                    <ul>
+                        <li style="list-style:none">Sensor Type: {{SensorBox.sensorType}}</li>
+                        <li style="list-style:none">Deployment Type: {{SensorBox.deploymentType || '--'}}</li>
+                        <li style="list-style:none">Retrieved on: {{SensorBox.instrument_status[0].time_stamp | date: 'MM/dd/yyyy hh:mm a'}}</li>
+                        <li style="list-style:none">Collection Condition: {{SensorBox.CollectCondition || '--'}}</li>
+                        <li style="list-style:none">Serial Number: {{SensorBox.serial_number || '--'}}</li>
+                        <li style="list-style:none">Location Description: {{SensorBox.location_description || '--'}}</li>
+                        <li style="list-style:none">Sensor Brand: {{SensorBox.sensorBrand || '--'}}</li>
+                    </ul><br clear="all" />
+                    <div class="col-md-12">
+                        <label>Sensor Files</label>
+                        <div ng-if="SensorBox.files.length > 0">
+                            <ul style="padding-left: 0">
+                                <li ng-repeat="f in SensorBox.files" style="list-style:none;padding-bottom: 15px;">
+                                    <span class="col-sm-9 borderLess" style="padding:0">
+                                        <a class="btn btn-primary borderLess" style="padding:0" target="_blank" ng-href="{{serverURL}}/Files/{{f.file_id}}/Item">
+                                            {{f.file_date | date: 'MM/dd/yyyy'}} ({{f.name || f.file_id}})
+                                        </a>
+                                    </span>
+                                </li>
+                            </ul>
+                        </div>
+                        <div ng-if="SensorBox.files.length == 0">No files</div>
+                        <!-- carousel of photo files-->
+                        <div class="col-md-6" ng-if="SensorBox.files.length > 0" style="height:120px;">
+                            <uib-carousel interval="4000">
+                                <uib-slide ng-repeat="f in SensorBox.files | where:{filetype_id:1}">
+                                    <img ng-click="showImageModal(f.file_id)" ng-src="{{serverURL}}/Files/{{f.file_id}}/Item" />
+                                    <div class="carousel-caption">
+                                        <p>{{f.name || f.file_id}}</p>
+                                    </div>
+                                </uib-slide>
+                            </uib-carousel>
+                        </div>
+                    </div>
+
+                </div>
+                <!-- datafile box of meta data and datafiles -->
+                <div style="border:solid 1px black;padding-bottom:10px" class="col-md-12" ng-if="dataFileDetail">
+                    <!-- only show if they click showDataFileDetails() above -->
+                    <label>Data File {{DFBox.filePath}} Details</label><button class="close" type="button" ng-click="closeDetail()" aria-hidden="true" style="color:gray;">&times;</button>
+                    <ul>
+                        <li style="list-style:none">Description: {{DFBox.fileDesc || '--'}}</li>
+                        <li style="list-style:none">Collected on: {{DFBox.collect_date | date: 'MM/dd/yyyy hh:mm a'}} UTC</li>
+                        <li style="list-style:none">Good Start: {{DFBox.good_start | date: 'MM/dd/yyyy hh:mm a'}} UTC</li>
+                        <li style="list-style:none">Good End:{{DFBox.good_end | date: 'MM/dd/yyyy hh:mm a'}} UTC</li>
+                        <li style="list-style:none">Processed By: {{DFBox.processedBy.fname}} {{DFBox.processedBy.lname}}</li>
+                        <li style="list-style:none">Elevation Status: {{DFBox.elevation_status}}</li>
+                    </ul><br clear="all" />
+                    <div class="col-md-12">
+                        <label>File</label><br clear="all" />
+                        <!-- TODO :: IF this is an NWIS file, show link to go see the data instead of the link to download -->
+                        <span ng-if="!DFBox.nwisFile" class="col-sm-9 borderLess" style="padding:0">
+                            <a class="btn btn-primary borderLess" style="padding:0" target="_blank" ng-href="{{serverURL}}/Files/{{DFBox.fileID}}/Item">
+                                {{DFBox.collect_date | date: 'MM/dd/yyyy'}} ({{DFBox.filePath}})
+                            </a>
+                        </span>
+                        <span ng-if="DFBox.nwisFile" class="col-sm-9 borderLess" style="padding:0">
+                            <a class="btn btn-primary borderLess" style="padding:0" target="_blank" ng-href="{{DFBox.fileURL}}">{{DFBox.fileURL}}</a>
+                        </span>
+                    </div>
+                </div>
+                <!--</div>
+                </div>
+                </div>-->
+                <!-- End SENSORs and HWMs used for Peak -->
+
+                <br clear="all" />
+
+                <!-- Peak Calculation Notes: -->
+                <div class="form-group">
+                    <label class="col-md-4 control-label" for="calc_notes">Peak Calculation Notes:</label>
+                    <div class="col-md-5">
+                        <textarea class="form-control" name="calc_notes" type="text" rows="3" placeholder="Please document the reason this Peak was chosen for this event." ng-model="aPeak.calc_notes" />
+                    </div>
+                    <button type="button" class="col-md-2 borderLess" tooltip-placement="top" uib-tooltip="Please document the reason this Peak was chosen for this event.">
+                        <span class="glyphicon glyphicon-question-sign"></span>
+                    </button>
+                </div>
+                <br clear="all" />
+
+                <!--Peak creator-->
+                <div class="form-group">
+                    <label class="col-md-4 control-label" for="member_id">Peak Creator:</label>
+                    <div class="col-md-5" style="margin-top:13px">
+                        <span>{{PeakCreator.fname}} {{PeakCreator.lname}}</span>
+                    </div>
+                </div>
+
+                <!-- Peak Date: * -->
+                <div class="form-group" ng-class="{'has-error':peakForm.peak_date.date.$invalid && peakForm.peak_date.date.$dirty}">
+                    <label class="col-md-4 control-label req" for="peak_date.date">
+                        Peak Date:
+                        <button type="button" class="help-btn" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Required">
+                            <span class="glyphicon glyphicon-asterisk" style="color:#d00;font-size:xx-small;"></span>
+                        </button>
+                    </label>
+                    <div class="col-md-5">
+                        <datetimepicker hour-step="1" minute-step="1" ng-model="aPeak.peak_date.date" show-meridian="true"
+                                        date-format="MM/dd/yyyy" readonly-date="false" readonly-time="false" date-options="dateOptions"
+                                        hidden-time="true" hidden-date="false" show-spinners="true" required>
+                        </datetimepicker>
+                    </div>
+                    <div class="col-md-1">
+                        <span tooltip-placement="right" uib-tooltip="Date Estimated?">
+                            <input type="checkbox" name="is_peak_estimated" ng-model="aPeak.is_peak_estimated" ng-true-value="1" ng-false-value="0" />
+                        </span>
+                    </div>
+                </div>
+
+                <!-- Peak Time: * -->
+                <div class="form-group" ng-class="{'has-error':peakForm.peak_date.time.$invalid && peakForm.peak_date.time.$dirty}">
+                    <label class="col-md-4 control-label req" style="margin-top:4%" for="peak_time.time">
+                        Peak Time:
+                        <button type="button" class="help-btn" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Required">
+                            <span class="glyphicon glyphicon-asterisk" style="color:#d00;font-size:xx-small;"></span>
+                        </button>
+                    </label>
+                    <div class="col-md-5">
+                        <datetimepicker hour-step="1" minute-step="1" ng-model="aPeak.peak_date.time" show-meridian="true"
+                                        date-format="MM/dd/yyyy" readonly-date="false" readonly-time="false" date-options="dateOptions"
+                                        hidden-time="false" hidden-date="true" show-spinners="true" required>
+                        </datetimepicker>
+                    </div>
+                    <div class="col-md-1" style="margin-top:4%">
+                        <span tooltip-placement="right" uib-tooltip="Time Estimated?">
+                            <input type="checkbox" name="is_peak_time_estimated" ng-model="aPeak.is_peak_time_estimated" ng-true-value="1" ng-false-value="0" />
+                        </span>
+                    </div>
+                </div>
+
+                <!-- Time Zone:* -->
+                <div class="form-group">
+                    <label class="col-md-4 control-label" for="time_zone">
+                        Peak Recorded In:
+                        <button type="button" class="help-btn" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Required">
+                            <span class="glyphicon glyphicon-asterisk" style="color:#d00;font-size:xx-small;"></span>
+                        </button>
+                    </label>
+                    <div class="col-md-5">
+                        <select class="form-control" name="time_zone" ng-model="aPeak.time_zone"
+                                ng-options="vcm for vcm in timeZoneList" required>
+                            <option value=""></option>
+                        </select>
+                    </div>
+                    <button type="button" class="col-md-2 borderLess" tooltip-placement="top" uib-tooltip="Date/Time will be stored in UTC.">
+                        <span class="glyphicon glyphicon-question-sign"></span>
+                    </button>
+                </div>
+
+                <!-- Peak Stage-->
+                <div class="form-group">
+                    <label class="col-md-4 control-label" for="peak_stage">Peak Stage (elevation ft):</label>
+                    <div class="col-md-5">
+                        <input class="form-control" ng-keypress="isNum($event)" name="peak_stage" ng-model="aPeak.peak_stage" type="text" />
+                    </div>
+                    <div class="col-md-1">
+                        <span tooltip-placement="right" uib-tooltip="Peak Stage Estimated?">
+                            <input type="checkbox" name="is_peak_stage_estimated" ng-model="aPeak.is_peak_stage_estimated" ng-true-value="1" ng-false-value="0" />
+                        </span>
+                    </div>
+                </div>
+
+                <!-- Vertical Datum: -->
+                <div class="form-group" ng-class="{'required': aPeak.peak_stage}">
+                    <label class="col-md-4 control-label" ng-class="{'req': aPeak.peak_stage}" for="vdatum_id">Vertical Datum:</label>
+                    <div class="col-md-5">
+                        <select class="form-control" name="vdatum_id" ng-model="aPeak.vdatum_id"
+                                ng-options="vd.datum_id as vd.datum_abbreviation for vd in VDatumsList" ng-required="aPeak.peak_stage">
+                            <option value=""></option>
+                        </select>
+                    </div>
+                    <button ng-show="aPeak.peak_stage" type="button" class="col-md-2 borderLess" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Vertical Datum is required if Peak Stage Elevation is populated.">
+                        <span class="glyphicon glyphicon-question-sign"></span>
+                    </button>
+                </div>
+
+                <!-- Height Above Ground (ft)-->
+                <div class="form-group">
+                    <label class="col-md-4 control-label" for="height_above_gnd">Height Above Ground <br />(depth of water in ft):</label>
+                    <div class="col-md-5">
+                        <input class="form-control" ng-keypress="isNum($event)" name="height_above_gnd" ng-model="aPeak.height_above_gnd" type="text" />
+                    </div>
+                    <div class="col-md-1">
+                        <span tooltip-placement="right" uib-tooltip="HAG Estimated?">
+                            <input type="checkbox" name="is_hag_estimated" ng-model="aPeak.is_hag_estimated" ng-true-value="1" ng-false-value="0" />
+                        </span>
+                    </div>
+                </div>
+
+                <div class="panel panel-default">
+                    <div class="panel-body">
+                        <div class="col-md-8 col-md-offset-4">
+                            These fields shall be filled out pursuant to sw13.01
+                            <br />
+                            Click this <a target="_blank" href="http://water.usgs.gov/admin/memo/SW/sw13.01.pdf">link</a> for more information.
+                        </div>
+                        <br clear="all" />
+                        <!-- Peak Discharge-->
+                        <div class="form-group">
+                            <label class="col-md-4 control-label" for="peak_discharge">Peak Discharge:</label>
+                            <div class="col-md-5">
+                                <input class="form-control" ng-keypress="isNum($event)" name="peak_discharge" ng-model="aPeak.peak_discharge" type="text" />
+                            </div>
+                            <div class="col-md-1">
+                                <span tooltip-placement="right" uib-tooltip="Peak Discharge Estimated?">
+                                    <input type="checkbox" name="is_peak_discharge_estimated" ng-model="aPeak.is_peak_discharge_estimated" ng-true-value="1" ng-false-value="0" />
+                                </span>
+                            </div>
+                        </div>
+
+                        <!--AEP: -->
+                        <div class="form-group">
+                            <label class="col-md-4 control-label" for="aep">AEP:</label>
+                            <div class="col-md-5">
+                                <input class="form-control" ng-keypress="isNum($event)" name="aep" ng-model="aPeak.aep" type="text" />
+                            </div>
+                        </div>
+
+                        <!--AEP Confidence Interval (lower limit): -->
+                        <div class="form-group">
+                            <label class="col-md-4 control-label" for="aep_lowci">AEP Confidence Interval<br />(lower limit):</label>
+                            <div class="col-md-5">
+                                <input class="form-control" ng-keypress="isNum($event)" name="aep_lowci" ng-model="aPeak.aep_lowci" type="text" />
+                            </div>
+                        </div>
+
+                        <!--AEP Confidence Interval (upper limit): -->
+                        <div class="form-group">
+                            <label class="col-md-4 control-label" for="aep_upperci">AEP Confidence Interval<br />(upper limit):</label>
+                            <div class="col-md-5">
+                                <input class="form-control" ng-keypress="isNum($event)" name="aep_upperci" ng-model="aPeak.aep_upperci" type="text" />
+                            </div>
+                        </div>
+
+                        <!--AEP Confidence Interval (percentage of limits): -->
+                        <div class="form-group">
+                            <label class="col-md-4 control-label" for="aep_range">AEP Confidence Interval<br />(percentage of limits):</label>
+                            <div class="col-md-5">
+                                <input class="form-control" ng-keypress="isNum($event)" name="aep_range" ng-model="aPeak.aep_range" type="text" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+            </div><!-- end modal-body-->
+            <div class="modal-footer">
+                <button class="btn btn-primary" ng-if="aPeak.peak_summary_id != undefined" ng-click="savePeak(peakForm.$valid)">Save</button>
+                <button class="btn btn-primary" ng-if="aPeak.peak_summary_id == undefined" ng-click="createPeak(peakForm.$valid)">Create</button>
+                <button type="button" class="btn btn-danger" ng-if="loggedInRole == 'Admin' && aPeak.peak_summary_id !== undefined" ng-click="deletePeak()">Delete</button>
+                <button type="button" class="btn btn-warning" ng-click="cancel()">Cancel</button>
+            </div>
+        </fieldset>
+    </form>
 </script>

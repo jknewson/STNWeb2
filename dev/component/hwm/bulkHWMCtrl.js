@@ -3,9 +3,9 @@
 
     var STNControllers = angular.module('STNControllers');
 
-    STNControllers.controller('bulkHWMCtrl', ['$scope', '$state', '$rootScope', '$cookies', '$http', '$q', '$filter', '$uibModal', 'SITE', 'HWM', 'MEMBER', 'FILE_TYPE', 'AGENCY', 'eventList', 'stateList', 'countyList', 
-        'hwmTypeList', 'markerList', 'hwmQualList', 'horizDatumList', 'horCollMethList', 'vertDatumList', 'vertCollMethList',  
-        function ($scope, $state, $rootScope, $cookies, $http, $q, $filter, $uibModal, SITE, HWM, MEMBER, FILE_TYPE, AGENCY, eventList, stateList, countyList, 
+    STNControllers.controller('bulkHWMCtrl', ['$scope', '$state', '$rootScope', '$cookies', '$http', '$q', '$filter', '$uibModal', 'SITE', 'HWM', 'MEMBER', 'FILE_TYPE', 'AGENCY', 'INST_COLL_CONDITION', 'PEAK',
+        'eventList', 'stateList', 'countyList', 'hwmTypeList', 'markerList', 'hwmQualList', 'horizDatumList', 'horCollMethList', 'vertDatumList', 'vertCollMethList',  
+        function ($scope, $state, $rootScope, $cookies, $http, $q, $filter, $uibModal, SITE, HWM, MEMBER, FILE_TYPE, AGENCY, INST_COLL_CONDITION, PEAK, eventList, stateList, countyList, 
             hwmTypeList, markerList, hwmQualList, horizDatumList, horCollMethList, vertDatumList, vertCollMethList) {
             if ($cookies.get('STNCreds') === undefined || $cookies.get('STNCreds') === "") {
                 $scope.auth = false;
@@ -53,6 +53,7 @@
                 //#endregion make dropdowns
 
                 $scope.chosenEvent = 0;
+                $scope.chosenEventName = "";
                 $scope.delIndex = -1; //if they delete a hwm from the DONE table, need index they clicked so closing warning modal will know which one to remove from postedHWMs list
                 //#region renderers/validators
                 $scope.requiredValidator = function (value, callback) {
@@ -250,37 +251,47 @@
 
                 //done posting, remove the successful one from the handsontable
                 var removeThisUploadHWM = function (successfulHWM) {
-                    //find this one in the $scope.uploadHWMs and splice it out
+                   // find this one in the $scope.uploadHWMs and splice it out
                     var spliceIndex = -1;
+                    var bank = successfulHWM.bank
                     var hcmName = horCollMethList.filter(function (hcm) { return hcm.hcollect_method_id == successfulHWM.hcollect_method_id; })[0].hcollect_method;
                     var hdName = horizDatumList.filter(function (hd) { return hd.datum_id == successfulHWM.hdatum_id; })[0].datum_name;
                     var hwmQName = hwmQualList.filter(function (hq) { return hq.hwm_quality_id == successfulHWM.hwm_quality_id; })[0].hwm_quality;
                     var hwmTName = hwmTypeList.filter(function (ht) { return ht.hwm_type_id == successfulHWM.hwm_type_id; })[0].hwm_type;
-                    var mark = successfulHWM.marker_id !== 0 && successfulHWM.marker_id !== undefined ? markerList.filter(function (m) { return m.marker_id == successfulHWM.marker_id; })[0].marker1 : undefined;
-                    var vcmName = successfulHWM.vcollect_method_id !== 0 && successfulHWM.vcollect_method_id !== undefined ? vertCollMethList.filter(function (vcm) { return vcm.vcollect_method_id == successfulHWM.vcollect_method_id; })[0].vcollect_method : undefined;
-                    var vdName = successfulHWM.vdatum_id !== 0 && successfulHWM.vdatum_id !== undefined ? vertDatumList.filter(function (vd) { return vd.datum_id == successfulHWM.vdatum_id; })[0].datum_abbreviation : undefined;
-                    var hag = successfulHWM.height_above_gnd !== undefined ? successfulHWM.height_above_gnd.toString() : undefined;
-                    var elFt = successfulHWM.elev_ft !== undefined ? successfulHWM.elev_ft.toString() : undefined;
-                    var unc = successfulHWM.uncertainty !== undefined ? successfulHWM.uncertainty.toString() : undefined;
+                    var mark = successfulHWM.marker_id !== undefined ? markerList.filter(function (m) { return m.marker_id == successfulHWM.marker_id; })[0].marker1 : undefined;
+                    var vcmName = successfulHWM.vcollect_method_id !== undefined ? vertCollMethList.filter(function (vcm) { return vcm.vcollect_method_id == successfulHWM.vcollect_method_id; })[0].vcollect_method : undefined;
+                    var vdName = successfulHWM.vdatum_id !== undefined ? vertDatumList.filter(function (vd) { return vd.datum_id == successfulHWM.vdatum_id; })[0].datum_abbreviation : undefined;
+                    var hag = successfulHWM.height_above_gnd !== undefined ? Number(successfulHWM.height_above_gnd) : undefined;
+                    var elFt = successfulHWM.elev_ft !== undefined ? Number(successfulHWM.elev_ft) : undefined;
+                    var unc = successfulHWM.uncertainty !== undefined ? Number(successfulHWM.uncertainty) : undefined;
+                    var hwmUnc = successfulHWM.hwm_uncertainty !== undefined ? Number(successfulHWM.hwm_uncertainty) : undefined;
                     for (var hwmI = 0; hwmI < $scope.uploadHWMs.length; hwmI++) {
                         if ($scope.uploadHWMs[hwmI].site_no !== undefined) {
+                            //format each uploadHWM first to compare apples to apples
+                            var upload_hwmUnc = $scope.uploadHWMs[hwmI].hwm_uncertainty !== "" && $scope.uploadHWMs[hwmI].hwm_uncertainty !== undefined ? Number($scope.uploadHWMs[hwmI].hwm_uncertainty) : undefined;
+                            var upload_mark = $scope.uploadHWMs[hwmI].marker_id !== "" && $scope.uploadHWMs[hwmI].marker_id !== undefined ? $scope.uploadHWMs[hwmI].marker_id : undefined;
+                            var upload_unc = $scope.uploadHWMs[hwmI].uncertainty !== "" && $scope.uploadHWMs[hwmI].uncertainty !== undefined ? Number($scope.uploadHWMs[hwmI].uncertainty) : undefined;
+                            var upload_hag = $scope.uploadHWMs[hwmI].height_above_gnd !== "" && $scope.uploadHWMs[hwmI].height_above_gnd !== undefined ? Number($scope.uploadHWMs[hwmI].height_above_gnd) : undefined;
+                            var upload_elFt = $scope.uploadHWMs[hwmI].elev_ft !== "" && $scope.uploadHWMs[hwmI].elev_ft !== undefined ? Number($scope.uploadHWMs[hwmI].elev_ft) : undefined;
+                            var upload_vcollMeth = $scope.uploadHWMs[hwmI].vcollect_method_id !== "" && $scope.uploadHWMs[hwmI].vcollect_method_id !== undefined ? $scope.uploadHWMs[hwmI].vcollect_method_id : undefined;
+                            var upload_vdat = $scope.uploadHWMs[hwmI].vdatum_id !== "" && $scope.uploadHWMs[hwmI].vdatum_id !== undefined ? $scope.uploadHWMs[hwmI].vdatum_id : undefined;
                             //not a null row
                             if ($scope.uploadHWMs[hwmI].site_no == successfulHWM.site_no &&
                                 $scope.uploadHWMs[hwmI].waterbody == successfulHWM.waterbody &&
-                                $scope.uploadHWMs[hwmI].hwm_uncertainty == successfulHWM.hwm_uncertainty &&
-                                $scope.uploadHWMs[hwmI].bank == successfulHWM.bank &&
+                                upload_hwmUnc == hwmUnc && //uploadHWMs[..].hwm_uncertainty is "" and comparing to undefined
+                                $scope.uploadHWMs[hwmI].bank == bank &&
                                 $scope.uploadHWMs[hwmI].hwm_locationdescription == successfulHWM.hwm_locationdescription &&
                                 $scope.uploadHWMs[hwmI].latitude_dd == successfulHWM.latitude_dd.toString() && $scope.uploadHWMs[hwmI].longitude_dd == successfulHWM.longitude_dd.toString() &&
-                                $scope.uploadHWMs[hwmI].height_above_gnd == hag &&
+                                upload_hag == hag &&
                                 $scope.uploadHWMs[hwmI].hcollect_method_id == hcmName &&
                                 $scope.uploadHWMs[hwmI].hdatum_id == hdName &&
                                 $scope.uploadHWMs[hwmI].hwm_quality_id == hwmQName &&
                                 $scope.uploadHWMs[hwmI].hwm_type_id == hwmTName &&
-                                $scope.uploadHWMs[hwmI].marker_id == mark &&
-                                $scope.uploadHWMs[hwmI].vcollect_method_id == vcmName &&
-                                $scope.uploadHWMs[hwmI].vdatum_id == vdName &&
-                                $scope.uploadHWMs[hwmI].elev_ft == elFt &&
-                                $scope.uploadHWMs[hwmI].uncertainty == unc &&
+                                upload_mark == mark && //uploadHWMs[..].marker_id is "" and comparing to undefined
+                                upload_vcollMeth == vcmName &&
+                                upload_vdat == vdName &&
+                                upload_elFt == elFt &&
+                                upload_unc == unc &&
                                 $scope.uploadHWMs[hwmI].hwm_notes == successfulHWM.hwm_notes) {
                                 spliceIndex = hwmI;
                             }
@@ -290,8 +301,7 @@
                             hwmI = $scope.uploadHWMs.length;//break!
                         }
                     }
-                    var removeI = 'test';//indices.sort(function (a, b) { return a - b });
-
+                    
                     $scope.showLoading = 'false'; // loading..
                 };
                                 
@@ -345,6 +355,8 @@
                 };
                 //save updates
                 $scope.save = function () {
+                    $scope.chosenEventName = $scope.events.filter(function(e){return e.event_id == $scope.chosenEvent;})[0].event_name;
+
                     var pastedHWMs = angular.copy($scope.uploadHWMs);
                     // drop the last 20 since they are empty
                     for (var i = pastedHWMs.length; i--;) {
@@ -356,50 +368,65 @@
                     $scope.notValid = true; //reset so they don't click it again before having to validate
                     $http.defaults.headers.common.Authorization = 'Basic ' + $cookies.get('STNCreds');
                     $http.defaults.headers.common.Accept = 'application/json';
+                    
                     //no go thru each and get rest of fields needed and post hwms
                     angular.forEach(pastedHWMs, function (hwm, index) {
+                        var sitePeak = {};
                         SITE.getSearchedSite({ bySiteNo: hwm.site_no }).$promise.then(function (response) {
-                            hwm.site_id = response.site_id;
-                            hwm.event_id = $scope.chosenEvent;
-                            hwm.flag_member_id = $scope.$parent.userID;
-                            hwm.hcollect_method_id = horCollMethList.filter(function (hcm) { return hcm.hcollect_method == hwm.hcollect_method_id; })[0].hcollect_method_id;
-                            hwm.hdatum_id = horizDatumList.filter(function (hd) { return hd.datum_name == hwm.hdatum_id; })[0].datum_id;
-                            hwm.hwm_quality_id = hwmQualList.filter(function (hq) { return hq.hwm_quality == hwm.hwm_quality_id; })[0].hwm_quality_id;
-                            hwm.hwm_type_id = hwmTypeList.filter(function (ht) { return ht.hwm_type == hwm.hwm_type_id; })[0].hwm_type_id;
-                            hwm.marker_id = hwm.marker_id !== "" && hwm.marker_id !== undefined ? markerList.filter(function (m) { return m.marker1 == hwm.marker_id; })[0].marker_id : "0";
-                            if (hwm.stillwater !== "" && hwm.stillwater !== undefined) hwm.stillwater = hwm.stillwater == "No" ? "0" : "1";
-                            hwm.vcollect_method_id = hwm.vcollect_method_id !== "" && hwm.vcollect_method_id !== undefined ? vertCollMethList.filter(function (vcm) { return vcm.vcollect_method == hwm.vcollect_method_id; })[0].vcollect_method_id : "0";
-                            hwm.vdatum_id = hwm.vdatum_id !== "" && hwm.vdatum_id !== undefined ? vertDatumList.filter(function (vd) { return vd.datum_abbreviation == hwm.vdatum_id; })[0].datum_id : "0";
-                            if (hwm.survey_date !== "" && hwm.survey_date !== undefined) hwm.survey_member_id = $scope.$parent.userID;
-                            //now post it
-                            var siteNo = hwm.site_no;
-                            delete hwm.site_no;
-                            hwm.hwm_label = "hwm-" + parseInt(index + 1);
-                            HWM.save(hwm).$promise.then(function (response) {
-                                
-                                response.site_no = siteNo;
-                                if (response.stillwater !== undefined) {
-                                    response.stillwater = response.stillwater > 0 ? "Yes" : "No";
-                                } else response.stillwater = "";
-                                //add to the done list (make sure it's not already there)
-                                if ($scope.postedHWMs.map(function (p) { return p.hwm_id; }).indexOf(response.hwm_id) < 0) {
-                                    toastr.success("HWM uploaded: hwm_id:" + response.hwm_id);
-                                    $scope.postedHWMs.push(response);
+                            SITE.getSitePeaks({ id: response.site_id }, function (peakResponse) {
+                                for (var p = 0; p < peakResponse.length; p++) {
+                                    //make sure the site peak is for this event
+                                    if (peakResponse[p].event_name == $scope.chosenEventName) {
+                                        sitePeak = peakResponse[p];
+                                        hwm.peak_summary_id = peakResponse[p].peak_summary_id;
+                                    }
                                 }
-                                else toastr.error("HWM " + response.hwm_id + " is already in the successfully uploaded list below.");                                
-                                removeThisUploadHWM(response); //remove it from the handsontable                                
-                            }, function (errorResponse) {
-                                $scope.showLoading = 'false'; // loading..
-                                toastr.options.timeOut = "0";
-                                toastr.options.closeButton = true;
-                                toastr.error("Error uploading hwm: " + errorResponse.statusText);
-                            });                            
-                        }, function (errorResponse) {
+                                hwm.site_id = response.site_id;
+                                hwm.event_id = $scope.chosenEvent;
+                                hwm.flag_member_id = $scope.$parent.userID;
+                                hwm.hcollect_method_id = horCollMethList.filter(function (hcm) { return hcm.hcollect_method == hwm.hcollect_method_id; })[0].hcollect_method_id;
+                                hwm.hdatum_id = horizDatumList.filter(function (hd) { return hd.datum_name == hwm.hdatum_id; })[0].datum_id;
+                                hwm.hwm_quality_id = hwmQualList.filter(function (hq) { return hq.hwm_quality == hwm.hwm_quality_id; })[0].hwm_quality_id;
+                                hwm.hwm_type_id = hwmTypeList.filter(function (ht) { return ht.hwm_type == hwm.hwm_type_id; })[0].hwm_type_id;
+                                hwm.marker_id = hwm.marker_id !== "" && hwm.marker_id !== undefined ? markerList.filter(function (m) { return m.marker1 == hwm.marker_id; })[0].marker_id : undefined;
+                                if (hwm.stillwater !== "" && hwm.stillwater !== undefined) hwm.stillwater = hwm.stillwater == "No" ? "0" : "1";
+                                hwm.vcollect_method_id = hwm.vcollect_method_id !== "" && hwm.vcollect_method_id !== undefined ? vertCollMethList.filter(function (vcm) { return vcm.vcollect_method == hwm.vcollect_method_id; })[0].vcollect_method_id : undefined;
+                                hwm.vdatum_id = hwm.vdatum_id !== "" && hwm.vdatum_id !== undefined ? vertDatumList.filter(function (vd) { return vd.datum_abbreviation == hwm.vdatum_id; })[0].datum_id : undefined;
+                                if (hwm.survey_date !== "" && hwm.survey_date !== undefined) hwm.survey_member_id = $scope.$parent.userID;
+                                //now post it
+                                var siteNo = hwm.site_no;
+                                delete hwm.site_no;
+                                hwm.hwm_label = "hwm-" + parseInt(index + 1);
+                                HWM.save(hwm).$promise.then(function (response) {
+                                    response.site_no = siteNo;
+                                    if (response.stillwater !== undefined) {
+                                        response.stillwater = response.stillwater > 0 ? "Yes" : "No";
+                                    } else response.stillwater = "";
+                                    if (response.peak_summary_id !== undefined && response.peak_summary_id > 0) {
+                                        response.PeakSummary = sitePeak;
+                                    }
+                                    //add to the done list (make sure it's not already there)
+                                    if ($scope.postedHWMs.map(function (p) { return p.hwm_id; }).indexOf(response.hwm_id) < 0) {
+                                        toastr.success("HWM uploaded: hwm_id:" + response.hwm_id);
+                                        $scope.postedHWMs.push(response);
+                                    }
+                                    else toastr.error("HWM " + response.hwm_id + " is already in the successfully uploaded list below.");
+                                    removeThisUploadHWM(response); //remove it from the handsontable
+                                }, function (hwmSaveError) {
+                                    $scope.showLoading = 'false'; // loading..
+                                    toastr.options.timeOut = "0";
+                                    toastr.options.closeButton = true;
+                                    toastr.error("Error uploading hwm: " + hwmSaveError.statusText);
+                                });
+                            }, function (getSitePeakError) {
+                                toastr.error("Something went wrong getting sitePeak");
+                            });
+                        }, function (getHwmSiteError) {
                             $scope.showLoading = 'false'; // loading..
                             toastr.options.timeOut = "0";
                             toastr.options.closeButton = true;
                             toastr.error("Error getting site information for " + hwm.site_no + ". Site does not exist.");
-                        });                        
+                        });
                     });
                 };
 
@@ -621,6 +648,99 @@
                 };
                 //#endregion SITE NO dropdown arrow Click MODAL part ------------------------------------------------------------------------
 
+                //#region HWM PEAK "add/edit" clicked ------------------------------------------------------------------------------------------
+                //thisPeak, peakSite, allEventHWMs, allSiteSensors, allSiteFiles, thisPeakDFs
+                $scope.OpenPeakEdit = function (peakId,siteId, eventId) {
+                    $rootScope.stateIsLoading.showLoading = true; // loading..
+                    //modal
+                    var peakEditInstance = $uibModal.open({
+                        templateUrl: 'PeakEdit_Modal.html',
+                        size: 'sm',
+                        backdrop: 'static',
+                        keyboard: false,
+                        resolve: {
+                            allCollectConditions: function () {
+                                return INST_COLL_CONDITION.getAll().$promise;
+                            },
+                            allVertDatums: function () {
+                                return vertDatumList;
+                            },
+                            thisPeak: function () {                                
+                                return PEAK.query({ id: peakId }).$promise;                            
+                            },
+                            thisPeakDFs: function () {
+                                return PEAK.getPeakSummaryDFs({ id: peakId }).$promise;                                
+                            },
+                            peakSite: function () {
+                                return SITE.query({id: siteId}).$promise;
+                            },
+                            allMembers: function () {
+                                $http.defaults.headers.common.Authorization = 'Basic ' + $cookies.get('STNCreds');
+                                $http.defaults.headers.common.Accept = 'application/json';
+                                return MEMBER.getAll().$promise;
+                            },
+                            allEventHWMs: function () {
+                                return HWM.getFilteredHWMs({ Event: $scope.chosenEvent, EventStatus: 0 }).$promise;
+                            },
+                            allSiteFiles: function () {
+                                return SITE.getSiteFiles({ id: siteId });
+                            },
+                            allSiteSensors: function () {
+                                return SITE.getSiteSensors({ id: siteId }).$promise;
+                            }
+                        },
+                        controller: 'peakModalCtrl'
+                    });
+                    peakEditInstance.result.then(function (updated) {
+                        //updated[0] will be the peak, updated[1] will be 'updated'
+                    });
+                };
+                $scope.OpenPeakCreate = function (siteId, eventId) {
+                    $rootScope.stateIsLoading.showLoading = true; // loading..
+                    //modal
+                    var peakCreateInstance = $uibModal.open({
+                        templateUrl: 'PeakEdit_Modal.html',
+                        size: 'sm',
+                        backdrop: 'static',
+                        keyboard: false,
+                        resolve: {
+                            allCollectConditions: function () {
+                                return INST_COLL_CONDITION.getAll().$promise;
+                            },
+                            allVertDatums: function () {
+                                return vertDatumList;
+                            },
+                            thisPeak: function () {
+                                return "empty";
+                            },
+                            thisPeakDFs: function () {
+                                return PEAK.getPeakSummaryDFs({ id: peakId }).$promise;
+                            },
+                            peakSite: function () {
+                                return SITE.query({ id: siteId }).$promise;
+                            },
+                            allMembers: function () {
+                                $http.defaults.headers.common.Authorization = 'Basic ' + $cookies.get('STNCreds');
+                                $http.defaults.headers.common.Accept = 'application/json';
+                                return MEMBER.getAll().$promise;
+                            },
+                            allEventHWMs: function () {
+                                return HWM.getFilteredHWMs({ Event: $scope.chosenEvent, EventStatus: 0 }).$promise;
+                            },
+                            allSiteFiles: function () {
+                                return SITE.getSiteFiles({ id: siteId });
+                            },
+                            allSiteSensors: function () {
+                                return SITE.getSiteSensors({ id: siteId }).$promise;
+                            }
+                        },
+                        controller: 'peakModalCtrl'
+                    });
+                    peakCreateInstance.result.then(function (createdPk) {
+                        //createdPk[0] will be the peak, createdPk[1] will be 'created'
+                    });
+                }
+                //#endregion HWM PEAK "add/edit" clicked----------------------------------------------------------------------------------------
                 //#region handsontable settings
                 $scope.tableSettings = {
                     //colHeaders: true,
@@ -1075,11 +1195,7 @@
             $scope.showChangeEventDD = function () {
                 $scope.showEventDD = !$scope.showEventDD;
             };
-            //change event = apply it to the $scope.EventName
-            //$scope.ChangeEvent = function () {
-            //    $scope.EventName = $scope.eventList.filter(function (el) { return el.event_id == $scope.adminChanged.event_id; })[0].event_name;
-            //};
-            // $scope.sessionEvent = $cookies.get('SessionEventName');
+            
             $scope.LoggedInMember = allMembers.filter(function (m) { return m.member_id == $cookies.get('mID'); })[0];
 
             $scope.aHWM = {};
