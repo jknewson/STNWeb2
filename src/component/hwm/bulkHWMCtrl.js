@@ -371,13 +371,13 @@
                     
                     //no go thru each and get rest of fields needed and post hwms
                     angular.forEach(pastedHWMs, function (hwm, index) {
-                        var sitePeak = {};
+                       // var sitePeak = {};
                         SITE.getSearchedSite({ bySiteNo: hwm.site_no }).$promise.then(function (response) {
                             SITE.getSitePeaks({ id: response.site_id }, function (peakResponse) {
                                 for (var p = 0; p < peakResponse.length; p++) {
                                     //make sure the site peak is for this event
                                     if (peakResponse[p].event_name == $scope.chosenEventName) {
-                                        sitePeak = peakResponse[p];
+                         //               sitePeak = peakResponse[p];
                                         hwm.peak_summary_id = peakResponse[p].peak_summary_id;
                                     }
                                 }
@@ -402,9 +402,9 @@
                                     if (response.stillwater !== undefined) {
                                         response.stillwater = response.stillwater > 0 ? "Yes" : "No";
                                     } else response.stillwater = "";
-                                    if (response.peak_summary_id !== undefined && response.peak_summary_id > 0) {
-                                        response.PeakSummary = sitePeak;
-                                    }
+                                    //if (response.peak_summary_id !== undefined && response.peak_summary_id > 0) {
+                                    //    response.PeakSummary = sitePeak;
+                                    //}
                                     //add to the done list (make sure it's not already there)
                                     if ($scope.postedHWMs.map(function (p) { return p.hwm_id; }).indexOf(response.hwm_id) < 0) {
                                         toastr.success("HWM uploaded: hwm_id:" + response.hwm_id);
