@@ -3,10 +3,10 @@
 
     var STNControllers = angular.module('STNControllers');
 
-    STNControllers.controller('bulkHWMCtrl', ['$scope', '$state', '$rootScope', '$cookies', '$http', '$q', '$filter', '$uibModal', 'SITE', 'HWM', 'MEMBER', 'FILE_TYPE', 'AGENCY', 'INST_COLL_CONDITION', 'PEAK',
-        'eventList', 'stateList', 'countyList', 'hwmTypeList', 'markerList', 'hwmQualList', 'horizDatumList', 'horCollMethList', 'vertDatumList', 'vertCollMethList',  
-        function ($scope, $state, $rootScope, $cookies, $http, $q, $filter, $uibModal, SITE, HWM, MEMBER, FILE_TYPE, AGENCY, INST_COLL_CONDITION, PEAK, eventList, stateList, countyList, 
-            hwmTypeList, markerList, hwmQualList, horizDatumList, horCollMethList, vertDatumList, vertCollMethList) {
+    STNControllers.controller('bulkHWMCtrl', ['$scope', '$state', '$rootScope', '$cookies', '$http', '$q', '$filter', '$uibModal', 'SITE', 'HWM', 'MEMBER', 'FILE', 'INST_COLL_CONDITION', 'PEAK', 'SOURCE',
+        'eventList', 'stateList', 'countyList', 'hwmTypeList', 'markerList', 'hwmQualList', 'horizDatumList', 'horCollMethList', 'vertDatumList', 'vertCollMethList', 'fileTypesList', 'agenciesList',  
+        function ($scope, $state, $rootScope, $cookies, $http, $q, $filter, $uibModal, SITE, HWM, MEMBER, FILE, INST_COLL_CONDITION, PEAK, SOURCE, eventList, stateList, countyList, 
+            hwmTypeList, markerList, hwmQualList, horizDatumList, horCollMethList, vertDatumList, vertCollMethList, fileTypesList, agenciesList) {
             if ($cookies.get('STNCreds') === undefined || $cookies.get('STNCreds') === "") {
                 $scope.auth = false;
                 $location.path('/login');
@@ -22,7 +22,9 @@
                 $scope.states = stateList;
                 $scope.counties = countyList;
 
-                $scope.showLoading = false; //div holding loader         
+                $scope.showLoading = false; //div holding loader      
+                $scope.max = 0; $scope.dynamic = 0; //values for number of hwms are uploading (used in progressbar
+                $scope.showProgressBar = false; //progressbar for uploading hwms
                 $scope.hotInstance;
                                  //siteno,water,type,mrker,envr,uncrt,qul,bank,des,lat,long,hdatum,hcm,hag,flgDt,surDt,elev,vdatum,vcm,sUnc,notes, tranq/still
                 $scope.columnWidths = [120, 180, 180, 180, 150, 170, 180, 100, 200, 140, 150, 180, 220, 100, 130, 120, 130, 160, 190, 160, 200, 200];
@@ -55,6 +57,114 @@
                 $scope.chosenEvent = 0;
                 $scope.chosenEventName = "";
                 $scope.delIndex = -1; //if they delete a hwm from the DONE table, need index they clicked so closing warning modal will know which one to remove from postedHWMs list
+                $scope.sitePeakarray = [];//when saving handsontable, each row, get sitePeaks, if so, store here
+                //add FILE for approval memo or publication link
+                $scope.addApprovalFile = function () {
+                    var approvedFILEmodal = $uibModal.open({
+                        templateUrl: 'BulkApprovalFILE_modal.html',
+                        controller: ['$scope', '$cookies', '$uibModal', '$uibModalInstance', 'fileTypeList', 'agencyList', 'thisMember',
+                            function ($scope, $cookies, $uibModal, $uibModalInstance, fileTypeList, agencyList, thisMember) {
+                                $scope.hwmFileTypes = fileTypeList.filter(function (hft) {
+                                    return hft.filetype === 'Photo' || hft.filetype === 'Historic Citation' || hft.filetype === 'Field Sheets' ||
+                                    hft.filetype === 'Level Notes' || hft.filetype === 'Other' || hft.filetype === 'Link' || hft.filetype === 'Sketch';
+                                });
+                                $scope.aFile = {}; //holder for file
+                                $scope.aSource = {}; //holder for file source
+                                $scope.agencies = agencyList;
+                                //Datepicker
+                                $scope.datepickrs = {};
+                                $scope.open = function ($event, which) {
+                                    $event.preventDefault();
+                                    $event.stopPropagation();
+
+                                    $scope.datepickrs[which] = true;
+                                };
+
+                                $scope.aFile.file_date = new Date();
+                                $scope.aFile.photo_date = new Date();
+                                $scope.aSource = thisMember;
+                                $scope.aSource.FULLname = $scope.aSource.fname + " " + $scope.aSource.lname;
+                                $scope.addFile = function (valid) {
+                                    if (valid) {
+                                        var fileParts = [$scope.aFile, $scope.aSource];
+                                        $uibModalInstance.close(fileParts);
+                                    }
+                                };
+                                $scope.cancelFile = function () {
+                                    $uibModalInstance.dismiss();
+                                };
+                            }
+                        ],
+                        size: 'lg',
+                        backdrop: 'static',
+                        keyboard: false,
+                        windowClass: 'rep-dialog',
+                        resolve: {                           
+                            fileTypeList: function () {
+                                return fileTypesList
+                            },
+                            agencyList: function () {
+                                return agenciesList;
+                            },
+                            thisMember: function () {
+                                $http.defaults.headers.common.Authorization = 'Basic ' + $cookies.get('STNCreds');
+                                $http.defaults.headers.common.Accept = 'application/json';
+                                return MEMBER.query({ id: $cookies.get('mID') }).$promise;
+                            }
+                        }
+                    });
+                    approvedFILEmodal.result.then(function (createdFile) {
+                        $scope.approvalFile = createdFile[0];
+                        $scope.approvalSource = createdFile[1];
+                    });
+                };//end addApprovalFile
+                //end add FILE
+
+                //#region SITE NO dropdown arrow Click MODAL part ------------------------------------------------------------------------
+                var getFindSiteModal = function (r, c, hwmParts) {
+                    var dataAtRow = $scope.hotInstance.getDataAtRow(r); setTimeout(function () { $scope.hotInstance.deselectCell(); }, 100);
+                    if (dataAtRow[9] !== "" && dataAtRow[10] !== "" && dataAtRow[9] !== null && dataAtRow[10] !== null) {
+                        var siteModal = $uibModal.open({
+                            templateUrl: 'associateSitemodal.html',
+                            backdrop: 'static',
+                            keyboard: false,
+                            resolve: {
+                                nearBySites: function () {
+                                    return SITE.getProximitySites({ Latitude: dataAtRow[9], Longitude: dataAtRow[10], Buffer: 0.0005 }).$promise;
+                                },
+                                HWMparts: function(){ return hwmParts; },
+                                siteNoAlreadyThere: function () { return dataAtRow[0]; },
+                                hdatums: function () { return $scope.horDatums; },
+                                hcolMeths: function () { return $scope.horCollMeths; },
+                                vdatums: function () { return $scope.vertDatums; },
+                                vcolMeths: function () { return $scope.vertCollMeths; },
+                                states: function () { return $scope.states; },
+                                counties: function () { return $scope.counties; }
+                            },
+                            controller: 'hwmSiteModalCtrl', 
+                            size: 'sm'
+                        });
+                        siteModal.result.then(function (thisSite) {
+                            if (thisSite !== undefined) $scope.hotInstance.setDataAtCell(r, c, thisSite.site_no);
+                        });
+                    } else {
+                        var errorModal = $uibModal.open({
+                            template: '<div class="modal-header"><h3 class="modal-title">Error</h3></div>' +
+                                '<div class="modal-body"><p>Please populate this row\'s latitude and longitude before finding a site to associate.</p></div>' +
+                                '<div class="modal-footer"><button class="btn btn-primary" ng-enter="ok()" ng-click="ok()">OK</button></div>',
+                            backdrop: 'static',
+                            keyboard: false,
+                            controller: ['$scope', '$uibModalInstance', function ($scope, $uibModalInstance) {
+                                $scope.ok = function () {
+                                    $uibModalInstance.dismiss();
+                                };
+                            }],
+                            size: 'sm'
+                        });
+                    }
+                };
+                //#endregion SITE NO dropdown arrow Click MODAL part ------------------------------------------------------------------------
+                
                 //#region renderers/validators
                 $scope.requiredValidator = function (value, callback) {
                     //if this is the dropdown arrow being clicked in siteNo cell, don't show error message
@@ -93,8 +203,7 @@
                             otherDataInRow = true;
                     });
                     if (((value < 22 || value > 55) || isNaN(value)) && otherDataInRow) {
-                        setTimeout(function () { $scope.hotInstance.deselectCell(); }, 100);
-                        
+                        setTimeout(function () { $scope.hotInstance.deselectCell(); }, 100);                        
                         toastr.options.timeOut = "6000";
                         toastr.options.closeButton = true;
                         toastr.error("Latitude must be between 22.0 and 55.0 (dec deg).");                       
@@ -104,7 +213,6 @@
                         toastr.options.timeOut = "6000";
                         toastr.options.closeButton = true;
                         toastr.error(whichOne + " is a required field.");
-                        //  requiredModal();
                         callback(false);
                     } else {
                         callback(true);
@@ -123,20 +231,7 @@
                         setTimeout(function () { $scope.hotInstance.deselectCell(); }, 100);
                         toastr.options.timeOut = "6000";
                         toastr.options.closeButton = true;
-                        toastr.error("Longitude must be between -130.0 and -55.0 (dec deg).");
-                        //var longModal = $uibModal.open({
-                        //    template: '<div class="modal-header"><h3 class="modal-title">Error</h3></div>' +
-                        //        '<div class="modal-body"><p>Longitude must be between -130.0 and -55.0 (NAD83 digital degrees).</p></div>' +
-                        //        '<div class="modal-footer"><button class="btn btn-primary" ng-enter="ok()" ng-click="ok()">OK</button></div>',
-                        //    backdrop: 'static',
-                        //    keyboard: false,
-                        //    controller: ['$scope', '$uibModalInstance', function ($scope, $uibModalInstance) {
-                        //        $scope.ok = function () {
-                        //            $uibModalInstance.dismiss();
-                        //        };
-                        //    }],
-                        //    size: 'sm'
-                        //});
+                        toastr.error("Longitude must be between -130.0 and -55.0 (dec deg).");                        
                         callback(false);
                     } else if (!value && otherDataInRow) {
                         var whichOne = $scope.hotInstance.getColHeader(col);
@@ -249,11 +344,11 @@
                 };
                 //#endregion
 
-                //done posting, remove the successful one from the handsontable
+                //called from in save function, done posting now remove the successful one from the handsontable above
                 var removeThisUploadHWM = function (successfulHWM) {
                    // find this one in the $scope.uploadHWMs and splice it out
                     var spliceIndex = -1;
-                    var bank = successfulHWM.bank
+                    var bank = successfulHWM.bank;
                     var hcmName = horCollMethList.filter(function (hcm) { return hcm.hcollect_method_id == successfulHWM.hcollect_method_id; })[0].hcollect_method;
                     var hdName = horizDatumList.filter(function (hd) { return hd.datum_id == successfulHWM.hdatum_id; })[0].datum_name;
                     var hwmQName = hwmQualList.filter(function (hq) { return hq.hwm_quality_id == successfulHWM.hwm_quality_id; })[0].hwm_quality;
@@ -301,7 +396,7 @@
                             hwmI = $scope.uploadHWMs.length;//break!
                         }
                     }
-                    
+                    if ($scope.dynamic == $scope.max) $scope.showProgressBar = false;
                     $scope.showLoading = 'false'; // loading..
                 };
                                 
@@ -316,9 +411,7 @@
                                 var validModal = $uibModal.open({
                                     template: '<div class="modal-header"><h3 class="modal-title">Valid</h3></div>' +
                                         '<div class="modal-body"><p>Good to go!</p></div>' +
-                                        '<div class="modal-footer"><button class="btn btn-primary" ng-enter="ok()" ng-click="ok()">OK</button></div>',
-                                    //   backdrop: 'static',
-                                    //   keyboard: false,
+                                        '<div class="modal-footer"><button class="btn btn-primary" ng-enter="ok()" ng-click="ok()">OK</button></div>',                                    
                                     controller: ['$scope','$rootScope', '$uibModalInstance', function ($scope, $rootScope, $uibModalInstance) {
                                         $scope.ok = function () {
                                             $uibModalInstance.dismiss();
@@ -332,6 +425,19 @@
                                 
                             } else {                             
                                 $scope.notValid = true;
+                                var invalidModal = $uibModal.open({
+                                    template: '<div class="modal-header"><h3 class="modal-title">Invalid!</h3></div>' +
+                                        '<div class="modal-body"><p>The table is not valid. Please correct red cells and try again.</p></div>' +
+                                        '<div class="modal-footer"><button class="btn btn-primary" ng-enter="ok()" ng-click="ok()">OK</button></div>',
+                                    controller: ['$scope', '$rootScope', '$uibModalInstance', function ($scope, $rootScope, $uibModalInstance) {
+                                        $scope.ok = function () {
+                                            $uibModalInstance.dismiss();
+                                        };
+                                        $scope.showLoading = false; // loading..
+                                        angular.element('#loadingDiv').addClass('noShow'); //addClass =false, removeClass =true                                        
+                                    }],
+                                    size: 'sm'
+                                });
                                 angular.element('#loadingDiv').addClass('noShow'); //need to do this way for some reason changing boolean isn't working . $rootScope either
                                 //$scope.showLoading = false; // loading..
                             }
@@ -353,10 +459,11 @@
                         
                     }
                 };
+
                 //save updates
                 $scope.save = function () {
-                    $scope.chosenEventName = $scope.events.filter(function(e){return e.event_id == $scope.chosenEvent;})[0].event_name;
 
+                    $scope.chosenEventName = $scope.events.filter(function(e){return e.event_id == $scope.chosenEvent;})[0].event_name;
                     var pastedHWMs = angular.copy($scope.uploadHWMs);
                     // drop the last 20 since they are empty
                     for (var i = pastedHWMs.length; i--;) {
@@ -364,11 +471,12 @@
                             pastedHWMs.splice(i, 1);
                         }
                     }
+                    $scope.max = pastedHWMs.length;
                     $scope.showLoading = 'true'; // loading..
                     $scope.notValid = true; //reset so they don't click it again before having to validate
                     $http.defaults.headers.common.Authorization = 'Basic ' + $cookies.get('STNCreds');
                     $http.defaults.headers.common.Accept = 'application/json';
-                    
+                    $scope.showProgressBar = true;
                     //no go thru each and get rest of fields needed and post hwms
                     angular.forEach(pastedHWMs, function (hwm, index) {
                        // var sitePeak = {};
@@ -376,11 +484,10 @@
                             SITE.getSitePeaks({ id: response.site_id }, function (peakResponse) {
                                 for (var p = 0; p < peakResponse.length; p++) {
                                     //make sure the site peak is for this event
-                                    if (peakResponse[p].event_name == $scope.chosenEventName) {
-                         //               sitePeak = peakResponse[p];
-                                        hwm.peak_summary_id = peakResponse[p].peak_summary_id;
+                                    if (peakResponse[p].event_name == $scope.chosenEventName) {                         
+                                        $scope.sitePeakarray.push([response.site_id, peakResponse[p].peak_summary_id]);
                                     }
-                                }
+                                }                                
                                 hwm.site_id = response.site_id;
                                 hwm.event_id = $scope.chosenEvent;
                                 hwm.flag_member_id = $scope.$parent.userID;
@@ -397,34 +504,115 @@
                                 var siteNo = hwm.site_no;
                                 delete hwm.site_no;
                                 hwm.hwm_label = "hwm-" + parseInt(index + 1);
-                                HWM.save(hwm).$promise.then(function (response) {
-                                    response.site_no = siteNo;
-                                    if (response.stillwater !== undefined) {
-                                        response.stillwater = response.stillwater > 0 ? "Yes" : "No";
-                                    } else response.stillwater = "";
-                                    //if (response.peak_summary_id !== undefined && response.peak_summary_id > 0) {
-                                    //    response.PeakSummary = sitePeak;
-                                    //}
-                                    //add to the done list (make sure it's not already there)
-                                    if ($scope.postedHWMs.map(function (p) { return p.hwm_id; }).indexOf(response.hwm_id) < 0) {
-                                        toastr.success("HWM uploaded: hwm_id:" + response.hwm_id);
-                                        $scope.postedHWMs.push(response);
-                                    }
-                                    else toastr.error("HWM " + response.hwm_id + " is already in the successfully uploaded list below.");
-                                    removeThisUploadHWM(response); //remove it from the handsontable
+                                HWM.save(hwm).$promise.then(function (hwmResponse) {
+                                    //approve it
+                                    $http.defaults.headers.common.Authorization = 'Basic ' + $cookies.get('STNCreds');
+                                    HWM.approveHWM({ id: hwmResponse.hwm_id }).$promise.then(function (approvalResponse) {
+                                        hwmResponse.approval_id = approvalResponse.approval_id;
+                                        hwmResponse.site_no = siteNo;
+                                        if (hwmResponse.stillwater !== undefined) {
+                                            hwmResponse.stillwater = hwmResponse.stillwater > 0 ? "Yes" : "No";
+                                        } else hwmResponse.stillwater = "";
+                                        var sitePeakId = $scope.sitePeakarray.filter(function (sp) { return sp[0] == hwmResponse.site_id; })[0];
+                                        if (sitePeakId !== undefined) {
+                                            //there's a peak this hwm could be added to
+                                            hwmResponse.PeakSummary = sitePeakId;
+                                        }
+                                        //post the file and add to the hwm before pushing to postedHWMs
+                                        var theSource = { source_name: $scope.approvalSource.FULLname, agency_id: $scope.approvalSource.agency_id };
+                                        //post source first to get source_id
+                                        SOURCE.save(theSource).$promise.then(function (sourceResponse) {
+                                            if ($scope.approvalFile.filetype_id !== 8) {
+                                                //then POST fileParts (Services populate PATH)
+                                                var fileParts = {
+                                                    FileEntity: {
+                                                        filetype_id: $scope.approvalFile.filetype_id,
+                                                        name: $scope.approvalFile.File.name,
+                                                        file_date: $scope.approvalFile.file_date,
+                                                        photo_date: $scope.approvalFile.photo_date,
+                                                        description: $scope.approvalFile.description,
+                                                        site_id: hwmResponse.site_id,
+                                                        source_id: sourceResponse.source_id,
+                                                        photo_direction: $scope.approvalFile.photo_direction,
+                                                        latitude_dd: $scope.approvalFile.latitude_dd,
+                                                        longitude_dd: $scope.approvalFile.longitude_dd,
+                                                        hwm_id: hwmResponse.hwm_id
+                                                    },
+                                                    File: $scope.approvalFile.File
+                                                };//end fileParts
+                                                //need to put the fileParts into correct format for post
+                                                var fd = new FormData();
+                                                fd.append("FileEntity", JSON.stringify(fileParts.FileEntity));
+                                                fd.append("File", fileParts.File);
+                                                //now POST it (fileparts)
+                                                FILE.uploadFile(fd).$promise.then(function (fresponse) {
+                                                    hwmResponse.HWMFiles = [];
+                                                    hwmResponse.HWMFiles.push(fresponse);
+                                                    //add to the done list (make sure it's not already there)
+                                                    if ($scope.postedHWMs.map(function (p) { return p.hwm_id; }).indexOf(hwmResponse.hwm_id) < 0) {
+                                                        toastr.success("HWM uploaded: hwm_id:" + hwmResponse.hwm_id);                                                        
+                                                        $scope.postedHWMs.push(hwmResponse);
+                                                    }
+                                                    else toastr.error("HWM " + hwmResponse.hwm_id + " is already in the successfully uploaded list below.");
+                                                    $scope.dynamic++;
+                                                    removeThisUploadHWM(hwmResponse); //remove it from the handsontable
+                                                }, function (errorResponse) {
+                                                    $scope.showProgressBar = false;
+                                                    toastr.error("Error uploading file: " + errorResponse.statusText);                                                    
+                                                });
+                                            }//end if filetype_id !== 8
+                                            else {
+                                                $scope.approvalFile.source_id = sourceResponse.source_id;
+                                                $scope.approvalFile.site_id = hwmResponse.site_id;
+                                                $scope.approvalFile.hwm_id = hwmResponse.hwm_id;
+                                                $scope.approvalFile.path = '<link>';
+                                                FILE.save($scope.approvalFile).$promise.then(function (fresponse) {
+                                                    hwmResponse.HWMFiles = [];
+                                                    hwmResponse.HWMFiles.push(fresponse);
+                                                    //add to the done list (make sure it's not already there)
+                                                    if ($scope.postedHWMs.map(function (p) { return p.hwm_id; }).indexOf(hwmResponse.hwm_id) < 0) {
+                                                        toastr.success("HWM uploaded: hwm_id:" + hwmResponse.hwm_id);
+                                                        $scope.postedHWMs.push(hwmResponse);
+                                                    }
+                                                    else toastr.error("HWM " + hwmResponse.hwm_id + " is already in the successfully uploaded list below.");
+                                                    $scope.dynamic++;
+                                                    removeThisUploadHWM(hwmResponse); //remove it from the handsontable
+                                                }, function (errorResponse) {
+                                                    $scope.HWMfileIsUploading = false;
+                                                    $scope.showProgressBar = false;
+                                                    toastr.error("Error saving file: " + errorResponse.statusText);
+                                                });                                                
+                                            }//end else (filetype_id does == 8)                                        
+                                        }, function (sourceError) {
+                                            $scope.showLoading = 'false'; // loading..
+                                            toastr.options.timeOut = "0";
+                                            toastr.options.closeButton = true;
+                                            $scope.showProgressBar = false;
+                                            toastr.error("Error uploading approval File Source: " + sourceError.statusText);
+                                        });
+                                    }, function (approveError){
+                                        $scope.showLoading = 'false'; // loading..
+                                        toastr.options.timeOut = "0";
+                                        toastr.options.closeButton = true;
+                                        $scope.showProgressBar = false;
+                                        toastr.error("Error approving hwm: " + approveError.statusText);
+                                    });//end approve hwm
                                 }, function (hwmSaveError) {
                                     $scope.showLoading = 'false'; // loading..
                                     toastr.options.timeOut = "0";
                                     toastr.options.closeButton = true;
+                                    $scope.showProgressBar = false;
                                     toastr.error("Error uploading hwm: " + hwmSaveError.statusText);
                                 });
                             }, function (getSitePeakError) {
+                                $scope.showProgressBar = false;
                                 toastr.error("Something went wrong getting sitePeak");
                             });
                         }, function (getHwmSiteError) {
                             $scope.showLoading = 'false'; // loading..
                             toastr.options.timeOut = "0";
                             toastr.options.closeButton = true;
+                            $scope.showProgressBar = false;
                             toastr.error("Error getting site information for " + hwm.site_no + ". Site does not exist.");
                         });
                     });
@@ -473,7 +661,8 @@
                     }
                 };
 
-                //DONE Table stuff ----------------------------------------------------------------------------------------------------------------
+                //#region successfully Uploaded Table stuff ----------------------------------------------------------------------------------------------------------------
+
                 //they clicked the site no in the finished table 
                 $scope.goToSiteDash = function (siteID) {
                     //show warning modal
@@ -529,7 +718,8 @@
                     }, function () {
                         //logic for cancel
                     });//end modal
-                }; //end DeleteHWM
+                }; //end DeleteHWM                
+                
                 //want to edit hwm or add files to it
                 $scope.OpenHWMEdit = function (HWMclicked) {
                     var passAllLists = [hwmTypeList, hwmQualList, horizDatumList, horCollMethList, vertDatumList, vertCollMethList, markerList, eventList];
@@ -556,7 +746,7 @@
                                 return SITE.query({ id: HWMclicked.site_id }).$promise;
                             },
                             agencyList: function () {
-                                return AGENCY.getAll().$promise;
+                                return agenciesList;
                             },
                             allMembers: function () {
                                 $http.defaults.headers.common.Authorization = 'Basic ' + $cookies.get('STNCreds');
@@ -564,7 +754,7 @@
                                 return MEMBER.getAll().$promise;
                             },
                             fileTypes: function () {
-                                return FILE_TYPE.getAll().$promise;
+                                return fileTypesList;
                             }
                         },
                         controller: 'hwmEditModalCtrl'//end modal controller
@@ -583,73 +773,9 @@
                         $scope.postedHWMs[indexClicked] = h;
                     });
                 };
-                //End DONE Table stuff -------------------------------------------------------------------------------------------------------------
+                //#endregion successfully Uploaded Table stuff -------------------------------------------------------------------------------------------------------------
                 
-                //#region SITE NO dropdown arrow Click MODAL part ------------------------------------------------------------------------
-                var getFindSiteModal = function (r, c, hwmParts) {
-                    var dataAtRow = $scope.hotInstance.getDataAtRow(r); setTimeout(function () { $scope.hotInstance.deselectCell(); }, 100);
-                    if (dataAtRow[9] !== "" && dataAtRow[10] !== "" && dataAtRow[9] !== null && dataAtRow[10] !== null) {
-                        var siteModal = $uibModal.open({
-                            templateUrl: 'associateSitemodal.html',
-                            backdrop: 'static',
-                            keyboard: false,
-                            resolve: {
-                                nearBySites: function () {
-                                    return SITE.getProximitySites({ Latitude: dataAtRow[9], Longitude: dataAtRow[10], Buffer: 0.0005 }).$promise;
-                                },
-                                HWMparts: function(){
-                                    return hwmParts;
-                                },
-                                siteNoAlreadyThere: function () {
-                                    return dataAtRow[0];
-                                },
-                                hdatums: function () {
-                                    return $scope.horDatums;
-                                },
-                                hcolMeths: function () {
-                                    return $scope.horCollMeths;
-                                },
-                                vdatums: function () {
-                                    return $scope.vertDatums;
-                                },
-                                vcolMeths: function () {
-                                    return $scope.vertCollMeths;
-                                },
-                                states: function () {
-                                    return $scope.states;
-                                },
-                                counties: function () {
-                                    return $scope.counties;
-                                }
-
-                            },
-                            controller: 'hwmSiteModalCtrl', 
-                            size: 'sm'
-                        });
-                        siteModal.result.then(function (thisSite) {
-                            if (thisSite !== undefined)
-                                $scope.hotInstance.setDataAtCell(r, c, thisSite.site_no);
-                        });
-                    } else {
-                        var errorModal = $uibModal.open({
-                            template: '<div class="modal-header"><h3 class="modal-title">Error</h3></div>' +
-                                '<div class="modal-body"><p>Please populate this row\'s latitude and longitude before finding a site to associate.</p></div>' +
-                                '<div class="modal-footer"><button class="btn btn-primary" ng-enter="ok()" ng-click="ok()">OK</button></div>',
-                            backdrop: 'static',
-                            keyboard: false,
-                            controller: ['$scope', '$uibModalInstance', function ($scope, $uibModalInstance) {
-                                $scope.ok = function () {
-                                    $uibModalInstance.dismiss();
-                                };
-                            }],
-                            size: 'sm'
-                        });
-                    }
-                };
-                //#endregion SITE NO dropdown arrow Click MODAL part ------------------------------------------------------------------------
-
                 //#region HWM PEAK "add/edit" clicked ------------------------------------------------------------------------------------------
-                //thisPeak, peakSite, allEventHWMs, allSiteSensors, allSiteFiles, thisPeakDFs
                 $scope.OpenPeakEdit = function (peakId,siteId, eventId) {
                     $rootScope.stateIsLoading.showLoading = true; // loading..
                     //modal
@@ -714,7 +840,7 @@
                                 return "empty";
                             },
                             thisPeakDFs: function () {
-                                return PEAK.getPeakSummaryDFs({ id: peakId }).$promise;
+                                return "empty";
                             },
                             peakSite: function () {
                                 return SITE.query({ id: siteId }).$promise;
@@ -738,8 +864,14 @@
                     });
                     peakCreateInstance.result.then(function (createdPk) {
                         //createdPk[0] will be the peak, createdPk[1] will be 'created'
+                        //add this 'PeakSummary' [site_id, peak_summary_id] to each hwm in postedHWMs that have this siteId
+                        angular.forEach($scope.postedHWMs, function (pHWM) {
+                            if (pHWM.site_id == siteId) {
+                                pHWM.PeakSummary = [siteId, createdPk[0].peak_summary_id];
+                            }
+                        })
                     });
-                }
+                };
                 //#endregion HWM PEAK "add/edit" clicked----------------------------------------------------------------------------------------
                 //#region handsontable settings
                 $scope.tableSettings = {
@@ -1425,7 +1557,7 @@
                             size: 'sm'
                         });
                         uniqueModal.result.then(function () {
-                            angular.element("[name='label']").focus();
+                            angular.element("[name='hwm_label']").focus();
                         });
                     }
                 });
@@ -1521,9 +1653,11 @@
                     $scope.existFileIndex = $scope.HWMFiles.indexOf(file);
                     $scope.existIMGFileIndex = $scope.hwmImageFiles.length > 0 ? $scope.hwmImageFiles.indexOf(file) : -1;
                     $scope.aFile = angular.copy(file);
-                    FILE.getFileItem({ id: $scope.aFile.file_id }).$promise.then(function (response) {
-                        $scope.fileItemExists = response.Length > 0 ? true : false;
-                    });
+                    if (file.filetype_id !== 8) {
+                        FILE.getFileItem({ id: $scope.aFile.file_id }).$promise.then(function (response) {
+                            $scope.fileItemExists = response.Length > 0 ? true : false;
+                        });
+                    }
                     $scope.aFile.fileType = $scope.fileTypeList.filter(function (ft) { return ft.filetype_id == $scope.aFile.filetype_id; })[0].filetype;
                     //determine if existing file is a photo (even if type is not )
                     if ($scope.aFile.name !== undefined) {
@@ -1689,5 +1823,5 @@
             };
             //#endregion FILE STUFF
             $rootScope.stateIsLoading.showLoading = false; // loading..
-        }]);
+        }]);    
 }());

@@ -379,7 +379,7 @@
                             size: 'sm'
                         });
                         uniqueModal.result.then(function () {
-                            angular.element("[name='label']").focus();
+                            angular.element("[name='hwm_label']").focus();
                         });
                     }
                 });
@@ -432,7 +432,7 @@
                     event_id: $cookies.get('SessionEventID'),
                     hwm_environment: 'Riverine',
                     bank: 'N/A',
-                    label: 'hwm-'+ (parseFloat(allSiteHWMs.length)+1),
+                    hwm_label: 'hwm-'+ (parseFloat(allSiteHWMs.length)+1),
                     stillwater: 0,
                     latitude_dd: hwmSite.latitude_dd,
                     longitude_dd: hwmSite.longitude_dd,
