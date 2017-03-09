@@ -1715,30 +1715,39 @@
             </div>
 
             <div class="modal-body">
+                <!-- Historic HWM approval type -->
+                <div class="form-group">
+                    <label class="col-md-4 control-label">Historic HWM Approval Type:</label>
+                    <div class="col-md-6">
+                        <span class="radio-inline">
+                            <input type="radio" name="approval_type" ng-model="approval_type" ng-change="updateFileType()" value="7" />PDF of Approval Memo
+                        </span>
+                        <span class="radio-inline">
+                            <input type="radio" name="approval_type" ng-model="approval_type" ng-change="updateFileType()" value="8" />Report Link
+                        </span>
+                    </div>
+                </div>
+
                 <!-- File Type* -->
                 <div class="form-group" ng-class="{'has-error':approvalFILEForm.filetype_id.$invalid && approvalFILEForm.filetype_id.$dirty}" style="margin:0;padding:0">
-                    <label class="col-md-3 control-label req" for="filetype_id">
+                    <label class="col-md-4 control-label req" for="filetype_id">
                         File Type:
                         <button type="button" class="help-btn" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Required">
                             <span class="glyphicon glyphicon-asterisk" style="color:#d00;font-size:xx-small;"></span>
                         </button>
                     </label>
-                    <div class="col-md-6" ng-if="aFile.file_id == undefined">
-                        <select class="form-control" name="filetype_id" ng-model="aFile.filetype_id" ng-options="ft.filetype_id as ft.filetype for ft in hwmFileTypes" required>
-                            <option value=""></option>
-                        </select>
-                    </div>
+                    <div class="col-md-6"><span ng-if="approval_type">{{(hwmFileTypes | filter: {filetype_id : approval_type})[0].filetype }}</span></div>
                 </div>
 
                 <!--Upload Single Image with validations*-->
-                <div ng-if="aFile.file_id === undefined && aFile.filetype_id !== 8" class="form-group" style="margin:0;padding:0">
-                    <label class="col-md-3 control-label" for="FILE">
+                <div ng-if="aFile.filetype_id !== 8" class="form-group" style="margin:0;padding:0">
+                    <label class="col-md-4 control-label" for="FILE">
                         Upload File:
                         <button type="button" class="help-btn" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Required">
                             <span class="glyphicon glyphicon-asterisk" style="color:#d00;font-size:xx-small;"></span>
                         </button>
                     </label>
-                    <div class="col-md-9">
+                    <div class="col-md-6">
                         <input type="file" max="500000" file-model="aFile.File" ng-required="aFile.filetype_id !== 8"/>
                         <img ngf-thumbnail="aFile.File" style="height:60px" class="thumbnail">
                     </div>
@@ -1747,7 +1756,7 @@
 
                 <!--File URL (LINK file)-->
                 <div ng-if="aFile.filetype_id === 8" class="form-group" style="margin:0;padding:0">
-                    <label class="col-md-3 control-label" for="name">File URL:</label>
+                    <label class="col-md-4 control-label" for="name">File URL:</label>
                     <div class="col-md-6">
                         <input class="form-control" name="name" ng-model="aFile.name" type="text" />
                     </div>
@@ -1758,7 +1767,7 @@
 
                 <!--Source Name (photo)-->
                 <div class="form-group" ng-if="aFile.filetype_id === 1" ng-class="{'has-error':approvalFILEForm.FULLname.$invalid && approvalFILEForm.FULLname.$dirty}" style="margin:0;padding:0">
-                    <label class="col-md-3 control-label req" for="source_id">
+                    <label class="col-md-4 control-label req" for="source_id">
                         Source Photographer:
                         <button type="button" class="help-btn" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Required">
                             <span class="glyphicon glyphicon-asterisk" style="color:#d00;font-size:xx-small;"></span>
@@ -1771,7 +1780,7 @@
 
                 <!--Source Name (all other)-->
                 <div class="form-group" ng-if="aFile.filetype_id  > 2" ng-class="{'has-error':approvalFILEForm.FULLname.$invalid && approvalFILEForm.FULLname.$dirty}" style="margin:0;padding:0">
-                    <label class="col-md-3 control-label req" for="source_id">
+                    <label class="col-md-4 control-label req" for="source_id">
                         Source Name:
                         <button type="button" class="help-btn" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Required">
                             <span class="glyphicon glyphicon-asterisk" style="color:#d00;font-size:xx-small;"></span>
@@ -1784,7 +1793,7 @@
 
                 <!--Source Agency* (photo, allOther)-->
                 <div ng-if="aFile.filetype_id === 1 || aFile.filetype_id > 2" class="form-group" ng-class="{'has-error':approvalFILEForm.agency_id.$invalid && approvalFILEForm.agency_id.$dirty}" style="margin:0;padding:0">
-                    <label class="col-md-3 control-label req" for="agency_id">
+                    <label class="col-md-4 control-label req" for="agency_id">
                         Source Agency:
                         <button type="button" class="help-btn" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Required">
                             <span class="glyphicon glyphicon-asterisk" style="color:#d00;font-size:xx-small;"></span>
@@ -1799,7 +1808,7 @@
 
                 <!-- Photo Date* (photo) -->
                 <div ng-if="aFile.filetype_id === 1" class="form-group" ng-class="{'has-error':approvalFILEForm.photo_date.$invalid && approvalFILEForm.photo_date.$dirty}" style="margin:0;padding:0">
-                    <label class="col-md-3 control-label req" for="photo_date">
+                    <label class="col-md-4 control-label req" for="photo_date">
                         Photo Date:
                         <button type="button" class="help-btn" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Required">
                             <span class="glyphicon glyphicon-asterisk" style="color:#d00;font-size:xx-small;"></span>
@@ -1817,7 +1826,7 @@
 
                 <!-- Date Uploaded* (photo, data, allother) -->
                 <div ng-if="aFile.filetype_id > 0" class="form-group" ng-class="{'has-error':approvalFILEForm.file_date.$invalid && approvalFILEForm.file_date.$dirty}" style="margin:0;padding:0">
-                    <label class="col-md-3 control-label req" for="file_date">
+                    <label class="col-md-4 control-label req" for="file_date">
                         Date Uploaded:
                         <button type="button" class="help-btn" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Required">
                             <span class="glyphicon glyphicon-asterisk" style="color:#d00;font-size:xx-small;"></span>
@@ -1835,7 +1844,7 @@
 
                 <!--Description*(photo, data, allother)-->
                 <div ng-if="aFile.filetype_id > 0" class="form-group" ng-class="{'has-error':approvalFILEForm.description.$invalid && approvalFILEForm.description.$dirty}" style="margin:0;padding:0">
-                    <label class="col-md-3 control-label req" for="description">
+                    <label class="col-md-4 control-label req" for="description">
                         Description:
                         <button type="button" class="help-btn" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Required">
                             <span class="glyphicon glyphicon-asterisk" style="color:#d00;font-size:xx-small;"></span>
@@ -1852,7 +1861,7 @@
                 <!-- This is where Other ends, rest is for Photo -->
                 <!--Photo Direction (photo)-->
                 <div ng-if="aFile.filetype_id === 1" class="form-group" style="margin:0;padding:0;padding-top:5px;">
-                    <label class="col-md-3 control-label" for="photo_direction">Photo Direction:</label>
+                    <label class="col-md-4 control-label" for="photo_direction">Photo Direction:</label>
                     <div class="col-md-6">
                         <input class="form-control" id="photo_direction" name="photo_direction" ng-model="aFile.photo_direction" type="text" />
                     </div>
@@ -1860,7 +1869,7 @@
 
                 <!-- Photo Latitude (photo)-->
                 <div ng-if="aFile.filetype_id === 1" class="form-group" style="margin:0;padding:0">
-                    <label class="col-md-3 control-label" for="latitude_dd">Photo Latitude <br /> (if different):</label>
+                    <label class="col-md-4 control-label" for="latitude_dd">Photo Latitude <br /> (if different):</label>
                     <div class="col-md-6">
                         <input class="form-control" ng-keypress="isNum($event)" name="latitude_dd" id="latitude_dd" ng-model="aFile.latitude_dd" type="text" />
                     </div>
@@ -1868,7 +1877,7 @@
 
                 <!--Photo Longitude (photo)-->
                 <div ng-if="aFile.filetype_id === 1" class="form-group" style="margin:0;padding:0">
-                    <label class="col-md-3 control-label" for="longitude_dd">Photo Longitude <br /> (if different):</label>
+                    <label class="col-md-4 control-label" for="longitude_dd">Photo Longitude <br /> (if different):</label>
                     <div class="col-md-6">
                         <input class="form-control" ng-keypress="isNum($event)" id="longitude_dd" name="longitude_dd" ng-model="aFile.longitude_dd" type="text" />
                     </div>
