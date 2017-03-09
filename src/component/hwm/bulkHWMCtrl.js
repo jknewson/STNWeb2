@@ -55,7 +55,7 @@
                 //#endregion make dropdowns
 
                 $scope.chosenEvent = 0;
-                $scope.chosenEventName = "";
+                $scope.chosenEventName = "";                
                 $scope.delIndex = -1; //if they delete a hwm from the DONE table, need index they clicked so closing warning modal will know which one to remove from postedHWMs list
                 $scope.sitePeakarray = [];//when saving handsontable, each row, get sitePeaks, if so, store here
                 //add FILE for approval memo or publication link
@@ -69,8 +69,17 @@
                                     hft.filetype === 'Level Notes' || hft.filetype === 'Other' || hft.filetype === 'Link' || hft.filetype === 'Sketch';
                                 });
                                 $scope.aFile = {}; //holder for file
+                                $scope.aFile.filetype_id = 7;
+                                $scope.aFile.description = "PDF of Approval Memo";
                                 $scope.aSource = {}; //holder for file source
                                 $scope.agencies = agencyList;
+                                $scope.approval_type = 7; //holder of approval type, used to update filetype_id and description
+                                //radio approval type changed, update filetype_id and description
+                                $scope.updateFileType = function () {
+                                    $scope.aFile.filetype_id = Number($scope.approval_type);
+                                    $scope.aFile.description = $scope.approval_type == "7" ? "PDF of Approval Memo" : "Report Link";
+                                }
+
                                 //Datepicker
                                 $scope.datepickrs = {};
                                 $scope.open = function ($event, which) {
@@ -120,6 +129,7 @@
                 };//end addApprovalFile
                 //end add FILE
 
+                
                 //#region SITE NO dropdown arrow Click MODAL part ------------------------------------------------------------------------
                 var getFindSiteModal = function (r, c, hwmParts) {
                     var dataAtRow = $scope.hotInstance.getDataAtRow(r); setTimeout(function () { $scope.hotInstance.deselectCell(); }, 100);
@@ -396,7 +406,8 @@
                             hwmI = $scope.uploadHWMs.length;//break!
                         }
                     }
-                    if ($scope.dynamic == $scope.max) $scope.showProgressBar = false;
+                    if ($scope.dynamic == $scope.max)
+                        $scope.showProgressBar = false;
                     $scope.showLoading = 'false'; // loading..
                 };
                                 
@@ -410,7 +421,7 @@
                             if (valid) {                                
                                 var validModal = $uibModal.open({
                                     template: '<div class="modal-header"><h3 class="modal-title">Valid</h3></div>' +
-                                        '<div class="modal-body"><p>Good to go!</p></div>' +
+                                        '<div class="modal-body"><p>Validation successful!</p></div>' +
                                         '<div class="modal-footer"><button class="btn btn-primary" ng-enter="ok()" ng-click="ok()">OK</button></div>',                                    
                                     controller: ['$scope','$rootScope', '$uibModalInstance', function ($scope, $rootScope, $uibModalInstance) {
                                         $scope.ok = function () {
@@ -462,7 +473,7 @@
 
                 //save updates
                 $scope.save = function () {
-
+                    $scope.dynamic = 0;
                     $scope.chosenEventName = $scope.events.filter(function(e){return e.event_id == $scope.chosenEvent;})[0].event_name;
                     var pastedHWMs = angular.copy($scope.uploadHWMs);
                     // drop the last 20 since they are empty
@@ -616,6 +627,7 @@
                             toastr.error("Error getting site information for " + hwm.site_no + ". Site does not exist.");
                         });
                     });
+                    $scope.showProgressBar = false;
                 };
 
                 //reset back 
