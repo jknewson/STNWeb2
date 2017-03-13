@@ -13,7 +13,7 @@ var mainBowerFiles = require('main-bower-files');
 
 var paths = {
     scripts: 'src/**/*.js',
-    appStyles: 'src/**/*.css',
+    appStyles: 'src/css/*.css',
     //vendorStyles: '../bower_components/**/**/**/*.css',
     less: 'src/less',
     images: 'src/images/**/*',
