@@ -12,10 +12,13 @@
             $scope.states = stateList;
             $scope.senTypes = sensorTypes;
             $scope.netNames = networkNames;
+            $scope.surveyOptions = [{ id: true, value: "Surveyed HWMs" }, { id: false, value: "Unsurveyed HWMs" }];
             $scope.Chosen = {
                 network: null,
-                sensor: null
+                sensor: null,
+                survey:null
             };
+            
             $scope.chosenStates = []; //used to join each abbrev to pass to call
             $scope.siteResponse = false;
             $scope.checkboxModel = {
@@ -30,8 +33,7 @@
                 //$rootScope.stateIsLoading.showLoading = true; // loading..
                 //store search in case they leave and click back
                 spinnerService.show("mapSpinner");
-
-                if ($scope.checkboxModel.eventSitesOnly === "1" && $scope.sessionEventExists == true ) {
+                if ($scope.checkboxModel.eventSitesOnly === "1" && $scope.sessionEventExists === true ) {
                     var stateString = $scope.chosenStates.join();
                     $scope.siteResponse = false;
                     $scope.siteList = [];
@@ -42,6 +44,7 @@
                         SensorType: $scope.Chosen.sensor,
                         NetworkName: $scope.Chosen.network,
                         HWMOnly: $scope.checkboxModel.hwmOnly,
+                        HWMSurveyed: $scope.Chosen.survey,
                         SensorOnly: $scope.checkboxModel.senOnly,
                         RDGOnly: $scope.checkboxModel.rdgOnly,
                         OPDefined: $scope.checkboxModel.opDefined
@@ -52,6 +55,7 @@
                             SensorType: $scope.Chosen.sensor,
                             NetworkName: $scope.Chosen.network,
                             HWMOnly: $scope.checkboxModel.hwmOnly,
+                            HWMSurveyed: $scope.Chosen.survey,
                             SensorOnly: $scope.checkboxModel.senOnly,
                             RDGOnly: $scope.checkboxModel.rdgOnly,
                             OPDefined: $scope.checkboxModel.opDefined
@@ -67,7 +71,7 @@
                             $rootScope.stateIsLoading.showLoading = false; // loading..
                             alert("Error: " + errorResponse.statusText);
                         });
-                } else if ($scope.checkboxModel.eventSitesOnly === "0" || $scope.sessionEventExists == false){
+                } else if ($scope.checkboxModel.eventSitesOnly === "0" || $scope.sessionEventExists === false){
 
 
                     var stateString = $scope.chosenStates.join();
@@ -79,13 +83,14 @@
                         SensorType: $scope.Chosen.sensor,
                         NetworkName: $scope.Chosen.network,
                         HWMOnly: $scope.checkboxModel.hwmOnly,
+                        HWMSurveyed: $scope.Chosen.survey,
                         SensorOnly: $scope.checkboxModel.senOnly,
                         RDGOnly: $scope.checkboxModel.rdgOnly,
                         OPDefined: $scope.checkboxModel.opDefined
                     };
 
                     var sp = $rootScope.searchParams;
-                    if (sp.HWMOnly === "0" && sp.NetworkName == null && sp.OPDefined === "0" && sp.RDGOnly === "0" && sp.SensorOnly === "0" && sp.SensorType === null && sp.state.length == 0) {
+                    if (sp.HWMOnly === "0" && sp.HWMSurveyed === null && sp.NetworkName === null && sp.OPDefined === "0" && sp.RDGOnly === "0" && sp.SensorOnly === "0" && sp.SensorType === null && sp.state.length === 0) {
                         spinnerService.hide("mapSpinner");
                         toastr.options.positionClass = "toast-bottom-right";
                         toastr.warning("Please select at least one search parameter.", "Map Filters");
@@ -97,6 +102,7 @@
                             SensorType: $scope.Chosen.sensor,
                             NetworkName: $scope.Chosen.network,
                             HWMOnly: $scope.checkboxModel.hwmOnly,
+                            HWMSurveyed: $scope.Chosen.survey,
                             SensorOnly: $scope.checkboxModel.senOnly,
                             RDGOnly: $scope.checkboxModel.rdgOnly,
                             OPDefined: $scope.checkboxModel.opDefined
@@ -140,7 +146,7 @@
                     rdgOnly: 0,
                     opDefined: 0
                 };
-                $scope.Chosen = {};
+                $scope.Chosen = {}; 
                 $scope.chosenStates = [];
                 angular.forEach($scope.states, function (st) {
                     st.selected = false;

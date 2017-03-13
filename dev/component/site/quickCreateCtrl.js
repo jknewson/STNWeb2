@@ -48,14 +48,16 @@
                 $scope.removeOPCarray = []; //holder if they remove any OP controls
                 $scope.addedIdentifiers = []; //holder for added Identifiers
                 $scope.showControlIDinput = false; //initially hide the area containing added control Identifiers
+
                 //dropdowns
                 $scope.horDatumList = allHorDatums; $scope.horCollMethodList = allHorCollMethods;
                 $scope.stateList = allStates; $scope.allCountyList = allCounties; $scope.stateCountyList = [];
                 $scope.opTypeList = allOPTypes; $scope.vertDatumList = allVertDatums;
                 $scope.vertCollMethodList = allVertColMethods; $scope.opQualList = allOPQualities;
+
                 //hwm dropdowns
                 if (whichQuick == 'HWM') {
-                    $scope.aHWM = { hwm_environment: 'Riverine', event_id: $cookies.get('SessionEventID'), bank: 'N/A', flag_date: makeAdate(""), stillwater: 0, flag_member_id: $cookies.get('mID') };
+                    $scope.aHWM = { hwm_label: 'hwm-1', hwm_environment: 'Riverine', event_id: $cookies.get('SessionEventID'), bank: 'N/A', flag_date: makeAdate(""), stillwater: 0, flag_member_id: $cookies.get('mID') };
                     $scope.hwmTypeList = allHWMTypes; $scope.hwmQualList = allHWMQualities; $scope.markerList = allMarkers;
                 }
                 //sensor dropdowns
@@ -155,6 +157,7 @@
                 var azimuth = function (deg, min, sec) {
                     var azi = 0;
                     if (deg < 0) {
+                        //longitude
                         azi = -1.0 * deg + 1.0 * min / 60.0 + 1.0 * sec / 3600.0;
                         return (-1.0 * azi).toFixed(5);
                     }
@@ -184,11 +187,31 @@
                 $scope.latLongChange = function () {
                     if ($scope.decDegORdms.val == "dd") {
                         //they clicked Dec Deg..
-                        if ($scope.DMS.LADeg !== undefined) {
-                            //convert what's here for each lat and long
+                        if (($scope.DMS.LADeg !== undefined && $scope.DMS.LAMin !== undefined && $scope.DMS.LASec !== undefined) &&
+                            $scope.DMS.LODeg !== undefined && $scope.DMS.LOMin !== undefined && $scope.DMS.LOSec !== undefined) {
+                            //convert what's here for each lat and long                            
                             $scope.aSite.latitude_dd = azimuth($scope.DMS.LADeg, $scope.DMS.LAMin, $scope.DMS.LASec);
                             $scope.aSite.longitude_dd = azimuth($scope.DMS.LODeg, $scope.DMS.LOMin, $scope.DMS.LOSec);
-                            var test;
+                        } else {
+                            //show modal telling them to populate all three (DMS) for conversion to work
+                            var DMSModal = $uibModal.open({
+                                template: '<div class="modal-header"><h3 class="modal-title">Error</h3></div>' +
+                                    '<div class="modal-body"><p>Please populate all three inputs for conversion from DMS to Decimal Degrees to work.</p></div>' +
+                                    '<div class="modal-footer"><button type="button" class="btn btn-primary" ng-enter="ok()" ng-click="ok()">OK</button></div>',
+                                controller: ['$scope', '$uibModalInstance', function ($scope, $uibModalInstance) {
+                                    $scope.ok = function () {
+                                        $uibModalInstance.close();
+                                    };
+                                }],
+                                size: 'sm'
+                            });
+                            DMSModal.result.then(function () {
+                                if ($scope.DMS.LADeg !== undefined || $scope.DMS.LAMin !== undefined || $scope.DMS.LASec !== undefined)
+                                    $("#LaDeg").focus();
+                                if ($scope.DMS.LODeg !== undefined || $scope.DMS.LOMin !== undefined || $scope.DMS.LOSec !== undefined)
+                                    $("#LoDeg").focus();
+                                $scope.decDegORdms.val = "dms";
+                            });
                         }
                     } else {
                         //they clicked dms (convert lat/long to dms)
@@ -247,22 +270,46 @@
                 };
 
                 //make sure lat/long are right number range
-                $scope.checkValue = function (d) {
+                $scope.checkValue = function (d, direction) {
                     if (d == 'dms') {
                         //check the degree value
-                        if ($scope.DMS.LADeg < 0 || $scope.DMS.LADeg > 73) {
-                            openLatModal('dms');
+                        if (direction == 'lat') {
+                            if ($scope.DMS.LADeg < 0 || $scope.DMS.LADeg > 73 || (isNaN($scope.DMS.LADeg) && $scope.DMS.LADeg !== undefined) || (isNaN($scope.DMS.LAMin) && $scope.DMS.LAMin !== undefined) || (isNaN($scope.DMS.LASec) && $scope.DMS.LASec !== undefined)) {
+                                openLatModal('dms');
+                                //if not a number, clear the imputs to trigger the validation
+                                if (isNaN($scope.DMS.LADeg)) $scope.DMS.LADeg = undefined;
+                                if (isNaN($scope.DMS.LAMin)) $scope.DMS.LAMin = undefined;
+                                if (isNaN($scope.DMS.LASec)) $scope.DMS.LASec = undefined;
+                            }
                         }
-                        if ($scope.DMS.LODeg < -175 || $scope.DMS.LODeg > -60) {
-                            openLongModal('dms');
+                        if (direction == 'long') {
+                            if ($scope.DMS.LODeg < -175 || $scope.DMS.LODeg > -60 || (isNaN($scope.DMS.LODeg) && $scope.DMS.LODeg !== undefined) || (isNaN($scope.DMS.LOMin) && $scope.DMS.LOMin !== undefined) || (isNaN($scope.DMS.LOSec) && $scope.DMS.LOSec !== undefined)) {
+                                openLongModal('dms');
+                                //if not a number, clear the imputs to trigger the validation
+                                if (isNaN($scope.DMS.LODeg)) $scope.DMS.LODeg = undefined;
+                                if (isNaN($scope.DMS.LOMin)) $scope.DMS.LOMin = undefined;
+                                if (isNaN($scope.DMS.LOSec)) $scope.DMS.LOSec = undefined;
+                            }
                         }
                     } else {
                         //check the latitude/longitude
-                        if ($scope.aSite.latitude_dd < 0 || $scope.aSite.latitude_dd > 73) {
-                            openLatModal('latlong');
+                        if (direction == 'lat') {
+                            if ($scope.aSite.latitude_dd < 0 || $scope.aSite.latitude_dd > 73 || isNaN($scope.aSite.latitude_dd)) {
+                                openLatModal('latlong');
+                                //if not a number, clear the imputs to trigger the validation
+                                if (isNaN($scope.aSite.latitude_dd)) {
+                                    $scope.aSite.latitude_dd = undefined;
+                                }
+                            }
                         }
-                        if ($scope.aSite.longitude_dd < -175 || $scope.aSite.longitude_dd > -60) {
-                            openLongModal('latlong');
+                        if (direction == 'long') {
+                            if ($scope.aSite.longitude_dd < -175 || $scope.aSite.longitude_dd > -60 || isNaN($scope.aSite.longitude_dd)) {
+                                openLongModal('latlong');
+                                //if not a number, clear the imputs to trigger the validation
+                                if (isNaN($scope.aSite.longitude_dd)) {
+                                    $scope.aSite.longitude_dd = undefined;
+                                }
+                            }
                         }
                     }
                 };
@@ -284,29 +331,34 @@
                     $scope.stateCountyList = []; delete $scope.aSite.zip;
                     if ($scope.DMS.LADeg !== undefined) $scope.aSite.latitude_dd = azimuth($scope.DMS.LADeg, $scope.DMS.LAMin, $scope.DMS.LASec);
                     if ($scope.DMS.LODeg !== undefined) $scope.aSite.longitude_dd = azimuth($scope.DMS.LODeg, $scope.DMS.LOMin, $scope.DMS.LOSec);
-                    if ($scope.aSite.latitude_dd !== undefined && $scope.aSite.longitude_dd !== undefined) {
+                    if ($scope.aSite.latitude_dd !== undefined && $scope.aSite.longitude_dd !== undefined && !isNaN($scope.aSite.latitude_dd) && !isNaN($scope.aSite.longitude_dd)) {
                         $rootScope.stateIsLoading.showLoading = true; //loading...
                         delete $http.defaults.headers.common.Authorization;
                         $http.defaults.headers.common.Accept = 'application/json';
                         GEOCODE.getAddressParts({ Longitude: $scope.aSite.longitude_dd, Latitude: $scope.aSite.latitude_dd }, function success(response) {
-                            if (response.result.geographies.Counties.length > 0) {
-                                var stateFIPS = response.result.geographies.Counties[0].STATE;
-                                var countyName = response.result.geographies.Counties[0].NAME;
-                                var thisStateID = $scope.allCountyList.filter(function (c) { return c.state_fip == stateFIPS; })[0].state_id;
-                                var thisState = $scope.stateList.filter(function(s){return s.state_id == thisStateID; })[0];
-                                
-                                if (thisState !== undefined) {
-                                    $scope.aSite.state = thisState.state_abbrev;
-                                    $scope.stateCountyList = $scope.allCountyList.filter(function (c) { return c.state_id == thisState.state_id; });
-                                    $scope.aSite.county = countyName;
-                                    $rootScope.stateIsLoading.showLoading = false;// loading..                                   
+                            if (response.result !== undefined) {
+                                if (response.result.geographies.Counties.length > 0) {
+                                    var stateFIPS = response.result.geographies.Counties[0].STATE;
+                                    var countyName = response.result.geographies.Counties[0].NAME;
+                                    var thisStateID = $scope.allCountyList.filter(function (c) { return c.state_fip == stateFIPS; })[0].state_id;
+                                    var thisState = $scope.stateList.filter(function (s) { return s.state_id == thisStateID; })[0];
+
+                                    if (thisState !== undefined) {
+                                        $scope.aSite.state = thisState.state_abbrev;
+                                        $scope.stateCountyList = $scope.allCountyList.filter(function (c) { return c.state_id == thisState.state_id; });
+                                        $scope.aSite.county = countyName;
+                                        $rootScope.stateIsLoading.showLoading = false;// loading..                                   
+                                    } else {
+                                        $rootScope.stateIsLoading.showLoading = false;// loading..
+                                        toastr.error("The Latitude/Longitude did not return a recognized state. Please choose one from the dropdown.");
+                                    }
                                 } else {
                                     $rootScope.stateIsLoading.showLoading = false;// loading..
-                                    toastr.error("The Latitude/Longitude did not return a recognized state. Please choose one from the dropdown.");
+                                    toastr.error("No location information came back from that lat/long");
                                 }
                             } else {
                                 $rootScope.stateIsLoading.showLoading = false;// loading..
-                                toastr.error("No location information came back from that lat/long");
+                                toastr.error("Error getting address. Choose State and County from dropdowns.");
                             }
                         }, function error(errorResponse) {
                             $rootScope.stateIsLoading.showLoading = false;// loading..
@@ -331,6 +383,43 @@
 
                 //#endregion lat/long stuff
             
+                //hwm_uncertainty typed in, choose cooresponding hwm_environment
+                $scope.chooseQuality = function () {
+                    if ($scope.aHWM.hwm_uncertainty !== "") {
+                        var x = Number($scope.aHWM.hwm_uncertainty);
+                        //                    Excellent    +-0.05       0      -  0.050
+                        //                    Good         +-0.10       0.051  -  0.100
+                        //                    Fair         +-0.20       0.101  -  0.200
+                        //                    Poor         +-0.40       0.201  -  0.400
+                        //                    V Poor       > 0.40       0.401  -  infinity
+                        $scope.aHWM.hwm_quality_id = $scope.hwmQualList.filter(function (h) { return h.min_range <= x && h.max_range >= x; })[0].hwm_quality_id;
+                    }
+                };
+                //hwm quality chosen (or it changed from above), check to make sure it is congruent with input above
+                $scope.compareToUncertainty = function () {
+                    if ($scope.aHWM.hwm_uncertainty !== "" && $scope.aHWM.hwm_uncertainty !== undefined) {
+                        var x = Number($scope.aHWM.hwm_uncertainty);
+                        var matchingQualId = $scope.hwmQualList.filter(function (h) { return h.min_range <= x && h.max_range >= x; })[0].hwm_quality_id;
+                        if ($scope.aHWM.hwm_quality_id !== matchingQualId) {
+                            //show warning modal and focus in uncertainty
+                            var incongruentModal = $uibModal.open({
+                                template: '<div class="modal-header"><h3 class="modal-title">Warning</h3></div>' +
+                                    '<div class="modal-body"><p>There is a mismatch between the hwm quality chosen and the hwm uncertainty above. Please correct your hwm uncertainty.</p></div>' +
+                                    '<div class="modal-footer"><button class="btn btn-primary" ng-enter="ok()" ng-click="ok()">OK</button></div>',
+                                controller: ['$scope', '$uibModalInstance', function ($scope, $uibModalInstance) {
+                                    $scope.ok = function () {
+                                        $uibModalInstance.close();
+                                    };
+                                }],
+                                size: 'sm'
+                            });
+                            incongruentModal.result.then(function () {
+                                angular.element("[name='hwm_uncertainty']").focus();
+                            });
+                        }
+                    }
+                };
+
                 // watch for the session event to change and update
                 $scope.$watch(function () { return $cookies.get('SessionEventName'); }, function (newValue) {
                     $scope.sessionEventName = newValue !== undefined ? newValue : "All Events";

@@ -43,8 +43,13 @@
         <form class="form-horizontal" name="lookupForm.horDatumFm">
             <fieldset>
 
-                <div class="form-group required">
-                    <label class="col-md-3 control-label req" for="datum_name">Horizontal Datum Name:</label>
+                <div class="form-group">
+                    <label class="col-md-3 control-label req" for="datum_name">
+                        Horizontal Datum Name:
+                        <button type="button" class="help-btn" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Required">
+                            <span class="glyphicon glyphicon-asterisk" style="color:#d00;font-size:xx-small;"></span>
+                        </button>
+                    </label>
                     <div class="col-md-6">
                         <input class="form-control" id="datum_name" name="datum_name" type="text" placeholder="" ng-model="newHD.datum_name" required />
                     </div>
@@ -61,11 +66,7 @@
                 <!--submit button-->
                 <div class="form-group">
                     <div class="col-md-2 col-md-offset-2">
-                        <span>
-                            <button class="btn btn-primary" ng-click="AddHorDatum(lookupForm.horDatumFm.$valid, newHD)">
-                                Add
-                            </button>
-                        </span>
+                        <button class="btn btn-primary" ng-click="AddHorDatum(lookupForm.horDatumFm.$valid, newHD)">Add</button>
                     </div>
                 </div>
 

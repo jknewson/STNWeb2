@@ -4,13 +4,18 @@
 
     var STNControllers = angular.module('STNControllers');
 
-    STNControllers.controller('fileCtrl', ['$scope', '$cookies', '$location', '$state', '$http', 'SERVER_URL', 'Site_Files', 'HWM_Service', 'Instrument_Service', '$uibModal', '$filter', '$timeout', 'thisSite', 'thisSiteFiles', 'allFileTypes', 'allAgencies', 'thisSiteSensors', 'thisSiteOPs', 'thisSiteHWMs', 'FILE', 'DATA_FILE', 'MEMBER', 'SOURCE',
-        function ($scope, $cookies, $location, $state, $http, SERVER_URL, Site_Files, HWM_Service, Instrument_Service, $uibModal, $filter, $timeout, thisSite, thisSiteFiles, allFileTypes, allAgencies, thisSiteSensors, thisSiteOPs, thisSiteHWMs, FILE, DATA_FILE, MEMBER, SOURCE) {
+    STNControllers.controller('fileCtrl', ['$scope', '$rootScope', '$cookies', '$location', '$state', '$http', 'SERVER_URL', 'FILE_STAMP', 'Site_Files', 'HWM_Service', 'Instrument_Service', '$uibModal', '$filter', '$timeout', 'thisSite', 'thisSiteFiles', 'allFileTypes', 'allAgencies', 'thisSiteSensors', 'thisSiteOPs', 'thisSiteHWMs', 'FILE', 'DATA_FILE', 'MEMBER', 'SOURCE',
+        function ($scope, $rootScope, $cookies, $location, $state, $http, SERVER_URL,FILE_STAMP, Site_Files, HWM_Service, Instrument_Service, $uibModal, $filter, $timeout, thisSite, thisSiteFiles, allFileTypes, allAgencies, thisSiteSensors, thisSiteOPs, thisSiteHWMs, FILE, DATA_FILE, MEMBER, SOURCE) {
             if ($cookies.get('STNCreds') === undefined || $cookies.get('STNCreds') === "") {
                 $scope.auth = false;
                 $location.path('/login');
             } else {
                 $scope.serverURL = SERVER_URL;
+                $scope.stamp = FILE_STAMP.getStamp();
+                $rootScope.$on('fileStampSet', function (event, st) {
+                    $scope.stamp = st;
+                });
+
                 $scope.siteHWMs = thisSiteHWMs; //HWM_Service.getAllSiteHWMs(); //if create a new one, then add a file to it.. doesn't show in fileList because this doesn't have that new hwm yet..
                 $scope.siteSensors = thisSiteSensors;
                 //include if HWM, Instrument, Data File or OP File for each               
@@ -36,36 +41,72 @@
                 }
                 Site_Files.setAllSiteFiles(thisSiteFiles);//, $scope.siteHWMs, $scope.siteSensors);
                 $scope.SiteFiles = Site_Files.getAllSiteFiles();
-                
+
+                $scope.siteImageFiles = []; //holder of carousel images
+                for (var s = 0; s < $scope.SiteFiles.length; s++) {
+                    var extI = $scope.SiteFiles[s].name.indexOf(".");
+                    var extString = $scope.SiteFiles[s].name.substring(extI + 1);
+                    if (['jpg','JPG','jpeg','JPEG','png','PNG','gif','GIF'].indexOf(extString) > -1)
+                        $scope.siteImageFiles.push($scope.SiteFiles[s]);
+                }
                 //if files are added/edited, deleted from other parts (objective Points, sensors, hwms), make sure if event is chosen to update siteFiles accordingly
-                $scope.$on('siteFilesUpdated', function (event, sitefiles) {                    
+                $scope.$on('siteFilesUpdated', function (event, sitefiles) {
+                    $scope.siteHWMs = HWM_Service.getAllSiteHWMs(); $scope.siteSensors = Instrument_Service.getAllSiteSensors();
+                    //now go about updating the FileList
+                    $scope.SiteFiles = sitefiles.filter(function (h) { return h.fileBelongsTo == 'Site File' || h.fileBelongsTo == 'Objective Point File'; });  //keep all site and op files
+                    angular.forEach($scope.SiteFiles, function (sf){
+                        if (sf.fileBelongsTo == 'Objective Point File')
+                            sf.typeName = thisSiteOPs.filter(function (op) { return op.objective_point_id == sf.objective_point_id; })[0].name;
+                       
+                            
+                    });
+                    var hwmFiles = sitefiles.filter(function (sfiles) { return sfiles.fileBelongsTo == 'HWM File'; });
+                    var sensFiles = sitefiles.filter(function (sfi) { return sfi.instrument_id > 0 && sfi.instrument_id !== null; });
+                    //only show files for this event (go through hwm files and match eventid
                     if ($cookies.get('SessionEventID') !== undefined) {
-                        $scope.siteHWMs = HWM_Service.getAllSiteHWMs(); $scope.siteSensors = Instrument_Service.getAllSiteSensors();
-                        //now go about updating the FileList
-                        $scope.SiteFiles = sitefiles.filter(function (h) { return h.fileBelongsTo == 'Site File' || h.fileBelongsTo == 'Objective Point File'; });  //keep all site and op files
-                        angular.forEach($scope.SiteFiles, function (sf){
-                            if (sf.fileBelongsTo == 'Objective Point File')
-                                sf.typeName = thisSiteOPs.filter(function (op) { return op.objective_point_id == sf.objective_point_id; })[0].name;
-                        });
-                        var hwmFiles = sitefiles.filter(function (sfiles) { return sfiles.fileBelongsTo == 'HWM File'; });
-                        var sensFiles = sitefiles.filter(function (sfi) { return sfi.instrument_id > 0 && sfi.instrument_id !== null; });
-                        //only show files for this event (go through hwm files and match eventid
+                        for (var Ehf = 0; Ehf < hwmFiles.length; Ehf++) {
+                            for (var Ehwm = 0; Ehwm < $scope.siteHWMs.length; Ehwm++) {
+                                if (hwmFiles[Ehf].hwm_id == $scope.siteHWMs[Ehwm].hwm_id && $scope.siteHWMs[Ehwm].event_id == $cookies.get('SessionEventID'))
+                                    $scope.SiteFiles.push(hwmFiles[Ehf]);
+                            }
+                        }
+                    } else {
                         for (var hf = 0; hf < hwmFiles.length; hf++) {
                             for (var hwm = 0; hwm < $scope.siteHWMs.length; hwm++) {
-                                if (hwmFiles[hf].hwm_id == $scope.siteHWMs[hwm].hwm_id && $scope.siteHWMs[hwm].event_id == $cookies.get('SessionEventID'))
+                                if (hwmFiles[hf].hwm_id == $scope.siteHWMs[hwm].hwm_id)
                                     $scope.SiteFiles.push(hwmFiles[hf]);
                             }
                         }
-                        //only show files for this event (go through sensor files and match eventid
+                    }
+                    //only show files for this event (go through sensor files and match eventid
+                    if ($cookies.get('SessionEventID') !== undefined) {
+                        for (var Esf = 0; Esf < sensFiles.length; Esf++) {
+                            for (var Einst = 0; Einst < $scope.siteSensors.length; Einst++) {
+                                if (sensFiles[Esf].instrument_id == $scope.siteSensors[Einst].instrument_id && $scope.siteSensors[Einst].event_id == $cookies.get('SessionEventID')) {
+                                    sensFiles[Esf].typeName = $scope.siteSensors[Einst].serial_number;
+                                    $scope.SiteFiles.push(sensFiles[Esf]);
+                                }
+                            }
+                        }
+                    } else {
                         for (var sf = 0; sf < sensFiles.length; sf++) {
                             for (var inst = 0; inst < $scope.siteSensors.length; inst++) {
-                                if (sensFiles[sf].instrument_id == $scope.siteSensors[inst].instrument_id && $scope.siteSensors[inst].event_id == $cookies.get('SessionEventID')) {
+                                if (sensFiles[sf].instrument_id == $scope.siteSensors[inst].instrument_id) {
                                     sensFiles[sf].typeName = $scope.siteSensors[inst].serial_number;
                                     $scope.SiteFiles.push(sensFiles[sf]);
                                 }
                             }
-                        }                        
-                    }//end if SessionEventID !== undefined
+                        }
+                    }
+                    //if image, put into carousel array
+                    $scope.siteImageFiles = [];
+                    angular.forEach($scope.SiteFiles, function (sf) {
+                        var extI = sf.name.indexOf(".");
+                        var extString = sf.name.substring(extI + 1);
+                        if (['jpg', 'JPG', 'jpeg', 'JPEG', 'png', 'PNG', 'gif', 'GIF'].indexOf(extString) > -1)
+                            $scope.siteImageFiles.push(sf);
+                    });
+                    
                 }, true);
                 
                 // watch for the session event to change and update SITE FILES DO NOT HAVE AN EVENT                
@@ -79,6 +120,12 @@
                         angular.forEach($scope.SiteFiles, function (sf) {
                             if (sf.fileBelongsTo == 'Objective Point File')
                                 sf.typeName = thisSiteOPs.filter(function (op) { return op.objective_point_id == sf.objective_point_id; })[0].name;
+                            //if image, put into carousel array
+                            $scope.siteImageFiles = [];
+                            var extI = sf.name.indexOf(".");
+                            var extString = sf.name.substring(extI + 1);
+                            if (['jpg', 'JPG', 'jpeg', 'JPEG', 'png', 'PNG', 'gif', 'GIF'].indexOf(extString) > -1)
+                                $scope.siteImageFiles.push(sf);
                         });
                         var hwmFiles = Site_Files.getAllSiteFiles().filter(function (sfiles) { return sfiles.fileBelongsTo == 'HWM File'; }); 
                         var sensFiles = Site_Files.getAllSiteFiles().filter(function (sfi) { return sfi.instrument_id > 0 && sfi.instrument_id !== null; });
@@ -151,6 +198,10 @@
                         keyboard: false,
                         windowClass: 'rep-dialog',
                         resolve: {
+                            fileExists: function () {
+                                if (FileClicked !== 0) 
+                                    return FILE.getFileItem({ id: FileClicked.file_id }).$promise;
+                            },
                             fileTypeList: function () {
                                 if (FileClicked !== 0) {
                                     switch (FileClicked.fileBelongsTo) {
@@ -207,7 +258,8 @@
                         if (createdFile[1] === undefined) {
                             //this is from edit -- refresh page?
                             $scope.SiteFiles[SindexClicked] = createdFile;
-                            Site_Files.setAllSiteFiles($scope.SiteFiles);//, $scope.siteHWMs, $scope.siteSensors);
+                            Site_Files.setAllSiteFiles($scope.SiteFiles);
+                            $scope.stamp = FILE_STAMP.getStamp();
                         }
                         if (createdFile[1] == 'deleted') {
                             $scope.SiteFiles.splice(SindexClicked, 1); //remove from file List

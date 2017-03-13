@@ -30,6 +30,27 @@
             //proposed sensors accordion was opened, go get them
             $scope.getProposedSensors = function () {
                 SITE.getSiteSensors({ id: $scope.thisSite.site_id }).$promise.then(function (sResponse) {
+                    //need to make sure the instrument_statuses are in the correct order ([0]Retrieved, [1]Deployed, [2]Proposed                
+                    for (var s = 0; s < sResponse.length; s++) {
+                        var correctOrderSS = [];
+                        var sensorStatuses = sResponse[s].instrument_status;
+                        if (sensorStatuses.length > 1) {
+                            //only care about order if there's more than 1
+                            var proposedStat = sensorStatuses.filter(function (ps) { return ps.status == "Proposed"; })[0];
+                            var deployedStat = sensorStatuses.filter(function (ps) { return ps.status == "Deployed"; })[0];
+                            var retLostStat = sensorStatuses.filter(function (ps) { return ps.status == "Retrieved" || ps.status == "Lost"; })[0];
+                            //now add them back in correctly                            
+                            if (retLostStat) correctOrderSS.push(retLostStat);
+                            if (deployedStat) correctOrderSS.push(deployedStat);
+                            if (proposedStat) correctOrderSS.push(proposedStat);
+                        } else {
+                            correctOrderSS.push(sensorStatuses[0]);
+                        }
+                        //now put it back in the object
+                        sResponse[s].instrument_status = [];
+                        sResponse[s].instrument_status = correctOrderSS;
+                    }
+
                     $scope.ProposedSensors4Site = sResponse.filter(function (ss) { return ss.instrument_status[0].status_type_id == 4; });
                 });
             };

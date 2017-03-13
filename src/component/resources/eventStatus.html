@@ -38,8 +38,13 @@
     <div ng-show="showAddESForm">
         <form class="form-horizontal" name="lookupForm.eventStatFm">
             <fieldset>
-                <div class="form-group required">
-                    <label class="col-md-3 control-label req" for="status">Event Status:</label>
+                <div class="form-group">
+                    <label class="col-md-3 control-label req" for="status">
+                        Event Status:
+                        <button type="button" class="help-btn" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Required">
+                            <span class="glyphicon glyphicon-asterisk" style="color:#d00;font-size:xx-small;"></span>
+                        </button>
+                    </label>
                     <div class="col-md-6">
                         <input class="form-control" id="status" name="status" type="text" placeholder="" ng-model="newES.status" required />
                     </div>
@@ -48,11 +53,7 @@
                 <!--submit button-->
                 <div class="form-group">
                     <div class="col-md-2 col-md-offset-2">
-                        <span>
-                            <button class="btn btn-primary" ng-click="AddEventStat(lookupForm.eventStatFm.$valid, newES)">
-                                Add
-                            </button>
-                        </span>
+                        <button class="btn btn-primary" ng-click="AddEventStat(lookupForm.eventStatFm.$valid, newES)">Add</button>                        
                     </div>
                 </div>
             </fieldset>

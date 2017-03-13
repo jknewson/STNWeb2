@@ -3,9 +3,9 @@
 
     //look up common service module, and register the new factory with that module 
     var STNResource = angular.module('STNResource', ['ngResource']);
-    var rootURL = "https://stn.wim.usgs.gov/STNServices";
-     //var rootURL = "https://stntest.wim.usgs.gov/STNServices2";
-    // var rootURL = "http://localhost/STNServices2";
+   // var rootURL = "https://stn.wim.usgs.gov/STNServices";
+       var rootURL = "https://stntest.wim.usgs.gov/STNServices2";
+   //var rootURL = "http://localhost/STNServices2";
    
     //#region GEOCODE https://geocoding.geo.census.gov/geocoder/geographies/coordinates?benchmark=4&vintage=4&format=json
     STNResource.factory('GEOCODE', ['$resource', function ($resource) {          
@@ -105,7 +105,21 @@
                 delete: { method: 'DELETE', cache: false, isArray: false }
             });
     }]);
-    //#endregion of DEPLOYMENT_TYPE
+    //#endregion of DEPLOYMENT_TYPE    
+    //#region EVENT
+    STNResource.factory('EVENT', ['$resource', function ($resource) {
+        return $resource(rootURL + '/Events/:id.json',
+            {}, {
+                query: {},
+                getAll: { method: 'GET', isArray: true },
+                getEventSites: {method: 'GET', isArray:true, url: rootURL + '/Events/:id/Sites.json'},
+                getFilteredEvents: {method: 'GET', isArray: true, url: rootURL + '/Events/FilteredEvents.json'}, //?Date: null, Type: 0, State: null
+                update: { method: 'PUT', cache: false, isArray: false },
+                save: { method: 'POST', cache: false, isArray: false },
+                delete: { method: 'DELETE', cache: false, isArray: false }
+            });
+    }]);
+    //#endregion of EVENT
     //#region EVENT_STATUS
     STNResource.factory('EVENT_STATUS', ['$resource', function ($resource) {
         return $resource(rootURL + '/EventStatus/:id.json',
@@ -129,7 +143,39 @@
                 delete: { method: 'DELETE', cache: false, isArray: false }
             });
     }]);
-    //#endregion of EVENT_TYPE
+    //#endregion of EVENT_TYPE   
+    //#region FILE    
+    STNResource.factory('FILE', ['$resource', function ($resource) {
+        return $resource(rootURL + '/Files/:id.json',
+            {}, {
+                query: {},
+                getAll: { method: 'GET', isArray: true },
+                getFileItem: { method: 'GET', isArray: false, url: rootURL + '/Files/:id/Item' },
+                update: { method: 'PUT', cache: false, isArray: false },
+                uploadFile: { method: 'POST', url: rootURL + '/Files/bytes', headers: { 'Content-Type': undefined }, transformRequest: angular.identity, cache: false, isArray: false },
+                downloadZip: {
+                    method: 'GET', responseType: 'arraybuffer', cache: false, url: rootURL + '/Events/:eventId/EventFileItems'
+                },//?HWMFiles={hwmFiles}&HWMFileType={hwmFileTypes}&SensorFiles={sensorFiles}&SensorFileTypes={sensorFileTypes}"
+                save: { method: 'POST', cache: false, isArray: false },
+                delete: { method: 'DELETE', cache: false, isArray: false }
+            });
+    }]);
+    //#endregion of FILE 
+    //#region photoFileStamp
+    STNResource.factory('FILE_STAMP', ['$rootScope', function ($rootScope) {
+        //need to update the ng-src on photo files if one changes, update the stamp part of the image to refresh the link        
+        return {
+            getStamp: function () {
+                var stamp = '?' + new Date().getTime();
+                return stamp;
+            },
+            setStamp: function () {
+                var stamp = '?' + new Date().getTime();
+                $rootScope.$broadcast('fileStampSet', stamp);
+            }
+        };
+    }]);
+    //#endregion of HWM_Service
     //#region FILE_TYPE
     STNResource.factory('FILE_TYPE', ['$resource', function ($resource) {
         return $resource(rootURL + '/FileTypes/:id.json',
@@ -142,34 +188,6 @@
             });
     }]);
     //#endregion of FILE_TYPE   
-    //#region EVENT
-    STNResource.factory('EVENT', ['$resource', function ($resource) {
-        return $resource(rootURL + '/Events/:id.json',
-            {}, {
-                query: {},
-                getAll: { method: 'GET', isArray: true },
-                getEventSites: {method: 'GET', isArray:true, url: rootURL + '/Events/:id/Sites.json'},
-                getFilteredEvents: {method: 'GET', isArray: true, url: rootURL + '/Events/FilteredEvents.json'}, //?Date: null, Type: 0, State: null
-                update: { method: 'PUT', cache: false, isArray: false },
-                save: { method: 'POST', cache: false, isArray: false },
-                delete: { method: 'DELETE', cache: false, isArray: false }
-            });
-    }]);
-    //#endregion of EVENT
-    //#region FILE
-    STNResource.factory('FILE', ['$resource', function ($resource) {
-        return $resource(rootURL + '/Files/:id.json',
-            {}, {
-                query: {},
-                getAll: { method: 'GET', isArray: true },
-                getFileItem: { method: 'GET', isArray: false, url: rootURL + '/Files/:id/Item' },
-                update: { method: 'PUT', cache: false, isArray: false },
-                uploadFile: { method: 'POST', url: rootURL + '/Files/bytes', headers: { 'Content-Type': undefined }, transformRequest: angular.identity, cache: false, isArray: false },
-                save: { method: 'POST', cache: false, isArray: false },
-                delete: { method: 'DELETE', cache: false, isArray: false }
-            });
-    }]);
-    //#endregion of FILE
     //#region HORIZONTAL_COLL_METHODS
     STNResource.factory('HORIZONTAL_COLL_METHODS', ['$resource', function ($resource) {
         return $resource(rootURL + '/HorizontalMethods/:id.json',
@@ -212,6 +230,8 @@
             {}, {
                 query: {},
                 getAll: { method: 'GET', isArray: true },
+                getEventStateHWMs: { method: 'GET', isArray: true, url: rootURL + '/Events/:eventId/stateHWMs.json?State=:state' },
+                getEventSiteHWMs: { method: 'GET', isArray: true, url: rootURL + '/Sites/:siteId/EventHWMs.json' },//?Event=:eventId
                 getFilteredHWMs: { method: 'GET', isArray: true, url: rootURL + '/HWMs/FilteredHWMs.json' }, //Event={eventIds}&EventType={eventTypeIDs}&EventStatus={eventStatusID}&States={states}&County={counties}&HWMType={hwmTypeIDs}&HWMQuality={hwmQualIDs}&HWMEnvironment={hwmEnvironment}&SurveyComplete={surveyComplete}&StillWater={stillWater}
                 getUnapprovedHWMs: { method: 'GET', isArray: true, cache: false }, //IsApproved={'true'/'false'}&Event={eventId}&Member={memberId}&State={state}
                 getHWMApproval: {method: 'GET', cache: false, isArray: false, url: rootURL + '/hwms/:id/Approval.json'},
@@ -226,14 +246,22 @@
     //#region HWM_Service
     STNResource.factory('HWM_Service', [function () {
         //when hwm is created or deleted, this gets updated so that filesCtrl will update it's list of siteHWMs
-        var allSiteHWMs = [];
+        var allSiteHWMs = []; var bulkSearch = {};
         return {
             getAllSiteHWMs: function () {
                 return allSiteHWMs;
             },
             setAllSiteHWMs: function (sh) {
                 allSiteHWMs = sh;               
+            },
+            setBulkHWMSearch: function (searchTerms)
+            {
+                bulkSearch = searchTerms;
+            },
+            getBulkHWMSearch: function () {
+                return bulkSearch;
             }
+
         };
     }]);
     //#endregion of HWM_Service
@@ -267,7 +295,8 @@
             {}, {
                 query: {},
                 getAll: { method: 'GET', isArray: true },
-                getstatusInstruments: { method: 'GET', isArray: true, url: rootURL + '/Instruments.json/' }, //CurrentStatus: 1, Event: $scope.evID 
+                getSensorView: {method: 'GET', isArray:true, url: rootURL + '/SensorViews.json'}, //?ViewType={}&Event={}
+                getstatusInstruments: { method: 'GET', isArray: true, url: rootURL + '/Instruments.json' }, //CurrentStatus: 1, Event: $scope.evID 
                 getFullInstrument: { method: 'GET', url: rootURL + '/Instruments/:id/FullInstrument.json' }, //gets instrument and it's stats together
                 getInstrumentStatus: { method: 'GET', url: rootURL + '/Instruments/:id/InstrumentStatus.json' },
                 update: { method: 'PUT', cache: false, isArray: false },
@@ -568,17 +597,17 @@
                 getProximitySites: {method: 'GET', isArray: true, params: { Latitude: '@latitude', Longitude: '@longitude', Buffer: '@buffer' }},
                 getAll: { method: 'GET', isArray: true },
                 getSearchedSite: { method: 'GET', isArray: false, url: rootURL + '/Sites/Search' }, //?bySiteNo={siteNo}&bySiteName={siteName}&bySiteId={siteId} (only going to populate 1 of these params
-                getFilteredSites: { method: 'GET', isArray: true, url: rootURL + '/Sites/FilteredSites.json' }, //accepts optional parameters: Event={eventId}&State={stateNames}&SensorType={sensorTypeId}&NetworkName={networkNameId}&OPDefined={opDefined}&HWMOnly={hwmOnlySites}
+                getFilteredSites: { method: 'GET', isArray: true, url: rootURL + '/Sites/FilteredSites.json' }, //accepts optional parameters: Event={eventId}&State={stateNames}&SensorType={sensorTypeId}&NetworkName={networkNameId}&OPDefined={opDefined}&HWMOnly={hwmOnlySites}&&HWMSurveyed={surveyedHWMs}
                 //landowner
                 getSiteLandOwner: { method: 'GET', url: rootURL + '/Sites/:id/LandOwner.json' },
                 //Site NetworkTypes
                 getSiteNetworkTypes: { method: 'GET', isArray: true, url: rootURL + '/sites/:id/networkTypes.json' },
                 postSiteNetworkType: { method: 'POST', cache: false, params: { siteId: '@siteId', NetworkTypeId: '@networkTypeId' }, isArray: true, url: rootURL + '/sites/:siteId/AddNetworkType' }, //?NetworkTypeId= {networkTypeId}
-                deleteSiteNetworkType: { method: 'DELETE', cache: false, isArray: false, url: rootURL + '/sites/:siteId/removeNetworkType?NetworkTypeId:networkTypeId' },
+                deleteSiteNetworkType: { method: 'DELETE', cache: false, isArray: false, url: rootURL + '/sites/:siteId/removeNetworkType?NetworkTypeId=:networkTypeId' },
                 //Site Network Names
                 getSiteNetworkNames: { method: 'GET', isArray: true, url: rootURL + '/sites/:id/networkNames.json' },
                 postSiteNetworkName: { method: 'POST', cache: false, params: { siteId: '@siteId', NetworkNameId: '@networkNameId' }, isArray: true, url: rootURL + '/sites/:siteId/AddNetworkName' }, //?NetworkNameId= {networkNameId}
-                deleteSiteNetworkName: { method: 'DELETE', cache: false, isArray: false, url: rootURL + '/sites/:siteId/removeNetworkName?NetworkNameId:networkNameId'},
+                deleteSiteNetworkName: { method: 'DELETE', cache: false, isArray: false, url: rootURL + '/sites/:siteId/removeNetworkName?NetworkNameId=:networkNameId'},
                 //Site Housings
                 getSiteHousings: { method: 'GET', isArray: true, url: rootURL + '/sites/:id/SiteHousings.json' },
               //  postSiteHousing: {method: 'POST', cache: false, isArray:true, url: rootURL + '/site/:id/AddSiteSiteHousing.json'},

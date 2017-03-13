@@ -9,8 +9,32 @@ var connect = require('gulp-connect');
 var open = require('open');
 var mainBowerFiles = require('main-bower-files');
 
-// == PATH STRINGS ========
+var version = require('gulp-version-number');
 
+const JSversionConfig = {
+    'value': '%MDS%',    
+    'append': {
+        'key': '_v',
+        'to': ['js'],
+    },
+    'output': {
+        'file': 'version.json'
+    }
+};
+const CSSversionConfig = {
+    'value': '%MDS%',    
+    'append': {
+        'key': '_v',
+        'to': ['css'],
+    },
+    'output': {
+        'file': 'version.json'
+    }
+};
+//.pipe(version({ CSSversionConfig }))
+//.pipe(version({ JSversionConfig }))
+
+// == PATH STRINGS ========
 var paths = {
     scripts: 'src/**/*.js',
     appStyles: 'src/css/*.css',
@@ -60,7 +84,7 @@ pipes.minifiedFileName = function() {
 
 pipes.validatedAppScripts = function() {
     return gulp.src(paths.scripts)
-        .pipe(plugins.jshint())
+        .pipe(plugins.jshint())        
         .pipe(plugins.jshint.reporter('jshint-stylish'));
 };
 
@@ -96,12 +120,13 @@ pipes.builtAppScriptsProd = function() {
 
 pipes.builtVendorScriptsDev = function() {
     return gulp.src(mainBowerFiles())
+        .pipe(version({ JSversionConfig }))
         .pipe(gulp.dest('dev/bower_components'));
 };
 
 pipes.builtVendorImagesDev = function() {
     //in parens below is filter statement for bowerFiles retrieval
-    return gulp.src(mainBowerFiles(['images/**', '**/images/**']))
+    return gulp.src(mainBowerFiles(['images/**', '**/images/**']))        
         .pipe(gulp.dest('dev/bower_components/images'));
 };
 
@@ -116,18 +141,19 @@ pipes.builtVendorScriptsProd = function() {
     return gulp.src(mainBowerFiles('**/*.js'))
         .pipe(pipes.orderedVendorScripts())
         //added
-        .pipe(plugins.sourcemaps.init())
+        .pipe(plugins.sourcemaps.init())        
         .pipe(plugins.concat('vendor.min.js'))
-        .pipe(plugins.uglify({mangle: false}))
+        .pipe(version({ JSversionConfig }))
+        .pipe(plugins.uglify({ mangle: false }))
         //added
-        .pipe(plugins.sourcemaps.write())
+        .pipe(plugins.sourcemaps.write())        
         .pipe(gulp.dest(paths.distScriptsProd));
 };
 //checked 5/5 BAD
 
 pipes.validatedPartials = function() {
     return gulp.src(paths.partials)
-        .pipe(plugins.htmlhint({'doctype-first': false}))
+        .pipe(plugins.htmlhint({ 'doctype-first': false }))
         .pipe(plugins.htmlhint.reporter());
 };
 
@@ -170,7 +196,8 @@ pipes.builtAppStylesDev = function() {
 
 
 ///updated css minification to use cssnano
-pipes.builtAppStylesProd = function() {
+pipes.builtAppStylesProd =
+    function () {
     return gulp.src(paths.appStyles)
         .pipe(plugins.sourcemaps.init())
         //     .pipe(plugins.sass())
@@ -178,6 +205,7 @@ pipes.builtAppStylesProd = function() {
         //.pipe(plugins.minifyCss())
         .pipe(plugins.cssnano())
         .pipe(plugins.sourcemaps.write())
+        
         .pipe(pipes.minifiedFileName())
         .pipe(gulp.dest(paths.dist));
 };
@@ -231,11 +259,11 @@ pipes.builtIndexDev = function() {
         .pipe(gulp.dest(paths.dev)) // write first to get relative path for inject
         .pipe(plugins.inject(orderedVendorScripts, {relative: true, name: 'bower'}))
         .pipe(plugins.inject(orderedAppScripts, {relative: true}))
-        //.pipe(plugins.inject(orderedAppStyles, {relative:true}))
-        .pipe(plugins.inject(appStyles, {relative: true}))
+        //.pipe(plugins.inject(orderedAppStyles, {relative:true}))        
+        .pipe(plugins.inject(appStyles, { relative: true }))
+        .pipe(plugins.htmlmin({ collapseWhitespace: true, removeComments: true }))
         .pipe(gulp.dest(paths.dev));
 };
-
 
 pipes.builtIndexProd = function() {
 
@@ -249,8 +277,8 @@ pipes.builtIndexProd = function() {
         .pipe(plugins.inject(vendorScripts, {relative: true, name: 'bower'}))
         .pipe(plugins.inject(appScripts, {relative: true}))
         .pipe(plugins.inject(vendorStyles, {relative: true, name: 'bower'}))
-        .pipe(plugins.inject(appStyles, {relative: true}))
-        .pipe(plugins.htmlmin({collapseWhitespace: true, removeComments: true}))
+        .pipe(plugins.inject(appStyles, { relative: true }))        
+        .pipe(plugins.htmlmin({ collapseWhitespace: true, removeComments: true }))        
         .pipe(gulp.dest(paths.dist));
 };
 

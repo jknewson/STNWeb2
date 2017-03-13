@@ -191,3 +191,7 @@ FakesAssemblies/
 GeneratedArtifacts/
 _Pvt_Extensions/
 ModelManifest.xml
+dev/component/logInOut/logInOutCtrl.js
+
+# Ignore dev folder
+dev/*

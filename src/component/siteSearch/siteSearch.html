@@ -42,7 +42,13 @@
                 <option value=""></option>
             </select>
         </div>
-
+        <div class="form-item item-20">
+            <label>HWMs Surveyed:</label>
+            <div class="btn-group">
+                <button type="button" class="btn" ng-model="Chosen.survey" uib-btn-radio="'true'" uncheckable>Surveyed</button>
+                <button type="button" class="btn" ng-model="Chosen.survey" uib-btn-radio="'false'" uncheckable>Unsurveyed</button>
+            </div>
+        </div>
 
         <div class="form-item item-20">
             <div class="checkbox-inline">
@@ -107,9 +113,7 @@
             </tbody>
         </table>
 
-        <div ng-show="siteList.length == 0">
-            <span>No Sites returned from query.</span>
-        </div>
+        <div ng-show="siteList.length == 0">No Sites returned from query.</div>
     </div>
 
 </div>

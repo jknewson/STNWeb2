@@ -26,6 +26,26 @@
                     allSiteFiles[sf].selected = false;
                 }
             }
+            //need to make sure the instrument_statuses are in the correct order ([0]Retrieved, [1]Deployed, [2]Proposed                
+            for (var s = 0; s < allSiteSensors.length; s++) {
+                var correctOrderSS = [];
+                var sensorStatuses = allSiteSensors[s].instrument_status;
+                if (sensorStatuses.length > 1) {
+                    //only care about order if there's more than 1
+                    var proposedStat = sensorStatuses.filter(function (ps) { return ps.status == "Proposed"; })[0];
+                    var deployedStat = sensorStatuses.filter(function (ps) { return ps.status == "Deployed"; })[0];
+                    var retLostStat = sensorStatuses.filter(function (ps) { return ps.status == "Retrieved" || ps.status == "Lost"; })[0];
+                    //now add them back in correctly
+                    if (retLostStat) correctOrderSS.push(retLostStat);
+                    if (deployedStat) correctOrderSS.push(deployedStat);
+                    if (proposedStat) correctOrderSS.push(proposedStat);
+                } else {
+                    correctOrderSS.push(sensorStatuses[0]);
+                }
+                //now put it back in the object
+                allSiteSensors[s].instrument_status = [];
+                allSiteSensors[s].instrument_status = correctOrderSS;
+            }
 
             $scope.eventSiteHWMs = allEventHWMs.filter(function (h) { return h.site_id == peakSite.site_id; });
             angular.forEach($scope.eventSiteHWMs, function (esh) {
@@ -34,22 +54,23 @@
             });
             
             $scope.eventSiteSensors = allSiteSensors.filter(function (s) { return s.event_id == $cookies.get('SessionEventID'); }); //maybe go from here to get all datafiles for each sensor
-            angular.forEach($scope.eventSiteSensors, function (ess) {
+            for (var evSiteSen = 0; evSiteSen < $scope.eventSiteSensors.length; evSiteSen++) {
+                //angular.forEach($scope.eventSiteSensors, function (ess) {
                 // if ess.Sensor_type == 2, 5, or 6 .. and there are no files.. show red ! with text
-                ess.CollectCondition = ess.inst_collection_id !== null && ess.inst_collection_id > 0 ?
-                    allCollectConditions.filter(function (cc) { return cc.id == ess.inst_collection_id; })[0].condition :
+                $scope.eventSiteSensors[evSiteSen].CollectCondition = $scope.eventSiteSensors[evSiteSen].inst_collection_id !== null && $scope.eventSiteSensors[evSiteSen].inst_collection_id > 0 ?
+                    allCollectConditions.filter(function (cc) { return cc.id == $scope.eventSiteSensors[evSiteSen].inst_collection_id; })[0].condition :
                     '';
                 //store if this is retrieved (if not, show ! for them to retrieve it in order to complete the peak
-                ess.isRetrieved = ess.instrument_status[0].status == 'Retrieved' ? true : false;
-                ess.files = allSiteFiles.filter(function (sf) { return sf.instrument_id == ess.instrument_id && (sf.fileBelongsTo == "DataFile File" || sf.fileBelongsTo == "Sensor File"); });
+                $scope.eventSiteSensors[evSiteSen].isRetrieved = $scope.eventSiteSensors[evSiteSen].instrument_status[0].status == 'Retrieved' ? true : false;
+                $scope.eventSiteSensors[evSiteSen].files = allSiteFiles.filter(function (sf) { return sf.instrument_id == $scope.eventSiteSensors[evSiteSen].instrument_id && (sf.fileBelongsTo == "DataFile File" || sf.fileBelongsTo == "Sensor File"); });
                 //var hasDF = {value:true}; (2: Met Station, 5: Rapid Deployment Gage, 6: Rain Gage)
-                if (ess.sensor_type_id == 2 || ess.sensor_type_id == 5 || ess.sensor_type_id == 6) {
-                    if (ess.files.length === 0) ess.NeedDF = true;
+                if ($scope.eventSiteSensors[evSiteSen].sensor_type_id == 2 || $scope.eventSiteSensors[evSiteSen].sensor_type_id == 5 || $scope.eventSiteSensors[evSiteSen].sensor_type_id == 6) {
+                    if ($scope.eventSiteSensors[evSiteSen].files.length === 0) $scope.eventSiteSensors[evSiteSen].NeedDF = true;
                     else {
-                        if (!determineDFPresent(ess.files)) ess.NeedDF = true;
+                        if (!determineDFPresent($scope.eventSiteSensors[evSiteSen].files)) $scope.eventSiteSensors[evSiteSen].NeedDF = true;
                     }
                 }//end if this is a datafile requiring sensor
-            });
+            }//);
 
             
             // $scope.siteFilesForSensors = allSiteFiles.filter(function (f) { return f.instrument_id !== null && f.instrument_id > 0; });
@@ -162,9 +183,9 @@
                 }
                 //check off those hwms used for this peak
                 //for each eventSiteSensor.. for each file within each sensor... if dataFileID == any of the peakDFs datafileID ====> make that file.selected =true
-                for (var s = 0; s < $scope.eventSiteSensors.length; s++) {
+                for (var ess = 0; ess < $scope.eventSiteSensors.length; ess++) {
                     //for each eventSiteSensor
-                    var essI = s;
+                    var essI = ess;
                     for (var df = 0; df < $scope.eventSiteSensors[essI].files.length; df++) {
                         //for each file within this eventSiteSensor
                         var isThere = thisPeakDFs.filter(function (pdf) { return pdf.data_file_id == $scope.eventSiteSensors[essI].files[df].data_file_id; })[0];
@@ -200,8 +221,9 @@
 
             //#region hwm list stuff
             var formatSelectedHWM = function (h) {
-                var fhwm = {};
+                var fhwm = {};                
                 fhwm.approval_id = h.approval_id;
+                fhwm.hwm_label = h.hwm_label;
                 fhwm.bank = h.bank;
                 fhwm.elev_ft = h.elev_ft;
                 fhwm.event_id = h.event_id;
@@ -367,6 +389,8 @@
                     var datetime = new Date($scope.aPeak.peak_date.date.getFullYear(), $scope.aPeak.peak_date.date.getMonth(), $scope.aPeak.peak_date.date.getDate(),
                         $scope.aPeak.peak_date.time.getHours(), $scope.aPeak.peak_date.time.getMinutes(), $scope.aPeak.peak_date.time.getSeconds());
                     $scope.aPeak.peak_date = datetime;
+                    dealWithTimeStampb4Send(); //UTC or local?
+
                     $http.defaults.headers.common.Authorization = 'Basic ' + $cookies.get('STNCreds');
                     $http.defaults.headers.common.Accept = 'application/json';
                     PEAK.update({ id: $scope.aPeak.peak_summary_id }, $scope.aPeak).$promise.then(function (response) {

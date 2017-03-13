@@ -6,15 +6,15 @@
             <div class="row">
                 <div class="col-md-12">
                     <label class="col-md-12">Date being reported:</label>
-                    <div class="col-md-6" style="padding-left:15px;padding-right:15px;"><span>{{report_date}}</span></div>
+                    <div class="col-md-6" style="padding-left:15px;padding-right:15px;">{{report_date}}</div>
                 </div>
                 <div class="col-md-12">
                     <label class="col-md-12">Event:</label>
-                    <div class="col-md-6"><span>{{event_name}}</span></div>
+                    <div class="col-md-6">{{event_name}}</div>
                 </div>
                 <div class="col-md-12">
                     <label class="col-md-12">State:</label>
-                    <div class="col-md-6"><span>{{state}}</span></div>
+                    <div class="col-md-6">{{state}}</div>
                 </div>
             </div>
             <br />
@@ -127,9 +127,7 @@
                 <td colspan="2">{{gage_down}}</td>
             </tr>
             <tr>
-                <td rowspan="2">
-                    <span>Discharge measurements</span>
-                </td>
+                <td rowspan="2">Discharge measurements</td>
                 <td>
                     <span class="required">To date</span>
                 </td>
@@ -142,9 +140,7 @@
                 <td colspan="2">{{plan_discharge_meas}}</td>
             </tr>
             <tr>
-                <td rowspan="2">
-                    <span>Check measurements</span>
-                </td>
+                <td rowspan="2">Check measurements</td>
                 <td>
                     <span class="required">To Date</span>
                 </td>
@@ -195,9 +191,7 @@
                 </td>
             </tr>
             <tr>
-                <td rowspan="4">
-                    <span>Rapid Deployment gages to date</span>
-                </td>
+                <td rowspan="4">Rapid Deployment gages to date</td>
                 <td>
                     <span class="required">Planned</span>
                 </td>
@@ -207,36 +201,28 @@
                 </td>
             </tr>
             <tr>
-                <td>
-                    <span>Deployed</span>
-                </td>
+                <td>Deployed</td>
                 <td colspan="2">
                     <input class="form-control" id="rdgDeployed" name="newReport.dep_rapdepl_gage" readonly="readonly"
                            ng-model="newReport.dep_rapdepl_gage" type="text" numeric-only required />
                 </td>
             </tr>
             <tr>
-                <td>
-                    <span>Recovered</span>
-                </td>
+                <td>Recovered</td>
                 <td colspan="2">
                     <input class="form-control" id="rdgRecovered" name="newReport.rec_rapdepl_gage" readonly="readonly"
                            ng-model="newReport.rec_rapdepl_gage" type="text" numeric-only required />
                 </td>
             </tr>
             <tr>
-                <td>
-                    <span>Lost</span>
-                </td>
+                <td>Lost</td>
                 <td colspan="2">
                     <input class="form-control" id="rdgLost" name="newReport.lost_rapdepl_gage" readonly="readonly"
                            ng-model="newReport.lost_rapdepl_gage" type="text" numeric-only required />
                 </td>
             </tr>
             <tr>
-                <td rowspan="4">
-                    <span>Water Level Sensors to date</span>
-                </td>
+                <td rowspan="4">Water Level Sensors to date</td>
                 <td>
                     <span class="required">Planned</span>
                 </td>
@@ -246,36 +232,28 @@
                 </td>
             </tr>
             <tr>
-                <td>
-                    <span>Deployed</span>
-                </td>
+                <td>Deployed</td>
                 <td colspan="2">
                     <input class="form-control" id="wlsDeployed" name="newReport.dep_wtrlev_sensor" readonly="readonly"
                            ng-model="newReport.dep_wtrlev_sensor" type="text" numeric-only required />
                 </td>
             </tr>
             <tr>
-                <td>
-                    <span>Recovered</span>
-                </td>
+                <td>Recovered</td>
                 <td colspan="2">
                     <input class="form-control" id="wlsRecovered" name="newReport.rec_wtrlev_sensor" readonly="readonly"
                            ng-model="newReport.rec_wtrlev_sensor" type="text" numeric-only required />
                 </td>
             </tr>
             <tr>
-                <td>
-                    <span>Lost</span>
-                </td>
+                <td>Lost</td>
                 <td colspan="2">
                     <input class="form-control" id="wlsLost" name="newReport.lost_wtrlev_sensor" readonly="readonly"
                            ng-model="newReport.lost_wtrlev_sensor" type="text" numeric-only required />
                 </td>
             </tr>
             <tr>
-                <td rowspan="4">
-                    <span>Wave Sensors to date</span>
-                </td>
+                <td rowspan="4">Wave Sensors to date</td>
                 <td>
                     <span class="required">Planned</span>
                 </td>
@@ -294,27 +272,21 @@
                 </td>
             </tr>
             <tr>
-                <td>
-                    <span>Recovered</span>
-                </td>
+                <td>Recovered</td>
                 <td colspan="2">
                     <input class="form-control" id="wsRecovered" name="newReport.rec_wv_sens" readonly="readonly"
                            ng-model="newReport.rec_wv_sens" type="text" numeric-only required />
                 </td>
             </tr>
             <tr>
-                <td>
-                    <span>Lost</span>
-                </td>
+                <td>Lost</td>
                 <td colspan="2">
                     <input class="form-control" id="wsLost" name="newReport.lost_wv_sens" readonly="readonly"
                            ng-model="newReport.lost_wv_sens" type="text" numeric-only required />
                 </td>
             </tr>
             <tr>
-                <td rowspan="4">
-                    <span>Barometers to date</span>
-                </td>
+                <td rowspan="4">Barometers to date</td>
                 <td>
                     <span class="required">Planned</span>
                 </td>
@@ -324,36 +296,28 @@
                 </td>
             </tr>
             <tr>
-                <td>
-                    <span>Deployed</span>
-                </td>
+                <td>Deployed</td>
                 <td colspan="2">
                     <input class="form-control" id="barDeployed" name="newReport.dep_barometric" readonly="readonly"
                            ng-model="newReport.dep_barometric" type="text" numeric-only required />
                 </td>
             </tr>
             <tr>
-                <td>
-                    <span>Recovered</span>
-                </td>
+                <td>Recovered</td>
                 <td colspan="2">
                     <input class="form-control" id="barRecovered" name="newReport.rec_barometric" readonly="readonly"
                            ng-model="newReport.rec_barometric" type="text" numeric-only required />
                 </td>
             </tr>
             <tr>
-                <td>
-                    <span>Lost</span>
-                </td>
+                <td>Lost</td>
                 <td colspan="2">
                     <input class="form-control" id="barLost" name="newReport.lost_barometric" readonly="readonly"
                            ng-model="newReport.lost_barometric" type="text" numeric-only required />
                 </td>
             </tr>
             <tr>
-                <td rowspan="4">
-                    <span>Meteorological Sensors to date</span>
-                </td>
+                <td rowspan="4">Meteorological Sensors to date</td>
                 <td>
                     <span class="required">Planned</span>
                 </td>
@@ -363,48 +327,36 @@
                 </td>
             </tr>
             <tr>
-                <td>
-                    <span>Deployed</span>
-                </td>
+                <td>Deployed</td>
                 <td colspan="2">
                     <input class="form-control" id="msDeployed" name="newReport.dep_meteorological" readonly="readonly"
                            ng-model="newReport.dep_meteorological" type="text" numeric-only required />
                 </td>
             </tr>
             <tr>
-                <td>
-                    <span>Recovered</span>
-                </td>
+                <td>Recovered</td>
                 <td colspan="2">
                     <input class="form-control" id="msRecovered" name="newReport.rec_meteorological" readonly="readonly"
                            ng-model="newReport.rec_meteorological" type="text" numeric-only required />
                 </td>
             </tr>
             <tr>
-                <td>
-                    <span>Lost</span>
-                </td>
+                <td>Lost</td>
                 <td colspan="2">
                     <input class="form-control" id="msLost" name="newReport.lost_meteorological" readonly="readonly"
                            ng-model="newReport.lost_meteorological" type="text" numeric-only required />
                 </td>
             </tr>
             <tr>
-                <td rowspan="2">
-                    <span>Highwater Mark to date</span>
-                </td>
-                <td>
-                    <span>Flagged</span>
-                </td>
+                <td rowspan="2">Highwater Mark to date</td>
+                <td>Flagged</td>
                 <td colspan="2">
                     <input class="form-control" id="hwmFlagged" name="newReport.hwm_flagged" readonly="readonly"
                            ng-model="newReport.hwm_flagged" type="text" numeric-only required />
                 </td>
             </tr>
             <tr>
-                <td>
-                    <span>Collected</span>
-                </td>
+                <td>Collected</td>
                 <td colspan="2">
                     <input class="form-control" id="hwmCollected" name="newReport.hwm_collected" readonly="readonly"
                            ng-model="newReport.hwm_collected" type="text" numeric-only required />
@@ -467,10 +419,10 @@
     <uib-accordion-group heading="Section 5: Contact Information">
         <div><b>Submitter</b></div>
         <div><span class="col-md-3">Name:</span><span>{{MemberLoggedIn.fname}} {{MemberLoggedIn.lname}}</span></div>
-        <div><span class="col-md-3">Phone</span><span>{{MemberLoggedIn.phone}}</span></div>
-        <div><span class="col-md-3">Email</span><span>{{MemberLoggedIn.email}}</span></div>
-        <div><span class="col-md-3">Office Name</span><span>{{MemberLoggedIn.agency_name}}</span></div>
-        <div><span class="col-md-3">Office Address</span><span>{{MemberLoggedIn.agency_address}}</span></div>
+        <div><span class="col-md-3">Phone</span>{{MemberLoggedIn.phone}}</div>
+        <div><span class="col-md-3">Email</span>{{MemberLoggedIn.email}}</div>
+        <div><span class="col-md-3">Office Name</span>{{MemberLoggedIn.agency_name}}</div>
+        <div><span class="col-md-3">Office Address</span>{{MemberLoggedIn.agency_address}}</div>
 
         <h3>Event Contacts</h3>
 
@@ -682,18 +634,13 @@
 
     <div>
         <input type="checkbox" name="complete" ng-model="newReport.complete" ng-true-value="'1'" ng-false-value="'0'" />
-        <span>Check if this Report is Complete. (If left unchecked, you may come back later to finish it)</span>
+        Check if this Report is Complete. (If left unchecked, you may come back later to finish it)
     </div>
     <div class="form-group">
         <div class="col-md-4 col-md-offset-2">
-            <span>
-                <button type="submit" class="btn btn-primary" ng-click="saveReport(fullReportForm.$valid)">
-                    <span>Save</span>
-                </button>
-            </span>
+            <button type="submit" class="btn btn-primary" ng-click="saveReport(fullReportForm.$valid)">Save</button>
         </div>
     </div>
-
 </uib-accordion>
 
 

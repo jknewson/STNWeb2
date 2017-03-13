@@ -1,0 +1,63 @@
+﻿<style type="text/css">
+    .dataTable th, .dataTable td {
+        text-overflow: ellipsis !important;
+        white-space: nowrap !important;
+    }
+
+    .maxWidth {
+        display: inline-block;
+        position: relative;
+        width: 80%;
+    }
+
+    .progress {
+        background-image: linear-gradient(to bottom, #cccaca 0px, #cccaca 100%);
+    }
+</style>
+
+<div ng-class="{'hidden': !showLoading}" class="page-loading">
+    <div id="loading">
+        <div id="loadingcontent">
+            <p id="loadingspinner" style="">
+                <uib-progressbar class="maxWidth" max="max" value="dynamic">
+                    <span ng-if="dynamic <= 0">Processing...</span>
+                    <span ng-if="dynamic != max" style="color:white; white-space:nowrap;">{{dynamic}} / {{max}} HWMs Uploaded</span>
+                    <span ng-if="dynamic == max">Redirecting...</span>
+                </uib-progressbar>
+                <br />
+                <img src="images/loading1.gif" />
+            </p>
+        </div>
+    </div>
+</div>
+
+<div class="page-padding">
+    <div><h2>Bulk Historic HWM upload for Event: {{event.event_name}}</h2></div>
+    <div class="col-md-12" style="padding:0;margin:0;height:600px;overflow:hidden">
+        <hot-table datarows="historicHWMs" column-sorting settings="tableSettings" hot-id="tableinstance" class="dataTable">
+            <hot-column data="siteDescription" title="'Site Description'" validator="requiredValidator"></hot-column><!-- 0 -->
+            <hot-column data="latitude" title="'Latitude'" validator="latValidator" type="'numeric'" format="'00.00000'"></hot-column><!-- 1 -->
+            <hot-column data="longitude" title="'Longitude'" validator="longValidator" type="'numeric'" format="'-00.00000'"></hot-column><!--2-->
+            <hot-column data="hDatum" title="'Horizontal Datum'" type="'dropdown'" source="hDatumArray" validator="requiredValidator"></hot-column><!-- 3 -->
+            <hot-column data="hCollectMethod" title="'Horizontal Collection Method'" type="'dropdown'" source="hcollectArray" validator="requiredValidator"></hot-column><!-- 4 -->
+            <hot-column data="waterbody" title="'Waterbody'" validator="requiredValidator"></hot-column><!--5 -->
+            <hot-column read-only title="' '"></hot-column><!--6-->
+            <hot-column data="state" title="'State'" type="'dropdown'" source="stateArray" validator="requiredValidator"></hot-column><!-- 7 -->
+            <hot-column data="county" title="'County'" type="'dropdown'" source="countyArray"></hot-column><!-- 8-->
+            <hot-column data="datumLocation_type" title="'ObjectivePoint Type'" type="'dropdown'" source="opTypeArray" validator="requiredValidator"></hot-column><!-- 9 -->
+            <hot-column data="op_name" title="'OP Name'" validator="requiredValidator"></hot-column><!-- 10 -->
+            <hot-column data="opDescription" title="'OP Description'" validator="requiredValidator"></hot-column><!-- 11 -->
+            <hot-column data="vDatum" title="'Vertical Datum'" type="'dropdown'" source="vDatumArray" validator="requiredValidator"></hot-column><!-- 12 -->
+            <hot-column data="dateEst" title="'OP Date Est.'" type="'date'" date-format="'MM/DD/YYYY'" validator="dateValidator"></hot-column><!-- 13 -->
+            <hot-column data="hwm_type" title="'HWM Type'" type="'dropdown'" source="hwmTypeArray" validator="requiredValidator"></hot-column><!-- 14 -->
+            <hot-column data="hwm_envir" title="'HWM Environment'" type="'dropdown'" source="hwmEnvirList" validator="requiredValidator"></hot-column><!-- 15 -->
+            <hot-column data="hwm_qual" title="'HWM Quality'" type="'dropdown'" source="hwmQualityArray" validator="requiredValidator"></hot-column><!-- 16 -->
+            <hot-column data="flagDate" title="'HWM Flag Date'" type="'date'" date-format="'MM/DD/YYYY'" validator="dateValidator"></hot-column><!-- 17 -->
+        </hot-table>
+    </div>
+    <div>
+        <button class="btn btn-primary" ng-click="save()">Save</button>
+        <button type="button" class="btn btn-warning" back-button>Cancel</button>
+        <button type="button" class="btn btn-danger" ng-click="reset()">Reset</button>
+    </div>
+</div>

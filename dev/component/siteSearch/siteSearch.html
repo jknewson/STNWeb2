@@ -42,7 +42,13 @@
                 <option value=""></option>
             </select>
         </div>
-
+        <div class="form-item item-20">
+            <label>HWMs Surveyed:</label>
+            <div class="btn-group">
+                <button type="button" class="btn" ng-model="Chosen.survey" uib-btn-radio="'true'" uncheckable>Surveyed</button>
+                <button type="button" class="btn" ng-model="Chosen.survey" uib-btn-radio="'false'" uncheckable>Unsurveyed</button>
+            </div>
+        </div>
 
         <div class="form-item item-20">
             <div class="checkbox-inline">
@@ -77,20 +83,8 @@
     </form>
 
 
-    <div ng-if="showHWMbox" class="results-box rb-50">
-        <h3 class="results-box-title">Unapproved Site HWMs</h3>
-        <ul ng-show="unApprovedHWMs.length > 0">
-            <li style="list-style:none;" ng-repeat="h in unApprovedHWMs | orderBy: 'site_id'">
-                <span><a ui-sref="site.dashboard({id: h.site_id})">{{h.site_no}}</a>: {{h.hwm_id}} ({{h.elev_ft}} ft.)</span>
-            </li>
-        </ul>
-        <div ng-show="unApprovedHWMs.length == 0" class="results-box-no-result">
-            No HWMs returned from query.
-        </div>
-    </div>
-
     <div ng-show="siteResponse">
-        <h3 class="results-box-title">Sites:</h3>
+        <div><h3 class="results-box-title">Sites: <span style="font-size:small;color:grey" class="ng-binding">(count: {{siteList.length}})</span></h3></div>
         <script>
             var sortingOrder = 'site_no';
         </script>
@@ -119,9 +113,7 @@
             </tbody>
         </table>
 
-        <div ng-show="siteList.length == 0">
-            <span>No Sites returned from query.</span>
-        </div>
+        <div ng-show="siteList.length == 0">No Sites returned from query.</div>
     </div>
 
 </div>

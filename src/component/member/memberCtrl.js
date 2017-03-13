@@ -29,6 +29,11 @@
                     }
                 };
 
+                $http.defaults.headers.common.Authorization = 'Basic ' + $cookies.get('STNCreds');
+                $http.defaults.headers.common.Accept = 'application/json';
+                MEMBER.getEventPeople({ Eventid: '135' }).$promise.then(function (response) {
+                    console.table(response);
+                });
                 //create/view member was clicked
                 $scope.showMemberModal = function (memberClicked) {
                     var indexClicked = $scope.memberList.indexOf(memberClicked);
@@ -81,7 +86,7 @@
                         var ag = $scope.agencyList.filter(function (a) { return a.agency_id == response[x].agency_id; })[0];
                         var ro = allRoles.filter(function (r) { return r.role_id == response[x].role_id; })[0];
                         eachM.Agency = ag.agency_name;
-                        eachM.Role = ro.role_name;
+                        eachM.Role = ro.role_name;                       
 
                         $scope.memberList.push(eachM);
                     }

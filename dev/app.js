@@ -2,10 +2,11 @@
     "use strict"; 
     var app = angular.module('app',
         ['ngResource', 'ui.router', 'ngCookies', 'ui.mask', 'ui.bootstrap', 'isteven-multi-select', 'ngInputModified', 'ui.validate', 'cgBusy',
-            'angular.filter', 'xeditable', 'checklist-model', 'ngFileUpload', 'STNResource', 'ui.bootstrap.datetimepicker','leaflet-directive',
+            'angular.filter', 'xeditable', 'checklist-model', 'ngFileUpload', 'STNResource', 'ui.bootstrap.datetimepicker','leaflet-directive','ngHandsontable',
             'STNControllers', 'LogInOutController', 'ModalControllers', 'SettingsControllers', 'WiM.Services', 'WiM.Event', 'wim_angular', 'angularSpinners']);
-    app.constant('SERVER_URL', 'https://stn.wim.usgs.gov/STNServices');
-   // app.constant('SERVER_URL', 'https://stn.wim.usgs.gov/STNServices');
+  // app.constant('SERVER_URL', 'https://stn.wim.usgs.gov/STNServices');
+    // app.constant('SERVER_URL', 'https://stntest.wim.usgs.gov/STNServices2');
+    app.constant('SERVER_URL', 'http://localhost/STNServices2');
     
     app.run(['$rootScope', '$uibModalStack', '$cookies', '$state', function ($rootScope, $uibModalStack, $cookies, $state) {
         $rootScope.$on('$stateChangeStart', function (event, toState, toParams, fromState, fromParams) {
@@ -54,6 +55,8 @@
                 })
 
                 //#endregion entryPoint
+
+                //#region map
                 .state("map", {
                     url: "/Map",
                     //templateUrl: "component/map/map.html",
@@ -111,7 +114,7 @@
                         }
                     }
                 })
-                //#endregion
+                //#endregion map
 
                 //#region approval page
                 .state("approval", {
@@ -274,30 +277,10 @@
                 .state("members.MembersList", {
                     url: "/MembersList",
                     templateUrl: "component/member/membersList.html",
-                    authenticate: true,                  
+                    authenticate: true
                  })
                 //#endregion members.MembersList
-
-                //#region members.MemberInfo
-                .state("members.MemberInfo", {
-                    url: "/memberInfo/:id",
-                    templateUrl: "component/member/memberInfo.html",
-                    controller: "memberInfoCtrl",
-                    authenticate: true,
-                    resolve: {
-                        m: 'MEMBER',
-                        thisMember: function (m, $stateParams, $http, $cookies) {
-                            var memberId = $stateParams.id;
-                            if (memberId > 0) {
-                                $http.defaults.headers.common.Authorization = 'Basic ' + $cookies.get('STNCreds');
-                                $http.defaults.headers.common.Accept = 'application/json';
-                                return m.query(
-                                    { id: memberId }).$promise;
-                            }
-                        }
-                    }
-                })//#endregion members.MemberInfo
-                //#endregion members
+                 //#endregion members
 
                 //#region events
                 //#region events
@@ -357,7 +340,7 @@
                 //#endregion events
 
                 //#region resources
-                //#region resources
+                //#region resources main         
                 .state("resources", {
                     url: "/Resources",
                     abstract: true,
@@ -462,7 +445,7 @@
                             return vd.getAll().$promise;
                         }
                     }
-                })//#endregion resources
+                })//#endregion resources main
 
                 //#region resources.ResourcesList
                 .state("resources.ResourcesList", {
@@ -660,6 +643,138 @@
                 //#endregion all lookup htmls
                 //#endregion resources
 
+                //#region bulk hwm adjustment page                                 
+                .state("bulkHWMAdj", {
+                    url: "/BulkHWM_adjustments",
+                    templateUrl: "component/hwm/bulkHWMAdj.html",
+                    authenticate: true,
+                    controller: "bulkHWMAdjCtrl",
+                    resolve: {
+                        e: 'EVENT',
+                        eventList: function (e) {
+                            return e.getAll().$promise;
+                        },
+                        s: 'STATE',
+                        stateList: function (s) {
+                            return s.getAll().$promise;
+                        },
+                        c: 'COUNTIES',
+                        countyList: function (c) {
+                            return c.getAll().$promise;
+                        }
+                    }
+                })
+                //#endregion
+
+                //#region bulk hwm adjustment page                                 
+                .state("bulkHWM", {
+                    url: "/HistoricHWM_Upload",
+                    templateUrl: "component/hwm/bulkHWM.html",
+                    authenticate: true,
+                    controller: "bulkHWMCtrl",
+                    resolve: {
+                        e: 'EVENT',
+                        eventList: function (e) {
+                            return e.getAll().$promise;
+                        },
+                        s: 'STATE',
+                        stateList: function (s) {
+                            return s.getAll().$promise;
+                        },
+                        c: 'COUNTIES',
+                        countyList: function (c) {
+                            return c.getAll().$promise;
+                        },
+                        ht: 'HWM_TYPE',
+                        hwmTypeList: function (ht){
+                            return ht.getAll().$promise;
+                        },
+                        m: 'MARKER',
+                        markerList: function (m){
+                            return m.getAll().$promise;
+                        },
+                        hq: 'HWM_QUALITY',
+                        hwmQualList: function (hq){
+                            return hq.getAll().$promise;
+                        },
+                        hd: 'HORIZONTAL_DATUM',
+                        horizDatumList: function (hd){
+                            return hd.getAll().$promise;
+                        },
+                        hcm: 'HORIZONTAL_COLL_METHODS',
+                        horCollMethList: function (hcm){
+                            return hcm.getAll().$promise;
+                        },
+                        vd: 'VERTICAL_DATUM',
+                        vertDatumList: function (vd){
+                            return vd.getAll().$promise;
+                        },
+                        vcm: 'VERTICAL_COLL_METHOD',
+                        vertCollMethList: function (vcm) {
+                            return vcm.getAll().$promise;
+                        },
+                        f: 'FILE_TYPE',
+                        fileTypesList: function (f) {
+                            return f.getAll().$promise;
+                        },
+                        a: 'AGENCY',
+                        agenciesList: function (a) {
+                            return a.getAll().$promise;
+                        },
+                    }
+                })
+                //#endregion
+
+                //#region historicHWM upload
+                .state("historicHWMs", {
+                    url: "/Events/:id/HistoricHWMs",
+             //       params:{id:null},
+                    templateUrl: "component/hwm/historic.html",
+                    authenticate: true,
+                    controller: "historicHWMCtrl",
+                    resolve: {
+                        e: 'EVENT',
+                        thisEvent: function (e, $stateParams) {
+                            if ($stateParams.id > 0) {
+                                return e.query({ id: $stateParams.id }).$promise;
+                            }
+                        },
+                        hd: 'HORIZONTAL_DATUM',
+                        HDatums: function (hd){
+                            return hd.getAll().$promise;
+                        },
+                        hc: 'HORIZONTAL_COLL_METHODS',
+                        HCollectMeths: function (hc){
+                            return hc.getAll().$promise;
+                        },
+                        s: 'STATE',
+                        States: function (s){
+                            return s.getAll().$promise;
+                        },
+                        c: 'COUNTIES',
+                        Counties: function (c){
+                            return c.getAll().$promise;
+                        },
+                        opt: 'OP_TYPE',
+                        OPTypes: function (opt){
+                            return opt.getAll().$promise;
+                        },
+                        vd: 'VERTICAL_DATUM',
+                        VDatums: function (vd){
+                            return vd.getAll().$promise;
+                        },
+                        ht: 'HWM_TYPE',
+                        HTypes: function (ht) {
+                            return ht.getAll().$promise;
+                        },
+                        hqu: 'HWM_QUALITY',
+                        HWMQuals: function (hqu) {
+                            return hqu.getAll().$promise;
+                        }
+                    }
+                })
+                //#endregion
+                
                 //#region site (abstract)
                 .state("site", {
                     url: "/Site/:id",
@@ -854,6 +969,62 @@
                                 aSite: function (thisSite) {
                                     if (thisSite !== undefined) {
                                         return thisSite;
+                                    }
+                                },
+                                dt: 'DEPLOYMENT_TYPE',
+                                deploymentTypes: function(thisSite, dt){
+                                    if (thisSite !== undefined) return dt.getAll().$promise;
+                                },
+                                s: 'SITE',
+                                siteHWMs: function (thisSite, s) {
+                                    if (thisSite !== undefined) {
+                                        return s.getSiteHWMs({ id: thisSite.site_id }).$promise;
+                                    }
+                                },
+                                i: 'INSTRUMENT',
+                                baroSensors: function (thisSite, i) {
+                                    if (thisSite !== undefined) {
+                                        return i.getSensorView({ ViewType: 'baro_view' }).$promise;
+                                    }
+                                },
+                                metSensors: function (thisSite, i) {
+                                    if (thisSite !== undefined) {
+                                        return i.getSensorView({ ViewType: 'met_view' }).$promise;
+                                    }
+                                },
+                                rdgSensors: function (thisSite, i) {
+                                    if (thisSite !== undefined) {
+                                        return i.getSensorView({ ViewType: 'rdg_view' }).$promise;
+                                    }
+                                },
+                                stormSensors: function (thisSite, i) {
+                                    if (thisSite !== undefined) {
+                                        return i.getSensorView({ ViewType: 'stormtide_view' }).$promise;
+                                    }
+                                },
+                                waveSensors: function (thisSite, i) {
+                                    if (thisSite !== undefined) {
+                                        return i.getSensorView({ ViewType: 'waveheight_view' }).$promise;
+                                    }
+                                },
+                                presTempSensors: function (thisSite, i) {
+                                    if (thisSite !== undefined) {
+                                        return i.getSensorView({ ViewType: 'pressuretemp_view' }).$promise;
+                                    }
+                                },
+                                thermSensors: function (thisSite, i) {
+                                    if (thisSite !== undefined) {
+                                        return i.getSensorView({ ViewType: 'therm_view' }).$promise;
+                                    }
+                                },
+                                webcamSensors: function (thisSite, i) {
+                                    if (thisSite !== undefined) {
+                                        return i.getSensorView({ ViewType: 'webcam_view' }).$promise;
+                                    }
+                                },
+                                raingageSensors: function (thisSite, i) {
+                                    if (thisSite !== undefined) {
+                                        return i.getSensorView({ ViewType: 'raingage_view' }).$promise;
                                     }
                                 }
                             }

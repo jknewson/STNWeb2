@@ -2,8 +2,8 @@
     'use strict';
 
     var ModalControllers = angular.module('ModalControllers');//
-    ModalControllers.controller('siteFileModalCtrl', ['$scope', '$cookies', '$http', '$uibModalInstance', '$uibModal', 'SERVER_URL', 'fileTypeList', 'thisFile', 'allMembers', 'fileSource', 'dataFile', 'agencyList', 'fileSite', 'FILE', 'SOURCE', 'DATA_FILE',
-        function ($scope, $cookies, $http, $uibModalInstance, $uibModal, SERVER_URL, fileTypeList, thisFile, allMembers, fileSource, dataFile, agencyList, fileSite, FILE, SOURCE, DATA_FILE) {
+    ModalControllers.controller('siteFileModalCtrl', ['$scope', '$cookies', '$http', '$uibModalInstance', '$uibModal', 'SERVER_URL', 'FILE_STAMP', 'fileTypeList', 'thisFile', 'fileExists', 'allMembers', 'fileSource', 'dataFile', 'agencyList', 'fileSite', 'FILE', 'SOURCE', 'DATA_FILE',
+        function ($scope, $cookies, $http, $uibModalInstance, $uibModal, SERVER_URL, FILE_STAMP, fileTypeList, thisFile, fileExists, allMembers, fileSource, dataFile, agencyList, fileSite, FILE, SOURCE, DATA_FILE) {
             //dropdowns
             $scope.serverURL = SERVER_URL;
             $scope.userRole = $cookies.get('usersRole');
@@ -12,6 +12,7 @@
             $scope.fileTypes = fileTypeList;
             $scope.agencies = agencyList;
             $scope.theSite = fileSite;
+            
             $scope.aFile = {}; //holder for file
             $scope.aSource = {}; //holder for file source
             $scope.datafile = {}; //holder for file datafile
@@ -24,6 +25,7 @@
                     if (theEvent.preventDefault) theEvent.preventDefault();
                 }
             };
+            $scope.fileItemExists = fileExists === undefined || fileExists.Length > 0 ? true:false;
 
             //#region Datepicker
             $scope.datepickrs = {};
@@ -66,7 +68,15 @@
                 if ($scope.whoseFile == 'Objective Point File') $scope.whoseFile = 'Datum Location File';
                 $scope.aFile = thisFile;
                 $scope.aFile.fileType = fileTypeList.filter(function (ft) { return ft.filetype_id == $scope.aFile.filetype_id; })[0].filetype;
-                
+                //determine if existing file is a photo (even if type is not )
+                if ($scope.aFile.name !== undefined) {
+                    var fI = $scope.aFile.name.lastIndexOf(".");
+                    var fileExt = $scope.aFile.name.substring(fI + 1);
+                    if (fileExt.match(/(jpg|JPG|jpeg|JPEG|png|PNG|gif|GIF)$/)) {
+                        $scope.isPhoto = true;
+                    } else $scope.isPhoto = false;
+                }
+                $scope.src = $scope.serverURL + '/Files/' + $scope.aFile.file_id + '/Item' + FILE_STAMP.getStamp();
                 $scope.aFile.file_date = new Date($scope.aFile.file_date); //date for validity of form on PUT
                 if ($scope.aFile.photo_date !== undefined) $scope.aFile.photo_date = new Date($scope.aFile.photo_date); //date for validity of form on PUT
                 if (fileSource !== undefined)  {
@@ -79,10 +89,11 @@
                 if (dataFile !== undefined) {
                     $scope.ApprovalInfo = {};
                     $scope.datafile = dataFile;
+                    $scope.timeZoneList = ['UTC', 'PST', 'MST', 'CST', 'EST'];                
                     $scope.datafile.collect_date = new Date($scope.datafile.collect_date); //date for validity of form on put
                     $scope.datafile.good_start = getDateTimeParts($scope.datafile.good_start); //date for validity of form on put
                     $scope.datafile.good_end = getDateTimeParts($scope.datafile.good_end); //date for validity of form on put
-                    $scope.timeZoneList = ['UTC', 'PST', 'MST', 'CST', 'EST'];
+                    
                     if ($scope.datafile.approval_id !== undefined && $scope.datafile.approval_id !== null && $scope.datafile.approval_id >= 1) {
                         DATA_FILE.getDFApproval({ id: $scope.datafile.data_file_id }, function success(approvalResponse) {
                             $scope.ApprovalInfo.approvalDate = new Date(approvalResponse.approval_date); //include note that it's displayed in their local time but stored in UTC
@@ -175,9 +186,15 @@
                     });//end source.save()
                 }//end valid
             };//end create()
-
+            $scope.changedFileType = function () {
+                //from photo to data
+                //from data to photo
+                //from data to other
+                //from photo to other
+                //from other to other
+            };
             //update this file
-            $scope.save = function (valid) {
+            $scope.save = function (valid) {                
                 if ($scope.fileCopy.filetype_id == 2) {
                     //make sure end date is after start date
                     var s = $scope.dfCopy.good_start;//need to get dep status date in same format as retrieved to compare
@@ -198,8 +215,8 @@
                         fixDate.result.then(function () {
                             valid = false;
                         });
-                    }
-                }
+                    }//end if Date<Date
+                }//end file.Copy.filetype_id == 2
                 if (valid) {
                     $scope.sFileIsUploading = true;
                     //only photo or other file type (no data file here)
@@ -213,6 +230,7 @@
                             $scope.aSource = sResponse;
                             $scope.aSource.FULLname = $scope.aSource.source_name;
                             $scope.aSource.agencyName = $scope.agencies.filter(function (a) { return a.agency_id == $scope.aSource.agency_id; })[0].agency_name;
+                            //editing just the file
                             FILE.update({ id: $scope.fileCopy.file_id }, $scope.fileCopy).$promise.then(function (fileResponse) {
                                 toastr.success("File Updated");
                                 fileResponse.fileBelongsTo = whatkind;
@@ -222,7 +240,7 @@
                                 if ($scope.aFile.photo_date !== undefined) $scope.aFile.photo_date = new Date($scope.aFile.photo_date); //date for validity of form on PUT
                                 $scope.fileCopy = {}; $scope.sourceCopy = {};
                                 $scope.view.FILEval = 'detail';
-                                $scope.sFileIsUploading = false;                                                                
+                                $scope.sFileIsUploading = false;
                             }, function (errorResponse) {
                                 $scope.sFileIsUploading = false;
                                 toastr.error("Error saving file: " + errorResponse.statusText);
@@ -248,7 +266,6 @@
                             $scope.dfCopy.good_start = $scope.dfCopy.good_start.toString().substring(0, si);
                             $scope.dfCopy.good_end = $scope.dfCopy.good_end.toString().substring(0, ei);
                         }
-
                         DATA_FILE.update({ id: $scope.dfCopy.data_file_id }, $scope.dfCopy).$promise.then(function (dfResponse) {
                             $scope.datafile = dfResponse;
                             $scope.datafile.collect_date = new Date($scope.datafile.collect_date); //date for validity of form on put
@@ -275,8 +292,74 @@
                             toastr.error("Error saving data file: " + errorResponse.statusText);
                         });
                     } //end else (datafile)
-                }//end valid
+                }//end valid                
             };//end save()
+
+            //need to reupload fileItem to this existing file OR Change out existing fileItem for new one
+            $scope.saveFileUpload = function () {
+                $http.defaults.headers.common.Authorization = 'Basic ' + $cookies.get('STNCreds');
+                $http.defaults.headers.common.Accept = 'application/json';
+                $scope.sFileIsUploading = true;                
+                var fileParts = {
+                    FileEntity: {
+                        file_id: $scope.aFile.file_id,
+                        name: $scope.aFile.name,
+                        description: $scope.aFile.description,
+                        photo_direction: $scope.aFile.photo_direction,
+                        latitude_dd: $scope.aFile.latitude_dd,
+                        longitude_dd: $scope.aFile.longitude_dd,
+                        file_date: $scope.aFile.file_date,
+                        hwm_id: $scope.aFile.hwm_id,
+                        site_id: $scope.aFile.site_id,
+                        filetype_id: $scope.aFile.filetype_id,
+                        source_id: $scope.aFile.source_id,
+                        path: $scope.aFile.path,
+                        data_file_id: $scope.aFile.data_file_id,
+                        instrument_id: $scope.aFile.instrument_id,
+                        photo_date: $scope.aFile.photo_date,
+                        is_nwis: $scope.aFile.is_nwis,
+                        objective_point_id: $scope.aFile.objective_point_id
+                    },
+                    File: $scope.aFile.File1 !== undefined ? $scope.aFile.File1 : $scope.aFile.File
+                };
+                //need to put the fileParts into correct format for post
+                var fd = new FormData();
+                fd.append("FileEntity", JSON.stringify(fileParts.FileEntity));
+                fd.append("File", fileParts.File);
+                //now POST it (fileparts)
+                FILE.uploadFile(fd).$promise.then(function (fresponse) {
+                    toastr.success("File Uploaded");
+                    $scope.src = $scope.serverURL + '/Files/' + $scope.aFile.file_id + '/Item' + FILE_STAMP.getStamp();
+                    FILE_STAMP.setStamp();
+                    $scope.stamp = FILE_STAMP.getStamp();
+                    $scope.aFile.name = fresponse.name;
+                    $scope.aFile.path = fresponse.path;
+                    //if this is a photo file, flag so thumbnail shows and make sure
+                    if ($scope.aFile.File1 !== undefined) {
+                        if ($scope.aFile.File1.type.indexOf("image") > -1) {
+                            $scope.isPhoto = true;
+                        }
+                        else { $scope.isPhoto = false; }
+                    } else {
+                        if ($scope.aFile.File.type.indexOf("image") > -1) {
+                            $scope.isPhoto = true;
+                        }
+                        else { $scope.isPhoto = false; }
+                    }
+                    
+                    if ($scope.aFile.File1 !== undefined) {
+                        $scope.aFile.File = $scope.aFile.File1;
+                        $scope.aFile.File1 = undefined; //put it as file and remove it from 1
+                    }
+                    //update the siteImageFiles for carousel if photo was changed to a different type or vise versa
+                    
+                    $scope.sFileIsUploading = false;
+                    $scope.fileItemExists = true;
+                }, function (errorResponse) {
+                    $scope.sFileIsUploading = false;
+                    toastr.error("Error saving file: " + errorResponse.statusText);
+                });
+            };
 
             //delete this file
             $scope.deleteFile = function () {
@@ -307,7 +390,7 @@
             };//end delete()
 
             //edit button clicked. make copy of hwm 
-            $scope.wannaEditFILE = function () {
+            $scope.wannaEditFILE = function () {                
                 $scope.view.FILEval = 'edit';
                 $scope.fileCopy = angular.copy($scope.aFile);
                 $scope.dfCopy = angular.copy($scope.datafile);

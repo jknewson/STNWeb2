@@ -3,8 +3,8 @@
 
     var SettingsControllers = angular.module('SettingsControllers');
 
-    SettingsControllers.controller('memberModalCtrl', ['$scope', '$rootScope', '$cookies', '$location', '$http', '$uibModal', '$uibModalInstance', '$stateParams', '$filter', '$sce', 'roleList', 'agencyList', 'thisMember', 'MEMBER',
-        function ($scope, $rootScope, $cookies, $location, $http, $uibModal, $uibModalInstance, $stateParams, $filter, $sce, roleList, agencyList, thisMember, MEMBER) {
+    SettingsControllers.controller('memberModalCtrl', ['$scope', '$rootScope', '$cookies', '$http', '$uibModal', '$uibModalInstance', '$filter', '$sce', 'roleList', 'agencyList', 'thisMember', 'MEMBER',
+        function ($scope, $rootScope, $cookies, $http, $uibModal, $uibModalInstance, $filter, $sce, roleList, agencyList, thisMember, MEMBER) {
             //all things both new and existing member page will need
             $scope.aMember = {}; //holder for member (either coming in for edit, or being created for post
             $scope.matchingUsers = true;
@@ -35,7 +35,7 @@
                 //check to see if the acct User is the same as the user they are looking at
                 $scope.matchingUsers = thisMember.member_id == $scope.loggedInUser.ID ? true : false;
 
-                $scope.aMember = thisMember;
+                $scope.aMember = angular.copy(thisMember);
                 $scope.aMember.Role = roleList.filter(function (r) { return r.role_id == $scope.aMember.role_id; })[0].role_name;
                 $scope.changePass = false;
 
@@ -87,11 +87,11 @@
                 if (valid) {
                     $http.defaults.headers.common.Authorization = 'Basic ' + $cookies.get('STNCreds');
                     $http.defaults.headers.common.Accept = 'application/json';
-                    if ($scope.pass.newP !== undefined) $scope.aMember.password = btoa($scope.pass.newP);
+                    if ($scope.pass.newP !== "") $scope.aMember.password = btoa($scope.pass.newP);
                     var updatedMember = {};
                     var formattedMember = angular.copy($scope.aMember);
                     
-                    delete formattedMember.Role;
+                    delete formattedMember.Role; delete formattedMember.Agency;
                     MEMBER.update({ id: formattedMember.member_id }, formattedMember, function success(response) {
                         updatedMember = response;
                         var ag = $scope.agencyList.filter(function (a) { return a.agency_id == response.agency_id; })[0];
@@ -103,7 +103,9 @@
                         if ($scope.loggedInUser.ID == response.member_id) {
                             if ($scope.aMember.password !== undefined) {
                                 var enc = btoa(updatedMember.username.concat(":", $scope.pass.newP));
-                                $cookies.put('STNCreds', enc);
+                                //set expiration on cookies
+                                var expireDate = new Date().addHours(8);
+                                $cookies.put('STNCreds', enc, { expires: expireDate });                                
                             }
                             $cookies.put('STNUsername', updatedMember.username);
                             var usersNAME = updatedMember.fname + " " + updatedMember.lname;
@@ -147,27 +149,17 @@
                         }
                     }
                 });
-                modalInstance.result.then(function (nameToRemove) {
-                    //yes, remove this keyword
-                    var test;
+                modalInstance.result.then(function (memToRemove) {
                     //DELETE it
-                    //$http.defaults.headers.common.Authorization = 'Basic ' + $cookies.get('STNCreds');
+                    $http.defaults.headers.common.Authorization = 'Basic ' + $cookies.get('STNCreds');
 
-                    //MEMBER.deleteMember({ id: nameToRemove.member_id }, function success(response) {
-                    //    var delMem = {};
-                    //    delMem.member_id = nameToRemove.member_id;
-                    //    delMem.Name = nameToRemove.fname + " " + nameToRemove.lname;
-                    //    var ag = $scope.agencyList.filter(function (a) { return a.agency_id == nameToRemove.agency_id; })[0];
-                    //    var ro = allRoles.filter(function (r) { return r.role_id == nameToRemove.role_id; })[0];
-                    //    delMem.Agency = ag.agency_name;
-                    //    delMem.Role = ro.role_name;
-                    //    $scope.memberList.splice($scope.memberList.indexOf(delMem), 1);
-                    //    toastr.success("Member Deleted");
-                    //}, function error(errorResponse) {
-                    //    toastr.error("Error: " + errorResponse.statusText);
-                    //}).$promise.then(function () {
-                    //    $location.path('/Members/MembersList').replace();
-                    //});
+                    MEMBER.deleteMember({ id: memToRemove.member_id }, function success(response) {
+                        toastr.success("Member Deleted");
+                    }, function error(errorResponse) {
+                        toastr.error("Error: " + errorResponse.statusText);
+                    }).$promise.then(function () {                        
+                        $uibModalInstance.close(["de", 'deleted']);
+                    });
                 });
                 //end modal
             };

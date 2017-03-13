@@ -11,12 +11,8 @@
                 <td style="white-space: nowrap">
                     <!-- form -->
                     <form editable-form name="StatTrowform" onaftersave="saveStatusType($data, StatT.status_type_id)" ng-show="StatTrowform.$visible" class="form-buttons form-inline" shown="inserted == StatT">
-                        <button type="submit" ng-disabled="StatTrowform.$waiting" class="btn btn-primary">
-                            save
-                        </button>
-                        <button type="button" ng-disabled="StatTrowform.$waiting" ng-click="StatTrowform.$cancel()" class="btn btn-default">
-                            cancel
-                        </button>
+                        <button type="submit" ng-disabled="StatTrowform.$waiting" class="btn btn-primary">save</button>
+                        <button type="button" ng-disabled="StatTrowform.$waiting" ng-click="StatTrowform.$cancel()" class="btn btn-default">cancel</button>
                     </form>
                     <div class="buttons" ng-show="!StatTrowform.$visible">
                         <button class="btn btn-primary" ng-click="StatTrowform.$show()">edit</button>
@@ -39,8 +35,13 @@
         <form class="form-horizontal" name="lookupForm.eventStatFm">
             <fieldset>
 
-                <div class="form-group required">
-                    <label class="col-md-3 control-label req" for="status">Sensor Status Type:</label>
+                <div class="form-group">
+                    <label class="col-md-3 control-label req" for="status">
+                        Sensor Status Type:
+                        <button type="button" class="help-btn" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Required">
+                            <span class="glyphicon glyphicon-asterisk" style="color:#d00;font-size:xx-small;"></span>
+                        </button>
+                    </label>
                     <div class="col-md-6">
                         <input class="form-control" id="status" name="status" type="text" placeholder="" ng-model="newStatT.status" required />
                     </div>
@@ -50,11 +51,7 @@
                 <!--submit button-->
                 <div class="form-group">
                     <div class="col-md-2 col-md-offset-2">
-                        <span>
-                            <button class="btn btn-primary" ng-click="AddStatusType(lookupForm.eventStatFm.$valid, newStatT)">
-                                Add
-                            </button>
-                        </span>
+                        <button class="btn btn-primary" ng-click="AddStatusType(lookupForm.eventStatFm.$valid, newStatT)">Add</button>
                     </div>
                 </div>
 

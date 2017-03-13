@@ -2,39 +2,7 @@
     /* controllers.js, 'leaflet-directive''ui.unique','ngTagsInput',*/
     'use strict';
     var STNControllers = angular.module('STNControllers');
-    //#region DIRECTIVES
-    //print test
-    //STNControllers.directive('print', ['$compile', function ($compile) {
-    //    return {
-    //        restrict: 'AEC',
-    //        link: function (scope, el, attrs) {
-    //            if (attrs.nopopup) {
-    //                el.bind('click', function () {
-    //                    window.print();
-    //                });
-    //            } else {
-    //                el.bind('click', function () {
-    //                    var html = document.getElementById(attrs.print);
-    //                    var links = document.getElementsByTagName('link');
-    //                    var stylesheets = "";
-    //                    for (var i = 0; i < links.length; i++) {
-    //                        stylesheets = stylesheets + links[i].outerHTML;
-    //                    }
-    //                    var printarea = window.open('', '', '');
-    //                    printarea.document.write('<html><head><title></title>');
-    //                    printarea.document.write(stylesheets);
-    //                    printarea.document.write('<style>label {font-weight: 600;} *{font-size: medium;}</style></head><body>');
-    //                    printarea.document.write('<h2>Short Term Network Modeling</h2>');
-    //                    printarea.document.write(html.innerHTML);
-    //                    printarea.document.write('</body></html>');
-    //                    printarea.print();
-    //                    printarea.close();
-
-    //                });
-    //            }
-    //        }
-    //    };
-    //}]);nitAdvancedSearchbox
+    
     //try this one Monday:::
     //http://www.ng-newsletter.com/posts/d3-on-angular.html
     STNControllers.directive('barsChart',['$parse', function ($parse) {
@@ -89,7 +57,7 @@
                     $scope.searchTerm = '';
                     $scope.searchBy = { val: 'bySiteNo' };
                     $scope.placeholder = '...';
-                    $scope.IndexSearchSites = function () {                       
+                    $scope.IndexSearchSites = function () {
                         if ($scope.searchTerm !== "") {
                             $http.defaults.headers.common.Accept = 'application/json';
                             switch ($scope.searchBy.val) {
@@ -301,21 +269,42 @@
         };
     }]);
 
-    //STNControllers.directive('datetimez', function () {
-    //    //http://tarruda.github.io/bootstrap-datetimepicker/#api  -- can't get it working right now
-    //    return {
-    //        restrict: 'A',
-    //        require: 'ngModel',
-    //        link: function (scope, element, attrs, ngModelCtrl) {
-    //            element.datetimepicker({
-    //                dateFormat: 'dd/MM/yyyy hh:mm:ss',
-    //                language: 'pt-BR'
-    //            }).on('changeDate', function (e) {
-    //                ngModelCtrl.$setViewValue(e.date);
-    //                scope.$apply();
-    //            });
-    //        }
-    //    };
-    //});
-    //#endregion DIRECTIVES
+    //used on event name to make sure no special characters
+    STNControllers.directive('inputRestrictor', [
+        function () {
+            return {
+                restrict: 'A',
+                require: 'ngModel',
+                link: function(scope, element, attr, ngModelCtrl) {
+                    var pattern = /[^a-zA-Z0-9-_]/g;
+
+                    function fromUser(text) {
+                        if (!text)
+                            return text;
+
+                        var transformedInput = text.replace(pattern, '');
+                        if (transformedInput !== text) {
+                            ngModelCtrl.$setViewValue(transformedInput);
+                            ngModelCtrl.$render();
+                        }
+                        return transformedInput;
+                    }
+                    ngModelCtrl.$parsers.push(fromUser);
+                }
+            };
+        }
+    ]);
+
+    STNControllers.directive('labelLimitLength', function () {
+        return {
+            restrict: "A",
+            link: function (scope, elem, attrs) {
+                var limit = parseInt(attrs.labelLimitLength);
+                angular.element(elem).on("keypress", function (e) {
+                    if (this.value.length == limit) e.preventDefault();
+                });
+            }
+        };
+    });
+    
 })();

@@ -120,13 +120,13 @@
 
                         controls.markers.create(markers ,$scope.markers);
                         $scope.markers = markers;
-                        console.table($scope.markers);
+                       // console.table($scope.markers);
 
-                        var LLBounds =  new L.LatLngBounds($scope.markersLatLngArray);
-                        $scope.bounds = leafletBoundsHelpers.createBoundsFromArray([
-                            [LLBounds._northEast.lat, LLBounds._northEast.lng],
-                            [LLBounds._southWest.lat, LLBounds._southWest.lng]
-                        ]);
+                        //var LLBounds =  new L.LatLngBounds($scope.markersLatLngArray);
+                        //$scope.bounds = leafletBoundsHelpers.createBoundsFromArray([
+                        //    [LLBounds._northEast.lat, LLBounds._northEast.lng],
+                        //    [LLBounds._southWest.lat, LLBounds._southWest.lng]
+                        //]);
 
 
                     });
@@ -250,7 +250,7 @@
                         toastr.options.timeOut = "8000";
                         toastr.options.closeButton = true;
                         toastr.warning("No sites are showing because you have no filters applied. Please select at least one search parameter.", "Map Filters");
-                        return;
+                        return;                        
 
                     }
                 });
@@ -265,7 +265,7 @@
                     $scope.error = "Could not fetch sites";
                 };
                 $scope.$on("leafletDirectiveMap.click", function(event, args){
-                    if ($scope.createSiteModeActive == true) {
+                    if ($scope.createSiteModeActive === true) {
                         //first, remove previously click-created site
                         removeUserCreatedSite();
                         var leafEvent = args.leafletEvent;

@@ -40,7 +40,10 @@
                     size: 'sm'
                 });
             }
-            
+            Date.prototype.addHours = function (h) {
+                this.setHours(this.getHours() + h);
+                return this;
+            };
             $scope.serverURL = SERVER_URL;
             $scope.submit = function () {
                 //$scope.sub = true;
@@ -52,7 +55,7 @@
                 var up = $scope.username + ":" + $scope.password;
                 $http.defaults.headers.common.Authorization = 'Basic ' + btoa(up);
                 $http.defaults.headers.common.Accept = 'application/json';
-
+                
                 Login.login({}, 
                     function success(response) {
                         var user = response;
@@ -60,7 +63,9 @@
                             //set user cookies (cred, username, name, role
                             var usersNAME = user.fname + " " + user.lname;
                             var enc = btoa($scope.username.concat(":", $scope.password));
-                            $cookies.put('STNCreds', enc);
+                            //set expiration on cookies
+                            var expireDate = new Date().addHours(8);
+                            $cookies.put('STNCreds', enc, { expires: expireDate });
                             $cookies.put('STNUsername', $scope.username);
                             $cookies.put('usersName', usersNAME);
                             $cookies.put('mID', user.member_id);
@@ -87,6 +92,7 @@
                             $rootScope.isAuth.val = true;
                             $rootScope.usersName = usersNAME;
                             $rootScope.userID = user.member_id;
+                            $rootScope.userRole = $cookies.get('usersRole');
                             if ($rootScope.returnToState !== undefined) {
                                 $state.go($rootScope.returnToState, {id: $rootScope.returnToStateParams});
                             } else {
@@ -145,6 +151,11 @@
                 $rootScope.searchTerm = undefined;
                 $rootScope.searchParams = undefined;
                 $rootScope.approvalSearch = undefined;
+                $rootScope.userID = undefined;
+                $rootScope.userRole = undefined;
+                $rootScope.usersName = undefined;
+
+
                 $location.path('/login');
             };
         }]);

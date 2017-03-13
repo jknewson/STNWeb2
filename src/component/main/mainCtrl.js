@@ -6,7 +6,7 @@
         function ($scope, $rootScope, $document, $cookies, $uibModal, $location, $state) {
             $rootScope.isAuth = {};        
             $rootScope.activeMenu = 'home'; //scope var for setting active class
-            if ($cookies.get('STNCreds') === undefined || $cookies.get('STNCreds') === "") {
+            if ($cookies.get('STNCreds') === undefined || $cookies.get('STNCreds') === "" || $cookies.get('STNUsername') === undefined) {
                 $rootScope.isAuth.val = false;
                 $location.path('/login');
             } else {
@@ -26,6 +26,7 @@
                 $rootScope.isAuth.val = true;
                 $rootScope.usersName = $cookies.get('usersName');
                 $rootScope.userID = $cookies.get('mID');
+                $rootScope.userRole = $cookies.get('usersRole');
                 var EventName = $cookies.get('SessionEventName');
                 if (EventName !== null && EventName !== undefined)
                     $rootScope.sessionEvent = "Session Event: " + EventName + ".";                

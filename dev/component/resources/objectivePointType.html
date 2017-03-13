@@ -3,7 +3,7 @@
         <thead>
             <tr>
                 <th style="width:0"></th>
-                <th>Objective Point Type</th>
+                <th>Datum Location Type</th>
             </tr>
         </thead>
         <tbody>
@@ -11,12 +11,8 @@
                 <td style="white-space: nowrap">
                     <!-- form -->
                     <form editable-form name="OPTrowform" onaftersave="saveOPType($data, opt.objective_point_type_id)" ng-show="OPTrowform.$visible" class="form-buttons form-inline" shown="inserted == opt">
-                        <button type="submit" ng-disabled="OPTrowform.$waiting" class="btn btn-primary">
-                            save
-                        </button>
-                        <button type="button" ng-disabled="OPTrowform.$waiting" ng-click="OPTrowform.$cancel()" class="btn btn-default">
-                            cancel
-                        </button>
+                        <button type="submit" ng-disabled="OPTrowform.$waiting" class="btn btn-primary">save</button>
+                        <button type="button" ng-disabled="OPTrowform.$waiting" ng-click="OPTrowform.$cancel()" class="btn btn-default">cancel</button>
                     </form>
                     <div class="buttons" ng-show="!OPTrowform.$visible">
                         <button class="btn btn-primary" ng-click="OPTrowform.$show()">edit</button>
@@ -33,14 +29,19 @@
 
     <hr />
 
-    <button ng-show="addOPTButtonShowing" class="btn btn-primary" ng-click="showAddOPTClicked()">Add New Objective Point Type</button>
+    <button ng-show="addOPTButtonShowing" class="btn btn-primary" ng-click="showAddOPTClicked()">Add New Datum Location Type</button>
 
     <div ng-show="showAddOPTForm">
         <form class="form-horizontal" name="lookupForm.opTypeFm">
             <fieldset>
 
-                <div class="form-group required">
-                    <label class="col-md-3 control-label req" for="op_type">Objective Point Type:</label>
+                <div class="form-group">
+                    <label class="col-md-3 control-label req" for="op_type">
+                        Datum Location Type:
+                        <button type="button" class="help-btn" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Required">
+                            <span class="glyphicon glyphicon-asterisk" style="color:#d00;font-size:xx-small;"></span>
+                        </button>
+                    </label>
                     <div class="col-md-6">
                         <input class="form-control" id="op_type" name="op_type" type="text" placeholder="" ng-model="newOPT.op_type" required />
                     </div>
@@ -50,11 +51,7 @@
                 <!--submit button-->
                 <div class="form-group">
                     <div class="col-md-2 col-md-offset-2">
-                        <span>
-                            <button class="btn btn-primary" ng-click="AddOPType(lookupForm.opTypeFm.$valid, newOPT)">
-                                Add
-                            </button>
-                        </span>
+                        <button class="btn btn-primary" ng-click="AddOPType(lookupForm.opTypeFm.$valid, newOPT)">Add</button>
                     </div>
                 </div>
 

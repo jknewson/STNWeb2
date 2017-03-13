@@ -18,7 +18,7 @@
                     <!--Site Description*-->
                     <div class="col-md-12">
                         <div class="col-md-4"><label>Site Description:</label></div>
-                        <div class="col-md-7"><span>{{aSite.site_description}}</span></div>
+                        <div class="col-md-7">{{aSite.site_description}}</div>
                     </div>
 
                     <!--Internal Notes-->
@@ -33,85 +33,85 @@
                     <!--Latitude*-->
                     <div class="col-md-12">
                         <div class="col-md-4"><label>Latitude:</label></div>
-                        <div class="col-md-7"><span>{{aSite.latitude_dd}}</span></div>
+                        <div class="col-md-7">{{aSite.latitude_dd}}</div>
                     </div>
 
                     <!--Longitude*-->
                     <div class="col-md-12">
                         <div class="col-md-4"><label>Longitude:</label></div>
-                        <div class="col-md-7"><span>{{aSite.longitude_dd}}</span></div>
+                        <div class="col-md-7">{{aSite.longitude_dd}}</div>
                     </div>
 
                     <!--Horizontal Datum*-->
                     <div class="col-md-12">
                         <div class="col-md-4"><label>Horizontal Datum:</label></div>
-                        <div class="col-md-7"><span>{{aSite.HorizontalDatum}}</span></div>
+                        <div class="col-md-7">{{aSite.HorizontalDatum}}</div>
                     </div>
 
                     <!--Horizontal Collection Method*-->
                     <div class="col-md-12">
                         <div class="col-md-4"><label>Horizontal Collection Method:</label></div>
-                        <div class="col-md-7"><span>{{aSite.HorizontalCollectMethod}}</span></div>
+                        <div class="col-md-7">{{aSite.HorizontalCollectMethod}}</div>
                     </div>
 
                     <!--Address-->
                     <div class="col-md-12">
                         <div class="col-md-4"><label>Address:</label></div>
-                        <div class="col-md-7"><span>{{aSite.address || "---"}}</span></div>
+                        <div class="col-md-7">{{aSite.address || "---"}}</div>
                     </div>
 
                     <!--City-->
                     <div class="col-md-12">
                         <div class="col-md-4"><label>City:</label></div>
-                        <div class="col-md-7"><span>{{aSite.city || "---"}}</span></div>
+                        <div class="col-md-7">{{aSite.city || "---"}}</div>
                     </div>
 
                     <!--State*-->
                     <div class="col-md-12">
                         <div class="col-md-4"><label>State:</label></div>
-                        <div class="col-md-7"><span>{{aSite.state || "---"}}</span></div>
+                        <div class="col-md-7">{{aSite.state || "---"}}</div>
                     </div>
 
                     <!--Zip-->
                     <div class="col-md-12">
                         <div class="col-md-4"><label>Zip:</label></div>
-                        <div class="col-md-7"><span>{{aSite.zip || "---"}}</span></div>
+                        <div class="col-md-7">{{aSite.zip || "---"}}</div>
                     </div>
 
                     <!--County*-->
                     <div class="col-md-12">
                         <div class="col-md-4"><label>County:</label></div>
-                        <div class="col-md-7"><span>{{aSite.county || "---"}}</span></div>
+                        <div class="col-md-7">{{aSite.county || "---"}}</div>
                     </div>
 
                     <!--Waterbody*-->
                     <div class="col-md-12">
                         <div class="col-md-4"><label>Waterbody:</label></div>
-                        <div class="col-md-7"><span>{{aSite.waterbody}}</span></div>
+                        <div class="col-md-7">{{aSite.waterbody}}</div>
                     </div>
 
                     <!--Drainage Area-->
                     <div class="col-md-12">
                         <div class="col-md-4"><label>Drainage Area (sq mi):</label></div>
-                        <div class="col-md-7"><span>{{aSite.drainage_area_sqmi || "---"}}</span></div>
+                        <div class="col-md-7">{{aSite.drainage_area_sqmi || "---"}}</div>
                     </div>
 
                     <!--Station ID for USGS gage-->
                     <div class="col-md-12">
                         <div class="col-md-4"><label>Station ID for USGS gage:</label></div>
-                        <div class="col-md-7"><span>{{aSite.usgs_sid || "---"}}</span></div>
+                        <div class="col-md-7">{{aSite.usgs_sid || "---"}}</div>
                     </div>
 
                     <!--Station ID for NOAA gage-->
                     <div class="col-md-12">
                         <div class="col-md-4"><label>Station ID for NOAA gage:</label></div>
-                        <div class="col-md-7"><span>{{aSite.noaa_sid || "---"}}</span></div>
+                        <div class="col-md-7">{{aSite.noaa_sid || "---"}}</div>
                     </div>
 
                     <!--Other Station ID-->
                     <div class="col-md-12">
                         <div class="col-md-4"><label>Other Station ID:</label></div>
-                        <div class="col-md-7"><span>{{aSite.other_sid || "---"}}</span></div>
+                        <div class="col-md-7">{{aSite.other_sid || "---"}}</div>
                     </div>
 
                     <!--Safety Notes-->
@@ -157,16 +157,14 @@
                 <!--Priority-->
                     <div class="col-md-12">
                         <div class="col-md-4"><label>Priority:</label></div>
-                        <div class="col-md-7"><span>{{aSite.PriorityName}}</span></div>
+                        <div class="col-md-7">{{aSite.PriorityName}}</div>
                     </div>
                     <!--Network Type-->
                     <div class="col-md-12">
                         <div class="col-md-4"><label>Site Location Type in the Network:</label></div>
                         <div class="col-md-7">
                             <ul style="padding-left:0">
-                                <li style="list-style:none;" ng-repeat="nt in siteNetworkTypes">
-                                    <span>{{nt}}</span>
-                                </li>
+                                <li style="list-style:none;" ng-repeat="nt in siteNetworkTypes">{{nt}}</li>
                             </ul>
                             <span ng-if="siteNetworkTypes.length < 1">---</span>
                         </div>
@@ -176,9 +174,7 @@
                         <div class="col-md-4"><label>Network Name:</label></div>
                         <div class="col-md-7">
                             <ul style="padding-left:0">
-                                <li style="list-style:none;" ng-repeat="nn in siteNetworkNames">
-                                    <span>{{nn}}</span>
-                                </li>
+                                <li style="list-style:none;" ng-repeat="nn in siteNetworkNames">{{nn}}</li>
                             </ul>
                             <span ng-if="siteNetworkNames.length < 1">---</span>
                         </div>
@@ -186,7 +182,7 @@
                     <!--Zone-->
                     <div class="col-md-12">
                         <div class="col-md-4"><label>Zone:</label></div>
-                        <div class="col-md-7"><span>{{aSite.zone || "---"}}</span></div>
+                        <div class="col-md-7">{{aSite.zone || "---"}}</div>
                     </div>
 
                     <!--Sensor Not Appropriate-->
@@ -200,15 +196,13 @@
                     <!--Permanent Sensor Housing?-->
                     <div class="col-md-12 sensorInfo" ng-class="{darkClass:disableSensorParts}">
                         <div class="col-md-4"><label>Permanent Sensor Housing Installed?</label></div>
-                        <div class="col-md-7"><span>{{aSite.is_permanent_housing_installed || "---"}}</span></div>
+                        <div class="col-md-7">{{aSite.is_permanent_housing_installed || "---"}}</div>
                     </div>
 
                     <!--Site creator-->
                     <div class="col-md-12">
                         <div class="col-md-4"><label>Site Creator:</label></div>
-                        <div class="col-md-7">
-                            <span>{{aSite.Creator || "---"}}</span>
-                        </div>
+                        <div class="col-md-7">{{aSite.Creator || "---"}}</div>
                     </div>
                     <hr />
                     <!--start Landowner contact area-->
@@ -222,58 +216,58 @@
                                 <!--First Name:-->
                                 <div class="col-md-12">
                                     <div class="col-md-4"><label>First Name:</label></div>
-                                    <div class="col-md-7"><span>{{landowner.fname || "---"}}</span></div>
+                                    <div class="col-md-7">{{landowner.fname || "---"}}</div>
                                 </div>
                                 <!--Last Name:-->
                                 <div class="col-md-12">
                                     <div class="col-md-4"><label>Last Name:</label></div>
-                                    <div class="col-md-7"><span>{{landowner.lname || "---"}}</span></div>
+                                    <div class="col-md-7">{{landowner.lname || "---"}}</div>
                                 </div>
                                 <!--Affiliation/Title:-->
                                 <div class="col-md-12">
                                     <div class="col-md-4"><label>Affiliation/Title:</label></div>
-                                    <div class="col-md-7"><span>{{landowner.title || "---"}}</span></div>
+                                    <div class="col-md-7">{{landowner.title || "---"}}</div>
                                 </div>
                                 <!--Address:-->
                                 <div class="col-md-12">
                                     <div class="col-md-4"><label>Address:</label></div>
-                                    <div class="col-md-7"><span>{{landowner.address || "---"}}</span></div>
+                                    <div class="col-md-7">{{landowner.address || "---"}}</div>
                                 </div>
                                 <!--City:-->
                                 <div class="col-md-12">
                                     <div class="col-md-4"><label>City:</label></div>
-                                    <div class="col-md-7"><span>{{landowner.city || "---"}}</span></div>
+                                    <div class="col-md-7">{{landowner.city || "---"}}</div>
                                 </div>
                                 <!--State-->
                                 <div class="col-md-12">
                                     <div class="col-md-4"><label>State:</label></div>
-                                    <div class="col-md-7"><span>{{landowner.state || "---"}}</span></div>
+                                    <div class="col-md-7">{{landowner.state || "---"}}</div>
                                 </div>
                                 <!--Zip:-->
                                 <div class="col-md-12">
                                     <div class="col-md-4"><label>Zip:</label></div>
-                                    <div class="col-md-7"><span>{{landowner.zip || "---"}}</span></div>
+                                    <div class="col-md-7">{{landowner.zip || "---"}}</div>
                                 </div>
                                 <!--Primary Phone:-->
                                 <div class="col-md-12">
                                     <div class="col-md-4"><label>Primary Phone:</label></div>
-                                    <div class="col-md-7"><span>{{landowner.primaryphone || "---"}}</span></div>
+                                    <div class="col-md-7">{{landowner.primaryphone || "---"}}</div>
                                 </div>
                                 <!--Secondary Phone:-->
                                 <div class="col-md-12">
                                     <div class="col-md-4"><label>Secondary Phone:</label></div>
-                                    <div class="col-md-7"><span>{{landowner.secondaryphone || "---"}}</span></div>
+                                    <div class="col-md-7">{{landowner.secondaryphone || "---"}}</div>
                                 </div>
                                 <!--Email:-->
                                 <div class="col-md-12">
                                     <div class="col-md-4"><label>Email:</label></div>
-                                    <div class="col-md-7"><span>{{landowner.email || "---"}}</span></div>
+                                    <div class="col-md-7">{{landowner.email || "---"}}</div>
                                 </div>
                             </div>
                             <div ng-show="!addLandowner">
                                 <div class="col-md-12">
                                     <div class="col-md-4"><label></label></div>
-                                    <div class="col-md-7"><span>No land owner added.</span></div>
+                                    <div class="col-md-7">No land owner added.</div>
                                 </div>
                             </div>
                         </div>
@@ -285,7 +279,7 @@
                     <!--Access Permission Granted-->
                     <div class="col-md-12">
                         <div class="col-md-4"><label>Access Permission Granted:</label></div>
-                        <div class="col-md-7"><span>{{aSite.access_granted || "---"}}</span></div>
+                        <div class="col-md-7">{{aSite.access_granted || "---"}}</div>
                     </div>
                 </fieldset>
             </form>

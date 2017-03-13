@@ -2,21 +2,20 @@
     <uib-accordion-group is-open="status.filesOpen">
         <uib-accordion-heading>
             <i style="margin-right:10px" class="pull-left glyphicon" ng-class="{'glyphicon-chevron-down': status.filesOpen, 'glyphicon-chevron-right': !status.filesOpen}"></i>
-            <span>Files</span>
+            Files
             <span class="badge pull-right">{{SiteFiles.length}}</span>
         </uib-accordion-heading>
-        <div class="btn-group pull-right">
+        <!--<div ng-if="!sessionEventExists" class="btn-group pull-right">
             <div class="btn-group">
-                <button type="button" class="borderLess" ng-click="showFileModal(0)" tooltip-placement="right" tooltip-append-to-body="true" uib-tooltip="Add a Site File">
+                <button type="button" class="borderLess" ng-click="showFileModal(0)" tooltip-placement="left" tooltip-append-to-body="true" uib-tooltip="Add a Site File">
                     <span class="glyphicon glyphicon-plus"></span>
                 </button>
             </div>
-        </div>
+        </div>-->
 
         <!-- ------ Site files here -------- -->
         <label class="col-md-9">-- Site Files --</label>
         <br clear="all" />
-
         <div ng-repeat="f in SiteFiles">
             <div ng-if="f.fileBelongsTo == 'Site File'">
                 <ul style="padding-left: 0">
@@ -83,12 +82,12 @@
             </div>
         </div>
 
-        <!-- Photo Carousel -->
+        <!-- Photo Carousel SiteFiles-->
         <br clear="all" />
         <div ng-if="SiteFiles.length > 0" style="height:140px;" title="Click image for preview.">
-            <uib-carousel interval="4000">
-                <uib-slide ng-repeat="f in SiteFiles | where:{filetype_id: 1}">
-                    <img ng-click="showImageModal(f.file_id)" ng-src="{{serverURL}}/Files/{{f.file_id}}/Item" />
+            <uib-carousel interval="4000">                
+                <uib-slide ng-repeat="f in siteImageFiles">
+                    <img ng-click="showImageModal(f.file_id)" ng-src="{{serverURL}}/Files/{{f.file_id}}/Item{{stamp}}" />
                     <div class="carousel-caption">
                         <p>{{f.name || f.file_id}}</p>
                     </div>
