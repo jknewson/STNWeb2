@@ -40,15 +40,15 @@
         <h3 class="results-box-title">Unapproved Site HWMs <span style="font-size:small;color:grey" class="ng-binding">(count: {{unApprovedHWMs.length}})</span></h3>
         <ul ng-show="unApprovedHWMs.length > 0">
             <li style="list-style:none;" ng-repeat="h in unApprovedHWMs | orderBy: 'site_id'">
-                <span><a ui-sref="site.dashboard({id: h.site_id})">{{h.site_no}}</a>: {{h.hwm_id}} ({{h.elev_ft}} ft.)</span>
+                <span><a ui-sref="site.dashboard({id: h.site_id})">{{h.site_no}}</a>: {{h.hwm_label}} ({{h.elev_ft}} ft.)</span>
             </li>
         </ul>
         <div ng-show="unApprovedHWMs.length == 0" class="results-box-no-result">
             No HWMs returned from query.
         </div>
-    </div><!--
+    </div>
 
-    --><div ng-if="showDFbox" class="results-box rb-50">
+    <div ng-if="showDFbox" class="results-box rb-50">
         <h3 class="results-box-title">Unapproved Instrument Data Files <span style="font-size:small;color:grey" class="ng-binding">(count: {{unApprovedDFs.length}})</span></h3>
         <ul ng-show="unApprovedDFs.length > 0"> <!--track by $index-->
             <li style="list-style:none;" ng-repeat="d in unApprovedDFs | orderBy: 'SiteId'">
