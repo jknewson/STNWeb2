@@ -18,35 +18,27 @@
     }
 </style>
 
-<!--<div ng-class="{'hidden': !showLoading}" class="page-loading">
-    <div id="loading">
-        <div id="loadingcontent">
-            <p id="loadingspinner" style="">
-                <uib-progressbar class="maxWidth" max="max" value="dynamic">
-                    <span ng-if="dynamic <= 0">Processing...</span>
-                    <span ng-if="dynamic != max" style="color:white; white-space:nowrap;">{{dynamic}} / {{max}} HWMs Uploaded</span>
-                    <span ng-if="dynamic == max">Redirecting...</span>
-                </uib-progressbar>
-                <br />
-                <img src="images/loading1.gif" />
-            </p>
-        </div>
-    </div>
-</div>-->
-
 <div class="page-padding">
     <div><h2>Bulk HWM Adjustments</h2></div>
     <form name="bulkHWMForm" class="wim-form border-bottom">
         <div>You must select an EVENT and a STATE.<br />Selecting no county gives you all counties.<br /> Multiple county selection is also allowed.</div>
         <br />
         <div class="form-item item-25">
-            <label for="event" class="req">Event:<span style="color:#d00"> *</span></label>
+            <label for="event" class="req">Event:
+                <button type="button" class="help-btn" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Required">
+                    <span class="glyphicon glyphicon-asterisk" style="color:#d00;font-size:xx-small;"></span>
+                </button>
+            </label>
             <select name="event_id" ng-model="HWM_params.event_id" ng-options="e.event_id as e.event_name for e in events | orderBy: 'event_name'" required>
                 <option value=""></option>
             </select>
         </div>
         <div class="form-item item-25">
-            <label for="state" class="req">State:<span style="color:#d00"> *</span></label>
+            <label for="state" class="req">State:
+                <button type="button" class="help-btn" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Required">
+                    <span class="glyphicon glyphicon-asterisk" style="color:#d00;font-size:xx-small;"></span>
+                </button>    
+            </label>
             <select name="state_abbrev" ng-model="HWM_params.state_abbrev" ng-change="UpdateCounties()"
                     ng-options="s.state_abbrev as s.state_name for s in states" required>
                 <option value=""></option>
@@ -86,7 +78,7 @@
                     <ul>
                         <li>Copy/Paste is allowed but <i>BE CAREFUL</i> of sort order when pasting into the table.</li>
                         <li>If you make a mistake, click Cancel or Reset or fix the mistake before clicking Save.</li>
-                        <li>If you click Save after making a mistake, you are responsible to fix the mistake and Save again. There is no UNDO feature.</li>
+                        <li>If you click Save after making a mistake, you are responsible to fix the mistake and Save again. <span style="color:red;">There is no UNDO feature.</span></li>
                     </ul>
                 </b>
             </div>

@@ -9,8 +9,13 @@
     <div class="panel panel-default">
         <div class="panel-heading"><h4 class="panel-title">Select Event, Date, and State(s)</h4></div>
         <div class="panel-body">
-            <div class="form-group col-md-12 required">
-                <label class="col-md-12 control-label req" for="event_id">Event:</label>
+            <div class="form-group col-md-12">
+                <label class="col-md-12 control-label req" for="event_id">
+                    Event:
+                    <button type="button" class="help-btn" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Required">
+                        <span class="glyphicon glyphicon-asterisk" style="color:#d00;font-size:xx-small;"></span>
+                    </button>
+                </label>
                 <div class="col-md-4">
                     <select class="form-control" id="event_id" name="event_id" ng-change="genRepChange()"
                             ng-model="genSummary.event_id" ng-options="e.event_id as e.event_name for e in events" required>
@@ -19,8 +24,13 @@
                 </div>
             </div>
 
-            <div class="form-group col-md-12 required">
-                <label class="col-md-12 control-label req" for="sum_date">Date:</label>
+            <div class="form-group col-md-12">
+                <label class="col-md-12 control-label req" for="sum_date">
+                    Date:
+                    <button type="button" class="help-btn" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Required">
+                        <span class="glyphicon glyphicon-asterisk" style="color:#d00;font-size:xx-small;"></span>
+                    </button>
+                </label>
                 <div class="col-md-3 input-group" style="padding-left:15px;padding-right:15px;">
                     <input datepicker-append-to-body="true" class="form-control dateInputStyle" id="sum_date" show-weeks="false" name="sd" type="date" uib-datepicker-popup="MM/dd/yyyy"
                            is-open="datepickrs.sd" ng-model="genSummary.sum_date" required />

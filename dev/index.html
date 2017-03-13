@@ -1,274 +1,8 @@
-<!DOCTYPE html>
-<html lang="en" xmlns="http://www.w3.org/1999/xhtml" >
-<head>
-    <!--<link rel="icon" href="data:;base64,="><link rel="icon" href="data:;base64,iVBORw0KGgo=">
-    <link rel="shortcut icon" type="image/x-icon" href="http://wim.usgs.gov/img/faviconsmall.png" />-->
-    <link rel="shortcut icon" type="image/x-icon" href="http://wim.usgs.gov/favicon-wim.png" />
-    <title>STNWeb</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-
-    <!-- bower:css -->
-    <link rel="stylesheet" href="bower_components/angular-busy.css">
-    <link rel="stylesheet" href="bower_components/bootstrap-multiselect.css">
-    <link rel="stylesheet" href="bower_components/bootstrap-table.css">
-    <link rel="stylesheet" href="bower_components/bootstrap-theme.css">
-    <link rel="stylesheet" href="bower_components/bootstrap.css">
-    <link rel="stylesheet" href="bower_components/datetimepicker.css">
-    <link rel="stylesheet" href="bower_components/handsontable.full.css">
-    <link rel="stylesheet" href="bower_components/isteven-multi-select.css">
-    <link rel="stylesheet" href="bower_components/l.geosearch.css">
-    <link rel="stylesheet" href="bower_components/ladda.min.css">
-    <link rel="stylesheet" href="bower_components/lato.css">
-    <link rel="stylesheet" href="bower_components/leaflet.css">
-    <link rel="stylesheet" href="bower_components/leaflet.label.css">
-    <link rel="stylesheet" href="bower_components/MarkerCluster.css">
-    <link rel="stylesheet" href="bower_components/MarkerCluster.Default.css">
-    <link rel="stylesheet" href="bower_components/mobile-angular-ui-base.css">
-    <link rel="stylesheet" href="bower_components/mobile-angular-ui-desktop.css">
-    <link rel="stylesheet" href="bower_components/mobile-angular-ui-hover.css">
-    <link rel="stylesheet" href="bower_components/ng-tags-input.min.css">
-    <link rel="stylesheet" href="bower_components/pikaday.css">
-    <link rel="stylesheet" href="bower_components/select.css">
-    <link rel="stylesheet" href="bower_components/toaster.css">
-    <link rel="stylesheet" href="bower_components/toastr.css">
-    <link rel="stylesheet" href="bower_components/wimLegend.css">
-    <link rel="stylesheet" href="bower_components/xeditable.css">
-    <!-- endinject -->
-
-    <!-- inject:css -->
-    <link rel="stylesheet" href="app.css">
-    <link rel="stylesheet" href="stn.css">
-    <!-- endinject -->
-
-    <!-- bower:js -->
-    <script src="bower_components/jquery.js"></script>
-    <script src="bower_components/angular.js"></script>
-    <script src="bower_components/leaflet-src.js"></script>
-    <script src="bower_components/esri-leaflet.js"></script>
-    <script src="bower_components/angular-leaflet-directive.js"></script>
-    <script src="bower_components/directives.module.js"></script>
-    <script src="bower_components/service.module.js"></script>
-    <script src="bower_components/RequestInfo.js"></script>
-    <script src="bower_components/HTTPServiceBase.js"></script>
-    <script src="bower_components/Delegate.js"></script>
-    <script src="bower_components/RequestTransform.js"></script>
-    <script src="bower_components/EventManager.js"></script>
-    <script src="bower_components/EventArgs.js"></script>
-    <script src="bower_components/wimLegend.js"></script>
-    <script src="bower_components/angular-animate.js"></script>
-    <script src="bower_components/angular-busy.js"></script>
-    <script src="bower_components/angular-cookies.js"></script>
-    <script src="bower_components/angular-filter.min.js"></script>
-    <script src="bower_components/angular-input-modified.js"></script>
-    <script src="bower_components/angular-resource.js"></script>
-    <script src="bower_components/angular-route.js"></script>
-    <script src="bower_components/angular-spinners.min.js"></script>
-    <script src="bower_components/angular-ui-router.js"></script>
-    <script src="bower_components/bootstrap-multiselect.js"></script>
-    <script src="bower_components/bootstrap-table.js"></script>
-    <script src="bower_components/bootstrap.js"></script>
-    <script src="bower_components/checklist-model.js"></script>
-    <script src="bower_components/datetimepicker.js"></script>
-    <script src="bower_components/event.js"></script>
-    <script src="bower_components/EventHandler.js"></script>
-    <script src="bower_components/handsontable.full.js"></script>
-    <script src="bower_components/indeterminate.js"></script>
-    <script src="bower_components/index.js"></script>
-    <script src="bower_components/isteven-multi-select.js"></script>
-    <script src="bower_components/l.control.geosearch.js"></script>
-    <script src="bower_components/l.geosearch.provider.bing.js"></script>
-    <script src="bower_components/l.geosearch.provider.esri.js"></script>
-    <script src="bower_components/l.geosearch.provider.google.js"></script>
-    <script src="bower_components/l.geosearch.provider.openstreetmap.js"></script>
-    <script src="bower_components/ladda-angular.js"></script>
-    <script src="bower_components/ladda.min.js"></script>
-    <script src="bower_components/leaflet.label.js"></script>
-    <script src="bower_components/leaflet.markercluster-src.js"></script>
-    <script src="bower_components/mask.js"></script>
-    <script src="bower_components/mobile-angular-ui.gestures.js"></script>
-    <script src="bower_components/mobile-angular-ui.js"></script>
-    <script src="bower_components/moment.js"></script>
-    <script src="bower_components/ng-file-upload.js"></script>
-    <script src="bower_components/ng-tags-input.min.js"></script>
-    <script src="bower_components/ngHandsontable.js"></script>
-    <script src="bower_components/pikaday.js"></script>
-    <script src="bower_components/scrollpoint.js"></script>
-    <script src="bower_components/select.js"></script>
-    <script src="bower_components/spin.js"></script>
-    <script src="bower_components/toaster.js"></script>
-    <script src="bower_components/toastr.js"></script>
-    <script src="bower_components/ui-bootstrap-tpls.js"></script>
-    <script src="bower_components/ui-scroll.js"></script>
-    <script src="bower_components/uploader.js"></script>
-    <script src="bower_components/validate.js"></script>
-    <script src="bower_components/xeditable.js"></script>
-    <script src="bower_components/ZeroClipboard.js"></script>
-    <!-- endinject -->
-
-    <!-- inject:js -->
-    <script src="component/STNCtrl.js"></script>
-    <script src="shared/directives/STNDirectives.js"></script>
-    <script src="component/siteSearch/siteSearchCtrl.js"></script>
-    <script src="component/site/siteModalCtrl.js"></script>
-    <script src="component/site/siteMapCtrl.js"></script>
-    <script src="component/site/siteCtrl.js"></script>
-    <script src="component/site/quickCreateCtrl.js"></script>
-    <script src="component/settings/settingsCtrl.js"></script>
-    <script src="component/sensor/sensorModalCtrl.js"></script>
-    <script src="component/sensor/sensorCtrl.js"></script>
-    <script src="component/resources/resourcesCtrl.js"></script>
-    <script src="component/reporting/submitReportCtrl.js"></script>
-    <script src="component/reporting/reportModalCtrl.js"></script>
-    <script src="component/reporting/reportingDashboardCtrl.js"></script>
-    <script src="component/reporting/reportingCtrl.js"></script>
-    <script src="component/reporting/projectAlertModalCtrl.js"></script>
-    <script src="component/reporting/confirmReportModalCtrl.js"></script>
-    <script src="component/peak/peakModalCtrl.js"></script>
-    <script src="component/peak/peakCtrl.js"></script>
-    <script src="component/objectivePoint/objectivePointModalCtrl.js"></script>
-    <script src="component/objectivePoint/objectivePointCtrl.js"></script>
-    <script src="component/member/memberModalCtrl.js"></script>
-    <script src="component/member/memberInfoCtrl.js"></script>
-    <script src="component/member/memberCtrl.js"></script>
-    <script src="component/map/MapSiteInfoController.js"></script>
-    <script src="component/map/MapSensorProposeController.js"></script>
-    <script src="component/map/MapPeaksController.js"></script>
-    <script src="component/map/MapFiltersController.js"></script>
-    <script src="component/map/mapCtrl.js"></script>
-    <script src="component/main/mainCtrl.js"></script>
-    <script src="component/logInOut/logInOutCtrl.js"></script>
-    <script src="component/hwm/quickHWMCtrl.js"></script>
-    <script src="component/hwm/hwmModalCtrl.js"></script>
-    <script src="component/hwm/hwmCtrl.js"></script>
-    <script src="component/hwm/historicHWMCtrl.js"></script>
-    <script src="component/hwm/bulkHWMCtrl.js"></script>
-    <script src="component/hwm/bulkHWMAdjCtrl.js"></script>
-    <script src="component/home/homeCtrl.js"></script>
-    <script src="component/help/helpCtrl.js"></script>
-    <script src="component/file/fileUploadCtrl.js"></script>
-    <script src="component/file/fileModalCtrl.js"></script>
-    <script src="component/file/fileCtrl.js"></script>
-    <script src="component/event/eventSessionModalCtrl.js"></script>
-    <script src="component/event/eventSessionCtrl.js"></script>
-    <script src="component/event/eventModalCtrl.js"></script>
-    <script src="component/event/eventCtrl.js"></script>
-    <script src="component/approval/approvalCtrl.js"></script>
-    <script src="services/STNResource.js"></script>
-    <script src="services/businessServices.js"></script>
-    <script src="component/ModalsCtrl.js"></script>
-    <script src="component/jquery.inputmask.bundle.js"></script>
-    <script src="app.js"></script>
-    <!-- endinject -->
-
-
-
-    <!--<script src="app.js"></script>-->
-    <!--<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?v=3.exp"></script>-->
-    <script src="//d3js.org/d3.v3.min.js" charset="utf-8"></script>
-
-
-    <!-- Not working in Bower -->
-    <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
-    <script src="bower_components/angular-ui-router.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-router/0.3.0/angular-ui-router.js"></script>
-
-
-</head>
-
-<body ng-app="app" ng-strict-di>
-
-    <!--HEADER START navCtrl-->
-    <div ng-controller="mainCtrl" class="app-nav">
-        <h1 class="nav-header">Short-Term Network<span ng-if="thisPage"> - {{thisPage}}</span></h1>
-        <i  ng-show="isAuth.val" class="mobile-menu-btn ion-navicon" id="mobile-menu-btn"></i>
-
-        <button type="button" ng-show="isAuth.val" ng-controller="eventSessionCtrl" class="btn-wim btn-sm btn-white nav-change-session" ng-click="openEventModal()">
-            <span ng-show="!sessionEvent">Choose Event</span>
-            <span ng-show="sessionEvent">Change Event</span>
-        </button>
-        <div ng-show="isAuth.val"  class="nav-session-label" ng-if="sessionTeam || sessionEvent">
-            <span ng-if="sessionTeam">{{sessionTeam}}<br></span>
-            <span ng-if="sessionEvent">{{sessionEvent}}</span>
-        </div>
-
-
-        <!-- Script for nav control -->
-        <script>
-            $("#mobile-menu-btn").click(function(){
+<!DOCTYPE html><html lang="en" xmlns="http://www.w3.org/1999/xhtml"><head><link rel="shortcut icon" type="image/x-icon" href="http://wim.usgs.gov/favicon-wim.png"><title>STNWeb</title><meta name="viewport" content="width=device-width,initial-scale=1"><meta http-equiv="content-type" content="text/html; charset=UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><link rel="stylesheet" href="bower_components/angular-busy.css"><link rel="stylesheet" href="bower_components/bootstrap-multiselect.css"><link rel="stylesheet" href="bower_components/bootstrap-table.css"><link rel="stylesheet" href="bower_components/bootstrap-theme.css"><link rel="stylesheet" href="bower_components/bootstrap.css"><link rel="stylesheet" href="bower_components/datetimepicker.css"><link rel="stylesheet" href="bower_components/handsontable.full.css"><link rel="stylesheet" href="bower_components/isteven-multi-select.css"><link rel="stylesheet" href="bower_components/l.geosearch.css"><link rel="stylesheet" href="bower_components/ladda.min.css"><link rel="stylesheet" href="bower_components/lato.css"><link rel="stylesheet" href="bower_components/leaflet.css"><link rel="stylesheet" href="bower_components/leaflet.label.css"><link rel="stylesheet" href="bower_components/MarkerCluster.css"><link rel="stylesheet" href="bower_components/MarkerCluster.Default.css"><link rel="stylesheet" href="bower_components/mobile-angular-ui-base.css"><link rel="stylesheet" href="bower_components/mobile-angular-ui-desktop.css"><link rel="stylesheet" href="bower_components/mobile-angular-ui-hover.css"><link rel="stylesheet" href="bower_components/ng-tags-input.min.css"><link rel="stylesheet" href="bower_components/pikaday.css"><link rel="stylesheet" href="bower_components/select.css"><link rel="stylesheet" href="bower_components/toaster.css"><link rel="stylesheet" href="bower_components/toastr.css"><link rel="stylesheet" href="bower_components/wimLegend.css"><link rel="stylesheet" href="bower_components/xeditable.css"><link rel="stylesheet" href="app.css"><link rel="stylesheet" href="stn.css"><script src="bower_components/jquery.js"></script><script src="bower_components/angular.js"></script><script src="bower_components/leaflet-src.js"></script><script src="bower_components/esri-leaflet.js"></script><script src="bower_components/angular-leaflet-directive.js"></script><script src="bower_components/directives.module.js"></script><script src="bower_components/service.module.js"></script><script src="bower_components/RequestInfo.js"></script><script src="bower_components/HTTPServiceBase.js"></script><script src="bower_components/Delegate.js"></script><script src="bower_components/RequestTransform.js"></script><script src="bower_components/EventManager.js"></script><script src="bower_components/EventArgs.js"></script><script src="bower_components/wimLegend.js"></script><script src="bower_components/angular-animate.js"></script><script src="bower_components/angular-busy.js"></script><script src="bower_components/angular-cookies.js"></script><script src="bower_components/angular-filter.min.js"></script><script src="bower_components/angular-input-modified.js"></script><script src="bower_components/angular-resource.js"></script><script src="bower_components/angular-route.js"></script><script src="bower_components/angular-spinners.min.js"></script><script src="bower_components/angular-ui-router.js"></script><script src="bower_components/bootstrap-multiselect.js"></script><script src="bower_components/bootstrap-table.js"></script><script src="bower_components/bootstrap.js"></script><script src="bower_components/checklist-model.js"></script><script src="bower_components/datetimepicker.js"></script><script src="bower_components/event.js"></script><script src="bower_components/EventHandler.js"></script><script src="bower_components/handsontable.full.js"></script><script src="bower_components/indeterminate.js"></script><script src="bower_components/index.js"></script><script src="bower_components/isteven-multi-select.js"></script><script src="bower_components/l.control.geosearch.js"></script><script src="bower_components/l.geosearch.provider.bing.js"></script><script src="bower_components/l.geosearch.provider.esri.js"></script><script src="bower_components/l.geosearch.provider.google.js"></script><script src="bower_components/l.geosearch.provider.openstreetmap.js"></script><script src="bower_components/ladda-angular.js"></script><script src="bower_components/ladda.min.js"></script><script src="bower_components/leaflet.label.js"></script><script src="bower_components/leaflet.markercluster-src.js"></script><script src="bower_components/mask.js"></script><script src="bower_components/mobile-angular-ui.gestures.js"></script><script src="bower_components/mobile-angular-ui.js"></script><script src="bower_components/moment.js"></script><script src="bower_components/ng-file-upload.js"></script><script src="bower_components/ng-tags-input.min.js"></script><script src="bower_components/ngHandsontable.js"></script><script src="bower_components/pikaday.js"></script><script src="bower_components/scrollpoint.js"></script><script src="bower_components/select.js"></script><script src="bower_components/spin.js"></script><script src="bower_components/toaster.js"></script><script src="bower_components/toastr.js"></script><script src="bower_components/ui-bootstrap-tpls.js"></script><script src="bower_components/ui-scroll.js"></script><script src="bower_components/uploader.js"></script><script src="bower_components/validate.js"></script><script src="bower_components/xeditable.js"></script><script src="bower_components/ZeroClipboard.js"></script><script src="component/STNCtrl.js"></script><script src="shared/directives/STNDirectives.js"></script><script src="component/siteSearch/siteSearchCtrl.js"></script><script src="component/site/siteModalCtrl.js"></script><script src="component/site/siteMapCtrl.js"></script><script src="component/site/siteCtrl.js"></script><script src="component/site/quickCreateCtrl.js"></script><script src="component/settings/settingsCtrl.js"></script><script src="component/sensor/sensorModalCtrl.js"></script><script src="component/sensor/sensorCtrl.js"></script><script src="component/resources/resourcesCtrl.js"></script><script src="component/reporting/submitReportCtrl.js"></script><script src="component/reporting/reportModalCtrl.js"></script><script src="component/reporting/reportingDashboardCtrl.js"></script><script src="component/reporting/reportingCtrl.js"></script><script src="component/reporting/projectAlertModalCtrl.js"></script><script src="component/reporting/confirmReportModalCtrl.js"></script><script src="component/peak/peakModalCtrl.js"></script><script src="component/peak/peakCtrl.js"></script><script src="component/objectivePoint/objectivePointModalCtrl.js"></script><script src="component/objectivePoint/objectivePointCtrl.js"></script><script src="component/member/memberModalCtrl.js"></script><script src="component/member/memberInfoCtrl.js"></script><script src="component/member/memberCtrl.js"></script><script src="component/map/MapSiteInfoController.js"></script><script src="component/map/MapSensorProposeController.js"></script><script src="component/map/MapPeaksController.js"></script><script src="component/map/MapFiltersController.js"></script><script src="component/map/mapCtrl.js"></script><script src="component/main/mainCtrl.js"></script><script src="component/logInOut/logInOutCtrl.js"></script><script src="component/hwm/quickHWMCtrl.js"></script><script src="component/hwm/hwmModalCtrl.js"></script><script src="component/hwm/hwmCtrl.js"></script><script src="component/hwm/historicHWMCtrl.js"></script><script src="component/hwm/bulkHWMCtrl.js"></script><script src="component/hwm/bulkHWMAdjCtrl.js"></script><script src="component/home/homeCtrl.js"></script><script src="component/help/helpCtrl.js"></script><script src="component/file/fileUploadCtrl.js"></script><script src="component/file/fileModalCtrl.js"></script><script src="component/file/fileCtrl.js"></script><script src="component/event/eventSessionModalCtrl.js"></script><script src="component/event/eventSessionCtrl.js"></script><script src="component/event/eventModalCtrl.js"></script><script src="component/event/eventCtrl.js"></script><script src="component/approval/approvalCtrl.js"></script><script src="services/STNResource.js"></script><script src="services/businessServices.js"></script><script src="component/ModalsCtrl.js"></script><script src="component/jquery.inputmask.bundle.js"></script><script src="app.js"></script><script src="//d3js.org/d3.v3.min.js" charset="utf-8"></script><link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css"><script src="bower_components/angular-ui-router.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-router/0.3.0/angular-ui-router.js"></script></head><body ng-app="app" ng-strict-di><div ng-controller="mainCtrl" class="app-nav"><h1 class="nav-header">Short-Term Network<span ng-if="thisPage">- {{thisPage}}</span></h1><i ng-show="isAuth.val" class="mobile-menu-btn ion-navicon" id="mobile-menu-btn"></i> <button type="button" ng-show="isAuth.val" ng-controller="eventSessionCtrl" class="btn-wim btn-sm btn-white nav-change-session" ng-click="openEventModal()"><span ng-show="!sessionEvent">Choose Event</span> <span ng-show="sessionEvent">Change Event</span></button><div ng-show="isAuth.val" class="nav-session-label" ng-if="sessionTeam || sessionEvent"><span ng-if="sessionTeam">{{sessionTeam}}<br></span> <span ng-if="sessionEvent">{{sessionEvent}}</span></div><script>$("#mobile-menu-btn").click(function(){
                 $(".subnav").toggle();
                 $(".mobile-menu-btn").toggleClass('ion-navicon');
                 $(".mobile-menu-btn").toggleClass('ion-close-round');
-            })
-        </script>
-
-        <div class="nav-userctrl" ng-show="isAuth.val">
-            <span>Welcome, <a ui-sref="members.MembersList({id: userID})">{{usersName}}</a></span>
-            <button type="button" ng-controller="logoutCtrl" ng-click="logout()">LOG OFF</button>
-        </div>
-
-
-        <div class="subnav" ng-show="isAuth.val">
-            <div class="subnav-right" uib-dropdown is-open="status.isopen" ng-show="isAuth.val">
-                <button type="button" ng-click="goSearch = !goSearch" class="btn-subnav">
-                    <span ng-show="!goSearch">Search <i class="ion-search"></i></span>
-                    <span ng-show="goSearch">Cancel <i class="ion-close"></i></span>
-                </button>
-
-                <button id="single-button" type="button" class="btn-subnav" uib-dropdown-toggle ng-disabled="disabled">
-                    Create <span ng-show="status.isopen" class="ion-arrow-up-b"></span><span ng-show="!status.isopen" class="ion-arrow-down-b"></span>
-                </button>
-                <ul ng-show="status.isopen" class="dropdown-menu" role="menu" aria-labelledby="single-button">
-                    <li role="menuitem"><a ui-sref="site.dashboard({id: 0})">Site</a></li>
-                    <li role="menuitem"><a ui-sref="quickCreate({id:'HWM'})">Quick HWM</a></li>
-                    <li role="menuitem"><a ui-sref="quickCreate({id:'Sensor'})">Quick Sensor</a></li>
-                </ul>
-            </div>
-
-
-            <ul class="subnav-links">
-                <li class="mobile-only special" ng-show="!sessionEvent"><a ng-controller="eventSessionCtrl" ng-click="openEventModal()">Choose Event</a></li>
-                <li class="mobile-only special" ng-show="sessionEvent"><a ng-controller="eventSessionCtrl" ng-click="openEventModal()">{{sessionEvent}} - (Change)</a></li>
-
-                <li><a ng-class="{active: activeMenu == 'map'}" ui-sref="map" ng-click="activeMenu = 'map'">Map</a></li>
-                <li><a ng-class="{active: activeMenu == 'approval'}" ui-sref="approval" ng-click="activeMenu = 'approval'">Approval</a></li>
-                <li><a ng-class="{active: activeMenu == 'sites'}" ui-sref="siteSearch" ng-click="activeMenu = 'sites'">Sites</a></li>
-                <li><a ng-class="{active: activeMenu == 'report'}" ui-sref="reporting.reportDash" ng-click="activeMenu = 'report'">Reporting</a></li>
-                <li><a ng-class="{active: activeMenu == 'settings'}" ui-sref="settings" ng-click="activeMenu = 'settings'">Settings</a></li>
-                <div class="subnav-right" uib-dropdown is-open="status1.isopen" ng-show="isAuth.val">
-                    <button id="single-button1" ng-show="userRole == 'Admin' || userRole == 'Manager'" type="button" class="btn-subnav" uib-dropdown-toggle ng-disabled="disabled">
-                        Review <span ng-show="status1.isopen" class="ion-arrow-up-b"></span><span ng-show="!status1.isopen" class="ion-arrow-down-b"></span>
-                    </button>
-                    <ul ng-show="status1.isopen" class="dropdown-menu" role="menu" aria-labelledby="single-button1" style="margin-left: 0;">
-                        <li role="menuitem"><a ui-sref="bulkHWMAdj()" style="white-space: pre-wrap;">Bulk HWM Adjustment</a></li>
-                        <li role="menuitem"><a ui-sref="bulkHWM()" style="white-space: pre-wrap;">Historical HWM Uploader</a></li>
-                    </ul>
-                </div>
-
-
-                <li class="mobile-only special2"><a ng-controller="logoutCtrl" ng-click="logout()">Log Off</a></li>
-            </ul>
-            <site-search ng-show="goSearch && isAuth.val"/>
-
-        </div>
-
-
-    </div>
-
-    <div ng-class="{'hidden': !stateIsLoading.showLoading}" class="page-loading">
-        <div class="loading">
-            <div class="loadingcontent"><p class="loadingspinner" style=""><img src="images/loading1.gif" /></p></div>
-        </div>
-    </div>
-
-    <div ui-view class="app-view"></div>
-
-</body>
-</html>
-<!-- MODALs for "are you sure you want to remove this thing (Keyword or URL) -->
-<script type="text/ng-template" id="removemodal.html">
-    <div class="modal-header">
+            })</script><div class="nav-userctrl" ng-show="isAuth.val"><span>Welcome, <a ui-sref="members.MembersList({id: userID})">{{usersName}}</a></span> <button type="button" ng-controller="logoutCtrl" ng-click="logout()">LOG OFF</button></div><div class="subnav" ng-show="isAuth.val"><div class="subnav-right" uib-dropdown is-open="status.isopen" ng-show="isAuth.val"><button type="button" ng-click="goSearch = !goSearch" class="btn-subnav"><span ng-show="!goSearch">Search <i class="ion-search"></i></span> <span ng-show="goSearch">Cancel <i class="ion-close"></i></span></button> <button id="single-button" type="button" class="btn-subnav" uib-dropdown-toggle ng-disabled="disabled">Create <span ng-show="status.isopen" class="ion-arrow-up-b"></span><span ng-show="!status.isopen" class="ion-arrow-down-b"></span></button><ul ng-show="status.isopen" class="dropdown-menu" role="menu" aria-labelledby="single-button"><li role="menuitem"><a ui-sref="site.dashboard({id: 0})">Site</a></li><li role="menuitem"><a ui-sref="quickCreate({id:'HWM'})">Quick HWM</a></li><li role="menuitem"><a ui-sref="quickCreate({id:'Sensor'})">Quick Sensor</a></li></ul></div><ul class="subnav-links"><li class="mobile-only special" ng-show="!sessionEvent"><a ng-controller="eventSessionCtrl" ng-click="openEventModal()">Choose Event</a></li><li class="mobile-only special" ng-show="sessionEvent"><a ng-controller="eventSessionCtrl" ng-click="openEventModal()">{{sessionEvent}} - (Change)</a></li><li><a ng-class="{active: activeMenu == 'map'}" ui-sref="map" ng-click="activeMenu = 'map'">Map</a></li><li><a ng-class="{active: activeMenu == 'approval'}" ui-sref="approval" ng-click="activeMenu = 'approval'">Approval</a></li><li><a ng-class="{active: activeMenu == 'sites'}" ui-sref="siteSearch" ng-click="activeMenu = 'sites'">Sites</a></li><li><a ng-class="{active: activeMenu == 'report'}" ui-sref="reporting.reportDash" ng-click="activeMenu = 'report'">Reporting</a></li><li><a ng-class="{active: activeMenu == 'settings'}" ui-sref="settings" ng-click="activeMenu = 'settings'">Settings</a></li><div class="subnav-right" uib-dropdown is-open="status1.isopen" ng-show="isAuth.val"><button id="single-button1" ng-show="userRole == 'Admin' || userRole == 'Manager'" type="button" class="btn-subnav" uib-dropdown-toggle ng-disabled="disabled">Review <span ng-show="status1.isopen" class="ion-arrow-up-b"></span><span ng-show="!status1.isopen" class="ion-arrow-down-b"></span></button><ul ng-show="status1.isopen" class="dropdown-menu" role="menu" aria-labelledby="single-button1" style="margin-left: 0"><li role="menuitem"><a ui-sref="bulkHWMAdj()" style="white-space: pre-wrap">Bulk HWM Adjustment</a></li><li role="menuitem"><a ui-sref="bulkHWM()" style="white-space: pre-wrap">Historical HWM Uploader</a></li></ul></div><li class="mobile-only special2"><a ng-controller="logoutCtrl" ng-click="logout()">Log Off</a></li></ul><site-search ng-show="goSearch && isAuth.val"></div></div><div ng-class="{'hidden': !stateIsLoading.showLoading}" class="page-loading"><div class="loading"><div class="loadingcontent"><p class="loadingspinner" style=""><img src="images/loading1.gif"></p></div></div></div><div ui-view class="app-view"></div></body></html><script type="text/ng-template" id="removemodal.html"><div class="modal-header">
         <h3 class="modal-title">Remove {{what}}</h3>
     </div>
     <div class="modal-body">
@@ -277,12 +11,7 @@
     <div class="modal-footer center-all">
         <button type="button" class="btn-wim btn-blue btn-inline" ng-click="ok()">OK</button>
         <button type="button" class="btn-wim btn-inline btn-orange" ng-click="cancel()">Cancel</button>
-    </div>
-</script>
-
-<!-- MODAL for Choose Event for this session -->
-<script type="text/ng-template" id="ChooseEvent.html">
-    <div class="modal-header">
+    </div></script><script type="text/ng-template" id="ChooseEvent.html"><div class="modal-header">
         <h3 class="modal-title">Choose Event for this Session</h3>
     </div>
     <div class="modal-body">
@@ -337,12 +66,7 @@
         <button type="button" class="btn-wim btn-blue btn-md btn-inline" ng-click="setEvent()">Set event</button>
         <button type="button" class="btn-wim btn-orange btn-md btn-inline" ng-click="clearEvent()">Clear event</button>
         <button type="button" class="btn-wim btn-orange btn-md btn-inline" ng-click="close()">Cancel</button>
-    </div>
-</script>
-
-
-<script type="text/ng-template" id="saveReportModal.html">
-    <div class="modal-header">
+    </div></script><script type="text/ng-template" id="saveReportModal.html"><div class="modal-header">
         <h3 class="modal-title">Confirm</h3>
     </div>
     <div class="modal-body">
@@ -351,11 +75,7 @@
     <div class="modal-footer center-all">
         <button type="button" class="btn-wim btn-primary btn-inline" ng-click="ok()">OK</button>
         <button type="button" class="btn-wim btn-primary btn-inline" ng-click="cancel()">Cancel</button>
-    </div>
-</script>
-
-<script type="text/ng-template" id="FloodPA.html">
-    <div class="modal-header">
+    </div></script><script type="text/ng-template" id="FloodPA.html"><div class="modal-header">
         <h3 class="modal-title">Project Alert Paragraph for a Flood Event</h3>
     </div>
     <div class="modal-body">
@@ -375,11 +95,7 @@
     </div>
     <div class="modal-footer center-all">
         <button type="button" class="btn-wim btn-blue btn-inline" ng-click="ok()">OK</button>
-    </div>
-</script>
-
-<script type="text/ng-template" id="HurricanePA.html">
-    <div class="modal-header">
+    </div></script><script type="text/ng-template" id="HurricanePA.html"><div class="modal-header">
         <h3 class="modal-title">Project Alert Paragraph for an Hurricane Event</h3>
     </div>
     <div class="modal-body">
@@ -401,5 +117,4 @@
     </div>
     <div class="modal-footer center-all">
         <button type="button" class="btn-wim btn-blue btn-inline" ng-click="ok()">OK</button>
-    </div>
-</script>
+    </div></script>
