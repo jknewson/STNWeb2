@@ -1,4 +1,4 @@
-﻿(function () {
+(function () {
     "use strict";
 
     //look up common service module, and register the new factory with that module 
