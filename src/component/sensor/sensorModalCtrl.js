@@ -1,4 +1,4 @@
-﻿/// <reference path="sensorModalCtrl.js" />
+/// <reference path="sensorModalCtrl.js" />
 (function () {
     'use strict';
 

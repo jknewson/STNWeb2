@@ -9,31 +9,14 @@ var connect = require('gulp-connect');
 var open = require('open');
 var mainBowerFiles = require('main-bower-files');
 
-var version = require('gulp-version-number');
-
-const JSversionConfig = {
-    'value': '%MDS%',    
-    'append': {
-        'key': '_v',
-        'to': ['js'],
-    },
-    'output': {
-        'file': 'version.json'
-    }
-};
-const CSSversionConfig = {
-    'value': '%MDS%',    
-    'append': {
-        'key': '_v',
-        'to': ['css'],
-    },
-    'output': {
-        'file': 'version.json'
-    }
-};
-//.pipe(version({ CSSversionConfig }))
-//.pipe(version({ JSversionConfig }))
-
+const rev = require('gulp-rev');
+//var revDel = require('rev-del');
+//revDel({
+//    oldManifest: 'rev-manifest.json',
+//    newManifest: { /* a manifest */ },
+//    suppress: true,
+//    deleteMapExtensions: true
+//});
 // == PATH STRINGS ========
 var paths = {
     scripts: 'src/**/*.js',
@@ -90,7 +73,11 @@ pipes.validatedAppScripts = function() {
 
 pipes.builtAppScriptsDev = function() {
     return pipes.validatedAppScripts()
-        .pipe(gulp.dest(paths.dev));
+        .pipe(rev())
+       // .pipe(gulp.dest(paths.dev))
+        //.pipe(rev.manifest())
+      //  .pipe(revDel({ dest: 'dev' }))
+        .pipe(gulp.dest(paths.dev));        
 };
 
 ///comments in function are artifacts of old partial scripting using the ng-html2js plugin, now stripped out
@@ -102,8 +89,11 @@ pipes.builtAppScriptsProd = function() {
         .pipe(pipes.orderedAppScripts())
         .pipe(plugins.sourcemaps.init())
         .pipe(plugins.concat('app.min.js'))
-        .pipe(plugins.uglify({mangle: false}))
+        .pipe(plugins.uglify({ mangle: false }))
         .pipe(plugins.sourcemaps.write())
+        .pipe(rev())
+        .pipe(rev.manifest())
+   //     .pipe(revDel({ dest: 'dist' }))
         .pipe(gulp.dest(paths.distScriptsProd));
 };
 
@@ -120,7 +110,6 @@ pipes.builtAppScriptsProd = function() {
 
 pipes.builtVendorScriptsDev = function() {
     return gulp.src(mainBowerFiles())
-        .pipe(version({ JSversionConfig }))
         .pipe(gulp.dest('dev/bower_components'));
 };
 
@@ -136,14 +125,12 @@ pipes.builtVendorImagesProd = function() {
         .pipe(gulp.dest(paths.dist + '/images/'));
 };
 
-
 pipes.builtVendorScriptsProd = function() {
     return gulp.src(mainBowerFiles('**/*.js'))
         .pipe(pipes.orderedVendorScripts())
         //added
         .pipe(plugins.sourcemaps.init())        
         .pipe(plugins.concat('vendor.min.js'))
-        .pipe(version({ JSversionConfig }))
         .pipe(plugins.uglify({ mangle: false }))
         //added
         .pipe(plugins.sourcemaps.write())        
@@ -184,6 +171,10 @@ pipes.builtPartialsProd = function() {
 pipes.builtAppStylesDev = function() {
     return gulp.src(paths.appStyles)
         //.pipe(plugins.sass())
+        .pipe(rev())
+     //   .pipe(gulp.dest(paths.dev))
+     //   .pipe(rev.manifest({ merge: true }))
+    //    .pipe(revDel({ dest: 'dev' }))
         .pipe(gulp.dest(paths.dev));
 };
 
@@ -198,16 +189,18 @@ pipes.builtAppStylesDev = function() {
 ///updated css minification to use cssnano
 pipes.builtAppStylesProd =
     function () {
-    return gulp.src(paths.appStyles)
-        .pipe(plugins.sourcemaps.init())
-        //     .pipe(plugins.sass())
-        //     .pipe(plugins.minifyCss())
-        //.pipe(plugins.minifyCss())
-        .pipe(plugins.cssnano())
-        .pipe(plugins.sourcemaps.write())
-        
-        .pipe(pipes.minifiedFileName())
-        .pipe(gulp.dest(paths.dist));
+        return gulp.src(paths.appStyles)
+            .pipe(plugins.sourcemaps.init())
+            //     .pipe(plugins.sass())
+            //     .pipe(plugins.minifyCss())
+            //.pipe(plugins.minifyCss())
+            .pipe(plugins.cssnano())
+            .pipe(plugins.sourcemaps.write())
+            .pipe(pipes.minifiedFileName())
+            .pipe(rev())
+            .pipe(rev.manifest({ merge: true }))
+  //          .pipe(revDel({ dest: 'dist' }))
+            .pipe(gulp.dest(paths.dist));
 };
 ///////////////////////////////////////////////
 
@@ -318,7 +311,6 @@ gulp.task('images', function () {
         .pipe(gulp.dest('build/images'))
         .pipe(plugins.size());
 });
-
 
 // checks html source files for syntax errors
 gulp.task('validate-partials', pipes.validatedPartials);

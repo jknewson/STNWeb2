@@ -1,4 +1,4 @@
-﻿(function () {
+(function () {
     'use strict';
 
     var ModalControllers = angular.module('ModalControllers');//
