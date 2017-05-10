@@ -162,7 +162,7 @@
                 }
             };
 
-            $scope.DeleteEvent = function (ev) {
+            $scope.deleteEV = function (ev) {
                 //modal
                 var modalInstance = $uibModal.open({
                     templateUrl: 'removemodal.html',

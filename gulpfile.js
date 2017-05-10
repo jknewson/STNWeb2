@@ -91,8 +91,8 @@ pipes.builtAppScriptsProd = function() {
         .pipe(plugins.concat('app.min.js'))
         .pipe(plugins.uglify({ mangle: false }))
         .pipe(plugins.sourcemaps.write())
-        .pipe(rev())
-        .pipe(rev.manifest())
+//        .pipe(rev())
+ //       .pipe(rev.manifest())
    //     .pipe(revDel({ dest: 'dist' }))
         .pipe(gulp.dest(paths.distScriptsProd));
 };
@@ -197,8 +197,8 @@ pipes.builtAppStylesProd =
             .pipe(plugins.cssnano())
             .pipe(plugins.sourcemaps.write())
             .pipe(pipes.minifiedFileName())
-            .pipe(rev())
-            .pipe(rev.manifest({ merge: true }))
+ //           .pipe(rev())
+ //           .pipe(rev.manifest({ merge: true }))
   //          .pipe(revDel({ dest: 'dist' }))
             .pipe(gulp.dest(paths.dist));
 };

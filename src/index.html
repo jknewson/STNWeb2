@@ -33,7 +33,7 @@
 <body ng-app="app" ng-strict-di>
 
     <!--HEADER START navCtrl-->
-    <div ng-controller="mainCtrl" class="app-nav">
+    <div ng-controller="mainCtrl" class="app-nav" ng-class="{testEnvir: environment == 'Testing'}">
         <h1 class="nav-header">Short-Term Network<span ng-if="thisPage"> - {{thisPage}}</span></h1>
         <i ng-show="isAuth.val" class="mobile-menu-btn ion-navicon" id="mobile-menu-btn"></i>
 
@@ -55,7 +55,7 @@
                 $(".mobile-menu-btn").toggleClass('ion-close-round');
             })
         </script>
-
+        <h2 class="nav-userctrl" style="float:none;color:chartreuse;" ng-if="environment == 'Testing'">   ----- TESTING VERSION -----</h2>
         <div class="nav-userctrl" ng-show="isAuth.val">
             <span>Welcome, <a ui-sref="members.MembersList({id: userID})">{{usersName}}</a></span>
             <button type="button" ng-controller="logoutCtrl" ng-click="logout()">LOG OFF</button>

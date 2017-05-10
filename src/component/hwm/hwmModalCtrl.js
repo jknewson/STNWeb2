@@ -202,7 +202,7 @@
                         };
                         if (show == 'range') $scope.message = 'The Latitude must be between 0 and 73.0';
 
-                        if (show == 'distance') $scope.message = 'Latitude must be within 232 ft from the site\'s latitude.';
+                        if (show == 'distance') $scope.message = 'Latitude places the HWM more than 232 ft from the site\'s latitude. Please verify before continuing.';
                     }],
                     size: 'sm'
                 });
@@ -229,7 +229,7 @@
                         };
                         if (show == 'range') $scope.message = 'The Longitude must be between -175.0 and -60.0';
                         
-                        if (show == 'distance') $scope.message = 'Longitude must be within 232 ft from the site\'s longitude.';
+                        if (show == 'distance') $scope.message = 'Longitude places the HWM more than 232 ft from the site\'s longitude. Please verify before continuing';
                     }],
                     size: 'sm'
                 });
@@ -925,8 +925,12 @@
                     $http.defaults.headers.common.Authorization = 'Basic ' + $cookies.get('STNCreds');
                     $http.defaults.headers.common.Accept = 'application/json';
                     if ($scope.aSource.source_id !== undefined) {
-                        $scope.aSource.source_name = $scope.aSource.FULLname;
-                        SOURCE.update({ id: $scope.aSource.source_id }, $scope.aSource).$promise.then(function () {
+                        // post again (if no change, will return existing one. if edited, will create a new one --instead of editing all files that use this source)
+                        var theSource = { source_name: $scope.aSource.FULLname, agency_id: $scope.aSource.agency_id };
+                        SOURCE.save(theSource).$promise.then(function (response) {
+
+                        //SOURCE.update({ id: $scope.aSource.source_id }, $scope.aSource).$promise.then(function () {
+                            $scope.aFile.source_id = response.source_id;
                             FILE.update({ id: $scope.aFile.file_id }, $scope.aFile).$promise.then(function (fileResponse) {
                                 toastr.success("File Updated");
                                 fileResponse.fileBelongsTo = "HWM File";

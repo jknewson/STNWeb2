@@ -202,7 +202,7 @@
                         };
                         if (show == 'range') $scope.message = 'The Latitude must be between 0 and 73.0';
 
-                        if (show == 'distance') $scope.message = 'Latitude must be within 232 ft from the site\'s latitude.';
+                        if (show == 'distance') $scope.message = 'Latitude places the HWM more than 232 ft from the site\'s latitude. Please verify before continuing.';
                     }],
                     size: 'sm'
                 });
@@ -229,7 +229,7 @@
                         };
                         if (show == 'range') $scope.message = 'The Longitude must be between -175.0 and -60.0';
                         
-                        if (show == 'distance') $scope.message = 'Longitude must be within 232 ft from the site\'s longitude.';
+                        if (show == 'distance') $scope.message = 'Longitude places the HWM more than 232 ft from the site\'s longitude. Please verify before continuing';
                     }],
                     size: 'sm'
                 });
