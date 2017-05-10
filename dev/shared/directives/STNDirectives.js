@@ -276,7 +276,7 @@
                 restrict: 'A',
                 require: 'ngModel',
                 link: function(scope, element, attr, ngModelCtrl) {
-                    var pattern = /[^a-zA-Z0-9-_]/g;
+                    var pattern = /[^a-zA-Z0-9- _]/g;
 
                     function fromUser(text) {
                         if (!text)

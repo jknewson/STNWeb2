@@ -5,10 +5,11 @@
             'angular.filter', 'xeditable', 'checklist-model', 'ngFileUpload', 'STNResource', 'ui.bootstrap.datetimepicker','leaflet-directive','ngHandsontable',
             'STNControllers', 'LogInOutController', 'ModalControllers', 'SettingsControllers', 'WiM.Services', 'WiM.Event', 'wim_angular', 'angularSpinners']);
   // app.constant('SERVER_URL', 'https://stn.wim.usgs.gov/STNServices');
-    // app.constant('SERVER_URL', 'https://stntest.wim.usgs.gov/STNServices2');
-    app.constant('SERVER_URL', 'http://localhost/STNServices2');
-    
-    app.run(['$rootScope', '$uibModalStack', '$cookies', '$state', function ($rootScope, $uibModalStack, $cookies, $state) {
+     app.constant('SERVER_URL', 'https://stntest.wim.usgs.gov/STNServices2');
+    //app.constant('SERVER_URL', 'http://localhost/STNServices2');
+     app.constant('ENVIRONMENT', 'Testing');
+    //app.constant('ENVIRONMENT', 'Production');
+     app.run(['$rootScope', '$uibModalStack', '$cookies', '$state', 'ENVIRONMENT', function ($rootScope, $uibModalStack, $cookies, $state, ENVIRONMENT) {
         $rootScope.$on('$stateChangeStart', function (event, toState, toParams, fromState, fromParams) {
             if (($cookies.get('STNCreds') === undefined || $cookies.get('STNCreds') === "") && toState.authenticate) {
                 $rootScope.returnToState = toState.name;
@@ -25,6 +26,7 @@
                     $("#userNameFocus").focus();
                 }
             }
+            $rootScope.environment = ENVIRONMENT;
         });
 
         $rootScope.$on('$stateChangeSuccess', function (event, toState, toParams, fromState, fromParams, error) {
@@ -726,9 +728,8 @@
                 //#endregion
 
                 //#region historicHWM upload
-                .state("historicHWMs", {
+           /*     .state("historicHWMs", {
                     url: "/Events/:id/HistoricHWMs",
-             //       params:{id:null},
                     templateUrl: "component/hwm/historic.html",
                     authenticate: true,
                     controller: "historicHWMCtrl",
@@ -772,7 +773,7 @@
                             return hqu.getAll().$promise;
                         }
                     }
-                })
+                })*/
                 //#endregion
                 
                 //#region site (abstract)

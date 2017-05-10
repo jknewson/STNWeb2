@@ -710,6 +710,9 @@
                     <uib-accordion-heading>
                         <i style="margin-right:10px" class="pull-left glyphicon" ng-class="{'glyphicon-chevron-down': s.sFileOpen, 'glyphicon-chevron-right': !s.sFileOpen}"></i>
                         <span ng-class="{'redText':showFileForm}">Site Files</span>
+                        <button type="button" class="col-md-1 borderLess pull-right" tooltip-placement="left" tooltip-append-to-body="false" uib-tooltip="For general site files only. Please add event-specific files (e.g. HWM photos, field sheets, sensor data files, etc.) by editing the Sensor or HWM sections within this site and uploading files from there .">
+                            <span class="glyphicon glyphicon-question-sign"></span>
+                        </button>
                     </uib-accordion-heading>
                     <div class="col-md-12">
                         <div class="col-md-12" ng-if="!showFileForm">
@@ -2314,6 +2317,26 @@
                             <input class="form-control" ng-keypress="isNum($event)" name="height_above_gnd" ng-model="aHWM.height_above_gnd" type="text" />
                         </div>
                     </div>
+                    
+                    <!-- Tranquil/Stillwater HWM -->
+                    <div class="form-group">
+                        <label class="col-md-4 control-label">
+                            <button type="button" class="help-btn" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Displayed publicly.">
+                                <span class="glyphicon glyphicon-eye-open"></span>
+                            </button> Tranquil/Stillwater HWM:
+                        </label>
+                        <div class="col-md-6">
+                            <span class="radio-inline">
+                                <input type="radio" name="stillwater" ng-model="aHWM.stillwater" value="1" />Yes
+                            </span>
+                            <span class="radio-inline">
+                                <input type="radio" name="stillwater" ng-model="aHWM.stillwater" value="0" />No
+                            </span>
+                        </div>
+                        <button type="button" class="col-md-1 borderLess pull-left" tooltip-placement="bottom" tooltip-append-to-body="false" uib-tooltip="For modelling purposes, all high-water marks are assumed to be rapid-water high-water marks unless the user is confident that the mark being entered here was formed in tranquil water. See TM3-A24 for a discussion on rapid versus tranquil high-water marks.">
+                            <span class="glyphicon glyphicon-question-sign"></span>
+                        </button>
+                    </div>
 
                     <!-- Flag/Found Date: * -->
                     <div class="form-group" ng-class="{'has-error':HWMForm.flag_date.$invalid && HWMForm.flag_date.$dirty}">
@@ -2436,26 +2459,7 @@
                         </div>
                     </div>
 
-                    <!-- Tranquil/Stillwater HWM -->
-                    <div class="form-group">
-                        <label class="col-md-4 control-label">
-                            <button type="button" class="help-btn" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Displayed publicly.">
-                                <span class="glyphicon glyphicon-eye-open"></span>
-                            </button> Tranquil/Stillwater HWM:
-                        </label>
-                        <div class="col-md-6">
-                            <span class="radio-inline">
-                                <input type="radio" name="stillwater" ng-model="aHWM.stillwater" value="1" />Yes
-                            </span>
-                            <span class="radio-inline">
-                                <input type="radio" name="stillwater" ng-model="aHWM.stillwater" value="0" />No
-                            </span>
-                        </div>
-                        <button type="button" class="col-md-1 borderLess pull-left" tooltip-placement="bottom" tooltip-append-to-body="false" uib-tooltip="For modelling purposes, all high-water marks are assumed to be rapid-water high-water marks unless the user is confident that the mark being entered here was formed in tranquil water. See TM3-A24 for a discussion on rapid versus tranquil high-water marks.">
-                            <span class="glyphicon glyphicon-question-sign"></span>
-                        </button>
-                    </div>
-
+                  
                     <!-- Flagging Member: -->
                     <div class="form-group">
                         <label class="col-md-4 control-label" for="flag_member_id">
@@ -2882,6 +2886,31 @@
                                 </div>
                             </div>
 
+                            <!-- Tranquil/Stillwater HWM (details) -->
+                            <div class="col-md-12" ng-if="view.HWMval== 'detail'">
+                                <div class="col-md-4"><label>Tranquil/Stillwater HWM:</label></div>
+                                <div class="col-md-6">{{aHWM.Tranquil || '---'}}</div>
+                            </div>
+                            <!-- Tranquil/Stillwater HWM (edit) -->
+                            <div class="form-group" ng-if="view.HWMval== 'edit'">
+                                <label class="col-md-4 control-label">
+                                    <button type="button" class="help-btn" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Displayed publicly.">
+                                        <span class="glyphicon glyphicon-eye-open"></span>
+                                    </button> Tranquil/Stillwater HWM:
+                                </label>
+                                <div class="col-md-6">
+                                    <span class="radio-inline">
+                                        <input type="radio" name="stillwater" ng-model="hwmCopy.stillwater" value="1" />Yes
+                                    </span>
+                                    <span class="radio-inline">
+                                        <input type="radio" name="stillwater" ng-model="hwmCopy.stillwater" value="0" />No
+                                    </span>
+                                </div>
+                                <button type="button" class="col-md-1 borderLess pull-left" tooltip-placement="bottom" tooltip-append-to-body="false" uib-tooltip="For modelling purposes, all high-water marks are assumed to be rapid-water high-water marks unless the user is confident that the mark being entered here was formed in tranquil water. See TM3-A24 for a discussion on rapid versus tranquil high-water marks.">
+                                    <span class="glyphicon glyphicon-question-sign"></span>
+                                </button>
+                            </div>
+
                             <!-- Flag/Found Date: * (details) -->
                             <div class="col-md-12" ng-if="view.HWMval== 'detail'">
                                 <div class="col-md-4"><label>Flag/Found Date:</label></div>
@@ -3071,31 +3100,7 @@
                                 </div>
                             </div>
 
-                            <!-- Tranquil/Stillwater HWM (details) -->
-                            <div class="col-md-12" ng-if="view.HWMval== 'detail'">
-                                <div class="col-md-4"><label>Tranquil/Stillwater HWM:</label></div>
-                                <div class="col-md-6">{{aHWM.Tranquil || '---'}}</div>
-                            </div>
-                            <!-- Tranquil/Stillwater HWM (edit) -->
-                            <div class="form-group" ng-if="view.HWMval== 'edit'">
-                                <label class="col-md-4 control-label">
-                                    <button type="button" class="help-btn" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Displayed publicly.">
-                                        <span class="glyphicon glyphicon-eye-open"></span>
-                                    </button> Tranquil/Stillwater HWM:
-                                </label>
-                                <div class="col-md-6">
-                                    <span class="radio-inline">
-                                        <input type="radio" name="stillwater" ng-model="hwmCopy.stillwater" value="1" />Yes
-                                    </span>
-                                    <span class="radio-inline">
-                                        <input type="radio" name="stillwater" ng-model="hwmCopy.stillwater" value="0" />No
-                                    </span>
-                                </div>
-                                <button type="button" class="col-md-1 borderLess pull-left" tooltip-placement="bottom" tooltip-append-to-body="false" uib-tooltip="For modelling purposes, all high-water marks are assumed to be rapid-water high-water marks unless the user is confident that the mark being entered here was formed in tranquil water. See TM3-A24 for a discussion on rapid versus tranquil high-water marks.">
-                                    <span class="glyphicon glyphicon-question-sign"></span>
-                                </button>
-                            </div>
-
+                            
                             <!-- Approval info (detail) -->
                             <div class="form-group" ng-show="ApprovalInfo.Member !==undefined">
                                 <label class="col-md-4 control-label" for="approval_id">

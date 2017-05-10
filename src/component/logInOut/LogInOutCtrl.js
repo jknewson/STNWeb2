@@ -3,8 +3,8 @@
 
     var LogInOutController = angular.module('LogInOutController', []);
 
-    LogInOutController.controller('loginCtrl', ['$scope', '$state', '$location', '$uibModal', '$http', '$cookies', '$rootScope', '$document', 'SERVER_URL', 'Login', 
-        function ($scope, $state, $location, $uibModal, $http, $cookies, $rootScope, $document, SERVER_URL, Login) {
+    LogInOutController.controller('loginCtrl', ['$scope', '$state', '$location', '$uibModal', '$http', '$cookies', '$rootScope', '$document', 'SERVER_URL', 'ENVIRONMENT', 'Login', 
+        function ($scope, $state, $location, $uibModal, $http, $cookies, $rootScope, $document, SERVER_URL, ENVIRONMENT, Login) {
             //login //
             //#region CAP lock Check
             $('[type=password]').keypress(function (e) {
@@ -45,6 +45,7 @@
                 return this;
             };
             $scope.serverURL = SERVER_URL;
+            $rootScope.environment = ENVIRONMENT;
             $scope.submit = function () {
                 //$scope.sub = true;
                 $rootScope.stateIsLoading.showLoading = true;// loading..
@@ -154,7 +155,7 @@
                 $rootScope.userID = undefined;
                 $rootScope.userRole = undefined;
                 $rootScope.usersName = undefined;
-
+                $rootScope.environment = undefined;
 
                 $location.path('/login');
             };
