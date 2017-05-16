@@ -29,8 +29,8 @@
                 $scope.max = 0; $scope.dynamic = 0; //values for number of hwms are uploading (used in progressbar
                 $scope.showProgressBar = false; //progressbar for uploading hwms
                 $scope.hotInstance;
-                                 //water,type,mrker,envr,uncrt,qul,bank,des,lat,long,hdatum,hcm,hag,flgDt,surDt,elev,vdatum,vcm,sUnc,notes, tranq/still,siteno
-                $scope.columnWidths = [180, 180, 180, 150, 170, 180, 100, 200, 140, 150, 180, 220, 100, 130, 120, 130, 160, 190, 160, 200, 200, 120 ];
+                                 //water, label, type,mrker,envr,uncrt,qul,bank,des,lat,long,hdatum,hcm,hag,flgDt,surDt,elev,vdatum,vcm,sUnc,notes, tranq/still,siteno
+                $scope.columnWidths = [180, 150, 180, 180, 150, 170, 180, 100, 200, 140, 150, 180, 220, 100, 130, 120, 130, 160, 190, 160, 200, 200, 120 ];
                 $scope.siteNoArrowClicked = false; //need a flag when clicked to check so that the required validation doesn't fire and show error modal at same time as sitemodal
                 $scope.uploadHWMs = []; //data binding in the handsontable (they will paste in hwms)
                 $scope.postedHWMs = []; //once posted, they are removed from the handsontable and added to this array to show in a table below
@@ -154,7 +154,7 @@
                  //   $scope.showLoading = true; // loading..
                     angular.element('#loadingDiv').removeClass('noShow');
                     var dataAtRow = $scope.hotInstance.getDataAtRow(r); setTimeout(function () { $scope.hotInstance.deselectCell(); }, 100);
-                    if (dataAtRow[8] !== "" && dataAtRow[9] !== "" && dataAtRow[8] !== null && dataAtRow[9] !== null) {
+                    if (dataAtRow[9] !== "" && dataAtRow[10] !== "" && dataAtRow[9] !== null && dataAtRow[10] !== null) {
                         angular.element('#loadingDiv').addClass('noShow');
                         var siteModal = $uibModal.open({
                             templateUrl: 'associateSitemodal.html',
@@ -162,10 +162,10 @@
                             keyboard: false,
                             resolve: {
                                 nearBySites: function () {
-                                    return SITE.getProximitySites({ Latitude: dataAtRow[8], Longitude: dataAtRow[9], Buffer: 0.0005 }).$promise;
+                                    return SITE.getProximitySites({ Latitude: dataAtRow[9], Longitude: dataAtRow[10], Buffer: 0.0005 }).$promise;
                                 },
                                 HWMparts: function(){ return hwmParts; },
-                                siteNoAlreadyThere: function () { return dataAtRow[21]; },
+                                siteNoAlreadyThere: function () { return dataAtRow[22]; },
                                 hdatums: function () { return $scope.horDatums; },
                                 hcolMeths: function () { return $scope.horCollMeths; },
                                 vdatums: function () { return $scope.vertDatums; },
@@ -289,7 +289,7 @@
                         callback(false);
                     } else if (whichOne == "HWM Uncertainty (ft)" && value !== "" && value !== null) {
                         //check if hwmQuality has value. if so, see if it's within proper range
-                        var hwmQualValue = $scope.hotInstance.getDataAtCell(this.row, 5);
+                        var hwmQualValue = $scope.hotInstance.getDataAtCell(this.row, 6);
                         if (hwmQualValue !== null && hwmQualValue !== "") {
                             var appropriateHWMQual = "";
                             if (value > 0.4) appropriateHWMQual = "VP: > 0.40 ft";
@@ -352,7 +352,7 @@
                             callback(false);
                         } else if (prop == "hwm_quality_id") {
                             //check if hwm uncertainty has value. if so, see if it's within proper range
-                            var uncertValue = $scope.hotInstance.getDataAtCell(row, 4);
+                            var uncertValue = $scope.hotInstance.getDataAtCell(row, 5);
                             if (uncertValue !== null && uncertValue !== "") {
                                 var appropriatequal = "";
                                 if (uncertValue > 0.4) appropriatequal = "VP: > 0.40 ft";
@@ -439,7 +439,7 @@
                 $scope.validateTable = function () {
                     $scope.showLoading = true; // loading..
                     angular.element('#loadingDiv').removeClass('noShow');
-                    var haveData = $scope.hotInstance.getDataAtCell(0, 1); //  (row,col) hwm_type
+                    var haveData = $scope.hotInstance.getDataAtCell(0, 2); //  (row,col) hwm_type
                     if (haveData !== null) {
                         $scope.hotInstance.validateCells(function (valid) {                            
                             if (valid) {                                
@@ -914,6 +914,7 @@
                     //colHeaders: true,
                     colHeaders: [                        
                         '<span title="Required">Waterbody *</span>',
+                        '<span title="Identifying Label. If left blank, defaults to &quot;no_label&quot;">HWM Label</span>',
                         '<span title="Required">HWM Type *</span>',
                         "Marker",
                         '<span title="Required">HWM Environment *</span>',
@@ -955,14 +956,14 @@
                     afterOnCellMouseDown: function (event, coords, td) {
                         //open modal for siteNo
                         //open multi-select modal for resources, media or frequencies
-                        if (coords.col === 21 && event.realTarget.className == "htAutocompleteArrow") {
+                        if (coords.col === 22 && event.realTarget.className == "htAutocompleteArrow") {
                             $scope.siteNoArrowClicked = true;
                             var passHWMvals = [];
                             passHWMvals.push($scope.hotInstance.getDataAtCell(coords.row, 0)); //waterbody
-                            passHWMvals.push($scope.hotInstance.getDataAtCell(coords.row, 8)); //lat 
-                            passHWMvals.push($scope.hotInstance.getDataAtCell(coords.row, 9)); //long  
-                            passHWMvals.push($scope.hotInstance.getDataAtCell(coords.row, 10)); //hdatum  
-                            passHWMvals.push($scope.hotInstance.getDataAtCell(coords.row, 11)); //hcollectmethd 
+                            passHWMvals.push($scope.hotInstance.getDataAtCell(coords.row, 9)); //lat 
+                            passHWMvals.push($scope.hotInstance.getDataAtCell(coords.row, 10)); //long  
+                            passHWMvals.push($scope.hotInstance.getDataAtCell(coords.row, 11)); //hdatum  
+                            passHWMvals.push($scope.hotInstance.getDataAtCell(coords.row, 12)); //hcollectmethd 
 
                             getFindSiteModal(coords.row, coords.col, passHWMvals);
                         }

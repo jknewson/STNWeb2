@@ -361,7 +361,7 @@
                 return dateWOtime;
             };//end makeAdate()
 
-            $scope.ensurehwmLabelUnique = function () {
+          /*  $scope.ensurehwmLabelUnique = function () {
                 var h = $scope.view.HWMval == 'edit' ? $scope.hwmCopy : $scope.aHWM;
                 angular.forEach(allSiteHWMs, function (hwm) {
                     if (hwm.hwm_label == h.hwm_label) {
@@ -384,7 +384,7 @@
                     }
                 });
             };
-
+            */
             if (thisHWM != "empty") {
                 //#region existing HWM
                 $scope.createOReditHWM = 'edit';
@@ -432,7 +432,7 @@
                     event_id: $cookies.get('SessionEventID'),
                     hwm_environment: 'Riverine',
                     bank: 'N/A',
-                    hwm_label: 'hwm-'+ (parseFloat(allSiteHWMs.length)+1),
+                    hwm_label: 'no_label',
                     stillwater: 0,
                     latitude_dd: hwmSite.latitude_dd,
                     longitude_dd: hwmSite.longitude_dd,

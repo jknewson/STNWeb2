@@ -2086,7 +2086,7 @@
                         </div>
                     </div>
 
-                    <!-- Label*: -->
+                    <!-- Label*: ng-change="ensurehwmLabelUnique()"  ng-model-options="{ updateOn: 'blur' }"-->
                     <div class="form-group">
                         <label class="col-md-4 control-label req" for="hwm_label">
                             <button type="button" class="help-btn" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Displayed publicly.">
@@ -2097,7 +2097,7 @@
                             </button>
                         </label>
                         <div class="col-md-6">
-                            <input class="form-control" name="hwm_label" ng-model="aHWM.hwm_label" type="text" label-limit-length="12" ng-model-options="{ updateOn: 'blur' }" ng-change="ensurehwmLabelUnique()" required />
+                            <input class="form-control" name="hwm_label" ng-model="aHWM.hwm_label" type="text" label-limit-length="12" required />
                         </div>
                         <button type="button" class="col-md-1 borderLess pull-left" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Label for distinguishing hwm from other hwms at this site-event. Limited to 12 characters.">
                             <span class="glyphicon glyphicon-question-sign"></span>
@@ -2459,7 +2459,6 @@
                         </div>
                     </div>
 
-                  
                     <!-- Flagging Member: -->
                     <div class="form-group">
                         <label class="col-md-4 control-label" for="flag_member_id">
@@ -2606,7 +2605,7 @@
                                 <div class="col-md-4"><label>Label:</label></div>
                                 <div class="col-md-6">{{aHWM.hwm_label}}</div>
                             </div>
-                            <!-- Label: (edit) -->
+                            <!-- Label: (edit)  ng-model-options="{ updateOn: 'blur' }" ng-change="ensurehwmLabelUnique()"-->
                             <div class="form-group" ng-if="view.HWMval== 'edit'">
                                 <label class="col-md-4 control-label req" for="hwm_label">
                                     <button type="button" class="help-btn" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Displayed publicly." required>
@@ -2617,7 +2616,7 @@
                                     </button>
                                 </label>
                                 <div class="col-md-6">
-                                    <input type="text" class="form-control" ng-model="hwmCopy.hwm_label" label-limit-length="12"  ng-model-options="{ updateOn: 'blur' }" ng-change="ensurehwmLabelUnique()"/>
+                                    <input type="text" class="form-control" ng-model="hwmCopy.hwm_label" label-limit-length="12" />
                                 </div>
                                 <button type="button" class="col-md-1 borderLess pull-left" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Label for distinguishing hwm from other hwms at this site-event. Limited to 12 characters.">
                                     <span class="glyphicon glyphicon-question-sign"></span>

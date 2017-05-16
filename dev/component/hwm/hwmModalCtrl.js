@@ -361,7 +361,7 @@
                 return dateWOtime;
             };//end makeAdate()
 
-            $scope.ensurehwmLabelUnique = function () {
+          /*  $scope.ensurehwmLabelUnique = function () {
                 var h = $scope.view.HWMval == 'edit' ? $scope.hwmCopy : $scope.aHWM;
                 angular.forEach(allSiteHWMs, function (hwm) {
                     if (hwm.hwm_label == h.hwm_label) {
@@ -384,7 +384,7 @@
                     }
                 });
             };
-
+            */
             if (thisHWM != "empty") {
                 //#region existing HWM
                 $scope.createOReditHWM = 'edit';
@@ -432,7 +432,7 @@
                     event_id: $cookies.get('SessionEventID'),
                     hwm_environment: 'Riverine',
                     bank: 'N/A',
-                    hwm_label: 'hwm-'+ (parseFloat(allSiteHWMs.length)+1),
+                    hwm_label: 'no_label',
                     stillwater: 0,
                     latitude_dd: hwmSite.latitude_dd,
                     longitude_dd: hwmSite.longitude_dd,
@@ -925,8 +925,12 @@
                     $http.defaults.headers.common.Authorization = 'Basic ' + $cookies.get('STNCreds');
                     $http.defaults.headers.common.Accept = 'application/json';
                     if ($scope.aSource.source_id !== undefined) {
-                        $scope.aSource.source_name = $scope.aSource.FULLname;
-                        SOURCE.update({ id: $scope.aSource.source_id }, $scope.aSource).$promise.then(function () {
+                        // post again (if no change, will return existing one. if edited, will create a new one --instead of editing all files that use this source)
+                        var theSource = { source_name: $scope.aSource.FULLname, agency_id: $scope.aSource.agency_id };
+                        SOURCE.save(theSource).$promise.then(function (response) {
+
+                        //SOURCE.update({ id: $scope.aSource.source_id }, $scope.aSource).$promise.then(function () {
+                            $scope.aFile.source_id = response.source_id;
                             FILE.update({ id: $scope.aFile.file_id }, $scope.aFile).$promise.then(function (fileResponse) {
                                 toastr.success("File Updated");
                                 fileResponse.fileBelongsTo = "HWM File";
