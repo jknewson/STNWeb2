@@ -1,0 +1,104 @@
+<uib-accordion close-others="false">
+    <uib-accordion-group is-open="status.filesOpen">
+        <uib-accordion-heading>
+            <i style="margin-right:10px" class="pull-left glyphicon" ng-class="{'glyphicon-chevron-down': status.filesOpen, 'glyphicon-chevron-right': !status.filesOpen}"></i>
+            Files
+            <span class="badge pull-right">{{SiteFiles.length}}</span>
+        </uib-accordion-heading>
+        <!--<div ng-if="!sessionEventExists" class="btn-group pull-right">
+            <div class="btn-group">
+                <button type="button" class="borderLess" ng-click="showFileModal(0)" tooltip-placement="left" tooltip-append-to-body="true" uib-tooltip="Add a Site File">
+                    <span class="glyphicon glyphicon-plus"></span>
+                </button>
+            </div>
+        </div>-->
+
+        <!-- ------ Site files here -------- -->
+        <label class="col-md-9">-- Site Files --</label>
+        <br clear="all" />
+        <div ng-repeat="f in SiteFiles">
+            <div ng-if="f.fileBelongsTo == 'Site File'">
+                <ul style="padding-left: 0">
+                    <li style="list-style:none;padding-bottom: 15px;">
+                        <span class="col-sm-9 borderLess" style="padding:0">
+                            <a class="btn borderLess" style="padding:0" title="{{f.file_date | date: 'MM/dd/yyyy'}} ({{f.name || f.file_id}})" ng-click="showFileModal(f)">{{f.file_date | date: 'MM/dd/yyyy'}} ({{f.name || f.file_id}})</a>
+                        </span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- ------ Objective Point Files here ------ -->
+        <label class="col-md-8">-- Datum Location Files --</label>
+        <button type="button" class="borderLess" tooltip-placement="right" uib-tooltip="To add a Datum Location file, go to the OP to add it">
+            <span class="glyphicon glyphicon-question-sign"></span>
+        </button>
+        <br clear="all" />
+        <div ng-repeat="f in SiteFiles">
+            <div ng-if="f.fileBelongsTo == 'Objective Point File'">
+                <ul style="padding-left: 0">
+                    <li style="list-style:none;padding-bottom: 15px;">
+                        <span class="col-sm-9 borderLess" style="padding:0">
+                            <a class="btn borderLess" style="padding:0" title="{{f.typeName}}- {{f.file_date | date: 'MM/dd/yyyy'}} ({{f.name || f.file_id}})" ng-click="showFileModal(f)">{{f.typeName}}- {{f.file_date | date: 'MM/dd/yyyy'}} ({{f.name || f.file_id}})</a>
+                        </span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- ------ Sensor Files here ------ -->
+        <label class="col-md-8">-- Sensor Files --</label>
+        <button type="button" class="borderLess" tooltip-placement="right" uib-tooltip="To add a Sensor file, go to the Sensor to add it">
+            <span class="glyphicon glyphicon-question-sign"></span>
+        </button>
+        <br clear="all" />
+        <div ng-repeat="f in SiteFiles">
+            <div ng-if="f.fileBelongsTo == 'Sensor File' || f.fileBelongsTo == 'DataFile File'">
+                <ul style="padding-left: 0">
+                    <li style="list-style:none;padding-bottom: 15px;">
+                        <span class="col-sm-9 borderLess" style="padding:0">
+                            <a class="btn borderLess" style="padding:0" title="{{f.typeName}}- {{f.file_date | date: 'MM/dd/yyyy'}} ({{f.name || f.file_id}})" ng-click="showFileModal(f)">{{f.typeName}}- {{f.file_date | date: 'MM/dd/yyyy'}} ({{f.name || f.file_id}})</a>
+                        </span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- ------ HWM Files here ------ -->
+        <label class="col-md-8">-- HWM Files --</label>
+        <button type="button" class="borderLess" tooltip-placement="right" uib-tooltip="To add a HWM file, go to the HWM to add it">
+            <span class="glyphicon glyphicon-question-sign"></span>
+        </button>
+        <br clear="all" />
+        <div ng-repeat="f in SiteFiles">
+            <div ng-if="f.fileBelongsTo == 'HWM File'">
+                <ul style="padding-left: 0">
+                    <li style="list-style:none;padding-bottom: 15px;">
+                        <span class="col-sm-9 borderLess" style="padding:0">
+                            <a class="btn borderLess" style="padding:0" title="{{f.file_date | date: 'MM/dd/yyyy'}} ({{f.name || f.file_id}})" ng-click="showFileModal(f)">{{f.file_date | date: 'MM/dd/yyyy'}} ({{f.name || f.file_id}})</a>
+                        </span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Photo Carousel SiteFiles-->
+        <br clear="all" />
+        <div ng-if="SiteFiles.length > 0" style="height:140px;" title="Click image for preview.">
+            <uib-carousel interval="4000">                
+                <uib-slide ng-repeat="f in siteImageFiles">
+                    <img ng-click="showImageModal(f.file_id)" ng-src="{{serverURL}}/Files/{{f.file_id}}/Item{{stamp}}" />
+                    <div class="carousel-caption">
+                        <p>{{f.name || f.file_id}}</p>
+                    </div>
+                </uib-slide>
+            </uib-carousel>
+        </div>
+        <br />
+
+
+
+
+
+    </uib-accordion-group>
+</uib-accordion>

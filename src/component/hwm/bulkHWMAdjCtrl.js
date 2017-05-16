@@ -13,8 +13,8 @@
                 $scope.querySearch = {}; //holds what they searched for to get the adjustedHWMs again and have it shown to them
                 $scope.showLoading = false; //div holding loader and dynamic and max for progress bar
                 $scope.dynamic = 0; $scope.max = 0;
-                $scope.hotInstance;  //id   wtr sNO desc lat  long date elev unc  not 
-                $scope.columnWidths = [84, 120, 120, 220, 120, 120, 150, 130, 160, 180];
+                $scope.hotInstance;  //id  wtr label sNO desc lat  long date elev unc  not 
+                $scope.columnWidths = [84, 120, 120, 120, 220, 120, 120, 150, 130, 160, 180];
                 $scope.Changes = []; //track changes made to compare for saving
                 $scope.invalids = []; //store when invalid thrown
                 $scope.events = eventList;
@@ -74,6 +74,7 @@
                                 var one = {};
                                 one.hwm_id = response[i].hwm_id;
                                 one.waterbody = response[i].waterbody;
+                                one.hwm_label = response[i].hwm_label;
                                 one.site_id = response[i].site_id;
                                 one.site_no = response[i].site_no,
                                 one.hwm_locationdescription = response[i].hwm_locationdescription;
@@ -230,8 +231,8 @@
                     cells: function (row, col, prop) {
                         //first 6 are readonly (grey) and site_no is a link
                         var cellprops = {};
-                        if (col <= 5) cellprops.renderer = colorRenderer;                         
-                        if (col == 2) cellprops.renderer = siteNoRenderer;                            
+                        if (col <= 6) cellprops.renderer = colorRenderer;                         
+                        if (col == 3) cellprops.renderer = siteNoRenderer;                            
                         return cellprops;                        
                     },
                     onBeforeChange: function (data) {
@@ -260,7 +261,7 @@
                     },
                     afterOnCellMouseDown: function (event, coords, td) {
                         //open multi-select modal for resources, media or frequencies
-                        if (coords.col == 2) {
+                        if (coords.col == 3) {
                             var site_number = $scope.hotInstance.getDataAtCell(coords.row, coords.col);
                             var siteId = $scope.adjustHWMs.filter(function (h) { return h.site_no == site_number; })[0].site_id;
                             $state.go("site.dashboard", {id: siteId});
