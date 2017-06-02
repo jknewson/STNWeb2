@@ -148,6 +148,20 @@
                 };//end addApprovalFile
                 //end add FILE
 
+                //called to format just the date (no time)
+                var makeAdate = function (d) {
+                    var aDate = new Date();
+                    if (d !== "" && d !== undefined) {
+                        //provided date
+                        aDate = new Date(d);
+                    }
+                    var year = aDate.getFullYear();
+                    var month = aDate.getMonth();
+                    var day = ('0' + aDate.getDate()).slice(-2);
+                    var monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+                    var dateWOtime = new Date(monthNames[month] + " " + day + ", " + year);
+                    return dateWOtime;
+                };//end makeAdate()
                 
                 //#region SITE NO dropdown arrow Click MODAL part ------------------------------------------------------------------------
                 var getFindSiteModal = function (r, c, hwmParts) {
@@ -526,6 +540,8 @@
                                 hwm.site_id = response.site_id;
                                 hwm.event_id = $scope.chosenEvent;
                                 hwm.flag_member_id = $scope.$parent.userID;
+                                hwm.flag_date = makeAdate(hwm.flag_date);
+                                if (hwm.survey_date !== "" && hwm.survey_date !== undefined) hwm.survey_date = makeAdate(hwm.survey_date);
                                 hwm.hcollect_method_id = horCollMethList.filter(function (hcm) { return hcm.hcollect_method == hwm.hcollect_method_id; })[0].hcollect_method_id;
                                 hwm.hdatum_id = horizDatumList.filter(function (hd) { return hd.datum_name == hwm.hdatum_id; })[0].datum_id;
                                 hwm.hwm_quality_id = hwmQualList.filter(function (hq) { return hq.hwm_quality == hwm.hwm_quality_id; })[0].hwm_quality_id;
