@@ -89,13 +89,14 @@
                 <hot-table datarows="adjustHWMs" column-sorting settings="tableSettings" hot-id="tableinstance" class="dataTable">
                     <hot-column read-only data="hwm_id" title="'hwm_id'"></hot-column><!-- 0 -->
                     <hot-column read-only data="waterbody" title="'waterbody'"></hot-column><!-- 1 -->
-                    <hot-column read-only data="site_no" title="'site number'"></hot-column><!--2-->
-                    <hot-column read-only data="hwm_locationdescription" title="'HWM description'"></hot-column><!-- 3 -->
-                    <hot-column read-only data="latitude_dd" title="'HWM latitude'"></hot-column><!-- 4 -->
-                    <hot-column read-only data="longitude_dd" title="'HWM longitude'"></hot-column><!--5 -->
-                    <hot-column data="survey_date" title="'Survey Date (UTC)'" correct-format type="'date'" date-format="'MM/DD/YYYY'"></hot-column><!-- 6 -->
-                    <hot-column data="elev_ft" title="'Surveyed Elevation (ft)'" type="'numeric'" format="'0000.000000'" validator="numberValidator"></hot-column><!-- 7 -->
-                    <hot-column data="uncertainty" title="'Surveyed Uncertainty'" type="'numeric'" format="'00.000000'" validator="numberValidator"></hot-column><!-- 8 -->
+                    <hot-column read-only data="hwm_label" title="'hwm label'"></hot-column><!-- 2 -->
+                    <hot-column read-only data="site_no" title="'site number'"></hot-column><!--2 3-->
+                    <hot-column read-only data="hwm_locationdescription" title="'HWM description'"></hot-column><!-- 3 4 -->
+                    <hot-column read-only data="latitude_dd" title="'HWM latitude'"></hot-column><!-- 4 5 -->
+                    <hot-column read-only data="longitude_dd" title="'HWM longitude'"></hot-column><!--5 6 -->
+                    <hot-column data="survey_date" title="'Survey Date (UTC)'" correct-format type="'date'" date-format="'MM/DD/YYYY'"></hot-column><!-- 6 7 -->
+                    <hot-column data="elev_ft" title="'Surveyed Elevation (ft)'" type="'numeric'" format="'0000.000000'" validator="numberValidator"></hot-column><!-- 7 8 -->
+                    <hot-column data="uncertainty" title="'Surveyed Uncertainty'" type="'numeric'" format="'00.000000'" validator="numberValidator"></hot-column><!-- 8 9 -->
                     <hot-column data="hwm_notes" title="'Survey Notes'"></hot-column><!-- 9 -->
                 </hot-table>
             </div>

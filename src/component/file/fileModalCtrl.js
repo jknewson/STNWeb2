@@ -1,4 +1,4 @@
-﻿(function () {
+(function () {
     'use strict';
 
     var ModalControllers = angular.module('ModalControllers');//
@@ -166,7 +166,8 @@
                             });
                         } else {
                             //this is a link
-                            $scope.aFile.site_id = $scope.theSite.site_id; $scope.aFile.source_id = response.source_id;
+                            $scope.aFile.site_id = $scope.theSite.site_id;
+                            $scope.aFile.source_id = response.source_id;
                             FILE.save($scope.aFile).$promise.then(function (fresponse) {
                                 toastr.success("File Uploaded");
                                 fresponse.fileBelongsTo = "Site File";
@@ -225,11 +226,14 @@
                     $http.defaults.headers.common.Authorization = 'Basic ' + $cookies.get('STNCreds');
                     $http.defaults.headers.common.Accept = 'application/json';
                     if ($scope.sourceCopy.source_id !== undefined) {
-                        $scope.sourceCopy.source_name = $scope.sourceCopy.FULLname;
-                        SOURCE.update({ id: $scope.sourceCopy.source_id }, $scope.sourceCopy).$promise.then(function (sResponse) {
+                        // post again (if no change, will return existing one. if edited, will create a new one --instead of editing all files that use this source)
+                        var theSource = { source_name: $scope.sourceCopy.FULLname, agency_id: $scope.sourceCopy.agency_id };
+                        SOURCE.save(theSource).$promise.then(function (sResponse) {
+                      //  SOURCE.update({ id: $scope.sourceCopy.source_id }, $scope.sourceCopy).$promise.then(function (sResponse) {
                             $scope.aSource = sResponse;
                             $scope.aSource.FULLname = $scope.aSource.source_name;
                             $scope.aSource.agencyName = $scope.agencies.filter(function (a) { return a.agency_id == $scope.aSource.agency_id; })[0].agency_name;
+                            $scope.fileCopy.source_id = sResponse.source_id;
                             //editing just the file
                             FILE.update({ id: $scope.fileCopy.file_id }, $scope.fileCopy).$promise.then(function (fileResponse) {
                                 toastr.success("File Updated");

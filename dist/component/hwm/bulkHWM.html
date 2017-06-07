@@ -107,63 +107,67 @@
             
         </div>
         <br clear="all" />
-        <div class="col-md-9">
-            <img height="45" src="images/bulkHWMsteps.PNG" />
-        </div>
-        <br clear="all" />
+        
     </form>
     
     <div ng-show="chosenEvent !== 0 && approvalFile.filetype_id">
-        <div><a ng-click="showTips=!showTips"><span ng-if="!showTips">Show</span><span ng-if="showTips">Hide</span></a> Bulk HWM Uploader tips.</div>
+        <br/>
+        <div class="col-md-4">
+            <img height="45" src="images/bulkHWMsteps.PNG" />
+        </div>        
+        <div class="col-md-5" style="padding-top:5px;font-size:large;">
+            <a ng-click="showTips=!showTips"><span ng-if="!showTips">Show</span><span ng-if="showTips">Hide</span></a> Historic HWM Uploader tips.
+        </div>
+        <br clear="all"/><br/>
         <div ng-if="showTips">
-            <b>
-                <ul>
-                    <li style="list-style:none">
-                        Copy/paste or manually populate the table below. If you know the Site Number (ex: 'FLPIN06064'), type or paste that into the Site No column.
-                        <br />If you do not know the Site Number, click the down arrow in the Site No cell to search for a nearby site or create a site to use for the hwm.
-                    </li>
-                    <li style="list-style:none">You mush click "Validate Table" after entering all your hwm data. Once you have validated the data, you may Upload the HWMs.</li>
-                    <li style="list-style:none">
-                        Examples of invalid data are: empty Required fields, a Site Number that does not exist, latitude/longitude out of range or empty.
-                        <br />Fix any validation errors, and click Validate Table again.
-                    </li>
-                    <li style="list-style:none">If you make a change to the data after Validating, you will need to validate again before being able to upload.</li>
-                    <li style="list-style:none">
-                        Once the HWMs have been uploaded successfully, they will be removed from the table and brought down below to the
-                        "Successfully Uploaded High Water Marks" section.<br /> You can upload files to each HWM in the Successfully Uploaded section.
-                    </li>
-                    <li style="list-style:none">Clicking the Cancel button will send you back to your previous page. Clear Table will remove all data from the table (start over).</li>
-                </ul>
-            </b>
+            <ul>
+                <li>
+                    Click <a target="_blank" title="Download" ng-href="{{serverURL}}/hwms/historicHWMspreadsheet"><b>here</b></a> to download an empty spreadsheet to assist in populating valid data.</li>
+                <li>
+                    Copy/paste <b>(Ctrl+C / Ctrl+V)</b> or manually populate the table below. If you know the Site Number (ex: 'FLPIN06064'), type or paste that into the <b>Site No</b> column.
+                    <br />If you do not know the Site Number, click the down arrow in the Site No cell to search for a nearby site or create a site to use for the hwm.
+                </li>
+                <li>You must click <b>"Validate Table"</b> after entering all your hwm data. Once you have validated the data, you may Upload the HWMs.</li>
+                <li>
+                    Examples of invalid data are: empty Required fields, a Site Number that does not exist, latitude/longitude out of range or empty.
+                    <br />Fix any validation errors, and click Validate Table again.
+                </li>
+                <li>If you make a change to the data after Validating, you will need to validate again before being able to upload.</li>
+                <li>
+                    Once the HWMs have been uploaded successfully, they will be removed from the table and brought down below to the
+                    "Successfully Uploaded High Water Marks" section.<br /> You can upload <b>files</b> to each HWM in the Successfully Uploaded section.
+                </li>
+            </ul>
             <br />
         </div>
 
         <div class="col-md-12">
             <!-- Hot table -->
-            <div class="col-md-12" style="padding:0;margin:0;height:600px;overflow:hidden">                
-                <hot-table datarows="uploadHWMs" settings="tableSettings" hot-id="tableinstance" class="dataTable">
-                    <hot-column data="site_no" type="'dropdown'" validator="requiredValidator"></hot-column>                                                      <!-- 0 -->
-                    <hot-column data="waterbody" ></hot-column>                                                                                                  <!-- 1 -->
-                    <hot-column data="hwm_type_id" type="'dropdown'" source="hwmTypeArray" validator="matchingDDValue"></hot-column>                           <!-- 2 -->
-                    <hot-column data="marker_id" type="'dropdown'" source="markerArray"></hot-column>                                                              <!-- 3 -->
-                    <hot-column data="hwm_environment" type="'dropdown'" source="envirArray" validator="matchingDDValue"></hot-column>                  <!-- 4 -->
-                    <hot-column data="hwm_uncertainty" validator="numericValidator"></hot-column>                                                    <!-- 5 -->
-                    <hot-column data="hwm_quality_id" type="'dropdown'" source="qualArray" validator="matchingDDValue"></hot-column>                        <!-- 6 -->
-                    <hot-column data="bank" type="'dropdown'" source="bankArray"></hot-column>                                                                       <!-- 7 -->
-                    <hot-column data="hwm_locationdescription"></hot-column>                                                                             <!-- 8 -->
-                    <hot-column data="latitude_dd" validator="latValidator"></hot-column>                                                                  <!-- 9 -->
-                    <hot-column data="longitude_dd" validator="longValidator"></hot-column>                                                               <!-- 10 -->
-                    <hot-column data="hdatum_id" type="'dropdown'" source="hdatumArray" validator="matchingDDValue"></hot-column>                      <!-- 11 -->
-                    <hot-column data="hcollect_method_id" type="'dropdown'" source="hcollMethArray" validator="matchingDDValue"></hot-column> <!-- 12 -->
-                    <hot-column data="height_above_gnd" validator="numericValidator"></hot-column>                                                               <!-- 13 -->
-                    <hot-column data="flag_date" date-format="'MM/DD/YYYY'" correct-format type="'date'" validator="requiredValidator"></hot-column>    <!-- 14 -->
-                    <hot-column data="survey_date" date-format="'MM/DD/YYYY'" correct-format type="'date'"></hot-column>                                      <!-- 15 -->
-                    <hot-column data="elev_ft" validator="numericValidator"></hot-column>                                                              <!-- 16 -->
-                    <hot-column data="vdatum_id" type="'dropdown'" source="vdatumArray"></hot-column>                                                      <!-- 17 -->
-                    <hot-column data="vcollect_method_id" type="'dropdown'" source="vcollMethArray"></hot-column>                                 <!-- 18 -->
-                    <hot-column data="uncertainty" validator="numericValidator"></hot-column>                                                     <!-- 19 -->
-                    <hot-column data="hwm_notes"></hot-column>                                                                                                      <!-- 20 -->
-                    <hot-column data="stillwater" type="'dropdown'" source="tranqArray"></hot-column>                                                 <!-- 21 -->
+            <div class="col-md-12" style="padding:0;margin:0;height:350px;overflow:hidden">                
+                <hot-table datarows="uploadHWMs" settings="tableSettings" hot-id="tableinstance" class="dataTable">                    
+                    <hot-column data="waterbody" validator="requiredValidator"></hot-column>                                                          <!-- 0 -->
+                    <hot-column data="hwm_label"></hot-column>                                                                                        <!-- 1 -->
+                    <hot-column data="hwm_type_id" type="'dropdown'" source="hwmTypeArray" validator="matchingDDValue"></hot-column>                  <!-- 1  2 -->
+                    <hot-column data="marker_id" type="'dropdown'" source="markerArray"></hot-column>                                                 <!-- 2  3 -->
+                    <hot-column data="hwm_environment" type="'dropdown'" source="envirArray" validator="matchingDDValue"></hot-column>                <!-- 3  4 -->
+                    <hot-column data="hwm_uncertainty" validator="numericValidator"></hot-column>                                                     <!-- 4  5 -->
+                    <hot-column data="hwm_quality_id" type="'dropdown'" source="qualArray" validator="matchingDDValue"></hot-column>                  <!-- 5  6 -->
+                    <hot-column data="bank" type="'dropdown'" source="bankArray"></hot-column>                                                        <!-- 6  7 -->
+                    <hot-column data="hwm_locationdescription"></hot-column>                                                                          <!-- 7  8 -->
+                    <hot-column data="latitude_dd" validator="latValidator"></hot-column>                                                             <!-- 8  9 -->
+                    <hot-column data="longitude_dd" validator="longValidator"></hot-column>                                                           <!-- 9  10 -->
+                    <hot-column data="hdatum_id" type="'dropdown'" source="hdatumArray" validator="matchingDDValue"></hot-column>                     <!-- 10 11 -->
+                    <hot-column data="hcollect_method_id" type="'dropdown'" source="hcollMethArray" validator="matchingDDValue"></hot-column>         <!-- 11 12 -->
+                    <hot-column data="height_above_gnd" validator="numericValidator"></hot-column>                                                    <!-- 12 13 -->
+                    <hot-column data="flag_date" date-format="'MM/DD/YYYY'" correct-format type="'date'" validator="requiredValidator"></hot-column>  <!-- 13 14 -->
+                    <hot-column data="survey_date" date-format="'MM/DD/YYYY'" correct-format type="'date'"></hot-column>                              <!-- 14 15 -->
+                    <hot-column data="elev_ft" validator="numericValidator"></hot-column>                                                             <!-- 15 16 -->
+                    <hot-column data="vdatum_id" type="'dropdown'" source="vdatumArray"></hot-column>                                                 <!-- 16 17 -->
+                    <hot-column data="vcollect_method_id" type="'dropdown'" source="vcollMethArray"></hot-column>                                     <!-- 17 18 -->
+                    <hot-column data="uncertainty" validator="numericValidator"></hot-column>                                                         <!-- 18 19 -->
+                    <hot-column data="hwm_notes"></hot-column>                                                                                        <!-- 19 20 -->
+                    <hot-column data="stillwater" type="'dropdown'" source="tranqArray"></hot-column>                                                 <!-- 20 21 -->
+                    <hot-column data="site_no" type="'dropdown'" validator="requiredValidator"></hot-column>                                          <!-- 21 22 -->
                 </hot-table>
             </div>
             <br clear="all" />
@@ -285,7 +289,7 @@
             </uib-accordion-group>
         </uib-accordion>
     </div> <!--if postedHWMs.length > 0 -->
-</div> <!-- end page -->
+</div> <!-- end page-padding -->
 
 <!-- Modal for Site No-->
 <script type="text/ng-template" id="associateSitemodal.html">

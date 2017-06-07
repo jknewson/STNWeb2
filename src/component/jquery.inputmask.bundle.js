@@ -1,4 +1,4 @@
-﻿/*!
+/*!
 * jquery.inputmask.bundle.js
 * http://github.com/RobinHerbots/jquery.inputmask
 * Copyright (c) 2010 - 2015 Robin Herbots

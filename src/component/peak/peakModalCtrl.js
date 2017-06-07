@@ -1,4 +1,4 @@
-﻿(function () {
+(function () {
     /* controllers.js, 'leaflet-directive''ui.unique','ngTagsInput',*/
     'use strict';
 
@@ -239,8 +239,8 @@
                 fhwm.hwm_uncertainty = h.hwm_uncertainty;
                 fhwm.hwm_quality_id = h.hwm_quality_id;
                 fhwm.hwm_type_id = h.hwm_type_id;
-                fhwm.latitude_dd = h.latitude;
-                fhwm.longitude_dd = h.longitude;
+                fhwm.latitude_dd = h.latitude_dd;
+                fhwm.longitude_dd = h.longitude_dd;
                 fhwm.marker_id = h.marker_id;
                 fhwm.peak_summary_id = h.peak_summary_id;
                 fhwm.site_id = h.site_id;

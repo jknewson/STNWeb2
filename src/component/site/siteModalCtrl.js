@@ -1,4 +1,4 @@
-﻿(function () {
+(function () {
     'use strict';
 
     var ModalControllers = angular.module('ModalControllers');
@@ -448,8 +448,11 @@
                     $http.defaults.headers.common.Authorization = 'Basic ' + $cookies.get('STNCreds');
                     $http.defaults.headers.common.Accept = 'application/json';
                     if ($scope.aSource.source_id !== undefined) {
-                        $scope.aSource.source_name = $scope.aSource.FULLname;
-                        SOURCE.update({ id: $scope.aSource.source_id }, $scope.aSource).$promise.then(function () {
+                        // post again (if no change, will return existing one. if edited, will create a new one --instead of editing all files that use this source)
+                        var theSource = { source_name: $scope.aSource.FULLname, agency_id: $scope.aSource.agency_id };
+                        SOURCE.save(theSource).$promise.then(function (response) {
+                            $scope.aFile.source_id = response.source_id;
+                       // SOURCE.update({ id: $scope.aSource.source_id }, $scope.aSource).$promise.then(function () {
                             FILE.update({ id: $scope.aFile.file_id }, $scope.aFile).$promise.then(function (fileResponse) {
                                 toastr.success("File Updated");
                                 fileResponse.fileBelongsTo = "Site File";
@@ -987,9 +990,7 @@
                     $scope.originalSiteHousings = thisSiteStuff[1]; //for multiselect .selected = true/false
                     $scope.showSiteHouseTable = true;
                     $scope.siteHouseTypesTable = thisSiteStuff[2]; //for table to show all info on house type
-                    $scope.landowner = thisSiteStuff[5];
-                    $scope.addLandowner = $scope.landowner.fname !== undefined || $scope.landowner.lname !== undefined || $scope.landowner.address !== undefined || $scope.landowner.primaryphone !== undefined ? true : false;
-
+                   
                     //go through allHousingTypeList and add selected Property.
                     for (var ht = 0; ht < $scope.allHousingTypeList.length; ht++) {
                         //for each one, if thisSiteHousings has this id, add 'selected:true' else add 'selected:false'
@@ -1007,6 +1008,8 @@
                     }
 
                 }//end if thisSiteHousings != undefined
+
+                
 
                 //apply any site network names or types
                 if (thisSiteStuff[3].length > 0) {
@@ -1046,6 +1049,13 @@
                             $scope.NetTypeList[ni].selected = false;
                     }
                 }//end if thisSiteNetworkNames != undefined   
+
+                //landowner stuff
+                if (thisSiteStuff[5] !== undefined) {
+                    $scope.landowner = thisSiteStuff[5];
+                    $scope.addLandowner = $scope.landowner.fname !== undefined || $scope.landowner.lname !== undefined || $scope.landowner.address !== undefined || $scope.landowner.primaryphone !== undefined ? true : false;
+                }
+
                 $scope.s = { sOpen: false, sFileOpen: false }; //accordions
                 //#endregion existing site 
             }

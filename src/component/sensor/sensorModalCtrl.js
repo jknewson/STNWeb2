@@ -1,4 +1,4 @@
-﻿/// <reference path="sensorModalCtrl.js" />
+/// <reference path="sensorModalCtrl.js" />
 (function () {
     'use strict';
 
@@ -428,8 +428,11 @@
                             });
                    } else {
                        //has SOURCE
-                       $scope.aSource.source_name = $scope.aSource.FULLname;
-                       SOURCE.update({ id: $scope.aSource.source_id }, $scope.aSource).$promise.then(function () {
+                       // post again (if no change, will return existing one. if edited, will create a new one --instead of editing all files that use this source)
+                       var theSource = { source_name: $scope.aSource.FULLname, agency_id: $scope.aSource.agency_id };
+                       SOURCE.save(theSource).$promise.then(function (response) {                           
+                           $scope.aFile.source_id = response.source_id;
+  //                       SOURCE.update({ id: $scope.aSource.source_id }, $scope.aSource).$promise.then(function () {
                            FILE.update({ id: $scope.aFile.file_id }, $scope.aFile).$promise.then(function (fileResponse) {
                                toastr.success("File Updated");
                                fileResponse.fileBelongsTo = "Sensor File";
@@ -2364,8 +2367,12 @@
                     });
                 } else {
                     //has SOURCE
-                    $scope.aSource.source_name = $scope.aSource.FULLname;
-                    SOURCE.update({ id: $scope.aSource.source_id }, $scope.aSource).$promise.then(function () {
+                    // post again (if no change, will return existing one. if edited, will create a new one --instead of editing all files that use this source)
+                    var theSource = { source_name: $scope.aSource.FULLname, agency_id: $scope.aSource.agency_id };
+                    SOURCE.save(theSource).$promise.then(function (response) {
+                       $scope.aFile.source_id = response.source_id;
+                    //$scope.aSource.source_name = $scope.aSource.FULLname;
+                   // SOURCE.update({ id: $scope.aSource.source_id }, $scope.aSource).$promise.then(function () {
                         FILE.update({ id: $scope.aFile.file_id }, $scope.aFile).$promise.then(function (fileResponse) {
                             toastr.success("File Updated");
                             fileResponse.fileBelongsTo = "Sensor File";

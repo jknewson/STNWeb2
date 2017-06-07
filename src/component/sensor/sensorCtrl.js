@@ -1,4 +1,4 @@
-﻿(function () {
+(function () {
     'use strict';
 
     var STNControllers = angular.module('STNControllers');
@@ -354,9 +354,16 @@
                         }
                     });
                     modalInstance.result.then(function (createdSensor) {
-                        //update the list
-                        $scope.SiteSensors[indexClicked] = createdSensor[0];
+                        if (createdSensor[1] == 'deleted') {
+                            $scope.SiteSensors.splice(indexClicked, 1);
+                            $scope.sensorCount.total = $scope.SiteSensors.length;
+                            Instrument_Service.setAllSiteSensors($scope.SiteSensors);
+                        } else {
+                            //update the list
+                            $scope.SiteSensors[indexClicked] = createdSensor[0];
+                        }
                         $rootScope.stateIsLoading.showLoading = false;// loading..
+                        
                     });
 
                 };

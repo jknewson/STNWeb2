@@ -9,31 +9,14 @@ var connect = require('gulp-connect');
 var open = require('open');
 var mainBowerFiles = require('main-bower-files');
 
-var version = require('gulp-version-number');
-
-const JSversionConfig = {
-    'value': '%MDS%',    
-    'append': {
-        'key': '_v',
-        'to': ['js'],
-    },
-    'output': {
-        'file': 'version.json'
-    }
-};
-const CSSversionConfig = {
-    'value': '%MDS%',    
-    'append': {
-        'key': '_v',
-        'to': ['css'],
-    },
-    'output': {
-        'file': 'version.json'
-    }
-};
-//.pipe(version({ CSSversionConfig }))
-//.pipe(version({ JSversionConfig }))
-
+const rev = require('gulp-rev');
+//var revDel = require('rev-del');
+//revDel({
+//    oldManifest: 'rev-manifest.json',
+//    newManifest: { /* a manifest */ },
+//    suppress: true,
+//    deleteMapExtensions: true
+//});
 // == PATH STRINGS ========
 var paths = {
     scripts: 'src/**/*.js',
@@ -48,7 +31,6 @@ var paths = {
     dist: 'dist',
     distScriptsProd: 'dist/scripts',
     vendorLibs: 'bower_components'
-    //scriptsDevServer: 'devServer/**/*.js'
 };
 
 // == PIPE SEGMENTS ========
@@ -58,18 +40,6 @@ var pipes = {};
 pipes.orderedVendorScripts = function() {
     return plugins.order(['jquery.js', 'angular.js', 'leaflet-src.js', 'esri-leaflet.js', 'angular-leaflet-directive.js', 'directives.module.js', 'service.module.js', 'RequestInfo.js', 'HTTPServiceBase.js', 'Delegate.js', 'RequestTransform.js', 'EventManager.js','EventArgs.js', 'wimLegend.js']);
 };
-
-// pipes.orderedVendorScripts = function() {
-//     return plugins.order(['jquery/dist/jquery.js', 'angular/angular.js', 'leaflet/dist/leaflet-src.js', 'esri-leaflet/dist/esri-leaflet.js', 'angular-leaflet-directive/dist/angular-leaflet-directive.js']);
-// };
-
-//pipes.orderedAppStyles = function(){
-//    return plugins.order(['select.css, app.css']);
-//};
-
-//pipes.orderedVendorStyles = function(){
-//    return plugins.order(['first.css, second.css']);
-//};
 
 //this angularFilesort plugin may not work because each file does not have a uniquely named module(needed, acc. to docs)
 pipes.orderedAppScripts = function() {
@@ -90,20 +60,19 @@ pipes.validatedAppScripts = function() {
 
 pipes.builtAppScriptsDev = function() {
     return pipes.validatedAppScripts()
-        .pipe(gulp.dest(paths.dev));
+        .pipe(rev())
+        .pipe(gulp.dest(paths.dev));        
 };
 
 ///comments in function are artifacts of old partial scripting using the ng-html2js plugin, now stripped out
 pipes.builtAppScriptsProd = function() {
-    //var scriptedPartials = pipes.scriptedPartials();
-    //var validatedAppScripts = pipes.validatedAppScripts();
-    //return es.merge(scriptedPartials, validatedAppScripts)
     return pipes.validatedAppScripts()
         .pipe(pipes.orderedAppScripts())
         .pipe(plugins.sourcemaps.init())
         .pipe(plugins.concat('app.min.js'))
-        .pipe(plugins.uglify({mangle: false}))
+        .pipe(plugins.uglify({ mangle: false }))
         .pipe(plugins.sourcemaps.write())
+        .pipe(rev())
         .pipe(gulp.dest(paths.distScriptsProd));
 };
 
@@ -120,7 +89,6 @@ pipes.builtAppScriptsProd = function() {
 
 pipes.builtVendorScriptsDev = function() {
     return gulp.src(mainBowerFiles())
-        .pipe(version({ JSversionConfig }))
         .pipe(gulp.dest('dev/bower_components'));
 };
 
@@ -136,14 +104,12 @@ pipes.builtVendorImagesProd = function() {
         .pipe(gulp.dest(paths.dist + '/images/'));
 };
 
-
 pipes.builtVendorScriptsProd = function() {
     return gulp.src(mainBowerFiles('**/*.js'))
         .pipe(pipes.orderedVendorScripts())
         //added
         .pipe(plugins.sourcemaps.init())        
         .pipe(plugins.concat('vendor.min.js'))
-        .pipe(version({ JSversionConfig }))
         .pipe(plugins.uglify({ mangle: false }))
         //added
         .pipe(plugins.sourcemaps.write())        
@@ -183,31 +149,21 @@ pipes.builtPartialsProd = function() {
 ///stripped out sass compiler - sass not in use
 pipes.builtAppStylesDev = function() {
     return gulp.src(paths.appStyles)
-        //.pipe(plugins.sass())
+        .pipe(rev())
         .pipe(gulp.dest(paths.dev));
 };
-
-//pipes.builtVendorStylesDev = function (){
-//        return gulp.src(bowerFiles())
-//        //return gulp.src(paths.vendorStyles)
-//            .pipe(gulp.dest('dev/bower_components'));
-//
-//};
 
 
 ///updated css minification to use cssnano
 pipes.builtAppStylesProd =
     function () {
-    return gulp.src(paths.appStyles)
-        .pipe(plugins.sourcemaps.init())
-        //     .pipe(plugins.sass())
-        //     .pipe(plugins.minifyCss())
-        //.pipe(plugins.minifyCss())
-        .pipe(plugins.cssnano())
-        .pipe(plugins.sourcemaps.write())
-        
-        .pipe(pipes.minifiedFileName())
-        .pipe(gulp.dest(paths.dist));
+        return gulp.src(paths.appStyles)
+            .pipe(plugins.sourcemaps.init())
+            .pipe(plugins.cssnano())
+            .pipe(plugins.sourcemaps.write())
+            .pipe(pipes.minifiedFileName())
+            .pipe(rev())
+            .pipe(gulp.dest(paths.dist));
 };
 ///////////////////////////////////////////////
 
@@ -318,7 +274,6 @@ gulp.task('images', function () {
         .pipe(gulp.dest('build/images'))
         .pipe(plugins.size());
 });
-
 
 // checks html source files for syntax errors
 gulp.task('validate-partials', pipes.validatedPartials);

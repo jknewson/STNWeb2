@@ -10,6 +10,7 @@
                 $scope.auth = false;
                 $location.path('/login');
             } else {
+                var test = "hi";
                 $scope.serverURL = SERVER_URL;
                 $scope.stamp = FILE_STAMP.getStamp();
                 $rootScope.$on('fileStampSet', function (event, st) {

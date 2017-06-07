@@ -1,4 +1,4 @@
-﻿(function () {
+(function () {
     'use strict';
 
     var STNControllers = angular.module('STNControllers');
@@ -86,6 +86,7 @@
                     modalInstance.result.then(function (r) {
                         if (r !== 'Deleted') {
                             $scope.aSite = r[0];
+                            getLandOwnerContact();
                             $scope.aSite.HorizontalDatum = $scope.aSite.hdatum_id > 0 ? allHorDatums.filter(function (hd) { return hd.datum_id == $scope.aSite.hdatum_id; })[0].datum_name : "---";
                             $scope.aSite.HorizontalCollectMethod = $scope.aSite.hcollect_method_id !== undefined && $scope.aSite.hcollect_method_id > 0 ? allHorCollMethods.filter(function (hc) { return hc.hcollect_method_id == $scope.aSite.hcollect_method_id; })[0].hcollect_method : "---";
                             $scope.aSite.PriorityName = $scope.aSite.priority_id !== undefined && $scope.aSite.priority_id > 0 ? allDeployPriorities.filter(function (dp) { return dp.priority_id == $scope.aSite.priority_id; })[0].priority_name : "---";
@@ -165,17 +166,20 @@
                             }).$promise;
                         } else $scope.aSite.Creator = "Not recorded";
 
-                        //get the landownerCOntact with getCreds
-                        if ($scope.aSite.landownercontact_id !== null && $scope.aSite.landownercontact_id !== undefined && $scope.aSite.landownercontact_id > 0) {
-                            $http.defaults.headers.common.Authorization = 'Basic ' + $cookies.get('STNCreds');
-                            $http.defaults.headers.common.Accept = 'application/json';
-                            SITE.getSiteLandOwner({ id: $scope.aSite.site_id }, function success(response) {
-                                $scope.landowner = response;
-                                $scope.addLandowner = true;
-                            }, function error(errorResponse) {
-                                toastr.error("Error getting Landowner Information: " + errorResponse.statusText);
-                            }).$promise;
-                        }//end if site has landownercontact id
+                        //get the landownerCOntact with getCreds (called when coming back from modal too
+                        var getLandOwnerContact = function () {
+                            if ($scope.aSite.landownercontact_id !== null && $scope.aSite.landownercontact_id !== undefined && $scope.aSite.landownercontact_id > 0) {
+                                $http.defaults.headers.common.Authorization = 'Basic ' + $cookies.get('STNCreds');
+                                $http.defaults.headers.common.Accept = 'application/json';
+                                SITE.getSiteLandOwner({ id: $scope.aSite.site_id }, function success(response) {
+                                    $scope.landowner = response;
+                                    $scope.addLandowner = true;
+                                }, function error(errorResponse) {
+                                    toastr.error("Error getting Landowner Information: " + errorResponse.statusText);
+                                }).$promise;
+                            }//end if site has landownercontact id
+                        }
+                        getLandOwnerContact(); //call it from here and from modalresponse;
 
                     } else {
                         //site != undefined but the site.site_id is == this site doesn't exist
