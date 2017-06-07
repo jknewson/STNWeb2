@@ -29,7 +29,7 @@
                 $scope.max = 0; $scope.dynamic = 0; //values for number of hwms are uploading (used in progressbar
                 $scope.showProgressBar = false; //progressbar for uploading hwms
                 $scope.hotInstance;
-                                 //water, label, type,mrker,envr,uncrt,qul,bank,des,lat,long,hdatum,hcm,hag,flgDt,surDt,elev,vdatum,vcm,sUnc,notes, tranq/still,siteno
+                //water, label, type,mrker,envr,uncrt,qul,bank,des,lat,long,hdatum,hcm,hag,flgDt,surDt,elev,vdatum,vcm,sUnc,notes, tranq/still,siteno
                 $scope.columnWidths = [180, 150, 180, 180, 150, 170, 180, 100, 200, 140, 150, 180, 220, 100, 130, 120, 130, 160, 190, 160, 200, 200, 120 ];
                 $scope.siteNoArrowClicked = false; //need a flag when clicked to check so that the required validation doesn't fire and show error modal at same time as sitemodal
                 $scope.uploadHWMs = []; //data binding in the handsontable (they will paste in hwms)
@@ -165,7 +165,7 @@
                 
                 //#region SITE NO dropdown arrow Click MODAL part ------------------------------------------------------------------------
                 var getFindSiteModal = function (r, c, hwmParts) {
-                 //   $scope.showLoading = true; // loading..
+                    //   $scope.showLoading = true; // loading..
                     angular.element('#loadingDiv').removeClass('noShow');
                     var dataAtRow = $scope.hotInstance.getDataAtRow(r); setTimeout(function () { $scope.hotInstance.deselectCell(); }, 100);
                     if (dataAtRow[9] !== "" && dataAtRow[10] !== "" && dataAtRow[9] !== null && dataAtRow[10] !== null) {
@@ -332,11 +332,16 @@
                             otherDataInRow = true;
                     });
                     //if value isn't empty and theres other data in row...
-                    if (value !== "" && value !== null && otherDataInRow) {
+                    if (value !== "" && value !== null){// && otherDataInRow) {
                         var prop = this.prop; var hasError = false;
                         switch (prop) {
                             case 'hwm_type_id':
-                                if (hwmTypeList.map(function (hwT) { return hwT.hwm_type; }).indexOf(value) < 0) {
+                                if ($scope.hwmTypeArray.map(function (hwT) { return hwT; }).indexOf(value) < 0) {
+                                    hasError = true;
+                                }
+                                break;
+                            case 'marker_id':
+                                if ($scope.markerArray.map(function (hwM) { return hwM; }).indexOf(value) < 0) {
                                     hasError = true;
                                 }
                                 break;
@@ -346,17 +351,37 @@
                                 }
                                 break;
                             case 'hwm_quality_id':
-                                if (hwmQualList.map(function (hwQ) { return hwQ.hwm_quality; }).indexOf(value) < 0) {
+                                if ($scope.qualArray.map(function (hwQ) { return hwQ; }).indexOf(value) < 0) {
+                                    hasError = true;
+                                }
+                                break;
+                            case 'bank':
+                                if ($scope.bankArray.map(function (hwB) { return hwB; }).indexOf(value) < 0) {
                                     hasError = true;
                                 }
                                 break;
                             case 'hdatum_id':
-                                if (horizDatumList.map(function (hD) { return hD.datum_name; }).indexOf(value) < 0) {
+                                if ($scope.hdatumArray.map(function (hD) { return hD; }).indexOf(value) < 0) {
                                     hasError = true;
                                 }
                                 break;
                             case 'hcollect_method_id':
-                                if (horCollMethList.map(function (hC) { return hC.hcollect_method; }).indexOf(value) < 0) {
+                                if ($scope.hcollMethArray.map(function (hC) { return hC; }).indexOf(value) < 0) {
+                                    hasError = true;
+                                }
+                                break;
+                            case 'vdatum_id':
+                                if ($scope.vdatumArray.map(function (hD) { return hD; }).indexOf(value) < 0) {
+                                    hasError = true;
+                                }
+                                break;
+                            case 'vcollect_method_id':
+                                if ($scope.vcollMethArray.map(function (hC) { return hC; }).indexOf(value) < 0) {
+                                    hasError = true;
+                                }
+                                break;
+                            case 'stillwater':
+                                if ($scope.tranqArray.map(function (t) { return t; }).indexOf(value) < 0) {
                                     hasError = true;
                                 }
                                 break;
@@ -394,7 +419,7 @@
 
                 //called from in save function, done posting now remove the successful one from the handsontable above
                 var removeThisUploadHWM = function (successfulHWM) {
-                   // find this one in the $scope.uploadHWMs and splice it out
+                    // find this one in the $scope.uploadHWMs and splice it out
                     var spliceIndex = -1;
                     var bank = successfulHWM.bank;
                     var hcmName = horCollMethList.filter(function (hcm) { return hcm.hcollect_method_id == successfulHWM.hcollect_method_id; })[0].hcollect_method;
@@ -528,7 +553,7 @@
                     $scope.showProgressBar = true;
                     //no go thru each and get rest of fields needed and post hwms
                     angular.forEach(pastedHWMs, function (hwm, index) {
-                       // var sitePeak = {};
+                        // var sitePeak = {};
                         SITE.getSearchedSite({ bySiteNo: hwm.site_no }).$promise.then(function (response) {
                             SITE.getSitePeaks({ id: response.site_id }, function (peakResponse) {
                                 for (var p = 0; p < peakResponse.length; p++) {
@@ -554,7 +579,7 @@
                                 //now post it
                                 var siteNo = hwm.site_no;
                                 delete hwm.site_no;
-                               // (let services handle this) hwm.hwm_label = "hwm-" + parseInt(index + 1);
+                                // (let services handle this) hwm.hwm_label = "hwm-" + parseInt(index + 1);
                                 HWM.save(hwm).$promise.then(function (hwmResponse) {
                                     //approve it
                                     $http.defaults.headers.common.Authorization = 'Basic ' + $cookies.get('STNCreds');
@@ -667,7 +692,7 @@
                             toastr.error("Error getting site information for " + hwm.site_no + ". Site does not exist.");
                         });
                     });
-                   // $scope.showProgressBar = false;
+                    // $scope.showProgressBar = false;
                 };
 
                 //reset back 
@@ -951,7 +976,7 @@
                         "Survey Uncertainty (ft)",
                         "Notes", "Tranquil/Stillwater",
                         '<span title="Site Number, Required"> Site No *</span>'
-                    ],
+                    ],                    
                     rowHeaders: true,
                     minSpareRows: 10,
                     maxRows: 10,
