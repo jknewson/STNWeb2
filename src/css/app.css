@@ -576,4 +576,9 @@ a.disabled {
 
 .angular-leaflet-control-layers-expanded {
     width: 300px;
+    z-index: 999;
+}
+
+.angular-leaflet-control-layers-collapsed {
+    z-index: 999;
 }

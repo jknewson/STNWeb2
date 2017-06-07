@@ -27,11 +27,10 @@
   "_release": "1.1.0",
   "_resolution": {
     "type": "version",
-    "tag": "1.1.0",
-    "commit": "4b089bca0fcb7fc5741ae3e95dcf57b2983ee947"
+    "tag": "v1.1.0",
+    "commit": "e3bc18abc0b3d75a1df81fe4d60974378bd4ffd5"
   },
   "_source": "https://github.com/smeijer/L.GeoSearch.git",
-  "_target": "^1.1.0",
-  "_originalSource": "L.GeoSearch",
-  "_direct": true
+  "_target": "1.1.0",
+  "_originalSource": "L.GeoSearch"
 }

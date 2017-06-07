@@ -523,23 +523,23 @@
                                     showOnSelector: false
                                 }
                             },
-                            nwis : {
-                                name: "USGS real-time streamgages",
-                                type: "agsFeature",
-                                url : "https://stnmapservices.wim.usgs.gov:6443/arcgis/rest/services/STN/STN_nwis_rt/MapServer/0",
-                                visible: false,
-                                layerOptions : {
-                                    pointToLayer: function (geojson, latlng) {
-                                        return L.marker(latlng, {
-                                            icon: icons.nwis
-                                        });
-                                    },
-                                    onEachFeature: function(feature, layer) {
-                                        //layer.bindPopup("USGS ID: " + feature.properties.Name);
-                                        layer.bindPopup(feature.properties.PopupInfo + '<br><img style="width: 350px" src="http://waterdata.usgs.gov/nwisweb/graph?agency_cd=USGS&site_no=' + feature.properties.Name + '&parm_cd=00065&period=7">');
-                                    }
-                                }
-                            },
+                            // nwis : {
+                            //     name: "USGS real-time streamgages",
+                            //     type: "agsFeature",
+                            //     url : "https://stnmapservices.wim.usgs.gov:6443/arcgis/rest/services/STN/STN_nwis_rt/MapServer/0",
+                            //     visible: false,
+                            //     layerOptions : {
+                            //         pointToLayer: function (geojson, latlng) {
+                            //             return L.marker(latlng, {
+                            //                 icon: icons.nwis
+                            //             });
+                            //         },
+                            //         onEachFeature: function(feature, layer) {
+                            //             //layer.bindPopup("USGS ID: " + feature.properties.Name);
+                            //             layer.bindPopup(feature.properties.PopupInfo + '<br><img style="width: 350px" src="http://waterdata.usgs.gov/nwisweb/graph?agency_cd=USGS&site_no=' + feature.properties.Name + '&parm_cd=00065&period=7">');
+                            //         }
+                            //     }
+                            // },
                             ahps : {
                                 name: "AHPS Gages",
                                 type: "agsFeature",
@@ -592,36 +592,36 @@
                             //         opacity: 1
                             //     }
                             // },
-                            lmwa : {
-                                name: "Limit Moderate Wave Action",
-                                type: "agsDynamic",
-                                url : "https://hazards.fema.gov/gis/nfhl/rest/services/public/NFHL/MapServer",
-                                visible: false,
-                                layerOptions : {
-                                    layers: [19],
-                                    opacity: 1
-                                }
-                            },
-                            floodBounds : {
-                                name: "Flood Hazard Boundaries",
-                                type: "agsDynamic",
-                                url : "https://hazards.fema.gov/gis/nfhl/rest/services/public/NFHL/MapServer",
-                                visible: false,
-                                layerOptions : {
-                                    layers: [27],
-                                    opacity: 1
-                                }
-                            },
-                            floodZones : {
-                                name: "Flood Hazard Zones",
-                                type: "agsDynamic",
-                                url : "https://hazards.fema.gov/gis/nfhl/rest/services/public/NFHL/MapServer",
-                                visible: false,
-                                layerOptions : {
-                                    layers: [28],
-                                    opacity: 0.7
-                                }
-                            }
+                            // lmwa : {
+                            //     name: "Limit Moderate Wave Action",
+                            //     type: "agsDynamic",
+                            //     url : "https://hazards.fema.gov/gis/nfhl/rest/services/public/NFHL/MapServer",
+                            //     visible: false,
+                            //     layerOptions : {
+                            //         layers: [19],
+                            //         opacity: 1
+                            //     }
+                            // },
+                            // floodBounds : {
+                            //     name: "Flood Hazard Boundaries",
+                            //     type: "agsDynamic",
+                            //     url : "https://hazards.fema.gov/gis/nfhl/rest/services/public/NFHL/MapServer",
+                            //     visible: false,
+                            //     layerOptions : {
+                            //         layers: [27],
+                            //         opacity: 1
+                            //     }
+                            // },
+                            // floodZones : {
+                            //     name: "Flood Hazard Zones",
+                            //     type: "agsDynamic",
+                            //     url : "https://hazards.fema.gov/gis/nfhl/rest/services/public/NFHL/MapServer",
+                            //     visible: false,
+                            //     layerOptions : {
+                            //         layers: [28],
+                            //         opacity: 0.7
+                            //     }
+                            // }
                         }
                         //legend: {
                         //    url: "http://gis.srh.noaa.gov/arcgis/rest/services/ahps_gauges/MapServer/legend?f=json",
