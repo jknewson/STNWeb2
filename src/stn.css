@@ -1439,3 +1439,11 @@ select {
 .whitebginput input {
   background-color: #FFF;
 }
+
+.angular-leaflet-control-layers-collapsed {
+  z-index: 999;
+}
+
+.angular-leaflet-control-layers-expanded {
+  z-index: 999;
+}
