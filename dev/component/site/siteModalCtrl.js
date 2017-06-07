@@ -990,9 +990,7 @@
                     $scope.originalSiteHousings = thisSiteStuff[1]; //for multiselect .selected = true/false
                     $scope.showSiteHouseTable = true;
                     $scope.siteHouseTypesTable = thisSiteStuff[2]; //for table to show all info on house type
-                    $scope.landowner = thisSiteStuff[5];
-                    $scope.addLandowner = $scope.landowner.fname !== undefined || $scope.landowner.lname !== undefined || $scope.landowner.address !== undefined || $scope.landowner.primaryphone !== undefined ? true : false;
-
+                   
                     //go through allHousingTypeList and add selected Property.
                     for (var ht = 0; ht < $scope.allHousingTypeList.length; ht++) {
                         //for each one, if thisSiteHousings has this id, add 'selected:true' else add 'selected:false'
@@ -1010,6 +1008,8 @@
                     }
 
                 }//end if thisSiteHousings != undefined
+
+                
 
                 //apply any site network names or types
                 if (thisSiteStuff[3].length > 0) {
@@ -1049,6 +1049,13 @@
                             $scope.NetTypeList[ni].selected = false;
                     }
                 }//end if thisSiteNetworkNames != undefined   
+
+                //landowner stuff
+                if (thisSiteStuff[5] !== undefined) {
+                    $scope.landowner = thisSiteStuff[5];
+                    $scope.addLandowner = $scope.landowner.fname !== undefined || $scope.landowner.lname !== undefined || $scope.landowner.address !== undefined || $scope.landowner.primaryphone !== undefined ? true : false;
+                }
+
                 $scope.s = { sOpen: false, sFileOpen: false }; //accordions
                 //#endregion existing site 
             }

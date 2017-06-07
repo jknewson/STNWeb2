@@ -147,27 +147,27 @@
                 <hot-table datarows="uploadHWMs" settings="tableSettings" hot-id="tableinstance" class="dataTable">                    
                     <hot-column data="waterbody" validator="requiredValidator"></hot-column>                                                          <!-- 0 -->
                     <hot-column data="hwm_label"></hot-column>                                                                                        <!-- 1 -->
-                    <hot-column data="hwm_type_id" type="'dropdown'" source="hwmTypeArray" validator="matchingDDValue"></hot-column>                  <!-- 1  2 -->
-                    <hot-column data="marker_id" type="'dropdown'" source="markerArray"></hot-column>                                                 <!-- 2  3 -->
-                    <hot-column data="hwm_environment" type="'dropdown'" source="envirArray" validator="matchingDDValue"></hot-column>                <!-- 3  4 -->
-                    <hot-column data="hwm_uncertainty" validator="numericValidator"></hot-column>                                                     <!-- 4  5 -->
-                    <hot-column data="hwm_quality_id" type="'dropdown'" source="qualArray" validator="matchingDDValue"></hot-column>                  <!-- 5  6 -->
-                    <hot-column data="bank" type="'dropdown'" source="bankArray"></hot-column>                                                        <!-- 6  7 -->
-                    <hot-column data="hwm_locationdescription"></hot-column>                                                                          <!-- 7  8 -->
-                    <hot-column data="latitude_dd" validator="latValidator"></hot-column>                                                             <!-- 8  9 -->
-                    <hot-column data="longitude_dd" validator="longValidator"></hot-column>                                                           <!-- 9  10 -->
-                    <hot-column data="hdatum_id" type="'dropdown'" source="hdatumArray" validator="matchingDDValue"></hot-column>                     <!-- 10 11 -->
-                    <hot-column data="hcollect_method_id" type="'dropdown'" source="hcollMethArray" validator="matchingDDValue"></hot-column>         <!-- 11 12 -->
-                    <hot-column data="height_above_gnd" validator="numericValidator"></hot-column>                                                    <!-- 12 13 -->
-                    <hot-column data="flag_date" date-format="'MM/DD/YYYY'" correct-format type="'date'" validator="requiredValidator"></hot-column>  <!-- 13 14 -->
-                    <hot-column data="survey_date" date-format="'MM/DD/YYYY'" correct-format type="'date'"></hot-column>                              <!-- 14 15 -->
-                    <hot-column data="elev_ft" validator="numericValidator"></hot-column>                                                             <!-- 15 16 -->
-                    <hot-column data="vdatum_id" type="'dropdown'" source="vdatumArray"></hot-column>                                                 <!-- 16 17 -->
-                    <hot-column data="vcollect_method_id" type="'dropdown'" source="vcollMethArray"></hot-column>                                     <!-- 17 18 -->
-                    <hot-column data="uncertainty" validator="numericValidator"></hot-column>                                                         <!-- 18 19 -->
-                    <hot-column data="hwm_notes"></hot-column>                                                                                        <!-- 19 20 -->
-                    <hot-column data="stillwater" type="'dropdown'" source="tranqArray"></hot-column>                                                 <!-- 20 21 -->
-                    <hot-column data="site_no" type="'dropdown'" validator="requiredValidator"></hot-column>                                          <!-- 21 22 -->
+                    <hot-column data="hwm_type_id" type="'dropdown'" source="hwmTypeArray" validator="matchingDDValue"></hot-column>                  <!-- 2 -->
+                    <hot-column data="marker_id" type="'dropdown'" source="markerArray" validator="matchingDDValue"></hot-column>                     <!-- 3 -->
+                    <hot-column data="hwm_environment" type="'dropdown'" source="envirArray" validator="matchingDDValue"></hot-column>                <!-- 4 -->
+                    <hot-column data="hwm_uncertainty" validator="numericValidator"></hot-column>                                                     <!-- 5 -->
+                    <hot-column data="hwm_quality_id" type="'dropdown'" source="qualArray" validator="matchingDDValue"></hot-column>                  <!-- 6 -->
+                    <hot-column data="bank" type="'dropdown'" source="bankArray" validator="matchingDDValue"></hot-column>                            <!-- 7 -->
+                    <hot-column data="hwm_locationdescription"></hot-column>                                                                          <!-- 8 -->
+                    <hot-column data="latitude_dd" validator="latValidator"></hot-column>                                                             <!-- 9 -->
+                    <hot-column data="longitude_dd" validator="longValidator"></hot-column>                                                           <!-- 10 -->
+                    <hot-column data="hdatum_id" type="'dropdown'" source="hdatumArray" validator="matchingDDValue"></hot-column>                     <!-- 11 -->
+                    <hot-column data="hcollect_method_id" type="'dropdown'" source="hcollMethArray" validator="matchingDDValue"></hot-column>         <!-- 12 -->
+                    <hot-column data="height_above_gnd" validator="numericValidator"></hot-column>                                                    <!-- 13 -->
+                    <hot-column data="flag_date" date-format="'MM/DD/YYYY'" correct-format type="'date'" validator="requiredValidator"></hot-column>  <!-- 14 -->
+                    <hot-column data="survey_date" date-format="'MM/DD/YYYY'" correct-format type="'date'"></hot-column>                              <!-- 15 -->
+                    <hot-column data="elev_ft" validator="numericValidator"></hot-column>                                                             <!-- 16 -->
+                    <hot-column data="vdatum_id" type="'dropdown'" source="vdatumArray" validator="matchingDDValue"></hot-column>                     <!-- 17 -->
+                    <hot-column data="vcollect_method_id" type="'dropdown'" source="vcollMethArray" validator="matchingDDValue"></hot-column>         <!-- 18 -->
+                    <hot-column data="uncertainty" validator="numericValidator"></hot-column>                                                         <!-- 19 -->
+                    <hot-column data="hwm_notes"></hot-column>                                                                                        <!-- 20 -->
+                    <hot-column data="stillwater" type="'dropdown'" source="tranqArray" validator="matchingDDValue"></hot-column>                     <!-- 21 -->
+                    <hot-column data="site_no" type="'dropdown'" validator="requiredValidator"></hot-column>                                          <!-- 22 -->
                 </hot-table>
             </div>
             <br clear="all" />
