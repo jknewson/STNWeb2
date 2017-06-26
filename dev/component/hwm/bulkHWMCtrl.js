@@ -407,7 +407,7 @@
                                 } else { callback(true); }
                             } else callback(true);
                         } else callback(true);
-                    } else if (!value && otherDataInRow) {
+                    } else if (!value && otherDataInRow && [3,7,17,18,21].indexOf(this.col) < 0) {
                         var whichOne = $scope.hotInstance.getColHeader(col);
                         toastr.options.timeOut = "6000";
                         toastr.options.closeButton = true;
