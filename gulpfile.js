@@ -60,7 +60,7 @@ pipes.validatedAppScripts = function() {
 
 pipes.builtAppScriptsDev = function() {
     return pipes.validatedAppScripts()
-        .pipe(rev())
+  //      .pipe(rev())
         .pipe(gulp.dest(paths.dev));        
 };
 
@@ -72,7 +72,7 @@ pipes.builtAppScriptsProd = function() {
         .pipe(plugins.concat('app.min.js'))
         .pipe(plugins.uglify({ mangle: false }))
         .pipe(plugins.sourcemaps.write())
-        .pipe(rev())
+  //      .pipe(rev())
         .pipe(gulp.dest(paths.distScriptsProd));
 };
 
@@ -149,7 +149,7 @@ pipes.builtPartialsProd = function() {
 ///stripped out sass compiler - sass not in use
 pipes.builtAppStylesDev = function() {
     return gulp.src(paths.appStyles)
-        .pipe(rev())
+   //     .pipe(rev())
         .pipe(gulp.dest(paths.dev));
 };
 
@@ -162,7 +162,7 @@ pipes.builtAppStylesProd =
             .pipe(plugins.cssnano())
             .pipe(plugins.sourcemaps.write())
             .pipe(pipes.minifiedFileName())
-            .pipe(rev())
+    //        .pipe(rev())
             .pipe(gulp.dest(paths.dist));
 };
 ///////////////////////////////////////////////

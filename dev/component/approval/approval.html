@@ -4,7 +4,7 @@
 
     <hr />
 
-    <p>Choose what you want to approve. Search by one or more parameters</p>
+    <p>Search by one or more parameters to show your to-do lists for this event.</p>
 
     <form name="approvalForm" class="wim-form border-bottom">
         <div class="form-item item-25">
@@ -13,12 +13,27 @@
         </div>
         <div class="form-item item-25">
             <label for="state">States:</label>
-            <select id="state_abbrev" name="state_abbrev" ng-model="ChosenState.id"
+            <select id="state_abbrev" name="state_abbrev" ng-model="ChosenState.id" ng-change="UpdateCounties()"
                     ng-options="s.state_abbrev as s.state_name for s in allStates">
                 <option value=""></option>
             </select>
         </div>
 
+        <div class="form-item item-25" ng-if="ChosenState.id">
+            <label class="col-md-12 control-label" for="counties">Counties:</label>
+            <div class="col-md-12">
+                <div isteven-multi-select
+                     input-model="countyArray"
+                     output-model="ChosenCounties.counties"
+                     button-label="county_name"
+                     item-label="county_name"
+                     max-height="600px"
+                     tick-property="selected"
+                     helper-elements="">
+                </div>
+            </div>
+        </div>
+        <!--
         <div class="form-item item-25">
             <label for="member">Members:</label>
             <select id="member_id" name="member_id" ng-model="ChosenMember.id"
@@ -26,7 +41,8 @@
                 <option value=""></option>
             </select>
         </div>
-       
+       -->
+        <br />
         <div class="form-item item-25">
             <label>&nbsp;</label>
             <button class="btn-wim btn-blue" ng-click="search()">
@@ -35,31 +51,46 @@
         </div>
 
     </form>
-
-    <div ng-if="showHWMbox" class="results-box rb-50">
-        <h3 class="results-box-title">Unapproved Site HWMs <span style="font-size:small;color:grey" class="ng-binding">(count: {{unApprovedHWMs.length}})</span></h3>
-        <ul ng-show="unApprovedHWMs.length > 0">
-            <li style="list-style:none;" ng-repeat="h in unApprovedHWMs | orderBy: 'site_id'">
-                <span><a ui-sref="site.dashboard({id: h.site_id})">{{h.site_no}}</a>: {{h.hwm_label}} ({{h.elev_ft}} ft.)</span>
-            </li>
-        </ul>
-        <div ng-show="unApprovedHWMs.length == 0" class="results-box-no-result">
-            No HWMs returned from query.
-        </div>
-    </div>
-
-    <div ng-if="showDFbox" class="results-box rb-50">
-        <h3 class="results-box-title">Unapproved Instrument Data Files <span style="font-size:small;color:grey" class="ng-binding">(count: {{unApprovedDFs.length}})</span></h3>
-        <ul ng-show="unApprovedDFs.length > 0"> <!--track by $index-->
-            <li style="list-style:none;" ng-repeat="d in unApprovedDFs | orderBy: 'SiteId'">
-                <span><a ui-sref="site.dashboard({id: d.SiteId})">{{d.SiteNo}}</a>: {{d.depType || d.senType}}</span>
-            </li>
-        </ul>
-        <div ng-show="unApprovedDFs.length == 0" class="results-box-no-result">
-            No Data Files returned from query.
-        </div>
-    </div>
-
-
-
+    <uib-accordion close-others="false">
+        <!--HWM Part-->
+        <uib-accordion-group ng-if="showHWMbox" is-open="accords.hwmOpen" panel-class="{{getPanelClass()}}">
+            <uib-accordion-heading>
+                Unapproved Site HWMs <span style="font-size:small;color:grey" class="ng-binding">(count: {{unApprovedHWMs.length}})</span>
+                <i style="margin-right:10px" class="pull-left glyphicon" ng-class="{'glyphicon-chevron-down': accords.hwmOpen, 'glyphicon-chevron-right': !accords.hwmOpen}"></i>
+            </uib-accordion-heading>
+            <ul ng-show="unApprovedHWMs.length > 0">
+                <li style="list-style:none;" ng-repeat="h in unApprovedHWMs | orderBy: 'site_id'">
+                    <span><a ui-sref="site.dashboard({id: h.site_id})">{{h.site_no}}</a>: {{h.hwm_label}} ({{h.elev_ft}} ft.)</span>
+                </li>
+            </ul>
+            <div ng-show="unApprovedHWMs.length == 0" class="results-box-no-result">
+                No HWMs returned from query.
+            </div>
+        </uib-accordion-group>
+        <uib-accordion-group  ng-if="showDFbox" is-open="accords.dlOpen" panel-class="{{getPanelClass()}}">
+            <uib-accordion-heading>
+                Unapproved  Instrument Data Files <span style="font-size:small;color:grey" class="ng-binding">(count: {{unApprovedDFs.length}})</span>
+                <i style="margin-right:10px" class="pull-left glyphicon" ng-class="{'glyphicon-chevron-down': accords.dlOpen, 'glyphicon-chevron-right': !accords.dlOpen}"></i>
+            </uib-accordion-heading>
+            <ul ng-show="unApprovedDFs.length > 0">
+                <li style="list-style:none;" ng-repeat="d in unApprovedDFs | orderBy: 'SiteId'">
+                    <span><a ui-sref="site.dashboard({id: d.SiteId})">{{d.SiteNo}}</a>: {{d.depType || d.senType}}</span>
+                </li>
+            </ul>
+            <div ng-show="unApprovedDFs.length == 0" class="results-box-no-result">
+                No Data Files returned from query.
+            </div>
+        </uib-accordion-group>
+        <uib-accordion-group is-open="accords.pkOpen" panel-class="{{getPanelClass()}}">
+            <uib-accordion-heading>
+                Peak Information
+                <i style="margin-right:10px" class="pull-left glyphicon" ng-class="{'glyphicon-chevron-down': accords.pkOpen, 'glyphicon-chevron-right': !accords.pkOpen}"></i>
+            </uib-accordion-heading>
+            <ul>
+                <li style="list-style:none;">
+                    <span>Some Peak stuff here later</span>
+                </li>
+            </ul>
+        </uib-accordion-group>
+    </uib-accordion>
 </div><!-- /PAGE PADDING -->
