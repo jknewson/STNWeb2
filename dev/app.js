@@ -146,6 +146,14 @@
                         dt: 'DEPLOYMENT_TYPE',
                         allDepTypes: function (dt) {
                             return dt.getAll().$promise;
+                        },
+                        hq: 'HWM_QUALITY',
+                        hwmQualList: function (hq) {
+                            return hq.getAll().$promise;
+                        },
+                        ht: 'HWM_TYPE',
+                        hwmTypeList: function (ht) {
+                            return ht.getAll().$promise;
                         }
                     }
                 })
@@ -471,7 +479,6 @@
                     authenticate: true
                 })
                 //#endregion resources.ResourcesList.agency
-
                 //#region resources.ResourcesList.ContactType
                 .state("resources.ResourcesList.ContactType", {
                     url: "/ContactTypes",
@@ -479,7 +486,6 @@
                     authenticate: true
                 })
                 //#endregion resources.ResourcesList.ContactType
-
                 //#region resources.ResourcesList.DepPriority
                 .state("resources.ResourcesList.DepPriority", {
                     url: "/DeploymentPriorities",
@@ -487,7 +493,6 @@
                     authenticate: true
                 })
                 //#endregion resources.ResourcesList.DepPriority
-
                 //#region resources.ResourcesList.EventStatus
                 .state("resources.ResourcesList.EventStatus", {
                     url: "/EventStatus",
@@ -495,7 +500,6 @@
                     authenticate: true
                 })
                 //#endregion resources.ResourcesList.EventStatus
-
                 //#region resources.ResourcesList.EventType
                 .state("resources.ResourcesList.EventType", {
                     url: "/EventTypes",
@@ -503,7 +507,6 @@
                     authenticate: true
                 })
                 //#endregion resources.ResourcesList.EventType
-
                 //#region resources.ResourcesList.FileType
                 .state("resources.ResourcesList.FileType", {
                     url: "/FileTypes",
@@ -511,7 +514,6 @@
                     authenticate: true
                 })
                 //#endregion resources.ResourcesList.FileType
-
                 //#region resources.ResourcesList.HorCollMethd
                 .state("resources.ResourcesList.HorCollMethd", {
                     url: "/HorizontalCollMethods",
@@ -519,7 +521,6 @@
                     authenticate: true
                 })
                 //#endregion resources.ResourcesList.HorCollMethd
-
                 //#region resources.ResourcesList.HorDatum
                 .state("resources.ResourcesList.HorDatum", {
                     url: "/HorizontalDatums",
@@ -527,7 +528,6 @@
                     authenticate: true
                 })
                 //#endregion resources.ResourcesList.HorDatum
-
                 //#region resources.ResourcesList.HousingType
                 .state("resources.ResourcesList.HousingType", {
                     url: "/HousingTypes",
@@ -535,7 +535,6 @@
                     authenticate: true
                 })
                 //#endregion resources.ResourcesList.HousingType
-
                 //#region resources.ResourcesList.HWMQual
                 .state("resources.ResourcesList.HWMQual", {
                     url: "/HWMQualities",
@@ -543,7 +542,6 @@
                     authenticate: true
                 })
                 //#endregion resources.ResourcesList.HWMQual
-
                 //#region resources.ResourcesList.HWMType
                 .state("resources.ResourcesList.HWMType", {
                     url: "/HWMTypes",
@@ -551,7 +549,6 @@
                     authenticate: true
                 })
                 //#endregion resources.ResourcesList.HWMType
-
                 //#region resources.ResourcesList.InstrCollCondition
                 .state("resources.ResourcesList.InstrCollCondition", {
                     url: "/InstrCollConditions",
@@ -559,7 +556,6 @@
                     authenticate: true
                 })
                 //#endregion resources.ResourcesList.InstrCollCondition
-
                 //#region resources.ResourcesList.Marker
                 .state("resources.ResourcesList.Marker", {
                     url: "/Markers",
@@ -567,7 +563,6 @@
                     authenticate: true
                 })
                 //#endregion resources.ResourcesList.Marker
-
                 //#region resources.ResourcesList.NetworkNames
                 .state("resources.ResourcesList.NetworkNames", {
                     url: "/NetworkNames",
@@ -575,7 +570,6 @@
                     authenticate: true
                 })
                 //#endregion resources.ResourcesList.NetworkNames
-
                 //#region resources.ResourcesList.OPquality
                 .state("resources.ResourcesList.OPquality", {
                     url: "/ObjPointQualities",
@@ -583,7 +577,6 @@
                     authenticate: true
                 })
                 //#endregion resources.ResourcesList.OPquality
-
                 //#region resources.ResourcesList.OPType
                 .state("resources.ResourcesList.OPType", {
                     url: "/ObjPointType",
@@ -591,7 +584,6 @@
                     authenticate: true
                 })
                 //#endregion resources.ResourcesList.OPType
-
                 //#region resources.ResourcesList.SensorBrand
                 .state("resources.ResourcesList.SensorBrand", {
                     url: "/SensorBrands",
@@ -599,7 +591,6 @@
                     authenticate: true
                 })
                 //#endregion resources.ResourcesList.SensorBrand
-
                 //#region resources.ResourcesList.DepType
                 .state("resources.ResourcesList.SenDepType", {
                     url: "/SensorDeploymentTypes",
@@ -607,7 +598,6 @@
                     authenticate: true
                 })
                 //#endregion resources.ResourcesList.DepType
-
                 //#region resources.ResourcesList.StatusType
                 .state("resources.ResourcesList.StatusType", {
                     url: "/StatusTypes",
@@ -615,7 +605,6 @@
                     authenticate: true
                 })
                 //#endregion resources.ResourcesList.StatusType
-
                 //#region resources.ResourcesList.SensorType
                 .state("resources.ResourcesList.SensorType", {
                     url: "/SensorTypes",
@@ -623,7 +612,6 @@
                     authenticate: true
                 })
                 //#endregion resources.ResourcesList.SensorType
-
                 //#region resources.ResourcesList.NetworkType
                 .state("resources.ResourcesList.NetworkType", {
                     url: "/NetworkTypes",
@@ -631,7 +619,6 @@
                     authenticate: true
                 })
                 //#endregion resources.ResourcesList.NetworkType
-
                 //#region resources.ResourcesList.VertCollMethod
                 .state("resources.ResourcesList.VertCollMethod", {
                     url: "/VerticalCollMethods",
@@ -639,14 +626,13 @@
                     authenticate: true
                 })
                 //#endregion resources.ResourcesList.VertCollMethod
-
                 //#region resources.ResourcesList.VertDatum
                 .state("resources.ResourcesList.VertDatum", {
                     url: "/VerticalDatums",
                     templateUrl: "component/resources/verticalDatum.html",
                     authenticate: true
                 })
-            //#endregion resources.ResourcesList.VertDatum
+                //#endregion resources.ResourcesList.VertDatum
 
                 //#endregion all lookup htmls
                 //#endregion resources

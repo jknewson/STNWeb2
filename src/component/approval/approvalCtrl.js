@@ -5,8 +5,8 @@
 
     var STNControllers = angular.module('STNControllers');
 
-    STNControllers.controller('approvalCtrl', ['$scope', '$cookies', '$rootScope', '$location', '$http', 'stateList', 'countyList', 'instrumentList', 'allSensorTypes', 'allDepTypes', 'HWM', 'DATA_FILE', 'INSTRUMENT', 'SITE',
-        function ($scope, $cookies, $rootScope, $location, $http, stateList, countyList, instrumentList, allSensorTypes, allDepTypes, HWM, DATA_FILE, INSTRUMENT, SITE) {
+    STNControllers.controller('approvalCtrl', ['$scope', '$state', '$cookies', '$rootScope', '$location', '$http', '$uibModal', 'stateList', 'countyList', 'instrumentList', 'allSensorTypes', 'allDepTypes', 'hwmQualList', 'hwmTypeList', 'HWM', 'DATA_FILE', 'INSTRUMENT', 'SITE',
+        function ($scope, $state, $cookies, $rootScope, $location, $http, $uibModal, stateList, countyList, instrumentList, allSensorTypes, allDepTypes, hwmQualList, hwmTypeList, HWM, DATA_FILE, INSTRUMENT, SITE) {
             if ($cookies.get('STNCreds') === undefined || $cookies.get('STNCreds') === "") {
                 $scope.auth = false;
                 $location.path('/login');
@@ -14,6 +14,24 @@
                 $rootScope.thisPage = "Approval";
                 $rootScope.activeMenu = "approval";
                 
+                // change sorting order
+                $scope.sort_by = function (newSortingOrder) {
+                    if ($scope.sortingOrder == newSortingOrder) {
+                        $scope.reverse = !$scope.reverse;
+                    }
+                    $scope.sortingOrder = newSortingOrder;
+                    // icon setup
+                    $('th i').each(function () {
+                        // icon reset
+                        $(this).removeClass().addClass('glyphicon glyphicon-sort');
+                    });
+                    if ($scope.reverse) {
+                        $('th.' + newSortingOrder + ' i').removeClass().addClass('glyphicon glyphicon-chevron-up');
+                    } else {
+                        $('th.' + newSortingOrder + ' i').removeClass().addClass('glyphicon glyphicon-chevron-down');
+                    }
+                };
+
                 // watch for the session event to change and update  
                 $scope.$watch(function () { return $cookies.get('SessionEventName'); }, function (newValue) {
                     $scope.sessionEvent = $cookies.get('SessionEventName') !== null && $cookies.get('SessionEventName') !== undefined ? $cookies.get('SessionEventName') : "All Events";
@@ -28,16 +46,20 @@
                 $scope.allInstruments = instrumentList;
                 $scope.allSensorTypes = allSensorTypes;
                 $scope.allDeploymentTypes = allDepTypes;
+                $scope.hwmQuals = hwmQualList;
+                $scope.hwmTypes = hwmTypeList;
                 $scope.ChosenEvent = {};
                 $scope.ChosenState = {};
                 $scope.ChosenCounties = {};
                 $scope.unApprovedHWMs = []; $scope.showHWMbox = false;
                 $scope.unApprovedDFs = []; $scope.showDFbox = false;
-                                
+                $scope.sitesWOpeaks = []; $scope.showPeakbox = false;
+
                 $scope.search = function () {
                     //clear contents in case they are searching multiple times
                     $scope.unApprovedHWMs = []; $scope.showHWMbox = false;
                     $scope.unApprovedDFs = []; $scope.showDFbox = false;
+                    $scope.sitesWOpeaks = []; $scope.showPeakbox = false;
                     var evID = $cookies.get('SessionEventID') !== null && $cookies.get('SessionEventID') !== undefined ? $cookies.get('SessionEventID') : 0;
                     var sID = $scope.ChosenState.id !== undefined ? $scope.ChosenState.id : 0;
                     var chosenCounties = $scope.ChosenCounties.counties !== undefined ? $scope.ChosenCounties.counties : [];
@@ -52,6 +74,7 @@
                     angular.forEach(chosenCounties, function (c) {
                         countyNames.push(c.county_name);
                     });
+
                     var countiesCommaSep = countyNames.join(',');
                     $http.defaults.headers.common.Authorization = 'Basic ' + $cookies.get('STNCreds');
                     $http.defaults.headers.common.Accept = 'application/json';
@@ -60,6 +83,8 @@
                         angular.forEach(response, function (h) {
                             SITE.query({ id: h.site_id }).$promise.then(function (sresponse) {
                                 h.site_no = sresponse.site_no;
+                                h.stillwater = h.stillwater > 0 ? "Yes" : "No";
+                                h.selected = false;
                                 $scope.unApprovedHWMs.push(h);
                             });
                         });
@@ -81,15 +106,18 @@
                             formattedDF.depType = depType !== undefined ? depType.method : undefined;
                             formattedDF.InstrID = thisdfInst.instrument_id;
                             SITE.query({ id: siteID }).$promise.then(function (response2) {
-                                formattedDF.SiteNo = response2.site_no;
-                                
+                                formattedDF.SiteNo = response2.site_no;                                
                                 $scope.unApprovedDFs.push(formattedDF);
                             });
                         });
                         $scope.showDFbox = true;
                     }, function error(errorResponse1) {
                         alert("Error: " + errorResponse1.statusText);
-                    }); 
+                    });
+                    SITE.getPeaklessSites({ id: evID }, function success(resp2) {
+                        $scope.sitesWOpeaks = resp2;
+                        $scope.showPeakbox = true;
+                    })
                 };
 
                 $scope.UpdateCounties = function () {
@@ -135,7 +163,14 @@
                     $http.defaults.headers.common.Authorization = 'Basic ' + $cookies.get('STNCreds');
                     $http.defaults.headers.common.Accept = 'application/json';
                     HWM.getUnapprovedHWMs({ IsApproved: 'false', Event: thisSearch.eventID, State: thisSearch.stateID, Counties: countiesCommaSep }, function success(response) {
-                        $scope.unApprovedHWMs = response;
+                        angular.forEach(response, function (h) {
+                            SITE.query({ id: h.site_id }).$promise.then(function (sresponse) {
+                                h.site_no = sresponse.site_no;
+                                h.stillwater = h.stillwater > 0 ? "Yes" : "No";
+                                h.selected = false;
+                                $scope.unApprovedHWMs.push(h);
+                            });
+                        });                        
                         $scope.showHWMbox = true;
 
                     }, function error(errorResponse) {
@@ -164,7 +199,62 @@
                         alert("Error: " + errorResponse1.statusText);
                     }); 
                 }
-            }
+
+                //once they check 'approve' checkbox, show the approve these button
+                $scope.approveCheck = function (hArray) {
+                    if (hArray) {
+                        return hArray.some(function (h) {
+                            return h.selected === true;
+                        });
+                    }
+                };
+                $scope.approveThese = function () {
+                    var approveModal = $uibModal.open({
+                        template: "<div class='modal-header'><h3 class='modal-title'>Approve HWMs</h3></div>" +
+                            "<div class='modal-body'><p>Are you sure you want to approve these HWMs? Doing so will remove them from this list of unapproved HWMs.</p></div>" +
+                            "<div class='modal-footer'><button class='btn btn-primary' ng-click='approveIt()'>Approve</button><button class='btn btn-warning' ng-click='cancel()'>Cancel</button></div>",
+                        controller: ['$scope', '$uibModalInstance', function ($scope, $uibModalInstance) {
+                            $scope.cancel = function () {
+                                $uibModalInstance.dismiss('cancel');
+                            };
+                            $scope.approveIt = function () {
+                                //delete the site and all things 
+                                $uibModalInstance.close();
+                            };
+                        }],
+                        size: 'sm'
+                    });
+                    approveModal.result.then(function () {
+                        var test = $scope.unApprovedHWMs;
+                        // for everyone that has .selected = true, 
+                        //remove .selected property, remove site_no, and change the stillwater back to 0/1, approve it, which should remove it from this list
+                    });
+                }
+
+                //they clicked the site no in the finished table 
+                $scope.goToSiteDash = function (siteID) {
+                    //show warning modal
+                    var warningModal = $uibModal.open({
+                        template: '<div class="modal-header"><h3 class="modal-title">Warning!</h3></div>' +
+                            '<div class="modal-body"><p>You are about to leave the Approval page and be taken to the Site Dashboard.<br/>Are you sure you want to leave the Approval page?</p></div>' +
+                            '<div class="modal-footer"><button class="btn btn-warning" ng-enter="ok()" ng-click="ok()">Yes</button><button class="btn btn-primary" ng-enter="cancel()" ng-click="cancel()">Cancel</button></div>',
+                        backdrop: 'static',
+                        keyboard: false,
+                        controller: ['$scope', '$uibModalInstance', function ($scope, $uibModalInstance) {
+                            $scope.cancel = function () {
+                                $uibModalInstance.dismiss();
+                            };
+                            $scope.ok = function () {
+                                $uibModalInstance.close(siteID);
+                            };
+                        }],
+                        size: 'sm'
+                    });
+                    warningModal.result.then(function (siteId) {
+                        $state.go('site.dashboard', { id: siteId });
+                    });
+                };
+            } // end else not auth
         }]);
 
 })();

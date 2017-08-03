@@ -574,6 +574,7 @@
     //        });
     //}]);
     //#endregion of SENSOR_DEPLOYMENT
+
     //#region SENSOR_TYPE
     STNResource.factory('SENSOR_TYPE', ['$resource', function ($resource) {
         return $resource(rootURL + '/SensorTypes/:id.json',
@@ -617,6 +618,7 @@
                 getSiteHWMs: { method: 'GET', isArray: true, url: rootURL + '/Sites/:id/HWMs.json' },
                 getSiteFiles: { method: 'GET', isArray: true, url: rootURL + '/Sites/:id/Files.json' },
                 getSitePeaks: { method: 'GET', isArray: true, url: rootURL + '/Sites/:id/PeakSummaryView.json' },
+                getPeaklessSites: { method: 'GET', isArray: true, url: rootURL + '/Events/:id/PeaklessSites.json' },
                 //just the Site
                 update: { method: 'PUT', cache: false, isArray: false },
                 save: { method: 'POST', cache: false, isArray: false },
