@@ -776,7 +776,7 @@
                 if ($scope.DMS.LODeg !== undefined) $scope.aSite.longitude_dd = azimuth($scope.DMS.LODeg, $scope.DMS.LOMin, $scope.DMS.LOSec);
                 var updateSite = angular.copy($scope.aSite);
                 delete updateSite.Creator; delete updateSite.HorizontalCollectMethod; delete updateSite.HorizontalDatum; delete updateSite.PriorityName;
-                delete updateSite.decDegORdms; 
+                delete updateSite.decDegORdms;
                 SITE.update({ id: $scope.aSite.site_id }, updateSite, function success(response) {
                     //update site housings
                     var defer = $q.defer();
@@ -849,7 +849,8 @@
                     }); //all added
                 }, function error(errorResponse) {
                     $rootScope.stateIsLoading.showLoading = false; // loading..
-                    toastr.error("Error updating Site: " + errorResponse.statusText);
+                    if (errorResponse.headers(["usgswim-messages"]) !== undefined) toastr.error("Error updating Site: " + errorResponse.headers(["usgswim-messages"]));
+                    else toastr.error("Error updating Site: " + errorResponse.statusText);
                 });//end SITE.save(...
             }; // end PUTsite()
 
