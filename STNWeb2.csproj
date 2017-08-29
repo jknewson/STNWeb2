@@ -139,6 +139,7 @@
     <Content Include="src\images\loading1.gif" />
     <Content Include="src\images\Members1.png" />
     <Content Include="src\images\MeteorologicalSensor.png" />
+    <Content Include="src\images\processing.gif" />
     <Content Include="src\images\raingage.png" />
     <Content Include="src\images\RapidDeploymentGage.png" />
     <Content Include="src\images\RealTimeStreamGage.png" />

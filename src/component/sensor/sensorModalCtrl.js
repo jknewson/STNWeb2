@@ -1435,11 +1435,16 @@
         }]);//end sensorRetrievalModalCtrl
 
     // view/edit retrieved sensor (deployed included here) modal
-    ModalControllers.controller('fullSensorModalCtrl', ['$scope', '$rootScope', '$filter', '$timeout', '$cookies', '$http', '$uibModalInstance', '$uibModal', 'SERVER_URL', 'FILE_STAMP', 'allDepDropdowns', 'agencyList', 'Site_Files', 'allStatusTypes', 'allInstCollCond', 'allEvents', 'allDepTypes', 'thisSensor', 'SensorSite', 'siteOPs', 'allMembers', 'INSTRUMENT', 'INSTRUMENT_STATUS', 'DATA_FILE', 'FILE', 'SOURCE', 'OP_MEASURE',
-        function ($scope, $rootScope, $filter, $timeout, $cookies, $http, $uibModalInstance, $uibModal, SERVER_URL,FILE_STAMP, allDepDropdowns, agencyList, Site_Files, allStatusTypes, allInstCollCond, allEvents, allDepTypes, thisSensor, SensorSite, siteOPs, allMembers, INSTRUMENT, INSTRUMENT_STATUS, DATA_FILE, FILE, SOURCE, OP_MEASURE) {
+    ModalControllers.controller('fullSensorModalCtrl', ['$scope', '$rootScope', '$filter', '$timeout', '$cookies', '$http', '$uibModalInstance', '$uibModal', 'SERVER_URL', 'FILE_STAMP', 'allDepDropdowns',
+        'agencyList', 'Site_Files', 'allStatusTypes', 'allInstCollCond', 'allEvents', 'allDepTypes', 'thisSensor', 'SensorSite', 'siteOPs', 'allMembers', 'allEventDataFiles',
+        'INSTRUMENT', 'INSTRUMENT_STATUS', 'DATA_FILE', 'FILE', 'SOURCE', 'OP_MEASURE',
+        function ($scope, $rootScope, $filter, $timeout, $cookies, $http, $uibModalInstance, $uibModal, SERVER_URL, FILE_STAMP, allDepDropdowns, agencyList, Site_Files, allStatusTypes, allInstCollCond, allEvents,
+            allDepTypes, thisSensor, SensorSite, siteOPs, allMembers, allEventDataFiles, INSTRUMENT, INSTRUMENT_STATUS, DATA_FILE, FILE, SOURCE, OP_MEASURE) {
             /*allSensorTypes, allSensorBrands, allHousingTypes, allSensDeps*/
             $scope.serverURL = SERVER_URL;
             $scope.fullSenfileIsUploading = false; //Loading...   
+            $scope.showProcessing = false; // processing script...
+            $scope.stormSection = false; // section holding all baro pressure sensors for this event.
             $scope.sensorTypeList = allDepDropdowns[0];
             $scope.sensorBrandList = allDepDropdowns[1];
             $scope.houseTypeList = allDepDropdowns[2];
@@ -1459,6 +1464,8 @@
             $scope.filteredDeploymentTypes = []; //will be populated based on the sensor type chosen
             $scope.timeZoneList = ['UTC', 'PST', 'MST', 'CST', 'EST'];
             $scope.statusTypeList = allStatusTypes.filter(function (s) { return s.status == 'Retrieved' || s.status == 'Lost'; });
+            $scope.eventDataFiles = allEventDataFiles;
+            $scope.is4Hz = {selected: false};
             //default setting for interval
             $scope.IntervalType = { type: 'Seconds' };
             //ng-show determines whether they are editing or viewing details
@@ -1780,7 +1787,6 @@
                 $scope.depStuffCopy =[angular.copy($scope.sensor), angular.copy($scope.DeployedSensorStat)];
                 $scope.depTapeCopy = angular.copy($scope.DEPtapeDownTable);
             };
-
 
             //save Deployed sensor info
             $scope.saveDeployed = function (valid) {
@@ -2430,6 +2436,9 @@
                 $scope.aSource = { };
                 $scope.datafile = { };
                 $scope.showFileForm = false;
+                $scope.stormSection = false; // in case they clicked run script
+                angular.forEach($scope.eventDataFiles, function (df) { delete df.selected; });
+                $scope.is4Hz = { selected: false };
             };
 
             //approve this datafile (if admin or manager)
@@ -2500,6 +2509,42 @@
                     //logic for cancel
                 });//end modal
             };
+
+            // run air script using the data file id
+            $scope.runAirScript = function () {
+                $scope.showProcessing = true;
+           /*     DATA_FILE.runAirScript({ id: $scope.datafile.data_file_id }).$promise.then(function (netCDF_response) {
+                    //do something with the response
+                    $scope.showProcessing = false;
+                })*/
+            }
+            function calcDistance(lat1, lon1) {
+                // http://www.geodatasource.com/developers/javascript
+                var radlat1 = Math.PI * lat1/180
+                var radlat2 = Math.PI * $scope.thisSensorSite.latitude_dd/180;
+                var theta = lon1- $scope.thisSensorSite.longitude_dd;
+                var radtheta = Math.PI * theta/180;
+                var dist = Math.sin(radlat1) * Math.sin(radlat2) + Math.cos(radlat1) * Math.cos(radlat2) * Math.cos(radtheta);
+                dist = Math.acos(dist);
+                dist = dist * 180/Math.PI;
+                dist = dist * 60 * 1.1515; // miles
+                return dist;
+            }
+
+            $scope.showStormSection = function () {
+                $scope.stormSection = true;
+                angular.forEach($scope.eventDataFiles, function (df) {
+                    df.distance = calcDistance(df.latitude_dd, df.longitude_dd);
+                });
+                // how does $scope.eventDataFiles change if a datafile is added after this page loads??
+
+            }
+            $scope.runStormScript = function () {
+                var airDF = $scope.eventDataFiles.filter(function (d) { return d.selected == "true"; })[0].data_file_id;
+                var waterDF = $scope.datafile.data_file_id;
+                var boolVal = $scope.is4Hz.selected;
+
+            }
             //#endregion FILE STUFF
 
             //#region NWIS DATA_FILE

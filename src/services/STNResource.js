@@ -3,8 +3,8 @@
 
     //look up common service module, and register the new factory with that module 
     var STNResource = angular.module('STNResource', ['ngResource']);
-      //var rootURL = "https://stn.wim.usgs.gov/STNServices";
-      var rootURL = "https://stntest.wim.usgs.gov/STNServices2";
+     var rootURL = "https://stn.wim.usgs.gov/STNServices";
+     //  var rootURL = "https://stntest.wim.usgs.gov/STNServices2";
    //var rootURL = "http://localhost/STNServices2";
    
     //#region GEOCODE https://geocoding.geo.census.gov/geocoder/geographies/coordinates?benchmark=4&vintage=4&format=json
@@ -72,6 +72,7 @@
                 getAll: { method: 'GET', isArray: true },
                 getDFApproval: { method: 'GET', cache: false, isArray: false, url: rootURL + '/DataFiles/:id/Approval.json' },
                 getUnapprovedDFs: { method: 'GET', isArray: true, cache: false }, //?IsApproved={approved}&Event={eventId}&Counties={counties}&State={state}
+                getEventDataView: {method: 'GET', isArray: true, cache: false, url: rootURL + '/DataFileView?EventId=:eventId' },
                 approveDF: { method: 'POST', cache: false, isArray: false, params: { id: '@id' }, url: rootURL + '/datafiles/:id/Approve.json' }, //posts an APPROVAL, updates the data file with approval_id and returns APPROVAL
                 approveNWISDF: { method: 'POST', cache: false, isArray: false, params: { id: '@id' }, url: rootURL + '/datafiles/:id/NWISApprove.json' }, //posts an APPROVAL (using EventCoord), updates the data file with approval_id and returns APPROVAL
                 unApproveDF: { method: 'DELETE', cache: false, isArray: false, url: rootURL + '/datafiles/:id/Unapprove.json' }, //posts an APPROVAL, updates the datafile with approval_id and returns APPROVAL

@@ -3,8 +3,11 @@
 
     var STNControllers = angular.module('STNControllers');
 
-    STNControllers.controller('sensorCtrl', ['$scope', '$rootScope', '$q', '$cookies', '$location', '$state', '$http', '$uibModal', '$filter', '$timeout', 'thisSite', 'Instrument_Service', 'thisSiteSensors', 'allSensorBrands', 'allAgencies', 'allVertDatums', 'allDeployTypes', 'allSensorTypes', 'allHousingTypes', 'allEvents', 'allFileTypes', 'INSTRUMENT', 'INSTRUMENT_STATUS', 'SITE', 'MEMBER', 'DEPLOYMENT_TYPE', 'STATUS_TYPE', 'INST_COLL_CONDITION',
-        function ($scope, $rootScope, $q, $cookies, $location, $state, $http, $uibModal, $filter, $timeout, thisSite, Instrument_Service, thisSiteSensors, allSensorBrands, allAgencies, allVertDatums, allDeployTypes, allSensorTypes, allHousingTypes, allEvents, allFileTypes, INSTRUMENT, INSTRUMENT_STATUS, SITE, MEMBER, DEPLOYMENT_TYPE, STATUS_TYPE, INST_COLL_CONDITION) {
+    STNControllers.controller('sensorCtrl', ['$scope', '$rootScope', '$q', '$cookies', '$location', '$state', '$http', '$uibModal', '$filter', '$timeout', 'thisSite', 'Instrument_Service', 'thisSiteSensors',
+        'allSensorBrands', 'allAgencies', 'allVertDatums', 'allDeployTypes', 'allSensorTypes', 'allHousingTypes', 'allEvents', 'allFileTypes', 'INSTRUMENT', 'INSTRUMENT_STATUS', 'SITE', 'MEMBER', 'DEPLOYMENT_TYPE', 'STATUS_TYPE',
+        'INST_COLL_CONDITION', 'DATA_FILE',
+        function ($scope, $rootScope, $q, $cookies, $location, $state, $http, $uibModal, $filter, $timeout, thisSite, Instrument_Service, thisSiteSensors, allSensorBrands, allAgencies, allVertDatums, allDeployTypes,
+            allSensorTypes, allHousingTypes, allEvents, allFileTypes, INSTRUMENT, INSTRUMENT_STATUS, SITE, MEMBER, DEPLOYMENT_TYPE, STATUS_TYPE, INST_COLL_CONDITION, DATA_FILE) {
             if ($cookies.get('STNCreds') === undefined || $cookies.get('STNCreds') === "") {
                 $scope.auth = false;
                 $location.path('/login');
@@ -350,6 +353,9 @@
                                 $http.defaults.headers.common.Authorization = 'Basic ' + $cookies.get('STNCreds');
                                 $http.defaults.headers.common.Accept = 'application/json';
                                 return MEMBER.getAll().$promise;
+                            },
+                            allEventDataFiles: function () {
+                                return DATA_FILE.getEventDataView({ eventId: $cookies.get('SessionEventID') }).$promise;
                             }
                         }
                     });

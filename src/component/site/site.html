@@ -6655,7 +6655,8 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div ng-show="!fullSenfileIsUploading">
+
+                                <div class="col-md-8" ng-show="!fullSenfileIsUploading">
                                     <button class="btn btn-primary" ng-if="aFile.file_id != undefined" ng-click="saveFile(DepSenFILEForm.$valid)">Save File</button>
                                     <button type="button" ng-show="(datafile.data_file_id != undefined && ApprovalInfo.approvalDate == undefined) && (userRole == 'Admin' || userRole == 'Manager')"
                                             class="btn btn-primary" ng-click="approveDF(DepSenFILEForm.$valid)">
@@ -6669,7 +6670,38 @@
                                     <button class="btn btn-primary" ng-if="aFile.file_id == undefined" ng-click="createFile(DepSenFILEForm.$valid)">Create File</button>
                                     <button class="btn btn-warning" type="button" ng-click="cancelFile()">Close/Cancel File</button>
                                 </div>
+                                <div class="col-md-4" ng-show="!showProcessing">
+                                    <!-- button to run STORM script if this existing data file is on a water sensor (sensor_type_id == 1 && (deployment_type_id == 1 || deployment_type_id == 2) )-->
+                                    <button type="button" class="btn btn-primary" ng-if="aFile.file_id != undefined && aFile.filetype_id === 2 && (sensor.sensor_type_id == 1 && (sensor.deployment_type_id == 1 || sensor.deployment_type_id == 2))" ng-click="showStormSection()">Run Storm Script</button>
+                                    <!-- button to run AIR script if this existing data file is on a air sensor (sensor_type_id == 1 && deployment_type_id == 3 )-->
+                                    <button type="button" class="btn btn-primary" ng-if="aFile.file_id != undefined && aFile.filetype_id === 2 && (sensor.sensor_type_id == 1 && sensor.deployment_type_id == 3)" ng-click="runAirScript()">Process Air Data File</button>
+                                </div>
                                 <div ng-show="fullSenfileIsUploading"><img src="images/fileUpload.gif" /></div>
+                                <div ng-show="showProcessing" class="col-md-4"><img src="images/processing.gif" /></div>
+                                <br clear="all" />
+                                <div ng-if="stormSection">                                    
+                                    <h4 style="margin-top:1em;">Select the Barometric Sensor File for this Event that you would like to use.</h4>
+                                    <table class="table" style="display:inline-block;overflow:auto;">
+                                        <thead>
+                                            <tr>
+                                                <th></th><th>Distance from here</th><th>Location</th><th>Sensor Brand</th><th>File Name</th><th>Good Start</th><th>Good End</th>
+                                            </tr>
+                                        </thead>
+                                        <tr ng-repeat="df in eventDataFiles">
+                                            <td><input type="radio" name="selected_datafile" ng-model="df.selected" value="true" /></td>
+                                            <td>{{df.distance | number:4}} mi.</td><td>{{df.city}}, {{df.state}}</td><td>{{df.brand_name}}</td>
+                                            <td>{{df.name}}</td><td>{{df.good_start | date: 'MM/dd/yyyy' }}</td><td>{{df.good_end | date: 'MM/dd/yyyy'}}</td>
+                                        </tr>
+                                    </table>
+                                    <div class="col-md-8">
+                                        <div class="chx">
+                                            <label>
+                                                <input style="margin:0!important;" class="col-md-1" type="checkbox" ng-model="is4Hz.selected" ng-true-value="'true'" ng-false-value="'false'" /> Sensor is 4 Hz
+                                            </label>
+                                        </div>                                        
+                                    </div>
+                                    <button class="btn btn-primary" ng-click="runStormScript()">Run Script</button>
+                                </div> <!-- end stormSection -->
                             </fieldset>
                         </form>
                     </div>
