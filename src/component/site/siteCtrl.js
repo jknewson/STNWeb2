@@ -4,8 +4,8 @@
     var STNControllers = angular.module('STNControllers');
 
     STNControllers.controller('siteCtrl', ['$scope', '$state', '$rootScope', '$cookies', '$location', '$http', '$uibModal', '$filter', 'thisSite', 'latlong', 'thisSiteNetworkNames', 'thisSiteNetworkTypes', 'thisSiteHousings',
-        'SITE', 'MEMBER', 'FILE_TYPE', 'AGENCY', 'allHorDatums', 'allHorCollMethods', 'allStates', 'allCounties', 'allDeployPriorities', 'allHousingTypes', 'allNetworkNames', 'allNetworkTypes', 'allDeployTypes', 'allSensorTypes',
-        function ($scope, $state, $rootScope, $cookies, $location, $http, $uibModal, $filter, thisSite, latlong, thisSiteNetworkNames, thisSiteNetworkTypes, thisSiteHousings, SITE, MEMBER, FILE_TYPE, AGENCY, allHorDatums,
+        'SITE', 'MEMBER', 'FILE_TYPE', 'AGENCY', 'Site_Script', 'allHorDatums', 'allHorCollMethods', 'allStates', 'allCounties', 'allDeployPriorities', 'allHousingTypes', 'allNetworkNames', 'allNetworkTypes', 'allDeployTypes', 'allSensorTypes',
+        function ($scope, $state, $rootScope, $cookies, $location, $http, $uibModal, $filter, thisSite, latlong, thisSiteNetworkNames, thisSiteNetworkTypes, thisSiteHousings, SITE, MEMBER, FILE_TYPE, AGENCY, Site_Script, allHorDatums,
             allHorCollMethods, allStates, allCounties, allDeployPriorities, allHousingTypes, allNetworkNames, allNetworkTypes, allDeployTypes, allSensorTypes) {
             if ($cookies.get('STNCreds') === undefined || $cookies.get('STNCreds') === "") {
                 $scope.auth = false;
@@ -13,7 +13,27 @@
             } else {
                 $rootScope.thisPage = "Site Dashboard";
                 $scope.aSite = {};
-                
+                // are there any scripts running against this site right now for air/water
+                var showScriptToast = function () {
+                    toastr.options = {
+                        "closeButton": true,
+                        "positionClass": "toast-bottom-right",
+                        "onclick": null,
+                        "timeOut": "0",
+                        "extendedTimeOut": "0"
+                    };
+                    toastr.warning("Storm Scripts are running on data files for this site and can take several minutes. Check back to the site dashboard later or refresh to see if script is complete and new files are ready.");
+                }
+                if (Site_Script.getIsScriptRunning() == "true") {
+                    showScriptToast();
+                }
+                $scope.$on('siteDFScriptRunning', function (e, runningScript) {
+                    if (runningScript == "true") {
+                        showScriptToast();
+                    } else {
+                        toastr.clear();
+                    }
+                });
                 $scope.status = {
                     mapOpen: false, siteOpen: true, opOpen: false, sensorOpen: false, hwmOpen: false, filesOpen: false, peakOpen: false
                 };

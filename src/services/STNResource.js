@@ -3,8 +3,8 @@
 
     //look up common service module, and register the new factory with that module 
     var STNResource = angular.module('STNResource', ['ngResource']);
-    var rootURL = "https://stn.wim.usgs.gov/STNServices";
-    //  var rootURL = "https://stntest.wim.usgs.gov/STNServices2";
+   // var rootURL = "https://stn.wim.usgs.gov/STNServices";
+      var rootURL = "https://stntest.wim.usgs.gov/STNServices2";
    //var rootURL = "http://localhost/STNServices2";
    
     //#region GEOCODE https://geocoding.geo.census.gov/geocoder/geographies/coordinates?benchmark=4&vintage=4&format=json
@@ -76,6 +76,7 @@
                 approveDF: { method: 'POST', cache: false, isArray: false, params: { id: '@id' }, url: rootURL + '/datafiles/:id/Approve.json' }, //posts an APPROVAL, updates the data file with approval_id and returns APPROVAL
                 approveNWISDF: { method: 'POST', cache: false, isArray: false, params: { id: '@id' }, url: rootURL + '/datafiles/:id/NWISApprove.json' }, //posts an APPROVAL (using EventCoord), updates the data file with approval_id and returns APPROVAL
                 unApproveDF: { method: 'DELETE', cache: false, isArray: false, url: rootURL + '/datafiles/:id/Unapprove.json' }, //posts an APPROVAL, updates the datafile with approval_id and returns APPROVAL
+                stormScript: {method: 'GET', cache: false, isArray: false, url: rootURL + '/DataFiles/RunScript?SeaDataFileID=:seaDataFileId&AirDataFileID=:airDataFileId&Hertz=:hertz&Username=username' },
                 update: { method: 'PUT', cache: false, isArray: false },
                 save: { method: 'POST', cache: false, isArray: false },
                 delete: { method: 'DELETE', cache: false, isArray: false }
@@ -596,6 +597,7 @@
         return $resource(rootURL + '/Sites/:id.json',
             {}, {
                 query: {},
+                sensorScriptRunning: { method: 'GET', isArray: false, transformResponse: function (data) { return { value: angular.fromJson(data) } }, url: rootURL + '/Sites/:id/GetDataFileScript.json'},
                 getProximitySites: {method: 'GET', isArray: true, params: { Latitude: '@latitude', Longitude: '@longitude', Buffer: '@buffer' }},
                 getAll: { method: 'GET', isArray: true },
                 getSearchedSite: { method: 'GET', isArray: false, url: rootURL + '/Sites/Search' }, //?bySiteNo={siteNo}&bySiteName={siteName}&bySiteId={siteId} (only going to populate 1 of these params
@@ -626,8 +628,20 @@
                 delete: { method: 'DELETE', cache: false, isArray: false }
             });
     }]);
-    //#endregion of SITE
-    //#region Site_Files
+    // IsScriptRunning Service
+    STNResource.factory('Site_Script', ['$cookies', '$rootScope', function ($cookies, $rootScope) {
+        var isRunning;
+        return {
+            getIsScriptRunning: function () {
+                return isRunning;
+            },
+            setIsScriptRunning: function (running) {
+                isRunning = running;
+                $rootScope.$broadcast('siteDFScriptRunning', isRunning);
+            }
+        };
+    }]);
+    // Site_Files
     STNResource.factory('Site_Files', ['$cookies', '$rootScope', function ($cookies, $rootScope) {
         var allSiteFiles = [];
         return {
@@ -639,9 +653,8 @@
                 $rootScope.$broadcast('siteFilesUpdated', allSiteFiles);                
             }
         };
-    }]);
-    //#endregion of Site_Files
-    //#region STATE
+    }]);    
+    // STATE
     STNResource.factory('STATE', ['$resource', function ($resource) {
         return $resource(rootURL + '/States/:id.json',
             {}, {
@@ -652,8 +665,7 @@
                 delete: { method: 'DELETE', cache: false, isArray: false }
             });
     }]);
-    //#endregion of STATE
-    //#region SITE_HOUSING
+    // SITE_HOUSING
     STNResource.factory('SITE_HOUSING', ['$resource', function ($resource) {
         return $resource(rootURL + '/SiteHousings/:id.json',
             {}, {
@@ -664,8 +676,7 @@
                 delete: { method: 'DELETE', cache: false, isArray: false }
             });
     }]);
-    //#endregion of SITE_HOUSING
-    //#region STATUS_TYPE
+    // STATUS_TYPE
     STNResource.factory('STATUS_TYPE', ['$resource', function ($resource) {
         return $resource(rootURL + '/StatusTypes/:id.json',
             {}, {
@@ -676,8 +687,7 @@
                 delete: { method: 'DELETE', cache: false, isArray: false }
             });
     }]);
-    //#endregion of STATUS_TYPE 
-    //#region SOURCE
+    // SOURCE
     STNResource.factory('SOURCE', ['$resource', function ($resource) {
         return $resource(rootURL + '/Sources/:id.json',
             {}, {
@@ -688,8 +698,7 @@
                 delete: { method: 'DELETE', cache: false, isArray: false }
             });
     }]);
-    //#endregion of SOURCE
-    //#region VERTICAL_COLL_METHOD
+    // VERTICAL_COLL_METHOD
     STNResource.factory('VERTICAL_COLL_METHOD', ['$resource', function ($resource) {
         return $resource(rootURL + '/VerticalMethods/:id.json',
             {}, {
@@ -700,8 +709,7 @@
                 delete: { method: 'DELETE', cache: false, isArray: false }
             });
     }]);
-    //#endregion of VERTICAL_COLL_METHOD
-    //#region VERTICAL_DATUM
+    // VERTICAL_DATUM
     STNResource.factory('VERTICAL_DATUM', ['$resource', function ($resource) {
         return $resource(rootURL + '/VerticalDatums/:id.json',
             {}, {
@@ -712,14 +720,12 @@
                 delete: { method: 'DELETE', cache: false, isArray: false }
             });
     }]);
-    //#endregion of VERTICAL_DATUM
-    //#region Login
+    // Login
     STNResource.factory('Login', ['$resource', function ($resource) {
         return $resource(rootURL + '/login',
             {}, {
                 login: { method: 'GET', cache: false, isArray: false }
             });
     }]);
-    //#endregion of Login
-
+    
 })();

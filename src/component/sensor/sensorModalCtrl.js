@@ -1437,9 +1437,9 @@
     // view/edit retrieved sensor (deployed included here) modal
     ModalControllers.controller('fullSensorModalCtrl', ['$scope', '$rootScope', '$filter', '$timeout', '$cookies', '$http', '$uibModalInstance', '$uibModal', 'SERVER_URL', 'FILE_STAMP', 'allDepDropdowns',
         'agencyList', 'Site_Files', 'allStatusTypes', 'allInstCollCond', 'allEvents', 'allDepTypes', 'thisSensor', 'SensorSite', 'siteOPs', 'allMembers', 'allEventDataFiles',
-        'INSTRUMENT', 'INSTRUMENT_STATUS', 'DATA_FILE', 'FILE', 'SOURCE', 'OP_MEASURE',
+        'INSTRUMENT', 'INSTRUMENT_STATUS', 'DATA_FILE', 'FILE', 'SOURCE', 'OP_MEASURE', 'Site_Script',
         function ($scope, $rootScope, $filter, $timeout, $cookies, $http, $uibModalInstance, $uibModal, SERVER_URL, FILE_STAMP, allDepDropdowns, agencyList, Site_Files, allStatusTypes, allInstCollCond, allEvents,
-            allDepTypes, thisSensor, SensorSite, siteOPs, allMembers, allEventDataFiles, INSTRUMENT, INSTRUMENT_STATUS, DATA_FILE, FILE, SOURCE, OP_MEASURE) {
+            allDepTypes, thisSensor, SensorSite, siteOPs, allMembers, allEventDataFiles, INSTRUMENT, INSTRUMENT_STATUS, DATA_FILE, FILE, SOURCE, OP_MEASURE, Site_Script) {
             /*allSensorTypes, allSensorBrands, allHousingTypes, allSensDeps*/
             $scope.serverURL = SERVER_URL;
             $scope.fullSenfileIsUploading = false; //Loading...   
@@ -2517,6 +2517,7 @@
                     //do something with the response
                     $scope.showProcessing = false;
                 })*/
+
             }
             function calcDistance(lat1, lon1) {
                 // http://www.geodatasource.com/developers/javascript
@@ -2540,10 +2541,27 @@
 
             }
             $scope.runStormScript = function () {
-                var airDF = $scope.eventDataFiles.filter(function (d) { return d.selected == "true"; })[0].data_file_id;
-                var waterDF = $scope.datafile.data_file_id;
-                var boolVal = $scope.is4Hz.selected;
-
+                var airDF = $scope.eventDataFiles.filter(function (d) { return d.selected == "true"; })[0];
+                if (airDF !== undefined) {
+                    var waterDF = $scope.datafile.data_file_id;
+                    var boolVal = $scope.is4Hz.selected;
+                    // run the script if airDF and waterDF are present                    
+                    //DATA_FILE.stormScript({ seaDataFileId: waterDF, airDataFileId: airDF.data_file_id, hertz: boolVal, username: $cookies.get('STNUsername') });
+                    Site_Script.setIsScriptRunning("true"); //tell site.ctrl to show toastr notification
+                    $scope.cancelFile();
+                } else {                    
+                    var missingInfo = $uibModal.open({
+                        template: '<div class="modal-header"><h3 class="modal-title">Error</h3></div>' +
+                            '<div class="modal-body"><p>Please choose an air data file to use for the storm script.</p></div>' +
+                            '<div class="modal-footer"><button class="btn btn-primary" ng-enter="ok()" ng-click="ok()">OK</button></div>',
+                        controller: ['$scope', '$uibModalInstance', function ($scope, $uibModalInstance) {
+                            $scope.ok = function () {
+                                $uibModalInstance.close();
+                            };
+                        }],
+                        size: 'sm'
+                    });
+                }
             }
             //#endregion FILE STUFF
 
