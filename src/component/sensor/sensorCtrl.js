@@ -67,6 +67,8 @@
                             if ($scope.deployTypeList[dt].method.substring(0, 4) == "Temp") {
                                 //temperature proposed sensor
                                 proposedToAdd = {
+                                    event_id: 0,
+                                    location_description: "Proposed sensor at this site. Change description when deploying sensor.",
                                     deployment_type_id: $scope.deployTypeList[dt].deployment_type_id,
                                     site_id: thisSite.site_id,
                                     sensor_type_id: $scope.deployTypeList[dt].method == "Temperature (Pressure Transducer)" ? 1 : 2,
@@ -82,6 +84,8 @@
                                 });
                                 //any other type
                                 proposedToAdd = {
+                                    event_id: 0,
+                                    location_description: "Proposed sensor at this site. Change description when deploying sensor.",
                                     deployment_type_id: $scope.deployTypeList[dt].deployment_type_id,
                                     site_id: thisSite.site_id,
                                     sensor_type_id: sID,
