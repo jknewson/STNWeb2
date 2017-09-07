@@ -4,8 +4,8 @@
         ['ngResource', 'ui.router', 'ngCookies', 'ui.mask', 'ui.bootstrap', 'isteven-multi-select', 'ngInputModified', 'ui.validate', 'cgBusy',
             'angular.filter', 'xeditable', 'checklist-model', 'ngFileUpload', 'STNResource', 'ui.bootstrap.datetimepicker','leaflet-directive','ngHandsontable',
             'STNControllers', 'LogInOutController', 'ModalControllers', 'SettingsControllers', 'WiM.Services', 'WiM.Event', 'wim_angular', 'angularSpinners']);
-    //app.constant('SERVER_URL', 'https://stn.wim.usgs.gov/STNServices');
-       app.constant('SERVER_URL', 'https://stntest.wim.usgs.gov/STNServices2');
+    app.constant('SERVER_URL', 'https://stn.wim.usgs.gov/STNServices');
+     //  app.constant('SERVER_URL', 'https://stntest.wim.usgs.gov/STNServices2');
     //app.constant('SERVER_URL', 'http://localhost/STNServices2');
 
     app.constant('ENVIRONMENT', 'Testing');
@@ -60,7 +60,7 @@
 
                 //#endregion entryPoint
 
-                //#region map
+                // map
                 .state("map", {
                     url: "/Map",
                     //templateUrl: "component/map/map.html",
@@ -118,9 +118,8 @@
                         }
                     }
                 })
-                //#endregion map
-
-                //#region approval page
+                
+                // approval page
                 .state("approval", {
                     url: "/Approval",
                     templateUrl: "component/approval/approval.html",
@@ -157,9 +156,8 @@
                         }
                     }
                 })
-                //#endregion
-
-                //#region sitesSearch page
+                
+                // sitesSearch page
                 .state("siteSearch", {
                     url: "/SiteSearch",
                     templateUrl: "component/siteSearch/siteSearch.html",
@@ -180,10 +178,8 @@
                         }
                     }
                 })
-                //#endregion
-
-                //#region reporting
-                //#region reporting (abstract)
+                
+                // reporting
                 .state("reporting", {
                     url: "/Reporting",
                     abstract: true,
@@ -221,9 +217,8 @@
                         }
                     }
                 })
-                //#endregion reporting (abstract)
-
-                //#region reporting.reportDash
+                
+                // reporting.reportDash
                 .state("reporting.reportDash", {
                     url: "/Dashboard",
                     templateUrl: "component/reporting/reportingDashboard.html",
@@ -237,34 +232,30 @@
                     }
                 })//#endregion reporting.reportDash
 
-                //#region reporting.SubmitReport
+                // reporting.SubmitReport
                 .state("reporting.submitReport", {
                     url: "/SubmitReport",
                     templateUrl: "component/reporting/submitReport.html",
                     controller: "submitReportCtrl",
                     authenticate: true,
                 })
-                //#endregion reporting.SubmitReport
-
-                //#region reporting.GenerateReport
+                
+                // reporting.GenerateReport
                 .state("reporting.generateReport", {
                     url: "/GenerateReport",
                     templateUrl: "component/reporting/generateReport.html",
                     authenticate: true,
-                })//#endregion reporting.GenerateReport
-                //#endregion reporting
-
-                //#region settings 
+                })
+                
+                // settings 
                 .state("settings", {
                     url: "/Settings",
                     templateUrl: "component/settings/settings.html",
                     controller: "settingsCtrl",
                     authenticate: true
                 })
-                //#endregion settings
 
-                //#region members
-                //#region members (abstract)
+                // members
                 .state("members", {
                     url: "/Members",
                     params: { id: null},
@@ -287,19 +278,17 @@
                             
                         }
                     }
-                })//#endregion members
+                })
 
-                //#region members.MembersList
+                // members.MembersList
                 .state("members.MembersList", {
                     url: "/MembersList",
                     templateUrl: "component/member/membersList.html",
                     authenticate: true
                  })
-                //#endregion members.MembersList
-                 //#endregion members
+                
 
-                //#region events
-                //#region events
+                // events               
                 .state("events", {
                     url: "/Events",
                     abstract: true,
@@ -326,17 +315,16 @@
                             return m.getRoleMembers({ roleId: 1 }).$promise;
                         }
                     }
-                })//#endregion events
+                })
 
-                //#region events.EventsList
+                // events.EventsList
                 .state("events.EventsList", {
                     url: "/EventsList",
                     templateUrl: "component/event/eventsList.html",
                     authenticate: true
-                })
-                //#endregion events.EventsList
+                })             
 
-                //#region events.EventInfof
+                // events.EventInfof
                 .state("events.EventInfo", {
                     url: "/eventInfo/:id",
                     templateUrl: "component/event/eventInfo.html",
@@ -352,11 +340,9 @@
                             }
                         }
                     }
-                })//#endregion events.EventInfo
-                //#endregion events
+                })
 
-                //#region resources
-                //#region resources main         
+                // resources
                 .state("resources", {
                     url: "/Resources",
                     abstract: true,
@@ -461,15 +447,14 @@
                             return vd.getAll().$promise;
                         }
                     }
-                })//#endregion resources main
+                })
 
-                //#region resources.ResourcesList
+                // resources.ResourcesList
                 .state("resources.ResourcesList", {
                     url: "/ResourcesList",
                     templateUrl: "component/resources/resourcesList.html",
                     authenticate: true
                 })
-                //#endregion resources.ResourcesList
 
                 // all lookup htmls
                 .state("resources.ResourcesList.agency", {
@@ -588,9 +573,7 @@
                     authenticate: true
                 })
                 
-                //#endregion resources
-
-                //#region bulk hwm adjustment page                                 
+                // bulk hwm adjustment page                                 
                 .state("bulkHWMAdj", {
                     url: "/BulkHWM_adjustments",
                     templateUrl: "component/hwm/bulkHWMAdj.html",
@@ -611,9 +594,8 @@
                         }
                     }
                 })
-                //#endregion
 
-                //#region bulk hwm adjustment page                                 
+                // bulk hwm adjustment page                                 
                 .state("bulkHWM", {
                     url: "/HistoricHWM_Upload",
                     templateUrl: "component/hwm/bulkHWM.html",
@@ -670,9 +652,8 @@
                         },
                     }
                 })
-                //#endregion
 
-                //#region site (abstract)
+                // site (abstract)
                 .state("site", {
                     url: "/Site/:id",
                     abstract: true,
@@ -813,9 +794,8 @@
                         sb: 'SENSOR_BRAND',
                         allSensorBrands: function (sb){
                             return sb.getAll().$promise;
-                        },                       
-                        //#endregion sensor stuff
-                        //#region hwm stuff
+                        },        
+                        // hwm stuff
                         hwmt: 'HWM_TYPE',
                         allHWMTypes: function (hwmt) {
                             return hwmt.getAll().$promise;
@@ -828,8 +808,7 @@
                         allMarkers: function (m){
                             return m.getAll().$promise;
                         }, 
-                        //#endregion hwm stuff
-                        //#region file
+                        // file
                         ft: 'FILE_TYPE',
                         allFileTypes: function(ft){
                             return ft.getAll().$promise;
@@ -838,12 +817,10 @@
                         allAgencies: function(a){
                             return a.getAll().$promise;
                         }
-                        //#endregion file
                     }
                 })
-                //#endregion site (abstract)
 
-                //#region site.info
+                // site.info
                 .state("site.dashboard", {
                     url: "/SiteDashboard",
                     authenticate: true,
@@ -952,9 +929,9 @@
 
                         }
                     }
-                })//#endregion site.info
+                })
 
-                //#region QuickHWM page
+                // QuickHWM page
                 .state("quickCreate", {
                     url: "/QuickCreate/:id",                    
                     templateUrl: "component/site/quickCreate.html",
@@ -964,7 +941,7 @@
                         whichQuick: function ($stateParams){
                             return $stateParams.id;
                         },
-                        //#region site stuff                        
+                        // site stuff                        
                         hd: 'HORIZONTAL_DATUM',
                         allHorDatums: function (hd) {
                             return hd.getAll().$promise;
@@ -980,9 +957,8 @@
                         c: 'COUNTIES',
                         allCounties: function (c) {
                             return c.getAll().$promise;
-                        },                        
-                        //#endregion site stuff
-                        //#region op stuff                        
+                        },   
+                        // op stuff                        
                         opt: 'OP_TYPE',
                         allOPTypes: function (opt) {
                             return opt.getAll().$promise;
@@ -998,9 +974,8 @@
                         opQual: 'OP_QUALITY',
                         allOPQualities: function (opQual) {
                             return opQual.getAll().$promise;
-                        },
-                        //#endregion op stuff                        
-                        //#region hwm stuff (if id='hwm'
+                        },                                              
+                        // hwm stuff (if id='hwm')
                         hwmt: 'HWM_TYPE',
                         allHWMTypes: function (hwmt, $stateParams) {
                             if ($stateParams.id == 'HWM') return hwmt.getAll().$promise;
@@ -1013,8 +988,7 @@
                         allMarkers: function (m, $stateParams) {
                             if ($stateParams.id == 'HWM') return m.getAll().$promise;
                         },
-                        //#endregion hwm stuff  
-                        //#region sensor stuff
+                        // sensor stuff
                         dt: 'DEPLOYMENT_TYPE',
                         allDeployTypes: function (dt) {
                             return dt.getAll().$promise;
@@ -1030,20 +1004,14 @@
                         sb: 'SENSOR_BRAND',
                         allSensorBrands: function (sb, $stateParams) {
                             if ($stateParams.id == 'Sensor') return sb.getAll().$promise;
-                        },
-                        //sd: 'SENSOR_DEPLOYMENT', -----------------------------returned in above 'allSensorTypes' grouped together
-                        //allSensDeps: function (sd) {
-                        //    return sd.getAll().$promise;
-                        //},
+                        },                        
                         ht: 'HOUSING_TYPE',
                         allHousingTypes: function (ht) {
                             return ht.getAll().$promise;
-                        }
-                        //#endregion
+                        }                       
                     }
                 });
-                //#endregion QuickHWM page
-               
+                              
             //this causes issues with Status404 Not found on component/main/mainView.html
             //$locationProvider.html5Mode({
             //    enabled: true,
