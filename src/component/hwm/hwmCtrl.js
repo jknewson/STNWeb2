@@ -4,8 +4,8 @@
 
     var STNControllers = angular.module('STNControllers');
 
-    STNControllers.controller('hwmCtrl', ['$scope', '$rootScope', '$cookies', '$location', '$state', '$http', '$uibModal', '$filter', '$timeout', 'thisSite', 'thisSiteHWMs', 'HWM_Service', 'allAgencies', 'allHWMTypes', 'allHWMQualities', 'allHorDatums', 'allMarkers', 'allHorCollMethods', 'allVertDatums', 'allVertColMethods', 'allEvents', 'allFileTypes', 'MEMBER', 'HWM',
-        function ($scope, $rootScope, $cookies, $location, $state, $http, $uibModal, $filter, $timeout, thisSite, thisSiteHWMs, HWM_Service, allAgencies, allHWMTypes, allHWMQualities, allHorDatums, allMarkers, allHorCollMethods, allVertDatums, allVertColMethods, allEvents, allFileTypes, MEMBER, HWM) {
+    STNControllers.controller('hwmCtrl', ['$scope', '$rootScope', '$cookies', '$location', '$state', '$http', '$uibModal', '$filter', '$timeout', 'thisSite', 'thisSiteHWMs', 'HWM_Service', 'allAgencies', 'allHWMTypes', 'allHWMQualities', 'allHorDatums', 'allMarkers', 'allHorCollMethods', 'allVertDatums', 'allVertColMethods', 'allEvents', 'allFileTypes', 'MEMBER', 'HWM', 'SITE',
+        function ($scope, $rootScope, $cookies, $location, $state, $http, $uibModal, $filter, $timeout, thisSite, thisSiteHWMs, HWM_Service, allAgencies, allHWMTypes, allHWMQualities, allHorDatums, allMarkers, allHorCollMethods, allVertDatums, allVertColMethods, allEvents, allFileTypes, MEMBER, HWM, SITE) {
             if ($cookies.get('STNCreds') === undefined || $cookies.get('STNCreds') === "") {
                 $scope.auth = false;
                 $location.path('/login');
@@ -61,7 +61,7 @@
                                     }
                                 },
                                 hwmSite: function () {
-                                    return thisSite;
+                                    return SITE.query({ id: thisSite.site_id }).$promise;
                                 },
                                 agencyList: function () {
                                     return allAgencies;

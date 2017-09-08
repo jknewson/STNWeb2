@@ -70,6 +70,8 @@
                             if ($scope.deployTypeList[dt].method.substring(0, 4) == "Temp") {
                                 //temperature proposed sensor
                                 proposedToAdd = {
+                                    event_id: 0,
+                                    location_description: "Proposed sensor at this site. Change description when deploying sensor.",
                                     deployment_type_id: $scope.deployTypeList[dt].deployment_type_id,
                                     site_id: thisSite.site_id,
                                     sensor_type_id: $scope.deployTypeList[dt].method == "Temperature (Pressure Transducer)" ? 1 : 2,
@@ -85,6 +87,8 @@
                                 });
                                 //any other type
                                 proposedToAdd = {
+                                    event_id: 0,
+                                    location_description: "Proposed sensor at this site. Change description when deploying sensor.",
                                     deployment_type_id: $scope.deployTypeList[dt].deployment_type_id,
                                     site_id: thisSite.site_id,
                                     sensor_type_id: sID,
@@ -98,6 +102,8 @@
                                 var createdPropSensor = {
                                     deployment_type_id: response.deployment_type_id,
                                     site_id: response.site_id,
+                                    event_id: response.event_id,
+                                    location_description: response.location_description,
                                     sensor_type_id: response.sensor_type_id,
                                     instrument_id: response.instrument_id,
                                     deploymentType: $scope.deployTypeList.filter(function (dtl) { return dtl.deployment_type_id == response.deployment_type_id; })[0].method,
@@ -148,7 +154,7 @@
                                 return sensorClicked !== 0 ? sensorClicked : "empty";
                             },
                             SensorSite: function () {
-                                return thisSite;
+                                return SITE.query({ id: thisSite.site_id }).$promise;
                             },
                             allEventList: function () {
                                 return allEvents;
@@ -263,7 +269,7 @@
                                 return sensorClicked !== 0 ? sensorClicked : "empty";
                             },
                             SensorSite: function () {
-                                return thisSite;
+                                return SITE.query({ id: thisSite.site_id }).$promise;
                             },
                             siteOPs: function () {
                                 return SITE.getSiteOPs({ id: thisSite.site_id }).$promise;
@@ -341,7 +347,7 @@
                                 return sensorClicked !== 0 ? sensorClicked : "empty";
                             },
                             SensorSite: function () {
-                                return thisSite;
+                                return SITE.query({ id: thisSite.site_id }).$promise;
                             },
                             siteOPs: function () {
                                 return SITE.getSiteOPs({ id: thisSite.site_id }).$promise;

@@ -56,7 +56,7 @@
                                 }
                             },
                             peakSite: function () {
-                                return thisSite;
+                                return SITE.query({ id: thisSite.site_id }).$promise;
                             },
                             allMembers: function () {
                                 $http.defaults.headers.common.Authorization = 'Basic ' + $cookies.get('STNCreds');

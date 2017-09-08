@@ -8,8 +8,8 @@
      //  app.constant('SERVER_URL', 'https://stntest.wim.usgs.gov/STNServices2');
     //app.constant('SERVER_URL', 'http://localhost/STNServices2');
 
-    app.constant('ENVIRONMENT', 'Testing');
-   // app.constant('ENVIRONMENT', 'Production');
+    //app.constant('ENVIRONMENT', 'Testing');
+    app.constant('ENVIRONMENT', 'Production');
 
      app.run(['$rootScope', '$uibModalStack', '$cookies', '$state', 'ENVIRONMENT', function ($rootScope, $uibModalStack, $cookies, $state, ENVIRONMENT) {
         $rootScope.$on('$stateChangeStart', function (event, toState, toParams, fromState, fromParams) {
@@ -51,21 +51,16 @@
             //http://stackoverflow.com/questions/19721125/resolve-http-request-before-running-app-and-switching-to-a-route-or-state
             //http://stackoverflow.com/questions/22537311/angular-ui-router-login-authentication
             $stateProvider
-                //#region entryPoint
+                // entryPoint
                 .state("entry", {
                     url: "/",
                     templateUrl: "component/main/mainView.html",
                     controller: "mainCtrl"
                 })
 
-                //#endregion entryPoint
-
                 // map
                 .state("map", {
                     url: "/Map",
-                    //templateUrl: "component/map/map.html",
-                    //controller: "MapController",
-                    //authenticate: true,
                     views: {
                         '': {
                             controller: 'MapController',
@@ -89,10 +84,6 @@
                                 }
                             }
                         },
-                        // 'wimLegend@map': {
-                        //     templateUrl: 'component/Views/Legend/legend.html',
-                        //     controller: 'wimLegend'
-                        // },
                         'mapSiteInfo@map': {
                             templateUrl: 'component/site/mapSiteInfoView.html', 
                             controller: 'MapSiteInfoController'
@@ -105,10 +96,6 @@
                                 allDeployTypes: function (dt) {
                                     return dt.getAll().$promise;
                                 },
-                                //sd: 'SENSOR_DEPLOYMENT',
-                                //allSensDeps: function (sd) {
-                                //    return sd.getAll().$promise;
-                                //}
                                 sd: 'SENSOR_TYPE',
                                 allSensDeps: function (sd) {
                                     return sd.getAll().$promise;
@@ -118,7 +105,6 @@
                         }
                     }
                 })
-                
                 // approval page
                 .state("approval", {
                     url: "/Approval",
@@ -156,8 +142,7 @@
                         }
                     }
                 })
-                
-                // sitesSearch page
+                // sitesSearch 
                 .state("siteSearch", {
                     url: "/SiteSearch",
                     templateUrl: "component/siteSearch/siteSearch.html",
@@ -178,7 +163,6 @@
                         }
                     }
                 })
-                
                 // reporting
                 .state("reporting", {
                     url: "/Reporting",
@@ -230,7 +214,7 @@
                             return r.getAll().$promise;
                         }
                     }
-                })//#endregion reporting.reportDash
+                })
 
                 // reporting.SubmitReport
                 .state("reporting.submitReport", {
@@ -239,14 +223,12 @@
                     controller: "submitReportCtrl",
                     authenticate: true,
                 })
-                
                 // reporting.GenerateReport
                 .state("reporting.generateReport", {
                     url: "/GenerateReport",
                     templateUrl: "component/reporting/generateReport.html",
                     authenticate: true,
                 })
-                
                 // settings 
                 .state("settings", {
                     url: "/Settings",
@@ -254,7 +236,6 @@
                     controller: "settingsCtrl",
                     authenticate: true
                 })
-
                 // members
                 .state("members", {
                     url: "/Members",
@@ -286,9 +267,7 @@
                     templateUrl: "component/member/membersList.html",
                     authenticate: true
                  })
-                
-
-                // events               
+                // events
                 .state("events", {
                     url: "/Events",
                     abstract: true,
@@ -323,7 +302,6 @@
                     templateUrl: "component/event/eventsList.html",
                     authenticate: true
                 })             
-
                 // events.EventInfof
                 .state("events.EventInfo", {
                     url: "/eventInfo/:id",
@@ -341,8 +319,7 @@
                         }
                     }
                 })
-
-                // resources
+                // resources    
                 .state("resources", {
                     url: "/Resources",
                     abstract: true,
@@ -454,14 +431,14 @@
                     url: "/ResourcesList",
                     templateUrl: "component/resources/resourcesList.html",
                     authenticate: true
-                })
+                })               
 
                 // all lookup htmls
                 .state("resources.ResourcesList.agency", {
                     url: "/Agencies",
                     templateUrl: "component/resources/agency.html",
                     authenticate: true
-                })
+                })                
                 .state("resources.ResourcesList.ContactType", {
                     url: "/ContactTypes",
                     templateUrl: "component/resources/contactType.html",
@@ -562,7 +539,7 @@
                     templateUrl: "component/resources/networkType.html",
                     authenticate: true
                 })
-                .state("resources.ResourcesList.VertCollMethod", {
+               .state("resources.ResourcesList.VertCollMethod", {
                     url: "/VerticalCollMethods",
                     templateUrl: "component/resources/verticalCollectionMethod.html",
                     authenticate: true
@@ -572,7 +549,6 @@
                     templateUrl: "component/resources/verticalDatum.html",
                     authenticate: true
                 })
-                
                 // bulk hwm adjustment page                                 
                 .state("bulkHWMAdj", {
                     url: "/BulkHWM_adjustments",
@@ -652,7 +628,6 @@
                         },
                     }
                 })
-
                 // site (abstract)
                 .state("site", {
                     url: "/Site/:id",
@@ -794,7 +769,7 @@
                         sb: 'SENSOR_BRAND',
                         allSensorBrands: function (sb){
                             return sb.getAll().$promise;
-                        },        
+                        },                       
                         // hwm stuff
                         hwmt: 'HWM_TYPE',
                         allHWMTypes: function (hwmt) {
@@ -819,7 +794,6 @@
                         }
                     }
                 })
-
                 // site.info
                 .state("site.dashboard", {
                     url: "/SiteDashboard",
@@ -957,7 +931,7 @@
                         c: 'COUNTIES',
                         allCounties: function (c) {
                             return c.getAll().$promise;
-                        },   
+                        },    
                         // op stuff                        
                         opt: 'OP_TYPE',
                         allOPTypes: function (opt) {
@@ -974,7 +948,7 @@
                         opQual: 'OP_QUALITY',
                         allOPQualities: function (opQual) {
                             return opQual.getAll().$promise;
-                        },                                              
+                        },                 
                         // hwm stuff (if id='hwm')
                         hwmt: 'HWM_TYPE',
                         allHWMTypes: function (hwmt, $stateParams) {
@@ -1004,14 +978,14 @@
                         sb: 'SENSOR_BRAND',
                         allSensorBrands: function (sb, $stateParams) {
                             if ($stateParams.id == 'Sensor') return sb.getAll().$promise;
-                        },                        
+                        },
                         ht: 'HOUSING_TYPE',
                         allHousingTypes: function (ht) {
                             return ht.getAll().$promise;
-                        }                       
+                        }
                     }
                 });
-                              
+
             //this causes issues with Status404 Not found on component/main/mainView.html
             //$locationProvider.html5Mode({
             //    enabled: true,

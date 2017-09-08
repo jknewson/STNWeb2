@@ -490,9 +490,9 @@
                $scope.datafile = {};
                $scope.showFileForm = false;
            };           
-            //#endregion file Upload
+            //end file Upload
 
-            //#region NWIS Connection
+            // NWIS Connection
             $scope.showNWISFile = function (f) {
                 //want to add or edit file
                 $scope.existFileIndex = -1;
@@ -515,7 +515,7 @@
                 } else {
                     //creating a nwis file
                     $scope.NWISFile = {
-                        name: 'http://waterdata.usgs.gov/nwis/uv?site_no=' + $scope.thisSensorSite.usgs_sid,  // if [fill in if not here.. TODO...&begin_date=20160413&end_date=20160419 (event start/end)
+                        name: 'https://waterdata.usgs.gov/nwis/uv?site_no=' + $scope.thisSensorSite.usgs_sid,  // if [fill in if not here.. TODO...&begin_date=20160413&end_date=20160419 (event start/end)
                         path: '<link>',
                         file_date: new Date(),
                         filetype_id: 2,
@@ -957,88 +957,102 @@
            //create (POST) a deployed sensor click
            $scope.deploy = function () {
                if (this.SensorForm.$valid) {
-                   //see if they used Minutes or seconds for interval. need to store in seconds
-                   if ($scope.IntervalType.type == "Minutes")
-                       $scope.aSensor.interval = $scope.aSensor.interval * 60;
-                   //set event_id
-                   $scope.aSensor.event_id = $cookies.get('SessionEventID');
-                   $scope.aSensor.site_id = SensorSite.site_id;
-                   dealWithTimeStampb4Send('deploy'); //UTC or local?
-                   $scope.aSensStatus.status_type_id = 1; //deployed status
-                   $scope.aSensStatus.member_id = $cookies.get('mID'); //user that logged in is deployer
-                   var createdSensor = {}; var depSenStat = {};
-                   $http.defaults.headers.common.Authorization = 'Basic ' + $cookies.get('STNCreds');
-                   $http.defaults.headers.common.Accept = 'application/json';
+                   if ($scope.aSensor.location_description !== "Proposed sensor at this site. Change description when deploying sensor.") {
+                       //see if they used Minutes or seconds for interval. need to store in seconds
+                       if ($scope.IntervalType.type == "Minutes")
+                           $scope.aSensor.interval = $scope.aSensor.interval * 60;
+                       //set event_id
+                       $scope.aSensor.event_id = $cookies.get('SessionEventID');
+                       $scope.aSensor.site_id = SensorSite.site_id;
+                       dealWithTimeStampb4Send('deploy'); //UTC or local?
+                       $scope.aSensStatus.status_type_id = 1; //deployed status
+                       $scope.aSensStatus.member_id = $cookies.get('mID'); //user that logged in is deployer
+                       var createdSensor = {}; var depSenStat = {};
+                       $http.defaults.headers.common.Authorization = 'Basic ' + $cookies.get('STNCreds');
+                       $http.defaults.headers.common.Accept = 'application/json';
 
-                   //DEPLOY PROPOSED or CREATE NEW deployment?
-                   if ($scope.aSensor.instrument_id !== undefined) {
-                       //put instrument, post status for deploying PROPOSED sensor
-                       INSTRUMENT.update({ id: $scope.aSensor.instrument_id }, $scope.aSensor).$promise.then(function (response) {
-                           //create instrumentstatus too need: status_type_id and instrument_id
-                           createdSensor = response;
-                           createdSensor.deploymentType = $scope.aSensor.deploymentType;
-                           createdSensor.housingType = response.housing_type_id > 0 ? $scope.houseTypeList.filter(function (h) { return h.housing_type_id == response.housing_type_id; })[0].type_name : '';
-                           createdSensor.sensorBrand = $scope.sensorBrandList.filter(function (s) { return s.sensor_brand_id == response.sensor_brand_id; })[0].brand_name;
-                           createdSensor.sensorType = $scope.sensorTypeList.filter(function (t) { return t.sensor_type_id == response.sensor_type_id; })[0].sensor;
-                           $scope.aSensStatus.instrument_id = response.instrument_id;
-                           INSTRUMENT_STATUS.save($scope.aSensStatus).$promise.then(function (statResponse) {
-                               //any tape downs?
-                               if ($scope.tapeDownTable.length > 0) {
-                                   for (var t = 0; t < $scope.tapeDownTable.length; t++) {
-                                       var thisTape = $scope.tapeDownTable[t];
-                                       thisTape.instrument_status_id = statResponse.instrument_status_id;
-                                       ///POST IT///
-                                       OP_MEASURE.save(thisTape).$promise;
+                       //DEPLOY PROPOSED or CREATE NEW deployment?
+                       if ($scope.aSensor.instrument_id !== undefined) {
+                           //put instrument, post status for deploying PROPOSED sensor
+                           INSTRUMENT.update({ id: $scope.aSensor.instrument_id }, $scope.aSensor).$promise.then(function (response) {
+                               //create instrumentstatus too need: status_type_id and instrument_id
+                               createdSensor = response;
+                               createdSensor.deploymentType = $scope.aSensor.deploymentType;
+                               createdSensor.housingType = response.housing_type_id > 0 ? $scope.houseTypeList.filter(function (h) { return h.housing_type_id == response.housing_type_id; })[0].type_name : '';
+                               createdSensor.sensorBrand = $scope.sensorBrandList.filter(function (s) { return s.sensor_brand_id == response.sensor_brand_id; })[0].brand_name;
+                               createdSensor.sensorType = $scope.sensorTypeList.filter(function (t) { return t.sensor_type_id == response.sensor_type_id; })[0].sensor;
+                               $scope.aSensStatus.instrument_id = response.instrument_id;
+                               INSTRUMENT_STATUS.save($scope.aSensStatus).$promise.then(function (statResponse) {
+                                   //any tape downs?
+                                   if ($scope.tapeDownTable.length > 0) {
+                                       for (var t = 0; t < $scope.tapeDownTable.length; t++) {
+                                           var thisTape = $scope.tapeDownTable[t];
+                                           thisTape.instrument_status_id = statResponse.instrument_status_id;
+                                           ///POST IT///
+                                           OP_MEASURE.save(thisTape).$promise;
+                                       }
                                    }
-                               }
-                               //build the createdSensor to send back and add to the list page
-                               depSenStat = statResponse;
-                               //add Status
-                               depSenStat.status = 'Deployed';
-                               createdSensor.instrument_status = [depSenStat, $scope.previousStateStatus];                               
-                               $timeout(function () {
-                                   // anything you want can go here and will safely be run on the next digest.
+                                   //build the createdSensor to send back and add to the list page
+                                   depSenStat = statResponse;
+                                   //add Status
+                                   depSenStat.status = 'Deployed';
+                                   createdSensor.instrument_status = [depSenStat, $scope.previousStateStatus];
+                                   $timeout(function () {
+                                       // anything you want can go here and will safely be run on the next digest.
+                                       toastr.success("Sensor deployed");
+                                       var state = $scope.whichButton == 'deployP' ? 'proposedDeployed' : 'newDeployed';
+                                       var sendBack = [createdSensor, state];
+                                       $uibModalInstance.close(sendBack);
+                                   });
+                               });
+                           });
+                       } else {
+                           //post instrument and status for deploying NEW sensor
+                           INSTRUMENT.save($scope.aSensor).$promise.then(function (response) {
+                               //create instrumentstatus too need: status_type_id and instrument_id
+                               createdSensor = response;
+                               createdSensor.deploymentType = response.deployment_type_id !== null && response.deployment_type_id !== undefined ? $scope.depTypeList.filter(function (d) { return d.deployment_type_id == response.deployment_type_id; })[0].method : "";
+                               createdSensor.housingType = response.housing_type_id !== null && response.housing_type_id !== undefined ? $scope.houseTypeList.filter(function (h) { return h.housing_type_id == response.housing_type_id; })[0].type_name : '';
+                               createdSensor.sensorBrand = $scope.sensorBrandList.filter(function (s) { return s.sensor_brand_id == response.sensor_brand_id; })[0].brand_name;
+                               createdSensor.sensorType = $scope.sensorTypeList.filter(function (t) { return t.sensor_type_id == response.sensor_type_id; })[0].sensor;
+                               $scope.aSensStatus.instrument_id = response.instrument_id;
+
+                               INSTRUMENT_STATUS.save($scope.aSensStatus).$promise.then(function (statResponse) {
+                                   //any tape downs?
+                                   if ($scope.tapeDownTable.length > 0) {
+                                       for (var t = 0; t < $scope.tapeDownTable.length; t++) {
+                                           var thisTape = $scope.tapeDownTable[t];
+                                           thisTape.instrument_status_id = statResponse.instrument_status_id;
+                                           ///POST IT///
+                                           OP_MEASURE.save(thisTape).$promise;
+                                       }
+                                   }
+                                   //build the createdSensor to send back and add to the list page
+                                   depSenStat = statResponse;
+                                   depSenStat.status = 'Deployed';
+                                   createdSensor.instrument_status = [depSenStat];
                                    toastr.success("Sensor deployed");
                                    var state = $scope.whichButton == 'deployP' ? 'proposedDeployed' : 'newDeployed';
                                    var sendBack = [createdSensor, state];
                                    $uibModalInstance.close(sendBack);
                                });
                            });
-                       });
+                       }
                    } else {
-                       //post instrument and status for deploying NEW sensor
-                       INSTRUMENT.save($scope.aSensor).$promise.then(function (response) {
-                           //create instrumentstatus too need: status_type_id and instrument_id
-                           createdSensor = response;
-                           createdSensor.deploymentType = response.deployment_type_id !== null && response.deployment_type_id !== undefined ? $scope.depTypeList.filter(function (d) { return d.deployment_type_id == response.deployment_type_id; })[0].method : "";
-                           createdSensor.housingType = response.housing_type_id !== null && response.housing_type_id !== undefined ? $scope.houseTypeList.filter(function (h) { return h.housing_type_id == response.housing_type_id; })[0].type_name : '';
-                           createdSensor.sensorBrand = $scope.sensorBrandList.filter(function (s) { return s.sensor_brand_id == response.sensor_brand_id; })[0].brand_name;
-                           createdSensor.sensorType = $scope.sensorTypeList.filter(function (t) { return t.sensor_type_id == response.sensor_type_id; })[0].sensor;
-                           $scope.aSensStatus.instrument_id = response.instrument_id;
-
-                           INSTRUMENT_STATUS.save($scope.aSensStatus).$promise.then(function (statResponse) {
-                               //any tape downs?
-                               if ($scope.tapeDownTable.length > 0){
-                                   for (var t = 0; t < $scope.tapeDownTable.length; t++){
-                                       var thisTape = $scope.tapeDownTable[t];
-                                       thisTape.instrument_status_id = statResponse.instrument_status_id;
-                                       ///POST IT///
-                                       OP_MEASURE.save(thisTape).$promise;
-                                   } 
-                               }
-                               //build the createdSensor to send back and add to the list page
-                               depSenStat = statResponse;
-                               depSenStat.status = 'Deployed';
-                               createdSensor.instrument_status = [depSenStat];                               
-                               toastr.success("Sensor deployed");
-                               var state = $scope.whichButton == 'deployP' ? 'proposedDeployed' : 'newDeployed';
-                               var sendBack = [createdSensor, state];
-                               $uibModalInstance.close(sendBack);
-                           });
+                       //show modal to tell them to update the location_description before deploying sensor
+                       var updateDescrModal = $uibModal.open({
+                           template: '<div class="modal-header"><h3 class="modal-title">Error</h3></div>' +
+                               '<div class="modal-body"><p>You must update the Location Description when deploying a proposed sensor.</p></div>' +
+                               '<div class="modal-footer"><button class="btn btn-primary" ng-enter="ok()" ng-click="ok()">OK</button></div>',
+                           controller: ['$scope', '$uibModalInstance', function ($scope, $uibModalInstance) {
+                               $scope.ok = function () {
+                                   $uibModalInstance.close();
+                               };
+                           }],
+                           size: 'sm'
                        });
-                   }
-
-               }
+                   } // end else location_description
+               } //end $valid
            };//end deploy()
 
            //delete aSensor and sensor statuses
@@ -2648,7 +2662,7 @@
                     $scope.NWISFile = {
                         file_date: new Date(),
                         filetype_id: 2,
-                        name: 'http://waterdata.usgs.gov/nwis/uv?site_no=' + $scope.thisSensorSite.usgs_sid,  // if [fill in if not here.. TODO...&begin_date=20160413&end_date=20160419 (event start/end)
+                        name: 'https://waterdata.usgs.gov/nwis/uv?site_no=' + $scope.thisSensorSite.usgs_sid,  // if [fill in if not here.. TODO...&begin_date=20160413&end_date=20160419 (event start/end)
                         path: '<link>',
                         FileType: 'Data',
                         site_id: $scope.sensor.site_id,

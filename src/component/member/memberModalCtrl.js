@@ -87,9 +87,19 @@
                 if (valid) {
                     $http.defaults.headers.common.Authorization = 'Basic ' + $cookies.get('STNCreds');
                     $http.defaults.headers.common.Accept = 'application/json';
-                    if ($scope.pass.newP !== "") $scope.aMember.password = btoa($scope.pass.newP);
-                    var updatedMember = {};
                     var formattedMember = angular.copy($scope.aMember);
+                    // only pass along the password if they changed it
+                    if ($scope.pass.newP !== "") formattedMember.password = btoa($scope.pass.newP);
+                    else {
+
+                        delete formattedMember.password; delete formattedMember.salt;
+                    }
+                    var updatedMember = {};
+
+                    Date.prototype.addHours = function (h) {
+                        this.setHours(this.getHours() + h);
+                        return this;
+                    };
                     
                     delete formattedMember.Role; delete formattedMember.Agency;
                     MEMBER.update({ id: formattedMember.member_id }, formattedMember, function success(response) {
@@ -99,14 +109,15 @@
                         updatedMember.Agency = ag.agency_name;
                         updatedMember.Role = ro.role_name;
                         
-                        //check if this is the member logged in and update the cookies if so
+                        //check if this is the member logged in and they changed their password and update the cookies if so
                         if ($scope.loggedInUser.ID == response.member_id) {
-                            if ($scope.aMember.password !== undefined) {
-                                var enc = btoa(updatedMember.username.concat(":", $scope.pass.newP));
-                                //set expiration on cookies
+                            if ($scope.pass.newP !== "") {
+                                // they changed their password // no way to do this if they only change their username and not their password
+                                var enc = btoa(updatedMember.username.concat(":", $scope.pass.newP)); 
                                 var expireDate = new Date().addHours(8);
-                                $cookies.put('STNCreds', enc, { expires: expireDate });                                
+                                $cookies.put('STNCreds', enc, { expires: expireDate });
                             }
+                                                    
                             $cookies.put('STNUsername', updatedMember.username);
                             var usersNAME = updatedMember.fname + " " + updatedMember.lname;
                             $cookies.put('usersName', usersNAME);

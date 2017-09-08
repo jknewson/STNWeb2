@@ -7,15 +7,14 @@
     //  var rootURL = "https://stntest.wim.usgs.gov/STNServices2";
    //var rootURL = "http://localhost/STNServices2";
    
-    //#region GEOCODE https://geocoding.geo.census.gov/geocoder/geographies/coordinates?benchmark=4&vintage=4&format=json
+    // GEOCODE https://geocoding.geo.census.gov/geocoder/geographies/coordinates?benchmark=4&vintage=4&format=json
     STNResource.factory('GEOCODE', ['$resource', function ($resource) {          
         return $resource(rootURL + '/Geocode/location',
             {}, {
                 getAddressParts: { method: 'GET', params: { Latitude: '@Latitude', Longitude: '@Longitude' } } //y=28.35975&x=-81.421988
             });
-    }]);
-    //#endregion of GEOCODE
-    //#region AGENCY
+    }]);    
+    // AGENCY
     STNResource.factory('AGENCY', ['$resource', function ($resource) {
         return $resource(rootURL + '/Agencies/:id.json',
             {}, {
@@ -25,9 +24,8 @@
                 save: { method: 'POST', cache: false, isArray: false },
                 delete: { method: 'DELETE', cache: false, isArray: false }
             });
-    }]);
-    //#endregion of AGENCY    
-    //#region CONTACT_TYPE
+    }]);    
+    // CONTACT_TYPE
     STNResource.factory('CONTACT_TYPE', ['$resource', function ($resource) {
         return $resource(rootURL + '/ContactTypes/:id.json',
             {}, {
@@ -37,9 +35,8 @@
                 save: { method: 'POST', cache: false, isArray: false },
                 delete: { method: 'DELETE', cache: false, isArray: false }
             });
-    }]);
-    //#endregion of CONTACT_TYPE
-    //#region CONTACT
+    }]);  
+    // CONTACT
     STNResource.factory('CONTACT', ['$resource', function ($resource) {
         return $resource(rootURL + '/Contacts/:id.json',
             {}, {
@@ -51,8 +48,7 @@
                 delete: { method: 'DELETE', cache: false, isArray: false }
             });
     }]);
-    //#endregion of CONTACT
-    //#region COUNTIES
+    // COUNTIES
     STNResource.factory('COUNTIES', ['$resource', function ($resource) {
         return $resource(rootURL + '/Counties/:id.json',
             {}, {
@@ -63,8 +59,7 @@
                 delete: { method: 'DELETE', cache: false, isArray: false }
             });
     }]);
-    //#endregion of COUNTIES
-    //#region DATA_FILE
+    // DATA_FILE
     STNResource.factory('DATA_FILE', ['$resource', function ($resource) {
         return $resource(rootURL + '/DataFiles/:id.json',
             {}, {
@@ -82,8 +77,7 @@
                 delete: { method: 'DELETE', cache: false, isArray: false }
             });
     }]);
-    //#endregion of DATA_FILE
-    //#region DEPLOYMENT_PRIORITY
+    // DEPLOYMENT_PRIORITY
     STNResource.factory('DEPLOYMENT_PRIORITY', ['$resource', function ($resource) {
         return $resource(rootURL + '/DeploymentPriorities/:id.json',
             {}, {
@@ -94,8 +88,7 @@
                 delete: { method: 'DELETE', cache: false, isArray: false }
             });
     }]);
-    //#endregion of DEPLOYMENT_PRIORITY
-    //#region DEPLOYMENT_TYPE
+    // DEPLOYMENT_TYPE
     STNResource.factory('DEPLOYMENT_TYPE', ['$resource', function ($resource) {
         return $resource(rootURL + '/DeploymentTypes/:id.json',
             {}, {
@@ -107,8 +100,7 @@
                 delete: { method: 'DELETE', cache: false, isArray: false }
             });
     }]);
-    //#endregion of DEPLOYMENT_TYPE    
-    //#region EVENT
+    // EVENT
     STNResource.factory('EVENT', ['$resource', function ($resource) {
         return $resource(rootURL + '/Events/:id.json',
             {}, {
@@ -121,8 +113,7 @@
                 delete: { method: 'DELETE', cache: false, isArray: false }
             });
     }]);
-    //#endregion of EVENT
-    //#region EVENT_STATUS
+    // EVENT_STATUS
     STNResource.factory('EVENT_STATUS', ['$resource', function ($resource) {
         return $resource(rootURL + '/EventStatus/:id.json',
             {}, {
@@ -133,8 +124,7 @@
                 delete: { method: 'DELETE', cache: false, isArray: false }
             });
     }]);
-    //#endregion of EVENT_STATUS
-    //#region EVENT_TYPE
+    // EVENT_TYPE
     STNResource.factory('EVENT_TYPE', ['$resource', function ($resource) {
         return $resource(rootURL + '/EventTypes/:id.json',
             {}, {
@@ -145,13 +135,12 @@
                 delete: { method: 'DELETE', cache: false, isArray: false }
             });
     }]);
-    //#endregion of EVENT_TYPE   
-    //#region FILE    
+    // FILE    
     STNResource.factory('FILE', ['$resource', function ($resource) {
         return $resource(rootURL + '/Files/:id.json',
             {}, {
                 query: {},
-                getAll: { method: 'GET', isArray: true },
+                getAll: { method: 'GET', isArray: true },                
                 getFileItem: { method: 'GET', isArray: false, url: rootURL + '/Files/:id/Item' },
                 update: { method: 'PUT', cache: false, isArray: false },
                 uploadFile: { method: 'POST', url: rootURL + '/Files/bytes', headers: { 'Content-Type': undefined }, transformRequest: angular.identity, cache: false, isArray: false },
@@ -162,8 +151,7 @@
                 delete: { method: 'DELETE', cache: false, isArray: false }
             });
     }]);
-    //#endregion of FILE 
-    //#region photoFileStamp
+    // photoFileStamp
     STNResource.factory('FILE_STAMP', ['$rootScope', function ($rootScope) {
         //need to update the ng-src on photo files if one changes, update the stamp part of the image to refresh the link        
         return {
@@ -177,8 +165,7 @@
             }
         };
     }]);
-    //#endregion of HWM_Service
-    //#region FILE_TYPE
+    // FILE_TYPE
     STNResource.factory('FILE_TYPE', ['$resource', function ($resource) {
         return $resource(rootURL + '/FileTypes/:id.json',
             {}, {
@@ -189,8 +176,7 @@
                 delete: { method: 'DELETE', cache: false, isArray: false }
             });
     }]);
-    //#endregion of FILE_TYPE   
-    //#region HORIZONTAL_COLL_METHODS
+    // HORIZONTAL_COLL_METHODS
     STNResource.factory('HORIZONTAL_COLL_METHODS', ['$resource', function ($resource) {
         return $resource(rootURL + '/HorizontalMethods/:id.json',
             {}, {
@@ -201,8 +187,7 @@
                 delete: { method: 'DELETE', cache: false, isArray: false }
             });
     }]);
-    //#endregion of HORIZONTAL_COLL_METHODS
-    //#region HORIZONTAL_DATUM
+    // HORIZONTAL_DATUM
     STNResource.factory('HORIZONTAL_DATUM', ['$resource', function ($resource) {
         return $resource(rootURL + '/HorizontalDatums/:id.json',
             {}, {
@@ -213,8 +198,7 @@
                 delete: { method: 'DELETE', cache: false, isArray: false }
             });
     }]);
-    //#endregion of HORIZONTAL_DATUM
-    //#region HOUSING_TYPE
+    // HOUSING_TYPE
     STNResource.factory('HOUSING_TYPE', ['$resource', function ($resource) {
         return $resource(rootURL + '/HousingTypes/:id.json',
             {}, {
@@ -225,8 +209,7 @@
                 delete: { method: 'DELETE', cache: false, isArray: false }
             });
     }]);
-    //#endregion of HOUSING_TYPE
-    //#region HWM
+    // HWM
     STNResource.factory('HWM', ['$resource', function ($resource) {
         return $resource(rootURL + '/hwms/:id.json',
             {}, {
@@ -244,8 +227,7 @@
                 delete: { method: 'DELETE', cache: false, isArray: false }
             });
     }]);
-    //#endregion of HWM
-    //#region HWM_Service
+    // HWM_Service
     STNResource.factory('HWM_Service', [function () {
         //when hwm is created or deleted, this gets updated so that filesCtrl will update it's list of siteHWMs
         var allSiteHWMs = []; var bulkSearch = {};
@@ -266,8 +248,7 @@
 
         };
     }]);
-    //#endregion of HWM_Service
-    //#region HWM_QUALITY
+    // HWM_QUALITY
     STNResource.factory('HWM_QUALITY', ['$resource', function ($resource) {
         return $resource(rootURL + '/HWMQualities/:id.json',
             {}, {
@@ -278,8 +259,7 @@
                 delete: { method: 'DELETE', cache: false, isArray: false }
             });
     }]);
-    //#endregion of HWM_QUALITY
-    //#region HWM_TYPE
+    // HWM_TYPE
     STNResource.factory('HWM_TYPE', ['$resource', function ($resource) {
         return $resource(rootURL + '/HWMTypes/:id.json',
             {}, {
@@ -290,8 +270,7 @@
                 delete: { method: 'DELETE', cache: false, isArray: false }
             });
     }]);
-    //#endregion of HWM_TYPE
-    //#region INSTRUMENT
+    // INSTRUMENT
     STNResource.factory('INSTRUMENT', ['$resource', function ($resource) {
         return $resource(rootURL + '/Instruments/:id.json',
             {}, {
@@ -306,8 +285,7 @@
                 delete: { method: 'DELETE', cache: false, isArray: false }
             });
     }]);
-    //#endregion of INSTRUMENT
-    //#region Instrument_Service
+    // Instrument_Service
     STNResource.factory('Instrument_Service', [function () {
         //when hwm is created or deleted, this gets updated so that filesCtrl will update it's list of siteHWMs
         var allSiteSensors = [];
@@ -320,8 +298,7 @@
             }
         };
     }]);
-    //#endregion of Instrument_Service
-    //#region INSTRUMENT_STATUS
+    // INSTRUMENT_STATUS
     STNResource.factory('INSTRUMENT_STATUS', ['$resource', function ($resource) {
         return $resource(rootURL + '/InstrumentStatus/:id.json',
             {}, {
@@ -332,8 +309,7 @@
                 delete: { method: 'DELETE', cache: false, isArray: false }
             });
     }]);
-    //#endregion of INSTRUMENT
-    //#region INST_COLL_CONDITION
+    // INST_COLL_CONDITION
     STNResource.factory('INST_COLL_CONDITION', ['$resource', function ($resource) {
         return $resource(rootURL + '/InstrCollectConditions/:id.json',
             {}, {
@@ -344,8 +320,7 @@
                 delete: { method: 'DELETE', cache: false, isArray: false }
             });
     }]);
-    //#endregion of INST_COLL_CONDITION
-    //#region LANDOWNER_CONTACT
+    // LANDOWNER_CONTACT
     STNResource.factory('LANDOWNER_CONTACT', ['$resource', function ($resource) {
         return $resource(rootURL + '/LandOwners/:id.json',
             {}, {
@@ -356,8 +331,7 @@
                 delete: { method: 'DELETE', cache: false, isArray: false }
             });
     }]);
-    //#endregion of LANDOWNER_CONTACT
-    //#region Map_Site
+    // Map_Site
     STNResource.factory('Map_Site', ['SITE', '$rootScope', '$cookies', function (SITE, $rootScope,$cookies) {
         var MapSiteParts = [];
 
@@ -378,8 +352,7 @@
             }
         };
     }]);
-    //#endregion of Map_Site
-    //#region Map_filter
+    // Map_filter
     STNResource.factory('Map_Filter', [ '$rootScope', function ($rootScope) {
         var filteredSites = [];
 
@@ -393,8 +366,7 @@
             }
         };
     }]);
-    //#endregion of Map_Filter
-    //#region MARKER
+    // MARKER
     STNResource.factory('MARKER', ['$resource', function ($resource) {
         return $resource(rootURL + '/Markers/:id.json',
             {}, {
@@ -405,8 +377,7 @@
                 delete: { method: 'DELETE', cache: false, isArray: false }
             });
     }]);
-    //#endregion of MARKER
-    //#region MEMBER
+    // MEMBER
     STNResource.factory('MEMBER', ['$resource', function ($resource) {
         return $resource(rootURL + '/Members/:id.json',
             {}, {
@@ -422,8 +393,7 @@
                 deleteMember: { method: 'DELETE', cache: false, isArray: false,url: rootURL + '/Members/:id' }
             });
     }]);
-    //#endregion of MEMBER
-    //#region NETWORK_NAME
+    // NETWORK_NAME
     STNResource.factory('NETWORK_NAME', ['$resource', function ($resource) {
         return $resource(rootURL + '/NetworkNames/:id.json',
             {}, {
@@ -434,8 +404,7 @@
                 delete: { method: 'DELETE', cache: false, isArray: false }
             });
     }]);
-    //#endregion of NETWORK_NAME
-    //#region NETWORK_TYPE
+    // NETWORK_TYPE
     STNResource.factory('NETWORK_TYPE', ['$resource', function ($resource) {
         return $resource(rootURL + '/NetworkTypes/:id.json',
             {}, {
@@ -446,8 +415,7 @@
                 delete: { method: 'DELETE', cache: false, isArray: false }
             });
     }]);
-    //#endregion of NETWORK_TYPE   
-    //#region OBJECTIVE_POINT
+    // OBJECTIVE_POINT
     STNResource.factory('OBJECTIVE_POINT', ['$resource', function ($resource) {
         return $resource(rootURL + '/ObjectivePoints/:id.json',
             {}, {
@@ -460,8 +428,7 @@
                 delete: { method: 'DELETE', cache: false, isArray: false }
             });
     }]);
-    //#endregion of OBJECTIVE_POINT
-    //#region OP_CONTROL_IDENTIFIER
+    // OP_CONTROL_IDENTIFIER
     STNResource.factory('OP_CONTROL_IDENTIFIER', ['$resource', function ($resource) {
         return $resource(rootURL + '/OPControlIdentifiers/:id.json',
             {}, {
@@ -472,8 +439,7 @@
                 delete: { method: 'DELETE', cache: false, isArray: false }
             });
     }]);
-    //#endregion of OP_CONTROL_IDENTIFIER
-    //#region OP_MEASURE
+    // OP_MEASURE
     STNResource.factory('OP_MEASURE', ['$resource', function ($resource) {
         return $resource(rootURL + '/OPMeasurements/:id.json',
             {}, {
@@ -486,8 +452,7 @@
                 delete: { method: 'DELETE', cache: false, isArray: false }
             });
     }]);
-    //#endregion of OP_MEASURE
-    //#region OP_QUALITY
+    // OP_QUALITY
     STNResource.factory('OP_QUALITY', ['$resource', function ($resource) {
         return $resource(rootURL + '/ObjectivePointQualities/:id.json',
             {}, {
@@ -498,8 +463,7 @@
                 delete: { method: 'DELETE', cache: false, isArray: false }
             });
     }]);
-    //#endregion of OP_QUALITY
-    //#region OP_TYPE
+    // OP_TYPE
     STNResource.factory('OP_TYPE', ['$resource', function ($resource) {
         return $resource(rootURL + '/OPTypes/:id.json',
             {}, {
@@ -510,8 +474,7 @@
                 delete: { method: 'DELETE', cache: false, isArray: false }
             });
     }]);
-    //#endregion of OP_TYPE
-    //#region PEAK
+    // PEAK
     STNResource.factory('PEAK', ['$resource', function ($resource) {
         return $resource(rootURL + '/PeakSummaries/:id.json',
             {}, {
@@ -523,8 +486,7 @@
                 delete: { method: 'DELETE', cache: false, isArray: false }
             });
     }]);
-    //#endregion of PEAK
-    //#region REPORT
+    // REPORT
     STNResource.factory('REPORT', ['$resource', function ($resource) {
         return $resource(rootURL + '/ReportingMetrics/:id.json',
             {}, {
@@ -542,8 +504,7 @@
                 delete: { method: 'DELETE', cache: false, isArray: false }
             });
     }]);
-    //#endregion of REPORT
-    //#region ROLE
+    // ROLE
     STNResource.factory('ROLE', ['$resource', function ($resource) {
         return $resource(rootURL + '/Roles/:id.json',
             {}, {
@@ -551,8 +512,7 @@
                 getAll: { method: 'GET', isArray: true }                
             });
     }]);
-    //#endregion of ROLE
-    //#region SENSOR_BRAND
+    // SENSOR_BRAND
     STNResource.factory('SENSOR_BRAND', ['$resource', function ($resource) {
         return $resource(rootURL + '/SensorBrands/:id.json',
             {}, {
@@ -563,8 +523,7 @@
                 delete: { method: 'DELETE', cache: false, isArray: false }
             });
     }]);
-    //#endregion of SENSOR_BRAND
-    //#region SENSOR_DEPLOYMENT --- no longer needed since SENSOR_TYPE returns as this relationship now
+    // SENSOR_DEPLOYMENT --- no longer needed since SENSOR_TYPE returns as this relationship now
     //STNResource.factory('SENSOR_DEPLOYMENT', ['$resource', function ($resource) {
     //    return $resource(rootURL + '/SensorDeployments/:id.json',
     //        {}, {
@@ -575,9 +534,8 @@
     //            delete: { method: 'DELETE', cache: false, isArray: false }
     //        });
     //}]);
-    //#endregion of SENSOR_DEPLOYMENT
 
-    //#region SENSOR_TYPE
+    // SENSOR_TYPE
     STNResource.factory('SENSOR_TYPE', ['$resource', function ($resource) {
         return $resource(rootURL + '/SensorTypes/:id.json',
             {}, {
@@ -591,8 +549,7 @@
                 delete: { method: 'DELETE', cache: false, isArray: false }
             });
     }]);
-    //#endregion of SENSOR_TYPE
-    //#region SITE
+    // SITE
     STNResource.factory('SITE', ['$resource', function ($resource) {
         return $resource(rootURL + '/Sites/:id.json',
             {}, {
@@ -628,6 +585,7 @@
                 delete: { method: 'DELETE', cache: false, isArray: false }
             });
     }]);
+
     // IsScriptRunning Service
     STNResource.factory('Site_Script', ['$cookies', '$rootScope', function ($cookies, $rootScope) {
         var isRunning;
@@ -727,5 +685,4 @@
                 login: { method: 'GET', cache: false, isArray: false }
             });
     }]);
-    
 })();

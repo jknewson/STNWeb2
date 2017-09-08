@@ -6670,7 +6670,7 @@
                                     <button class="btn btn-primary" ng-if="aFile.file_id == undefined" ng-click="createFile(DepSenFILEForm.$valid)">Create File</button>
                                     <button class="btn btn-warning" type="button" ng-click="cancelFile()">Close/Cancel File</button>
                                 </div>
-                                <div class="col-md-4" ng-show="!showProcessing">
+                                <div class="col-md-4" ng-if="!showProcessing">
                                     <!-- button to run STORM script if this existing data file is on a water sensor (sensor_type_id == 1 && (deployment_type_id == 1 || deployment_type_id == 2) )-->
                                     <button type="button" class="btn btn-primary" ng-if="aFile.file_id != undefined && aFile.filetype_id === 2 && (sensor.sensor_type_id == 1 && (sensor.deployment_type_id == 1 || sensor.deployment_type_id == 2))" ng-click="showStormSection()">Run Storm Script</button>
                                     <!-- button to run AIR script if this existing data file is on a air sensor (sensor_type_id == 1 && deployment_type_id == 3 )-->
@@ -6684,12 +6684,12 @@
                                     <table class="table" style="display:inline-block;overflow:auto;">
                                         <thead>
                                             <tr>
-                                                <th></th><th>Distance from here</th><th>Location</th><th>Sensor Brand</th><th>File Name</th><th>Good Start</th><th>Good End</th>
+                                                <th></th><th>Site No.</th><th>Site distance</th><th>Location</th><th>Sensor Brand</th><th>File Name</th><th>Good Start</th><th>Good End</th>
                                             </tr>
                                         </thead>
                                         <tr ng-repeat="df in eventDataFiles">
                                             <td><input type="radio" name="selected_datafile" ng-model="df.selected" value="true" /></td>
-                                            <td>{{df.distance | number:4}} mi.</td><td>{{df.city}}, {{df.state}}</td><td>{{df.brand_name}}</td>
+                                            <td>{{df.site_no}}</td><td>{{df.distance | number:4}} mi.</td><td>{{df.city}}, {{df.state}}</td><td>{{df.brand_name}}</td>
                                             <td>{{df.name}}</td><td>{{df.good_start | date: 'MM/dd/yyyy' }}</td><td>{{df.good_end | date: 'MM/dd/yyyy'}}</td>
                                         </tr>
                                     </table>
@@ -7803,7 +7803,7 @@
                             <ul style="padding-left: 0">
                                 <li ng-repeat="f in SensorBox.files" style="list-style:none;padding-bottom: 15px;">
                                     <span class="col-sm-9 borderLess" style="padding:0">
-                                        <a class="btn btn-primary borderLess" style="padding:0" target="_blank" ng-href="{{serverURL}}/Files/{{f.file_id}}/Item">
+                                        <a class="btn btn-primary borderLess" style="padding:0;color:#333333;" target="_blank" ng-href="{{serverURL}}/Files/{{f.file_id}}/Item">
                                             {{f.file_date | date: 'MM/dd/yyyy'}} ({{f.name || f.file_id}})
                                         </a>
                                     </span>
@@ -7983,7 +7983,7 @@
                         <div class="col-md-8 col-md-offset-4">
                             These fields shall be filled out pursuant to sw13.01
                             <br />
-                            Click this <a target="_blank" href="http://water.usgs.gov/admin/memo/SW/sw13.01.pdf">link</a> for more information.
+                            Click this <a target="_blank" href="https://water.usgs.gov/admin/memo/SW/sw13.01.pdf">link</a> for more information.
                         </div>
                         <br clear="all" />
                         <!-- Peak Discharge-->

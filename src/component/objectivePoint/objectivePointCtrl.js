@@ -4,8 +4,8 @@
 
     var STNControllers = angular.module('STNControllers');
 
-    STNControllers.controller('objectivePointCtrl', ['$scope', '$rootScope', '$cookies', '$location', '$state', '$http', '$uibModal', '$filter', '$timeout', 'OBJECTIVE_POINT', 'MEMBER', 'thisSite', 'thisSiteOPs', 'allOPTypes', 'allHorDatums', 'allHorCollMethods', 'allVertDatums', 'allVertColMethods', 'allOPQualities', 'allFileTypes', 'allAgencies',
-        function ($scope, $rootScope, $cookies, $location, $state, $http, $uibModal, $filter, $timeout, OBJECTIVE_POINT, MEMBER, thisSite, thisSiteOPs, allOPTypes, allHorDatums, allHorCollMethods, allVertDatums, allVertColMethods, allOPQualities, allFileTypes, allAgencies) {
+    STNControllers.controller('objectivePointCtrl', ['$scope', '$rootScope', '$cookies', '$location', '$state', '$http', '$uibModal', '$filter', '$timeout', 'OBJECTIVE_POINT', 'MEMBER', 'SITE', 'thisSite', 'thisSiteOPs', 'allOPTypes', 'allHorDatums', 'allHorCollMethods', 'allVertDatums', 'allVertColMethods', 'allOPQualities', 'allFileTypes', 'allAgencies',
+        function ($scope, $rootScope, $cookies, $location, $state, $http, $uibModal, $filter, $timeout, OBJECTIVE_POINT, MEMBER, SITE, thisSite, thisSiteOPs, allOPTypes, allHorDatums, allHorCollMethods, allVertDatums, allVertColMethods, allOPQualities, allFileTypes, allAgencies) {
             if ($cookies.get('STNCreds') === undefined || $cookies.get('STNCreds') === "") {
                 $scope.auth = false;
                 $location.path('/login');
@@ -43,7 +43,7 @@
                                 }
                             },
                             opSite: function () {
-                                return thisSite;
+                                return SITE.query({ id: thisSite.site_id }).$promise;
                             },
                             agencyList: function () {
                                 return allAgencies;
