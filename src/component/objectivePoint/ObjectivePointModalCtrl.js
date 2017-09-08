@@ -597,32 +597,46 @@
 
             //Create this OP
             $scope.create = function () {
-                if (this.OPForm.$valid) {                    
+                if (this.OPForm.$valid) {
                     $http.defaults.headers.common.Authorization = 'Basic ' + $cookies.get('STNCreds');
                     $http.defaults.headers.common.Accept = 'application/json';
                     var createdOP = {};
                     //post
-                    formatDefaults($scope.OP, 'create'); //$scope.OP.FTorMETER, FTorCM, decDegORdms                               
-                    var OPtoPOST = trimOP($scope.OP); //make it an OBJECTIVE_POINT for saving                    
-
-                    OBJECTIVE_POINT.save(OPtoPOST, function success(response) {
-                        toastr.success("Datum Location created");
-                        createdOP = response;
-                        if ($scope.addedIdentifiers.length > 0) {
-                            //post each one THIS WILL CHANGE SOON TO HAVE objective_point_id already added and not sent along with it
-                            for (var opc = 0; opc < $scope.addedIdentifiers.length; opc++) {
-                                var thisOne = $scope.addedIdentifiers[opc];
-                                thisOne.objective_point_id = response.objective_point_id;
-                                OP_CONTROL_IDENTIFIER.save(thisOne).$promise;
-                            }
+                    formatDefaults($scope.OP, 'create'); //$scope.OP.FTorMETER, FTorCM, decDegORdms    
+                    if ($scope.OP.latitude_dd < 0 || $scope.OP.latitude_dd > 73 || isNaN($scope.OP.latitude_dd)) {
+                        openLatModal('latlong');
+                        //if not a number, clear the imputs to trigger the validation
+                        if (isNaN($scope.OP.latitude_dd)) {
+                            $scope.OP.latitude_dd = undefined;
                         }
-                    }, function error(errorResponse) {
-                        toastr.error("Error creating Datum Location: " + errorResponse.statusText);
-                    }).$promise.then(function () {
-                        var sendBack = [createdOP, 'created'];
-                        $uibModalInstance.close(sendBack);
-                    });
-                }
+                    } else if ($scope.OP.longitude_dd < -175 || $scope.OP.longitude_dd > -60 || isNaN($scope.OP.longitude_dd)) {
+                        openLongModal('latlong');
+                        //if not a number, clear the imputs to trigger the validation
+                        if (isNaN($scope.OP.longitude_dd)) {
+                            $scope.OP.longitude_dd = undefined;
+                        }
+                    } else {
+                        var OPtoPOST = trimOP($scope.OP); //make it an OBJECTIVE_POINT for saving                    
+
+                        OBJECTIVE_POINT.save(OPtoPOST, function success(response) {
+                            toastr.success("Datum Location created");
+                            createdOP = response;
+                            if ($scope.addedIdentifiers.length > 0) {
+                                //post each one THIS WILL CHANGE SOON TO HAVE objective_point_id already added and not sent along with it
+                                for (var opc = 0; opc < $scope.addedIdentifiers.length; opc++) {
+                                    var thisOne = $scope.addedIdentifiers[opc];
+                                    thisOne.objective_point_id = response.objective_point_id;
+                                    OP_CONTROL_IDENTIFIER.save(thisOne).$promise;
+                                }
+                            }
+                        }, function error(errorResponse) {
+                            toastr.error("Error creating Datum Location: " + errorResponse.statusText);
+                        }).$promise.then(function () {
+                            var sendBack = [createdOP, 'created'];
+                            $uibModalInstance.close(sendBack);
+                        });
+                    } //end lat/long is good
+                }// end valid
             }; //end Create
 
             //X was clicked next to existing Control Identifier to have it removed, store in remove array for Save()
@@ -650,61 +664,75 @@
                     $http.defaults.headers.common.Accept = 'application/json';
                     if ($scope.DMS.LADeg !== undefined) $scope.opCopy.latitude_dd = azimuth($scope.DMS.LADeg, $scope.DMS.LAMin, $scope.DMS.LASec);
                     if ($scope.DMS.LODeg !== undefined) $scope.opCopy.longitude_dd = azimuth($scope.DMS.LODeg, $scope.DMS.LOMin, $scope.DMS.LOSec);
-                    var updatedOP = {};
-                    //if there's an op_control_identifier_id, PUT .. else POST
-                    if ($scope.addedIdentifiersCopy.length > 0) {
-                        for (var i = 0; i < $scope.addedIdentifiersCopy.length; i++) {
-                            if ($scope.addedIdentifiersCopy[i].op_control_identifier_id !== undefined) {
-                                //existing: PUTvar ind = $scope.chosenHWMList.map(function (hwm) { return hwm.hwm_id; }).indexOf(aHWM.hwm_id); //not working:: $scope.chosenHWMList.indexOf(aHWM);
-                                var existIndex = $scope.addedIdentifiers.map(function (i) { return i.op_control_identifier_id; }).indexOf($scope.addedIdentifiersCopy[i].op_control_identifier_id);
-                                OP_CONTROL_IDENTIFIER.update({ id: $scope.addedIdentifiersCopy[i].op_control_identifier_id }, $scope.addedIdentifiersCopy[i]).$promise.then(function (response) {
-                                    $scope.addedIdentifiers[existIndex] = response;
-                                });
-                            } else {
-                                //post each one
-                                var thisOPControlID = $scope.addedIdentifiersCopy[i];
-                                thisOPControlID.objective_point_id = $scope.OP.objective_point_id;
-                                OP_CONTROL_IDENTIFIER.save(thisOPControlID).$promise.then(function (response) {
-                                    $scope.addedIdentifiers.push(response);
-                                });
-                            }
-                        }//end foreach addedIdentifier
-                    }//end if there's addedidentifiers
+                    if ($scope.opCopy.latitude_dd < 0 || $scope.opCopy.latitude_dd > 73 || isNaN($scope.opCopy.latitude_dd)) {
+                        openLatModal('latlong');
+                        //if not a number, clear the imputs to trigger the validation
+                        if (isNaN($scope.opCopy.latitude_dd)) {
+                            $scope.opCopy.latitude_dd = undefined;
+                        }
+                    } else if ($scope.opCopy.longitude_dd < -175 || $scope.opCopy.longitude_dd > -60 || isNaN($scope.opCopy.longitude_dd)) {
+                        openLongModal('latlong');
+                        //if not a number, clear the imputs to trigger the validation
+                        if (isNaN($scope.opCopy.longitude_dd)) {
+                            $scope.opCopy.longitude_dd = undefined;
+                        }
+                    } else {
+                        var updatedOP = {};
+                        //if there's an op_control_identifier_id, PUT .. else POST
+                        if ($scope.addedIdentifiersCopy.length > 0) {
+                            for (var i = 0; i < $scope.addedIdentifiersCopy.length; i++) {
+                                if ($scope.addedIdentifiersCopy[i].op_control_identifier_id !== undefined) {
+                                    //existing: PUTvar ind = $scope.chosenHWMList.map(function (hwm) { return hwm.hwm_id; }).indexOf(aHWM.hwm_id); //not working:: $scope.chosenHWMList.indexOf(aHWM);
+                                    var existIndex = $scope.addedIdentifiers.map(function (i) { return i.op_control_identifier_id; }).indexOf($scope.addedIdentifiersCopy[i].op_control_identifier_id);
+                                    OP_CONTROL_IDENTIFIER.update({ id: $scope.addedIdentifiersCopy[i].op_control_identifier_id }, $scope.addedIdentifiersCopy[i]).$promise.then(function (response) {
+                                        $scope.addedIdentifiers[existIndex] = response;
+                                    });
+                                } else {
+                                    //post each one
+                                    var thisOPControlID = $scope.addedIdentifiersCopy[i];
+                                    thisOPControlID.objective_point_id = $scope.OP.objective_point_id;
+                                    OP_CONTROL_IDENTIFIER.save(thisOPControlID).$promise.then(function (response) {
+                                        $scope.addedIdentifiers.push(response);
+                                    });
+                                }
+                            }//end foreach addedIdentifier
+                        }//end if there's addedidentifiers
 
-                    //if there's any in removeOPCarray, DELETE those
-                    if ($scope.removeOPCarray.length > 0) {
-                        for (var r = 0; r < $scope.removeOPCarray.length; r++) {
-                            var deIndex = $scope.addedIdentifiers.map(function (ri) { return ri.op_control_identifier_id; }).indexOf($scope.removeOPCarray[r].op_control_identifier_id);
-                            OP_CONTROL_IDENTIFIER.delete({ id: $scope.removeOPCarray[r].op_control_identifier_id }).$promise.then(function () {
-                                $scope.addedIdentifiers.splice(deIndex,1);
-                            });
-                        }//end foreach removeOPCarray
-                    }//end if there's removeOPCs
+                        //if there's any in removeOPCarray, DELETE those
+                        if ($scope.removeOPCarray.length > 0) {
+                            for (var r = 0; r < $scope.removeOPCarray.length; r++) {
+                                var deIndex = $scope.addedIdentifiers.map(function (ri) { return ri.op_control_identifier_id; }).indexOf($scope.removeOPCarray[r].op_control_identifier_id);
+                                OP_CONTROL_IDENTIFIER.delete({ id: $scope.removeOPCarray[r].op_control_identifier_id }).$promise.then(function () {
+                                    $scope.addedIdentifiers.splice(deIndex, 1);
+                                });
+                            }//end foreach removeOPCarray
+                        }//end if there's removeOPCs
 
-                    //look at OP.FTorMETER ("ft"), OP.FTorCM ("ft"), and OP.decDegORdms ("dd"), make sure site_ID is on there and send it to trim before PUT                
-                    formatDefaults($scope.opCopy, 'edit'); //$scope.OP.FTorMETER, FTorCM, decDegORdms
-                    var OPtoPOST = trimOP($scope.opCopy);
-                    OPtoPOST.objective_point_id = $scope.opCopy.objective_point_id;
-                    //$http.defaults.headers.common['X-HTTP-Method-Override'] = 'PUT';
-                    OBJECTIVE_POINT.update({ id: OPtoPOST.objective_point_id }, OPtoPOST, function success(response) {
-                        toastr.success("Datum Location updated");
-                        $scope.OP = response; thisOP = response;
-                        $scope.OP.date_established = makeAdate($scope.OP.date_established);
-                        if ($scope.OP.date_recovered !== null)
-                            $scope.OP.date_recovered = makeAdate($scope.OP.date_recovered);
-                        $scope.OP.opType = $scope.OP.op_type_id > 0 ? $scope.OPTypeList.filter(function (t) { return t.objective_point_type_id == $scope.OP.op_type_id; })[0].op_type : '';
-                        $scope.OP.quality = $scope.OP.op_quality_id > 0 ? $scope.OPQualityList.filter(function (q) { return q.op_quality_id == $scope.OP.op_quality_id; })[0].quality : '';
-                        $scope.OP.hdatum = $scope.OP.hdatum_id > 0 ? $scope.HDList.filter(function (hd) { return hd.datum_id == $scope.OP.hdatum_id; })[0].datum_name : '';
-                        $scope.OP.hCollectMethod = $scope.OP.hcollect_method_id > 0 ? $scope.HCollectMethodList.filter(function (hc) { return hc.hcollect_method_id == $scope.OP.hcollect_method_id; })[0].hcollect_method : '';
-                        $scope.OP.vDatum = $scope.OP.vdatum_id > 0 ? $scope.VDatumList.filter(function (vd) { return vd.datum_id == $scope.OP.vdatum_id; })[0].datum_name : '';
-                        $scope.OP.vCollectMethod = $scope.OP.vcollect_method_id > 0 ? $scope.VCollectMethodList.filter(function (vc) { return vc.vcollect_method_id == $scope.OP.vcollect_method_id; })[0].vcollect_method : '';
-                        $scope.opCopy = {};
-                        $scope.addedIdentifiersCopy = []; $scope.view.OPval = 'detail';
-                        //    delete $http.defaults.headers.common['X-HTTP-Method-Override'];
-                    }, function error(errorResponse) {
-                        toastr.error("Error updating Datum Location: " + errorResponse.statusText);
-                    }).$promise;
-                }//end valid
+                        //look at OP.FTorMETER ("ft"), OP.FTorCM ("ft"), and OP.decDegORdms ("dd"), make sure site_ID is on there and send it to trim before PUT                
+                        formatDefaults($scope.opCopy, 'edit'); //$scope.OP.FTorMETER, FTorCM, decDegORdms
+                        var OPtoPOST = trimOP($scope.opCopy);
+                        OPtoPOST.objective_point_id = $scope.opCopy.objective_point_id;
+                        //$http.defaults.headers.common['X-HTTP-Method-Override'] = 'PUT';
+                        OBJECTIVE_POINT.update({ id: OPtoPOST.objective_point_id }, OPtoPOST, function success(response) {
+                            toastr.success("Datum Location updated");
+                            $scope.OP = response; thisOP = response;
+                            $scope.OP.date_established = makeAdate($scope.OP.date_established);
+                            if ($scope.OP.date_recovered !== null)
+                                $scope.OP.date_recovered = makeAdate($scope.OP.date_recovered);
+                            $scope.OP.opType = $scope.OP.op_type_id > 0 ? $scope.OPTypeList.filter(function (t) { return t.objective_point_type_id == $scope.OP.op_type_id; })[0].op_type : '';
+                            $scope.OP.quality = $scope.OP.op_quality_id > 0 ? $scope.OPQualityList.filter(function (q) { return q.op_quality_id == $scope.OP.op_quality_id; })[0].quality : '';
+                            $scope.OP.hdatum = $scope.OP.hdatum_id > 0 ? $scope.HDList.filter(function (hd) { return hd.datum_id == $scope.OP.hdatum_id; })[0].datum_name : '';
+                            $scope.OP.hCollectMethod = $scope.OP.hcollect_method_id > 0 ? $scope.HCollectMethodList.filter(function (hc) { return hc.hcollect_method_id == $scope.OP.hcollect_method_id; })[0].hcollect_method : '';
+                            $scope.OP.vDatum = $scope.OP.vdatum_id > 0 ? $scope.VDatumList.filter(function (vd) { return vd.datum_id == $scope.OP.vdatum_id; })[0].datum_name : '';
+                            $scope.OP.vCollectMethod = $scope.OP.vcollect_method_id > 0 ? $scope.VCollectMethodList.filter(function (vc) { return vc.vcollect_method_id == $scope.OP.vcollect_method_id; })[0].vcollect_method : '';
+                            $scope.opCopy = {};
+                            $scope.addedIdentifiersCopy = []; $scope.view.OPval = 'detail';
+                            //    delete $http.defaults.headers.common['X-HTTP-Method-Override'];
+                        }, function error(errorResponse) {
+                            toastr.error("Error updating Datum Location: " + errorResponse.statusText);
+                        }).$promise;
+                    }//end lat/long are good
+                }// end valid
             }; //end Save
 
             //delete this OP from the SITE

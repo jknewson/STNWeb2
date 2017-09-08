@@ -23,7 +23,7 @@
             $scope.showFileForm = false; //hidden form to add file to hwm
             $scope.userRole = $cookies.get('usersRole');
             $scope.FlagMember = ""; //just for show on page
-            //$scope.SurveyMember = ""; //just for show on page
+            $scope.SurveyMember = ""; //just for show on page
             $scope.showEventDD = false; //toggle to show/hide event dd (admin only)
             $scope.adminChanged = {}; //will hold event_id if admin changes it. apply when PUTting
             $scope.serverURL = SERVER_URL; //constant with stntest.wim.usgs.gov/STNServices2 
@@ -360,31 +360,7 @@
                 var dateWOtime = new Date(monthNames[month] + " " + day + ", " + year);
                 return dateWOtime;
             };//end makeAdate()
-
-          /*  $scope.ensurehwmLabelUnique = function () {
-                var h = $scope.view.HWMval == 'edit' ? $scope.hwmCopy : $scope.aHWM;
-                angular.forEach(allSiteHWMs, function (hwm) {
-                    if (hwm.hwm_label == h.hwm_label) {
-                        //not unique, clear it and show warning
-                        h.hwm_label = h.hwm_id !== undefined ? $scope.aHWM.hwm_label : 'hwm-' + (parseFloat(allSiteHWMs.length) + 1);
-                        var uniqueModal = $uibModal.open({
-                            template: '<div class="modal-header"><h3 class="modal-title">Warning</h3></div>' +
-                                '<div class="modal-body"><p>The hwm label must be unique from all other hwms at this site for this event.</p></div>' +
-                                '<div class="modal-footer"><button class="btn btn-primary" ng-enter="ok()" ng-click="ok()">OK</button></div>',
-                            controller: ['$scope', '$uibModalInstance', function ($scope, $uibModalInstance) {
-                                $scope.ok = function () {
-                                    $uibModalInstance.close();
-                                };
-                            }],
-                            size: 'sm'
-                        });
-                        uniqueModal.result.then(function () {
-                            angular.element("[name='hwm_label']").focus();
-                        });
-                    }
-                });
-            };
-            */
+            
             if (thisHWM != "empty") {
                 //#region existing HWM
                 $scope.createOReditHWM = 'edit';
@@ -455,33 +431,52 @@
                     var createdHWM = {};
                     if ($scope.DMS.LADeg !== undefined) $scope.aHWM.latitude_dd = azimuth($scope.DMS.LADeg, $scope.DMS.LAMin, $scope.DMS.LASec);
                     if ($scope.DMS.LODeg !== undefined) $scope.aHWM.longitude_dd = azimuth($scope.DMS.LODeg, $scope.DMS.LOMin, $scope.DMS.LOSec);
-                    //if they entered a survey date or elevation, then set survey member as the flag member (flagging and surveying at same time
-                    if ($scope.aHWM.survey_date !== undefined && $scope.aHWM.survey_date !== null)
-                        $scope.aHWM.survey_member_id = $scope.flag_member_id;
 
-                    if ($scope.aHWM.FTorCM == "cm") {
-                        $scope.aHWM.FTorCM = 'ft';
-                        if ($scope.aHWM.uncertainty !== undefined)
-                            $scope.aHWM.uncertainty = parseFloat($scope.aHWM.uncertainty / 30.48).toFixed(6);
-                    }
+                    // check that the lat/long are within correct range
+                    if ($scope.aHWM.latitude_dd < 0 || $scope.aHWM.latitude_dd > 73 || isNaN($scope.aHWM.latitude_dd)) {
+                        // latitude is out of range
+                        openLatModal('latlong', 'range');
+                        //if not a number, clear the imputs to trigger the validation
+                        if (isNaN($scope.aHWM.latitude_dd)) {
+                            $scope.aHWM.latitude_dd = undefined;
+                        }
+                    } else if ($scope.aHWM.longitude_dd < -175 || $scope.aHWM.longitude_dd > -60 || isNaN($scope.aHWM.longitude_dd)) {
+                        // longitude_dd is out of range
+                        openLongModal('latlong', 'range');
+                        //if not a number, clear the imputs to trigger the validation
+                        if (isNaN($scope.aHWM.longitude_dd)) {
+                            $scope.aHWM.longitude_dd = undefined;
+                        } 
+                    } else {
+                        // lat and long are good!
+                        //if they entered a survey date or elevation, then set survey member as the flag member (flagging and surveying at same time
+                        if ($scope.aHWM.survey_date !== undefined && $scope.aHWM.survey_date !== null)
+                            $scope.aHWM.survey_member_id = $scope.flag_member_id;
 
-                    if ($scope.aHWM.elev_ft !== undefined && $scope.aHWM.elev_ft !== null) {
-                        //make sure they added the survey date if they added an elevation
-                        if ($scope.aHWM.survey_date === undefined)
-                            $scope.aHWM.survey_date = makeAdate("");
+                        if ($scope.aHWM.FTorCM == "cm") {
+                            $scope.aHWM.FTorCM = 'ft';
+                            if ($scope.aHWM.uncertainty !== undefined)
+                                $scope.aHWM.uncertainty = parseFloat($scope.aHWM.uncertainty / 30.48).toFixed(6);
+                        }
 
-                        $scope.aHWM.survey_member_id = $scope.aHWM.flag_member_id;
-                    }
+                        if ($scope.aHWM.elev_ft !== undefined && $scope.aHWM.elev_ft !== null) {
+                            //make sure they added the survey date if they added an elevation
+                            if ($scope.aHWM.survey_date === undefined)
+                                $scope.aHWM.survey_date = makeAdate("");
 
-                    $http.defaults.headers.common.Authorization = 'Basic ' + $cookies.get('STNCreds');
-                    $http.defaults.headers.common.Accept = 'application/json';
-                    HWM.save($scope.aHWM).$promise.then(function (response) {
-                        createdHWM = response;
-                        toastr.success("HWM created");
-                        var sendBack = [createdHWM, 'created'];
-                        $uibModalInstance.close(sendBack);
-                    });
-                }
+                            $scope.aHWM.survey_member_id = $scope.aHWM.flag_member_id;
+                        }
+
+                        $http.defaults.headers.common.Authorization = 'Basic ' + $cookies.get('STNCreds');
+                        $http.defaults.headers.common.Accept = 'application/json';
+                        HWM.save($scope.aHWM).$promise.then(function (response) {
+                            createdHWM = response;
+                            toastr.success("HWM created");
+                            var sendBack = [createdHWM, 'created'];
+                            $uibModalInstance.close(sendBack);
+                        });
+                    } //end all's good to post
+                }// end valid
             };//end create()
 
             //approve this hwm (if admin or manager)
@@ -594,68 +589,87 @@
                     var updatedHWM = {};
                     if ($scope.DMS.LADeg !== undefined) $scope.hwmCopy.latitude_dd = azimuth($scope.DMS.LADeg, $scope.DMS.LAMin, $scope.DMS.LASec);
                     if ($scope.DMS.LODeg !== undefined) $scope.hwmCopy.longitude_dd = azimuth($scope.DMS.LODeg, $scope.DMS.LOMin, $scope.DMS.LOSec);
-                    if ($scope.adminChanged.event_id !== undefined) {
-                        //admin changed the event for this hwm..
-                        $scope.hwmCopy.event_id = $scope.adminChanged.event_id;
-                    }
-                    //if they added a survey date, apply survey member as logged in member
-                    if ($scope.hwmCopy.survey_date !== undefined && $scope.hwmCopy.survey_member_id === undefined)
-                        $scope.hwmCopy.survey_member_id = $cookies.get('mID');
+                    // check that the lat/long are within correct range
+                    if ($scope.hwmCopy.latitude_dd < 0 || $scope.hwmCopy.latitude_dd > 73 || isNaN($scope.hwmCopy.latitude_dd)) {
+                        // latitude is out of range
+                        openLatModal('latlong', 'range');
+                        //if not a number, clear the imputs to trigger the validation
+                        if (isNaN($scope.hwmCopy.latitude_dd)) {
+                            $scope.hwmCopy.latitude_dd = undefined;
+                        }
+                    } else if ($scope.hwmCopy.longitude_dd < -175 || $scope.hwmCopy.longitude_dd > -60 || isNaN($scope.hwmCopy.longitude_dd)) {
+                        // longitude_dd is out of range
+                        openLongModal('latlong', 'range');
+                        //if not a number, clear the imputs to trigger the validation
+                        if (isNaN($scope.hwmCopy.longitude_dd)) {
+                            $scope.hwmCopy.longitude_dd = undefined;
+                        }
+                    } else {
+                        // lat and long are good!
 
-                    if ($scope.hwmCopy.FTorCM == "cm") {
-                        $scope.hwmCopy.FTorCM = 'ft';
-                        if ($scope.hwmCopy.uncertainty !== undefined)
-                            $scope.hwmCopy.uncertainty = parseFloat($scope.hwmCopy.uncertainty / 30.48).toFixed(6);
-                    }
-
-                    if ($scope.hwmCopy.elev_ft !== undefined && $scope.hwmCopy.elev_ft !== null) {
-                        //make sure they added the survey date if they added an elevation
-                        if ($scope.hwmCopy.survey_date === undefined)
-                            $scope.hwmCopy.survey_date = makeAdate("");
-
-                        if ($scope.hwmCopy.survey_member_id === undefined)
+                        if ($scope.adminChanged.event_id !== undefined) {
+                            //admin changed the event for this hwm..
+                            $scope.hwmCopy.event_id = $scope.adminChanged.event_id;
+                        }
+                        //if they added a survey date, apply survey member as logged in member
+                        if ($scope.hwmCopy.survey_date !== undefined && $scope.hwmCopy.survey_member_id === undefined)
                             $scope.hwmCopy.survey_member_id = $cookies.get('mID');
+
+                        if ($scope.hwmCopy.FTorCM == "cm") {
+                            $scope.hwmCopy.FTorCM = 'ft';
+                            if ($scope.hwmCopy.uncertainty !== undefined)
+                                $scope.hwmCopy.uncertainty = parseFloat($scope.hwmCopy.uncertainty / 30.48).toFixed(6);
+                        }
+
+                        if ($scope.hwmCopy.elev_ft !== undefined && $scope.hwmCopy.elev_ft !== null) {
+                            //make sure they added the survey date if they added an elevation
+                            if ($scope.hwmCopy.survey_date === undefined)
+                                $scope.hwmCopy.survey_date = makeAdate("");
+
+                            if ($scope.hwmCopy.survey_member_id === undefined)
+                                $scope.hwmCopy.survey_member_id = $cookies.get('mID');
+                        }
+
+                        $http.defaults.headers.common.Authorization = 'Basic ' + $cookies.get('STNCreds');
+                        $http.defaults.headers.common.Accept = 'application/json';
+                        var cleanHWM = formatHWM($scope.hwmCopy);
+                        HWM.update({ id: cleanHWM.hwm_id }, cleanHWM).$promise.then(function (response) {
+                            toastr.success("HWM updated");
+                            $scope.aHWM = response; thisHWM = response;
+                            //get all the names for details view
+                            $scope.aHWM.hwm_type = $scope.hwmTypeList.filter(function (ht) { return ht.hwm_type_id == $scope.aHWM.hwm_type_id; })[0].hwm_type;
+                            if ($scope.aHWM.stillwater !== null) {
+                                $scope.aHWM.Tranquil = $scope.aHWM.stillwater > 0 ? 'Yes' : 'No';
+                            }
+                            $scope.aHWM.Marker = $scope.aHWM.marker_id > 0 ? $scope.markerList.filter(function (m) { return m.marker_id == $scope.aHWM.marker_id; })[0].marker1 : '';
+                            $scope.aHWM.Quality = $scope.aHWM.hwm_quality_id > 0 ? $scope.hwmQualList.filter(function (hq) { return hq.hwm_quality_id == $scope.aHWM.hwm_quality_id; })[0].hwm_quality : '';
+                            $scope.aHWM.hdatum = $scope.aHWM.hdatum_id > 0 ? $scope.HDatumsList.filter(function (hd) { return hd.datum_id == $scope.aHWM.hdatum_id; })[0].datum_name : '';
+                            $scope.aHWM.hCollectMethod = $scope.aHWM.hcollect_method_id > 0 ? $scope.hCollMList.filter(function (hc) { return hc.hcollect_method_id == $scope.aHWM.hcollect_method_id; })[0].hcollect_method : '';
+                            $scope.aHWM.vDatum = $scope.aHWM.vdatum_id > 0 ? $scope.VDatumsList.filter(function (vd) { return vd.datum_id == $scope.aHWM.vdatum_id; })[0].datum_name : '';
+                            $scope.aHWM.vCollectMethod = $scope.aHWM.vcollect_method_id > 0 ? $scope.vCollMList.filter(function (vc) { return vc.vcollect_method_id == $scope.aHWM.vcollect_method_id; })[0].vcollect_method : '';
+                            $scope.aHWM.flag_date = makeAdate($scope.aHWM.flag_date);
+                            //is it approved?
+                            if (hwmApproval !== undefined) {
+                                $scope.ApprovalInfo.approvalDate = new Date(hwmApproval.approval_date); //include note that it's displayed in their local time but stored in UTC
+                                $scope.ApprovalInfo.Member = allMembers.filter(function (amem) { return amem.member_id == hwmApproval.member_id; })[0];
+
+                            }
+                            //if this is surveyed, date format and get survey member's name
+                            if ($scope.aHWM.survey_date !== null && $scope.aHWM.survey_date !== undefined) {
+                                $scope.aHWM.survey_date = makeAdate($scope.aHWM.survey_date);
+                                $scope.SurveyMember = allMembers.filter(function (m) { return m.member_id == $scope.aHWM.survey_member_id; })[0];
+                            }
+
+                            //get flagging member's name
+                            $scope.FlagMember = allMembers.filter(function (m) { return m.member_id == $scope.aHWM.flag_member_id; })[0];
+
+                            $scope.hwmCopy = {};
+                            $scope.view.HWMval = 'detail';
+                            //var sendBack = [updatedHWM, 'updated'];
+                            //$uibModalInstance.close(sendBack);
+                        });
                     }
-
-                    $http.defaults.headers.common.Authorization = 'Basic ' + $cookies.get('STNCreds');
-                    $http.defaults.headers.common.Accept = 'application/json';
-                    var cleanHWM = formatHWM($scope.hwmCopy);
-                    HWM.update({ id: cleanHWM.hwm_id }, cleanHWM).$promise.then(function (response) {
-                        toastr.success("HWM updated");
-                        $scope.aHWM = response; thisHWM = response;
-                        //get all the names for details view
-                        $scope.aHWM.hwm_type = $scope.hwmTypeList.filter(function (ht) { return ht.hwm_type_id == $scope.aHWM.hwm_type_id; })[0].hwm_type;
-                        if ($scope.aHWM.stillwater !== null) {
-                            $scope.aHWM.Tranquil = $scope.aHWM.stillwater > 0 ? 'Yes' : 'No';
-                        }
-                        $scope.aHWM.Marker = $scope.aHWM.marker_id > 0 ? $scope.markerList.filter(function (m) { return m.marker_id == $scope.aHWM.marker_id; })[0].marker1 : '';
-                        $scope.aHWM.Quality = $scope.aHWM.hwm_quality_id > 0 ? $scope.hwmQualList.filter(function (hq) { return hq.hwm_quality_id == $scope.aHWM.hwm_quality_id; })[0].hwm_quality : '';
-                        $scope.aHWM.hdatum = $scope.aHWM.hdatum_id > 0 ? $scope.HDatumsList.filter(function (hd) { return hd.datum_id == $scope.aHWM.hdatum_id; })[0].datum_name : '';
-                        $scope.aHWM.hCollectMethod = $scope.aHWM.hcollect_method_id > 0 ? $scope.hCollMList.filter(function (hc) { return hc.hcollect_method_id == $scope.aHWM.hcollect_method_id; })[0].hcollect_method : '';
-                        $scope.aHWM.vDatum = $scope.aHWM.vdatum_id > 0 ? $scope.VDatumsList.filter(function (vd) { return vd.datum_id == $scope.aHWM.vdatum_id; })[0].datum_name : '';
-                        $scope.aHWM.vCollectMethod = $scope.aHWM.vcollect_method_id > 0 ? $scope.vCollMList.filter(function (vc) { return vc.vcollect_method_id == $scope.aHWM.vcollect_method_id; })[0].vcollect_method : '';
-                        $scope.aHWM.flag_date = makeAdate($scope.aHWM.flag_date);
-                        //is it approved?
-                        if (hwmApproval !== undefined) {
-                            $scope.ApprovalInfo.approvalDate = new Date(hwmApproval.approval_date); //include note that it's displayed in their local time but stored in UTC
-                            $scope.ApprovalInfo.Member = allMembers.filter(function (amem) { return amem.member_id == hwmApproval.member_id; })[0];
-
-                        }
-                        //if this is surveyed, date format and get survey member's name
-                        if ($scope.aHWM.survey_date !== null && $scope.aHWM.survey_date !== undefined) {
-                            $scope.aHWM.survey_date = makeAdate($scope.aHWM.survey_date);
-                            $scope.SurveyMember = allMembers.filter(function (m) { return m.member_id == $scope.aHWM.survey_member_id; })[0];
-                        }
-
-                        //get flagging member's name
-                        $scope.FlagMember = allMembers.filter(function (m) { return m.member_id == $scope.aHWM.flag_member_id; })[0];
-
-                        $scope.hwmCopy = {};
-                        $scope.view.HWMval = 'detail';
-                        //var sendBack = [updatedHWM, 'updated'];
-                        //$uibModalInstance.close(sendBack);
-                    });
-                }
+                }// end valid
             };//end save()
 
             //delete aHWM

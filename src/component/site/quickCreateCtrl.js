@@ -340,7 +340,9 @@
                                 if (response.result.geographies.Counties.length > 0) {
                                     var stateFIPS = response.result.geographies.Counties[0].STATE;
                                     var countyName = response.result.geographies.Counties[0].NAME;
-                                    var thisStateID = $scope.allCountyList.filter(function (c) { return c.state_fip == stateFIPS; })[0].state_id;
+                                    var thisStateID = stateFIPS !== undefined ?
+                                        $scope.allCountyList.filter(function (c) { return c.state_fip == stateFIPS; })[0].state_id :
+                                        0;
                                     var thisState = $scope.stateList.filter(function (s) { return s.state_id == thisStateID; })[0];
 
                                     if (thisState !== undefined) {
@@ -564,93 +566,115 @@
                 $scope.siteErrors = false; $scope.opErrors = false; $scope.hwmErrors = false; 
                 $scope.create = function () {
                     $rootScope.stateIsLoading.showLoading = true;// loading..
-                    var theForm = $scope.quickForm.quick; $scope.siteErrors = false; $scope.opErrors = false; $scope.hwmErrors = false;
+                    var theForm = $scope.quickForm.quick;
+                    $scope.siteErrors = false; $scope.opErrors = false; $scope.hwmErrors = false;
                     if (theForm.$valid) {
                         //site POST
                         $http.defaults.headers.common.Authorization = 'Basic ' + $cookies.get('STNCreds');
                         $http.defaults.headers.common.Accept = 'application/json';
                         if ($scope.aSite.latitude_dd === undefined) $scope.aSite.latitude_dd = azimuth($scope.DMS.LADeg, $scope.DMS.LAMin, $scope.DMS.LASec);
                         if ($scope.aSite.longitude_dd === undefined) $scope.aSite.longitude_dd = azimuth($scope.DMS.LODeg, $scope.DMS.LOMin, $scope.DMS.LOSec);
-                        var createdSiteID = 0;                        
-                        //POST site
-                        SITE.save($scope.aSite, function success(response) {
-                            createdSiteID = response.site_id;
-                            $scope.aOP.site_id = createdSiteID; $scope.aOP.latitude_dd = response.latitude_dd; $scope.aOP.longitude_dd = response.longitude_dd;
-                            $scope.aOP.hdatum_id = response.hdatum_id; $scope.aOP.hcollect_method_id = response.hcollect_method_id;
-                            if ($scope.CreateWhat == 'HWM') {
-                                $scope.aHWM.site_id = createdSiteID; $scope.aHWM.waterbody = response.waterbody; $scope.aHWM.latitude_dd = response.latitude_dd;
-                                $scope.aHWM.longitude_dd = response.longitude_dd; $scope.aHWM.hcollect_method_id = response.hcollect_method_id;
-                                $scope.aHWM.hdatum_id = response.hdatum_id; $scope.aHWM.flag_member_id = response.member_id; $scope.aHWM.event_id = $cookies.get('SessionEventID');
+                        // make sure lat/long are within proper range
+                        if ($scope.aSite.latitude_dd < 0 || $scope.aSite.latitude_dd > 73 || isNaN($scope.aSite.latitude_dd)) {
+                            openLatModal('latlong');
+                            $rootScope.stateIsLoading.showLoading = false;// loading..
+                            //if not a number, clear the imputs to trigger the validation
+                            if (isNaN($scope.aSite.latitude_dd)) {
+                                $scope.aSite.latitude_dd = undefined;
                             }
-                            //OP stuff POST
-                            var createdOP = {};
-                            //post
-                            formatDefaults($scope.aOP); //$scope.OP.FTorMETER, FTorCM, decDegORdms                               
-                            var OPtoPOST = trimOP($scope.aOP); //make it an OBJECTIVE_POINT for saving
-
-                            OBJECTIVE_POINT.save(OPtoPOST, function success(response) {
-                                createdOP = response;
-                                if ($scope.addedIdentifiers.length > 0) {
-                                    //post each one THIS WILL CHANGE SOON TO HAVE objective_point_id already added and not sent along with it
-                                    for (var opc = 0; opc < $scope.addedIdentifiers.length; opc++) {
-                                        var thisOPControlID = $scope.addedIdentifiers[opc];
-                                        thisOPControlID.objective_point_id = response.objective_point_id;
-                                        OP_CONTROL_IDENTIFIER.save(thisOPControlID).$promise;
-                                    }
-                                }
-                                //HWM stuff POST if HWM
+                        } else if ($scope.aSite.longitude_dd < -175 || $scope.aSite.longitude_dd > -60 || isNaN($scope.aSite.longitude_dd)) {
+                            openLongModal('latlong');
+                            $rootScope.stateIsLoading.showLoading = false;// loading..
+                            //if not a number, clear the imputs to trigger the validation
+                            if (isNaN($scope.aSite.longitude_dd)) {
+                                $scope.aSite.longitude_dd = undefined;
+                            }
+                        } else {
+                            var createdSiteID = 0;
+                            //POST site
+                            SITE.save($scope.aSite, function success(response) {
+                                createdSiteID = response.site_id;
+                                $scope.aOP.site_id = createdSiteID; $scope.aOP.latitude_dd = response.latitude_dd; $scope.aOP.longitude_dd = response.longitude_dd;
+                                $scope.aOP.hdatum_id = response.hdatum_id; $scope.aOP.hcollect_method_id = response.hcollect_method_id;
                                 if ($scope.CreateWhat == 'HWM') {
-                                    var createdHWM = {};
-                                    //if they entered a survey date or elevation, then set survey member as the flag member (flagging and surveying at same time
-                                    if ($scope.aHWM.survey_date !== undefined)
-                                        $scope.aHWM.survey_member_id = $scope.aHWM.flag_member_id;
+                                    $scope.aHWM.site_id = createdSiteID;
+                                    $scope.aHWM.waterbody = response.waterbody;
+                                    $scope.aHWM.latitude_dd = response.latitude_dd;
+                                    $scope.aHWM.longitude_dd = response.longitude_dd;
+                                    $scope.aHWM.hcollect_method_id = response.hcollect_method_id;
+                                    $scope.aHWM.hdatum_id = response.hdatum_id;
+                                    $scope.aHWM.flag_member_id = response.member_id;
+                                    $scope.aHWM.event_id = $cookies.get('SessionEventID');
+                                }
+                                //OP stuff POST
+                                var createdOP = {};
+                                //post
+                                formatDefaults($scope.aOP); //$scope.OP.FTorMETER, FTorCM, decDegORdms                               
+                                var OPtoPOST = trimOP($scope.aOP); //make it an OBJECTIVE_POINT for saving
 
-                                    if ($scope.aHWM.elev_ft !== undefined) {
-                                        //make sure they added the survey date if they added an elevation
-                                        if ($scope.aHWM.survey_date === undefined)
-                                            $scope.aHWM.survey_date = makeAdate("");
-
-                                        $scope.aHWM.survey_member_id = $scope.aHWM.flag_member_id;
+                                OBJECTIVE_POINT.save(OPtoPOST, function success(response) {
+                                    createdOP = response;
+                                    if ($scope.addedIdentifiers.length > 0) {
+                                        //post each one THIS WILL CHANGE SOON TO HAVE objective_point_id already added and not sent along with it
+                                        for (var opc = 0; opc < $scope.addedIdentifiers.length; opc++) {
+                                            var thisOPControlID = $scope.addedIdentifiers[opc];
+                                            thisOPControlID.objective_point_id = response.objective_point_id;
+                                            OP_CONTROL_IDENTIFIER.save(thisOPControlID).$promise;
+                                        }
                                     }
-                                    HWM.save($scope.aHWM).$promise.then(function (response) {
-                                        toastr.success("Quick HWM created");
-                                        $rootScope.stateIsLoading.showLoading = false;// loading..
-                                        $location.path('/Site/' + createdSiteID + '/SiteDashboard').replace();//.notify(false);
-                                        $scope.apply;
-                                    });//end HWM.save()
-                                }//end HWM creating
-                                if ($scope.CreateWhat == 'Sensor') {
-                                    var createdSensor = {}; var depSenStat = {};
-                                    if ($scope.IntervalType.type == "Minutes")
-                                        $scope.aSensor.interval = $scope.aSensor.interval * 60;
+                                    //HWM stuff POST if HWM
+                                    if ($scope.CreateWhat == 'HWM') {
+                                        var createdHWM = {};
+                                        //if they entered a survey date or elevation, then set survey member as the flag member (flagging and surveying at same time
+                                        if ($scope.aHWM.survey_date !== undefined)
+                                            $scope.aHWM.survey_member_id = $scope.aHWM.flag_member_id;
 
-                                    $scope.aSensor.site_id = createdSiteID;
-                                    dealWithTimeStampb4Send(); //UTC or local?
-                                    $http.defaults.headers.common.Authorization = 'Basic ' + $cookies.get('STNCreds');
-                                    $http.defaults.headers.common.Accept = 'application/json';
-                                    INSTRUMENT.save($scope.aSensor).$promise.then(function (response) {
-                                        //create instrumentstatus too 
-                                        createdSensor = response;
-                                        $scope.aSensStatus.instrument_id = response.instrument_id;
-                                        INSTRUMENT_STATUS.save($scope.aSensStatus).$promise.then(function (statResponse) {
-                                            //added tape downs?
-                                            if ($scope.tapeDownTable.length > 0) {
-                                                var thisTape = $scope.tapeDownTable[0];
-                                                thisTape.instrument_status_id = statResponse.instrument_status_id;
-                                                thisTape.objective_point_id = createdOP.objective_point_id;
-                                                ///POST IT///
-                                                OP_MEASURE.save(thisTape).$promise;                                                
-                                            }
-                                            toastr.success("Quick Sensor created");
+                                        if ($scope.aHWM.elev_ft !== undefined) {
+                                            //make sure they added the survey date if they added an elevation
+                                            if ($scope.aHWM.survey_date === undefined)
+                                                $scope.aHWM.survey_date = makeAdate("");
+
+                                            $scope.aHWM.survey_member_id = $scope.aHWM.flag_member_id;
+                                        }
+                                        HWM.save($scope.aHWM).$promise.then(function (response) {
+                                            toastr.success("Quick HWM created");
                                             $rootScope.stateIsLoading.showLoading = false;// loading..
                                             $location.path('/Site/' + createdSiteID + '/SiteDashboard').replace();//.notify(false);
                                             $scope.apply;
-                                        });//end Instrument Status save
-                                    });//end instrumentSave
-                                }//end if sensor
-                            });//end OP.save()
-                        });//end SITE.save()
+                                        });//end HWM.save()
+                                    }//end HWM creating
+                                    if ($scope.CreateWhat == 'Sensor') {
+                                        var createdSensor = {}; var depSenStat = {};
+                                        if ($scope.IntervalType.type == "Minutes")
+                                            $scope.aSensor.interval = $scope.aSensor.interval * 60;
 
+                                        $scope.aSensor.site_id = createdSiteID;
+                                        dealWithTimeStampb4Send(); //UTC or local?
+                                        $http.defaults.headers.common.Authorization = 'Basic ' + $cookies.get('STNCreds');
+                                        $http.defaults.headers.common.Accept = 'application/json';
+                                        INSTRUMENT.save($scope.aSensor).$promise.then(function (response) {
+                                            //create instrumentstatus too 
+                                            createdSensor = response;
+                                            $scope.aSensStatus.instrument_id = response.instrument_id;
+                                            INSTRUMENT_STATUS.save($scope.aSensStatus).$promise.then(function (statResponse) {
+                                                //added tape downs?
+                                                if ($scope.tapeDownTable.length > 0) {
+                                                    var thisTape = $scope.tapeDownTable[0];
+                                                    thisTape.instrument_status_id = statResponse.instrument_status_id;
+                                                    thisTape.objective_point_id = createdOP.objective_point_id;
+                                                    ///POST IT///
+                                                    OP_MEASURE.save(thisTape).$promise;
+                                                }
+                                                toastr.success("Quick Sensor created");
+                                                $rootScope.stateIsLoading.showLoading = false;// loading..
+                                                $location.path('/Site/' + createdSiteID + '/SiteDashboard').replace();//.notify(false);
+                                                $scope.apply;
+                                            });//end Instrument Status save
+                                        });//end instrumentSave
+                                    }//end if sensor
+                                });//end OP.save()
+                            });//end SITE.save()
+                        }
                     } else {
                         $rootScope.stateIsLoading.showLoading = false;// loading..
                         $scope.status.siteOpen = true;

@@ -88,7 +88,7 @@
                                 //push sensor in that have this event_id
                                 $scope.markers.push({
                                     layer: 'stnSites',
-                                    message: '<div><b>' + $scope.allDeploymentTypes.filter(function (d) { return d.deployment_type_id == bSensor.deployment_type_id; })[0].method + ' Sensor Status:</b> ' + bSensor.status + '</div>',
+                                    message: '<div><b>Barometric Pressure Sensor Status:</b> ' + bSensor.status + '</div>',
                                     lat: bSensor.latitude_dd,
                                     lng: bSensor.longitude_dd,
                                     icon: icons.baroIcon,
@@ -120,7 +120,7 @@
                                 //push sensor in that have this event_id
                                 $scope.markers.push({
                                     layer: 'stnSites',
-                                    message: '<div><b>' + $scope.allDeploymentTypes.filter(function (d) { return d.deployment_type_id == rSensor.deployment_type_id; })[0].method + ' Sensor Status:</b> ' + rSensor.status + '</div>',
+                                    message: '<div><b>Rapid Deployment Sensor Status:</b> ' + rSensor.status + '</div>',
                                     lat: rSensor.latitude_dd,
                                     lng: rSensor.longitude_dd,
                                     icon: icons.rdgIcon,
@@ -152,7 +152,7 @@
                                 //push sensor in that have this event_id
                                 $scope.markers.push({
                                     layer: 'stnSites',
-                                    message: '<div><b>' + $scope.allDeploymentTypes.filter(function (d) { return d.deployment_type_id == wSensor.deployment_type_id; })[0].method + ' Sensor Status:</b> ' + wSensor.status + '</div>',
+                                    message: '<div><b>Wave Height Sensor Status:</b> ' + wSensor.status + '</div>',
                                     lat: wSensor.latitude_dd,
                                     lng: wSensor.longitude_dd,
                                     icon: icons.waveIcon,
@@ -184,7 +184,7 @@
                                 //push sensor in that have this event_id
                                 $scope.markers.push({
                                     layer: 'stnSites',
-                                    message: '<div><b>' + $scope.allDeploymentTypes.filter(function (d) { return d.deployment_type_id == tSensor.deployment_type_id; })[0].method + ' Sensor Status:</b> ' + tSensor.status + '</div>',
+                                    message: '<div><b>Temperature Sensor Status:</b> ' + tSensor.status + '</div>',
                                     lat: tSensor.latitude_dd,
                                     lng: tSensor.longitude_dd,
                                     icon: icons.thermIcon,
@@ -200,7 +200,7 @@
                                 //push sensor in that have this event_id
                                 $scope.markers.push({
                                     layer: 'stnSites',
-                                    message: '<div><b>' + $scope.allDeploymentTypes.filter(function (d) { return d.deployment_type_id == webSensor.deployment_type_id; })[0].method + ' Sensor Status:</b> ' + webSensor.status + '</div>',
+                                    message: '<div><b>Webcam Sensor Status:</b> ' + webSensor.status + '</div>',
                                     lat: webSensor.latitude_dd,
                                     lng: webSensor.longitude_dd,
                                     icon: icons.webcamIcon,
@@ -216,7 +216,7 @@
                                 //push sensor in that have this event_id
                                 $scope.markers.push({
                                     layer: 'stnSites',
-                                    message: '<div><b>' + $scope.allDeploymentTypes.filter(function (d) { return d.deployment_type_id == rainSensor.deployment_type_id; })[0].method + ' Sensor Status:</b> ' + rainSensor.status + '</div>',
+                                    message: '<div><b>Rain gage Sensor Status:</b> ' + rainSensor.status + '</div>',
                                     lat: rainSensor.latitude_dd,
                                     lng: rainSensor.longitude_dd,
                                     icon: icons.raingageIcon,
@@ -232,7 +232,7 @@
                             //push sensor in that have this event_id
                             $scope.markers.push({
                                 layer: 'stnSites',
-                                message: '<div><b>' + $scope.allDeploymentTypes.filter(function (d) { return d.deployment_type_id == noEbSensor.deployment_type_id; })[0].method + ' Sensor Status:</b> ' + noEbSensor.status + '</div>',
+                                message: '<div><b>Barometric Pressure Sensor Status:</b> ' + noEbSensor.status + '</div>',
                                 lat: noEbSensor.latitude_dd,
                                 lng: noEbSensor.longitude_dd,
                                 icon: icons.baroIcon,
@@ -260,7 +260,7 @@
                             //push sensor in that have this event_id
                             $scope.markers.push({
                                 layer: 'stnSites',
-                                message: '<div><b>' + $scope.allDeploymentTypes.filter(function (d) { return d.deployment_type_id == noErSensor.deployment_type_id; })[0].method + ' Sensor Status:</b> ' + noErSensor.status + '</div>',
+                                message: '<div><b>Rapid Deployment Sensor Status:</b> ' + noErSensor.status + '</div>',
                                 lat: noErSensor.latitude_dd,
                                 lng: noErSensor.longitude_dd,
                                 icon: icons.rdgIcon,
@@ -289,7 +289,7 @@
                             //push sensor in that have this event_id
                             $scope.markers.push({
                                 layer: 'stnSites',
-                                message: '<div><b>' + $scope.allDeploymentTypes.filter(function (d) { return d.deployment_type_id == noEwSensor.deployment_type_id; })[0].method + ' Sensor Status:</b> ' + noEwSensor.status + '</div>',
+                                message: '<div><b>Wave Height Sensor Status:</b> ' + noEwSensor.status + '</div>',
                                 lat: noEwSensor.latitude_dd,
                                 lng: noEwSensor.longitude_dd,
                                 icon: icons.waveIcon,
@@ -317,7 +317,7 @@
                             //push sensor in that have this event_id
                             $scope.markers.push({
                                 layer: 'stnSites',
-                                message: '<div><b>' + $scope.allDeploymentTypes.filter(function (d) { return d.deployment_type_id == noEtSensor.deployment_type_id; })[0].method + 'Sensor Status:</b> ' + noEtSensor.status + '</div>',
+                                message: '<div><b>Temperature Sensor Status:</b> ' + noEtSensor.status + '</div>',
                                 lat: noEtSensor.latitude_dd,
                                 lng: noEtSensor.longitude_dd,
                                 icon: icons.thermIcon,
@@ -331,7 +331,7 @@
                             //push sensor in that have this event_id
                             $scope.markers.push({
                                 layer: 'stnSites',
-                                message: '<div><b>' + $scope.allDeploymentTypes.filter(function (d) { return d.deployment_type_id == noEwebSensor.deployment_type_id; })[0].method + ' Sensor Status:</b> ' + noEwebSensor.status + '</div>',
+                                message: '<div><b>Webcam Sensor Status:</b> ' + noEwebSensor.status + '</div>',
                                 lat: noEwebSensor.latitude_dd,
                                 lng: noEwebSensor.longitude_dd,
                                 icon: icons.webcamIcon,
@@ -345,7 +345,7 @@
                             //push sensor in that have this event_id
                             $scope.markers.push({
                                 layer: 'stnSites',
-                                message: '<div><b>' + $scope.allDeploymentTypes.filter(function (d) { return d.deployment_type_id == noErainSensor.deployment_type_id; })[0].method + ' Sensor Status:</b> ' + noErainSensor.status + '</div>',
+                                message: '<div><b>>Webcam Sensor Status:</b> ' + noErainSensor.status + '</div>',
                                 lat: noErainSensor.latitude_dd,
                                 lng: noErainSensor.longitude_dd,
                                 icon: icons.raingageIcon,

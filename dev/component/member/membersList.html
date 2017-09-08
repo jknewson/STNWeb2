@@ -30,7 +30,7 @@
     <div class="modal-header">
         <h3 class="modal-title">Member<button class="close" type="button" ng-click="cancel()" aria-hidden="true" style="color:gray;">&times;</button></h3>
     </div>
-    <form ng-show="matchingUsers || loggedInUser.Role == 'Admin'" class="form-horizontal" id="accountForm" name="accountForm">
+    <form ng-show="(matchingUsers || loggedInUser.Role == 'Admin') || (loggedInUser.Role == 'Manager' && aMember.Role == 'Field')" class="form-horizontal" id="accountForm" name="accountForm">
         <fieldset>
             <div class="modal-body">
                 <!-- If this is the user logged -->
@@ -248,8 +248,9 @@
         </fieldset>
     </form>
     <!-- If this isn't the user logged in -->
-
-    <div ng-show="!matchingUsers && loggedInUser.Role != 'Admin'">
+    <!-- only show the details if not looking at own, or if I am a manager looking at another manager or admin
+    <div ng-show="(!matchingUsers && loggedInUser.Role != 'Admin') && (loggedInUser.Role == 'Manager' && aMember.Role != 'Field')">-->
+    <div ng-show="!matchingUsers && (loggedInUser.Role == 'Field' || (loggedInUser.Role == 'Manager' && (aMember.Role == 'Manager' || aMember.Role == 'Admin')))">
         <div class="modal-body">
             <!-- Your Name -->
             <div class="col-md-12">
@@ -286,7 +287,7 @@
                 <label class="col-md-4 control-label">Role:</label>
                 <div class="col-md-6">{{aMember.Role}}</div>
             </div>
-        </div><br clear="all"/>
+        </div><br clear="all" />
         <div class="modal-footer">
             <div class="form-group">
                 <div class="col-md-12"><button type="button" class="btn btn-warning" ng-click="cancel()">Close/Cancel</button></div>

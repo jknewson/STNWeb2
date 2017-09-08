@@ -515,7 +515,7 @@
                 } else {
                     //creating a nwis file
                     $scope.NWISFile = {
-                        name: 'http://waterdata.usgs.gov/nwis/uv?site_no=' + $scope.thisSensorSite.usgs_sid,  // if [fill in if not here.. TODO...&begin_date=20160413&end_date=20160419 (event start/end)
+                        name: 'https://waterdata.usgs.gov/nwis/uv?site_no=' + $scope.thisSensorSite.usgs_sid,  // if [fill in if not here.. TODO...&begin_date=20160413&end_date=20160419 (event start/end)
                         path: '<link>',
                         file_date: new Date(),
                         filetype_id: 2,
@@ -2554,7 +2554,7 @@
                     $scope.NWISFile = {
                         file_date: new Date(),
                         filetype_id: 2,
-                        name: 'http://waterdata.usgs.gov/nwis/uv?site_no=' + $scope.thisSensorSite.usgs_sid,  // if [fill in if not here.. TODO...&begin_date=20160413&end_date=20160419 (event start/end)
+                        name: 'https://waterdata.usgs.gov/nwis/uv?site_no=' + $scope.thisSensorSite.usgs_sid,  // if [fill in if not here.. TODO...&begin_date=20160413&end_date=20160419 (event start/end)
                         path: '<link>',
                         FileType: 'Data',
                         site_id: $scope.sensor.site_id,
