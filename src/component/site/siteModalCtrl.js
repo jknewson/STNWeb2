@@ -128,7 +128,9 @@
                         if (response.result.geographies.Counties.length > 0) {
                             var stateFIPS = response.result.geographies.Counties[0].STATE;
                             var countyName = response.result.geographies.Counties[0].NAME;
-                            var thisStateID = $scope.AllCountyList.filter(function (c) { return c.state_fip == stateFIPS; })[0].state_id;
+                            var thisStateID = stateFIPS !== undefined ?
+                                $scope.AllCountyList.filter(function (c) { return c.state_fip == stateFIPS; })[0].state_id :
+                                0;
                             var thisState = $scope.StateList.filter(function (s) { return s.state_id == thisStateID; })[0];
 
                             if (thisState !== undefined) {
@@ -246,7 +248,7 @@
             $scope.siteImageFiles = $scope.SITEFiles.filter(function (hf) { return hf.filetype_id === 1; }); //image files for carousel
             $scope.showFileForm = false; //hidden form to add file to site
             
-            //#region FILE STUFF
+            // FILE STUFF
             $scope.stamp = FILE_STAMP.getStamp(); $scope.fileItemExists = true;
             //need to reupload fileItem to this existing file OR Change out existing fileItem for new one
             $scope.saveFileUpload = function () {
@@ -305,7 +307,6 @@
                     toastr.error("Error saving file: " + errorResponse.statusText);
                 });
             };
-
             //show a modal with the larger image as a preview on the photo file for this hwm
             $scope.showImageModal = function (image) {
                 var imageModal = $uibModal.open({
@@ -322,7 +323,6 @@
                     size: 'md'
                 });
             };
-
             //want to add or edit file
             $scope.showFile = function (file) {
                 $scope.fileTypes = $scope.fileTypeList;
@@ -437,7 +437,6 @@
                     });//end source.save()              
                 }//end valid
             };//end create()
-
             //update this file
             $scope.saveFile = function (valid) {
                 if (valid) {
@@ -471,7 +470,6 @@
                     }
                 }//end valid
             };//end save()
-
             //delete this file
             $scope.deleteFile = function () {
                 var DeleteModalInstance = $uibModal.open({
@@ -502,14 +500,13 @@
                     });
                 });//end DeleteModal.result.then
             };//end delete()
-
             $scope.cancelFile = function () {
                 $scope.aFile = {};
                 $scope.aSource = {};
                 //  $scope.datafile = {};
                 $scope.showFileForm = false;
             };
-            //#endregion FILE STUFF
+            //end FILE STUFF
             
             //lat modal 
             var openLatModal = function (w) {
@@ -748,28 +745,42 @@
             //site PUT
             $scope.save = function (valid) {
                 if (valid) {
-                    $rootScope.stateIsLoading.showLoading = true; // loading..
-                    //update the site
-                    $http.defaults.headers.common.Authorization = 'Basic ' + $cookies.get('STNCreds');
-                    $http.defaults.headers.common.Accept = 'application/json';
-                    //did they add or edit the landowner
-                    if ($scope.addLandowner === true) {
-                        //there's a landowner.. edit or add?
-                        if ($scope.aSite.landownercontact_id !== null && $scope.aSite.landownercontact_id !== undefined && $scope.aSite.landownercontact_id > 0) {
-                            //did they change anything to warrent a put
-                            LANDOWNER_CONTACT.update({ id: $scope.aSite.landownercontact_id }, $scope.landowner).$promise.then(function () {
-                                putSiteAndParts();
-                            });
-                        } else if ($scope.landowner.fname !== undefined || $scope.landowner.lname !== undefined || $scope.landowner.title !== undefined ||
-                                $scope.landowner.address !== undefined || $scope.landowner.city !== undefined || $scope.landowner.primaryphone !== undefined) {
-                            //they added something.. POST (rather than just clicking button and not)
-                            LANDOWNER_CONTACT.save($scope.landowner, function success(response) {
-                                $scope.aSite.landownercontact_id = response.landownercontactid;
-                                putSiteAndParts();
-                            }, function error(errorResponse) { toastr.error("Error adding Landowner: " + errorResponse.statusText); });
+                    if ($scope.aSite.latitude_dd < 0 || $scope.aSite.latitude_dd > 73 || isNaN($scope.aSite.latitude_dd)) {
+                        openLatModal('latlong');
+                        //if not a number, clear the imputs to trigger the validation
+                        if (isNaN($scope.aSite.latitude_dd)) {
+                            $scope.aSite.latitude_dd = undefined;
+                        }
+                    } else if ($scope.aSite.longitude_dd < -175 || $scope.aSite.longitude_dd > -60 || isNaN($scope.aSite.longitude_dd)) {
+                        openLongModal('latlong');
+                        //if not a number, clear the imputs to trigger the validation
+                        if (isNaN($scope.aSite.longitude_dd)) {
+                            $scope.aSite.longitude_dd = undefined;
+                        }
+                    } else {
+                        $rootScope.stateIsLoading.showLoading = true; // loading..
+                        //update the site
+                        $http.defaults.headers.common.Authorization = 'Basic ' + $cookies.get('STNCreds');
+                        $http.defaults.headers.common.Accept = 'application/json';
+                        //did they add or edit the landowner
+                        if ($scope.addLandowner === true) {
+                            //there's a landowner.. edit or add?
+                            if ($scope.aSite.landownercontact_id !== null && $scope.aSite.landownercontact_id !== undefined && $scope.aSite.landownercontact_id > 0) {
+                                //did they change anything to warrent a put
+                                LANDOWNER_CONTACT.update({ id: $scope.aSite.landownercontact_id }, $scope.landowner).$promise.then(function () {
+                                    putSiteAndParts();
+                                });
+                            } else if ($scope.landowner.fname !== undefined || $scope.landowner.lname !== undefined || $scope.landowner.title !== undefined ||
+                                    $scope.landowner.address !== undefined || $scope.landowner.city !== undefined || $scope.landowner.primaryphone !== undefined) {
+                                //they added something.. POST (rather than just clicking button and not)
+                                LANDOWNER_CONTACT.save($scope.landowner, function success(response) {
+                                    $scope.aSite.landownercontact_id = response.landownercontactid;
+                                    putSiteAndParts();
+                                }, function error(errorResponse) { toastr.error("Error adding Landowner: " + errorResponse.statusText); });
+                            } else putSiteAndParts();
                         } else putSiteAndParts();
-                    } else putSiteAndParts();
-                }
+                    }
+                }//end valid
             };//end save
             var putSiteAndParts = function () {
                 if ($scope.DMS.LADeg !== undefined) $scope.aSite.latitude_dd = azimuth($scope.DMS.LADeg, $scope.DMS.LAMin, $scope.DMS.LASec);
@@ -892,29 +903,43 @@
             };
             $scope.create = function (valid) {
                 if (valid) {
-                    $rootScope.stateIsLoading.showLoading = true; // loading..
-                    //POST landowner, if they added one
-                    $http.defaults.headers.common.Authorization = 'Basic ' + $cookies.get('STNCreds');
-                    $http.defaults.headers.common.Accept = 'application/json';
-                    delete $scope.aSite.Creator; delete $scope.aSite.decDegORdms;
-                    if ($scope.addLandowner === true) {
-                        if ($scope.landowner.fname !== undefined || $scope.landowner.lname !== undefined || $scope.landowner.title !== undefined ||
-                                       $scope.landowner.address !== undefined || $scope.landowner.city !== undefined || $scope.landowner.primaryphone !== undefined) {
-                            LANDOWNER_CONTACT.save($scope.landowner, function success(response) {
-                                $scope.aSite.landownercontact_id = response.landownercontactid;
-                                //now post the site
+                    if ($scope.aSite.latitude_dd < 0 || $scope.aSite.latitude_dd > 73 || isNaN($scope.aSite.latitude_dd)) {
+                        openLatModal('latlong');
+                        //if not a number, clear the imputs to trigger the validation
+                        if (isNaN($scope.aSite.latitude_dd)) {
+                            $scope.aSite.latitude_dd = undefined;
+                        }
+                    } else if ($scope.aSite.longitude_dd < -175 || $scope.aSite.longitude_dd > -60 || isNaN($scope.aSite.longitude_dd)) {
+                        openLongModal('latlong');
+                        //if not a number, clear the imputs to trigger the validation
+                        if (isNaN($scope.aSite.longitude_dd)) {
+                            $scope.aSite.longitude_dd = undefined;
+                        }
+                    } else {
+                        $rootScope.stateIsLoading.showLoading = true; // loading..
+                        //POST landowner, if they added one
+                        $http.defaults.headers.common.Authorization = 'Basic ' + $cookies.get('STNCreds');
+                        $http.defaults.headers.common.Accept = 'application/json';
+                        delete $scope.aSite.Creator; delete $scope.aSite.decDegORdms;
+                        if ($scope.addLandowner === true) {
+                            if ($scope.landowner.fname !== undefined || $scope.landowner.lname !== undefined || $scope.landowner.title !== undefined ||
+                                           $scope.landowner.address !== undefined || $scope.landowner.city !== undefined || $scope.landowner.primaryphone !== undefined) {
+                                LANDOWNER_CONTACT.save($scope.landowner, function success(response) {
+                                    $scope.aSite.landownercontact_id = response.landownercontactid;
+                                    //now post the site
+                                    postSiteAndParts();
+                                }, function error(errorResponse) {
+                                    $rootScope.stateIsLoading.showLoading = false; // loading.. 
+                                    toastr.error("Error posting landowner: " + errorResponse.statusText);
+                                });
+                            } else {
                                 postSiteAndParts();
-                            }, function error(errorResponse) {
-                                $rootScope.stateIsLoading.showLoading = false; // loading.. 
-                                toastr.error("Error posting landowner: " + errorResponse.statusText);
-                            });
+                            }
                         } else {
                             postSiteAndParts();
                         }
-                    } else {
-                        postSiteAndParts();
-                    }
-                }
+                    } // end lat/long are good
+                } //end  valid
             };
             var postSiteAndParts = function () {
                 //make sure longitude is < 0, otherwise * (-1),
