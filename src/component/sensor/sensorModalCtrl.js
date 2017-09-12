@@ -1539,8 +1539,6 @@
             //deploy part //////////////////
             $scope.DeployedSensorStat = angular.copy(thisSensor.instrument_status.filter(function (inst) { return inst.status === "Deployed"; })[0]);
             $scope.DeployedSensorStat.time_stamp = getDateTimeParts($scope.DeployedSensorStat.time_stamp); //this keeps it as utc in display
-            //if ($scope.DeployedSensorStat.vdatum_id !== undefined)
-            //    $scope.DeployedSensorStat.vdatumName = $scope.vertDatumList.filter(function (vd) { return vd.datum_id == $scope.DeployedSensorStat.vdatum_id; })[0].datum_abbreviation;
             $scope.Deployer = allMembers.filter(function (m) { return m.member_id === $scope.DeployedSensorStat.member_id; })[0];
             $scope.DEPremoveOPList = [];
             $scope.DEPtapeDownTable = []; //holder of tapedown OP_MEASUREMENTS
@@ -1721,7 +1719,7 @@
             //accordion open/close glyphs
             $scope.s = { depOpen: false, retOpen: true, sFileOpen: false, NWISFileOpen: false };
 
-            //#region datetimepicker
+            // datetimepicker
             $scope.dateOptions = {
                 startingDay: 1,
                 showWeeks: false
@@ -1794,7 +1792,7 @@
                 }
             };
 
-            //#region deploy edit
+            // deploy edit
             //edit button clicked. make copy of deployed info 
             $scope.wannaEditDep = function () {
                 $scope.view.DEPval = 'edit';
@@ -2032,7 +2030,7 @@
                 });//end modal
             };
 
-            //#region FILE STUFF
+            // FILE STUFF
             $scope.stamp = FILE_STAMP.getStamp(); $scope.fileItemExists = true;
             //need to reupload fileItem to this existing file OR Change out existing fileItem for new one
             $scope.saveFileUpload = function () {
@@ -2525,14 +2523,33 @@
                 });//end modal
             };
 
-            // run air script using the data file id
-            $scope.runAirScript = function () {
-                $scope.showProcessing = true;
-           /*     DATA_FILE.runAirScript({ id: $scope.datafile.data_file_id }).$promise.then(function (netCDF_response) {
-                    //do something with the response
-                    $scope.showProcessing = false;
-                })*/
-
+            // this is a pressure transducer sensor's data file, run air script using the data file id
+            $scope.runAirScript = function () {                
+                // ensure the air sensor has a tapedown with the sensor_elevation on both dep and retrieved
+                if ($scope.DeployedSensorStat.sensor_elevation !== undefined && $scope.RetrievedSensorStat.sensor_elevation !== undefined) {
+                    $scope.showProcessing = true;
+                    /*DATA_FILE.runAirScript({ airDFID: $scope.datafile.data_file_id, username: $cookies.get('STNUsername') }).$promise.then(function () {                    
+                        $scope.showProcessing = false;
+                      }, function error(errorResponse) {
+                            if (errorResponse.headers(["usgswim-messages"]) !== undefined) toastr.error("Error running Air Script: " + errorResponse.headers(["usgswim-messages"]));
+                            else toastr.error("Error running Air Script: " + errorResponse.statusText);
+                        });*/
+                    Site_Script.setIsScriptRunning("true"); //tell site.ctrl to show toastr notification
+                    $scope.cancelFile();
+                } else {
+                    var missingSeaElev = $uibModal.open({
+                        template: '<div class="modal-header"><h3 class="modal-title">Error</h3></div>' +
+                            '<div class="modal-body"><p>This Pressure Transducer Sensor does not had a sensor elevation.</p>' +
+                            '<p>Please update the sensor, providing a sensor elevation for both the deployed section and retrieved section. This is required for the script.</p></div>' +
+                            '<div class="modal-footer"><button class="btn btn-primary" ng-enter="ok()" ng-click="ok()">OK</button></div>',
+                        controller: ['$scope', '$uibModalInstance', function ($scope, $uibModalInstance) {
+                            $scope.ok = function () {
+                                $uibModalInstance.close();
+                            };
+                        }],
+                        size: 'sm'
+                    });
+                }
             }
             function calcDistance(lat1, lon1) {
                 // http://www.geodatasource.com/developers/javascript
@@ -2555,10 +2572,12 @@
                 // how does $scope.eventDataFiles change if a datafile is added after this page loads??
 
             }
+
+            // this is a water sensor's data file, run storm script using air and water data file ids
             $scope.runStormScript = function () {
                 var airDF = $scope.eventDataFiles.filter(function (d) { return d.selected == "true"; })[0];
                 if (airDF !== undefined) {
-                    /* make sure they added a tapedown with the required fields for the script to run */
+                    // make sure they added a tapedown with the required fields for the script to run
                     // required => sea dep and retr status: sensor_elevation && sea dep and retr status: gs_elevation
                     if ($scope.DeployedSensorStat.sensor_elevation !== undefined && $scope.RetrievedSensorStat.sensor_elevation !== undefined &&
                         $scope.DeployedSensorStat.gs_elevation !== undefined && $scope.RetrievedSensorStat.gs_elevation !== undefined) {
@@ -2571,7 +2590,12 @@
                                 var waterDF = $scope.datafile.data_file_id;
                                 var boolVal = $scope.is4Hz.selected;
                                 // run the script if airDF and waterDF are present                    
-                                //DATA_FILE.stormScript({ seaDataFileId: waterDF, airDataFileId: airDF.data_file_id, hertz: boolVal, username: $cookies.get('STNUsername') });
+                                /*DATA_FILE.runStormScript({ seaDFID: waterDF, airDFID: airDF.data_file_id, hertz: boolVal, username: $cookies.get('STNUsername') }).$promise.then(function () {
+                                    var allDone = true; 
+                                  }, function error(errorResponse) {
+                                        if (errorResponse.headers(["usgswim-messages"]) !== undefined) toastr.error("Error running Air Script: " + errorResponse.headers(["usgswim-messages"]));
+                                        else toastr.error("Error running Air Script: " + errorResponse.statusText);
+                                  });*/
                                 Site_Script.setIsScriptRunning("true"); //tell site.ctrl to show toastr notification
                                 $scope.cancelFile();
                             } // end if air dep/retr has sensor_elevation
@@ -2596,7 +2620,7 @@
                     else {
                         var missingSeaElev = $uibModal.open({
                             template: '<div class="modal-header"><h3 class="modal-title">Error</h3></div>' +
-                                '<div class="modal-body"><p>This Water Sensor has not had a sensor elevation or ground elevation.</p>' +
+                                '<div class="modal-body"><p>This Water Sensor does not had a sensor elevation or ground elevation.</p>' +
                                 '<p>Please update the water sensor, providing a sensor elevation and ground elevation for both the deployed section and retrieved section. This is required for the script.</p></div>' +
                                 '<div class="modal-footer"><button class="btn btn-primary" ng-enter="ok()" ng-click="ok()">OK</button></div>',
                             controller: ['$scope', '$uibModalInstance', function ($scope, $uibModalInstance) {
@@ -2624,7 +2648,7 @@
             }
             //end fileStuff
 
-            //#region NWIS DATA_FILE
+            // NWIS DATA_FILE
             if ($scope.sensorDataNWIS) {
                 //FILE.VALIDATED being used to store 1 if this is an nwis file metadata link
                 $scope.sensorNWISFiles = [];
@@ -2835,7 +2859,7 @@
                 $scope.NWISDF = {};
                 $scope.showNWISFileForm = false;
             };
-            //#endregion
+            
             $rootScope.stateIsLoading.showLoading = false;
         }]);//end fullSensorModalCtrl
 })();

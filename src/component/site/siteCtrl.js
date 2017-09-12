@@ -15,14 +15,11 @@
                 $scope.aSite = {};
                 // are there any scripts running against this site right now for air/water
                 var showScriptToast = function () {
-                    toastr.options = {
-                        "closeButton": true,
-                        "positionClass": "toast-bottom-right",
-                        "onclick": null,
-                        "timeOut": "0",
-                        "extendedTimeOut": "0"
-                    };
-                    toastr.warning("Storm Scripts are running on data files for this site and can take several minutes. Check back to the site dashboard later or refresh to see if script is complete and new files are ready.");
+                    toastr.warning(
+                        "Data File Scripts are processing for this site and can take several minutes. Check back to the site dashboard later or refresh to see if script is complete and new files are ready.",
+                        null,
+                        { closeButton: true, positionClass: "toast-bottom-right", onclick: null, timeOut: 0, extendedTimeOut: 0 }
+                    );
                 }
                 if (Site_Script.getIsScriptRunning() == "true") {
                     showScriptToast();
