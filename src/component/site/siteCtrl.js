@@ -16,7 +16,7 @@
                 // are there any scripts running against this site right now for air/water
                 var showScriptToast = function () {
                     toastr.warning(
-                        "Data File Scripts are processing for this site and can take several minutes. Check back to the site dashboard later or refresh to see if script is complete and new files are ready.",
+                        "Data File Scripts are processing for this site and can take several minutes. Check back to the site dashboard later or refresh to see if script is complete and new files are ready. The output csv file contains success/error information.",
                         null,
                         { closeButton: true, positionClass: "toast-bottom-right", onclick: null, timeOut: 0, extendedTimeOut: 0 }
                     );

@@ -6672,7 +6672,9 @@
                                 </div>
                                 <div class="col-md-4" ng-if="!showProcessing">
                                     <!-- button to run STORM script if this existing data file is on a water sensor (sensor_type_id == 1 && (deployment_type_id == 1 || deployment_type_id == 2) )-->
-                                    <button type="button" class="btn btn-primary" ng-if="aFile.file_id != undefined && aFile.filetype_id === 2 && (sensor.sensor_type_id == 1 && (sensor.deployment_type_id == 1 || sensor.deployment_type_id == 2))" ng-click="showStormSection()">Run Storm Script</button>
+                                    <span ng-show="datafile.script_parent == undefined || datafile.script_parent.indexOf('_') == -1"> <!-- don't show the button for outputs of other scripts ran -->
+                                        <button type="button" class="btn btn-primary" ng-if="aFile.file_id != undefined && aFile.filetype_id === 2 && (sensor.sensor_type_id == 1 && (sensor.deployment_type_id == 1 || sensor.deployment_type_id == 2))" ng-click="showStormSection()">Run Storm Script</button>
+                                    </span>
                                     <!-- button to run AIR script if this existing data file is on a air sensor (sensor_type_id == 1 && deployment_type_id == 3 )-->
                                     <button type="button" class="btn btn-primary" ng-if="aFile.file_id != undefined && aFile.filetype_id === 2 && (sensor.sensor_type_id == 1 && sensor.deployment_type_id == 3)" ng-click="runAirScript()">Process Air Data File</button>
                                 </div>
@@ -6689,7 +6691,7 @@
                                         </thead>
                                         <tr ng-repeat="df in eventDataFiles">
                                             <td><input type="radio" name="selected_datafile" ng-model="df.selected" value="true" /></td>
-                                            <td>{{df.site_no}}</td><td>{{df.distance | number:4}} mi.</td><td>{{df.city}}, {{df.state}}</td><td>{{df.brand_name}}</td>
+                                            <td>{{df.site_no}}</td><td>{{df.distance | number:4}} mi.</td><td>{{df.county}}, {{df.state}}</td><td>{{df.brand_name}}</td>
                                             <td>{{df.name}}</td><td>{{df.good_start | date: 'MM/dd/yyyy' }}</td><td>{{df.good_end | date: 'MM/dd/yyyy'}}</td>
                                         </tr>
                                     </table>
@@ -7713,31 +7715,38 @@
                 <!-- Start SENSORs and HWMs used for Peak -->
                 <label class="col-md-6 text-center">Select Data used for Interpretation</label>
                 <!-- HWM list-->
-                <div class="col-md-9" ng-repeat="h in eventSiteHWMs">
+                <div class="col-sm-12" ng-repeat="h in eventSiteHWMs">
                     <input type="checkbox" class="col-sm-1 pull-left" ng-model="h.selected" ng-click="addHWM(h)" />
-                    <span class="col-md-7">
+                    <span><!-- class="col-sm-7">-->
                         HWM {{h.hwm_id}} - {{h.elev_ft || '--'}} ft
+                        
                     </span>
-                    <button type="button" class="borderLess" tooltip-placement="top" uib-tooltip="Show Details" ng-click="showHWMDetails(h)"><span class="glyphicon glyphicon-info-sign"></span></button>
-                    <button ng-if="h.elev_ft" type="button" class="borderLess" tooltip-placement="top" uib-tooltip="Set as Primary" ng-click="primaryHWM(h)"><span class="glyphicon glyphicon-check"></span></button>
-                    <button ng-if="!h.elev_ft" type="button" class="borderLess" tooltip-placement="top" uib-tooltip="Incomplete" ng-click="showIncompleteHWMInfo()"><span class="glyphicon glyphicon-alert"></span></button>
+                    <span class="col-sm-4 pull-right">
+                        <button type="button" class="borderLess" tooltip-placement="top" uib-tooltip="Show Details" ng-click="showHWMDetails(h)"><span class="glyphicon glyphicon-info-sign"></span></button>                        
+                        <button ng-if="h.elev_ft" type="button" class="borderLess" tooltip-placement="top" uib-tooltip="Set as Primary" ng-click="primaryHWM(h)"><span class="glyphicon glyphicon-check"></span></button>
+                        <button ng-if="!h.elev_ft" type="button" class="borderLess" tooltip-placement="top" uib-tooltip="Incomplete" ng-click="showIncompleteHWMInfo()"><span class="glyphicon glyphicon-alert"></span></button>
+                    </span>
                 </div>
                 <!-- Sensor list -->
-                <div class="col-md-9" ng-repeat="s in eventSiteSensors">
-                    <span class="col-sm-1"> </span>
-                    <span class="col-md-7">
+                <div class="col-sm-12" ng-repeat="s in eventSiteSensors">
+                    <!--<span class="col-sm-1"> </span>-->
+                    <span class="col-md-12">
                         {{s.deploymentType || s.sensorType}} Sensor
+                        <button type="button" class="borderLess" tooltip-placement="top" uib-tooltip="Show Details" ng-click="showSensorDetails(s)"><span class="glyphicon glyphicon-info-sign"></span></button>
                     </span>
-                    <button type="button" class="borderLess" tooltip-placement="top" uib-tooltip="Show Details" ng-click="showSensorDetails(s)"><span class="glyphicon glyphicon-info-sign"></span></button>
-                    <button ng-if="s.NeedDF" type="button" class="borderLess" tooltip-placement="top" uib-tooltip="Incomplete" ng-click="showIncompleteDFInfo()"><span class="glyphicon glyphicon-alert"></span></button>
-                    <button ng-if="!s.isRetrieved" type="button" class="borderLess" tooltip-placement="top" uib-tooltip="Needs to be Retrieved" ng-click="showRetrieveInfo()"><span class="needRetrieve glyphicon glyphicon-alert"></span></button>
+                    <span class="col-sm-4 pull-right">                        
+                        <button ng-if="s.NeedDF" type="button" class="borderLess" tooltip-placement="top" uib-tooltip="Incomplete" ng-click="showIncompleteDFInfo()"><span class="glyphicon glyphicon-alert"></span></button>
+                        <button ng-if="!s.isRetrieved" type="button" class="borderLess" tooltip-placement="top" uib-tooltip="Needs to be Retrieved" ng-click="showRetrieveInfo()"><span class="needRetrieve glyphicon glyphicon-alert"></span></button>
+                    </span>
                     <!-- Sensor FILES list -->
-                    <div ng-repeat="f in s.files | where:{filetype_id: 2}">
-                        <span class="col-sm-1"> </span>
+                    <div ng-repeat="f in s.files | where:{filetype_id: 2}" class="col-sm-12">
+                        <!--<span class="col-sm-1"> </span>-->
                         <input type="checkbox" class="pull-left col-sm-1" ng-model="f.selected" ng-click="addDataFile(f)" />
-                        <span class="col-md-6">{{f.name || '---'}}</span>
-                        <button type="button" class="borderLess" tooltip-placement="top" uib-tooltip="Show Details" ng-click="showDataFileDetails(f)"><span class="glyphicon glyphicon-info-sign"></span></button>
-                        <button type="button" class="borderLess" tooltip-placement="top" uib-tooltip="Set as Primary" ng-click="primaryDataFile(f)"><span class="glyphicon glyphicon-check"></span></button>
+                        <span>{{f.name || '---'}}</span>
+                        <span class="col-sm-4 pull-right">
+                            <button type="button" class="borderLess" tooltip-placement="top" uib-tooltip="Show Details" ng-click="showDataFileDetails(f)"><span class="glyphicon glyphicon-info-sign"></span></button>
+                            <button type="button" class="borderLess" tooltip-placement="top" uib-tooltip="Set as Primary" ng-click="primaryDataFile(f)"><span class="glyphicon glyphicon-check"></span></button>
+                        </span>
                     </div>
                 </div>
 
@@ -7756,7 +7765,9 @@
                         <li style="list-style:none">Elevation above ground: {{HWMBox.height_above_gnd}} ft</li>
                         <li style="list-style:none">Quality: {{HWMBox.hwm_quality}}</li>
                         <li style="list-style:none">Type: {{HWMBox.hwm_type}}</li>
-                        <li style="list-style:none">Stillwater: {{HWMBox.stillwater}}</li>
+                        <li style="list-style:none" ng-if="HWMBox.stillwater == 0">Stillwater: No</li>
+                        <li style="list-style:none" ng-if="HWMBox.stillwater == 1">Stillwater: Yes</li>
+                        <li style="list-style:none" ng-if="HWMBox.stillwater == undefined">Stillwater: ---</li>
                     </ul><br clear="all" />
                     <div class="col-md-12" ng-if="HWMBox.files.length > 0">
                         <label>HWM Files</label>                        
@@ -7841,7 +7852,7 @@
                         <label>File</label><br clear="all" />
                         <!-- TODO :: IF this is an NWIS file, show link to go see the data instead of the link to download -->
                         <span ng-if="!DFBox.nwisFile" class="col-sm-9 borderLess" style="padding:0">
-                            <a class="btn btn-primary borderLess" style="padding:0" target="_blank" ng-href="{{serverURL}}/Files/{{DFBox.fileID}}/Item">
+                            <a class="btn btn-primary borderLess" style="padding:0;color:#333333;" target="_blank" ng-href="{{serverURL}}/Files/{{DFBox.fileID}}/Item">
                                 {{DFBox.collect_date | date: 'MM/dd/yyyy'}} ({{DFBox.filePath}})
                             </a>
                         </span>

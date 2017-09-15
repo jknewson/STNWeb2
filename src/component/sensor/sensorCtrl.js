@@ -361,7 +361,7 @@
                                 return MEMBER.getAll().$promise;
                             },
                             allEventDataFiles: function () {
-                                return DATA_FILE.getEventDataView({ eventId: $cookies.get('SessionEventID') }).$promise;
+                                return DATA_FILE.getEventDataView({ eventId: sensorClicked.event_id }).$promise;
                             }
                         }
                     });
