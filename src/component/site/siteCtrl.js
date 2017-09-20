@@ -20,7 +20,7 @@
                         null,
                         { closeButton: true, positionClass: "toast-bottom-right", onclick: null, timeOut: 0, extendedTimeOut: 0 }
                     );
-                }
+                };
                 if (Site_Script.getIsScriptRunning() == "true") {
                     showScriptToast();
                 }
@@ -195,7 +195,7 @@
                                     toastr.error("Error getting Landowner Information: " + errorResponse.statusText);
                                 }).$promise;
                             }//end if site has landownercontact id
-                        }
+                        };
                         getLandOwnerContact(); //call it from here and from modalresponse;
 
                     } else {

@@ -6672,11 +6672,13 @@
                                 </div>
                                 <div class="col-md-4" ng-if="!showProcessing">
                                     <!-- button to run STORM script if this existing data file is on a water sensor (sensor_type_id == 1 && (deployment_type_id == 1 || deployment_type_id == 2) )-->
-                                    <span ng-show="datafile.script_parent == undefined || datafile.script_parent.indexOf('_') == -1"> <!-- don't show the button for outputs of other scripts ran -->
+                                    <span ng-show="(aFile.script_parent == undefined  || aFile.script_parent == '') || aFile.script_parent.indexOf('_') == -1"> <!-- don't show the button for outputs of other scripts ran -->
                                         <button type="button" class="btn btn-primary" ng-if="aFile.file_id != undefined && aFile.filetype_id === 2 && (sensor.sensor_type_id == 1 && (sensor.deployment_type_id == 1 || sensor.deployment_type_id == 2))" ng-click="showStormSection()">Run Storm Script</button>
                                     </span>
-                                    <!-- button to run AIR script if this existing data file is on a air sensor (sensor_type_id == 1 && deployment_type_id == 3 )-->
-                                    <button type="button" class="btn btn-primary" ng-if="aFile.file_id != undefined && aFile.filetype_id === 2 && (sensor.sensor_type_id == 1 && sensor.deployment_type_id == 3)" ng-click="runAirScript()">Process Air Data File</button>
+                                    <span ng-show="(aFile.script_parent == undefined || aFile.script_parent == '') || (aFile.script_parent != undefined && aFile.script_parent == 'true')">      <!-- don't show the button for outputs of other scripts ran -->
+                                        <!-- button to run AIR script if this existing data file is on a air sensor (sensor_type_id == 1 && deployment_type_id == 3 )-->
+                                        <button type="button" class="btn btn-primary" ng-if="aFile.file_id != undefined && aFile.filetype_id === 2 && (sensor.sensor_type_id == 1 && sensor.deployment_type_id == 3)" ng-click="runAirScript()">Process Air Data File</button>
+                                    </span>
                                 </div>
                                 <div ng-show="fullSenfileIsUploading"><img src="images/fileUpload.gif" /></div>
                                 <div ng-show="showProcessing" class="col-md-4"><img src="images/processing.gif" /></div>
@@ -6690,7 +6692,7 @@
                                             </tr>
                                         </thead>
                                         <tr ng-repeat="df in eventDataFiles">
-                                            <td><input type="radio" name="selected_datafile" ng-model="df.selected" value="true" /></td>
+                                            <td><input type="radio" name="selected" ng-model="df.selected" value="true" ng-change="updateChosenAirRadio($index)" /></td>
                                             <td>{{df.site_no}}</td><td>{{df.distance | number:4}} mi.</td><td>{{df.county}}, {{df.state}}</td><td>{{df.brand_name}}</td>
                                             <td>{{df.name}}</td><td>{{df.good_start | date: 'MM/dd/yyyy' }}</td><td>{{df.good_end | date: 'MM/dd/yyyy'}}</td>
                                         </tr>

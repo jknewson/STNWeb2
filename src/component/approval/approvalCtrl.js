@@ -117,7 +117,7 @@
                     SITE.getPeaklessSites({ id: evID }, function success(resp2) {
                         $scope.sitesWOpeaks = resp2;
                         $scope.showPeakbox = true;
-                    })
+                    });
                 };
 
                 $scope.UpdateCounties = function () {
@@ -211,8 +211,8 @@
                 $scope.approveThese = function () {
                     var approveModal = $uibModal.open({
                         template: "<div class='modal-header'><h3 class='modal-title'>Approve HWMs</h3></div>" +
-                            "<div class='modal-body'><p>Are you sure you want to approve these HWMs? Doing so will remove them from this list of unapproved HWMs.</p></div>" +
-                            "<div class='modal-footer'><button class='btn btn-primary' ng-click='approveIt()'>Approve</button><button class='btn btn-warning' ng-click='cancel()'>Cancel</button></div>",
+                        "<div class='modal-body'><p>Are you sure you want to approve these HWMs? Doing so will remove them from this list of unapproved HWMs.</p></div>" +
+                        "<div class='modal-footer'><button class='btn btn-primary' ng-click='approveIt()'>Approve</button><button class='btn btn-warning' ng-click='cancel()'>Cancel</button></div>",
                         controller: ['$scope', '$uibModalInstance', function ($scope, $uibModalInstance) {
                             $scope.cancel = function () {
                                 $uibModalInstance.dismiss('cancel');
@@ -229,7 +229,7 @@
                         // for everyone that has .selected = true, 
                         //remove .selected property, remove site_no, and change the stillwater back to 0/1, approve it, which should remove it from this list
                     });
-                }
+                };
 
                 //they clicked the site no in the finished table 
                 $scope.goToSiteDash = function (siteID) {

@@ -81,7 +81,7 @@
                                 $scope.updateFileType = function () {
                                     $scope.aFile.filetype_id = Number($scope.approval_type);
                                     $scope.aFile.description = $scope.approval_type == "7" ? "PDF of Approval Memo" : "Report Link";
-                                }
+                                };
 
                                 //Datepicker
                                 $scope.datepickrs = {};
@@ -129,7 +129,7 @@
                         windowClass: 'rep-dialog',
                         resolve: {                           
                             fileTypeList: function () {
-                                return fileTypesList
+                                return fileTypesList;
                             },
                             agencyList: function () {
                                 return agenciesList;
@@ -946,7 +946,7 @@
                             if (pHWM.site_id == siteId) {
                                 pHWM.PeakSummary = [siteId, createdPk[0].peak_summary_id];
                             }
-                        })
+                        });
                     });
                 };
                 //#endregion HWM PEAK "add/edit" clicked----------------------------------------------------------------------------------------
