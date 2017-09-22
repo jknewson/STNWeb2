@@ -6684,7 +6684,7 @@
                                 <div ng-show="showProcessing" class="col-md-4"><img src="images/processing.gif" /></div>
                                 <br clear="all" />
                                 <div ng-if="stormSection">                                    
-                                    <h4 style="margin-top:1em;">Select the Barometric Sensor File for this Event that you would like to use.</h4>
+                                    <h4 style="margin-top:1em;">Select the raw csv barometric sensor file that you would like to use.</h4>
                                     <table class="table" style="display:inline-block;overflow:auto;">
                                         <thead>
                                             <tr>
@@ -6697,14 +6697,16 @@
                                             <td>{{df.name}}</td><td>{{df.good_start | date: 'MM/dd/yyyy' }}</td><td>{{df.good_end | date: 'MM/dd/yyyy'}}</td>
                                         </tr>
                                     </table>
-                                    <div class="col-md-8">
-                                        <div class="chx">
+                                    <div class="col-md-12">
+                                        <div style="margin-bottom:15px" class="chx">
                                             <label>
                                                 <input style="margin:0!important;" class="col-md-1" type="checkbox" ng-model="is4Hz.selected" ng-true-value="'true'" ng-false-value="'false'" /> Sensor is 4 Hz
                                             </label>
-                                        </div>                                        
+                                        </div> 
+
+                                        <div class="col-md-7"><button class="btn btn-primary" ng-click="runStormScript()">Run Script</button></div>
                                     </div>
-                                    <button class="btn btn-primary" ng-click="runStormScript()">Run Script</button>
+                                    
                                 </div> <!-- end stormSection -->
                             </fieldset>
                         </form>
