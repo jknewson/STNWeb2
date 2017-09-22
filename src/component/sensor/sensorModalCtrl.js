@@ -2608,7 +2608,7 @@
                 } else {
                     var missingSeaElev = $uibModal.open({
                         template: '<div class="modal-header"><h3 class="modal-title">Error</h3></div>' +
-                            '<div class="modal-body"><p>This Pressure Transducer Sensor does not had a sensor elevation.</p>' +
+                            '<div class="modal-body"><p>This Pressure Transducer Sensor does not have a sensor elevation.</p>' +
                             '<p>Please update the sensor, providing a sensor elevation for both the deployed section and retrieved section. This is required for the script.</p></div>' +
                             '<div class="modal-footer"><button class="btn btn-primary" ng-enter="ok()" ng-click="ok()">OK</button></div>',
                         controller: ['$scope', '$uibModalInstance', function ($scope, $uibModalInstance) {
@@ -2767,7 +2767,7 @@
                     else {
                         var missingSeaElev = $uibModal.open({
                             template: '<div class="modal-header"><h3 class="modal-title">Error</h3></div>' +
-                                '<div class="modal-body"><p>This Water Sensor does not had a sensor elevation or ground elevation.</p>' +
+                                '<div class="modal-body"><p>This Water Sensor does not have a sensor elevation or ground elevation.</p>' +
                                 '<p>Please update the water sensor, providing a sensor elevation and ground elevation for both the deployed section and retrieved section. This is required for the script.</p></div>' +
                                 '<div class="modal-footer"><button class="btn btn-primary" ng-enter="ok()" ng-click="ok()">OK</button></div>',
                             controller: ['$scope', '$uibModalInstance', function ($scope, $uibModalInstance) {
