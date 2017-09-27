@@ -99,7 +99,8 @@
                             $scope.ApprovalInfo.approvalDate = new Date(approvalResponse.approval_date); //include note that it's displayed in their local time but stored in UTC
                             $scope.ApprovalInfo.Member = allMembers.filter(function (amem) { return amem.member_id == approvalResponse.member_id; })[0];
                         }, function error(errorResponse) {
-                            toastr.error("Error getting data file approval information");
+                            if (errorResponse.headers(["usgswim-messages"]) !== undefined) toastr.error("Error getting approval info: " + errorResponse.headers(["usgswim-messages"]));
+                            else toastr.error("Error getting approval info: " + errorResponse.statusText);
                         });
                     }
                     var aProcessor = $scope.datafile.processor_id !== null ? allMembers.filter(function (amem) { return amem.member_id == $scope.datafile.processor_id; })[0] : {};
@@ -162,7 +163,8 @@
                                 $uibModalInstance.close(sendBack);
                             }, function (errorResponse) {
                                 $scope.sFileIsUploading = false;
-                                toastr.error("Error saving file: " + errorResponse.statusText);
+                                if (errorResponse.headers(["usgswim-messages"]) !== undefined) toastr.error("Error creating file: " + errorResponse.headers(["usgswim-messages"]));
+                                else toastr.error("Error creating file: " + errorResponse.statusText);
                             });
                         } else {
                             //this is a link
@@ -178,12 +180,14 @@
                                 $uibModalInstance.close(sendBack);
                             }, function (errorResponse) {
                                 $scope.sFileIsUploading = false;
-                                toastr.error("Error saving file: " + errorResponse.statusText);
+                                if (errorResponse.headers(["usgswim-messages"]) !== undefined) toastr.error("Error creating file: " + errorResponse.headers(["usgswim-messages"]));
+                                else toastr.error("Error creating file: " + errorResponse.statusText);
                             });
                         }//end save link file
                     }, function (errorResponse) {
                         $scope.sFileIsUploading = false;
-                        toastr.error("Error saving Source info: " + errorResponse.statusText);
+                        if (errorResponse.headers(["usgswim-messages"]) !== undefined) toastr.error("Error creating source: " + errorResponse.headers(["usgswim-messages"]));
+                        else toastr.error("Error creating source: " + errorResponse.statusText);
                     });//end source.save()
                 }//end valid
             };//end create()
@@ -247,11 +251,13 @@
                                 $scope.sFileIsUploading = false;
                             }, function (errorResponse) {
                                 $scope.sFileIsUploading = false;
-                                toastr.error("Error saving file: " + errorResponse.statusText);
+                                if (errorResponse.headers(["usgswim-messages"]) !== undefined) toastr.error("Error saving file: " + errorResponse.headers(["usgswim-messages"]));
+                                else toastr.error("Error saving file: " + errorResponse.statusText);
                             });
                         }, function (errorResponse) {
                             $scope.sFileIsUploading = false; //Loading...
-                            toastr.error("Error saving source: " + errorResponse.statusText);
+                            if (errorResponse.headers(["usgswim-messages"]) !== undefined) toastr.error("Error saving source: " + errorResponse.headers(["usgswim-messages"]));
+                            else toastr.error("Error saving source: " + errorResponse.statusText);
                         });
                     } else {
                         //data file
@@ -289,11 +295,13 @@
                                 $scope.sFileIsUploading = false;
                             }, function (errorResponse) {
                                 $scope.sFileIsUploading = false;
-                                toastr.error("Error saving file: " + errorResponse.statusText);
+                                if (errorResponse.headers(["usgswim-messages"]) !== undefined) toastr.error("Error saving file: " + errorResponse.headers(["usgswim-messages"]));
+                                else toastr.error("Error saving file: " + errorResponse.statusText);
                             });
                         }, function (errorResponse) {
                             $scope.sFileIsUploading = false; //Loading...
-                            toastr.error("Error saving data file: " + errorResponse.statusText);
+                            if (errorResponse.headers(["usgswim-messages"]) !== undefined) toastr.error("Error saving file's data file: " + errorResponse.headers(["usgswim-messages"]));
+                            else toastr.error("Error saving file's data file: " + errorResponse.statusText);
                         });
                     } //end else (datafile)
                 }//end valid                
@@ -361,7 +369,8 @@
                     $scope.fileItemExists = true;
                 }, function (errorResponse) {
                     $scope.sFileIsUploading = false;
-                    toastr.error("Error saving file: " + errorResponse.statusText);
+                    if (errorResponse.headers(["usgswim-messages"]) !== undefined) toastr.error("Error saving file: " + errorResponse.headers(["usgswim-messages"]));
+                    else toastr.error("Error saving file: " + errorResponse.statusText);
                 });
             };
 
@@ -388,7 +397,8 @@
                         var sendBack = ["de", 'deleted'];
                         $uibModalInstance.close(sendBack);
                     }, function error(errorResponse) {
-                        toastr.error("Error: " + errorResponse.statusText);
+                        if (errorResponse.headers(["usgswim-messages"]) !== undefined) toastr.error("Error deleting file: " + errorResponse.headers(["usgswim-messages"]));
+                        else toastr.error("Error deleting file: " + errorResponse.statusText);
                     });
                 });//end DeleteModal.result.then
             };//end delete()
@@ -434,7 +444,8 @@
                         $scope.ApprovalInfo.approvalDate = new Date(approvalResponse.approval_date); //include note that it's displayed in their local time but stored in UTC
                         $scope.ApprovalInfo.Member = allMembers.filter(function (amem) { return amem.member_id == approvalResponse.member_id; })[0];
                     }, function error(errorResponse) {
-                        toastr.error("Error: " + errorResponse.statusText);
+                        if (errorResponse.headers(["usgswim-messages"]) !== undefined) toastr.error("Error approving data file: " + errorResponse.headers(["usgswim-messages"]));
+                        else toastr.error("Error approving data file: " + errorResponse.statusText);
                     });
                 }, function () {
                     //logic for cancel
@@ -468,7 +479,8 @@
                         toastr.success("Data File Unapproved");
                         $scope.ApprovalInfo = {};
                     }, function error(errorResponse) {
-                        toastr.error("Error: " + errorResponse.statusText);
+                        if (errorResponse.headers(["usgswim-messages"]) !== undefined) toastr.error("Error unapproving data file: " + errorResponse.headers(["usgswim-messages"]));
+                        else toastr.error("Error unapproving data file: " + errorResponse.statusText);
                     });
                 }, function () {
                     //logic for cancel

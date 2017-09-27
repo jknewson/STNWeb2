@@ -138,7 +138,8 @@
                         //then POST the ReportContacts
                         postReportContacts($scope.newReport.reporting_metrics_id);
                     }, function error(errorResponse) {
-                        toastr.error("Error: " + errorResponse.statusText);
+                        if (errorResponse.headers(["usgswim-messages"]) !== undefined) toastr.error("Error updating report: " + errorResponse.headers(["usgswim-messages"]));
+                        else toastr.error("Error updating report: " + errorResponse.statusText);
                     }).$promise.then(function () {
                         $scope.fullReportForm.submit.$setPristine();
                         $scope.fullReportForm.submit.event_id.$viewValue = undefined;//needed for the changeState to not throw up leaving tab message
@@ -159,7 +160,8 @@
                         $scope.newReport.reporting_metrics_id = response.reporting_metrics_id;
                         postReportContacts($scope.newReport.reporting_metrics_id);
                     }, function error(errorResponse) {
-                        toastr.error("Error: " + errorResponse.statusText);
+                        if (errorResponse.headers(["usgswim-messages"]) !== undefined) toastr.error("Error saving report: " + errorResponse.headers(["usgswim-messages"]));
+                        else toastr.error("Error saving report: " + errorResponse.statusText);
                     }).$promise.then(function () {
                         $scope.fullReportForm.submit.$setPristine();
                         $scope.fullReportForm.submit.event_id.$viewValue = undefined; //needed for the changeState to not throw up leaving tab message

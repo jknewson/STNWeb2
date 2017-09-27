@@ -508,7 +508,8 @@
                         //var sendBack = [h, 'updated'];
                         //$uibModalInstance.close(sendBack);
                     }, function error(errorResponse) {
-                        toastr.error("Error: " + errorResponse.statusText);
+                        if (errorResponse.headers(["usgswim-messages"]) !== undefined) toastr.error("Error approving hwm: " + errorResponse.headers(["usgswim-messages"]));
+                        else toastr.error("Error approving hwm: " + errorResponse.statusText);
                     });
                 }, function () {
                     //logic for cancel
@@ -542,7 +543,8 @@
                         //var sendBack = [h, 'updated'];
                         //$uibModalInstance.close(sendBack);
                     }, function error(errorResponse) {
-                        toastr.error("Error: " + errorResponse.statusText);
+                        if (errorResponse.headers(["usgswim-messages"]) !== undefined) toastr.error("Error unapproving: " + errorResponse.headers(["usgswim-messages"]));
+                        else toastr.error("Error unapproving hwm: " + errorResponse.statusText);
                     });
                 }, function () {
                     //logic for cancel
@@ -705,10 +707,9 @@
                         var sendBack = ["de", 'deleted'];
                         $uibModalInstance.close(sendBack);
                     }, function error(errorResponse) {
-                        toastr.error("Error: " + errorResponse.statusText);
+                        if (errorResponse.headers(["usgswim-messages"]) !== undefined) toastr.error("Error deleting hwm: " + errorResponse.headers(["usgswim-messages"]));
+                        else toastr.error("Error deleting hwm: " + errorResponse.statusText);
                     });
-                }, function () {
-                    //logic for cancel
                 });//end modal
             };
 
@@ -792,7 +793,8 @@
                     $scope.fileItemExists = true;
                 }, function (errorResponse) {
                     $scope.sFileIsUploading = false;
-                    toastr.error("Error saving file: " + errorResponse.statusText);
+                    if (errorResponse.headers(["usgswim-messages"]) !== undefined) toastr.error("Error creating file: " + errorResponse.headers(["usgswim-messages"]));
+                    else toastr.error("Error creating file: " + errorResponse.statusText);
                 });
             };
 
@@ -906,7 +908,8 @@
                                 $scope.showFileForm = false; $scope.HWMfileIsUploading = false;
                             }, function (errorResponse) {
                                 $scope.HWMfileIsUploading = false;
-                                toastr.error("Error uploading file: " + errorResponse.statusText);
+                                if (errorResponse.headers(["usgswim-messages"]) !== undefined) toastr.error("Error creating file: " + errorResponse.headers(["usgswim-messages"]));
+                                else toastr.error("Error creating file: " + errorResponse.statusText);
                             });
                         } else {
                             $scope.aFile.source_id = response.source_id; $scope.aFile.site_id = $scope.thisHWMsite.site_id; $scope.aFile.hwm_id = $scope.aHWM.hwm_id;
@@ -919,12 +922,14 @@
                                 $scope.showFileForm = false; $scope.HWMfileIsUploading = false;
                             }, function (errorResponse) {
                                 $scope.HWMfileIsUploading = false;
-                                toastr.error("Error saving file: " + errorResponse.statusText);
+                                if (errorResponse.headers(["usgswim-messages"]) !== undefined) toastr.error("Error creating file: " + errorResponse.headers(["usgswim-messages"]));
+                                else toastr.error("Error creating file: " + errorResponse.statusText);
                             });
                         }//end else
                     }, function (errorResponse) {
                         $scope.HWMfileIsUploading = false;
-                        toastr.error("Error creating Source info: " + errorResponse.statusText);
+                        if (errorResponse.headers(["usgswim-messages"]) !== undefined) toastr.error("Error creating source: " + errorResponse.headers(["usgswim-messages"]));
+                        else toastr.error("Error creating source: " + errorResponse.statusText);
                     });//end source.save()              
                 }//end valid
             };//end create()
@@ -942,8 +947,7 @@
                         // post again (if no change, will return existing one. if edited, will create a new one --instead of editing all files that use this source)
                         var theSource = { source_name: $scope.aSource.FULLname, agency_id: $scope.aSource.agency_id };
                         SOURCE.save(theSource).$promise.then(function (response) {
-
-                        //SOURCE.update({ id: $scope.aSource.source_id }, $scope.aSource).$promise.then(function () {
+                            //SOURCE.update({ id: $scope.aSource.source_id }, $scope.aSource).$promise.then(function () {
                             $scope.aFile.source_id = response.source_id;
                             FILE.update({ id: $scope.aFile.file_id }, $scope.aFile).$promise.then(function (fileResponse) {
                                 toastr.success("File Updated");
@@ -954,11 +958,13 @@
                                 $scope.showFileForm = false; $scope.HWMfileIsUploading = false;
                             }, function (errorResponse) {
                                 $scope.HWMfileIsUploading = false;
-                                toastr.error("Error saving file: " + errorResponse.statusText);
+                                if (errorResponse.headers(["usgswim-messages"]) !== undefined) toastr.error("Error creating file: " + errorResponse.headers(["usgswim-messages"]));
+                                else toastr.error("Error creating file: " + errorResponse.statusText);
                             });
                         }, function (errorResponse) {
                             $scope.HWMfileIsUploading = false; //Loading...
-                            toastr.error("Error saving file: " + errorResponse.statusText);
+                            if (errorResponse.headers(["usgswim-messages"]) !== undefined) toastr.error("Error creating source: " + errorResponse.headers(["usgswim-messages"]));
+                            else toastr.error("Error creating source: " + errorResponse.statusText);
                         });
                     }
                 }//end valid
@@ -990,7 +996,8 @@
                         Site_Files.setAllSiteFiles($scope.allSFiles); //updates the file list on the sitedashboard
                         $scope.showFileForm = false;
                     }, function error(errorResponse) {
-                        toastr.error("Error: " + errorResponse.statusText);
+                        if (errorResponse.headers(["usgswim-messages"]) !== undefined) toastr.error("Error deleting file: " + errorResponse.headers(["usgswim-messages"]));
+                        else toastr.error("Error deleting file: " + errorResponse.statusText);
                     });
                 });//end DeleteModal.result.then
             };//end delete()

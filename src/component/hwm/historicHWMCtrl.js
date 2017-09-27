@@ -73,7 +73,8 @@
                             }
                         }, function (errorResponse) {
                             $rootScope.stateIsLoading.showLoading = false;// loading..
-                            toastr.error("Error: " + errorResponse.statusText);
+                            if (errorResponse.headers(["usgswim-messages"]) !== undefined) toastr.error("Error getting address: " + errorResponse.headers(["usgswim-messages"]));
+                            else toastr.error("Error getting address: " + errorResponse.statusText);
                         });
                     } else {
                         //they did not type a lat/long first...

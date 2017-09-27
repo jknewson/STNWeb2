@@ -482,7 +482,8 @@
                                 }
                             }
                         }, function error(errorResponse) {
-                            toastr.error("Error: " + errorResponse.statusText);
+                            if (errorResponse.headers(["usgswim-messages"]) !== undefined) toastr.error("Error getting proximity sites: " + errorResponse.headers(["usgswim-messages"]));
+                            else toastr.error("Error getting proximity sites: " + errorResponse.statusText);
                         });
                 };
 

@@ -78,6 +78,8 @@
                         if ($scope.deployTypeList[dt].method.substring(0, 4) == "Temp") {
                             //temperature proposed sensor
                             proposedToAdd = {
+                                event_id: 0,
+                                location_description: "Proposed sensor at this site. Change description when deploying sensor.",
                                 deployment_type_id: $scope.deployTypeList[dt].deployment_type_id,
                                 site_id: $scope.thisSite.site_id,
                                 sensor_type_id: $scope.deployTypeList[dt].method == "Temperature (Pressure Transducer)" ? 1 : 2,
@@ -93,6 +95,8 @@
                             });
                             //any other type
                             proposedToAdd = {
+                                event_id: 0,
+                                location_description: "Proposed sensor at this site. Change description when deploying sensor.",
                                 deployment_type_id: $scope.deployTypeList[dt].deployment_type_id,
                                 site_id: $scope.thisSite.site_id,
                                 sensor_type_id: sID
@@ -101,8 +105,9 @@
                         //now post it (Instrument first, then Instrument Status
                         $http.defaults.headers.common.Authorization = 'Basic ' + $cookies.get('STNCreds');
                         $http.defaults.headers.common.Accept = 'application/json';
-
+                        var instrumentID = 0;
                         INSTRUMENT.save(proposedToAdd).$promise.then(function (response) {
+                            instrumentID = response.instrument_id;
                             var createdPropSensor = {
                                 deployment_type_id: response.deployment_type_id,
                                 site_id: response.site_id,
@@ -129,10 +134,15 @@
                                 });
 
                             }, function (errorResponse) {
-                                toastr.error("Error creating proposed instrument: " + errorResponse.statusText);
+                                // if status fails, delete the instrument too
+                                INSTRUMENT.delete({ id: instrumentID });
+                                angular.forEach($scope.deployTypeList, function (dt) { dt.selected = false; });
+                                if (errorResponse.headers(["usgswim-messages"]) !== undefined) toastr.error("Error creating proposed sensor: " + errorResponse.headers(["usgswim-messages"]));
+                                else toastr.error("Error creating proposed sensor: " + errorResponse.statusText);
                             });//end INSTRUMENT_STATUS.save
-                        }, function (errorResponse) {
-                            toastr.error("Error creating proposed instrument: " + errorResponse.statusText);
+                        }, function (errorResponse) {                            
+                            if (errorResponse.headers(["usgswim-messages"]) !== undefined) toastr.error("Error creating proposed sensor: " + errorResponse.headers(["usgswim-messages"]));
+                            else toastr.error("Error creating proposed sensor: " + errorResponse.statusText);
                         }); //end INSTRUMENT.save
                     }//end if selected == true
                 }//end foreach deployTypeList

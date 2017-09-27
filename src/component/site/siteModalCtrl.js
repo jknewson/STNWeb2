@@ -166,7 +166,8 @@
                                     $rootScope.stateIsLoading.showLoading = false;// loading..
                                 }, function error(errorResponse) {
                                     $rootScope.stateIsLoading.showLoading = false;// loading..
-                                    toastr.error("Error: " + errorResponse.statusText);
+                                    if (errorResponse.headers(["usgswim-messages"]) !== undefined) toastr.error("Error getting proximity sites: " + errorResponse.headers(["usgswim-messages"]));
+                                    else toastr.error("Error getting proximity sites: " + errorResponse.statusText);
                                 }).$promise;
                             } else {
                                 $rootScope.stateIsLoading.showLoading = false;// loading..
@@ -304,7 +305,8 @@
                     $scope.fileItemExists = true;
                 }, function (errorResponse) {
                     $scope.sFileIsUploading = false;
-                    toastr.error("Error saving file: " + errorResponse.statusText);
+                    if (errorResponse.headers(["usgswim-messages"]) !== undefined) toastr.error("Error creating file: " + errorResponse.headers(["usgswim-messages"]));
+                    else toastr.error("Error creating file: " + errorResponse.statusText);
                 });
             };
             //show a modal with the larger image as a preview on the photo file for this hwm
@@ -415,7 +417,8 @@
                                 $scope.showFileForm = false; $scope.SITEfileIsUploading = false;
                             }, function (errorResponse) {
                                 $scope.SITEfileIsUploading = false;
-                                toastr.error("Error uploading file: " + errorResponse.statusText);
+                                if (errorResponse.headers(["usgswim-messages"]) !== undefined) toastr.error("Error creating file: " + errorResponse.headers(["usgswim-messages"]));
+                                else toastr.error("Error creating file: " + errorResponse.statusText);
                             });
                         } else {
                             $scope.aFile.source_id = response.source_id; $scope.aFile.site_id = $scope.aSite.site_id;
@@ -428,12 +431,14 @@
                                 $scope.showFileForm = false; $scope.SITEfileIsUploading = false;
                             }, function (errorResponse) {
                                 $scope.SITEfileIsUploading = false;
-                                toastr.error("Error saving file: " + errorResponse.statusText);
+                                if (errorResponse.headers(["usgswim-messages"]) !== undefined) toastr.error("Error creating file: " + errorResponse.headers(["usgswim-messages"]));
+                                else toastr.error("Error creating file: " + errorResponse.statusText);
                             });
                         }//end else
                     }, function (errorResponse) {
                         $scope.SITEfileIsUploading = false;
-                        toastr.error("Error creating Source info: " + errorResponse.statusText);
+                        if (errorResponse.headers(["usgswim-messages"]) !== undefined) toastr.error("Error creating source: " + errorResponse.headers(["usgswim-messages"]));
+                        else toastr.error("Error creating source: " + errorResponse.statusText);
                     });//end source.save()              
                 }//end valid
             };//end create()
@@ -461,11 +466,13 @@
                                 $scope.showFileForm = false; $scope.SITEfileIsUploading = false;
                             }, function (errorResponse) {
                                 $scope.SITEfileIsUploading = false;
-                                toastr.error("Error saving file: " + errorResponse.statusText);
+                                if (errorResponse.headers(["usgswim-messages"]) !== undefined) toastr.error("Error creating file: " + errorResponse.headers(["usgswim-messages"]));
+                                else toastr.error("Error creating file: " + errorResponse.statusText);
                             });
                         }, function (errorResponse) {
                             $scope.SITEfileIsUploading = false; //Loading...
-                            toastr.error("Error saving file: " + errorResponse.statusText);
+                            if (errorResponse.headers(["usgswim-messages"]) !== undefined) toastr.error("Error creating source: " + errorResponse.headers(["usgswim-messages"]));
+                            else toastr.error("Error creating source: " + errorResponse.statusText);
                         });
                     }
                 }//end valid
@@ -496,7 +503,8 @@
                         Site_Files.setAllSiteFiles($scope.allSFiles); //updates the file list on the sitedashboard
                         $scope.showFileForm = false;
                     }, function error(errorResponse) {
-                        toastr.error("Error: " + errorResponse.statusText);
+                        if (errorResponse.headers(["usgswim-messages"]) !== undefined) toastr.error("Error deleting file: " + errorResponse.headers(["usgswim-messages"]));
+                        else toastr.error("Error deleting file: " + errorResponse.statusText);
                     });
                 });//end DeleteModal.result.then
             };//end delete()
@@ -776,7 +784,10 @@
                                 LANDOWNER_CONTACT.save($scope.landowner, function success(response) {
                                     $scope.aSite.landownercontact_id = response.landownercontactid;
                                     putSiteAndParts();
-                                }, function error(errorResponse) { toastr.error("Error adding Landowner: " + errorResponse.statusText); });
+                                }, function error(errorResponse) {
+                                    if (errorResponse.headers(["usgswim-messages"]) !== undefined) toastr.error("Error creating landowner contact: " + errorResponse.headers(["usgswim-messages"]));
+                                    else toastr.error("Error creating landowner contact: " + errorResponse.statusText);
+                                });
                             } else putSiteAndParts();
                         } else putSiteAndParts();
                     }
@@ -860,8 +871,8 @@
                     }); //all added
                 }, function error(errorResponse) {
                     $rootScope.stateIsLoading.showLoading = false; // loading..
-                    if (errorResponse.headers(["usgswim-messages"]) !== undefined) toastr.error("Error updating Site: " + errorResponse.headers(["usgswim-messages"]));
-                    else toastr.error("Error updating Site: " + errorResponse.statusText);
+                    if (errorResponse.headers(["usgswim-messages"]) !== undefined) toastr.error("Error saving Site: " + errorResponse.headers(["usgswim-messages"]));
+                    else toastr.error("Error saving Site: " + errorResponse.statusText);
                 });//end SITE.save(...
             }; // end PUTsite()
 
@@ -930,7 +941,8 @@
                                     postSiteAndParts();
                                 }, function error(errorResponse) {
                                     $rootScope.stateIsLoading.showLoading = false; // loading.. 
-                                    toastr.error("Error posting landowner: " + errorResponse.statusText);
+                                    if (errorResponse.headers(["usgswim-messages"]) !== undefined) toastr.error("Error saving landowner contact: " + errorResponse.headers(["usgswim-messages"]));
+                                    else toastr.error("Error saving landowner contact: " + errorResponse.statusText);
                                 });
                             } else {
                                 postSiteAndParts();
@@ -966,7 +978,9 @@
 
                                 var sensorTypeID = sID;
                                 var inst = { deployment_type_id: propSens.deployment_type_id, site_id: createdSiteID, sensor_type_id: sensorTypeID };
+                                var instrumentID = 0;
                                 INSTRUMENT.save(inst).$promise.then(function (insResponse) {
+                                    instrumentID = insResponse.instrument_id;
                                     var instStat = { instrument_id: insResponse.instrument_id, status_type_id: 4, member_id: $scope.aSite.member_id, time_stamp: new Date(), time_zone: 'UTC' };
                                     INSTRUMENT_STATUS.save(instStat).$promise.then(function () {
                                         //when done looping, go to last step in this post
@@ -974,11 +988,15 @@
                                             finishPOST(createdSiteID);
                                     }, function (errorResponse) {
                                         $rootScope.stateIsLoading.showLoading = false; // loading.. 
-                                        toastr.error("Error adding proposed Sensor: " + errorResponse.statusText);
+                                        // if status fails, delete instrument
+                                        INSTRUMENT.delete({ id: instrumentID });
+                                        if (errorResponse.headers(["usgswim-messages"]) !== undefined) toastr.error("Error creating proposed sensor: " + errorResponse.headers(["usgswim-messages"]));
+                                        else toastr.error("Error creating proposed sensor: " + errorResponse.statusText);
                                     });//end status post
                                 }, function (errorResponse) {
                                     $rootScope.stateIsLoading.showLoading = false; // loading.. 
-                                    toastr.error("Error adding proposed Sensor: " + errorResponse.statusText);
+                                    if (errorResponse.headers(["usgswim-messages"]) !== undefined) toastr.error("Error creating proposed sensor: " + errorResponse.headers(["usgswim-messages"]));
+                                    else toastr.error("Error creating proposed sensor: " + errorResponse.statusText);
                                 });//end sensor post
                             });//end angular.foreach on proposed sensors
                         } else finishPOST(createdSiteID);
@@ -987,7 +1005,8 @@
                     }
                 }, function (errorResponse) {
                     $rootScope.stateIsLoading.showLoading = false; // loading.. 
-                    toastr.error("Error creating site: " + errorResponse.statusText);
+                    if (errorResponse.headers(["usgswim-messages"]) !== undefined) toastr.error("Error creating site: " + errorResponse.headers(["usgswim-messages"]));
+                    else toastr.error("Error creating site: " + errorResponse.statusText);
                 });
             };//end postSiteand Parts
         
@@ -1097,7 +1116,8 @@
                     $scope.aSite.access_granted = "Not Needed";
                     //TODO: get member's id in there too
                 }, function error(errorResponse) {
-                    toastr.error("Error getting Member info: " + errorResponse.statusText);
+                    if (errorResponse.headers(["usgswim-messages"]) !== undefined) toastr.error("Error getting member: " + errorResponse.headers(["usgswim-messages"]));
+                    else toastr.error("Error getting member: " + errorResponse.statusText);
                 });
                 $scope.s = { sOpen: true }; //accordions
                 //#endregion this is a NEW SITE CREATE (site == undefined)

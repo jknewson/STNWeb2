@@ -1,4 +1,3 @@
-/// <reference path="sensorModalCtrl.js" />
 (function () {
     'use strict';
 
@@ -128,7 +127,8 @@
                    $scope.fileItemExists = true;
                }, function (errorResponse) {
                    $scope.sFileIsUploading = false;
-                   toastr.error("Error saving file: " + errorResponse.statusText);
+                   if (errorResponse.headers(["usgswim-messages"]) !== undefined) toastr.error("Error creating file: " + errorResponse.headers(["usgswim-messages"]));
+                   else toastr.error("Error creating file: " + errorResponse.statusText);
                });
            };
 
@@ -264,7 +264,9 @@
                        }
                        $scope.datafile.instrument_id = thisSensor.instrument_id;
                        $scope.datafile.processor_id = $cookies.get('mID');
-                       DATA_FILE.save($scope.datafile).$promise.then(function (dfResonse) {
+                       var datafileID = 0;
+                       DATA_FILE.save($scope.datafile).$promise.then(function (dfResponse) {
+                           datafileID = dfResponse.data_file_id;
                            //then POST fileParts (Services populate PATH)
                            var fileParts = {
                                FileEntity: {
@@ -273,7 +275,7 @@
                                    file_date: $scope.aFile.file_date,
                                    description: $scope.aFile.description,
                                    site_id: $scope.thisSensorSite.site_id,
-                                   data_file_id: dfResonse.data_file_id,
+                                   data_file_id: dfResponse.data_file_id,
                                    photo_direction: $scope.aFile.photo_direction,
                                    latitude_dd: $scope.aFile.latitude_dd,
                                    longitude_dd: $scope.aFile.longitude_dd,
@@ -296,11 +298,16 @@
                                $scope.showFileForm = false; $scope.depSenfileIsUploading = false;
                            }, function (errorResponse) {
                                $scope.depSenfileIsUploading = false;
-                               toastr.error("Error saving file: " + errorResponse.statusText);
+                               $scope.aFile = {}; $scope.aSource = {}; $scope.datafile = {}; $scope.showFileForm = false;
+                               // file did not get created, delete datafile
+                               DATA_FILE.delete({ id: datafileID });
+                               if (errorResponse.headers(["usgswim-messages"]) !== undefined) toastr.error("Error creating file: " + errorResponse.headers(["usgswim-messages"]));
+                               else toastr.error("Error creating file: " + errorResponse.statusText);                              
                            });
                        }, function (errorResponse) {
                            $scope.depSenfileIsUploading = false;
-                           toastr.error("Error saving Source info: " + errorResponse.statusText);
+                           if (errorResponse.headers(["usgswim-messages"]) !== undefined) toastr.error("Error creating file's data file: " + errorResponse.headers(["usgswim-messages"]));
+                           else toastr.error("Error creating file's data file: " + errorResponse.statusText);                              
                        });//end datafile.save()
                    } else {
                        //it's not a data file, so do the source
@@ -339,7 +346,8 @@
                                    $scope.showFileForm = false; $scope.depSenfileIsUploading = false;
                                }, function (errorResponse) {
                                    $scope.depSenfileIsUploading = false;
-                                   toastr.error("Error saving file: " + errorResponse.statusText);
+                                   if (errorResponse.headers(["usgswim-messages"]) !== undefined) toastr.error("Error creating file: " + errorResponse.headers(["usgswim-messages"]));
+                                   else toastr.error("Error creating file: " + errorResponse.statusText);
                                });
                            } else {
                                //this is a link file, no fileItem
@@ -353,12 +361,14 @@
                                    $scope.showFileForm = false; $scope.depSenfileIsUploading = false;
                                }, function (errorResponse) {
                                    $scope.depSenfileIsUploading = false;
-                                   toastr.error("Error saving file: " + errorResponse.statusText);
+                                   if (errorResponse.headers(["usgswim-messages"]) !== undefined) toastr.error("Error creating file: " + errorResponse.headers(["usgswim-messages"]));
+                                   else toastr.error("Error creating file: " + errorResponse.statusText);
                                });
                            } //end else (it's a Link file)
                        }, function (errorResponse) {
                            $scope.depSenfileIsUploading = false;
-                           toastr.error("Error saving Source info: " + errorResponse.statusText);
+                           if (errorResponse.headers(["usgswim-messages"]) !== undefined) toastr.error("Error creating source: " + errorResponse.headers(["usgswim-messages"]));
+                           else toastr.error("Error creating source: " + errorResponse.statusText);
                        });//end source.save()
                    }//end if source
                 }//end valid                   
@@ -419,12 +429,14 @@
                                    Site_Files.setAllSiteFiles($scope.allSFiles); //updates the file list on the sitedashboard
                                    $scope.showFileForm = false; $scope.depSenfileIsUploading = false;
                                }, function (errorResponse) {
-                                    $scope.depSenfileIsUploading = false;
-                                    toastr.error("Error saving file: " + errorResponse.statusText);
+                                   $scope.depSenfileIsUploading = false;
+                                   if (errorResponse.headers(["usgswim-messages"]) !== undefined) toastr.error("Error saving file: " + errorResponse.headers(["usgswim-messages"]));
+                                   else toastr.error("Error saving file: " + errorResponse.statusText);
                                });
                             }, function (errorResponse) {
                                 $scope.depSenfileIsUploading = false; //Loading...
-                                toastr.error("Error saving data file: " + errorResponse.statusText);
+                                if (errorResponse.headers(["usgswim-messages"]) !== undefined) toastr.error("Error saving file's data file: " + errorResponse.headers(["usgswim-messages"]));
+                                else toastr.error("Error saving file's data file: " + errorResponse.statusText);
                             });
                    } else {
                        //has SOURCE
@@ -442,11 +454,13 @@
                                $scope.showFileForm = false; $scope.depSenfileIsUploading = false;
                             }, function (errorResponse) {
                                 $scope.depSenfileIsUploading = false;
-                                toastr.error("Error saving file: " +errorResponse.statusText);
+                                if (errorResponse.headers(["usgswim-messages"]) !== undefined) toastr.error("Error saving file: " + errorResponse.headers(["usgswim-messages"]));
+                                else toastr.error("Error saving file': " + errorResponse.statusText);
                             });
                         }, function (errorResponse) {
                             $scope.depSenfileIsUploading = false; //Loading...
-                            toastr.error("Error saving source: " +errorResponse.statusText);
+                            if (errorResponse.headers(["usgswim-messages"]) !== undefined) toastr.error("Error saving source: " + errorResponse.headers(["usgswim-messages"]));
+                            else toastr.error("Error saving source: " + errorResponse.statusText);
                         });
                    }
                }//end valid
@@ -479,7 +493,8 @@
                        Site_Files.setAllSiteFiles($scope.allSFiles); //updates the file list on the sitedashboard
                        $scope.showFileForm = false;
                    }, function error(errorResponse) {
-                       toastr.error("Error: " + errorResponse.statusText);
+                       if (errorResponse.headers(["usgswim-messages"]) !== undefined) toastr.error("Error deleting file: " + errorResponse.headers(["usgswim-messages"]));
+                       else toastr.error("Error deleting file: " + errorResponse.statusText);
                    });
                });//end DeleteModal.result.then
            };//end delete()
@@ -583,8 +598,9 @@
                         $scope.NWISDF.good_start = $scope.NWISDF.good_start.toString().substring(0, si);
                         $scope.NWISDF.good_end = $scope.NWISDF.good_end.toString().substring(0, ei);
                     }
-                   
+                    var datafileID = 0;
                     DATA_FILE.save($scope.NWISDF).$promise.then(function (NdfResponse) {
+                        datafileID = NdfResponse.data_file_id;
                         //now create an approval with the event's coordinator and add the approval_id, put it, then post the file TODO ::: NEW ENDPOINT FOR THIS
                         //then POST file
                         $scope.NWISDF.data_file_id = NdfResponse.data_file_id;
@@ -594,19 +610,24 @@
                         $scope.NWISFile.path = '<link>';
                         delete $scope.NWISFile.FileType;
                         FILE.save($scope.NWISFile).$promise.then(function (Fresponse) {
-                            toastr.success("File Data saved");
+                            toastr.success("File created");
                             Fresponse.fileBelongsTo = "DataFile File";
                             $scope.sensorNWISFiles.push(Fresponse);
                             $scope.allSFiles.push(Fresponse);
                             Site_Files.setAllSiteFiles($scope.allSFiles); //updates the file list on the sitedashboard                 
                             $scope.showNWISFileForm = false; $scope.depNWISSenfileIsUploading = false; //Loading...
                         }, function (errorResponse) {
+                            // file did not get created, delete datafile
+                            DATA_FILE.delete({ id: datafileID });
+                            $scope.NWISFile = {}; $scope.NWISDF = {}; $scope.showNWISFileForm = false;
                             $scope.depNWISSenfileIsUploading = false; //Loading...
-                            toastr.error("Error saving file: " + errorResponse.statusText);
+                            if (errorResponse.headers(["usgswim-messages"]) !== undefined) toastr.error("Error creating file: " + errorResponse.headers(["usgswim-messages"]));
+                            else toastr.error("Error creating file: " + errorResponse.statusText);
                         });
                     }, function (errorResponse) {
                         $scope.depNWISSenfileIsUploading = false; //Loading...
-                        toastr.error("Error saving data file info: " + errorResponse.statusText);
+                        if (errorResponse.headers(["usgswim-messages"]) !== undefined) toastr.error("Error creating file's data file: " + errorResponse.headers(["usgswim-messages"]));
+                        else toastr.error("Error creating file's data file: " + errorResponse.statusText);
                     });//end source.save()
                 }//end valid
             };// end create NWIS file
@@ -660,10 +681,12 @@
                             Site_Files.setAllSiteFiles($scope.allSFiles); //updates the file list on the sitedashboard
                             $scope.showNWISFileForm = false;
                         }, function (errorResponse) {
-                            toastr.error("Error saving file: " + errorResponse.statusText);
+                            if (errorResponse.headers(["usgswim-messages"]) !== undefined) toastr.error("Error saving file: " + errorResponse.headers(["usgswim-messages"]));
+                            else toastr.error("Error saving file: " + errorResponse.statusText);
                         });
                     }, function (errorResponse) {
-                        toastr.error("Error saving data: " + errorResponse.statusText);
+                        if (errorResponse.headers(["usgswim-messages"]) !== undefined) toastr.error("Error saving file's data file: " + errorResponse.headers(["usgswim-messages"]));
+                        else toastr.error("Error saving file's data file: " + errorResponse.statusText);
                     });
                 }//end valid
             };//end save()
@@ -694,7 +717,8 @@
                         Site_Files.setAllSiteFiles($scope.allSFiles); //updates the file list on the sitedashboard
                         $scope.showNWISFileForm = false;
                     }, function error(errorResponse) {
-                        toastr.error("Error: " + errorResponse.statusText);
+                        if (errorResponse.headers(["usgswim-messages"]) !== undefined) toastr.error("Error deleting file: " + errorResponse.headers(["usgswim-messages"]));
+                        else toastr.error("Error deleting file: " + errorResponse.statusText);
                     });
                 });//end DeleteModal.result.then
             };//end delete()
@@ -946,10 +970,12 @@
                             $scope.view.DEPval = 'detail';
                             toastr.success("Sensor Updated");
                         }, function (errorResponse) {
-                            toastr.error("error saving sensor status: " + errorResponse.statusText);
+                            if (errorResponse.headers(["usgswim-messages"]) !== undefined) toastr.error("Error saving sensor's status: " + errorResponse.headers(["usgswim-messages"]));
+                            else toastr.error("Error saving sensor's status: " + errorResponse.statusText);
                         });
                     }, function (errorResponse) {
-                        toastr.error("error saving sensor: " + errorResponse.statusText);
+                        if (errorResponse.headers(["usgswim-messages"]) !== undefined) toastr.error("Error saving sensor: " + errorResponse.headers(["usgswim-messages"]));
+                        else toastr.error("Error saving sensor: " + errorResponse.statusText);
                     });
                }
            };//end save()
@@ -1091,7 +1117,8 @@
                        var sendBack = ["de", 'deleted'];
                        $uibModalInstance.close(sendBack);
                    }, function error(errorResponse) {
-                       toastr.error("Error: " + errorResponse.statusText);
+                       if (errorResponse.headers(["usgswim-messages"]) !== undefined) toastr.error("Error deleting sensor: " + errorResponse.headers(["usgswim-messages"]));
+                       else toastr.error("Error deleting sensor: " + errorResponse.statusText);
                    });
                }, function () {
                    //logic for cancel
@@ -1857,10 +1884,12 @@
                                 $scope.view.DEPval = 'detail';
                                 toastr.success("Sensor Updated");
                             }, function (errorResponse) {
-                                toastr.error("error saving sensor status: " + errorResponse.statusText);
+                                if (errorResponse.headers(["usgswim-messages"]) !== undefined) toastr.error("Error saving sensor's status: " + errorResponse.headers(["usgswim-messages"]));
+                                else toastr.error("Error saving sensor's status: " + errorResponse.statusText);
                             });
                         }, function (errorResponse) {
-                            toastr.error("error saving sensor: " + errorResponse.statusText);
+                            if (errorResponse.headers(["usgswim-messages"]) !== undefined) toastr.error("Error saving sensor: " + errorResponse.headers(["usgswim-messages"]));
+                            else toastr.error("Error saving sensor: " + errorResponse.statusText);
                         });
                 }//end if valid
             };//end saveDeployed()
@@ -1952,10 +1981,12 @@
                             $scope.view.RETval = 'detail';
                             toastr.success("Sensor updated");
                         }, function (errorResponse) {
-                            toastr.error("error saving sensor status: " + errorResponse.statusText);
+                            if (errorResponse.headers(["usgswim-messages"]) !== undefined) toastr.error("Error saving sensor's status: " + errorResponse.headers(["usgswim-messages"]));
+                            else toastr.error("Error saving sensor's status: " + errorResponse.statusText);
                         });
                     }, function (errorResponse) {
-                        toastr.error("error saving sensor: " + errorResponse.statusText);
+                        if (errorResponse.headers(["usgswim-messages"]) !== undefined) toastr.error("Error saving sensor: " + errorResponse.headers(["usgswim-messages"]));
+                        else toastr.error("Error saving sensor: " + errorResponse.statusText);
                     });
                 }//end if valid
         };//end saveRetrieved()            
@@ -2019,10 +2050,9 @@
                         var sendBack =["de", 'deleted'];
                         $uibModalInstance.close(sendBack);
                     }, function error(errorResponse) {
-                        toastr.error("Error: " +errorResponse.statusText);
+                        if (errorResponse.headers(["usgswim-messages"]) !== undefined) toastr.error("Error deleting sensor: " + errorResponse.headers(["usgswim-messages"]));
+                        else toastr.error("Error deleting sensor: " + errorResponse.statusText);
                     });
-                }, function () {
-                //logic for cancel
                 });//end modal
             };
 
@@ -2085,7 +2115,8 @@
                     $scope.fileItemExists = true;
                 }, function (errorResponse) {
                     $scope.sFileIsUploading = false;
-                    toastr.error("Error saving file: " + errorResponse.statusText);
+                    if (errorResponse.headers(["usgswim-messages"]) !== undefined) toastr.error("Error creating file: " + errorResponse.headers(["usgswim-messages"]));
+                    else toastr.error("Error creating file: " + errorResponse.statusText);
                 });
             };
             //show a modal with the larger image as a preview on the photo file for this op
@@ -2158,7 +2189,8 @@
                                     $scope.ApprovalInfo.approvalDate = new Date(approvalResponse.approval_date); //include note that it's displayed in their local time but stored in UTC
                                     $scope.ApprovalInfo.Member = allMembers.filter(function (amem) { return amem.member_id == approvalResponse.member_id; })[0];
                                 }, function error(errorResponse) {
-                                    toastr.error("Error getting data file approval information");
+                                    if (errorResponse.headers(["usgswim-messages"]) !== undefined) toastr.error("Error getting data file approval: " + errorResponse.headers(["usgswim-messages"]));
+                                    else toastr.error("Error getting data file approval: " + errorResponse.statusText);
                                 });
                             }
                         });
@@ -2232,7 +2264,9 @@
                     }
                     $scope.datafile.instrument_id = thisSensor.instrument_id;
                     $scope.datafile.processor_id = $cookies.get('mID');
-                    DATA_FILE.save($scope.datafile).$promise.then(function (dfResonse) {
+                    var datafileID = 0;
+                    DATA_FILE.save($scope.datafile).$promise.then(function (dfResponse) {
+                        datafileID = dfResponse.data_file_id;
                         //then POST fileParts (Services populate PATH)
                         var fileParts = {
                             FileEntity: {
@@ -2241,7 +2275,7 @@
                                 file_date: $scope.aFile.file_date,
                                 description: $scope.aFile.description,
                                 site_id: $scope.thisSensorSite.site_id,
-                                data_file_id: dfResonse.data_file_id,
+                                data_file_id: dfResponse.data_file_id,
                                 photo_direction: $scope.aFile.photo_direction,
                                 latitude_dd: $scope.aFile.latitude_dd,
                                 longitude_dd: $scope.aFile.longitude_dd,
@@ -2263,12 +2297,17 @@
                             if (fresponse.filetype_id === 1) $scope.sensImageFiles.push(fresponse);
                             $scope.showFileForm = false; $scope.fullSenfileIsUploading = false;
                         }, function (errorResponse) {
+                            // file did not get created, delete datafile
+                            DATA_FILE.delete({ id: datafileID });
+                            $scope.aFile = {}; $scope.aSource = {}; $scope.datafile = {}; $scope.showFileForm = false;
                             $scope.fullSenfileIsUploading = false;
-                            toastr.error("Error saving file: " +errorResponse.statusText);
+                            if (errorResponse.headers(["usgswim-messages"]) !== undefined) toastr.error("Error creating file: " + errorResponse.headers(["usgswim-messages"]));
+                            else toastr.error("Error creating file: " + errorResponse.statusText);
                         });
                     }, function (errorResponse) {
                         $scope.fullSenfileIsUploading = false;
-                        toastr.error("Error saving data file: " +errorResponse.statusText);
+                        if (errorResponse.headers(["usgswim-messages"]) !== undefined) toastr.error("Error creating file's data file: " + errorResponse.headers(["usgswim-messages"]));
+                        else toastr.error("Error creating file's data file: " + errorResponse.statusText);
                     });//end datafile.save()
                 } else {
                     //it's not a data file, so do the source
@@ -2306,11 +2345,13 @@
                                 $scope.showFileForm = false; $scope.fullSenfileIsUploading = false;
                             }, function (errorResponse) {
                                 $scope.fullSenfileIsUploading = false;
-                                toastr.error("Error saving file: " +errorResponse.statusText);
+                                if (errorResponse.headers(["usgswim-messages"]) !== undefined) toastr.error("Error creating file: " + errorResponse.headers(["usgswim-messages"]));
+                                else toastr.error("Error creating file: " + errorResponse.statusText);
                             });
                         }, function (errorResponse) {
                             $scope.fullSenfileIsUploading = false;
-                            toastr.error("Error saving source info: " +errorResponse.statusText);
+                            if (errorResponse.headers(["usgswim-messages"]) !== undefined) toastr.error("Error creating source: " + errorResponse.headers(["usgswim-messages"]));
+                            else toastr.error("Error creating source: " + errorResponse.statusText);
                         });//end source.save()
                     }//end if source
                 }//end valid
@@ -2373,11 +2414,13 @@
                                 $scope.showFileForm = false; $scope.fullSenfileIsUploading = false;
                             }, function (errorResponse) {
                                 $scope.fullSenfileIsUploading = false;
-                                toastr.error("Error saving file: " + errorResponse.statusText);
+                                if (errorResponse.headers(["usgswim-messages"]) !== undefined) toastr.error("Error saving file: " + errorResponse.headers(["usgswim-messages"]));
+                                else toastr.error("Error saving file: " + errorResponse.statusText);
                             });
                         }, function (errorResponse) {
                             $scope.fullSenfileIsUploading = false; //Loading...
-                            toastr.error("Error saving data file: " + errorResponse.statusText);
+                            if (errorResponse.headers(["usgswim-messages"]) !== undefined) toastr.error("Error saving file's data file: " + errorResponse.headers(["usgswim-messages"]));
+                            else toastr.error("Error saving file's data file: " + errorResponse.statusText);
                     });
                 } else {
                     //has SOURCE
@@ -2396,11 +2439,13 @@
                             $scope.showFileForm = false; $scope.fullSenfileIsUploading = false;
                         }, function (errorResponse) {
                             $scope.fullSenfileIsUploading = false;
-                            toastr.error("Error saving file: " + errorResponse.statusText);
+                            if (errorResponse.headers(["usgswim-messages"]) !== undefined) toastr.error("Error saving file: " + errorResponse.headers(["usgswim-messages"]));
+                            else toastr.error("Error saving file: " + errorResponse.statusText);
                         });
                     }, function (errorResponse) {
                         $scope.fullSenfileIsUploading = false; //Loading...
-                        toastr.error("Error saving source: " + errorResponse.statusText);
+                        if (errorResponse.headers(["usgswim-messages"]) !== undefined) toastr.error("Error saving source: " + errorResponse.headers(["usgswim-messages"]));
+                        else toastr.error("Error saving source: " + errorResponse.statusText);
                     });
                 }
             }//end valid
@@ -2434,7 +2479,8 @@
                         Site_Files.setAllSiteFiles($scope.allSFiles); //updates the file list on the sitedashboard
                         $scope.showFileForm = false;
                     }, function error(errorResponse) {
-                        toastr.error("Error: " + errorResponse.statusText);
+                        if (errorResponse.headers(["usgswim-messages"]) !== undefined) toastr.error("Error deleting file: " + errorResponse.headers(["usgswim-messages"]));
+                        else toastr.error("Error deleting file: " + errorResponse.statusText);
                     });
                 });//end DeleteModal.result.then
             };//end delete()
@@ -2474,10 +2520,9 @@
                         $scope.ApprovalInfo.approvalDate = new Date(approvalResponse.approval_date); //include note that it's displayed in their local time but stored in UTC
                         $scope.ApprovalInfo.Member = allMembers.filter(function (amem) { return amem.member_id == approvalResponse.member_id; })[0];
                     }, function error(errorResponse) {
-                        toastr.error("Error: " + errorResponse.statusText);
+                        if (errorResponse.headers(["usgswim-messages"]) !== undefined) toastr.error("Error approving data file: " + errorResponse.headers(["usgswim-messages"]));
+                        else toastr.error("Error approving data file: " + errorResponse.statusText);
                     });
-                }, function () {
-                    //logic for cancel
                 });//end modal
             };
             
@@ -2508,10 +2553,9 @@
                         toastr.success("Data File Unapproved");
                         $scope.ApprovalInfo = {};
                     }, function error(errorResponse) {
-                        toastr.error("Error: " + errorResponse.statusText);
+                        if (errorResponse.headers(["usgswim-messages"]) !== undefined) toastr.error("Error unapproving data file: " + errorResponse.headers(["usgswim-messages"]));
+                        else toastr.error("Error unapproving data file: " + errorResponse.statusText);
                     });
-                }, function () {
-                    //logic for cancel
                 });//end modal
             };
             //#endregion FILE STUFF
@@ -2619,10 +2663,12 @@
                         $scope.NWISDF.good_start = $scope.NWISDF.good_start.toString().substring(0, si);
                         $scope.NWISDF.good_end = $scope.NWISDF.good_end.toString().substring(0, ei);
                     }
-                    DATA_FILE.save($scope.NWISDF).$promise.then(function (NdfResonse) {
+                    var datafileID = 0;
+                    DATA_FILE.save($scope.NWISDF).$promise.then(function (NdfResponse) {
+                        datafileID = NdfResponse.data_file_id;
                         //then POST fileParts (Services populate PATH)
-                        $scope.NWISFile.data_file_id = NdfResonse.data_file_id;
-                        postApprovalForNWISfile(NdfResonse.data_file_id); //process approval
+                        $scope.NWISFile.data_file_id = NdfResponse.data_file_id;
+                        postApprovalForNWISfile(NdfResponse.data_file_id); //process approval
                         //now POST File
                         FILE.save($scope.NWISFile).$promise.then(function (Fresponse) {
                             toastr.success("File Data saved");
@@ -2632,8 +2678,17 @@
                             $scope.allSFiles.push(Fresponse);
                             Site_Files.setAllSiteFiles($scope.allSFiles); //updates the file list on the sitedashboard                            
                             $scope.showNWISFileForm = false;
+                        }, function (errorResponse) {
+                            // file did not get created, delete datafile
+                            DATA_FILE.delete({ id: datafileID });
+                            $scope.NWISFile = {}; $scope.NWISDF = {}; $scope.showNWISFileForm = false;
+                            if (errorResponse.headers(["usgswim-messages"]) !== undefined) toastr.error("Error creating file: " + errorResponse.headers(["usgswim-messages"]));
+                            else toastr.error("Error creating file: " + errorResponse.statusText);
                         });
-                    });
+                    }, function (errorResponse) {
+                        if (errorResponse.headers(["usgswim-messages"]) !== undefined) toastr.error("Error creating file's data file: " + errorResponse.headers(["usgswim-messages"]));
+                        else toastr.error("Error creating file's data file: " + errorResponse.statusText);
+                    });//end datafile.save()
                 }//end valid
             };// end create NWIS file
             //update this NWIS file
@@ -2717,7 +2772,8 @@
                         Site_Files.setAllSiteFiles($scope.allSFiles); //updates the file list on the sitedashboard
                         $scope.showNWISFileForm = false;
                     }, function error(errorResponse) {
-                        toastr.error("Error: " + errorResponse.statusText);
+                        if (errorResponse.headers(["usgswim-messages"]) !== undefined) toastr.error("Error deleting file: " + errorResponse.headers(["usgswim-messages"]));
+                        else toastr.error("Error deleting file: " + errorResponse.statusText);
                     });
                 });//end DeleteModal.result.then
             };//end delete()

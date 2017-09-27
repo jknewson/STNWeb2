@@ -75,7 +75,8 @@
                         createdMember.Role = ro.role_name;
                         //$scope.memberList.push(nm);
                     }, function error(errorResponse) {
-                        toastr.error("Error creating new member: " + errorResponse.statusText);
+                        if (errorResponse.headers(["usgswim-messages"]) !== undefined) toastr.error("Error creating member: " + errorResponse.headers(["usgswim-messages"]));
+                        else toastr.error("Error creating member: " + errorResponse.statusText);
                     }).$promise.then(function () {
                         var sendBack = [createdMember, 'created'];
                         $uibModalInstance.close(sendBack);
@@ -124,7 +125,8 @@
                         }
                         toastr.success("Member Updated");
                     }, function error(errorResponse) {
-                        toastr.error("Error: " + errorResponse.statusText);
+                        if (errorResponse.headers(["usgswim-messages"]) !== undefined) toastr.error("Error saving member: " + errorResponse.headers(["usgswim-messages"]));
+                        else toastr.error("Error saving member: " + errorResponse.statusText);
                     }).$promise.then(function () {
                         var sendBack = [updatedMember, 'updated'];
                         $uibModalInstance.close(sendBack);
@@ -167,7 +169,8 @@
                     MEMBER.deleteMember({ id: memToRemove.member_id }, function success(response) {
                         toastr.success("Member Deleted");
                     }, function error(errorResponse) {
-                        toastr.error("Error: " + errorResponse.statusText);
+                        if (errorResponse.headers(["usgswim-messages"]) !== undefined) toastr.error("Error deleting member: " + errorResponse.headers(["usgswim-messages"]));
+                        else toastr.error("Error deleting member: " + errorResponse.statusText);
                     }).$promise.then(function () {                        
                         $uibModalInstance.close(["de", 'deleted']);
                     });

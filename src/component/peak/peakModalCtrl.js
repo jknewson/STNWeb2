@@ -486,7 +486,8 @@
                         var sendBack = ["de", 'deleted'];
                         $uibModalInstance.close(sendBack);
                     }, function error(errorResponse) {
-                        toastr.error("Error: " + errorResponse.statusText);
+                        if (errorResponse.headers(["usgswim-messages"]) !== undefined) toastr.error("Error deleting peak: " + errorResponse.headers(["usgswim-messages"]));
+                        else toastr.error("Error deleting peak: " + errorResponse.statusText);
                     });
                 }, function () {
                     //logic for cancel

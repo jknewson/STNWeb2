@@ -88,8 +88,9 @@
                                 one.hwm_notes = response[i].hwm_notes;
                                 $scope.adjustHWMs.push(one);
                             }
-                        }, function (error) {
-                            toastr.error("Error getting hwms.");
+                        }, function (errorResponse) {
+                            if (errorResponse.headers(["usgswim-messages"]) !== undefined) toastr.error("Error getting hwms: " + errorResponse.headers(["usgswim-messages"]));
+                            else toastr.error("Error getting hwms: " + errorResponse.statusText);
                         });
                     }
                 };
@@ -182,8 +183,9 @@
                                 $scope.adjustHWMs = []; $scope.eventStateHWMs = [];
                                 $scope.invalids = [];
                                 $scope.getHWMs(true);
-                            }, function (error) {
-                                toastr.error("Error updating HWMs");
+                            }, function (errorResponse) {
+                                if (errorResponse.headers(["usgswim-messages"]) !== undefined) toastr.error("Error updating hwm: " + errorResponse.headers(["usgswim-messages"]));
+                                else toastr.error("Error getting hwm: " + errorResponse.statusText);
                             });
                         });
                     });

@@ -96,7 +96,8 @@
                     $scope.fileItemExists = true;
                 }, function (errorResponse) {
                     $scope.sFileIsUploading = false;
-                    toastr.error("Error saving file: " + errorResponse.statusText);
+                    if (errorResponse.headers(["usgswim-messages"]) !== undefined) toastr.error("Error creating file: " + errorResponse.headers(["usgswim-messages"]));
+                    else toastr.error("Error creating file: " + errorResponse.statusText);
                 });
             };
 
@@ -211,11 +212,13 @@
                                 $scope.showFileForm = false; $scope.fileIsUploading = false;
                             }, function (errorResponse) {
                                 $scope.fileIsUploading = false;
-                                toastr.error("Error saving file: " + errorResponse.statusText);
+                                if (errorResponse.headers(["usgswim-messages"]) !== undefined) toastr.error("Error creating file: " + errorResponse.headers(["usgswim-messages"]));
+                                else toastr.error("Error creating file: " + errorResponse.statusText);
                             });
                         }, function (errorResponse) {
                             $scope.fileIsUploading = false;
-                            toastr.error("Error saving Source info: " + errorResponse.statusText);
+                            if (errorResponse.headers(["usgswim-messages"]) !== undefined) toastr.error("Error creating source: " + errorResponse.headers(["usgswim-messages"]));
+                            else toastr.error("Error creating source: " + errorResponse.statusText);
                         });//end source.save()
                     }
                 }//end valid
@@ -246,11 +249,13 @@
                                 $scope.showFileForm = false; $scope.fileIsUploading = false;
                             }, function (errorResponse) {
                                 $scope.fileIsUploading = false;
-                                toastr.error("Error saving file: " + errorResponse.statusText);
+                                if (errorResponse.headers(["usgswim-messages"]) !== undefined) toastr.error("Error creating file: " + errorResponse.headers(["usgswim-messages"]));
+                                else toastr.error("Error creating file: " + errorResponse.statusText);
                             });
                         }, function (errorResponse) {
                             $scope.fileIsUploading = false; //Loading...
-                            toastr.error("Error saving source: " + errorResponse.statusText);
+                            if (errorResponse.headers(["usgswim-messages"]) !== undefined) toastr.error("Error creating source: " + errorResponse.headers(["usgswim-messages"]));
+                            else toastr.error("Error creating source: " + errorResponse.statusText);
                         });
                     }
                 }//end valid
@@ -282,7 +287,8 @@
                         Site_Files.setAllSiteFiles($scope.allSFiles); //updates the file list on the sitedashboard
                         $scope.showFileForm = false; 
                     }, function error(errorResponse) {
-                        toastr.error("Error: " + errorResponse.statusText);
+                        if (errorResponse.headers(["usgswim-messages"]) !== undefined) toastr.error("Error deleting file: " + errorResponse.headers(["usgswim-messages"]));
+                        else toastr.error("Error deleting file: " + errorResponse.statusText);
                     });
                 });//end DeleteModal.result.then
             };//end delete()
@@ -630,7 +636,8 @@
                                 }
                             }
                         }, function error(errorResponse) {
-                            toastr.error("Error creating Datum Location: " + errorResponse.statusText);
+                            if (errorResponse.headers(["usgswim-messages"]) !== undefined) toastr.error("Error creating datum location: " + errorResponse.headers(["usgswim-messages"]));
+                            else toastr.error("Error creating datum location: " + errorResponse.statusText);
                         }).$promise.then(function () {
                             var sendBack = [createdOP, 'created'];
                             $uibModalInstance.close(sendBack);
@@ -729,7 +736,8 @@
                             $scope.addedIdentifiersCopy = []; $scope.view.OPval = 'detail';
                             //    delete $http.defaults.headers.common['X-HTTP-Method-Override'];
                         }, function error(errorResponse) {
-                            toastr.error("Error updating Datum Location: " + errorResponse.statusText);
+                            if (errorResponse.headers(["usgswim-messages"]) !== undefined) toastr.error("Error saving datum location: " + errorResponse.headers(["usgswim-messages"]));
+                            else toastr.error("Error saving datum location: " + errorResponse.statusText);
                         }).$promise;
                     }//end lat/long are good
                 }// end valid
@@ -782,10 +790,9 @@
                                 var sendBack = ["de", 'deleted'];
                                 $uibModalInstance.close(sendBack);
                             }, function error(errorResponse) {
-                                toastr.error("Error: " + errorResponse.statusText);
+                                if (errorResponse.headers(["usgswim-messages"]) !== undefined) toastr.error("Error deleting datum location: " + errorResponse.headers(["usgswim-messages"]));
+                                else toastr.error("Error deleting datum location: " + errorResponse.statusText);
                             });
-                        }, function () {
-                            //logic for cancel
                         });//end modal
                     }//end else (proceed with delete)
                 }); //end get opmeasurements
