@@ -55,6 +55,7 @@
         font-weight: 700;
         font-size: 10pt;
     }
+
     .custom-file-inputChange::before {
         content: 'Replace Associated File';
         display: inline-block;
@@ -70,12 +71,14 @@
         font-weight: 700;
         font-size: 10pt;
     }
+
     .custom-file-input:hover::before, .custom-file-inputChange::before {
         border-color: black;
     }
+
     .custom-file-input:active::before, .custom-file-inputChange::before {
         background: -webkit-linear-gradient(top, #e3e3e3, #f9f9f9);
-    }   
+    }
 </style>
 
 <!-- MODAL for Site Create/edit-->
@@ -1306,7 +1309,7 @@
                         <span ng-class="{'redText':view.OPval == 'edit'}">{{opModalHeader}}</span>
                     </uib-accordion-heading>
                     <form class="form-horizontal" name="OPEditForm">
-                        <fieldset>                            
+                        <fieldset>
                             <!-- Type: (Detail) -->
                             <div ng-if="view.OPval == 'detail'" class="col-md-12">
                                 <div class="col-md-4"><label>Type:</label></div>
@@ -1695,7 +1698,7 @@
                                     <span class="glyphicon glyphicon-question-sign"></span>
                                 </button>
                             </div>
-                        
+
                             <!--edit button-->
                             <div class="form-group">
                                 <div class="col-md-12">
@@ -1736,7 +1739,7 @@
                                             <a class="btn borderLess" style="padding:0" title="{{f.file_date | date: 'MM/dd/yyyy'}} ({{f.name || f.file_id}})" ng-click="showFile(f)">{{f.file_date | date: 'MM/dd/yyyy'}} ({{f.name || f.file_id}})</a>
                                         </span>
                                     </li>
-                                </ul>                                
+                                </ul>
                             </div>
                             <!-- carousel of photo files -->
                             <div class="col-md-6" ng-if="opImageFiles.length > 0" style="height:120px;">
@@ -1935,7 +1938,7 @@
                                             <div class="col-md-6">
                                                 <span ng-if="fileItemExists">
                                                     <a target="_blank" title="Download File" ng-href="{{serverURL}}/Files/{{aFile.file_id}}/Item">{{aFile.name}}</a>
-                                                    <br/>
+                                                    <br />
                                                     <img ng-if="isPhoto" style="height:80px;" ng-src="{{src}}" />
                                                 </span>
                                                 <span ng-if="!fileItemExists">-- Missing --</span>
@@ -2317,7 +2320,7 @@
                             <input class="form-control" ng-keypress="isNum($event)" name="height_above_gnd" ng-model="aHWM.height_above_gnd" type="text" />
                         </div>
                     </div>
-                    
+
                     <!-- Tranquil/Stillwater HWM -->
                     <div class="form-group">
                         <label class="col-md-4 control-label">
@@ -2493,7 +2496,7 @@
                 </fieldset>
             </form>
         </div> <!-- end if create hwm -->
-        
+
         <div ng-if="createOReditHWM == 'edit'">
             <uib-accordion close-others="false">
                 <!--HWM Part-->
@@ -2503,7 +2506,7 @@
                         <span ng-class="{'redText':view.HWMval == 'edit'}">{{hwmModalHeader}}</span>
                     </uib-accordion-heading>
                     <form class="form-horizontal" name="HWMEditForm">
-                        <fieldset>                            
+                        <fieldset>
                             <!-- Waterbody: (details) -->
                             <div class="col-md-12" ng-if="view.HWMval== 'detail'">
                                 <div class="col-md-4"><label>Waterbody:</label></div>
@@ -2622,7 +2625,7 @@
                                     <span class="glyphicon glyphicon-question-sign"></span>
                                 </button>
                             </div>
-                            
+
                             <!-- HWM Environment:* (details) -->
                             <div class="col-md-12" ng-if="view.HWMval== 'detail'">
                                 <div class="col-md-4"><label>HWM Environment:</label></div>
@@ -2647,7 +2650,7 @@
                                     </span>
                                 </div>
                             </div>
-                                                        
+
                             <!-- hwm_uncertainty: (details) -->
                             <div class="col-md-12" ng-if="view.HWMval== 'detail'">
                                 <div class="col-md-4"><label>HWM Uncertainty:</label></div>
@@ -3099,13 +3102,16 @@
                                 </div>
                             </div>
 
-                            
+
                             <!-- Approval info (detail) -->
                             <div class="form-group" ng-show="ApprovalInfo.Member !==undefined">
                                 <label class="col-md-4 control-label" for="approval_id">
-                                    <span ng-if="view.HWMval == 'edit'"><button type="button" class="help-btn" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Displayed publicly.">
-                                        <span class="glyphicon glyphicon-eye-open"></span>
-                                    </button></span> Approval Info:</label>
+                                    <span ng-if="view.HWMval == 'edit'">
+                                        <button type="button" class="help-btn" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Displayed publicly.">
+                                            <span class="glyphicon glyphicon-eye-open"></span>
+                                        </button>
+                                    </span> Approval Info:
+                                </label>
                                 <div class="col-md-6">
                                     Approved By:<span ng-if="ApprovalInfo.Member"> {{ApprovalInfo.Member.fname || '---'}} {{ApprovalInfo.Member.lname || '---'}}</span><br />
                                     On:<span ng-if="ApprovalInfo.approvalDate"> {{ApprovalInfo.approvalDate | date: 'MM/dd/yyyy hh:mm a' || '---'}}</span>
@@ -3114,7 +3120,7 @@
                                     </button>
                                 </div>
                             </div>
-                            
+
                             <!-- edit button -->
                             <div class="form-group">
                                 <div class="col-md-12">
@@ -3353,7 +3359,7 @@
                                                     <br />
                                                     <img ng-if="isPhoto" style="height:80px;" ng-src="{{src}}" />
                                                 </span>
-                                                <span ng-if="!fileItemExists">-- Missing --</span>                                                
+                                                <span ng-if="!fileItemExists">-- Missing --</span>
                                                 <!--ReUpload Single Image with validations*-->
                                                 <div ng-if="!fileItemExists" class="form-group">
                                                     <div class="col-md-7">
@@ -3386,7 +3392,7 @@
                                                                 <button ng-if="aFile.File1" type="button" ng-click="saveFileUpload()">Replace</button>
                                                             </span>
                                                         </div>
-                                                    </div>                                                    
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
@@ -3437,7 +3443,7 @@
                     <div class="col-md-4"><label>Deployment Type:</label></div>
                     <div class="col-md-7">{{thisProposedSensor.deploymentType || ' '}}</div>
                 </div>
-            <br clear="all"/>
+                <br clear="all" />
             </div><!-- end modal-body -->
 
             <div class="modal-footer">
@@ -3469,7 +3475,8 @@
                     </label>
                     <div class="col-md-6">
                         <div class="col-md-8">
-                        {{EventName}}</div>
+                            {{EventName}}
+                        </div>
                         <div class="col-md-3" ng-show="userRole == 'Admin' && whichButton == 'edit'">
                             <button type="button" ng-click="showChangeEventDD()" class="btn btn-primary">Change Event</button>
                         </div>
@@ -3864,7 +3871,8 @@
                     <label class="col-md-3 control-label" for="notes">
                         <button type="button" class="help-btn" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Displayed publicly.">
                             <span class="glyphicon glyphicon-eye-open"></span>
-                        </button> Note:</label>
+                        </button> Note:
+                    </label>
                     <div class="col-md-6">
                         <textarea class="form-control" name="notes" type="text" rows="3" ng-model="aSensStatus.notes" elastic />
                     </div>
@@ -3915,7 +3923,7 @@
                     <span ng-class="{'redText':view.DEPval == 'edit'}">Deployed Sensor Information</span>
                 </uib-accordion-heading>
                 <form name="editDeployedForm">
-                    <fieldset>                        
+                    <fieldset>
                         <!-- Event: (detail) -->
                         <div class="col-md-12" ng-if="view.DEPval == 'detail'">
                             <div class="col-md-3 col-md-offset-1"><label>Event:</label></div>
@@ -4153,7 +4161,7 @@
                                                         <br />Surface
                                                         <button type="button" class="borderLess" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="From the datum location to the water surface.">
                                                             <span class="glyphicon glyphicon-question-sign"></span>
-                                                        </button>                                                        
+                                                        </button>
                                                     </label>
                                                 </th>
                                                 <th class="col-sm-2">
@@ -4164,7 +4172,7 @@
                                                         <br />Surface
                                                         <button type="button" class="borderLess" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="From the datum location to the ground surface.">
                                                             <span class="glyphicon glyphicon-question-sign"></span>
-                                                        </button>                                                        
+                                                        </button>
                                                     </label>
                                                 </th>
                                             </tr>
@@ -4447,7 +4455,7 @@
                                 <span>{{Deployer.fname}} {{Deployer.lname}}</span>
                             </div>
                         </div>
-                        
+
                         <!--edit button-->
                         <div class="form-group">
                             <div class="col-md-12">
@@ -4477,13 +4485,13 @@
                     <br clear="all" />
                     <!-- list of existing files for this op -->
                     <div class="col-md-6" ng-if="DepSensorFiles.length > 0">
-                       <ul style="padding-left: 0">
+                        <ul style="padding-left: 0">
                             <li ng-repeat="f in DepSensorFiles" style="list-style:none;padding-bottom: 15px;">
                                 <span class="col-sm-9 borderLess" style="padding:0">
                                     <a class="btn borderLess" style="padding:0" title="{{f.file_date | date: 'MM/dd/yyyy'}} ({{f.name || f.file_id}})" ng-click="showFile(f)">{{f.file_date | date: 'MM/dd/yyyy'}} ({{f.name || f.file_id}})</a>
                                 </span>
                             </li>
-                        </ul>                        
+                        </ul>
                     </div>
                     <!-- carousel of photo files -->
                     <div class="col-md-6" ng-if="depSensImageFiles.length > 0" style="height:120px;">
@@ -4766,14 +4774,14 @@
                                         </span>
                                     </div>
                                 </div>
-                                
+
                                 <!-- associated file (Deployed Sensor edit)-->
                                 <div ng-if="aFile.file_id !== undefined && aFile.filetype_id !== 8" class="form-group" style="margin:0;padding:0;padding-top:12px;">
                                     <label class="col-md-4 control-label">Associated File:</label>
                                     <div class="col-md-6" style="padding-top: 12px;">
                                         <span ng-if="fileItemExists">
                                             <a target="_blank" title="Download file" ng-href="{{serverURL}}/Files/{{aFile.file_id}}/Item">{{aFile.name}}</a>
-                                            <br/>
+                                            <br />
                                             <img ng-if="isPhoto" style="height:80px;" ng-src="{{src}}" />
                                         </span>
                                         <span ng-if="!fileItemExists">-- Missing --</span>
@@ -4805,7 +4813,7 @@
                                                         <button ng-if="aFile.File1" type="button" ng-click="saveFileUpload()">Replace</button>
                                                     </span>
                                                 </div>
-                                            </div>                                            
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -4847,8 +4855,8 @@
                                     <span class="col-sm-9 borderLess" style="padding:0">
                                         <a class="btn borderLess" style="padding:0" title="{{f.file_date | date: 'MM/dd/yyyy'}} ({{f.name || f.file_id}})" ng-click="showNWISFile(f)">{{f.file_date | date: 'MM/dd/yyyy'}} ({{f.name || f.file_id}})</a>
                                     </span>
-                                </li>                            
-                            </ul>                            
+                                </li>
+                            </ul>
                         </div>
                         <div ng-if="showNWISFileForm">
                             <br clear="all" /><hr />
@@ -5646,7 +5654,7 @@
                                                         <br />Surface
                                                         <button type="button" class="borderLess" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="From the datum location to the water surface.">
                                                             <span class="glyphicon glyphicon-question-sign"></span>
-                                                        </button>                                                        
+                                                        </button>
                                                     </label>
                                                 </th>
                                                 <th class="col-sm-2">
@@ -5942,7 +5950,7 @@
                             <div class="col-md-12">
                                 <button type="button" class="btn btn-primary" ng-show="view.DEPval == 'detail'" ng-disabled="view.RETval == 'edit'" ng-click="wannaEditDep()">Edit Deployed Sensor</button>
                                 <button class="btn btn-primary" ng-show="view.DEPval == 'edit'" ng-click="saveDeployed(editableDeployedForm.$valid)">Save</button>
-                                <button type="button" class="btn btn-warning" ng-show="view.DEPval == 'edit'" ng-click="cancelDepEdit()">Cancel Edit</button>                                
+                                <button type="button" class="btn btn-warning" ng-show="view.DEPval == 'edit'" ng-click="cancelDepEdit()">Cancel Edit</button>
                             </div>
                         </div>
                     </fieldset>
@@ -6161,7 +6169,7 @@
                                                         <br />Surface
                                                         <button type="button" class="borderLess" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="From the datum location to the water surface.">
                                                             <span class="glyphicon glyphicon-question-sign"></span>
-                                                        </button>                                                        
+                                                        </button>
                                                     </label>
                                                 </th>
                                                 <th class="col-sm-2">
@@ -6290,7 +6298,7 @@
                             <div class="col-md-12">
                                 <button type="button" class="btn btn-primary" ng-show="view.RETval == 'detail'" ng-disabled="view.DEPval == 'edit'" ng-click="wannaEditRet()">Edit {{mostRecentStatus}} Sensor</button>
                                 <button class="btn btn-primary" ng-show="view.RETval == 'edit'" ng-click="saveRetrieved(editableRetrievedForm.$valid)">Save</button>
-                                <button type="button" class="btn btn-warning" ng-show="view.RETval == 'edit'" ng-click="cancelRetEdit()">Cancel Edit</button>                                
+                                <button type="button" class="btn btn-warning" ng-show="view.RETval == 'edit'" ng-click="cancelRetEdit()">Cancel Edit</button>
                             </div>
                         </div>
                     </fieldset>
@@ -6319,7 +6327,7 @@
                                     <a class="btn borderLess" style="padding:0" title="{{f.file_date | date: 'MM/dd/yyyy'}} ({{f.name || f.file_id}})" ng-click="showFile(f)">{{f.file_date | date: 'MM/dd/yyyy'}} ({{f.name || f.file_id}})</a>
                                 </span>
                             </li>
-                        </ul>                        
+                        </ul>
                     </div>
                     <!-- carousel of photo files -->
                     <div class="col-md-6" ng-if="sensImageFiles.length > 0" style="height:120px;">
@@ -6618,7 +6626,7 @@
                                     <div class="col-md-6">
                                         <span ng-if="fileItemExists">
                                             <a target="_blank" title="Download file" ng-href="{{serverURL}}/Files/{{aFile.file_id}}/Item">{{aFile.name}}</a>
-                                            <br/>
+                                            <br />
                                             <img ng-if="isPhoto" style="height:80px;" ng-src="{{src}}" />
                                         </span>
                                         <span ng-if="!fileItemExists">-- Missing --</span>
@@ -6672,10 +6680,12 @@
                                 </div>
                                 <div class="col-md-4" ng-if="!showProcessing">
                                     <!-- button to run STORM script if this existing data file is on a water sensor (sensor_type_id == 1 && (deployment_type_id == 1 || deployment_type_id == 2) )-->
-                                    <span ng-show="(aFile.script_parent == undefined  || aFile.script_parent == '') || aFile.script_parent.indexOf('_') == -1"> <!-- don't show the button for outputs of other scripts ran -->
+                                    <span ng-show="(aFile.script_parent == undefined  || aFile.script_parent == '') || aFile.script_parent.indexOf('_') == -1">
+                                        <!-- don't show the button for outputs of other scripts ran -->
                                         <button type="button" class="btn btn-primary" ng-if="aFile.file_id != undefined && aFile.filetype_id === 2 && (sensor.sensor_type_id == 1 && (sensor.deployment_type_id == 1 || sensor.deployment_type_id == 2))" ng-click="showStormSection()">Run Storm Script</button>
                                     </span>
-                                    <span ng-show="(aFile.script_parent == undefined || aFile.script_parent == '') || (aFile.script_parent != undefined && aFile.script_parent == 'true')">      <!-- don't show the button for outputs of other scripts ran -->
+                                    <span ng-show="(aFile.script_parent == undefined || aFile.script_parent == '') || (aFile.script_parent != undefined && aFile.script_parent == 'true')">
+                                        <!-- don't show the button for outputs of other scripts ran -->
                                         <!-- button to run AIR script if this existing data file is on a air sensor (sensor_type_id == 1 && deployment_type_id == 3 )-->
                                         <button type="button" class="btn btn-primary" ng-if="aFile.file_id != undefined && aFile.filetype_id === 2 && (sensor.sensor_type_id == 1 && sensor.deployment_type_id == 3)" ng-click="runAirScript()">Process Air Data File</button>
                                     </span>
@@ -6683,30 +6693,46 @@
                                 <div ng-show="fullSenfileIsUploading"><img src="images/fileUpload.gif" /></div>
                                 <div ng-show="showProcessing" class="col-md-4"><img src="images/processing.gif" /></div>
                                 <br clear="all" />
-                                <div ng-if="stormSection">                                    
-                                    <h4 style="margin-top:1em;">Select the raw csv barometric sensor file that you would like to use.</h4>
-                                    <table class="table" style="display:inline-block;overflow:auto;">
-                                        <thead>
-                                            <tr>
-                                                <th></th><th>Site No.</th><th>Site distance</th><th>Location</th><th>Sensor Brand</th><th>File Name</th><th>Good Start</th><th>Good End</th>
+                                <div ng-if="stormSection">
+                                    <div ng-if="eventDataFiles.length > 0">
+                                        <h4 style="margin-top:1em;">Select the raw csv barometric sensor file that you would like to use.</h4>
+                                        <table class="table" style="display:inline-block;overflow:auto;">
+                                            <thead>
+                                                <tr>
+                                                    <th></th>
+                                                    <th>Site No.</th>
+                                                    <th>Site distance</th>
+                                                    <th>Location</th>
+                                                    <th>Sensor Brand</th>
+                                                    <th>File Name</th>
+                                                    <th>Good Start</th>
+                                                    <th>Good End</th>
+                                                </tr>
+                                            </thead>
+                                            <tr ng-repeat="df in eventDataFiles">
+                                                <td><input type="radio" name="selected" ng-model="df.selected" value="true" ng-change="updateChosenAirRadio($index)" /></td>
+                                                <td>{{df.site_no}}</td>
+                                                <td>{{df.distance | number:4}} mi.</td>
+                                                <td>{{df.county}}, {{df.state}}</td>
+                                                <td>{{df.brand_name}}</td>
+                                                <td>{{df.name}}</td>
+                                                <td>{{df.good_start | date: 'MM/dd/yyyy' }}</td>
+                                                <td>{{df.good_end | date: 'MM/dd/yyyy'}}</td>
                                             </tr>
-                                        </thead>
-                                        <tr ng-repeat="df in eventDataFiles">
-                                            <td><input type="radio" name="selected" ng-model="df.selected" value="true" ng-change="updateChosenAirRadio($index)" /></td>
-                                            <td>{{df.site_no}}</td><td>{{df.distance | number:4}} mi.</td><td>{{df.county}}, {{df.state}}</td><td>{{df.brand_name}}</td>
-                                            <td>{{df.name}}</td><td>{{df.good_start | date: 'MM/dd/yyyy' }}</td><td>{{df.good_end | date: 'MM/dd/yyyy'}}</td>
-                                        </tr>
-                                    </table>
-                                    <div class="col-md-12">
-                                        <div style="margin-bottom:15px" class="chx">
-                                            <label>
-                                                <input style="margin:0!important;" class="col-md-1" type="checkbox" ng-model="is4Hz.selected" ng-true-value="'true'" ng-false-value="'false'" /> Sensor is 4 Hz
-                                            </label>
-                                        </div> 
+                                        </table>
+                                        <div class="col-md-12">
+                                            <div style="margin-bottom:15px" class="chx">
+                                                <label>
+                                                    <input style="margin:0!important;" class="col-md-1" type="checkbox" ng-model="is4Hz.selected" ng-true-value="'true'" ng-false-value="'false'" /> Sensor is 4 Hz
+                                                </label>
+                                            </div>
 
-                                        <div class="col-md-7"><button class="btn btn-primary" ng-click="runStormScript()">Run Script</button></div>
+                                            <div class="col-md-7"><button class="btn btn-primary" ng-click="runStormScript()">Run Script</button></div>
+                                        </div>
                                     </div>
-                                    
+                                    <div style="margin:10px;" class="col-md-12" ng-if="eventDataFiles.length == 0">
+                                        <span>This script requires a barometric sensor data file (at this event) to be used for processing with this water data file.</span>
+                                    </div>
                                 </div> <!-- end stormSection -->
                             </fieldset>
                         </form>
@@ -6740,7 +6766,7 @@
                                         <a class="btn borderLess" style="padding:0" title="{{f.file_date | date: 'MM/dd/yyyy'}} ({{f.name || f.file_id}})" ng-click="showNWISFile(f)">{{f.file_date | date: 'MM/dd/yyyy'}} ({{f.name || f.file_id}})</a>
                                     </span>
                                 </li>
-                            </ul>                            
+                            </ul>
                         </div>
                         <div ng-if="showNWISFileForm">
                             <br clear="all" /><hr />
@@ -7603,7 +7629,7 @@
                     <div class="col-md-6">
                         <span ng-if="fileItemExists">
                             <a target="_blank" title="Download File" ng-href="{{serverURL}}/Files/{{aFile.file_id}}/Item">{{aFile.name}}</a>
-                            <br/>
+                            <br />
                             <img ng-if="isPhoto" style="height:80px;" ng-src="{{src}}"></img>
                         </span>
 
@@ -7648,27 +7674,27 @@
                         <a target="_blank" title="Download File" ng-href="{{serverURL}}/Files/{{fileCopy.file_id}}/Item">
                             <span class="glyphicon glyphicon-download"></span>
                         </a>
-                        <img ng-if="fileCopy.filetype_id === 1" style="height:80px;" ng-src="{{serverURL}}/Files/{{fileCopy.file_id}}/Item" />                        
+                        <img ng-if="fileCopy.filetype_id === 1" style="height:80px;" ng-src="{{serverURL}}/Files/{{fileCopy.file_id}}/Item" />
                     </div>
                 </div>
-                <br clear="all"/>
-                <!-- Edit Save Approve buttons 
+                <br clear="all" />
+                <!-- Edit Save Approve buttons
                 <div class="form-group" ng-show="createOReditFile == 'edit'">-->
-                    <div class="col-md-12" ng-show="createOReditFile == 'edit'">
-                        <button type="button" class="btn btn-primary" ng-show="view.FILEval == 'detail'" ng-click="wannaEditFILE()">Edit File</button>
-                        <button class="btn btn-primary" ng-show="view.FILEval == 'edit'" ng-click="save(FILEForm.$valid)">Save</button>
-                        <button type="button" class="btn btn-primary" ng-click="approveDF()"
-                                ng-show="(datafile.data_file_id != undefined && aFile.is_nwis !== 1 && view.FILEval == 'detail' && ApprovalInfo.approvalDate == undefined && (userRole == 'Admin' || userRole == 'Manager'))">
-                            Approve
-                        </button>
-                        <button type="button" class="btn btn-warning" ng-click="unApproveDF()"
-                                ng-show="(datafile.data_file_id != undefined && (view.FILEval == 'detail' && ApprovalInfo.approvalDate != undefined) && (userRole == 'Admin' || userRole == 'Manager'))">
-                            UnApprove
-                        </button>
-                        <button type="button" class="btn btn-warning" ng-show="view.FILEval == 'edit'" ng-click="cancelFILEEdit()">Cancel Edit</button>
-                    </div>
+                <div class="col-md-12" ng-show="createOReditFile == 'edit'">
+                    <button type="button" class="btn btn-primary" ng-show="view.FILEval == 'detail'" ng-click="wannaEditFILE()">Edit File</button>
+                    <button class="btn btn-primary" ng-show="view.FILEval == 'edit'" ng-click="save(FILEForm.$valid)">Save</button>
+                    <button type="button" class="btn btn-primary" ng-click="approveDF()"
+                            ng-show="(datafile.data_file_id != undefined && aFile.is_nwis !== 1 && view.FILEval == 'detail' && ApprovalInfo.approvalDate == undefined && (userRole == 'Admin' || userRole == 'Manager'))">
+                        Approve
+                    </button>
+                    <button type="button" class="btn btn-warning" ng-click="unApproveDF()"
+                            ng-show="(datafile.data_file_id != undefined && (view.FILEval == 'detail' && ApprovalInfo.approvalDate != undefined) && (userRole == 'Admin' || userRole == 'Manager'))">
+                        UnApprove
+                    </button>
+                    <button type="button" class="btn btn-warning" ng-show="view.FILEval == 'edit'" ng-click="cancelFILEEdit()">Cancel Edit</button>
+                </div>
                 <!--</div>-->
-                
+
                 <div class="form-group" ng-show="createOReditFile == 'create'">
                     <div class="col-md-12 text-center">
                         <button class="btn btn-primary" ng-click="create(FILEForm.$valid)">Create</button>
@@ -7721,12 +7747,13 @@
                 <!-- HWM list-->
                 <div class="col-sm-12" ng-repeat="h in eventSiteHWMs">
                     <input type="checkbox" class="col-sm-1 pull-left" ng-model="h.selected" ng-click="addHWM(h)" />
-                    <span><!-- class="col-sm-7">-->
+                    <span>
+                        <!-- class="col-sm-7">-->
                         HWM {{h.hwm_id}} - {{h.elev_ft || '--'}} ft
-                        
+
                     </span>
                     <span class="col-sm-4 pull-right">
-                        <button type="button" class="borderLess" tooltip-placement="top" uib-tooltip="Show Details" ng-click="showHWMDetails(h)"><span class="glyphicon glyphicon-info-sign"></span></button>                        
+                        <button type="button" class="borderLess" tooltip-placement="top" uib-tooltip="Show Details" ng-click="showHWMDetails(h)"><span class="glyphicon glyphicon-info-sign"></span></button>
                         <button ng-if="h.elev_ft" type="button" class="borderLess" tooltip-placement="top" uib-tooltip="Set as Primary" ng-click="primaryHWM(h)"><span class="glyphicon glyphicon-check"></span></button>
                         <button ng-if="!h.elev_ft" type="button" class="borderLess" tooltip-placement="top" uib-tooltip="Incomplete" ng-click="showIncompleteHWMInfo()"><span class="glyphicon glyphicon-alert"></span></button>
                     </span>
@@ -7738,7 +7765,7 @@
                         {{s.deploymentType || s.sensorType}} Sensor
                         <button type="button" class="borderLess" tooltip-placement="top" uib-tooltip="Show Details" ng-click="showSensorDetails(s)"><span class="glyphicon glyphicon-info-sign"></span></button>
                     </span>
-                    <span class="col-sm-4 pull-right">                        
+                    <span class="col-sm-4 pull-right">
                         <button ng-if="s.NeedDF" type="button" class="borderLess" tooltip-placement="top" uib-tooltip="Incomplete" ng-click="showIncompleteDFInfo()"><span class="glyphicon glyphicon-alert"></span></button>
                         <button ng-if="!s.isRetrieved" type="button" class="borderLess" tooltip-placement="top" uib-tooltip="Needs to be Retrieved" ng-click="showRetrieveInfo()"><span class="needRetrieve glyphicon glyphicon-alert"></span></button>
                     </span>
@@ -7774,7 +7801,7 @@
                         <li style="list-style:none" ng-if="HWMBox.stillwater == undefined">Stillwater: ---</li>
                     </ul><br clear="all" />
                     <div class="col-md-12" ng-if="HWMBox.files.length > 0">
-                        <label>HWM Files</label>                        
+                        <label>HWM Files</label>
                         <ul style="padding-left: 0">
                             <li ng-repeat="f in HWMBox.files" style="list-style:none;padding-bottom: 15px;">
                                 <span class="col-sm-9 borderLess" style="padding:0">
@@ -7783,7 +7810,7 @@
                                     </a>
                                 </span>
                             </li>
-                        </ul>                        
+                        </ul>
                     </div>
 
                     <!-- carousel of photo files -->
@@ -7814,7 +7841,7 @@
                     </ul><br clear="all" />
                     <div class="col-md-12">
                         <label>Sensor Files</label>
-                        <div ng-if="SensorBox.files.length > 0">                            
+                        <div ng-if="SensorBox.files.length > 0">
                             <ul style="padding-left: 0">
                                 <li ng-repeat="f in SensorBox.files" style="list-style:none;padding-bottom: 15px;">
                                     <span class="col-sm-9 borderLess" style="padding:0">
@@ -7823,7 +7850,7 @@
                                         </a>
                                     </span>
                                 </li>
-                            </ul>                            
+                            </ul>
                         </div>
                         <div ng-if="SensorBox.files.length == 0">No files</div>
                         <!-- carousel of photo files-->

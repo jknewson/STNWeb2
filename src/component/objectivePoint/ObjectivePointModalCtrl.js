@@ -31,8 +31,10 @@
             $scope.showFileForm = false; //hidden form to add file to op
             //make uncertainty cleared and disabled when 'unquantified' is checked
             $scope.UnquantChecked = function () {
-                if ($scope.opCopy.unquantified == 1)
-                    $scope.opCopy.uncertainty = "";
+                if ($scope.opCopy !== undefined) {
+                    if ($scope.opCopy.unquantified == 1)
+                        $scope.opCopy.uncertainty = "";
+                };
             };
 
             //#region FILE STUFF
