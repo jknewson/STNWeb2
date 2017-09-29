@@ -3,17 +3,18 @@
 
     //look up common service module, and register the new factory with that module 
     var STNResource = angular.module('STNResource', ['ngResource']);
-   // var rootURL = "https://stn.wim.usgs.gov/STNServices";
-      var rootURL = "https://stntest.wim.usgs.gov/STNServices2";
-   //var rootURL = "http://localhost/STNServices2";
-   
+
+    // var rootURL = "https://stn.wim.usgs.gov/STNServices";
+    var rootURL = "https://stntest.wim.usgs.gov/STNServices2";
+    //var rootURL = "http://localhost/STNServices2";
+
     // GEOCODE https://geocoding.geo.census.gov/geocoder/geographies/coordinates?benchmark=4&vintage=4&format=json
-    STNResource.factory('GEOCODE', ['$resource', function ($resource) {          
+    STNResource.factory('GEOCODE', ['$resource', function ($resource) {
         return $resource(rootURL + '/Geocode/location',
             {}, {
                 getAddressParts: { method: 'GET', params: { Latitude: '@Latitude', Longitude: '@Longitude' } } //y=28.35975&x=-81.421988
             });
-    }]);    
+    }]);
     // AGENCY
     STNResource.factory('AGENCY', ['$resource', function ($resource) {
         return $resource(rootURL + '/Agencies/:id.json',
@@ -24,7 +25,7 @@
                 save: { method: 'POST', cache: false, isArray: false },
                 delete: { method: 'DELETE', cache: false, isArray: false }
             });
-    }]);    
+    }]);
     // CONTACT_TYPE
     STNResource.factory('CONTACT_TYPE', ['$resource', function ($resource) {
         return $resource(rootURL + '/ContactTypes/:id.json',
@@ -35,13 +36,13 @@
                 save: { method: 'POST', cache: false, isArray: false },
                 delete: { method: 'DELETE', cache: false, isArray: false }
             });
-    }]);  
+    }]);
     // CONTACT
     STNResource.factory('CONTACT', ['$resource', function ($resource) {
         return $resource(rootURL + '/Contacts/:id.json',
             {}, {
                 query: {},
-                getContactModel: {method: 'GET', isArray: true },
+                getContactModel: { method: 'GET', isArray: true },
                 getAll: { method: 'GET', isArray: true },
                 update: { method: 'PUT', cache: false, isArray: false },
                 save: { method: 'POST', cache: false, isArray: false },
@@ -67,13 +68,13 @@
                 getAll: { method: 'GET', isArray: true },
                 getDFApproval: { method: 'GET', cache: false, isArray: false, url: rootURL + '/DataFiles/:id/Approval.json' },
                 getUnapprovedDFs: { method: 'GET', isArray: true, cache: false }, //?IsApproved={approved}&Event={eventId}&Counties={counties}&State={state}
-                getEventDataView: {method: 'GET', isArray: true, cache: false, url: rootURL + '/DataFileView?EventId=:eventId' },
+                getEventDataView: { method: 'GET', isArray: true, cache: false, url: rootURL + '/DataFileView?EventId=:eventId' },
                 runStormScript: { method: 'GET', url: rootURL + '/DataFiles/RunStormScript?SeaDataFileID=:seaDFID&AirDataFileID=:airDFID&Hertz=:hertz&Username=:username' },
                 runAirScript: { method: 'GET', url: rootURL + '/DataFiles/RunAirScript?AirDataFileID=:airDFID&Username=:username' },
                 approveDF: { method: 'POST', cache: false, isArray: false, params: { id: '@id' }, url: rootURL + '/datafiles/:id/Approve.json' }, //posts an APPROVAL, updates the data file with approval_id and returns APPROVAL
                 approveNWISDF: { method: 'POST', cache: false, isArray: false, params: { id: '@id' }, url: rootURL + '/datafiles/:id/NWISApprove.json' }, //posts an APPROVAL (using EventCoord), updates the data file with approval_id and returns APPROVAL
                 unApproveDF: { method: 'DELETE', cache: false, isArray: false, url: rootURL + '/datafiles/:id/Unapprove.json' }, //posts an APPROVAL, updates the datafile with approval_id and returns APPROVAL
-                stormScript: {method: 'GET', cache: false, isArray: false, url: rootURL + '/DataFiles/RunScript?SeaDataFileID=:seaDataFileId&AirDataFileID=:airDataFileId&Hertz=:hertz&Username=username' },
+                stormScript: { method: 'GET', cache: false, isArray: false, url: rootURL + '/DataFiles/RunScript?SeaDataFileID=:seaDataFileId&AirDataFileID=:airDataFileId&Hertz=:hertz&Username=username' },
                 update: { method: 'PUT', cache: false, isArray: false },
                 save: { method: 'POST', cache: false, isArray: false },
                 delete: { method: 'DELETE', cache: false, isArray: false }
@@ -95,7 +96,7 @@
         return $resource(rootURL + '/DeploymentTypes/:id.json',
             {}, {
                 query: {},
-                getDepSensType: {method: 'GET', isArray: false, url: rootURL + '/DeploymentTypes/:id/SensorType.json'},
+                getDepSensType: { method: 'GET', isArray: false, url: rootURL + '/DeploymentTypes/:id/SensorType.json' },
                 getAll: { method: 'GET', isArray: true },
                 update: { method: 'PUT', cache: false, isArray: false },
                 save: { method: 'POST', cache: false, isArray: false },
@@ -108,8 +109,8 @@
             {}, {
                 query: {},
                 getAll: { method: 'GET', isArray: true },
-                getEventSites: {method: 'GET', isArray:true, url: rootURL + '/Events/:id/Sites.json'},
-                getFilteredEvents: {method: 'GET', isArray: true, url: rootURL + '/Events/FilteredEvents.json'}, //?Date: null, Type: 0, State: null
+                getEventSites: { method: 'GET', isArray: true, url: rootURL + '/Events/:id/Sites.json' },
+                getFilteredEvents: { method: 'GET', isArray: true, url: rootURL + '/Events/FilteredEvents.json' }, //?Date: null, Type: 0, State: null
                 update: { method: 'PUT', cache: false, isArray: false },
                 save: { method: 'POST', cache: false, isArray: false },
                 delete: { method: 'DELETE', cache: false, isArray: false }
@@ -142,7 +143,7 @@
         return $resource(rootURL + '/Files/:id.json',
             {}, {
                 query: {},
-                getAll: { method: 'GET', isArray: true },                
+                getAll: { method: 'GET', isArray: true },
                 getFileItem: { method: 'GET', isArray: false, url: rootURL + '/Files/:id/Item' },
                 update: { method: 'PUT', cache: false, isArray: false },
                 uploadFile: { method: 'POST', url: rootURL + '/Files/bytes', headers: { 'Content-Type': undefined }, transformRequest: angular.identity, cache: false, isArray: false },
@@ -220,8 +221,8 @@
                 getEventStateHWMs: { method: 'GET', isArray: true, url: rootURL + '/Events/:eventId/stateHWMs.json?State=:state' },
                 getEventSiteHWMs: { method: 'GET', isArray: true, url: rootURL + '/Sites/:siteId/EventHWMs.json' },//?Event=:eventId
                 getFilteredHWMs: { method: 'GET', isArray: true, url: rootURL + '/HWMs/FilteredHWMs.json' }, //Event={eventIds}&EventType={eventTypeIDs}&EventStatus={eventStatusID}&States={states}&County={counties}&HWMType={hwmTypeIDs}&HWMQuality={hwmQualIDs}&HWMEnvironment={hwmEnvironment}&SurveyComplete={surveyComplete}&StillWater={stillWater}
-                getUnapprovedHWMs: { method: 'GET', isArray: true, cache: false }, //IsApproved={'true'/'false'}&Event={eventId}&Counties={counties}&State={state}
-                getHWMApproval: {method: 'GET', cache: false, isArray: false, url: rootURL + '/hwms/:id/Approval.json'},
+                getUnapprovedHWMs: { method: 'GET', isArray: true, cache: false }, //IsApproved={'true'/'false'}&Event={eventId}&Member={memberId}&State={state}
+                getHWMApproval: { method: 'GET', cache: false, isArray: false, url: rootURL + '/hwms/:id/Approval.json' },
                 approveHWM: { method: 'POST', cache: false, isArray: false, params: { id: '@id' }, url: rootURL + '/hwms/:id/Approve.json' }, //posts an APPROVAL, updates the HWM with approval_id and returns APPROVAL
                 unApproveHWM: { method: 'DELETE', cache: false, isArray: false, url: rootURL + '/hwms/:id/Unapprove.json' }, //posts an APPROVAL, updates the HWM with approval_id and returns APPROVAL
                 update: { method: 'PUT', cache: false, isArray: false },
@@ -238,10 +239,9 @@
                 return allSiteHWMs;
             },
             setAllSiteHWMs: function (sh) {
-                allSiteHWMs = sh;               
+                allSiteHWMs = sh;
             },
-            setBulkHWMSearch: function (searchTerms)
-            {
+            setBulkHWMSearch: function (searchTerms) {
                 bulkSearch = searchTerms;
             },
             getBulkHWMSearch: function () {
@@ -278,7 +278,7 @@
             {}, {
                 query: {},
                 getAll: { method: 'GET', isArray: true },
-                getSensorView: {method: 'GET', isArray:true, url: rootURL + '/SensorViews.json'}, //?ViewType={}&Event={}
+                getSensorView: { method: 'GET', isArray: true, url: rootURL + '/SensorViews.json' }, //?ViewType={}&Event={}
                 getstatusInstruments: { method: 'GET', isArray: true, url: rootURL + '/Instruments.json' }, //CurrentStatus: 1, Event: $scope.evID 
                 getFullInstrument: { method: 'GET', url: rootURL + '/Instruments/:id/FullInstrument.json' }, //gets instrument and it's stats together
                 getInstrumentStatus: { method: 'GET', url: rootURL + '/Instruments/:id/InstrumentStatus.json' },
@@ -305,7 +305,7 @@
         return $resource(rootURL + '/InstrumentStatus/:id.json',
             {}, {
                 query: {},
-                getAll: { method: 'GET', isArray: true },               
+                getAll: { method: 'GET', isArray: true },
                 update: { method: 'PUT', cache: false, isArray: false },
                 save: { method: 'POST', cache: false, isArray: false },
                 delete: { method: 'DELETE', cache: false, isArray: false }
@@ -334,7 +334,7 @@
             });
     }]);
     // Map_Site
-    STNResource.factory('Map_Site', ['SITE', '$rootScope', '$cookies', function (SITE, $rootScope,$cookies) {
+    STNResource.factory('Map_Site', ['SITE', '$rootScope', '$cookies', function (SITE, $rootScope, $cookies) {
         var MapSiteParts = [];
 
         return {
@@ -348,14 +348,19 @@
                     SITE.getSitePeaks({ id: siteId }).$promise.then(function (pResponse) {
                         MapSiteParts.push(pResponse);
                         $rootScope.$broadcast('mapSiteClickResults', MapSiteParts);
-                        //$rootScope.stateIsLoading.showLoading = false;
+                    }, function (errorResponse) {
+                        if (errorResponse.headers(["usgswim-messages"]) !== undefined) toastr.error("Error getting site peak: " + errorResponse.headers(["usgswim-messages"]));
+                        else toastr.error("Error getting site peak: " + errorResponse.statusText);
                     });
-                });                
+                }, function (errorResponse) {
+                    if (errorResponse.headers(["usgswim-messages"]) !== undefined) toastr.error("Error getting site: " + errorResponse.headers(["usgswim-messages"]));
+                    else toastr.error("Error getting site: " + errorResponse.statusText);
+                });
             }
         };
     }]);
     // Map_filter
-    STNResource.factory('Map_Filter', [ '$rootScope', function ($rootScope) {
+    STNResource.factory('Map_Filter', ['$rootScope', function ($rootScope) {
         var filteredSites = [];
 
         return {
@@ -383,16 +388,16 @@
     STNResource.factory('MEMBER', ['$resource', function ($resource) {
         return $resource(rootURL + '/Members/:id.json',
             {}, {
-                query: { },   
+                query: {},
                 getAll: { method: 'GET', isArray: true },
                 getRoleMembers: { method: 'GET', isArray: true, url: rootURL + '/Roles/:roleId/Members.json' },
                 getEventPeople: { method: 'GET', isArray: true, url: rootURL + '/Events/:Eventid/Members.json' },
-                
+
                 changePW: { method: 'GET', isArray: false, url: rootURL + '/Members.json' },
-                addMember: {method: 'POST', cache: false, isArray: false, url: rootURL + '/Members/:pass/addMember'},
+                addMember: { method: 'POST', cache: false, isArray: false, url: rootURL + '/Members/:pass/addMember' },
                 update: { method: 'PUT', cache: false, isArray: false },
                 save: { method: 'POST', cache: false, isArray: false },
-                deleteMember: { method: 'DELETE', cache: false, isArray: false,url: rootURL + '/Members/:id' }
+                deleteMember: { method: 'DELETE', cache: false, isArray: false, url: rootURL + '/Members/:id' }
             });
     }]);
     // NETWORK_NAME
@@ -424,7 +429,7 @@
                 query: {},
                 getAll: { method: 'GET', isArray: true },
                 update: { method: 'PUT', cache: false, isArray: false },
-                getOPFiles: {method: 'GET', isArray:true, url: rootURL + "/ObjectivePoints/:id/Files"},
+                getOPFiles: { method: 'GET', isArray: true, url: rootURL + "/ObjectivePoints/:id/Files" },
                 getOPControls: { method: 'GET', cache: false, isArray: true, url: rootURL + "/ObjectivePoints/:id/OPControls.json" },
                 save: { method: 'POST', cache: false, isArray: false },
                 delete: { method: 'DELETE', cache: false, isArray: false }
@@ -494,11 +499,11 @@
             {}, {
                 query: {},
                 getReportByEvSt: { method: 'GET', isArray: true },
-                getDailyReportTots: {method: 'GET', url: rootURL + '/ReportingMetrics/DailyReportTotals'},
+                getDailyReportTots: { method: 'GET', url: rootURL + '/ReportingMetrics/DailyReportTotals' },
                 getMemberReports: { method: 'GET', isArray: true, url: rootURL + '/Members/:memberId/Reports.json' },
                 getFilteredReports: { method: 'GET', isArray: true, url: rootURL + '/ReportingMetrics/FilteredReports.json' },
-                getReportwithContacts: {method: 'GET', isArray: true, url: rootURL + '/ReportResource/FilteredReportModel.json'},
-                getReportsCSV: {method: 'GET', url: rootURL + '/ReportingMetrics/FilteredReports.csv'},
+                getReportwithContacts: { method: 'GET', isArray: true, url: rootURL + '/ReportResource/FilteredReportModel.json' },
+                getReportsCSV: { method: 'GET', url: rootURL + '/ReportingMetrics/FilteredReports.csv' },
                 getAll: { method: 'GET', isArray: true },
                 update: { method: 'PUT', cache: false, isArray: false },
                 addReportContact: { method: 'POST', cache: false, isArray: false, params: { ReportId: '@reportId', ContactTypeId: '@contactTypeId' }, url: rootURL + '/ReportingMetrics/:reportId/AddContactType/:contactTypeId' }, //contact entity in body 
@@ -511,7 +516,7 @@
         return $resource(rootURL + '/Roles/:id.json',
             {}, {
                 query: {},
-                getAll: { method: 'GET', isArray: true }                
+                getAll: { method: 'GET', isArray: true }
             });
     }]);
     // SENSOR_BRAND
@@ -543,7 +548,7 @@
             {}, {
                 query: {},
                 getAll: { method: 'GET', isArray: true }, //this returns sensortypes with list of deploymenttypes for each one
-                getSensorDeploymentTypes: { method: 'GET', isArray: true, url: rootURL + '/SensorTypes/:id/DeploymentTypes.json' },                
+                getSensorDeploymentTypes: { method: 'GET', isArray: true, url: rootURL + '/SensorTypes/:id/DeploymentTypes.json' },
                 addSensorDeploymentType: { method: 'POST', cache: false, isArray: true, params: { sensorTypeId: '@sensorTypeId', DeploymentTypeId: '@deploymentTypeId' }, url: rootURL + '/SensorTypes/:sensorTypeId/addDeploymentType' },//?DeploymentTypeId={deploymentTypeId}"
                 removeSensorDeploymentType: { method: 'POST', isArray: false, params: { sensorTypeId: '@sensorTypeId', DeploymentTypeId: '@deploymentTypeId' }, url: rootURL + '/SensorTypes/:sensorTypeId/removeDeploymentType' },//?DeploymentTypeId={deploymentTypeId}"
                 update: { method: 'PUT', cache: false, isArray: false },
@@ -556,8 +561,8 @@
         return $resource(rootURL + '/Sites/:id.json',
             {}, {
                 query: {},
-                sensorScriptRunning: { method: 'GET', isArray: false, transformResponse: function (data) { return { value: angular.fromJson(data) } }, url: rootURL + '/Sites/:id/GetDataFileScript.json'},
-                getProximitySites: {method: 'GET', isArray: true, params: { Latitude: '@latitude', Longitude: '@longitude', Buffer: '@buffer' }},
+                sensorScriptRunning: { method: 'GET', isArray: false, transformResponse: function (data) { return { value: angular.fromJson(data) } }, url: rootURL + '/Sites/:id/GetDataFileScript.json' },
+                getProximitySites: { method: 'GET', isArray: true, params: { Latitude: '@latitude', Longitude: '@longitude', Buffer: '@buffer' } },
                 getAll: { method: 'GET', isArray: true },
                 getSearchedSite: { method: 'GET', isArray: false, url: rootURL + '/Sites/Search' }, //?bySiteNo={siteNo}&bySiteName={siteName}&bySiteId={siteId} (only going to populate 1 of these params
                 getFilteredSites: { method: 'GET', isArray: true, url: rootURL + '/Sites/FilteredSites.json' }, //accepts optional parameters: Event={eventId}&State={stateNames}&SensorType={sensorTypeId}&NetworkName={networkNameId}&OPDefined={opDefined}&HWMOnly={hwmOnlySites}&&HWMSurveyed={surveyedHWMs}
@@ -570,10 +575,10 @@
                 //Site Network Names
                 getSiteNetworkNames: { method: 'GET', isArray: true, url: rootURL + '/sites/:id/networkNames.json' },
                 postSiteNetworkName: { method: 'POST', cache: false, params: { siteId: '@siteId', NetworkNameId: '@networkNameId' }, isArray: true, url: rootURL + '/sites/:siteId/AddNetworkName' }, //?NetworkNameId= {networkNameId}
-                deleteSiteNetworkName: { method: 'DELETE', cache: false, isArray: false, url: rootURL + '/sites/:siteId/removeNetworkName?NetworkNameId=:networkNameId'},
+                deleteSiteNetworkName: { method: 'DELETE', cache: false, isArray: false, url: rootURL + '/sites/:siteId/removeNetworkName?NetworkNameId=:networkNameId' },
                 //Site Housings
                 getSiteHousings: { method: 'GET', isArray: true, url: rootURL + '/sites/:id/SiteHousings.json' },
-              //  postSiteHousing: {method: 'POST', cache: false, isArray:true, url: rootURL + '/site/:id/AddSiteSiteHousing.json'},
+                //  postSiteHousing: {method: 'POST', cache: false, isArray:true, url: rootURL + '/site/:id/AddSiteSiteHousing.json'},
                 //Site Parts
                 getSiteOPs: { method: 'GET', isArray: true, url: rootURL + '/Sites/:id/ObjectivePoints.json' },
                 getSiteSensors: { method: 'GET', isArray: true, url: rootURL + '/Sites/:id/SiteFullInstrumentList.json' }, //all instruments and their stats together
@@ -608,12 +613,12 @@
             getAllSiteFiles: function () {
                 return allSiteFiles;
             },
-            setAllSiteFiles: function (sf){
+            setAllSiteFiles: function (sf) {
                 allSiteFiles = sf;
-                $rootScope.$broadcast('siteFilesUpdated', allSiteFiles);                
+                $rootScope.$broadcast('siteFilesUpdated', allSiteFiles);
             }
         };
-    }]);    
+    }]);
     // STATE
     STNResource.factory('STATE', ['$resource', function ($resource) {
         return $resource(rootURL + '/States/:id.json',

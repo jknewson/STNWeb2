@@ -50,8 +50,10 @@
                         sResponse[s].instrument_status = [];
                         sResponse[s].instrument_status = correctOrderSS;
                     }
-
                     $scope.ProposedSensors4Site = sResponse.filter(function (ss) { return ss.instrument_status[0].status_type_id == 4; });
+                }, function (errorResponse) {
+                    if (errorResponse.headers(["usgswim-messages"]) !== undefined) toastr.error("Error getting site sensors: " + errorResponse.headers(["usgswim-messages"]));
+                    else toastr.error("Error getting site sensors: " + errorResponse.statusText);
                 });
             };
 
@@ -74,10 +76,12 @@
                 for (var dt = 0; dt < $scope.deployTypeList.length; dt++) {
                     if ($scope.deployTypeList[dt].selected === true) {
                         var proposedToAdd = {}; var propStatToAdd = {};
-                       
+
                         if ($scope.deployTypeList[dt].method.substring(0, 4) == "Temp") {
                             //temperature proposed sensor
                             proposedToAdd = {
+                                event_id: 0,
+                                location_description: "Proposed sensor at this site. Change description when deploying sensor.",
                                 deployment_type_id: $scope.deployTypeList[dt].deployment_type_id,
                                 site_id: $scope.thisSite.site_id,
                                 sensor_type_id: $scope.deployTypeList[dt].method == "Temperature (Pressure Transducer)" ? 1 : 2,
@@ -93,6 +97,8 @@
                             });
                             //any other type
                             proposedToAdd = {
+                                event_id: 0,
+                                location_description: "Proposed sensor at this site. Change description when deploying sensor.",
                                 deployment_type_id: $scope.deployTypeList[dt].deployment_type_id,
                                 site_id: $scope.thisSite.site_id,
                                 sensor_type_id: sID
@@ -101,23 +107,24 @@
                         //now post it (Instrument first, then Instrument Status
                         $http.defaults.headers.common.Authorization = 'Basic ' + $cookies.get('STNCreds');
                         $http.defaults.headers.common.Accept = 'application/json';
-
+                        var instrumentID = 0;
                         INSTRUMENT.save(proposedToAdd).$promise.then(function (response) {
+                            instrumentID = response.instrument_id;
                             var createdPropSensor = {
                                 deployment_type_id: response.deployment_type_id,
                                 site_id: response.site_id,
                                 sensor_type_id: response.sensor_type_id,
                                 instrument_id: response.instrument_id,
                                 deploymentType: $scope.deployTypeList.filter(function (dtl) { return dtl.deployment_type_id == response.deployment_type_id; })[0].method,
-                                sensorType: $scope.sensDepTypes.filter(function (s) { return s.sensor_type_id == response.sensor_type_id;})[0].sensor
+                                sensorType: $scope.sensDepTypes.filter(function (s) { return s.sensor_type_id == response.sensor_type_id; })[0].sensor
                             };
                             propStatToAdd = { instrument_id: response.instrument_id, status_type_id: 4, member_id: $cookies.get('mID'), time_stamp: Time_STAMP, time_zone: 'UTC', };
 
                             INSTRUMENT_STATUS.save(propStatToAdd).$promise.then(function (statResponse) {
                                 propStatToAdd.status = 'Proposed'; propStatToAdd.instrument_status_id = statResponse.instrument_status_id;
-                                createdPropSensor.instrument_status = [propStatToAdd];                               
+                                createdPropSensor.instrument_status = [propStatToAdd];
                                 $scope.ProposedSensors4Site.push(createdPropSensor);
-                                
+
                                 //clean up ...all unchecked and then hide
                                 for (var dep = 0; dep < $scope.deployTypeList.length; dep++) {
                                     $scope.deployTypeList[dep].selected = false;
@@ -129,10 +136,15 @@
                                 });
 
                             }, function (errorResponse) {
-                                toastr.error("Error creating proposed instrument: " + errorResponse.statusText);
+                                // if status fails, delete the instrument too
+                                INSTRUMENT.delete({ id: instrumentID });
+                                angular.forEach($scope.deployTypeList, function (dt) { dt.selected = false; });
+                                if (errorResponse.headers(["usgswim-messages"]) !== undefined) toastr.error("Error creating proposed sensor: " + errorResponse.headers(["usgswim-messages"]));
+                                else toastr.error("Error creating proposed sensor: " + errorResponse.statusText);
                             });//end INSTRUMENT_STATUS.save
                         }, function (errorResponse) {
-                            toastr.error("Error creating proposed instrument: " + errorResponse.statusText);
+                            if (errorResponse.headers(["usgswim-messages"]) !== undefined) toastr.error("Error creating proposed sensor: " + errorResponse.headers(["usgswim-messages"]));
+                            else toastr.error("Error creating proposed sensor: " + errorResponse.statusText);
                         }); //end INSTRUMENT.save
                     }//end if selected == true
                 }//end foreach deployTypeList

@@ -13,7 +13,7 @@
             } else {
                 $rootScope.thisPage = "Approval";
                 $rootScope.activeMenu = "approval";
-                
+
                 // change sorting order
                 $scope.sort_by = function (newSortingOrder) {
                     if ($scope.sortingOrder == newSortingOrder) {
@@ -39,7 +39,13 @@
 
                 $http.defaults.headers.common.Authorization = 'Basic ' + $cookies.get('STNCreds');
                 $http.defaults.headers.common.Accept = 'application/json';
-                
+                MEMBER.getAll(function success(response) {
+                    $scope.allMembers = response;
+                }, function error(errorResponse) {
+                    if (errorResponse.headers(["usgswim-messages"]) !== undefined) toastr.error("Error getting memebers: " + errorResponse.headers(["usgswim-messages"]));
+                    else toastr.error("Error getting members: " + errorResponse.statusText);
+                }).$promise;
+
                 $scope.allStates = stateList;
                 $scope.countyList = countyList;
                 $scope.countyArray = []; //holder of state counties (will change as they change state choice)
@@ -54,6 +60,7 @@
                 $scope.unApprovedHWMs = []; $scope.showHWMbox = false;
                 $scope.unApprovedDFs = []; $scope.showDFbox = false;
                 $scope.sitesWOpeaks = []; $scope.showPeakbox = false;
+
 
                 $scope.search = function () {
                     //clear contents in case they are searching multiple times
@@ -70,7 +77,7 @@
                     };
                     //go get the HWMs and DataFiles that need to be approved
                     var countyNames = [];
-                   
+
                     angular.forEach(chosenCounties, function (c) {
                         countyNames.push(c.county_name);
                     });
@@ -89,9 +96,9 @@
                             });
                         });
                         $scope.showHWMbox = true;
-
                     }, function error(errorResponse) {
-                        alert("Error: " + errorResponse.statusText);
+                        if (errorResponse.headers(["usgswim-messages"]) !== undefined) toastr.error("Error getting unapproved hwms: " + errorResponse.headers(["usgswim-messages"]));
+                        else toastr.error("Error getting unapproved hwms: " + errorResponse.statusText);
                     });
                     DATA_FILE.getUnapprovedDFs({ IsApproved: 'false', Event: evID, State: sID, Counties: countiesCommaSep }, function success(response1) {
                         var DFs = response1;
@@ -106,13 +113,17 @@
                             formattedDF.depType = depType !== undefined ? depType.method : undefined;
                             formattedDF.InstrID = thisdfInst.instrument_id;
                             SITE.query({ id: siteID }).$promise.then(function (response2) {
-                                formattedDF.SiteNo = response2.site_no;                                
+                                formattedDF.SiteNo = response2.site_no;
                                 $scope.unApprovedDFs.push(formattedDF);
+                            }, function (errorResponse) {
+                                if (errorResponse.headers(["usgswim-messages"]) !== undefined) toastr.error("Error getting site: " + errorResponse.headers(["usgswim-messages"]));
+                                else toastr.error("Error getting site: " + errorResponse.statusText);
                             });
                         });
                         $scope.showDFbox = true;
-                    }, function error(errorResponse1) {
-                        alert("Error: " + errorResponse1.statusText);
+                    }, function error(errorResponse) {
+                        if (errorResponse.headers(["usgswim-messages"]) !== undefined) toastr.error("Error getting unapproved data files: " + errorResponse.headers(["usgswim-messages"]));
+                        else toastr.error("Error getting unapproved data files: " + errorResponse.statusText);
                     });
                     SITE.getPeaklessSites({ id: evID }, function success(resp2) {
                         $scope.sitesWOpeaks = resp2;
@@ -169,12 +180,16 @@
                                 h.stillwater = h.stillwater > 0 ? "Yes" : "No";
                                 h.selected = false;
                                 $scope.unApprovedHWMs.push(h);
+                            }, function (errorResponse) {
+                                if (errorResponse.headers(["usgswim-messages"]) !== undefined) toastr.error("Error getting hwm site (" + h.site_id + "): " + errorResponse.headers(["usgswim-messages"]));
+                                else toastr.error("Error getting hwm site (" + h.site_id + "): " + errorResponse.statusText);
                             });
-                        });                        
+                        });
                         $scope.showHWMbox = true;
 
                     }, function error(errorResponse) {
-                        alert("Error: " + errorResponse.statusText);
+                        if (errorResponse.headers(["usgswim-messages"]) !== undefined) toastr.error("Error getting unapproved hwms: " + errorResponse.headers(["usgswim-messages"]));
+                        else toastr.error("Error getting unapproved hwms: " + errorResponse.statusText);
                     });
                     DATA_FILE.getUnapprovedDFs({ IsApproved: 'false', Event: thisSearch.eventID, State: thisSearch.stateID, Counties: countiesCommaSep }, function success(response1) {
                         var DFs = response1;
@@ -190,14 +205,17 @@
                             formattedDF.InstrID = thisdfInst.instrument_id;
                             SITE.query({ id: siteID }).$promise.then(function (response2) {
                                 formattedDF.SiteNo = response2.site_no;
-                                
                                 $scope.unApprovedDFs.push(formattedDF);
+                            }, function (errorResponse) {
+                                if (errorResponse.headers(["usgswim-messages"]) !== undefined) toastr.error("Error getting site: " + errorResponse.headers(["usgswim-messages"]));
+                                else toastr.error("Error getting site: " + errorResponse.statusText);
                             });
                         });
                         $scope.showDFbox = true;
-                    }, function error(errorResponse1) {
-                        alert("Error: " + errorResponse1.statusText);
-                    }); 
+                    }, function error(errorResponse) {
+                        if (errorResponse.headers(["usgswim-messages"]) !== undefined) toastr.error("Error getting unapproved data files: " + errorResponse.headers(["usgswim-messages"]));
+                        else toastr.error("Error getting unapproved data files: " + errorResponse.statusText);
+                    });
                 }
 
                 //once they check 'approve' checkbox, show the approve these button
@@ -236,8 +254,8 @@
                     //show warning modal
                     var warningModal = $uibModal.open({
                         template: '<div class="modal-header"><h3 class="modal-title">Warning!</h3></div>' +
-                            '<div class="modal-body"><p>You are about to leave the Approval page and be taken to the Site Dashboard.<br/>Are you sure you want to leave the Approval page?</p></div>' +
-                            '<div class="modal-footer"><button class="btn btn-warning" ng-enter="ok()" ng-click="ok()">Yes</button><button class="btn btn-primary" ng-enter="cancel()" ng-click="cancel()">Cancel</button></div>',
+                        '<div class="modal-body"><p>You are about to leave the Approval page and be taken to the Site Dashboard.<br/>Are you sure you want to leave the Approval page?</p></div>' +
+                        '<div class="modal-footer"><button class="btn btn-warning" ng-enter="ok()" ng-click="ok()">Yes</button><button class="btn btn-primary" ng-enter="cancel()" ng-click="cancel()">Cancel</button></div>',
                         backdrop: 'static',
                         keyboard: false,
                         controller: ['$scope', '$uibModalInstance', function ($scope, $uibModalInstance) {

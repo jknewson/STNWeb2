@@ -123,7 +123,8 @@
                         createdEvent.EndDate = response.event_end_date;
                         createdEvent.Coord = coord !== undefined ? coord.fname + " " + coord.lname : "";
                     }, function error(errorResponse) {
-                        toastr.error("Error creating new event: " + errorResponse.statusText);
+                        if (errorResponse.headers(["usgswim-messages"]) !== undefined) toastr.error("Error creating new event: " + errorResponse.headers(["usgswim-messages"]));
+                        else toastr.error("Error creating new event: " + errorResponse.statusText);   
                     }).$promise.then(function () {
                         var sendBack = [createdEvent, 'created'];
                         $uibModalInstance.close(sendBack);
@@ -154,7 +155,8 @@
                         updatedEvent.Coord = coord !== undefined ? coord.fname + " " + coord.lname : "";
                         toastr.success("Event Updated");
                     }, function error(errorResponse) {
-                        toastr.error("Error: " + errorResponse.statusText);
+                        if (errorResponse.headers(["usgswim-messages"]) !== undefined) toastr.error("Error saving: " + errorResponse.headers(["usgswim-messages"]));
+                        else toastr.error("Error saving event: " + errorResponse.statusText);
                     }).$promise.then(function () {
                         var sendBack = [updatedEvent, 'updated'];
                         $uibModalInstance.close(sendBack);
@@ -183,7 +185,8 @@
                     EVENT.delete({ id: eventToRemove.event_id }, function success(response) {
                         toastr.success("Event Deleted");
                     }, function error(errorResponse) {
-                        toastr.error("Error: " + errorResponse.statusText);
+                        if (errorResponse.headers(["usgswim-messages"]) !== undefined) toastr.error("Error deleting: " + errorResponse.headers(["usgswim-messages"]));
+                        else toastr.error("Error deleting event: " + errorResponse.statusText);
                     }).$promise.then(function () {
                         $uibModalInstance.close(["de", 'deleted']);
                     });

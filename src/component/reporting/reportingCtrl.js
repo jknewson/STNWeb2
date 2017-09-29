@@ -2,7 +2,7 @@
     'use strict';
 
     var STNControllers = angular.module('STNControllers');
-//#region Reporting Controller
+    //#region Reporting Controller
     STNControllers.controller('reportingCtrl', ['$scope', '$rootScope', '$cookies', '$location', '$http', '$uibModal', 'memberReports', 'allEvents', 'allStates', 'allReports', 'allEventTypes', 'allEventStatus', 'allAgencies', 'SERVER_URL', 'REPORT', 'MEMBER',
         function ($scope, $rootScope, $cookies, $location, $http, $uibModal, memberReports, allEvents, allStates, allReports, allEventTypes, allEventStatus, allAgencies, SERVER_URL, REPORT, MEMBER) {
             if ($cookies.get('STNCreds') === undefined || $cookies.get('STNCreds') === "") {
@@ -10,7 +10,7 @@
                 $location.path('/login');
             } else {
                 $rootScope.thisPage = "Reporting";
-                $rootScope.activeMenu = "report"; 
+                $rootScope.activeMenu = "report";
                 //#region changing tabs handler /////////////////////
                 $rootScope.$on('$stateChangeStart', function (event, toState, toParams, fromState, fromParams) {
                     var formIsPopulated = false;
@@ -41,7 +41,7 @@
 
                 //#region Datepicker
                 $scope.datepickrs = {};
-               
+
                 $scope.open = function ($event, which) {
                     $event.preventDefault();
                     $event.stopPropagation();
@@ -74,7 +74,7 @@
                 $scope.events = allEvents;
                 $scope.states = allStates;
                 $scope.reports = allReports;
-            
+
                 $http.defaults.headers.common.Authorization = 'Basic ' + $cookies.get('STNCreds');
                 $http.defaults.headers.common.Accept = 'application/json';
                 MEMBER.query({ id: $cookies.get('mID') }, function success(response) {
@@ -82,9 +82,15 @@
                     var memberAgency = allAgencies.filter(function (a) { return a.agency_id == $scope.MemberLoggedIn.agency_id; })[0];
                     $scope.MemberLoggedIn.agency_name = memberAgency.agency_name;
                     $scope.MemberLoggedIn.agency_address = memberAgency.address + ", " + memberAgency.city + " " + memberAgency.state + " " + memberAgency.zip;
+                }, function error(errorResponse) {
+                    if (errorResponse.headers(["usgswim-messages"]) !== undefined) toastr.error("Error getting member: " + errorResponse.headers(["usgswim-messages"]));
+                    else toastr.error("Error getting member: " + errorResponse.statusText);
                 }).$promise;
                 MEMBER.getAll().$promise.then(function (response) {
                     $scope.members = response;
+                }, function (errorResponse) {
+                    if (errorResponse.headers(["usgswim-messages"]) !== undefined) toastr.error("Error getting members: " + errorResponse.headers(["usgswim-messages"]));
+                    else toastr.error("Error getting members: " + errorResponse.statusText);
                 });
 
                 $scope.agencies = allAgencies;
@@ -162,11 +168,11 @@
                                 $scope.totalRow.yesPOffice += thisRPModel.report.yest_officepers;
                                 $scope.totalRow.todPOffice += thisRPModel.report.tod_officepers;
                                 $scope.totalRow.tomPOffice += thisRPModel.report.tmw_officepers;
-                               
+
                                 $scope.totalRow.gageVisits += thisRPModel.report.gage_visit; $scope.totalRow.gagesDown += thisRPModel.report.gage_down;
-                                $scope.totalRow.disCtoDate += thisRPModel.report.tot_discharge_meas; $scope.totalRow.disCPlanned += thisRPModel.report.plan_discharge_meas;                               
+                                $scope.totalRow.disCtoDate += thisRPModel.report.tot_discharge_meas; $scope.totalRow.disCPlanned += thisRPModel.report.plan_discharge_meas;
                                 $scope.totalRow.indMeas += thisRPModel.report.plan_indirect_meas; $scope.totalRow.ratExt += thisRPModel.report.rating_extens;
-                                $scope.totalRow.peaksOfRec += thisRPModel.report.gage_peak_record; 
+                                $scope.totalRow.peaksOfRec += thisRPModel.report.gage_peak_record;
                                 $scope.totalRow.disQWSamples += thisRPModel.report.qw_discr_samples; $scope.totalRow.sedSamples += thisRPModel.report.coll_sedsamples;
 
                                 $scope.totalRow.rdgPlan += thisRPModel.report.plan_rapdepl_gage; $scope.totalRow.rdgDep += thisRPModel.report.dep_rapdepl_gage;
@@ -208,7 +214,7 @@
                                         return $scope.totalRow;
                                     }
                                 },
-                                controller: ['$scope', '$uibModalInstance', 'thisReport', 'thisEvent', 'theTotalRow',  function ($scope, $uibModalInstance, thisReport, thisEvent, theTotalRow) {
+                                controller: ['$scope', '$uibModalInstance', 'thisReport', 'thisEvent', 'theTotalRow', function ($scope, $uibModalInstance, thisReport, thisEvent, theTotalRow) {
                                     $scope.Report = thisReport;
                                     $scope.Event = thisEvent;
                                     $scope.totals = theTotalRow;
@@ -220,9 +226,9 @@
                                     };
                                 }]
                             });
-                            modalInstance.result.then(function () {
-                                //nothing                            
-                            });//end modal
+                        }, function (errorResponse) {
+                            if (errorResponse.headers(["usgswim-messages"]) !== undefined) toastr.error("Error getting report: " + errorResponse.headers(["usgswim-messages"]));
+                            else toastr.error("Error getting report: " + errorResponse.statusText);
                         });
                     }//end if valid = true
                 };
@@ -300,10 +306,10 @@
                                         };
                                     }]
                                 });
-                                modalInstance.result.then(function () {
-                                    //nothing
-                                });
                             }; //end modal
+                        }, function (errorResponse) {
+                            if (errorResponse.headers(["usgswim-messages"]) !== undefined) toastr.error("Error getting report: " + errorResponse.headers(["usgswim-messages"]));
+                            else toastr.error("Error getting report: " + errorResponse.statusText);
                         });
                     } //end if valid
                 };
@@ -313,7 +319,6 @@
                     if (valid) {
                         //get reports and give a csv file back
                         $http.defaults.headers.common.Accept = 'text/csv';
-                  
                         REPORT.getReportsCSV({ Event: $scope.genSummary.event_id, States: $scope.StateAbbrevs, Date: $scope.genSummary.sum_date }).$promise.then(function (result) {
                             var anchor = angular.element('<a/>');
                             var joinedResponse = result.join("");
@@ -324,11 +329,12 @@
                             anchor.click();
                             var test;
                             //File.saveAs(blob, "report.csv");
-                        }), function () {
-                            console.log('error');
-                        };
+                        }, function (errorResponse) {
+                            if (errorResponse.headers(["usgswim-messages"]) !== undefined) toastr.error("Error getting csv: " + errorResponse.headers(["usgswim-messages"]));
+                            else toastr.error("Error getting csv: " + errorResponse.statusText);
+                        });
                     }
                 };//#endregion Generate Report tab
             }
-    }]);
+        }]);
 })();

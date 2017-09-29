@@ -3,7 +3,7 @@
     var STNControllers = angular.module('STNControllers');
 
     STNControllers.controller('MapController', ['$scope', '$http', '$rootScope', '$cookies', '$location', 'SITE', 'EVENT', 'Map_Site', 'leafletMarkerEvents', 'leafletBoundsHelpers', 'leafletData', '$state', 'spinnerService',
-        function ($scope, $http, $rootScope, $cookies, $location, SITE, EVENT, Map_Site,leafletMarkerEvents, leafletBoundsHelpers, leafletData, $state, spinnerService) {
+        function ($scope, $http, $rootScope, $cookies, $location, SITE, EVENT, Map_Site, leafletMarkerEvents, leafletBoundsHelpers, leafletData, $state, spinnerService) {
             if ($cookies.get('STNCreds') === undefined || $cookies.get('STNCreds') === "") {
                 $scope.auth = false;
                 $location.path('/login');
@@ -41,7 +41,7 @@
                         type: 'div',
                         iconSize: [10, 10],
                         className: 'newSiteIcon',
-                        iconAnchor:  [5, 5]
+                        iconAnchor: [5, 5]
                     },
                     selected: {
                         type: 'div',
@@ -92,7 +92,7 @@
                     })
                 };
                 //creates the markers on the map after getting JSON from STN web services call
-                var showEventSites = function(response) {
+                var showEventSites = function (response) {
                     var sitesArray = response;
                     $scope.sites = sitesArray;
                     $scope.markers = [];
@@ -107,7 +107,7 @@
                         for (var i = 0; i < sitesArray.length; i++) {
                             var a = sitesArray[i];
                             markers.push({
-                                layer:'stnSites',
+                                layer: 'stnSites',
                                 lat: a.latitude_dd,
                                 lng: a.longitude_dd,
                                 site_id: a.site_id,
@@ -118,9 +118,9 @@
                             $scope.markersLatLngArray.push([a.latitude_dd, a.longitude_dd]);
                         }
 
-                        controls.markers.create(markers ,$scope.markers);
+                        controls.markers.create(markers, $scope.markers);
                         $scope.markers = markers;
-                       // console.table($scope.markers);
+                        // console.table($scope.markers);
 
                         //var LLBounds =  new L.LatLngBounds($scope.markersLatLngArray);
                         //$scope.bounds = leafletBoundsHelpers.createBoundsFromArray([
@@ -162,8 +162,8 @@
                 $scope.pathsObj = {
                     circleMarker: {
                         type: "circleMarker",
-                        radius:20,
-                        weight:3,
+                        radius: 20,
+                        weight: 3,
                         color: '#000099',
                         latlngs: {}
                     }
@@ -196,13 +196,13 @@
                             }
                         };
                         if ($scope.mapCenter.zoom <= 9) {
-                            $scope.mapCenter = {lat: args.model.lat, lng: args.model.lng, zoom: 10};
+                            $scope.mapCenter = { lat: args.model.lat, lng: args.model.lng, zoom: 10 };
                         } else if ($scope.mapCenter.zoom >= 10) {
-                            $scope.mapCenter = {lat: args.model.lat, lng: args.model.lng, zoom : $scope.mapCenter.zoom};
+                            $scope.mapCenter = { lat: args.model.lat, lng: args.model.lng, zoom: $scope.mapCenter.zoom };
                         }
-                        var addShape = function() {
+                        var addShape = function () {
                             $scope.paths = {};
-                            $scope.pathsObj.circleMarker.latlngs = {lat: args.model.lat, lng: args.model.lng};
+                            $scope.pathsObj.circleMarker.latlngs = { lat: args.model.lat, lng: args.model.lng };
                             $scope.paths['circleMarker'] = $scope.pathsObj['circleMarker'];
                         };
                         addShape();
@@ -236,13 +236,15 @@
                         // $scope.sitesPromise = $http.get('https://stn.wim.usgs.gov/STNServices/Events/' + evID + '/Sites.json')
                         //                     .then(showEventSites, onError);
                         //below gets sites using the SITE 'factory'
-                        $scope.sitesPromise = EVENT.getEventSites({id: evID},// SITE.getAll({  Event: evID},
-                        function success(response) {
-                            spinnerService.hide("mapSpinner");
-                            showEventSites(response);
-                        }, function error(errorResponse) {
+                        $scope.sitesPromise = EVENT.getEventSites({ id: evID },// SITE.getAll({  Event: evID},
+                            function success(response) {
+                                spinnerService.hide("mapSpinner");
+                                showEventSites(response);
+                            }, function error(errorResponse) {
+                                if (errorResponse.headers(["usgswim-messages"]) !== undefined) toastr.error("Error getting sites: " + errorResponse.headers(["usgswim-messages"]));
+                                else toastr.error("Error getting sites: " + errorResponse.statusText);
                                 $scope.error = "Could not fetch sites";
-                        });
+                            });
 
                     } else {
 
@@ -250,7 +252,7 @@
                         toastr.options.timeOut = "8000";
                         toastr.options.closeButton = true;
                         toastr.warning("No sites are showing because you have no filters applied. Please select at least one search parameter.", "Map Filters");
-                        return;                        
+                        return;
 
                     }
                 });
@@ -261,10 +263,10 @@
                     $scope.sessionEventExists = $scope.sessionEventName != "All Events" ? true : false;
                 });
 
-                var onError = function(reason){
+                var onError = function (reason) {
                     $scope.error = "Could not fetch sites";
                 };
-                $scope.$on("leafletDirectiveMap.click", function(event, args){
+                $scope.$on("leafletDirectiveMap.click", function (event, args) {
                     if ($scope.createSiteModeActive === true) {
                         //first, remove previously click-created site
                         removeUserCreatedSite();
@@ -299,7 +301,7 @@
                 });
                 var removeUserCreatedSite = function () {
                     //returns created site index so it can be removed to make way for its replacement
-                    var createdSiteIndex = $scope.markers.map(function(obj) {
+                    var createdSiteIndex = $scope.markers.map(function (obj) {
                         return obj.site_id;
                     }).indexOf('newSite');
                     //splice created site from the markers array if it exists
@@ -310,7 +312,7 @@
                 };
 
                 ///update newSite lat/lng after dragend
-                $scope.$on("leafletDirectiveMarker.dragend", function(event, args){
+                $scope.$on("leafletDirectiveMarker.dragend", function (event, args) {
                     var dragendLocation = args.model;
                     $scope.userCreatedSite = {
                         latitude: dragendLocation.lat,
@@ -318,21 +320,21 @@
                     };
                 });
                 ///listens (watches) for change of the createSiteModeActive attribute - cued by click of the Create Site button
-                $scope.$watch('createSiteModeActive', function(){
+                $scope.$watch('createSiteModeActive', function () {
                     $scope.createSiteButtonText = $scope.createSiteModeActive ? 'Cancel Create Site Mode' : 'Create New Site on Map';
-                    $scope.mapStyle = $scope.createSiteModeActive ? {"cursor":"crosshair"} : {"cursor":"grab"};
-                    if (!$scope.createSiteModeActive) {removeUserCreatedSite();}
+                    $scope.mapStyle = $scope.createSiteModeActive ? { "cursor": "crosshair" } : { "cursor": "grab" };
+                    if (!$scope.createSiteModeActive) { removeUserCreatedSite(); }
                     //two lines below referenced createSiteModeIndicator leaflet control. can be removed eventually.
                     //var createSiteModeIndicator = document.getElementsByClassName("createSiteModeIndicator")[0];
                     //createSiteModeIndicator.style.visibility = $scope.createSiteModeActive ? 'visible' :'hidden';
                 });
 
                 $scope.createSiteFromMap = function () {
-                   if($scope.userCreatedSite.latitude !== undefined &&  $scope.userCreatedSite.longitude !== undefined ) {
-                       $state.go('site.dashboard', { id: 0, latitude: $scope.userCreatedSite.latitude, longitude: $scope.userCreatedSite.longitude });
-                   } else {
-                       alert("Please click a location on the map to create a site this way.");
-                   }
+                    if ($scope.userCreatedSite.latitude !== undefined && $scope.userCreatedSite.longitude !== undefined) {
+                        $state.go('site.dashboard', { id: 0, latitude: $scope.userCreatedSite.latitude, longitude: $scope.userCreatedSite.longitude });
+                    } else {
+                        alert("Please click a location on the map to create a site this way.");
+                    }
                 };
 
                 // $scope.showAllSites = function () {
@@ -389,7 +391,7 @@
                 //    .then(onSiteComplete, onError);
                 //copies scope object/////////////////////////////
 
-                leafletData.getMap().then(function(map) {
+                leafletData.getMap().then(function (map) {
                     var geoSearchControl = new L.Control.GeoSearch({
                         provider: new L.GeoSearch.Provider.Esri(),
                         position: 'topleft',
@@ -504,21 +506,21 @@
                                 visible: false
                             }
                         },
-                        overlays : {
+                        overlays: {
                             stnSites: {
                                 type: 'group',
-                                name:'STN Sites',
+                                name: 'STN Sites',
                                 visible: true
                             },
                             stnSitesAll: {
                                 type: 'group',
-                                name:'STN Sites All',
+                                name: 'STN Sites All',
                                 visible: true
                             },
-                            newSite : {
+                            newSite: {
                                 type: 'group',
                                 name: 'newSite',
-                                visible:true,
+                                visible: true,
                                 layerParams: {
                                     showOnSelector: false
                                 }
@@ -540,12 +542,12 @@
                             //         }
                             //     }
                             // },
-                            ahps : {
+                            ahps: {
                                 name: "AHPS Gages",
                                 type: "agsFeature",
-                                url : "https://idpgis.ncep.noaa.gov/arcgis/rest/services/NWS_Observations/ahps_riv_gauges/MapServer/0",
+                                url: "https://idpgis.ncep.noaa.gov/arcgis/rest/services/NWS_Observations/ahps_riv_gauges/MapServer/0",
                                 visible: false,
-                                layerOptions : {
+                                layerOptions: {
                                     //layers: [0],
                                     opacity: 1,
                                     pointToLayer: function (geojson, latlng) {
@@ -553,31 +555,31 @@
                                             icon: icons[geojson.properties.status]
                                         });
                                     },
-                                    onEachFeature: function(feature, layer) {
+                                    onEachFeature: function (feature, layer) {
                                         //layer.bindPopup("USGS ID: " + feature.properties.Name);
                                         var graphURL = "https://water.weather.gov/resources/hydrographs/" + feature.properties.gaugelid.toLowerCase() + "_hg.png";
                                         //layer.bindPopup("<b>Gage ID: </b>" + feature.properties.gaugelid + "</br><b>Location: </b>" + feature.properties.location + "</br><b>Waterbody: </b>" + feature.properties.waterbody + "</br><a target='_blank' href='"+ feature.properties.url + "'><img title='Click for details page' width=300 src='" + graphURL +"'/></a>");
-                                        layer.bindPopup("<b>Gage ID: </b>" + feature.properties.gaugelid + "</br><a target='_blank' href='"+ feature.properties.url + "'><img title='Click for details page' width=300 src='" + graphURL +"'/></a>");
+                                        layer.bindPopup("<b>Gage ID: </b>" + feature.properties.gaugelid + "</br><a target='_blank' href='" + feature.properties.url + "'><img title='Click for details page' width=300 src='" + graphURL + "'/></a>");
 
                                     }
                                 }
                             },
-                            radar : {
+                            radar: {
                                 name: "Weather Radar",
                                 type: "agsDynamic",
-                                url : "https://idpgis.ncep.noaa.gov/arcgis/rest/services/NWS_Observations/radar_base_reflectivity/MapServer",
+                                url: "https://idpgis.ncep.noaa.gov/arcgis/rest/services/NWS_Observations/radar_base_reflectivity/MapServer",
                                 visible: false,
-                                layerOptions : {
+                                layerOptions: {
                                     layers: [0],
                                     opacity: 1
                                 }
                             },
-                            watchWarn : {
+                            watchWarn: {
                                 name: "NWS Watches & Warnings",
                                 type: "agsDynamic",
-                                url : "https://idpgis.ncep.noaa.gov/arcgis/rest/services/NWS_Forecasts_Guidance_Warnings/watch_warn_adv/MapServer",
+                                url: "https://idpgis.ncep.noaa.gov/arcgis/rest/services/NWS_Forecasts_Guidance_Warnings/watch_warn_adv/MapServer",
                                 visible: false,
-                                layerOptions : {
+                                layerOptions: {
                                     layers: [1],
                                     opacity: 1
                                 }
