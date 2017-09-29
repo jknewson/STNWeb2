@@ -37,35 +37,35 @@ var paths = {
 
 var pipes = {};
 
-pipes.orderedVendorScripts = function() {
-    return plugins.order(['jquery.js', 'angular.js', 'leaflet-src.js', 'esri-leaflet.js', 'angular-leaflet-directive.js', 'directives.module.js', 'service.module.js', 'RequestInfo.js', 'HTTPServiceBase.js', 'Delegate.js', 'RequestTransform.js', 'EventManager.js','EventArgs.js', 'wimLegend.js']);
+pipes.orderedVendorScripts = function () {
+    return plugins.order(['jquery.js', 'angular.js', 'leaflet-src.js', 'esri-leaflet.js', 'angular-leaflet-directive.js', 'directives.module.js', 'service.module.js', 'RequestInfo.js', 'HTTPServiceBase.js', 'Delegate.js', 'RequestTransform.js', 'EventManager.js', 'EventArgs.js', 'wimLegend.js']);
 };
 
 //this angularFilesort plugin may not work because each file does not have a uniquely named module(needed, acc. to docs)
-pipes.orderedAppScripts = function() {
+pipes.orderedAppScripts = function () {
     return plugins.angularFilesort();
 };
 
-pipes.minifiedFileName = function() {
+pipes.minifiedFileName = function () {
     return plugins.rename(function (path) {
         path.extname = '.min' + path.extname;
     });
 };
 
-pipes.validatedAppScripts = function() {
+pipes.validatedAppScripts = function () {
     return gulp.src(paths.scripts)
-        .pipe(plugins.jshint())        
+        .pipe(plugins.jshint())
         .pipe(plugins.jshint.reporter('jshint-stylish'));
 };
 
-pipes.builtAppScriptsDev = function() {
+pipes.builtAppScriptsDev = function () {
     return pipes.validatedAppScripts()
         .pipe(rev())
-        .pipe(gulp.dest(paths.dev));        
+        .pipe(gulp.dest(paths.dev));
 };
 
 ///comments in function are artifacts of old partial scripting using the ng-html2js plugin, now stripped out
-pipes.builtAppScriptsProd = function() {
+pipes.builtAppScriptsProd = function () {
     return pipes.validatedAppScripts()
         .pipe(pipes.orderedAppScripts())
         .pipe(plugins.sourcemaps.init())
@@ -87,49 +87,49 @@ pipes.builtAppScriptsProd = function() {
 //         .pipe(gulp.dest('dev/bower_components'));
 // };
 
-pipes.builtVendorScriptsDev = function() {
+pipes.builtVendorScriptsDev = function () {
     return gulp.src(mainBowerFiles())
         .pipe(gulp.dest('dev/bower_components'));
 };
 
-pipes.builtVendorImagesDev = function() {
+pipes.builtVendorImagesDev = function () {
     //in parens below is filter statement for bowerFiles retrieval
-    return gulp.src(mainBowerFiles(['images/**', '**/images/**']))        
+    return gulp.src(mainBowerFiles(['images/**', '**/images/**']))
         .pipe(gulp.dest('dev/bower_components/images'));
 };
 
-pipes.builtVendorImagesProd = function() {
+pipes.builtVendorImagesProd = function () {
     //in parens below is filter statement for bowerFiles retrieval
     return gulp.src(mainBowerFiles(['images/**', '**/images/**']))
         .pipe(gulp.dest(paths.dist + '/images/'));
 };
 
-pipes.builtVendorScriptsProd = function() {
+pipes.builtVendorScriptsProd = function () {
     return gulp.src(mainBowerFiles('**/*.js'))
         .pipe(pipes.orderedVendorScripts())
         //added
-        .pipe(plugins.sourcemaps.init())        
+        .pipe(plugins.sourcemaps.init())
         .pipe(plugins.concat('vendor.min.js'))
         .pipe(plugins.uglify({ mangle: false }))
         //added
-        .pipe(plugins.sourcemaps.write())        
+        .pipe(plugins.sourcemaps.write())
         .pipe(gulp.dest(paths.distScriptsProd));
 };
 //checked 5/5 BAD
 
-pipes.validatedPartials = function() {
+pipes.validatedPartials = function () {
     return gulp.src(paths.partials)
         .pipe(plugins.htmlhint({ 'doctype-first': false }))
         .pipe(plugins.htmlhint.reporter());
 };
 
-pipes.builtPartialsDev = function() {
+pipes.builtPartialsDev = function () {
     return pipes.validatedPartials()
         .pipe(gulp.dest(paths.dev + '/component'));
 };
 
 ///adding as new task, to abandon the conversion to scripts
-pipes.builtPartialsProd = function() {
+pipes.builtPartialsProd = function () {
     return pipes.validatedPartials()
         .pipe(gulp.dest(paths.dist + '/component'));
 };
@@ -147,7 +147,7 @@ pipes.builtPartialsProd = function() {
 //};
 
 ///stripped out sass compiler - sass not in use
-pipes.builtAppStylesDev = function() {
+pipes.builtAppStylesDev = function () {
     return gulp.src(paths.appStyles)
         .pipe(rev())
         .pipe(gulp.dest(paths.dev));
@@ -164,10 +164,10 @@ pipes.builtAppStylesProd =
             .pipe(pipes.minifiedFileName())
             .pipe(rev())
             .pipe(gulp.dest(paths.dist));
-};
+    };
 ///////////////////////////////////////////////
 
-pipes.builtVendorStylesProd = function() {
+pipes.builtVendorStylesProd = function () {
     return gulp.src(mainBowerFiles('**/*.css'))
         //.pipe(pipes.orderedVendorStyles())
         .pipe(plugins.concat('vendor.min.css'))
@@ -175,33 +175,33 @@ pipes.builtVendorStylesProd = function() {
 };
 ////////////////////////////////////////////////////////
 
-pipes.processedImagesDev = function() {
+pipes.processedImagesDev = function () {
     return gulp.src(paths.images)
         .pipe(gulp.dest(paths.dev + '/images/'));
 };
 
-pipes.processedImagesProd = function() {
+pipes.processedImagesProd = function () {
     return gulp.src(paths.images)
         .pipe(gulp.dest(paths.dist + '/images/'));
 };
 
-pipes.processedIconsDev = function() {
+pipes.processedIconsDev = function () {
     return gulp.src(paths.fonts)
         .pipe(gulp.dest(paths.dev + '/fonts'))
 }
 
-pipes.processedIconsProd = function() {
+pipes.processedIconsProd = function () {
     return gulp.src(paths.fonts)
         .pipe(gulp.dest(paths.dist + '/fonts'))
 }
 
-pipes.validatedIndex = function() {
+pipes.validatedIndex = function () {
     return gulp.src(paths.index)
         .pipe(plugins.htmlhint())
         .pipe(plugins.htmlhint.reporter());
 };
 
-pipes.builtIndexDev = function() {
+pipes.builtIndexDev = function () {
 
     var orderedVendorScripts = pipes.builtVendorScriptsDev()
         .pipe(pipes.orderedVendorScripts());
@@ -213,15 +213,15 @@ pipes.builtIndexDev = function() {
 
     return pipes.validatedIndex()
         .pipe(gulp.dest(paths.dev)) // write first to get relative path for inject
-        .pipe(plugins.inject(orderedVendorScripts, {relative: true, name: 'bower'}))
-        .pipe(plugins.inject(orderedAppScripts, {relative: true}))
+        .pipe(plugins.inject(orderedVendorScripts, { relative: true, name: 'bower' }))
+        .pipe(plugins.inject(orderedAppScripts, { relative: true }))
         //.pipe(plugins.inject(orderedAppStyles, {relative:true}))        
         .pipe(plugins.inject(appStyles, { relative: true }))
         .pipe(plugins.htmlmin({ collapseWhitespace: true, removeComments: true }))
         .pipe(gulp.dest(paths.dev));
 };
 
-pipes.builtIndexProd = function() {
+pipes.builtIndexProd = function () {
 
     var vendorScripts = pipes.builtVendorScriptsProd();
     var appScripts = pipes.builtAppScriptsProd();
@@ -230,37 +230,37 @@ pipes.builtIndexProd = function() {
 
     return pipes.validatedIndex()
         .pipe(gulp.dest(paths.dist)) // write first to get relative path for inject
-        .pipe(plugins.inject(vendorScripts, {relative: true, name: 'bower'}))
-        .pipe(plugins.inject(appScripts, {relative: true}))
-        .pipe(plugins.inject(vendorStyles, {relative: true, name: 'bower'}))
-        .pipe(plugins.inject(appStyles, { relative: true }))        
-        .pipe(plugins.htmlmin({ collapseWhitespace: true, removeComments: true }))        
+        .pipe(plugins.inject(vendorScripts, { relative: true, name: 'bower' }))
+        .pipe(plugins.inject(appScripts, { relative: true }))
+        .pipe(plugins.inject(vendorStyles, { relative: true, name: 'bower' }))
+        .pipe(plugins.inject(appStyles, { relative: true }))
+        .pipe(plugins.htmlmin({ collapseWhitespace: true, removeComments: true }))
         .pipe(gulp.dest(paths.dist));
 };
 
-pipes.builtAppDev = function() {
+pipes.builtAppDev = function () {
     return es.merge(pipes.builtIndexDev(), pipes.builtPartialsDev(), pipes.processedImagesDev(), pipes.processedIconsDev(), pipes.builtVendorImagesDev());
 };
 
-pipes.builtAppProd = function() {
+pipes.builtAppProd = function () {
     return es.merge(pipes.builtIndexProd(), pipes.builtPartialsProd(), pipes.processedImagesProd(), pipes.processedIconsProd(), pipes.builtVendorImagesProd());
 };
 
 // == TASKS ========
 
 // removes all compiled dev files
-gulp.task('clean-dev', function() {
+gulp.task('clean-dev', function () {
     var deferred = Q.defer();
-    del(paths.dev, function() {
+    del(paths.dev, function () {
         deferred.resolve();
     });
     return deferred.promise;
 });
 
 // removes all compiled production files
-gulp.task('clean-prod', function() {
+gulp.task('clean-prod', function () {
     var deferred = Q.defer();
-    del(paths.dist, function() {
+    del(paths.dist, function () {
         deferred.resolve();
     });
     return deferred.promise;
@@ -269,8 +269,8 @@ gulp.task('clean-prod', function() {
 
 gulp.task('images', function () {
     return gulp.src([
-            'src/images/**/*',
-            'src/lib/images/*'])
+        'src/images/**/*',
+        'src/lib/images/*'])
         .pipe(gulp.dest('build/images'))
         .pipe(plugins.size());
 });
@@ -339,7 +339,7 @@ gulp.task('clean-build-app-dev', ['clean-dev'], pipes.builtAppDev);
 gulp.task('clean-build-app-prod', ['clean-prod'], pipes.builtAppProd);
 
 // clean, build, and watch live changes to the dev environment
-gulp.task('watch-dev', ['build-app-dev'], function() {
+gulp.task('watch-dev', ['build-app-dev'], function () {
 
     connect.server({
         root: 'dev',
@@ -349,28 +349,28 @@ gulp.task('watch-dev', ['build-app-dev'], function() {
     open("http://localhost:9000");
 
     // watch index
-    gulp.watch(paths.index, function() {
+    gulp.watch(paths.index, function () {
         return pipes.builtIndexDev()
             //.pipe(plugins.livereload());
             .pipe(connect.reload());
     });
 
     // watch app scripts
-    gulp.watch(paths.scripts, function() {
+    gulp.watch(paths.scripts, function () {
         return pipes.builtAppScriptsDev()
             //.pipe(plugins.livereload());
             .pipe(connect.reload());
     });
 
     // watch html partials
-    gulp.watch(paths.partials, function() {
+    gulp.watch(paths.partials, function () {
         return pipes.builtPartialsDev()
             //.pipe(plugins.livereload());
             .pipe(connect.reload());
     });
 
     // watch app styles
-    gulp.watch(paths.appStyles, function() {
+    gulp.watch(paths.appStyles, function () {
         return pipes.builtAppStylesDev()
             //.pipe(plugins.livereload());
             .pipe(connect.reload());
@@ -379,7 +379,7 @@ gulp.task('watch-dev', ['build-app-dev'], function() {
 });
 
 // clean, build, and watch live changes to the prod environment
-gulp.task('watch-prod', ['build-app-prod'], function() {
+gulp.task('watch-prod', ['build-app-prod'], function () {
 
     connect.server({
         root: 'dist',
@@ -389,28 +389,28 @@ gulp.task('watch-prod', ['build-app-prod'], function() {
     open("http://localhost:9001");
 
     // watch index
-    gulp.watch(paths.index, function() {
+    gulp.watch(paths.index, function () {
         return pipes.builtIndexProd()
             //.pipe(plugins.livereload());
             .pipe(connect.reload());
     });
 
     // watch app scripts
-    gulp.watch(paths.scripts, function() {
+    gulp.watch(paths.scripts, function () {
         return pipes.builtAppScriptsProd()
             //.pipe(plugins.livereload());
             .pipe(connect.reload());
     });
 
     // watch html partials
-    gulp.watch(paths.partials, function() {
+    gulp.watch(paths.partials, function () {
         return pipes.builtAppScriptsProd()
             //.pipe(plugins.livereload());
             .pipe(connect.reload());
     });
 
     // watch app styles
-    gulp.watch(paths.appStyles, function() {
+    gulp.watch(paths.appStyles, function () {
         return pipes.builtAppStylesProd()
             //.pipe(plugins.livereload());
             .pipe(connect.reload());

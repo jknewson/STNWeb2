@@ -12,7 +12,7 @@
             $scope.fileTypes = fileTypeList;
             $scope.agencies = agencyList;
             $scope.theSite = fileSite;
-            
+
             $scope.aFile = {}; //holder for file
             $scope.aSource = {}; //holder for file source
             $scope.datafile = {}; //holder for file datafile
@@ -25,7 +25,7 @@
                     if (theEvent.preventDefault) theEvent.preventDefault();
                 }
             };
-            $scope.fileItemExists = fileExists === undefined || fileExists.Length > 0 ? true:false;
+            $scope.fileItemExists = fileExists === undefined || fileExists.Length > 0 ? true : false;
 
             //#region Datepicker
             $scope.datepickrs = {};
@@ -79,7 +79,7 @@
                 $scope.src = $scope.serverURL + '/Files/' + $scope.aFile.file_id + '/Item' + FILE_STAMP.getStamp();
                 $scope.aFile.file_date = new Date($scope.aFile.file_date); //date for validity of form on PUT
                 if ($scope.aFile.photo_date !== undefined) $scope.aFile.photo_date = new Date($scope.aFile.photo_date); //date for validity of form on PUT
-                if (fileSource !== undefined)  {
+                if (fileSource !== undefined) {
                     $scope.aSource = fileSource;
                     $scope.aSource.FULLname = $scope.aSource.source_name;
                     $scope.aSource.agencyName = $scope.agencies.filter(function (a) { return a.agency_id == $scope.aSource.agency_id; })[0].agency_name;
@@ -89,11 +89,11 @@
                 if (dataFile !== undefined) {
                     $scope.ApprovalInfo = {};
                     $scope.datafile = dataFile;
-                    $scope.timeZoneList = ['UTC', 'PST', 'MST', 'CST', 'EST'];                
+                    $scope.timeZoneList = ['UTC', 'PST', 'MST', 'CST', 'EST'];
                     $scope.datafile.collect_date = new Date($scope.datafile.collect_date); //date for validity of form on put
                     $scope.datafile.good_start = getDateTimeParts($scope.datafile.good_start); //date for validity of form on put
                     $scope.datafile.good_end = getDateTimeParts($scope.datafile.good_end); //date for validity of form on put
-                    
+
                     if ($scope.datafile.approval_id !== undefined && $scope.datafile.approval_id !== null && $scope.datafile.approval_id >= 1) {
                         DATA_FILE.getDFApproval({ id: $scope.datafile.data_file_id }, function success(approvalResponse) {
                             $scope.ApprovalInfo.approvalDate = new Date(approvalResponse.approval_date); //include note that it's displayed in their local time but stored in UTC
@@ -199,7 +199,7 @@
                 //from other to other
             };
             //update this file
-            $scope.save = function (valid) {                
+            $scope.save = function (valid) {
                 if ($scope.fileCopy.filetype_id == 2) {
                     //make sure end date is after start date
                     var s = $scope.dfCopy.good_start;//need to get dep status date in same format as retrieved to compare
@@ -208,8 +208,8 @@
                         valid = false;
                         var fixDate = $uibModal.open({
                             template: '<div class="modal-header"><h3 class="modal-title">Error</h3></div>' +
-                                '<div class="modal-body"><p>The good end date must be after the good start date.</p></div>' +
-                                '<div class="modal-footer"><button class="btn btn-primary" ng-enter="ok()" ng-click="ok()">OK</button></div>',
+                            '<div class="modal-body"><p>The good end date must be after the good start date.</p></div>' +
+                            '<div class="modal-footer"><button class="btn btn-primary" ng-enter="ok()" ng-click="ok()">OK</button></div>',
                             controller: ['$scope', '$uibModalInstance', function ($scope, $uibModalInstance) {
                                 $scope.ok = function () {
                                     $uibModalInstance.close();
@@ -233,7 +233,6 @@
                         // post again (if no change, will return existing one. if edited, will create a new one --instead of editing all files that use this source)
                         var theSource = { source_name: $scope.sourceCopy.FULLname, agency_id: $scope.sourceCopy.agency_id };
                         SOURCE.save(theSource).$promise.then(function (sResponse) {
-                      //  SOURCE.update({ id: $scope.sourceCopy.source_id }, $scope.sourceCopy).$promise.then(function (sResponse) {
                             $scope.aSource = sResponse;
                             $scope.aSource.FULLname = $scope.aSource.source_name;
                             $scope.aSource.agencyName = $scope.agencies.filter(function (a) { return a.agency_id == $scope.aSource.agency_id; })[0].agency_name;
@@ -311,7 +310,7 @@
             $scope.saveFileUpload = function () {
                 $http.defaults.headers.common.Authorization = 'Basic ' + $cookies.get('STNCreds');
                 $http.defaults.headers.common.Accept = 'application/json';
-                $scope.sFileIsUploading = true;                
+                $scope.sFileIsUploading = true;
                 var fileParts = {
                     FileEntity: {
                         file_id: $scope.aFile.file_id,
@@ -358,13 +357,13 @@
                         }
                         else { $scope.isPhoto = false; }
                     }
-                    
+
                     if ($scope.aFile.File1 !== undefined) {
                         $scope.aFile.File = $scope.aFile.File1;
                         $scope.aFile.File1 = undefined; //put it as file and remove it from 1
                     }
                     //update the siteImageFiles for carousel if photo was changed to a different type or vise versa
-                    
+
                     $scope.sFileIsUploading = false;
                     $scope.fileItemExists = true;
                 }, function (errorResponse) {
@@ -396,7 +395,7 @@
                         toastr.success("File Removed");
                         var sendBack = ["de", 'deleted'];
                         $uibModalInstance.close(sendBack);
-                    }, function error(errorResponse) {
+                    }, function (errorResponse) {
                         if (errorResponse.headers(["usgswim-messages"]) !== undefined) toastr.error("Error deleting file: " + errorResponse.headers(["usgswim-messages"]));
                         else toastr.error("Error deleting file: " + errorResponse.statusText);
                     });
@@ -404,7 +403,7 @@
             };//end delete()
 
             //edit button clicked. make copy of hwm 
-            $scope.wannaEditFILE = function () {                
+            $scope.wannaEditFILE = function () {
                 $scope.view.FILEval = 'edit';
                 $scope.fileCopy = angular.copy($scope.aFile);
                 $scope.dfCopy = angular.copy($scope.datafile);
@@ -422,8 +421,8 @@
                 var thisDF = $scope.datafile;
                 var approveModal = $uibModal.open({
                     template: "<div class='modal-header'><h3 class='modal-title'>Approve Data File</h3></div>" +
-                        "<div class='modal-body'><p>Are you ready to approve this Data File?</p></div>" +
-                        "<div class='modal-footer'><button class='btn btn-primary' ng-click='approveIt()'>Approve</button><button class='btn btn-warning' ng-click='cancel()'>Cancel</button></div>",
+                    "<div class='modal-body'><p>Are you ready to approve this Data File?</p></div>" +
+                    "<div class='modal-footer'><button class='btn btn-primary' ng-click='approveIt()'>Approve</button><button class='btn btn-warning' ng-click='cancel()'>Cancel</button></div>",
                     controller: ['$scope', '$uibModalInstance', function ($scope, $uibModalInstance) {
                         $scope.cancel = function () {
                             $uibModalInstance.dismiss('cancel');
@@ -443,7 +442,7 @@
                         toastr.success("Data File Approved");
                         $scope.ApprovalInfo.approvalDate = new Date(approvalResponse.approval_date); //include note that it's displayed in their local time but stored in UTC
                         $scope.ApprovalInfo.Member = allMembers.filter(function (amem) { return amem.member_id == approvalResponse.member_id; })[0];
-                    }, function error(errorResponse) {
+                    }, function (errorResponse) {
                         if (errorResponse.headers(["usgswim-messages"]) !== undefined) toastr.error("Error approving data file: " + errorResponse.headers(["usgswim-messages"]));
                         else toastr.error("Error approving data file: " + errorResponse.statusText);
                     });
@@ -451,15 +450,15 @@
                     //logic for cancel
                 });//end modal
             };
-            
+
             //approve this hwm (if admin or manager)
             $scope.unApproveDF = function () {
                 //this is valid, show modal to confirm they want to approve it
                 var thisDF = $scope.datafile;
                 var unapproveModal = $uibModal.open({
                     template: "<div class='modal-header'><h3 class='modal-title'>Remove Approval</h3></div>" +
-                        "<div class='modal-body'><p>Are you sure you wan to unapprove this Data File?</p></div>" +
-                        "<div class='modal-footer'><button class='btn btn-primary' ng-click='unApproveIt()'>Unapprove</button><button class='btn btn-warning' ng-click='cancel()'>Cancel</button></div>",
+                    "<div class='modal-body'><p>Are you sure you wan to unapprove this Data File?</p></div>" +
+                    "<div class='modal-footer'><button class='btn btn-primary' ng-click='unApproveIt()'>Unapprove</button><button class='btn btn-warning' ng-click='cancel()'>Cancel</button></div>",
                     controller: ['$scope', '$uibModalInstance', function ($scope, $uibModalInstance) {
                         $scope.cancel = function () {
                             $uibModalInstance.dismiss('cancel');
@@ -478,7 +477,7 @@
                         $scope.datafile = df;
                         toastr.success("Data File Unapproved");
                         $scope.ApprovalInfo = {};
-                    }, function error(errorResponse) {
+                    }, function (errorResponse) {
                         if (errorResponse.headers(["usgswim-messages"]) !== undefined) toastr.error("Error unapproving data file: " + errorResponse.headers(["usgswim-messages"]));
                         else toastr.error("Error unapproving data file: " + errorResponse.statusText);
                     });

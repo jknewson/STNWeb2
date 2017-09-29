@@ -2,11 +2,11 @@
     'use strict';
 
     var STNControllers = angular.module('STNControllers');
-    STNControllers.controller('submitReportCtrl', ['$scope', '$http', '$cookies', '$uibModal', '$state', 'CONTACT', 'REPORT', 
+    STNControllers.controller('submitReportCtrl', ['$scope', '$http', '$cookies', '$uibModal', '$state', 'CONTACT', 'REPORT',
         function ($scope, $http, $cookies, $uibModal, $state, CONTACT, REPORT) {
             //#make sure this clears except for if they are needing to complete a report
             if ($scope.$parent.needToComplete !== true) {
-                $scope.$parent.newReport = {report_date: new Date()};
+                $scope.$parent.newReport = { report_date: new Date() };
             }
             else {
                 //keeps it valid and tells it it's utc so it will convert proper local
@@ -14,8 +14,8 @@
                 var mo = $scope.newReport.report_date.substr(5, 2);
                 var day = $scope.newReport.report_date.substr(8, 2);
                 $scope.newReport.report_date = new Date(mo + "/" + day + "/" + yr);
-               
-//                $scope.newReport.report_date = new Date($scope.newReport.report_date);
+
+                //                $scope.newReport.report_date = new Date($scope.newReport.report_date);
             }
 
             $scope.DeployStaff = {};
@@ -24,7 +24,7 @@
             $scope.CoastStaff = {};
             $scope.WaterStaff = {};
 
-            $scope.status = { openContacts: false, openCounts:false, openPersonnel:false }; //if submit form invalid, open contacts to show required field
+            $scope.status = { openContacts: false, openCounts: false, openPersonnel: false }; //if submit form invalid, open contacts to show required field
             //called a few times to format just the date (no time)
             var makeAdate = function (d) {
                 var aDate = new Date();
@@ -63,6 +63,9 @@
                     $scope.InlandStaff = response.filter(function (d) { return d.contactType == "Inland Flood"; })[0];
                     $scope.CoastStaff = response.filter(function (d) { return d.contactType == "Coastal Flood"; })[0];
                     $scope.WaterStaff = response.filter(function (d) { return d.contactType == "Water Quality"; })[0];
+                }, function error(errorResponse) {
+                    if (errorResponse.headers(["usgswim-messages"]) !== undefined) toastr.error("Error creating landowner contact: " + errorResponse.headers(["usgswim-messages"]));
+                    else toastr.error("Error creating landowner contact: " + errorResponse.statusText);
                 }).$promise;
                 $scope.disabled = false;
             };
@@ -70,39 +73,44 @@
 
             //#region POST Report Contacts
             var postReportContacts = function (reportID) {
-                if (!angular.equals({}, $scope.DeployStaff) && $scope.DeployStaff !== undefined) {                    
+                if (!angular.equals({}, $scope.DeployStaff) && $scope.DeployStaff !== undefined) {
                     REPORT.addReportContact({ reportId: reportID, contactTypeId: 1 }, $scope.DeployStaff, function success(response1) {
                         toastr.success("Deploy Staff Updated");
-                    }, function error(errorResponse1) {
-                        alert("Error: " + errorResponse1.statusText);
-                    }).$promise;                    
+                    }, function error(errorResponse) {
+                        if (errorResponse.headers(["usgswim-messages"]) !== undefined) toastr.error("Error adding report contact: " + errorResponse.headers(["usgswim-messages"]));
+                        else toastr.error("Error adding report contact: " + errorResponse.statusText);
+                    }).$promise;
                 }
                 if (!angular.equals({}, $scope.GenStaff) && $scope.GenStaff !== undefined) {
-                    REPORT.addReportContact({ reportId: reportID, contactTypeId: 2}, $scope.GenStaff, function success(response2) {
+                    REPORT.addReportContact({ reportId: reportID, contactTypeId: 2 }, $scope.GenStaff, function success(response2) {
                         toastr.success("General Staff Updated");
                     }, function error(errorResponse2) {
-                        alert("Error: " + errorResponse2.statusText);
+                        if (errorResponse2.headers(["usgswim-messages"]) !== undefined) toastr.error("Error adding report contact: " + errorResponse2.headers(["usgswim-messages"]));
+                        else toastr.error("Error adding report contact: " + errorResponse2.statusText);
                     }).$promise;
                 }
                 if (!angular.equals({}, $scope.InlandStaff) && $scope.InlandStaff !== undefined) {
-                    REPORT.addReportContact({ reportId: reportID, contactTypeId: 3}, $scope.InlandStaff, function success(response3) {
+                    REPORT.addReportContact({ reportId: reportID, contactTypeId: 3 }, $scope.InlandStaff, function success(response3) {
                         toastr.success("Inland Staff Updated");
                     }, function error(errorResponse3) {
-                        alert("Error: " + errorResponse3.statusText);
-                    }).$promise;                    
+                        if (errorResponse3.headers(["usgswim-messages"]) !== undefined) toastr.error("Error adding report contact: " + errorResponse3.headers(["usgswim-messages"]));
+                        else toastr.error("Error adding report contact: " + errorResponse3.statusText);
+                    }).$promise;
                 }
                 if (!angular.equals({}, $scope.CoastStaff) && $scope.CoastStaff !== undefined) {
-                    REPORT.addReportContact({ reportId: reportID, contactTypeId: 4}, $scope.CoastStaff, function success(response4) {
+                    REPORT.addReportContact({ reportId: reportID, contactTypeId: 4 }, $scope.CoastStaff, function success(response4) {
                         toastr.success("Coastal Staff Updated");
                     }, function error(errorResponse4) {
-                        alert("Error: " + errorResponse4.statusText);
-                    }).$promise;                
+                        if (errorResponse4.headers(["usgswim-messages"]) !== undefined) toastr.error("Error adding report contact: " + errorResponse4.headers(["usgswim-messages"]));
+                        else toastr.error("Error adding report contact: " + errorResponse4.statusText);
+                    }).$promise;
                 }
-                if (!angular.equals({}, $scope.WaterStaff) && $scope.WaterStaff !== undefined) {                
-                    REPORT.addReportContact({ reportId: reportID, contactTypeId: 5}, $scope.WaterStaff, function success(response5) {
-                        toastr.success("Water Staff Updated");       
+                if (!angular.equals({}, $scope.WaterStaff) && $scope.WaterStaff !== undefined) {
+                    REPORT.addReportContact({ reportId: reportID, contactTypeId: 5 }, $scope.WaterStaff, function success(response5) {
+                        toastr.success("Water Staff Updated");
                     }, function error(errorResponse5) {
-                        alert("Error: " + errorResponse5.statusText);
+                        if (errorResponse5.headers(["usgswim-messages"]) !== undefined) toastr.error("Error adding report contact: " + errorResponse5.headers(["usgswim-messages"]));
+                        else toastr.error("Error adding report contact: " + errorResponse5.statusText);
                     }).$promise;
                 }
             };
@@ -126,7 +134,7 @@
                 $scope.newReport.report_date = $scope.newReport.report_date.toDateString();
                 $http.defaults.headers.common.Authorization = 'Basic ' + $cookies.get('STNCreds');
                 $http.defaults.headers.common.Accept = 'application/json';
-                if ($scope.newReport.reporting_metrics_id !== undefined) {                    
+                if ($scope.newReport.reporting_metrics_id !== undefined) {
                     //PUT
                     REPORT.update({ id: $scope.newReport.reporting_metrics_id }, $scope.newReport, function success(response) {
                         toastr.success("Report Updated");
@@ -187,7 +195,7 @@
                     var previousDay = new Date(myDate);
                     previousDay.setHours(0, 0, 0, 0);
                     previousDay = previousDay.toISOString().substr(0, 10);
-                    
+
                     var yesterdayRpt = $scope.reports.filter(function (r) {
                         var repDate = r.report_date.toString().substring(0, 10);
                         return (r.event_id == $scope.newReport.event_id && r.state == $scope.newReport.state) && (repDate == previousDay);
@@ -227,7 +235,8 @@
                         $scope.newReport.hwm_flagged = response6.hwm_flagged;
                         $scope.newReport.hwm_collected = response6.hwm_collected;
                     }, function error(errorResponse6) {
-                        alert("Error: " + errorResponse6.statusText);
+                        if (errorResponse6.headers(["usgswim-messages"]) !== undefined) toastr.error("Error getting report totals: " + errorResponse6.headers(["usgswim-messages"]));
+                        else toastr.error("Error getting report totals: " + errorResponse6.statusText);
                     });
                 }
                 else {
@@ -281,10 +290,13 @@
                     $scope.fullReportForm.submit.$setDirty();
                     //get contacts 
                     getReportContacts(reportId);
+                }, function error(errorResponse) {
+                    if (errorResponse.headers(["usgswim-messages"]) !== undefined) toastr.error("Error getting report: " + errorResponse.headers(["usgswim-messages"]));
+                    else toastr.error("Error getting report: " + errorResponse.statusText);
                 }).$promise;
             };
 
-            if ($scope.newReport.reporting_metrics_id !==undefined)
+            if ($scope.newReport.reporting_metrics_id !== undefined)
                 getReportContacts($scope.newReport.reporting_metrics_id);
         }]);
 })();

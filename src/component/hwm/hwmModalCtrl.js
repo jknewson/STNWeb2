@@ -3,7 +3,7 @@
     'use strict';
 
     var ModalControllers = angular.module('ModalControllers');
-    ModalControllers.controller('hwmModalCtrl', ['$scope', '$rootScope', '$cookies', '$http', '$sce', '$uibModalInstance', '$uibModal', 'SERVER_URL','FILE_STAMP', 'allDropdowns', 'Site_Files', 'thisHWM', 'allSiteHWMs', 'hwmApproval', 'agencyList', 'hwmSite', 'allMembers', 'HWM', 'SOURCE', 'FILE',
+    ModalControllers.controller('hwmModalCtrl', ['$scope', '$rootScope', '$cookies', '$http', '$sce', '$uibModalInstance', '$uibModal', 'SERVER_URL', 'FILE_STAMP', 'allDropdowns', 'Site_Files', 'thisHWM', 'allSiteHWMs', 'hwmApproval', 'agencyList', 'hwmSite', 'allMembers', 'HWM', 'SOURCE', 'FILE',
         function ($scope, $rootScope, $cookies, $http, $sce, $uibModalInstance, $uibModal, SERVER_URL, FILE_STAMP, allDropdowns, Site_Files, thisHWM, allSiteHWMs, hwmApproval, agencyList, hwmSite, allMembers, HWM, SOURCE, FILE) {
             //dropdowns
             $scope.view = { HWMval: 'detail' };
@@ -15,7 +15,7 @@
             $scope.VDatumsList = allDropdowns[4];
             $scope.vCollMList = allDropdowns[5];
             $scope.markerList = allDropdowns[6];
-            $scope.eventList = allDropdowns[7];            
+            $scope.eventList = allDropdowns[7];
             $scope.fileTypeList = allDropdowns[8]; //used if creating/editing HWM file    
             $scope.allSFiles = Site_Files.getAllSiteFiles();
             $scope.HWMFiles = thisHWM !== "empty" ? $scope.allSFiles.filter(function (sf) { return sf.hwm_id == thisHWM.hwm_id; }) : [];// holder for hwm files added
@@ -31,7 +31,7 @@
             $scope.showChangeEventDD = function () {
                 $scope.showEventDD = !$scope.showEventDD;
             };
-                        
+
             //change event = apply it to the $scope.EventName
             $scope.ChangeEvent = function () {
                 $scope.EventName = $scope.eventList.filter(function (el) { return el.event_id == $scope.adminChanged.event_id; })[0].event_name;
@@ -82,7 +82,7 @@
             };
 
             //they changed radio button for dms dec deg
-            $scope.latLongChange = function () {                
+            $scope.latLongChange = function () {
                 if ($scope.createOReditHWM == 'edit') {
                     if ($scope.hwmCopy.decDegORdms == "dd") {
                         //they clicked Dec Deg..
@@ -97,8 +97,8 @@
                             //show modal telling them to populate all three (DMS) for conversion to work
                             var DMSddModal = $uibModal.open({
                                 template: '<div class="modal-header"><h3 class="modal-title">Error</h3></div>' +
-                                    '<div class="modal-body"><p>Please populate all three inputs for conversion from DMS to Decimal Degrees to work.</p></div>' +
-                                    '<div class="modal-footer"><button type="button" class="btn btn-primary" ng-enter="ok()" ng-click="ok()">OK</button></div>',
+                                '<div class="modal-body"><p>Please populate all three inputs for conversion from DMS to Decimal Degrees to work.</p></div>' +
+                                '<div class="modal-footer"><button type="button" class="btn btn-primary" ng-enter="ok()" ng-click="ok()">OK</button></div>',
                                 controller: ['$scope', '$uibModalInstance', function ($scope, $uibModalInstance) {
                                     $scope.ok = function () {
                                         $uibModalInstance.close();
@@ -137,7 +137,7 @@
                     if ($scope.aHWM.decDegORdms == "dd") {
                         //they clicked Dec Deg..
                         if (($scope.DMS.LADeg !== undefined && $scope.DMS.LAMin !== undefined && $scope.DMS.LASec !== undefined) &&
-                            $scope.DMS.LODeg !== undefined && $scope.DMS.LOMin !== undefined && $scope.DMS.LOSec !== undefined) {                        
+                            $scope.DMS.LODeg !== undefined && $scope.DMS.LOMin !== undefined && $scope.DMS.LOSec !== undefined) {
                             //convert what's here for each lat and long
                             $scope.aHWM.latitude_dd = azimuth($scope.DMS.LADeg, $scope.DMS.LAMin, $scope.DMS.LASec);
                             $scope.aHWM.longitude_dd = azimuth($scope.DMS.LODeg, $scope.DMS.LOMin, $scope.DMS.LOSec);
@@ -147,8 +147,8 @@
                             //show modal telling them to populate all three (DMS) for conversion to work
                             var DMSModal = $uibModal.open({
                                 template: '<div class="modal-header"><h3 class="modal-title">Error</h3></div>' +
-                                    '<div class="modal-body"><p>Please populate all three inputs for conversion from DMS to Decimal Degrees to work.</p></div>' +
-                                    '<div class="modal-footer"><button type="button" class="btn btn-primary" ng-enter="ok()" ng-click="ok()">OK</button></div>',
+                                '<div class="modal-body"><p>Please populate all three inputs for conversion from DMS to Decimal Degrees to work.</p></div>' +
+                                '<div class="modal-footer"><button type="button" class="btn btn-primary" ng-enter="ok()" ng-click="ok()">OK</button></div>',
                                 controller: ['$scope', '$uibModalInstance', function ($scope, $uibModalInstance) {
                                     $scope.ok = function () {
                                         $uibModalInstance.close();
@@ -189,8 +189,8 @@
             var openLatModal = function (w, message) {
                 var latModal = $uibModal.open({
                     template: '<div class="modal-header"><h3 class="modal-title">Error</h3></div>' +
-                        '<div class="modal-body"><p>{{message}}</p></div>' +
-                        '<div class="modal-footer"><button class="btn btn-primary" ng-enter="ok()" ng-click="ok()">OK</button></div>',
+                    '<div class="modal-body"><p>{{message}}</p></div>' +
+                    '<div class="modal-footer"><button class="btn btn-primary" ng-enter="ok()" ng-click="ok()">OK</button></div>',
                     resolve: {
                         show: function () {
                             return message;
@@ -216,8 +216,8 @@
             var openLongModal = function (w, message) {
                 var longModal = $uibModal.open({
                     template: '<div class="modal-header"><h3 class="modal-title">Error</h3></div>' +
-                        '<div class="modal-body"><p>{{message}}</p></div>' +
-                        '<div class="modal-footer"><button class="btn btn-primary" ng-enter="ok()" ng-click="ok()">OK</button></div>',
+                    '<div class="modal-body"><p>{{message}}</p></div>' +
+                    '<div class="modal-footer"><button class="btn btn-primary" ng-enter="ok()" ng-click="ok()">OK</button></div>',
                     resolve: {
                         show: function () {
                             return message;
@@ -228,7 +228,7 @@
                             $uibModalInstance.close();
                         };
                         if (show == 'range') $scope.message = 'The Longitude must be between -175.0 and -60.0';
-                        
+
                         if (show == 'distance') $scope.message = 'Longitude places the HWM more than 232 ft from the site\'s longitude. Please verify before continuing';
                     }],
                     size: 'sm'
@@ -246,14 +246,14 @@
                     if ($scope.DMS.LADeg < 0 || $scope.DMS.LADeg > 73 || (isNaN($scope.DMS.LADeg) && $scope.DMS.LADeg !== undefined) || (isNaN($scope.DMS.LAMin) && $scope.DMS.LAMin !== undefined) || (isNaN($scope.DMS.LASec) && $scope.DMS.LASec !== undefined)) {
                         openLatModal('dms', 'range');
                         //if not a number, clear the imputs to trigger the validation
-                        if (isNaN($scope.DMS.LADeg)) $scope.DMS.LADeg = undefined;  
+                        if (isNaN($scope.DMS.LADeg)) $scope.DMS.LADeg = undefined;
                         if (isNaN($scope.DMS.LAMin)) $scope.DMS.LAMin = undefined;
                         if (isNaN($scope.DMS.LASec)) $scope.DMS.LASec = undefined;
                     } else {
                         //check if distance is farther than 232 ft from site's lat
                         var lat = azimuth($scope.DMS.LADeg, $scope.DMS.LAMin, $scope.DMS.LASec);
                         var latDis = hwmSite.latitude_dd - lat;
-                        if (Math.abs(latDis) > 0.0005)  openLatModal('dms', 'distance');
+                        if (Math.abs(latDis) > 0.0005) openLatModal('dms', 'distance');
                     }
                     if ($scope.DMS.LODeg < -175 || $scope.DMS.LODeg > -60 || (isNaN($scope.DMS.LODeg) && $scope.DMS.LODeg !== undefined) || (isNaN($scope.DMS.LOMin) && $scope.DMS.LOMin !== undefined) || (isNaN($scope.DMS.LOSec) && $scope.DMS.LOSec !== undefined)) {
                         openLongModal('dms', 'range');
@@ -281,7 +281,7 @@
                         //check distance from site's lat/long
                         var latDistance = hwmSite.latitude_dd - h.latitude_dd;
                         if (Math.abs(latDistance) > 0.0005) {
-                            openLatModal('latlong', 'distance');                            
+                            openLatModal('latlong', 'distance');
                         }
                     }
                     if (h.longitude_dd < -175 || h.longitude_dd > -60 || isNaN(h.longitude_dd)) {
@@ -294,7 +294,7 @@
                         //check distance from site's lat/long
                         var longDistance = hwmSite.longitude_dd - h.longitude_dd;
                         if (Math.abs(longDistance) > 0.0005) {
-                            openLongModal('latlong', 'distance');                           
+                            openLongModal('latlong', 'distance');
                         }
                     }
                 }
@@ -331,8 +331,8 @@
                         //show warning modal and focus in uncertainty
                         var incongruentModal = $uibModal.open({
                             template: '<div class="modal-header"><h3 class="modal-title">Warning</h3></div>' +
-                                '<div class="modal-body"><p>There is a mismatch between the hwm quality chosen and the hwm uncertainty above. Please correct your hwm uncertainty.</p></div>' +
-                                '<div class="modal-footer"><button class="btn btn-primary" ng-enter="ok()" ng-click="ok()">OK</button></div>',
+                            '<div class="modal-body"><p>There is a mismatch between the hwm quality chosen and the hwm uncertainty above. Please correct your hwm uncertainty.</p></div>' +
+                            '<div class="modal-footer"><button class="btn btn-primary" ng-enter="ok()" ng-click="ok()">OK</button></div>',
                             controller: ['$scope', '$uibModalInstance', function ($scope, $uibModalInstance) {
                                 $scope.ok = function () {
                                     $uibModalInstance.close();
@@ -360,7 +360,7 @@
                 var dateWOtime = new Date(monthNames[month] + " " + day + ", " + year);
                 return dateWOtime;
             };//end makeAdate()
-            
+
             if (thisHWM != "empty") {
                 //#region existing HWM
                 $scope.createOReditHWM = 'edit';
@@ -378,10 +378,12 @@
                 $scope.aHWM.vCollectMethod = $scope.aHWM.vcollect_method_id > 0 ? $scope.vCollMList.filter(function (vc) { return vc.vcollect_method_id == $scope.aHWM.vcollect_method_id; })[0].vcollect_method : '';
                 //get approval info if any
                 if ($scope.aHWM.approval_id !== undefined) {
-
                     HWM.getHWMApproval({ id: $scope.aHWM.hwm_id }).$promise.then(function (response) {
                         $scope.ApprovalInfo.approvalDate = new Date(response.approval_date); //include note that it's displayed in their local time but stored in UTC
                         $scope.ApprovalInfo.Member = allMembers.filter(function (amem) { return amem.member_id == response.member_id; })[0];
+                    }, function (errorResponse) {
+                        if (errorResponse.headers(["usgswim-messages"]) !== undefined) toastr.error("Error getting hwm approval info: " + errorResponse.headers(["usgswim-messages"]));
+                        else toastr.error("Error getting hwm approval info: " + errorResponse.statusText);
                     });
                 }
 
@@ -389,7 +391,7 @@
                 //get this hwm's event name
                 $scope.EventName = $scope.aHWM.event_id > 0 ? $scope.eventList.filter(function (e) { return e.event_id == $scope.aHWM.event_id; })[0].event_name : 'None provided';
                 //date formatting
-                $scope.aHWM.flag_date = makeAdate($scope.aHWM.flag_date);                
+                $scope.aHWM.flag_date = makeAdate($scope.aHWM.flag_date);
                 //if this is surveyed, date format and get survey member's name
                 if ($scope.aHWM.survey_date !== null && $scope.aHWM.survey_date !== undefined) {
                     $scope.aHWM.survey_date = makeAdate($scope.aHWM.survey_date);
@@ -446,7 +448,7 @@
                         //if not a number, clear the imputs to trigger the validation
                         if (isNaN($scope.aHWM.longitude_dd)) {
                             $scope.aHWM.longitude_dd = undefined;
-                        } 
+                        }
                     } else {
                         // lat and long are good!
                         //if they entered a survey date or elevation, then set survey member as the flag member (flagging and surveying at same time
@@ -474,6 +476,9 @@
                             toastr.success("HWM created");
                             var sendBack = [createdHWM, 'created'];
                             $uibModalInstance.close(sendBack);
+                        }, function (errorResponse) {
+                            if (errorResponse.headers(["usgswim-messages"]) !== undefined) toastr.error("Error creating hwm: " + errorResponse.headers(["usgswim-messages"]));
+                            else toastr.error("Error creating hwm: " + errorResponse.statusText);
                         });
                     } //end all's good to post
                 }// end valid
@@ -485,8 +490,8 @@
                 var thisHWM = $scope.aHWM;
                 var approveModal = $uibModal.open({
                     template: "<div class='modal-header'><h3 class='modal-title'>Approve HWM</h3></div>" +
-                        "<div class='modal-body'><p>Are you ready to approve this HWM?</p><p>The surveyed elevation is {{approveHWM.elev_ft || '---'}}</p><p>The height above ground is {{approveHWM.height_above_gnd || '---'}}</p></div>" +
-                        "<div class='modal-footer'><button class='btn btn-primary' ng-click='approveIt()'>Approve</button><button class='btn btn-warning' ng-click='cancel()'>Cancel</button></div>",
+                    "<div class='modal-body'><p>Are you ready to approve this HWM?</p><p>The surveyed elevation is {{approveHWM.elev_ft || '---'}}</p><p>The height above ground is {{approveHWM.height_above_gnd || '---'}}</p></div>" +
+                    "<div class='modal-footer'><button class='btn btn-primary' ng-click='approveIt()'>Approve</button><button class='btn btn-warning' ng-click='cancel()'>Cancel</button></div>",
                     controller: ['$scope', '$uibModalInstance', function ($scope, $uibModalInstance) {
                         $scope.approveHWM = thisHWM;
                         $scope.cancel = function () {
@@ -507,7 +512,7 @@
                         $scope.ApprovalInfo.Member = allMembers.filter(function (amem) { return amem.member_id == approvalResponse.member_id; })[0];
                         //var sendBack = [h, 'updated'];
                         //$uibModalInstance.close(sendBack);
-                    }, function error(errorResponse) {
+                    }, function (errorResponse) {
                         if (errorResponse.headers(["usgswim-messages"]) !== undefined) toastr.error("Error approving hwm: " + errorResponse.headers(["usgswim-messages"]));
                         else toastr.error("Error approving hwm: " + errorResponse.statusText);
                     });
@@ -521,8 +526,8 @@
                 var thisHWM = $scope.aHWM;
                 var unapproveModal = $uibModal.open({
                     template: "<div class='modal-header'><h3 class='modal-title'>Remove Approval</h3></div>" +
-                        "<div class='modal-body'><p>Are you sure you wan to unapprove this HWM?</p></div>" +
-                        "<div class='modal-footer'><button class='btn btn-primary' ng-click='unApproveIt()'>Unapprove</button><button class='btn btn-warning' ng-click='cancel()'>Cancel</button></div>",
+                    "<div class='modal-body'><p>Are you sure you wan to unapprove this HWM?</p></div>" +
+                    "<div class='modal-footer'><button class='btn btn-primary' ng-click='unApproveIt()'>Unapprove</button><button class='btn btn-warning' ng-click='cancel()'>Cancel</button></div>",
                     controller: ['$scope', '$uibModalInstance', function ($scope, $uibModalInstance) {
                         $scope.approveHWM = thisHWM;
                         $scope.cancel = function () {
@@ -542,7 +547,7 @@
                         $scope.ApprovalInfo = {};
                         //var sendBack = [h, 'updated'];
                         //$uibModalInstance.close(sendBack);
-                    }, function error(errorResponse) {
+                    }, function (errorResponse) {
                         if (errorResponse.headers(["usgswim-messages"]) !== undefined) toastr.error("Error unapproving: " + errorResponse.headers(["usgswim-messages"]));
                         else toastr.error("Error unapproving hwm: " + errorResponse.statusText);
                     });
@@ -669,6 +674,9 @@
                             $scope.view.HWMval = 'detail';
                             //var sendBack = [updatedHWM, 'updated'];
                             //$uibModalInstance.close(sendBack);
+                        }, function (errorResponse) {
+                            if (errorResponse.headers(["usgswim-messages"]) !== undefined) toastr.error("Error saving hwm: " + errorResponse.headers(["usgswim-messages"]));
+                            else toastr.error("Error saving hwm: " + errorResponse.statusText);
                         });
                     }
                 }// end valid
@@ -702,11 +710,11 @@
                             if ($scope.allSFiles[l].hwm_id == hwmToRemove.hwm_id) $scope.allSFiles.splice(l, 1);
                         }
                         //updates the file list on the sitedashboard
-                        Site_Files.setAllSiteFiles($scope.allSFiles); 
+                        Site_Files.setAllSiteFiles($scope.allSFiles);
                         toastr.success("HWM Removed");
                         var sendBack = ["de", 'deleted'];
                         $uibModalInstance.close(sendBack);
-                    }, function error(errorResponse) {
+                    }, function (errorResponse) {
                         if (errorResponse.headers(["usgswim-messages"]) !== undefined) toastr.error("Error deleting hwm: " + errorResponse.headers(["usgswim-messages"]));
                         else toastr.error("Error deleting hwm: " + errorResponse.statusText);
                     });
@@ -722,13 +730,13 @@
 
             //edit button clicked. make copy of hwm 
             $scope.wannaEditHWM = function () {
-                $scope.view.HWMval = 'edit'; 
+                $scope.view.HWMval = 'edit';
                 $scope.hwmCopy = angular.copy($scope.aHWM);
                 $scope.hwmCopy.decDegORdms = 'dd'; $scope.hwmCopy.FTorCM = 'ft';
             };
             $scope.cancelHWMEdit = function () {
                 $scope.view.HWMval = 'detail';
-                $scope.hwmCopy = []; 
+                $scope.hwmCopy = [];
                 $scope.adminChanged = {};
                 $scope.EventName = $scope.eventList.filter(function (e) { return e.event_id == $scope.aHWM.event_id; })[0].event_name;
             };
@@ -802,8 +810,8 @@
             $scope.showImageModal = function (image) {
                 var imageModal = $uibModal.open({
                     template: '<div class="modal-header"><h3 class="modal-title">Image File Preview</h3></div>' +
-                        '<div class="modal-body"><img ng-src="{{setSRC}}" /></div>' +
-                        '<div class="modal-footer"><button class="btn btn-primary" ng-enter="ok()" ng-click="ok()">OK</button></div>',
+                    '<div class="modal-body"><img ng-src="{{setSRC}}" /></div>' +
+                    '<div class="modal-footer"><button class="btn btn-primary" ng-enter="ok()" ng-click="ok()">OK</button></div>',
                     controller: ['$scope', '$uibModalInstance', function ($scope, $uibModalInstance) {
                         $scope.ok = function () {
                             $uibModalInstance.close();
@@ -831,6 +839,9 @@
                     $scope.aFile = angular.copy(file);
                     FILE.getFileItem({ id: $scope.aFile.file_id }).$promise.then(function (response) {
                         $scope.fileItemExists = response.Length > 0 ? true : false;
+                    }, function (errorResponse) {
+                        if (errorResponse.headers(["usgswim-messages"]) !== undefined) toastr.error("Error getting file item: " + errorResponse.headers(["usgswim-messages"]));
+                        else toastr.error("Error getting file item: " + errorResponse.statusText);
                     });
                     $scope.aFile.fileType = $scope.fileTypeList.filter(function (ft) { return ft.filetype_id == $scope.aFile.filetype_id; })[0].filetype;
                     //determine if existing file is a photo (even if type is not )
@@ -849,6 +860,9 @@
                             $scope.aSource = s;
                             $scope.aSource.FULLname = $scope.aSource.source_name;
                             $scope.agencyNameForCap = $scope.agencies.filter(function (a) { return a.agency_id == $scope.aSource.agency_id; })[0].agency_name;
+                        }, function (errorResponse) {
+                            if (errorResponse.headers(["usgswim-messages"]) !== undefined) toastr.error("Error getting source: " + errorResponse.headers(["usgswim-messages"]));
+                            else toastr.error("Error getting source: " + errorResponse.statusText);
                         });
                     }//end if source
                 }//end existing file
@@ -860,7 +874,7 @@
                 } //end new file
                 $scope.showFileForm = true;
 
-                  
+
                 $scope.updateAgencyForCaption = function () {
                     if ($scope.aFile.filetype_id == 1)
                         $scope.agencyNameForCap = $scope.agencies.filter(function (a) { return a.agency_id == $scope.aSource.agency_id; })[0].agency_name;
@@ -947,7 +961,6 @@
                         // post again (if no change, will return existing one. if edited, will create a new one --instead of editing all files that use this source)
                         var theSource = { source_name: $scope.aSource.FULLname, agency_id: $scope.aSource.agency_id };
                         SOURCE.save(theSource).$promise.then(function (response) {
-                            //SOURCE.update({ id: $scope.aSource.source_id }, $scope.aSource).$promise.then(function () {
                             $scope.aFile.source_id = response.source_id;
                             FILE.update({ id: $scope.aFile.file_id }, $scope.aFile).$promise.then(function (fileResponse) {
                                 toastr.success("File Updated");
@@ -995,7 +1008,7 @@
                         $scope.hwmImageFiles.splice($scope.existIMGFileIndex, 1);
                         Site_Files.setAllSiteFiles($scope.allSFiles); //updates the file list on the sitedashboard
                         $scope.showFileForm = false;
-                    }, function error(errorResponse) {
+                    }, function (errorResponse) {
                         if (errorResponse.headers(["usgswim-messages"]) !== undefined) toastr.error("Error deleting file: " + errorResponse.headers(["usgswim-messages"]));
                         else toastr.error("Error deleting file: " + errorResponse.statusText);
                     });

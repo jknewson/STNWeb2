@@ -8,7 +8,7 @@
         'allHorCollMethods', 'allStates', 'allCounties', 'allOPTypes', 'allVertDatums', 'allVertColMethods', 'allOPQualities', 'allHWMTypes', 'allHWMQualities', 'allMarkers',
         'allEvents', 'allSensorTypes', 'allSensorBrands', 'allDeployTypes', 'allHousingTypes', 'SITE', 'OBJECTIVE_POINT', 'HWM', 'MEMBER', 'INSTRUMENT', 'INSTRUMENT_STATUS', 'OP_MEASURE', 'OP_CONTROL_IDENTIFIER', 'GEOCODE',
         function ($scope, $rootScope, $cookies, $location, $state, $http, $uibModal, $filter, $sce, whichQuick, allHorDatums, allHorCollMethods, allStates, allCounties, allOPTypes,
-            allVertDatums, allVertColMethods, allOPQualities, allHWMTypes, allHWMQualities, allMarkers, allEvents, allSensorTypes, allSensorBrands, allDeployTypes, allHousingTypes, 
+            allVertDatums, allVertColMethods, allOPQualities, allHWMTypes, allHWMQualities, allMarkers, allEvents, allSensorTypes, allSensorBrands, allDeployTypes, allHousingTypes,
             SITE, OBJECTIVE_POINT, HWM, MEMBER, INSTRUMENT, INSTRUMENT_STATUS, OP_MEASURE, OP_CONTROL_IDENTIFIER, GEOCODE) {
             if ($cookies.get('STNCreds') === undefined || $cookies.get('STNCreds') === "") {
                 $scope.auth = false;
@@ -21,6 +21,9 @@
                 $http.defaults.headers.common.Accept = 'application/json';
                 MEMBER.query({ id: $cookies.get('mID') }).$promise.then(function (response) {
                     $scope.loggedInMember = response;
+                }, function (errorResponse) {
+                    if (errorResponse.headers(["usgswim-messages"]) !== undefined) toastr.error("Error getting logged in member: " + errorResponse.headers(["usgswim-messages"]));
+                    else toastr.error("Error getting logged in member: " + errorResponse.statusText);
                 });
                 $rootScope.thisPage = "Quick" + whichQuick;
                 $scope.quickForm = {}; //forms within the accordion .Site, .OP, .HWM
@@ -42,8 +45,8 @@
                 $scope.decDegORdms = {};
                 $scope.EventName = $cookies.get('SessionEventName');
                 $scope.aSite = { member_id: $cookies.get('mID') };
-                $scope.aOP = {date_established: makeAdate("")};
-                
+                $scope.aOP = { date_established: makeAdate("") };
+
                 $scope.status = { siteOpen: true, opOpen: false, hwmOpen: false }; //accordion for parts
                 $scope.removeOPCarray = []; //holder if they remove any OP controls
                 $scope.addedIdentifiers = []; //holder for added Identifiers
@@ -91,7 +94,7 @@
                     $scope.depTypeList = allDeployTypes; //get fresh version so not messed up with the Temperature twice
                     $scope.houseTypeList = allHousingTypes;
                     $scope.timeZoneList = ['UTC', 'PST', 'MST', 'CST', 'EST'];
-                    $scope.aSensor = { event_id: $cookies.get('SessionEventID'),  };
+                    $scope.aSensor = { event_id: $cookies.get('SessionEventID'), };
                     $scope.aSensStatus = { status_type_id: 1, member_id: $cookies.get('mID') };
                     $scope.eventList = allEvents; $scope.sensorTypeList = allSensorTypes; $scope.sensorBrandList = allSensorBrands;
                     $scope.IntervalType = { type: 'Seconds' }; //default
@@ -149,7 +152,7 @@
                 //#endregion
 
                 //#region lat/long stuff
-            
+
                 $scope.decDegORdms.val = 'dd';
                 $scope.DMS = {}; //holder of deg min sec values
 
@@ -196,8 +199,8 @@
                             //show modal telling them to populate all three (DMS) for conversion to work
                             var DMSModal = $uibModal.open({
                                 template: '<div class="modal-header"><h3 class="modal-title">Error</h3></div>' +
-                                    '<div class="modal-body"><p>Please populate all three inputs for conversion from DMS to Decimal Degrees to work.</p></div>' +
-                                    '<div class="modal-footer"><button type="button" class="btn btn-primary" ng-enter="ok()" ng-click="ok()">OK</button></div>',
+                                '<div class="modal-body"><p>Please populate all three inputs for conversion from DMS to Decimal Degrees to work.</p></div>' +
+                                '<div class="modal-footer"><button type="button" class="btn btn-primary" ng-enter="ok()" ng-click="ok()">OK</button></div>',
                                 controller: ['$scope', '$uibModalInstance', function ($scope, $uibModalInstance) {
                                     $scope.ok = function () {
                                         $uibModalInstance.close();
@@ -221,7 +224,7 @@
                             $scope.DMS.LADeg = ladDMSarray[0];
                             $scope.DMS.LAMin = ladDMSarray[1];
                             $scope.DMS.LASec = ladDMSarray[2];
-                            
+
                             var longDMS = deg_to_dms($scope.aSite.longitude_dd);
                             var longDMSarray = longDMS.split(':');
                             $scope.DMS.LODeg = longDMSarray[0] * -1;
@@ -235,8 +238,8 @@
                 var openLatModal = function (w) {
                     var latModal = $uibModal.open({
                         template: '<div class="modal-header"><h3 class="modal-title">Error</h3></div>' +
-                            '<div class="modal-body"><p>The Latitude must be between 0 and 73.0</p></div>' +
-                            '<div class="modal-footer"><button class="btn btn-primary" ng-enter="ok()" ng-click="ok()">OK</button></div>',
+                        '<div class="modal-body"><p>The Latitude must be between 0 and 73.0</p></div>' +
+                        '<div class="modal-footer"><button class="btn btn-primary" ng-enter="ok()" ng-click="ok()">OK</button></div>',
                         controller: ['$scope', '$uibModalInstance', function ($scope, $uibModalInstance) {
                             $scope.ok = function () {
                                 $uibModalInstance.close();
@@ -254,8 +257,8 @@
                 var openLongModal = function (w) {
                     var longModal = $uibModal.open({
                         template: '<div class="modal-header"><h3 class="modal-title">Error</h3></div>' +
-                            '<div class="modal-body"><p>The Longitude must be between -175.0 and -60.0</p></div>' +
-                            '<div class="modal-footer"><button class="btn btn-primary" ng-enter="ok()" ng-click="ok()">OK</button></div>',
+                        '<div class="modal-body"><p>The Longitude must be between -175.0 and -60.0</p></div>' +
+                        '<div class="modal-footer"><button class="btn btn-primary" ng-enter="ok()" ng-click="ok()">OK</button></div>',
                         controller: ['$scope', '$uibModalInstance', function ($scope, $uibModalInstance) {
                             $scope.ok = function () {
                                 $uibModalInstance.close();
@@ -371,8 +374,8 @@
                         $rootScope.stateIsLoading.showLoading = false;// loading..
                         var emptyLatLongModal = $uibModal.open({
                             template: '<div class="modal-header"><h3 class="modal-title">Error</h3></div>' +
-                                '<div class="modal-body"><p>Please provide a Latitude and Longitude before clicking Verify Location</p></div>' +
-                                '<div class="modal-footer"><button class="btn btn-primary" ng-enter="ok()" ng-click="ok()">OK</button></div>',
+                            '<div class="modal-body"><p>Please provide a Latitude and Longitude before clicking Verify Location</p></div>' +
+                            '<div class="modal-footer"><button class="btn btn-primary" ng-enter="ok()" ng-click="ok()">OK</button></div>',
                             controller: ['$scope', '$uibModalInstance', function ($scope, $uibModalInstance) {
                                 $scope.ok = function () {
                                     $uibModalInstance.close();
@@ -384,7 +387,7 @@
                 };//end getAddress()
 
                 //#endregion lat/long stuff
-            
+
                 //hwm_uncertainty typed in, choose cooresponding hwm_environment
                 $scope.chooseQuality = function () {
                     if ($scope.aHWM.hwm_uncertainty !== "") {
@@ -406,8 +409,8 @@
                             //show warning modal and focus in uncertainty
                             var incongruentModal = $uibModal.open({
                                 template: '<div class="modal-header"><h3 class="modal-title">Warning</h3></div>' +
-                                    '<div class="modal-body"><p>There is a mismatch between the hwm quality chosen and the hwm uncertainty above. Please correct your hwm uncertainty.</p></div>' +
-                                    '<div class="modal-footer"><button class="btn btn-primary" ng-enter="ok()" ng-click="ok()">OK</button></div>',
+                                '<div class="modal-body"><p>There is a mismatch between the hwm quality chosen and the hwm uncertainty above. Please correct your hwm uncertainty.</p></div>' +
+                                '<div class="modal-footer"><button class="btn btn-primary" ng-enter="ok()" ng-click="ok()">OK</button></div>',
                                 controller: ['$scope', '$uibModalInstance', function ($scope, $uibModalInstance) {
                                     $scope.ok = function () {
                                         $uibModalInstance.close();
@@ -493,12 +496,12 @@
                 };
                 $scope.tapedown = { Open: false };
                 //sensor section, clicked Show/Hide Tape down information
-                var showNeedOPfirstModal = function () {                    
+                var showNeedOPfirstModal = function () {
                     var needOPModal = $uibModal.open({
                         template: '<div class="modal-header"><h3 class="modal-title">No Datum Location</h3></div>' +
-                            '<div class="modal-body"><p>In order to add tape down information, please populate the Datum Location section above first.</p>' +
-                            '<p>The following fields are required for the tape down section: <b>Name</b>, <b>Elevation</b> and <b>Vertical Datum</b>.</p></div>' +
-                            '<div class="modal-footer"><button class="btn btn-primary" ng-enter="ok()" ng-click="ok()">OK</button></div>',
+                        '<div class="modal-body"><p>In order to add tape down information, please populate the Datum Location section above first.</p>' +
+                        '<p>The following fields are required for the tape down section: <b>Name</b>, <b>Elevation</b> and <b>Vertical Datum</b>.</p></div>' +
+                        '<div class="modal-footer"><button class="btn btn-primary" ng-enter="ok()" ng-click="ok()">OK</button></div>',
                         controller: ['$scope', '$uibModalInstance', function ($scope, $uibModalInstance) {
                             $scope.ok = function () {
                                 $uibModalInstance.close();
@@ -511,14 +514,14 @@
                     });
                 };
                 $scope.tapeDownTable = []; //holder for the op if they choose it from the dropdown for tape down
-                $scope.removeOP = function () {                    
+                $scope.removeOP = function () {
                     //they unchecked the op to remove
                     var removeOPMeas = $uibModal.open({
                         backdrop: 'static',
                         keyboard: false,
                         template: '<div class="modal-header"><h3 class="modal-title">Remove OP Measure</h3></div>' +
-                            '<div class="modal-body"><p>Are you sure you don\'t want to add this OP Measurement to this quick sensor?</p></div>' +
-                            '<div class="modal-footer"><button class="btn btn-primary" ng-enter="ok()" ng-click="ok()">Yes</button><button class="btn btn-primary" ng-click="cancel()">Cancel</button></div>',
+                        '<div class="modal-body"><p>Are you sure you don\'t want to add this OP Measurement to this quick sensor?</p></div>' +
+                        '<div class="modal-footer"><button class="btn btn-primary" ng-enter="ok()" ng-click="ok()">Yes</button><button class="btn btn-primary" ng-click="cancel()">Cancel</button></div>',
                         controller: ['$scope', '$uibModalInstance', function ($scope, $uibModalInstance) {
                             $scope.ok = function () {
                                 $uibModalInstance.close('remove');
@@ -542,7 +545,7 @@
                 };
                 $scope.addTapedown = false; //toggle tapedown section                
                 $scope.OPsForTapeDown = []; //will hold OP they add in op accordion.. get this when they click the button and show modal if they haven't populated it yet.
-                $scope.showTapedownPart = function () {                    
+                $scope.showTapedownPart = function () {
                     if ($scope.tapeDownTable.length < 1) {
                         //they are opening to add tape down information
                         if ($scope.aOP.name !== undefined && $scope.aOP.elev_ft !== undefined && $scope.aOP.vdatum_id !== undefined) {
@@ -556,14 +559,14 @@
                             $scope.addTapedown = true; $scope.tapedown.Open = true;
                             $scope.aSensStatus.vdatum_id = $scope.aOP.vdatum_id;
                         } else {
-                            showNeedOPfirstModal(); 
+                            showNeedOPfirstModal();
                         }
                     } else {
                         $scope.addTapedown = true; $scope.tapedown.Open = true;
                     }
-                    
+
                 };
-                $scope.siteErrors = false; $scope.opErrors = false; $scope.hwmErrors = false; 
+                $scope.siteErrors = false; $scope.opErrors = false; $scope.hwmErrors = false;
                 $scope.create = function () {
                     $rootScope.stateIsLoading.showLoading = true;// loading..
                     var theForm = $scope.quickForm.quick;
@@ -641,6 +644,9 @@
                                             $rootScope.stateIsLoading.showLoading = false;// loading..
                                             $location.path('/Site/' + createdSiteID + '/SiteDashboard').replace();//.notify(false);
                                             $scope.apply;
+                                        }, function (errorResponse) {
+                                            if (errorResponse.headers(["usgswim-messages"]) !== undefined) toastr.error("Error saving hwm: " + errorResponse.headers(["usgswim-messages"]));
+                                            else toastr.error("Error saving hwm: " + errorResponse.statusText);
                                         });//end HWM.save()
                                     }//end HWM creating
                                     if ($scope.CreateWhat == 'Sensor') {
@@ -652,7 +658,9 @@
                                         dealWithTimeStampb4Send(); //UTC or local?
                                         $http.defaults.headers.common.Authorization = 'Basic ' + $cookies.get('STNCreds');
                                         $http.defaults.headers.common.Accept = 'application/json';
+                                        var instrumentID = 0;
                                         INSTRUMENT.save($scope.aSensor).$promise.then(function (response) {
+                                            instrumentID = response.instrument_id;
                                             //create instrumentstatus too 
                                             createdSensor = response;
                                             $scope.aSensStatus.instrument_id = response.instrument_id;
@@ -669,10 +677,23 @@
                                                 $rootScope.stateIsLoading.showLoading = false;// loading..
                                                 $location.path('/Site/' + createdSiteID + '/SiteDashboard').replace();//.notify(false);
                                                 $scope.apply;
+                                            }, function (errorResponse) {
+                                                INSTRUMENT.delete({ id: instrumentID });
+                                                if (errorResponse.headers(["usgswim-messages"]) !== undefined) toastr.error("Error creating sensor: " + errorResponse.headers(["usgswim-messages"]));
+                                                else toastr.error("Error creating sensor: " + errorResponse.statusText);
                                             });//end Instrument Status save
+                                        }, function (errorResponse) {
+                                            if (errorResponse.headers(["usgswim-messages"]) !== undefined) toastr.error("Error creating sensor: " + errorResponse.headers(["usgswim-messages"]));
+                                            else toastr.error("Error creating sensor: " + errorResponse.statusText);
                                         });//end instrumentSave
                                     }//end if sensor
+                                }, function error(errorResponse) {
+                                    if (errorResponse.headers(["usgswim-messages"]) !== undefined) toastr.error("Error creating datum location: " + errorResponse.headers(["usgswim-messages"]));
+                                    else toastr.error("Error creating datum location: " + errorResponse.statusText);
                                 });//end OP.save()
+                            }, function error(errorResponse) {
+                                if (errorResponse.headers(["usgswim-messages"]) !== undefined) toastr.error("Error creating site: " + errorResponse.headers(["usgswim-messages"]));
+                                else toastr.error("Error creating site: " + errorResponse.statusText);
                             });//end SITE.save()
                         }
                     } else {
@@ -697,5 +718,5 @@
                 };
             }//end else (logged in)
         }]);
-  
+
 })();

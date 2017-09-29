@@ -19,6 +19,9 @@
                 var s = $scope.event.state !== null && $scope.event.state !== undefined ? $scope.event.state : null;
                 EVENT.getFilteredEvents({ Date: d, Type: t, State: s }).$promise.then(function (response) {
                     $scope.EventList = response;
+                }, function (errorResponse) {
+                    if (errorResponse.headers(["usgswim-messages"]) !== undefined) toastr.error("Error getting filtered events: " + errorResponse.headers(["usgswim-messages"]));
+                    else toastr.error("Error getting filtered events: " + errorResponse.statusText);
                 });
             };
             //clear the filters
