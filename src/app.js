@@ -237,6 +237,7 @@
                     controller: "settingsCtrl",
                     authenticate: true
                 })
+
                 // members
                 .state("members", {
                     url: "/Members",
@@ -268,6 +269,7 @@
                     templateUrl: "component/member/membersList.html",
                     authenticate: true
                 })
+
                 // events
                 .state("events", {
                     url: "/Events",
@@ -550,6 +552,7 @@
                     templateUrl: "component/resources/verticalDatum.html",
                     authenticate: true
                 })
+
                 // bulk hwm adjustment page                                 
                 .state("bulkHWMAdj", {
                     url: "/BulkHWM_adjustments",
@@ -629,6 +632,7 @@
                         },
                     }
                 })
+
                 // site (abstract)
                 .state("site", {
                     url: "/Site/:id",
@@ -795,6 +799,7 @@
                         }
                     }
                 })
+
                 // site.info
                 .state("site.dashboard", {
                     url: "/SiteDashboard",
