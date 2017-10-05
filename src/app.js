@@ -1,17 +1,17 @@
 (function () {
-    "use strict"; 
+    "use strict";
     var app = angular.module('app',
         ['ngResource', 'ui.router', 'ngCookies', 'ui.mask', 'ui.bootstrap', 'isteven-multi-select', 'ngInputModified', 'ui.validate', 'cgBusy',
-            'angular.filter', 'xeditable', 'checklist-model', 'ngFileUpload', 'STNResource', 'ui.bootstrap.datetimepicker','leaflet-directive','ngHandsontable',
+            'angular.filter', 'xeditable', 'checklist-model', 'ngFileUpload', 'STNResource', 'ui.bootstrap.datetimepicker', 'leaflet-directive', 'ngHandsontable',
             'STNControllers', 'LogInOutController', 'ModalControllers', 'SettingsControllers', 'WiM.Services', 'WiM.Event', 'wim_angular', 'angularSpinners']);
     app.constant('SERVER_URL', 'https://stn.wim.usgs.gov/STNServices');
-     //  app.constant('SERVER_URL', 'https://stntest.wim.usgs.gov/STNServices2');
+    //  app.constant('SERVER_URL', 'https://stntest.wim.usgs.gov/STNServices2');
     //app.constant('SERVER_URL', 'http://localhost/STNServices2');
 
     //app.constant('ENVIRONMENT', 'Testing');
     app.constant('ENVIRONMENT', 'Production');
 
-     app.run(['$rootScope', '$uibModalStack', '$cookies', '$state', 'ENVIRONMENT', function ($rootScope, $uibModalStack, $cookies, $state, ENVIRONMENT) {
+    app.run(['$rootScope', '$uibModalStack', '$cookies', '$state', 'ENVIRONMENT', function ($rootScope, $uibModalStack, $cookies, $state, ENVIRONMENT) {
         $rootScope.$on('$stateChangeStart', function (event, toState, toParams, fromState, fromParams) {
             if (($cookies.get('STNCreds') === undefined || $cookies.get('STNCreds') === "") && toState.authenticate) {
                 $rootScope.returnToState = toState.name;
@@ -35,16 +35,16 @@
             $rootScope.stateIsLoading.showLoading = false;
         });
 
-        $rootScope.$on('$stateChangeError', function (event, toState, toParams, fromState, fromParams, error) {            
+        $rootScope.$on('$stateChangeError', function (event, toState, toParams, fromState, fromParams, error) {
             $rootScope.stateIsLoading.showLoading = false;
             alert("Error occurred: Status" + error.status + ", " + error.statusText + ". The following request was unsuccessful: " + error.config.url + " Please refresh and try again.");
         });
-        
+
     }]);
     //app.config(function that defines the config code. 'ui.select', 'ngSanitize','$locationProvider', $locationProvider
-    app.config(['$stateProvider', '$urlRouterProvider', 
+    app.config(['$stateProvider', '$urlRouterProvider',
         function ($stateProvider, $urlRouterProvider) {
-            
+
             //if no active state, display state associated with this fragment identifier
             $urlRouterProvider.otherwise("/");
 
@@ -85,10 +85,10 @@
                             }
                         },
                         'mapSiteInfo@map': {
-                            templateUrl: 'component/site/mapSiteInfoView.html', 
+                            templateUrl: 'component/site/mapSiteInfoView.html',
                             controller: 'MapSiteInfoController'
                         },
-                        'mapPeaksView@map': {templateUrl: 'component/peak/mapPeaksView.html', controller: 'MapPeaksController'},
+                        'mapPeaksView@map': { templateUrl: 'component/peak/mapPeaksView.html', controller: 'MapPeaksController' },
                         'mapSensorPropose@map': {
                             templateUrl: 'component/sensor/mapSensorPropose.html',
                             resolve: {
@@ -192,7 +192,7 @@
                         }
                     }
                 })
-                
+
                 // reporting.reportDash
                 .state("reporting.reportDash", {
                     url: "/Dashboard",
@@ -229,11 +229,11 @@
                     controller: "settingsCtrl",
                     authenticate: true
                 })
-               
+
                 // members
                 .state("members", {
                     url: "/Members",
-                    params: { id: null},
+                    params: { id: null },
                     abstract: true,
                     template: "<div ui-view></div>",
                     controller: "memberCtrl",
@@ -248,9 +248,9 @@
                             return a.getAll().$promise;
                         },
                         userProfileId: function ($stateParams) {
-                            if ($stateParams.id !== undefined) 
+                            if ($stateParams.id !== undefined)
                                 return $stateParams.id;
-                            
+
                         }
                     }
                 })
@@ -260,7 +260,7 @@
                     url: "/MembersList",
                     templateUrl: "component/member/membersList.html",
                     authenticate: true
-                 })
+                })
 
                 // events
                 .state("events", {
@@ -428,14 +428,14 @@
                     url: "/ResourcesList",
                     templateUrl: "component/resources/resourcesList.html",
                     authenticate: true
-                })               
+                })
 
                 // all lookup htmls
                 .state("resources.ResourcesList.agency", {
                     url: "/Agencies",
                     templateUrl: "component/resources/agency.html",
                     authenticate: true
-                })                
+                })
                 .state("resources.ResourcesList.ContactType", {
                     url: "/ContactTypes",
                     templateUrl: "component/resources/contactType.html",
@@ -536,7 +536,7 @@
                     templateUrl: "component/resources/networkType.html",
                     authenticate: true
                 })
-               .state("resources.ResourcesList.VertCollMethod", {
+                .state("resources.ResourcesList.VertCollMethod", {
                     url: "/VerticalCollMethods",
                     templateUrl: "component/resources/verticalCollectionMethod.html",
                     authenticate: true
@@ -546,7 +546,7 @@
                     templateUrl: "component/resources/verticalDatum.html",
                     authenticate: true
                 })
-            
+
                 // bulk hwm adjustment page                                 
                 .state("bulkHWMAdj", {
                     url: "/BulkHWM_adjustments",
@@ -589,27 +589,27 @@
                             return c.getAll().$promise;
                         },
                         ht: 'HWM_TYPE',
-                        hwmTypeList: function (ht){
+                        hwmTypeList: function (ht) {
                             return ht.getAll().$promise;
                         },
                         m: 'MARKER',
-                        markerList: function (m){
+                        markerList: function (m) {
                             return m.getAll().$promise;
                         },
                         hq: 'HWM_QUALITY',
-                        hwmQualList: function (hq){
+                        hwmQualList: function (hq) {
                             return hq.getAll().$promise;
                         },
                         hd: 'HORIZONTAL_DATUM',
-                        horizDatumList: function (hd){
+                        horizDatumList: function (hd) {
                             return hd.getAll().$promise;
                         },
                         hcm: 'HORIZONTAL_COLL_METHODS',
-                        horCollMethList: function (hcm){
+                        horCollMethList: function (hcm) {
                             return hcm.getAll().$promise;
                         },
                         vd: 'VERTICAL_DATUM',
-                        vertDatumList: function (vd){
+                        vertDatumList: function (vd) {
                             return vd.getAll().$promise;
                         },
                         vcm: 'VERTICAL_COLL_METHOD',
@@ -626,15 +626,15 @@
                         },
                     }
                 })
-                
+
                 // site (abstract)
                 .state("site", {
                     url: "/Site/:id",
                     abstract: true,
                     params: {
                         id: null,
-                        latitude: {value: null, squash: true},
-                        longitude: {value: null, squash: true}
+                        latitude: { value: null, squash: true },
+                        longitude: { value: null, squash: true }
                     },
                     templateUrl: "component/site/site.html",
                     authenticate: true,
@@ -760,34 +760,34 @@
                             return sent.getAll().$promise;
                         },
                         sb: 'SENSOR_BRAND',
-                        allSensorBrands: function (sb){
+                        allSensorBrands: function (sb) {
                             return sb.getAll().$promise;
-                        },                       
+                        },
                         // hwm stuff
                         hwmt: 'HWM_TYPE',
                         allHWMTypes: function (hwmt) {
                             return hwmt.getAll().$promise;
                         },
                         hq: 'HWM_QUALITY',
-                        allHWMQualities: function (hq){
+                        allHWMQualities: function (hq) {
                             return hq.getAll().$promise;
                         },
                         m: 'MARKER',
-                        allMarkers: function (m){
+                        allMarkers: function (m) {
                             return m.getAll().$promise;
-                        }, 
+                        },
                         // file
                         ft: 'FILE_TYPE',
-                        allFileTypes: function(ft){
+                        allFileTypes: function (ft) {
                             return ft.getAll().$promise;
                         },
                         a: 'AGENCY',
-                        allAgencies: function(a){
+                        allAgencies: function (a) {
                             return a.getAll().$promise;
                         }
                     }
                 })
-               
+
                 // site.info
                 .state("site.dashboard", {
                     url: "/SiteDashboard",
@@ -802,7 +802,7 @@
                                     $scope.sessionEvent = $cookies.get('SessionEventName') !== null && $cookies.get('SessionEventName') !== undefined ? $cookies.get('SessionEventName') : "All Events";
                                 });
                             }],
-                            template: '<div><h2 style="margin-top:0">Site {{SiteNo}} - For {{sessionEvent}}</h2></div><hr />' 
+                            template: '<div><h2 style="margin-top:0">Site {{SiteNo}} - For {{sessionEvent}}</h2></div><hr />'
                         },
                         'aMap': {
                             controller: 'siteMapCtrl',
@@ -814,7 +814,7 @@
                                     }
                                 },
                                 dt: 'DEPLOYMENT_TYPE',
-                                deploymentTypes: function(thisSite, dt){
+                                deploymentTypes: function (thisSite, dt) {
                                     if (thisSite !== undefined) return dt.getAll().$promise;
                                 },
                                 s: 'SITE',
@@ -901,12 +901,12 @@
 
                 // QuickHWM page
                 .state("quickCreate", {
-                    url: "/QuickCreate/:id",                    
+                    url: "/QuickCreate/:id",
                     templateUrl: "component/site/quickCreate.html",
                     controller: "quickCreateCtrl",
                     authenticate: true,
                     resolve: {
-                        whichQuick: function ($stateParams){
+                        whichQuick: function ($stateParams) {
                             return $stateParams.id;
                         },
                         // site stuff                        
@@ -925,7 +925,7 @@
                         c: 'COUNTIES',
                         allCounties: function (c) {
                             return c.getAll().$promise;
-                        },    
+                        },
                         // op stuff                        
                         opt: 'OP_TYPE',
                         allOPTypes: function (opt) {
@@ -942,7 +942,7 @@
                         opQual: 'OP_QUALITY',
                         allOPQualities: function (opQual) {
                             return opQual.getAll().$promise;
-                        },                 
+                        },
                         // hwm stuff (if id='hwm'
                         hwmt: 'HWM_TYPE',
                         allHWMTypes: function (hwmt, $stateParams) {
@@ -979,7 +979,7 @@
                         }
                     }
                 });
-               
+
             //this causes issues with Status404 Not found on component/main/mainView.html
             //$locationProvider.html5Mode({
             //    enabled: true,

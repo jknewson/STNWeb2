@@ -52,7 +52,7 @@
                 esh.selected = false;
                 esh.files = allSiteFiles.filter(function (sf) { return sf.hwm_id == esh.hwm_id && sf.fileBelongsTo == "HWM File"; });
             });
-            
+
             $scope.eventSiteSensors = allSiteSensors.filter(function (s) { return s.event_id == $cookies.get('SessionEventID'); }); //maybe go from here to get all datafiles for each sensor
             for (var evSiteSen = 0; evSiteSen < $scope.eventSiteSensors.length; evSiteSen++) {
                 //angular.forEach($scope.eventSiteSensors, function (ess) {
@@ -72,7 +72,7 @@
                 }//end if this is a datafile requiring sensor
             }//);
 
-            
+
             // $scope.siteFilesForSensors = allSiteFiles.filter(function (f) { return f.instrument_id !== null && f.instrument_id > 0; });
             $scope.timeZoneList = ['UTC', 'PST', 'MST', 'CST', 'EST'];
             $scope.LoggedInMember = allMembers.filter(function (m) { return m.member_id == $cookies.get('mID'); })[0];
@@ -159,7 +159,7 @@
                 $rootScope.stateIsLoading.showLoading = false; // loading.. 
                 $uibModalInstance.dismiss('cancel');
             };
-            
+
             //is number
             $scope.isNum = function (evt) {
                 var theEvent = evt || window.event;
@@ -198,7 +198,7 @@
                 var timeParts = getTimeZoneStamp();
                 $scope.aPeak = { peak_date: { date: timeParts[0], time: timeParts[0] }, time_zone: timeParts[1], member_id: $cookies.get('mID') };
                 $scope.PeakCreator = allMembers.filter(function (m) { return m.member_id == $cookies.get('mID'); })[0];
-               
+
                 //#endregion new PEAK
             }
 
@@ -206,8 +206,8 @@
             $scope.showImageModal = function (image) {
                 var imageModal = $uibModal.open({
                     template: '<div class="modal-header"><h3 class="modal-title">Image File Preview</h3></div>' +
-                        '<div class="modal-body"><img ng-src="{{setSRC}}" /></div>' +
-                        '<div class="modal-footer"><button class="btn btn-primary" ng-enter="ok()" ng-click="ok()">OK</button></div>',
+                    '<div class="modal-body"><img ng-src="{{setSRC}}" /></div>' +
+                    '<div class="modal-footer"><button class="btn btn-primary" ng-enter="ok()" ng-click="ok()">OK</button></div>',
                     controller: ['$scope', '$uibModalInstance', function ($scope, $uibModalInstance) {
                         $scope.ok = function () {
                             $uibModalInstance.close();
@@ -221,7 +221,7 @@
 
             //#region hwm list stuff
             var formatSelectedHWM = function (h) {
-                var fhwm = {};                
+                var fhwm = {};
                 fhwm.approval_id = h.approval_id;
                 fhwm.hwm_label = h.hwm_label;
                 fhwm.bank = h.bank;
@@ -237,6 +237,7 @@
                 fhwm.hwm_locationdescription = h.hwm_locationdescription;
                 fhwm.hwm_notes = h.hwm_notes;
                 fhwm.hwm_uncertainty = h.hwm_uncertainty;
+                fhwm.uncertainty = h.uncertainty;
                 fhwm.hwm_quality_id = h.hwm_quality_id;
                 fhwm.hwm_type_id = h.hwm_type_id;
                 fhwm.latitude_dd = h.latitude_dd;
@@ -255,7 +256,7 @@
             //add or remove a hwm from the list of chosen hwms for determining this peak
             $scope.addHWM = function (h) {
                 var aHWM = formatSelectedHWM(h);
-                if (h.selected === true) {                    
+                if (h.selected === true) {
                     $scope.chosenHWMList.push(aHWM);
                 } else {
                     if ($scope.aPeak.peak_summary_id !== undefined) {
@@ -268,7 +269,7 @@
                     }
                 }
             };
-            
+
             //they want to see the details of the hwm, or not see it anymore
             $scope.showHWMDetails = function (h) {
                 $scope.hwmDetail = true; $scope.sensorDetail = false; $scope.dataFileDetail = false;
@@ -279,8 +280,8 @@
             $scope.primaryHWM = function (h) {
                 var setPrimHWM = $uibModal.open({
                     template: '<div class="modal-header"><h3 class="modal-title">Set as Primary</h3></div>' +
-                        '<div class="modal-body"><p>Are you sure you want to set this as the Primary HWM? Doing so will populate the Peak Date (not including time), Stage, Vertical Datum and Height Above Ground.</p></div>' +
-                        '<div class="modal-footer"><button class="btn btn-primary" ng-click="SetIt()">Set as Primary</button><button class="btn btn-primary" ng-click="cancel()">Cancel</button></div>',
+                    '<div class="modal-body"><p>Are you sure you want to set this as the Primary HWM? Doing so will populate the Peak Date (not including time), Stage, Vertical Datum and Height Above Ground.</p></div>' +
+                    '<div class="modal-footer"><button class="btn btn-primary" ng-click="SetIt()">Set as Primary</button><button class="btn btn-primary" ng-click="cancel()">Cancel</button></div>',
                     controller: ['$scope', '$uibModalInstance', function ($scope, $uibModalInstance) {
                         $scope.cancel = function () {
                             $uibModalInstance.dismiss();
@@ -311,7 +312,7 @@
             //#region sensor list stuff
             //add or remove a sensor from the list of chosen sensor for determining this peak
             $scope.addDataFile = function (datafile) {
-                var dataFile = {};                
+                var dataFile = {};
                 DATA_FILE.query({ id: datafile.data_file_id }).$promise.then(function (response) {
                     dataFile = response;
                     if (datafile.selected === true) {
@@ -346,8 +347,8 @@
                     $scope.DFBox.fileURL = f.name;
                     $scope.dataFileDetail = true; $scope.hwmDetail = false; $scope.sensorDetail = false;
                 });
-                
-                
+
+
             };
             //use this hwm to populate peak parts (primary sensor for determining peak)
             /*'<div class="modal-body"><p>Are you sure you want to set this as the Primary Data file? Doing so will populate the Peak Date, Time and time zone, Stage, Vertical Datum and Height Above Ground.</p></div>' +
@@ -355,8 +356,8 @@
             $scope.primaryDataFile = function (f) {
                 var setPrimeDF = $uibModal.open({
                     template: '<div class="modal-header"><h3 class="modal-title">Set as Primary</h3></div>' +
-                        '<div class="modal-body"><p>Are you sure you want to set this as the Primary Data file?</p><p>(Coming soon: Script processing to populate the Peak date, time and time zone, Stage, Vertical Datum and Height above ground)</p></div>' +
-                        '<div class="modal-footer"><button class="btn btn-primary" ng-click="SetIt()">Set as Primary</button><button class="btn btn-primary" ng-click="cancel()">Cancel</button></div>',
+                    '<div class="modal-body"><p>Are you sure you want to set this as the Primary Data file?</p><p>(Coming soon: Script processing to populate the Peak date, time and time zone, Stage, Vertical Datum and Height above ground)</p></div>' +
+                    '<div class="modal-footer"><button class="btn btn-primary" ng-click="SetIt()">Set as Primary</button><button class="btn btn-primary" ng-click="cancel()">Cancel</button></div>',
                     controller: ['$scope', '$uibModalInstance', function ($scope, $uibModalInstance) {
                         $scope.cancel = function () {
                             $uibModalInstance.dismiss();
@@ -385,7 +386,7 @@
             //save Peak
             $scope.savePeak = function (valid) {
                 if (valid) {
-                    var updatedPeak = {};                       
+                    var updatedPeak = {};
                     var datetime = new Date($scope.aPeak.peak_date.date.getFullYear(), $scope.aPeak.peak_date.date.getMonth(), $scope.aPeak.peak_date.date.getDate(),
                         $scope.aPeak.peak_date.time.getHours(), $scope.aPeak.peak_date.time.getMinutes(), $scope.aPeak.peak_date.time.getSeconds());
                     $scope.aPeak.peak_date = datetime;
@@ -439,18 +440,18 @@
             $scope.deletePeak = function () {
                 var deletePeakMdl = $uibModal.open({
                     template: '<div class="modal-header"><h3 class="modal-title">Remove Peak</h3></div>' +
-                        '<div class="modal-body"><p>Are you sure you want to delete this Peak?</p></div>' +
-                        '<div class="modal-footer"><button class="btn btn-primary" ng-click="Ok()">OK</button><button class="btn btn-warning" ng-click="cancel()">Cancel</button></div>',
+                    '<div class="modal-body"><p>Are you sure you want to delete this Peak?</p></div>' +
+                    '<div class="modal-footer"><button class="btn btn-primary" ng-click="Ok()">OK</button><button class="btn btn-warning" ng-click="cancel()">Cancel</button></div>',
                     controller: ['$scope', '$uibModalInstance', function ($scope, $uibModalInstance) {
                         $scope.Ok = function () {
                             $uibModalInstance.close();
                         };
                         $scope.cancel = function () {
                             $uibModalInstance.dismiss();
-                        };                       
+                        };
                     }],
                     size: 'sm'
-                });               
+                });
 
                 deletePeakMdl.result.then(function () {
                     var peakID = $scope.aPeak.peak_summary_id;
@@ -471,7 +472,7 @@
                             }
                         }
                         //for each $scope.eventSiteHWMs if h.selected == true.. PUT and remove PEAKID 
-                        
+
                         for (var h = 0; h < $scope.eventSiteHWMs.length; h++) {
                             var thisH = $scope.eventSiteHWMs[h];
                             if (thisH.selected) {
@@ -514,7 +515,7 @@
                         var createdPeak = {};
                         //format to combine the date and time back together into 1 date object
                         var datetime = new Date($scope.aPeak.peak_date.date.getFullYear(), $scope.aPeak.peak_date.date.getMonth(), $scope.aPeak.peak_date.date.getDate(),
-                           $scope.aPeak.peak_date.time.getHours(), $scope.aPeak.peak_date.time.getMinutes(), $scope.aPeak.peak_date.time.getSeconds());
+                            $scope.aPeak.peak_date.time.getHours(), $scope.aPeak.peak_date.time.getMinutes(), $scope.aPeak.peak_date.time.getSeconds());
                         $scope.aPeak.peak_date = datetime;
                         dealWithTimeStampb4Send(); //UTC or local?
 
@@ -541,8 +542,8 @@
                     //no data file or hwm checked as used, show modal
                     var setOneModal = $uibModal.open({
                         template: '<div class="modal-header"><h3 class="modal-title">Error</h3></div>' +
-                            '<div class="modal-body"><p>You must choose at least one HWM or Data File to use for interpretation for this Peak Summary.</p></div>' +
-                            '<div class="modal-footer"><button class="btn btn-primary" ng-click="Ok()">OK</button></div>',
+                        '<div class="modal-body"><p>You must choose at least one HWM or Data File to use for interpretation for this Peak Summary.</p></div>' +
+                        '<div class="modal-footer"><button class="btn btn-primary" ng-click="Ok()">OK</button></div>',
                         controller: ['$scope', '$uibModalInstance', function ($scope, $uibModalInstance) {
                             $scope.Ok = function () {
                                 $uibModalInstance.dismiss();
@@ -552,13 +553,13 @@
                     });
                 }
             };//end create()
-      
+
             $scope.showIncompleteDFInfo = function () {
                 var incompleteModal = $uibModal.open({
                     template: '<div class="modal-header"><h3 class="modal-title">Incomplete Data File</h3></div>' +
-                        '<div class="modal-body"><p>All RDGs, Met Station, and Rain Gage sensors require data file information in order to use as primary in the Peak summary.</p>' + 
-                        '<p>Please revisit the Retrieved Sensor and click on NWIS Data Connection to add a link to the NWIS data if you want to use as primary.</p></div>' +
-                        '<div class="modal-footer"><button class="btn btn-primary" ng-click="Ok()">OK</button></div>',
+                    '<div class="modal-body"><p>All RDGs, Met Station, and Rain Gage sensors require data file information in order to use as primary in the Peak summary.</p>' +
+                    '<p>Please revisit the Retrieved Sensor and click on NWIS Data Connection to add a link to the NWIS data if you want to use as primary.</p></div>' +
+                    '<div class="modal-footer"><button class="btn btn-primary" ng-click="Ok()">OK</button></div>',
                     controller: ['$scope', '$uibModalInstance', function ($scope, $uibModalInstance) {
                         $scope.Ok = function () {
                             $uibModalInstance.dismiss();
@@ -570,9 +571,9 @@
             $scope.showIncompleteHWMInfo = function () {
                 var incompleteModal = $uibModal.open({
                     template: '<div class="modal-header"><h3 class="modal-title">Incomplete HWM</h3></div>' +
-                        '<div class="modal-body"><p>Survey date and elevation are required in order to use as primary in the Peak summary.</p>' +
-                        '<p>Please revisit the HWM and add Survey date and elevation if you want to use as primary.</p><p>The HWM can be used for interpreation withouth a final elevation.</p></div>' +
-                        '<div class="modal-footer"><button class="btn btn-primary" ng-click="Ok()">OK</button></div>',
+                    '<div class="modal-body"><p>Survey date and elevation are required in order to use as primary in the Peak summary.</p>' +
+                    '<p>Please revisit the HWM and add Survey date and elevation if you want to use as primary.</p><p>The HWM can be used for interpreation withouth a final elevation.</p></div>' +
+                    '<div class="modal-footer"><button class="btn btn-primary" ng-click="Ok()">OK</button></div>',
                     controller: ['$scope', '$uibModalInstance', function ($scope, $uibModalInstance) {
                         $scope.Ok = function () {
                             $uibModalInstance.dismiss();
@@ -584,8 +585,8 @@
             $scope.showRetrieveInfo = function () {
                 var goRetrieveModal = $uibModal.open({
                     template: '<div class="modal-header"><h3 class="modal-title">Deployed Sensor</h3></div>' +
-                        '<div class="modal-body"><p>This senosr needs to be retrieved before a Peak can be created.</p></div>' +
-                        '<div class="modal-footer"><button class="btn btn-primary" ng-click="Ok()">OK</button></div>',
+                    '<div class="modal-body"><p>This senosr needs to be retrieved before a Peak can be created.</p></div>' +
+                    '<div class="modal-footer"><button class="btn btn-primary" ng-click="Ok()">OK</button></div>',
                     controller: ['$scope', '$uibModalInstance', function ($scope, $uibModalInstance) {
                         $scope.Ok = function () {
                             $uibModalInstance.dismiss();
