@@ -5,8 +5,8 @@
 
     var STNControllers = angular.module('STNControllers');
 
-    STNControllers.controller('approvalCtrl', ['$scope', '$state', '$cookies', '$rootScope', '$location', '$http', '$uibModal', 'stateList', 'countyList', 'instrumentList', 'allSensorTypes', 'allDepTypes', 'hwmQualList', 'hwmTypeList', 'HWM', 'DATA_FILE', 'INSTRUMENT', 'SITE',
-        function ($scope, $state, $cookies, $rootScope, $location, $http, $uibModal, stateList, countyList, instrumentList, allSensorTypes, allDepTypes, hwmQualList, hwmTypeList, HWM, DATA_FILE, INSTRUMENT, SITE) {
+    STNControllers.controller('approvalCtrl', ['$scope', '$state', '$cookies', '$rootScope', '$location', '$http', '$uibModal', 'stateList', 'countyList', 'instrumentList', 'allSensorTypes', 'allDepTypes', 'hwmQualList', 'hwmTypeList', 'HWM', 'DATA_FILE', 'INSTRUMENT', 'SITE', 'MEMBER',
+        function ($scope, $state, $cookies, $rootScope, $location, $http, $uibModal, stateList, countyList, instrumentList, allSensorTypes, allDepTypes, hwmQualList, hwmTypeList, HWM, DATA_FILE, INSTRUMENT, SITE, MEMBER) {
             if ($cookies.get('STNCreds') === undefined || $cookies.get('STNCreds') === "") {
                 $scope.auth = false;
                 $location.path('/login');
