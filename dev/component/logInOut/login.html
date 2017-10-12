@@ -1,5 +1,5 @@
 <div class="stn-home">
-    <p >
+    <p>
         The USGS Short-Term Network (STN) is a national-scale application and database designed to support USGS event-based sensor deployments and High-Water Mark (HWM)
         data collection efforts. The STN database is designed to encourage, but not require, repeated visits to temporary sensor deployment (wave or water level) or
         HWM locations. By developing a system that encourages repeated, as-needed deployments in the same locations, it facilitates the development of longer-term datasets
@@ -18,10 +18,25 @@
             <li>
                 View the REST data services:
                 <a href="https://stn.wim.usgs.gov/STNServices/#/" target="_blank">REST Service Documentation</a>
-            </li>            
+            </li>
         </ul>
     </p>
 
+    <!-- NEWS FEED -->
+    <div class="form-group" style="padding-top:0!important;">
+        <div class="panel panel-default site-panel" style="margin-left: 0!important; width: 100%!important;">
+            <div class="panel-heading">
+                <h3 class="panel-title">{{newsTitle}}</h3>
+            </div>
+            <div class="panel-body" style="height:160px; overflow:auto;">
+                <div ng-repeat="n in newsFeed">
+                    <span ng-bind-html="n"></span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- LOGIN INPUTS -->
     <form ng-submit="submit()" ng-controller="loginCtrl" class="login-form">
         <div class="stn-login-error">{{error}}</div>
 
@@ -46,9 +61,9 @@
             For new user log-in credentials, contact your Data Chief.<br />
             If you have questions about STN or need assistance, please contact:<br />
             <b>Todd Koenig, P.E.</b><br />
-            <b>Office of Surface Water</b><br/>
-            <b>U.S. Geological Survey</b><br/>
-            <b>Office: 573-308-3924</b><br/>
+            <b>Office of Surface Water</b><br />
+            <b>U.S. Geological Survey</b><br />
+            <b>Office: 573-308-3924</b><br />
             <b>email: tkoenig@usgs.gov</b><br />
         </small>
     </p>

@@ -662,7 +662,8 @@
     STNResource.factory('Login', ['$resource', function ($resource) {
         return $resource(rootURL + '/login',
             {}, {
-                login: { method: 'GET', cache: false, isArray: false }
+                login: { method: 'GET', cache: false, isArray: false },
+                getNewsFeed: { method: 'GET', url: "https://stntest.wim.usgs.gov/STNServices2/Confluence/STNNewsFeed" } //rootURL + "/Confluence/STNNewsFeed" }
             });
     }]);
 
