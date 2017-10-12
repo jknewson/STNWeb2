@@ -689,7 +689,8 @@
     STNResource.factory('Login', ['$resource', function ($resource) {
         return $resource(rootURL + '/login',
             {}, {
-                login: { method: 'GET', cache: false, isArray: false }
+                login: { method: 'GET', cache: false, isArray: false },
+                getNewsFeed: { method: 'GET', url: rootURL + "/Confluence/STNNewsFeed" }
             });
     }]);
 })();

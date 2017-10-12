@@ -3,17 +3,11 @@
 
     //look up common service module, and register the new factory with that module 
     var STNResource = angular.module('STNResource', ['ngResource']);
-<<<<<<< HEAD
-   // var rootURL = "https://stn.wim.usgs.gov/STNServices";
-      var rootURL = "https://stntest.wim.usgs.gov/STNServices2";
-   //var rootURL = "http://localhost/STNServices2";
-   
-=======
-    // var rootURL = "https://stn.wim.usgs.gov/STNServices";
+
+    //var rootURL = "https://stn.wim.usgs.gov/STNServices";
     var rootURL = "https://stntest.wim.usgs.gov/STNServices2";
     //var rootURL = "http://localhost/STNServices2";
 
->>>>>>> a43d583e95311687cd508693741e61100d6a5acf
     // GEOCODE https://geocoding.geo.census.gov/geocoder/geographies/coordinates?benchmark=4&vintage=4&format=json
     STNResource.factory('GEOCODE', ['$resource', function ($resource) {
         return $resource(rootURL + '/Geocode/location',
@@ -74,13 +68,13 @@
                 getAll: { method: 'GET', isArray: true },
                 getDFApproval: { method: 'GET', cache: false, isArray: false, url: rootURL + '/DataFiles/:id/Approval.json' },
                 getUnapprovedDFs: { method: 'GET', isArray: true, cache: false }, //?IsApproved={approved}&Event={eventId}&Counties={counties}&State={state}
-                getEventDataView: {method: 'GET', isArray: true, cache: false, url: rootURL + '/DataFileView?EventId=:eventId' },
+                getEventDataView: { method: 'GET', isArray: true, cache: false, url: rootURL + '/DataFileView?EventId=:eventId' },
                 runStormScript: { method: 'GET', url: rootURL + '/DataFiles/RunStormScript?SeaDataFileID=:seaDFID&AirDataFileID=:airDFID&Hertz=:hertz&Username=:username' },
                 runAirScript: { method: 'GET', url: rootURL + '/DataFiles/RunAirScript?AirDataFileID=:airDFID&Username=:username' },
                 approveDF: { method: 'POST', cache: false, isArray: false, params: { id: '@id' }, url: rootURL + '/datafiles/:id/Approve.json' }, //posts an APPROVAL, updates the data file with approval_id and returns APPROVAL
                 approveNWISDF: { method: 'POST', cache: false, isArray: false, params: { id: '@id' }, url: rootURL + '/datafiles/:id/NWISApprove.json' }, //posts an APPROVAL (using EventCoord), updates the data file with approval_id and returns APPROVAL
                 unApproveDF: { method: 'DELETE', cache: false, isArray: false, url: rootURL + '/datafiles/:id/Unapprove.json' }, //posts an APPROVAL, updates the datafile with approval_id and returns APPROVAL
-                stormScript: {method: 'GET', cache: false, isArray: false, url: rootURL + '/DataFiles/RunScript?SeaDataFileID=:seaDataFileId&AirDataFileID=:airDataFileId&Hertz=:hertz&Username=username' },
+                stormScript: { method: 'GET', cache: false, isArray: false, url: rootURL + '/DataFiles/RunScript?SeaDataFileID=:seaDataFileId&AirDataFileID=:airDataFileId&Hertz=:hertz&Username=username' },
                 update: { method: 'PUT', cache: false, isArray: false },
                 save: { method: 'POST', cache: false, isArray: false },
                 delete: { method: 'DELETE', cache: false, isArray: false }
@@ -227,13 +221,8 @@
                 getEventStateHWMs: { method: 'GET', isArray: true, url: rootURL + '/Events/:eventId/stateHWMs.json?State=:state' },
                 getEventSiteHWMs: { method: 'GET', isArray: true, url: rootURL + '/Sites/:siteId/EventHWMs.json' },//?Event=:eventId
                 getFilteredHWMs: { method: 'GET', isArray: true, url: rootURL + '/HWMs/FilteredHWMs.json' }, //Event={eventIds}&EventType={eventTypeIDs}&EventStatus={eventStatusID}&States={states}&County={counties}&HWMType={hwmTypeIDs}&HWMQuality={hwmQualIDs}&HWMEnvironment={hwmEnvironment}&SurveyComplete={surveyComplete}&StillWater={stillWater}
-<<<<<<< HEAD
-                getUnapprovedHWMs: { method: 'GET', isArray: true, cache: false }, //IsApproved={'true'/'false'}&Event={eventId}&Counties={counties}&State={state}
-                getHWMApproval: {method: 'GET', cache: false, isArray: false, url: rootURL + '/hwms/:id/Approval.json'},
-=======
                 getUnapprovedHWMs: { method: 'GET', isArray: true, cache: false }, //IsApproved={'true'/'false'}&Event={eventId}&Member={memberId}&State={state}
                 getHWMApproval: { method: 'GET', cache: false, isArray: false, url: rootURL + '/hwms/:id/Approval.json' },
->>>>>>> a43d583e95311687cd508693741e61100d6a5acf
                 approveHWM: { method: 'POST', cache: false, isArray: false, params: { id: '@id' }, url: rootURL + '/hwms/:id/Approve.json' }, //posts an APPROVAL, updates the HWM with approval_id and returns APPROVAL
                 unApproveHWM: { method: 'DELETE', cache: false, isArray: false, url: rootURL + '/hwms/:id/Unapprove.json' }, //posts an APPROVAL, updates the HWM with approval_id and returns APPROVAL
                 update: { method: 'PUT', cache: false, isArray: false },
@@ -572,12 +561,8 @@
         return $resource(rootURL + '/Sites/:id.json',
             {}, {
                 query: {},
-<<<<<<< HEAD
-                sensorScriptRunning: { method: 'GET', isArray: false, transformResponse: function (data) { return { value: angular.fromJson(data) } }, url: rootURL + '/Sites/:id/GetDataFileScript.json'},
-                getProximitySites: {method: 'GET', isArray: true, params: { Latitude: '@latitude', Longitude: '@longitude', Buffer: '@buffer' }},
-=======
+                sensorScriptRunning: { method: 'GET', isArray: false, transformResponse: function (data) { return { value: angular.fromJson(data) } }, url: rootURL + '/Sites/:id/GetDataFileScript.json' },
                 getProximitySites: { method: 'GET', isArray: true, params: { Latitude: '@latitude', Longitude: '@longitude', Buffer: '@buffer' } },
->>>>>>> a43d583e95311687cd508693741e61100d6a5acf
                 getAll: { method: 'GET', isArray: true },
                 getSearchedSite: { method: 'GET', isArray: false, url: rootURL + '/Sites/Search' }, //?bySiteNo={siteNo}&bySiteName={siteName}&bySiteId={siteId} (only going to populate 1 of these params
                 getFilteredSites: { method: 'GET', isArray: true, url: rootURL + '/Sites/FilteredSites.json' }, //accepts optional parameters: Event={eventId}&State={stateNames}&SensorType={sensorTypeId}&NetworkName={networkNameId}&OPDefined={opDefined}&HWMOnly={hwmOnlySites}&&HWMSurveyed={surveyedHWMs}
@@ -633,7 +618,7 @@
                 $rootScope.$broadcast('siteFilesUpdated', allSiteFiles);
             }
         };
-    }]);    
+    }]);
     // STATE
     STNResource.factory('STATE', ['$resource', function ($resource) {
         return $resource(rootURL + '/States/:id.json',
@@ -704,11 +689,8 @@
     STNResource.factory('Login', ['$resource', function ($resource) {
         return $resource(rootURL + '/login',
             {}, {
-                login: { method: 'GET', cache: false, isArray: false }
+                login: { method: 'GET', cache: false, isArray: false },
+                getNewsFeed: { method: 'GET', url: rootURL + "/Confluence/STNNewsFeed" }
             });
     }]);
-<<<<<<< HEAD
-=======
-
->>>>>>> a43d583e95311687cd508693741e61100d6a5acf
 })();

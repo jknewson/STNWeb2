@@ -38,7 +38,7 @@
                 }
             };
             $scope.mapMarkers = [];
-            
+
             var icons = {
                 stn: {
                     type: 'div',
@@ -65,7 +65,7 @@
                 }
             };
 
-            $scope.updateAddressOnly = function () {                
+            $scope.updateAddressOnly = function () {
                 if ($scope.DMS.LADeg !== undefined) $scope.aSite.latitude_dd = azimuth($scope.DMS.LADeg, $scope.DMS.LAMin, $scope.DMS.LASec);
                 if ($scope.DMS.LODeg !== undefined) $scope.aSite.longitude_dd = azimuth($scope.DMS.LODeg, $scope.DMS.LOMin, $scope.DMS.LOSec);
                 delete $http.defaults.headers.common.Authorization;
@@ -88,7 +88,7 @@
                         $rootScope.stateIsLoading.showLoading = false;// loading..
                         toastr.error("No location information came back from that lat/long");
                     }
-                }, function error (errorResponse){
+                }, function error(errorResponse) {
                     toastr.error("Error getting location information.");
                 });
             };
@@ -110,7 +110,7 @@
                 $scope.DMS.LODeg = longDMSarray[0] * -1;
                 $scope.DMS.LOMin = longDMSarray[1];
                 $scope.DMS.LOSec = longDMSarray[2];
-            
+
                 $scope.updateAddressOnly();
             });
 
@@ -166,7 +166,8 @@
                                     $rootScope.stateIsLoading.showLoading = false;// loading..
                                 }, function error(errorResponse) {
                                     $rootScope.stateIsLoading.showLoading = false;// loading..
-                                    toastr.error("Error: " + errorResponse.statusText);
+                                    if (errorResponse.headers(["usgswim-messages"]) !== undefined) toastr.error("Error getting proximity sites: " + errorResponse.headers(["usgswim-messages"]));
+                                    else toastr.error("Error getting proximity sites: " + errorResponse.statusText);
                                 }).$promise;
                             } else {
                                 $rootScope.stateIsLoading.showLoading = false;// loading..
@@ -183,8 +184,8 @@
                     //they did not type a lat/long first...
                     var emptyLatLongModal = $uibModal.open({
                         template: '<div class="modal-header"><h3 class="modal-title">Error</h3></div>' +
-                            '<div class="modal-body"><p>Please provide a Latitude and Longitude before clicking Verify Location</p></div>' +
-                            '<div class="modal-footer"><button type="button" class="btn btn-primary" ng-enter="ok()" ng-click="ok()">OK</button></div>',
+                        '<div class="modal-body"><p>Please provide a Latitude and Longitude before clicking Verify Location</p></div>' +
+                        '<div class="modal-footer"><button type="button" class="btn btn-primary" ng-enter="ok()" ng-click="ok()">OK</button></div>',
                         controller: ['$scope', '$uibModalInstance', function ($scope, $uibModalInstance) {
                             $scope.ok = function () {
                                 $uibModalInstance.close();
@@ -210,7 +211,7 @@
             }
 
             $scope.aSite.decDegORdms = 'dd';
-            
+
             $scope.originalSiteHousings = [];
             $scope.checked = ""; $scope.checkedName = "Not Defined"; //comparers for disabling network names if 'Not Defined' checked
             $scope.landowner = {};
@@ -227,13 +228,13 @@
 
             $scope.siteNetworkNames = []; //holds the NetworkName (list of strings) to pass back;
             $scope.siteNetworkTypes = []; //holds the NetworkType (list of strings) to pass back;
-           
+
             //SITE FILE PART /////            
             $scope.serverURL = SERVER_URL; //constant with stntest.wim.usgs.gov/STNServices2 
             $scope.fileTypeList = fileTypes.filter(function (ft) {
                 return ft.filetype === 'Photo' || ft.filetype === 'Historic Citation' || ft.filetype === 'Field Sheets' ||
-                                ft.filetype === 'Level Notes' || ft.filetype === 'Site Sketch' || ft.filetype === 'Other' || ft.filetype === 'Link' || ft.filetype === 'Sketch' ||
-                                ft.filetype === 'Landowner Permission Form';
+                    ft.filetype === 'Level Notes' || ft.filetype === 'Site Sketch' || ft.filetype === 'Other' || ft.filetype === 'Link' || ft.filetype === 'Sketch' ||
+                    ft.filetype === 'Landowner Permission Form';
             });
             $scope.allSFiles = Site_Files.getAllSiteFiles();
             //if thisSiteStuff is not undefined, filter the allSFiles and give me just those for the site ONLY
@@ -247,7 +248,7 @@
                 : [];// holder for site files added
             $scope.siteImageFiles = $scope.SITEFiles.filter(function (hf) { return hf.filetype_id === 1; }); //image files for carousel
             $scope.showFileForm = false; //hidden form to add file to site
-            
+
             // FILE STUFF
             $scope.stamp = FILE_STAMP.getStamp(); $scope.fileItemExists = true;
             //need to reupload fileItem to this existing file OR Change out existing fileItem for new one
@@ -267,9 +268,9 @@
                         site_id: $scope.aFile.site_id,
                         filetype_id: $scope.aFile.filetype_id,
                         source_id: $scope.aFile.source_id,
-                        path: $scope.aFile.path,                        
+                        path: $scope.aFile.path,
                         photo_date: $scope.aFile.photo_date,
-                        is_nwis: $scope.aFile.is_nwis                        
+                        is_nwis: $scope.aFile.is_nwis
                     },
                     File: $scope.aFile.File1 !== undefined ? $scope.aFile.File1 : $scope.aFile.File
                 };
@@ -304,15 +305,16 @@
                     $scope.fileItemExists = true;
                 }, function (errorResponse) {
                     $scope.sFileIsUploading = false;
-                    toastr.error("Error saving file: " + errorResponse.statusText);
+                    if (errorResponse.headers(["usgswim-messages"]) !== undefined) toastr.error("Error creating file: " + errorResponse.headers(["usgswim-messages"]));
+                    else toastr.error("Error creating file: " + errorResponse.statusText);
                 });
             };
             //show a modal with the larger image as a preview on the photo file for this hwm
             $scope.showImageModal = function (image) {
                 var imageModal = $uibModal.open({
                     template: '<div class="modal-header"><h3 class="modal-title">Image File Preview</h3></div>' +
-                        '<div class="modal-body"><img ng-src="{{setSRC}}" /></div>' +
-                        '<div class="modal-footer"><button class="btn btn-primary" ng-enter="ok()" ng-click="ok()">OK</button></div>',
+                    '<div class="modal-body"><img ng-src="{{setSRC}}" /></div>' +
+                    '<div class="modal-footer"><button class="btn btn-primary" ng-enter="ok()" ng-click="ok()">OK</button></div>',
                     controller: ['$scope', '$uibModalInstance', function ($scope, $uibModalInstance) {
                         $scope.ok = function () {
                             $uibModalInstance.close();
@@ -339,6 +341,9 @@
                     $scope.aFile = angular.copy(file);
                     FILE.getFileItem({ id: $scope.aFile.file_id }).$promise.then(function (response) {
                         $scope.fileItemExists = response.Length > 0 ? true : false;
+                    }, function (errorResponse) {
+                        if (errorResponse.headers(["usgswim-messages"]) !== undefined) toastr.error("Error getting file item: " + errorResponse.headers(["usgswim-messages"]));
+                        else toastr.error("Error getting file item: " + errorResponse.statusText);
                     });
                     $scope.aFile.fileType = $scope.fileTypeList.filter(function (ft) { return ft.filetype_id == $scope.aFile.filetype_id; })[0].filetype;
                     //determine if existing file is a photo (even if type is not )
@@ -357,6 +362,9 @@
                             $scope.aSource = s;
                             $scope.aSource.FULLname = $scope.aSource.source_name;
                             $scope.agencyNameForCap = $scope.agencies.filter(function (a) { return a.agency_id == $scope.aSource.agency_id; })[0].agency_name;
+                        }, function (errorResponse) {
+                            if (errorResponse.headers(["usgswim-messages"]) !== undefined) toastr.error("Error getting source: " + errorResponse.headers(["usgswim-messages"]));
+                            else toastr.error("Error getting source: " + errorResponse.statusText);
                         });
                     }//end if source
                 }//end existing file
@@ -368,7 +376,7 @@
                 } //end new file
                 $scope.showFileForm = true;
 
-                  
+
                 $scope.updateAgencyForCaption = function () {
                     if ($scope.aFile.filetype_id == 1)
                         $scope.agencyNameForCap = $scope.agencies.filter(function (a) { return a.agency_id == $scope.aSource.agency_id; })[0].agency_name;
@@ -415,7 +423,8 @@
                                 $scope.showFileForm = false; $scope.SITEfileIsUploading = false;
                             }, function (errorResponse) {
                                 $scope.SITEfileIsUploading = false;
-                                toastr.error("Error uploading file: " + errorResponse.statusText);
+                                if (errorResponse.headers(["usgswim-messages"]) !== undefined) toastr.error("Error creating file: " + errorResponse.headers(["usgswim-messages"]));
+                                else toastr.error("Error creating file: " + errorResponse.statusText);
                             });
                         } else {
                             $scope.aFile.source_id = response.source_id; $scope.aFile.site_id = $scope.aSite.site_id;
@@ -428,12 +437,14 @@
                                 $scope.showFileForm = false; $scope.SITEfileIsUploading = false;
                             }, function (errorResponse) {
                                 $scope.SITEfileIsUploading = false;
-                                toastr.error("Error saving file: " + errorResponse.statusText);
+                                if (errorResponse.headers(["usgswim-messages"]) !== undefined) toastr.error("Error creating file: " + errorResponse.headers(["usgswim-messages"]));
+                                else toastr.error("Error creating file: " + errorResponse.statusText);
                             });
                         }//end else
                     }, function (errorResponse) {
                         $scope.SITEfileIsUploading = false;
-                        toastr.error("Error creating Source info: " + errorResponse.statusText);
+                        if (errorResponse.headers(["usgswim-messages"]) !== undefined) toastr.error("Error creating source: " + errorResponse.headers(["usgswim-messages"]));
+                        else toastr.error("Error creating source: " + errorResponse.statusText);
                     });//end source.save()              
                 }//end valid
             };//end create()
@@ -451,7 +462,6 @@
                         var theSource = { source_name: $scope.aSource.FULLname, agency_id: $scope.aSource.agency_id };
                         SOURCE.save(theSource).$promise.then(function (response) {
                             $scope.aFile.source_id = response.source_id;
-                       // SOURCE.update({ id: $scope.aSource.source_id }, $scope.aSource).$promise.then(function () {
                             FILE.update({ id: $scope.aFile.file_id }, $scope.aFile).$promise.then(function (fileResponse) {
                                 toastr.success("File Updated");
                                 fileResponse.fileBelongsTo = "Site File";
@@ -461,11 +471,13 @@
                                 $scope.showFileForm = false; $scope.SITEfileIsUploading = false;
                             }, function (errorResponse) {
                                 $scope.SITEfileIsUploading = false;
-                                toastr.error("Error saving file: " + errorResponse.statusText);
+                                if (errorResponse.headers(["usgswim-messages"]) !== undefined) toastr.error("Error creating file: " + errorResponse.headers(["usgswim-messages"]));
+                                else toastr.error("Error creating file: " + errorResponse.statusText);
                             });
                         }, function (errorResponse) {
                             $scope.SITEfileIsUploading = false; //Loading...
-                            toastr.error("Error saving file: " + errorResponse.statusText);
+                            if (errorResponse.headers(["usgswim-messages"]) !== undefined) toastr.error("Error creating source: " + errorResponse.headers(["usgswim-messages"]));
+                            else toastr.error("Error creating source: " + errorResponse.statusText);
                         });
                     }
                 }//end valid
@@ -495,8 +507,9 @@
                         $scope.siteImageFiles.splice($scope.existIMGFileIndex, 1);
                         Site_Files.setAllSiteFiles($scope.allSFiles); //updates the file list on the sitedashboard
                         $scope.showFileForm = false;
-                    }, function error(errorResponse) {
-                        toastr.error("Error: " + errorResponse.statusText);
+                    }, function (errorResponse) {
+                        if (errorResponse.headers(["usgswim-messages"]) !== undefined) toastr.error("Error deleting file: " + errorResponse.headers(["usgswim-messages"]));
+                        else toastr.error("Error deleting file: " + errorResponse.statusText);
                     });
                 });//end DeleteModal.result.then
             };//end delete()
@@ -507,13 +520,13 @@
                 $scope.showFileForm = false;
             };
             //end FILE STUFF
-            
+
             //lat modal 
             var openLatModal = function (w) {
                 var latModal = $uibModal.open({
                     template: '<div class="modal-header"><h3 class="modal-title">Error</h3></div>' +
-                        '<div class="modal-body"><p>The Latitude must be between 0 and 73.0</p></div>' +
-                        '<div class="modal-footer"><button type="button" class="btn btn-primary" ng-enter="ok()" ng-click="ok()">OK</button></div>',
+                    '<div class="modal-body"><p>The Latitude must be between 0 and 73.0</p></div>' +
+                    '<div class="modal-footer"><button type="button" class="btn btn-primary" ng-enter="ok()" ng-click="ok()">OK</button></div>',
                     controller: ['$scope', '$uibModalInstance', function ($scope, $uibModalInstance) {
                         $scope.ok = function () {
                             $uibModalInstance.close();
@@ -531,8 +544,8 @@
             var openLongModal = function (w) {
                 var longModal = $uibModal.open({
                     template: '<div class="modal-header"><h3 class="modal-title">Error</h3></div>' +
-                        '<div class="modal-body"><p>The Longitude must be between -175.0 and -60.0</p></div>' +
-                        '<div class="modal-footer"><button type="button" class="btn btn-primary" ng-enter="ok()" ng-click="ok()">OK</button></div>',
+                    '<div class="modal-body"><p>The Longitude must be between -175.0 and -60.0</p></div>' +
+                    '<div class="modal-footer"><button type="button" class="btn btn-primary" ng-enter="ok()" ng-click="ok()">OK</button></div>',
                     controller: ['$scope', '$uibModalInstance', function ($scope, $uibModalInstance) {
                         $scope.ok = function () {
                             $uibModalInstance.close();
@@ -547,7 +560,7 @@
             };
 
             //make sure lat/long are right number range
-            $scope.checkValue = function (d,direction) {
+            $scope.checkValue = function (d, direction) {
                 if (d == 'dms') {
                     //check the degree value
                     if (direction == 'lat') {
@@ -615,13 +628,13 @@
                         ($scope.DMS.LODeg !== undefined && $scope.DMS.LOMin !== undefined && $scope.DMS.LOSec !== undefined)) {
                         //convert what's here for each lat and long
                         $scope.aSite.latitude_dd = azimuth($scope.DMS.LADeg, $scope.DMS.LAMin, $scope.DMS.LASec);
-                        $scope.aSite.longitude_dd = azimuth($scope.DMS.LODeg, $scope.DMS.LOMin, $scope.DMS.LOSec);                        
+                        $scope.aSite.longitude_dd = azimuth($scope.DMS.LODeg, $scope.DMS.LOMin, $scope.DMS.LOSec);
                     } else {
                         //show modal telling them to populate all three (DMS) for conversion to work
                         var DMSModal = $uibModal.open({
                             template: '<div class="modal-header"><h3 class="modal-title">Error</h3></div>' +
-                                '<div class="modal-body"><p>Please populate all three inputs for conversion from DMS to Decimal Degrees to work.</p></div>' +
-                                '<div class="modal-footer"><button type="button" class="btn btn-primary" ng-enter="ok()" ng-click="ok()">OK</button></div>',
+                            '<div class="modal-body"><p>Please populate all three inputs for conversion from DMS to Decimal Degrees to work.</p></div>' +
+                            '<div class="modal-footer"><button type="button" class="btn btn-primary" ng-enter="ok()" ng-click="ok()">OK</button></div>',
                             controller: ['$scope', '$uibModalInstance', function ($scope, $uibModalInstance) {
                                 $scope.ok = function () {
                                     $uibModalInstance.close();
@@ -659,7 +672,7 @@
             $scope.netTypeChg = function (nt) {
                 //store this to handle in PUT or POST
                 if (nt.selected) { //selected
-                    $scope.NetworkTYPEToAdd.push(nt); 
+                    $scope.NetworkTYPEToAdd.push(nt);
                     if ($scope.aSite.site_id !== undefined) { //if this is edit
                         //editing (remove from remove list if there)
                         var i = $scope.NetworkTYPEToRemove.map(function (e) { return e.network_type_id; }).indexOf(nt.network_type_id);
@@ -680,7 +693,7 @@
             $scope.whichOne = function (n) {
                 //store this to handle in PUT or POST
                 if (n.selected) { //selected
-                    $scope.NetworkNAMEToAdd.push(n); 
+                    $scope.NetworkNAMEToAdd.push(n);
                     if ($scope.aSite.site_id !== undefined) { //if this is edit
                         //editing (remove from remove list if there)
                         var i = $scope.NetworkNAMEToRemove.map(function (e) { return e.network_name_id; }).indexOf(n.network_name_id);
@@ -696,7 +709,7 @@
 
                     }
                 }
-                
+
                 if (n.name == "Not Defined" && n.selected === true) {
                     //they checked "not defined"
                     for (var nn = 0; nn < $scope.NetNameList.length; nn++) {
@@ -769,14 +782,20 @@
                                 //did they change anything to warrent a put
                                 LANDOWNER_CONTACT.update({ id: $scope.aSite.landownercontact_id }, $scope.landowner).$promise.then(function () {
                                     putSiteAndParts();
+                                }, function (errorResponse) {
+                                    if (errorResponse.headers(["usgswim-messages"]) !== undefined) toastr.error("Error creating landowner contact: " + errorResponse.headers(["usgswim-messages"]));
+                                    else toastr.error("Error creating landowner contact: " + errorResponse.statusText);
                                 });
                             } else if ($scope.landowner.fname !== undefined || $scope.landowner.lname !== undefined || $scope.landowner.title !== undefined ||
-                                    $scope.landowner.address !== undefined || $scope.landowner.city !== undefined || $scope.landowner.primaryphone !== undefined) {
+                                $scope.landowner.address !== undefined || $scope.landowner.city !== undefined || $scope.landowner.primaryphone !== undefined) {
                                 //they added something.. POST (rather than just clicking button and not)
                                 LANDOWNER_CONTACT.save($scope.landowner, function success(response) {
                                     $scope.aSite.landownercontact_id = response.landownercontactid;
                                     putSiteAndParts();
-                                }, function error(errorResponse) { toastr.error("Error adding Landowner: " + errorResponse.statusText); });
+                                }, function error(errorResponse) {
+                                    if (errorResponse.headers(["usgswim-messages"]) !== undefined) toastr.error("Error creating landowner contact: " + errorResponse.headers(["usgswim-messages"]));
+                                    else toastr.error("Error creating landowner contact: " + errorResponse.statusText);
+                                });
                             } else putSiteAndParts();
                         } else putSiteAndParts();
                     }
@@ -802,12 +821,12 @@
                     angular.forEach($scope.NetworkNAMEToRemove, function (nnL) {
                         var delNNProm = SITE.deleteSiteNetworkName({ siteId: $scope.aSite.site_id, networkNameId: nnL.network_name_id }).$promise;
                         RemovePromises.push(delNNProm);
-                    });                   
+                    });
                     //Remove NetTypes
                     angular.forEach($scope.NetworkTYPEToRemove, function (ntL) {
                         var delNTProm = SITE.deleteSiteNetworkType({ siteId: $scope.aSite.site_id, networkTypeId: ntL.network_type_id }).$promise;
-                        RemovePromises.push(delNTProm);                                                
-                    });                    
+                        RemovePromises.push(delNTProm);
+                    });
                     //Add siteHousings
                     if ($scope.houseDirty === true) {
                         angular.forEach($scope.siteHouseTypesTable, function (ht) {
@@ -827,13 +846,13 @@
                     angular.forEach($scope.NetworkNAMEToAdd, function (AnnL) {
                         $scope.siteNetworkNames.push(AnnL.name);
                         var addNNProm = SITE.postSiteNetworkName({ siteId: $scope.aSite.site_id, networkNameId: AnnL.network_name_id }).$promise;
-                        AddPromises.push(addNNProm);                    
+                        AddPromises.push(addNNProm);
                     });
                     //Add NetTypes
                     angular.forEach($scope.NetworkTYPEToAdd, function (AnTL) {
                         $scope.siteNetworkTypes.push(AnTL.network_type_name);
                         var addNTProm = SITE.postSiteNetworkType({ siteId: $scope.aSite.site_id, networkTypeId: AnTL.network_type_id }).$promise;
-                        AddPromises.push(addNTProm);                        
+                        AddPromises.push(addNTProm);
                     });
 
                     //ok now run the removes, then the adds and then pass the stuff back out of here.
@@ -860,8 +879,8 @@
                     }); //all added
                 }, function error(errorResponse) {
                     $rootScope.stateIsLoading.showLoading = false; // loading..
-                    if (errorResponse.headers(["usgswim-messages"]) !== undefined) toastr.error("Error updating Site: " + errorResponse.headers(["usgswim-messages"]));
-                    else toastr.error("Error updating Site: " + errorResponse.statusText);
+                    if (errorResponse.headers(["usgswim-messages"]) !== undefined) toastr.error("Error saving Site: " + errorResponse.headers(["usgswim-messages"]));
+                    else toastr.error("Error saving Site: " + errorResponse.statusText);
                 });//end SITE.save(...
             }; // end PUTsite()
 
@@ -923,14 +942,15 @@
                         delete $scope.aSite.Creator; delete $scope.aSite.decDegORdms;
                         if ($scope.addLandowner === true) {
                             if ($scope.landowner.fname !== undefined || $scope.landowner.lname !== undefined || $scope.landowner.title !== undefined ||
-                                           $scope.landowner.address !== undefined || $scope.landowner.city !== undefined || $scope.landowner.primaryphone !== undefined) {
+                                $scope.landowner.address !== undefined || $scope.landowner.city !== undefined || $scope.landowner.primaryphone !== undefined) {
                                 LANDOWNER_CONTACT.save($scope.landowner, function success(response) {
                                     $scope.aSite.landownercontact_id = response.landownercontactid;
                                     //now post the site
                                     postSiteAndParts();
                                 }, function error(errorResponse) {
                                     $rootScope.stateIsLoading.showLoading = false; // loading.. 
-                                    toastr.error("Error posting landowner: " + errorResponse.statusText);
+                                    if (errorResponse.headers(["usgswim-messages"]) !== undefined) toastr.error("Error saving landowner contact: " + errorResponse.headers(["usgswim-messages"]));
+                                    else toastr.error("Error saving landowner contact: " + errorResponse.statusText);
                                 });
                             } else {
                                 postSiteAndParts();
@@ -965,8 +985,16 @@
                                 });
 
                                 var sensorTypeID = sID;
-                                var inst = { deployment_type_id: propSens.deployment_type_id, site_id: createdSiteID, sensor_type_id: sensorTypeID };
+                                var inst = {
+                                    event_id: 0,
+                                    location_description: "Proposed sensor at this site. Change description when deploying sensor.",
+                                    deployment_type_id: propSens.deployment_type_id,
+                                    site_id: createdSiteID,
+                                    sensor_type_id: sensorTypeID
+                                };
+                                var instrumentID = 0;
                                 INSTRUMENT.save(inst).$promise.then(function (insResponse) {
+                                    instrumentID = insResponse.instrument_id;
                                     var instStat = { instrument_id: insResponse.instrument_id, status_type_id: 4, member_id: $scope.aSite.member_id, time_stamp: new Date(), time_zone: 'UTC' };
                                     INSTRUMENT_STATUS.save(instStat).$promise.then(function () {
                                         //when done looping, go to last step in this post
@@ -974,11 +1002,15 @@
                                             finishPOST(createdSiteID);
                                     }, function (errorResponse) {
                                         $rootScope.stateIsLoading.showLoading = false; // loading.. 
-                                        toastr.error("Error adding proposed Sensor: " + errorResponse.statusText);
+                                        // if status fails, delete instrument
+                                        INSTRUMENT.delete({ id: instrumentID });
+                                        if (errorResponse.headers(["usgswim-messages"]) !== undefined) toastr.error("Error creating proposed sensor: " + errorResponse.headers(["usgswim-messages"]));
+                                        else toastr.error("Error creating proposed sensor: " + errorResponse.statusText);
                                     });//end status post
                                 }, function (errorResponse) {
                                     $rootScope.stateIsLoading.showLoading = false; // loading.. 
-                                    toastr.error("Error adding proposed Sensor: " + errorResponse.statusText);
+                                    if (errorResponse.headers(["usgswim-messages"]) !== undefined) toastr.error("Error creating proposed sensor: " + errorResponse.headers(["usgswim-messages"]));
+                                    else toastr.error("Error creating proposed sensor: " + errorResponse.statusText);
                                 });//end sensor post
                             });//end angular.foreach on proposed sensors
                         } else finishPOST(createdSiteID);
@@ -987,10 +1019,11 @@
                     }
                 }, function (errorResponse) {
                     $rootScope.stateIsLoading.showLoading = false; // loading.. 
-                    toastr.error("Error creating site: " + errorResponse.statusText);
+                    if (errorResponse.headers(["usgswim-messages"]) !== undefined) toastr.error("Error creating site: " + errorResponse.headers(["usgswim-messages"]));
+                    else toastr.error("Error creating site: " + errorResponse.statusText);
                 });
             };//end postSiteand Parts
-        
+
             if (thisSiteStuff !== undefined) {
                 //#region existing site 
                 //$scope.aSite[0], $scope.originalSiteHousings[1], $scope.existingSiteHouseTypesTable[2], thisSiteNetworkNames[3], siteNetworkTypes[4], $scope.landowner[5]
@@ -1016,7 +1049,7 @@
                     $scope.originalSiteHousings = thisSiteStuff[1]; //for multiselect .selected = true/false
                     $scope.showSiteHouseTable = true;
                     $scope.siteHouseTypesTable = thisSiteStuff[2]; //for table to show all info on house type
-                   
+
                     //go through allHousingTypeList and add selected Property.
                     for (var ht = 0; ht < $scope.allHousingTypeList.length; ht++) {
                         //for each one, if thisSiteHousings has this id, add 'selected:true' else add 'selected:false'
@@ -1035,7 +1068,7 @@
 
                 }//end if thisSiteHousings != undefined
 
-                
+
 
                 //apply any site network names or types
                 if (thisSiteStuff[3].length > 0) {
@@ -1048,7 +1081,7 @@
                                 e = projNNames.length;
                             } else {
                                 $scope.NetNameList[a].selected = false;
-                            }                            
+                            }
                         }
                         if (projNNames.length === 0)
                             $scope.NetNameList[a].selected = false;
@@ -1069,7 +1102,7 @@
                                 ny = projNType.length;
                             } else {
                                 $scope.NetTypeList[ni].selected = false;
-                            }                            
+                            }
                         }
                         if (projNType.length === 0)
                             $scope.NetTypeList[ni].selected = false;
@@ -1097,7 +1130,8 @@
                     $scope.aSite.access_granted = "Not Needed";
                     //TODO: get member's id in there too
                 }, function error(errorResponse) {
-                    toastr.error("Error getting Member info: " + errorResponse.statusText);
+                    if (errorResponse.headers(["usgswim-messages"]) !== undefined) toastr.error("Error getting logged in member: " + errorResponse.headers(["usgswim-messages"]));
+                    else toastr.error("Error getting logged in member: " + errorResponse.statusText);
                 });
                 $scope.s = { sOpen: true }; //accordions
                 //#endregion this is a NEW SITE CREATE (site == undefined)
@@ -1117,7 +1151,7 @@
             $scope.HouseTypeClick = function (ht) {
                 $scope.houseDirty = true; //they clicked it..used when post/put
                 //add/remove house type and inputs to table row -- foreach on post or put will handle the rest
-           
+
                 //new site being created
                 if (ht.selected === true) {
                     var houseT = { type_name: ht.type_name, housing_type_id: ht.housing_type_id, length: ht.length, material: ht.material, notes: ht.notes, amount: 1 };
@@ -1135,7 +1169,7 @@
                         $scope.showSiteHouseTable = false;
                     }
                 }
-            
+
             };
 
             // want to add a landowner contact
@@ -1160,8 +1194,8 @@
                 var thisSite = $scope.aSite;
                 var dSiteModal = $uibModal.open({
                     template: '<div class="modal-header"><h3 class="modal-title">Delete Site</h3></div>' +
-                        '<div class="modal-body"><p>Are you sure you want to delete site {{siteNo}}?</p></div>' +
-                        '<div class="modal-footer"><button type="button" class="btn btn-danger" ng-click="deleteIt()">Delete</button><button type="button" class="btn btn-primary" ng-click="ok()">Cancel</button></div>',
+                    '<div class="modal-body"><p>Are you sure you want to delete site {{siteNo}}?</p></div>' +
+                    '<div class="modal-footer"><button type="button" class="btn btn-danger" ng-click="deleteIt()">Delete</button><button type="button" class="btn btn-primary" ng-click="ok()">Cancel</button></div>',
                     controller: ['$scope', '$uibModalInstance', function ($scope, $uibModalInstance) {
                         $scope.siteNo = thisSite.site_no;
                         $scope.ok = function () {
@@ -1180,7 +1214,7 @@
                         toastr.success("Site Removed");
                         var sendBack = "Deleted";
                         $uibModalInstance.close(sendBack);
-                    }, function error(errorResponse) {
+                    }, function (errorResponse) {
                         $uibModal.open({
                             template: '<div class="modal-header"><h3 class="modal-title">Error</h3></div>' +
                             '<div class="modal-body"><p>{{message}}</p></div>' +
@@ -1191,10 +1225,8 @@
                                     $uibModalInstance.dismiss('cancel');
                                 };
                             }], size: 'sm'
-                        });                       
+                        });
                     });
-                }, function () {
-                    //logic for cancel
                 });//end modal
             };
 
