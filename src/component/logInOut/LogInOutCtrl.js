@@ -3,9 +3,25 @@
 
     var LogInOutController = angular.module('LogInOutController', []);
 
-    LogInOutController.controller('loginCtrl', ['$scope', '$state', '$location', '$uibModal', '$http', '$cookies', '$rootScope', '$document', 'SERVER_URL', 'ENVIRONMENT', 'Login', 
-        function ($scope, $state, $location, $uibModal, $http, $cookies, $rootScope, $document, SERVER_URL, ENVIRONMENT, Login) {
+    LogInOutController.controller('loginCtrl', ['$scope', '$state', '$location', '$uibModal', '$sce', '$http', '$cookies', '$rootScope', '$document', 'SERVER_URL', 'ENVIRONMENT', 'Login',
+        function ($scope, $state, $location, $uibModal, $sce, $http, $cookies, $rootScope, $document, SERVER_URL, ENVIRONMENT, Login) {
             //login //
+            $scope.newsTitle = "";
+            $scope.newsFeed = [];
+
+            Login.getNewsFeed({},
+                function success(response) {
+                    $scope.newsTitle = response.title;
+                    var paragraphTags = [];
+                    paragraphTags = response.body.storage.value.split("<p>");
+                    paragraphTags.forEach(function (p) {
+                        $scope.newsFeed.push($sce.trustAsHtml(p));
+                    });
+                }, function error(errorResponse) {
+                    $scope.newsTitle = "STN Notices";
+                    $scope.newsFeed.push("Currently not available.");
+                }
+            );
             //#region CAP lock Check
             $('[type=password]').keypress(function (e) {
                 var $password = $(this),
@@ -30,12 +46,12 @@
             if ($document[0].documentMode !== undefined) {
                 var browserInstance = $uibModal.open({
                     template: '<div class="modal-header"><h3 class="modal-title">Warning</h3></div>' +
-                               '<div class="modal-body"><p>This application uses functionality that is not completely supported by Internet Explorer. The preferred browser is Chrome (bison connect).</p></div>' +
-                               '<div class="modal-footer"><button class="btn btn-primary" ng-click="ok()">OK</button></div>',
+                    '<div class="modal-body"><p>This application uses functionality that is not completely supported by Internet Explorer. The preferred browser is Chrome (bison connect).</p></div>' +
+                    '<div class="modal-footer"><button class="btn btn-primary" ng-click="ok()">OK</button></div>',
                     controller: ['$scope', '$uibModalInstance', function ($scope, $uibModalInstance) {
                         $scope.ok = function () {
                             $uibModalInstance.close();
-                        };                        
+                        };
                     }],
                     size: 'sm'
                 });
@@ -56,8 +72,8 @@
                 var up = $scope.username + ":" + $scope.password;
                 $http.defaults.headers.common.Authorization = 'Basic ' + btoa(up);
                 $http.defaults.headers.common.Accept = 'application/json';
-                
-                Login.login({}, 
+
+                Login.login({},
                     function success(response) {
                         var user = response;
                         if (user !== undefined) {
@@ -95,9 +111,9 @@
                             $rootScope.userID = user.member_id;
                             $rootScope.userRole = $cookies.get('usersRole');
                             if ($rootScope.returnToState !== undefined) {
-                                $state.go($rootScope.returnToState, {id: $rootScope.returnToStateParams});
+                                $state.go($rootScope.returnToState, { id: $rootScope.returnToStateParams });
                             } else {
-                                $state.go('map');                                    
+                                $state.go('map');
                             }
                         }
                         else {
@@ -110,8 +126,8 @@
                         //modal for error
                         var modalInstance = $uibModal.open({
                             template: '<div class="modal-header"><h3 class="modal-title">Error</h3></div>' +
-                                       '<div class="modal-body"><p>There was an error.</p><p>Error: {{status}} - {{statusText}}</p></div>' +
-                                       '<div class="modal-footer"><button class="btn btn-primary" ng-click="ok()">OK</button></div>',
+                            '<div class="modal-body"><p>There was an error.</p><p>Error: {{status}} - {{statusText}}</p></div>' +
+                            '<div class="modal-footer"><button class="btn btn-primary" ng-click="ok()">OK</button></div>',
                             controller: ['$scope', '$uibModalInstance', function ($scope, $uibModalInstance) {
                                 $scope.ok = function () {
                                     $uibModalInstance.close();
@@ -130,7 +146,7 @@
         }]);
 
     //logOut
-    LogInOutController.controller('logoutCtrl', ['$scope', '$rootScope', '$cookies', '$location', 
+    LogInOutController.controller('logoutCtrl', ['$scope', '$rootScope', '$cookies', '$location',
         function ($scope, $rootScope, $cookies, $location) {
             $scope.logout = function () {
                 //clear $cookies
