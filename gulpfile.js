@@ -60,7 +60,7 @@ pipes.validatedAppScripts = function () {
 
 pipes.builtAppScriptsDev = function () {
     return pipes.validatedAppScripts()
-        .pipe(rev())
+        //   .pipe(rev())
         .pipe(gulp.dest(paths.dev));
 };
 
@@ -149,7 +149,7 @@ pipes.builtPartialsProd = function () {
 ///stripped out sass compiler - sass not in use
 pipes.builtAppStylesDev = function () {
     return gulp.src(paths.appStyles)
-        .pipe(rev())
+        //   .pipe(rev())
         .pipe(gulp.dest(paths.dev));
 };
 

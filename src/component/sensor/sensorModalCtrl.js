@@ -37,6 +37,123 @@
             $scope.view = { DEPval: 'detail', RETval: 'detail' };
             $scope.sensorDataNWIS = false; //is this a rain gage, met station, or rdg sensor -- if so, data file must be created pointing to nwis (we don't store actual file, just metadata with link)
             $scope.s = { depOpen: true, sFileOpen: false, NWISFileOpen: false };
+            $scope.chopperResponse = false; //set to true and show highchart with chopper results
+            $scope.chopperResponseKeys = [];
+            $scope.chartOptions = {};
+            $scope.chartData = [];
+            Array.prototype.zip = function (arr) {
+                return this.map(function (e, i) {
+                    return [e, arr[i]];
+                })
+            };
+            $scope.my_function = function (w) {
+                var test = w;
+            };
+            $scope.runChopper = function () {
+                FILE.getTESTdata().$promise.then(function (response) {
+                    $scope.chopperResponseKeys = Object.keys(response);
+                    $scope.chartData = response.time.zip(response.pressure);
+                    $scope.chartOptions = {
+                        chart: {
+                            zoomType: 'x',
+                            panning: true,
+                            panKey: 'shift'
+                        },
+                        boostThreshold: 2000,
+                        plotOptions: {
+                            series: {
+                                cursor: 'pointer',
+                                point: {
+                                    events: {
+                                        click: function () {
+                                            var pointClick = $uibModal.open({
+                                                template: '<div class="modal-header"><h3 class="modal-title"></h3></div>' +
+                                                '<div class="modal-body"><p>Would you like to set this ({{thisDate}}) as:</p>' +
+                                                '<div style="text-align:center;"><span class="radio-inline"><input type="radio" name="whichDate" ng-model="whichDate" value="StartDate" />Good Start Date</span>' +
+                                                '<span class="radio-inline"><input type="radio" name="whichDate" ng-model="whichDate" value="EndDate" />Good End Date</span></div>' +
+                                                '</div>' +
+                                                '<div class="modal-footer"><button class="btn btn-primary" ng-enter="ok()" ng-click="ok()">OK</button>' +
+                                                '<button class="btn btn-primary" ng-enter="cancel()" ng-click="cancel()">Cancel</button></div>',
+                                                controller: ['$scope', '$uibModalInstance', 'chosenDate', function ($scope, $uibModalInstance, chosenDate) {
+                                                    $scope.ok = function () {
+                                                        if ($scope.whichDate == "") alert("No Date chosen");
+                                                        else {
+                                                            var parts = [$scope.whichDate, chosenDate];
+                                                            $uibModalInstance.close(parts);
+                                                        };
+                                                    };
+                                                    $scope.cancel = function () {
+                                                        $uibModalInstance.dismiss();
+                                                    }
+                                                    $scope.whichDate = "";
+                                                    $scope.thisDate = new Date(chosenDate);
+                                                }],
+                                                resolve: {
+                                                    chosenDate: this.x
+                                                },
+                                                size: 'sm'
+                                            });
+                                            pointClick.result.then(function (parts) {
+                                                var theDate = new Date(parts[1]).toISOString();
+                                                var d = getDateTimeParts(theDate);
+                                                if (parts[0] == "StartDate") $scope.datafile.good_start = d;
+                                                else $scope.datafile.good_end = d;
+                                            });
+                                        },
+                                        mouseOver: function () {
+                                            if (this.series.halo) {
+                                                this.series.halo.attr({
+                                                    'class': 'highcharts-tracker'
+                                                }).toFront();
+                                            }
+                                        }
+                                    }
+                                },
+                                marker: {
+                                    enabled: false // turn dots off
+                                }
+                            }
+                        },
+                        title: {
+                            text: 'Chopper Results'
+                        },
+                        subtitle: {
+                            text: 'Click and drag to zoom in. Hold down shift key to pan.'
+                        },
+                        xAxis: {
+                            title: {
+                                text: $scope.chopperResponseKeys[1]
+                            },
+                            type: 'datetime',
+                            dateTimeLabelFormats: {
+                                second: '%Y-%m-%d<br/>%H:%M:%S',
+                                minute: '%Y-%m-%d<br/>%H:%M',
+                                hour: '%Y-%m-%d<br/>%H:%M',
+                                day: '%Y<br/>%m-%d',
+                                week: '%Y<br/>%m-%d',
+                                month: '%Y-%m',
+                                year: '%Y'
+                            }
+                        },
+                        yAxis: {
+                            title: {
+                                text: $scope.chopperResponseKeys[0]
+                            },
+                            labels: {
+                                format: '{value} psi'
+                            }
+                        },
+
+                        series: [{
+                            data: $scope.chartData
+                        }]
+                    };
+                    $scope.chopperResponse = true;
+                }, function (error) {
+                    console.log(error);
+                });
+            };
+
             //formatting date and time properly for chrome and ff
             var getDateTimeParts = function (d) {
                 var theDate;
@@ -215,9 +332,9 @@
                     $scope.processor = allMembers.filter(function (m) { return m.member_id == $cookies.get('mID'); })[0];
                     var dt = getTimeZoneStamp();
                     $scope.datafile.collect_date = dt[0];
-                    $scope.datafile.time_zone = dt[1]; //will be converted to utc on post/put 
-                    $scope.datafile.good_start = new Date();
-                    $scope.datafile.good_end = new Date();
+                    $scope.datafile.time_zone = "UTC";// dt[1]; //will be converted to utc on post/put 
+                    $scope.datafile.good_start = null;//new Date();
+                    $scope.datafile.good_end = null;//new Date();
                 } //end new file
                 $scope.showFileForm = true;
 
@@ -1247,7 +1364,7 @@
                 //displaying date / time it user's timezone
                 var DeptimeParts = getTimeZoneStamp();
                 $scope.aSensStatus.time_stamp = DeptimeParts[0];
-                $scope.aSensStatus.time_zone = DeptimeParts[1]; //will be converted to utc on post/put          
+                $scope.aSensStatus.time_zone = "UTC";// DeptimeParts[1]; //will be converted to utc on post/put          
                 $scope.aSensStatus.member_id = $cookies.get('mID'); // member logged in is deploying it
                 $scope.EventName = $cookies.get('SessionEventName');
                 $scope.Deployer = $scope.LoggedInMember;

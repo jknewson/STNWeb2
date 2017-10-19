@@ -2,10 +2,10 @@
     /* controllers.js, 'leaflet-directive''ui.unique','ngTagsInput',*/
     'use strict';
     var STNControllers = angular.module('STNControllers');
-    
+
     //try this one Monday:::
     //http://www.ng-newsletter.com/posts/d3-on-angular.html
-    STNControllers.directive('barsChart',['$parse', function ($parse) {
+    STNControllers.directive('barsChart', ['$parse', function ($parse) {
         var directiveDefinitionObject = {
             //We restrict its use to an element as usually  <bars-chart> is semantically more understandable
             restrict: 'E',
@@ -21,11 +21,11 @@
                 var chart = d3.select(element[0]);
                 //to our original directive markup bars-chart we add a div with out chart stling and bind each data entry to the chart
                 chart.append("div").attr("class", "chart")
-                 .selectAll('div')
-                 .data(scope.data).enter().append("div")
-                 .transition().ease("elastic")
-                 .style("width", function (d) { return d + "%"; })
-                 .text(function (d) { return d + "%"; });
+                    .selectAll('div')
+                    .data(scope.data).enter().append("div")
+                    .transition().ease("elastic")
+                    .style("width", function (d) { return d + "%"; })
+                    .text(function (d) { return d + "%"; });
                 //a little of magic: setting it's width based on the data value (d) and text all with a smooth transition
                 scope.$watch('data', function (newValue, oldValue) {
                     scope.data = newValue;
@@ -44,12 +44,12 @@
             },
             replace: true,
             template: '<div class="searchnav">' +
-                          '<div class="searchby"><b>Search By:</b>'+
-                              '<div class="searchbyoption"><input type="radio" name="SearchBy" ng-model="searchBy.val" value="bySiteId" />ID</div>'+
-                              '<div class="searchbyoption"><input type="radio" name="SearchBy" ng-model="searchBy.val" value="bySiteNo" />Number</div>' +
-                              '<div class="searchbyoption"><input type="radio" name="SearchBy" ng-model="searchBy.val" value="bySiteName" />Name</div></div>' +
-                              '<div class="search-input"><input ng-focus="goSearch" type="text" ng-model="searchTerm" ng-enter="IndexSearchSites()" placeholder="Search Sites..." />'+
-                              '<button type="button" class="borderLess" ng-click="IndexSearchSites()">Search <i class="ion-search"></i></button></div></div>',
+            '<div class="searchby"><b>Search By:</b>' +
+            '<div class="searchbyoption"><input type="radio" name="SearchBy" ng-model="searchBy.val" value="bySiteId" />ID</div>' +
+            '<div class="searchbyoption"><input type="radio" name="SearchBy" ng-model="searchBy.val" value="bySiteNo" />Number</div>' +
+            '<div class="searchbyoption"><input type="radio" name="SearchBy" ng-model="searchBy.val" value="bySiteName" />Name</div></div>' +
+            '<div class="search-input"><input ng-focus="goSearch" type="text" ng-model="searchTerm" ng-enter="IndexSearchSites()" placeholder="Search Sites..." />' +
+            '<button type="button" class="borderLess" ng-click="IndexSearchSites()">Search <i class="ion-search"></i></button></div></div>',
 
             controller: [
                 '$scope', '$state', '$http', 'SITE', '$uibModal',
@@ -90,8 +90,8 @@
                             //errorstatus show modal with error message 'no site found'
                             var errorModal = $uibModal.open({
                                 template: '<div class="modal-header"><h3 class="modal-title">Error</h3></div>' +
-                                    '<div class="modal-body"><p>No site found. For more site search options, go to the Sites navigation tab to search for sites.</p></div>' +
-                                    '<div class="modal-footer"><button type="button" class="btn btn-primary" ng-click="ok()">OK</button></div>',
+                                '<div class="modal-body"><p>No site found. For more site search options, go to the Sites navigation tab to search for sites.</p></div>' +
+                                '<div class="modal-footer"><button type="button" class="btn btn-primary" ng-click="ok()">OK</button></div>',
                                 controller: ['$scope', '$uibModalInstance', function ($scope, $uibModalInstance) {
                                     $scope.ok = function () {
                                         $uibModalInstance.close();
@@ -275,7 +275,7 @@
             return {
                 restrict: 'A',
                 require: 'ngModel',
-                link: function(scope, element, attr, ngModelCtrl) {
+                link: function (scope, element, attr, ngModelCtrl) {
                     var pattern = /[^a-zA-Z0-9- _]/g;
 
                     function fromUser(text) {
@@ -306,5 +306,36 @@
             }
         };
     });
-    
+
+    // Directive for generic chart, pass in chart options
+    STNControllers.directive('hcChart', function () {
+        return {
+            restrict: 'E',
+            template: '<div></div>',
+            scope: {
+                options: '='
+            },
+            link: function (scope, element) {
+                Highcharts.chart(element[0], scope.options);
+            }
+
+        };
+    });
+    /*STNControllers.directive('hcChart', function () {
+        return {
+            restrict: 'E',
+            template: '<div></div>',
+            scope: {
+                options: '='
+            },
+            link: function (scope, element, attrs) {
+                Highcharts.chart(element[0], scope.options);
+                scope.$watch(function () { return attrs.chart; }, function () {
+                    if (!attrs.chart) return;
+                    var chart = scope.example_chart;
+                    element.highcharts(chart);
+                });
+            }
+        };
+    });*/
 })();

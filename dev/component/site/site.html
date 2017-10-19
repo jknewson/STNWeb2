@@ -4483,7 +4483,7 @@
                         </button>
                     </div>
                     <br clear="all" />
-                    <!-- list of existing files for this op -->
+                    <!-- list of existing files for this sensor -->
                     <div class="col-md-6" ng-if="DepSensorFiles.length > 0">
                         <ul style="padding-left: 0">
                             <li ng-repeat="f in DepSensorFiles" style="list-style:none;padding-bottom: 15px;">
@@ -4512,7 +4512,7 @@
                         <form class="form-horizontal" name="DepSenFILEForm">
                             <fieldset>
                                 <!-- File Type* -->
-                                <div class="form-group" ng-class="{'has-error':DepSenFILEForm.filetype_id.$invalid && DepSenFILEForm.filetype_id.$dirty}" style="margin:0;padding:0">
+                                <div class="form-group" ng-class="{'has-error':DepSenFILEForm.filetype_id.$invalid && DepSenFILEForm.filetype_id.$dirty}" style="margin:0;padding:0;padding-top:5px;">
                                     <label class="col-md-4 control-label req" for="filetype_id">
                                         File Type:
                                         <button type="button" class="help-btn" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Required">
@@ -4528,7 +4528,7 @@
                                 </div>
 
                                 <!--Upload Single Image with validations*-->
-                                <div ng-if="aFile.file_id === undefined && aFile.filetype_id !== 8" class="form-group" style="margin:0;padding:0">
+                                <div ng-if="aFile.file_id === undefined && aFile.filetype_id !== 8" class="form-group" style="margin:0;padding:0;padding-top:5px;">
                                     <label class="col-md-4 control-label" for="FILE">
                                         Upload File:
                                         <button type="button" class="help-btn" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Required">
@@ -4543,7 +4543,7 @@
                                 <br clear="all" />
 
                                 <!--File URL (LINK file)-->
-                                <div ng-if="aFile.filetype_id === 8" class="form-group" style="margin:0;padding:0">
+                                <div ng-if="aFile.filetype_id === 8" class="form-group" style="margin:0;padding:0;padding-top:5px;">
                                     <label class="col-md-4 control-label" for="name">File URL:</label>
                                     <div class="col-md-6">
                                         <input class="form-control" name="name" ng-model="aFile.name" type="text" />
@@ -4552,15 +4552,16 @@
                                         <span class="glyphicon glyphicon-question-sign"></span>
                                     </button>
                                 </div>
+
                                 <!--Data Processed by (Data) -->
-                                <div ng-if="aFile.filetype_id === 2" class="form-group" style="margin:0;padding:0">
+                                <div ng-if="aFile.filetype_id === 2" class="form-group" style="margin:0;padding:0;padding-top:5px;">
                                     <label class="col-md-4 control-label" for="processor_id">Data Process By:</label>
                                     <div class="col-md-6">
                                         <span>{{processor.fname}} {{processor.lname}}</span>
                                     </div>
                                 </div>
                                 <!-- Date Collected/Processed* (data)-->
-                                <div ng-if="aFile.filetype_id === 2" class="form-group" ng-class="{'has-error':DepSenFILEForm.collect_date.$invalid && DepSenFILEForm.collect_date.$dirty}" style="margin:0;padding:0">
+                                <div ng-if="aFile.filetype_id === 2" class="form-group" ng-class="{'has-error':DepSenFILEForm.collect_date.$invalid && DepSenFILEForm.collect_date.$dirty}" style="margin:0;padding:0;padding-top:5px;">
                                     <label class="col-md-4 control-label req" for="collect_date">
                                         Date Collected/Processed:
                                         <button type="button" class="help-btn" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Required">
@@ -4578,7 +4579,7 @@
                                 </div>
 
                                 <!--Source Name (photo)-->
-                                <div class="form-group" ng-if="aFile.filetype_id === 1" ng-class="{'has-error':DepSenFILEForm.FULLname.$invalid && DepSenFILEForm.FULLname.$dirty}" style="margin:0;padding:0">
+                                <div class="form-group" ng-if="aFile.filetype_id === 1" ng-class="{'has-error':DepSenFILEForm.FULLname.$invalid && DepSenFILEForm.FULLname.$dirty}" style="margin:0;padding:0;padding-top:5px;">
                                     <label class="col-md-4 control-label req" for="source_id">
                                         Source Photographer:
                                         <button type="button" class="help-btn" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Required">
@@ -4591,7 +4592,7 @@
                                 </div>
 
                                 <!--Source Name (all other)-->
-                                <div class="form-group" ng-if="aFile.filetype_id  > 2" ng-class="{'has-error':DepSenFILEForm.FULLname.$invalid && DepSenFILEForm.FULLname.$dirty}" style="margin:0;padding:0">
+                                <div class="form-group" ng-if="aFile.filetype_id  > 2" ng-class="{'has-error':DepSenFILEForm.FULLname.$invalid && DepSenFILEForm.FULLname.$dirty}" style="margin:0;padding:0;padding-top:5px;">
                                     <label class="col-md-4 control-label req" for="source_id">
                                         Source Name:
                                         <button type="button" class="help-btn" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Required">
@@ -4604,7 +4605,7 @@
                                 </div>
 
                                 <!--Source Agency* (photo, allOther)-->
-                                <div ng-if="aFile.filetype_id === 1 || aFile.filetype_id > 2" class="form-group" ng-class="{'has-error':DepSenFILEForm.agency_id.$invalid && DepSenFILEForm.agency_id.$dirty}" style="margin:0;padding:0">
+                                <div ng-if="aFile.filetype_id === 1 || aFile.filetype_id > 2" class="form-group" ng-class="{'has-error':DepSenFILEForm.agency_id.$invalid && DepSenFILEForm.agency_id.$dirty}" style="margin:0;padding:0;padding-top:5px;">
                                     <label class="col-md-4 control-label req" for="agency_id">
                                         Source Agency:
                                         <button type="button" class="help-btn" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Required">
@@ -4620,7 +4621,7 @@
                                 </div>
 
                                 <!-- Photo Date * (photo) -->
-                                <div ng-if="aFile.filetype_id === 1" class="form-group" ng-class="{'has-error':DepSenFILEForm.photo_date.$invalid && DepSenFILEForm.photo_date.$dirty}" style="margin:0;padding:0">
+                                <div ng-if="aFile.filetype_id === 1" class="form-group" ng-class="{'has-error':DepSenFILEForm.photo_date.$invalid && DepSenFILEForm.photo_date.$dirty}" style="margin:0;padding:0;padding-top:5px;">
                                     <label class="col-md-4 control-label req" for="photo_date">
                                         Photo Date:
                                         <button type="button" class="help-btn" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Required">
@@ -4638,7 +4639,7 @@
                                 </div>
 
                                 <!-- Date Uploaded* (photo, data, allother) -->
-                                <div ng-if="aFile.filetype_id > 0" class="form-group" ng-class="{'has-error':DepSenFILEForm.file_date.$invalid && DepSenFILEForm.file_date.$dirty}" style="margin:0;padding:0">
+                                <div ng-if="aFile.filetype_id > 0" class="form-group" ng-class="{'has-error':DepSenFILEForm.file_date.$invalid && DepSenFILEForm.file_date.$dirty}" style="margin:0;padding:0;padding-top:5px;">
                                     <label class="col-md-4 control-label req" for="file_date">
                                         Date Uploaded:
                                         <button type="button" class="help-btn" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Required">
@@ -4656,7 +4657,7 @@
                                 </div>
 
                                 <!--Description*(photo, data, allother)-->
-                                <div ng-if="aFile.filetype_id > 0" class="form-group" ng-class="{'has-error':DepSenFILEForm.description.$invalid && DepSenFILEForm.description.$dirty}" style="margin:0;padding:0">
+                                <div ng-if="aFile.filetype_id > 0" class="form-group" ng-class="{'has-error':DepSenFILEForm.description.$invalid && DepSenFILEForm.description.$dirty}" style="margin:0;padding:0;padding-top:5px;">
                                     <label class="col-md-4 control-label req" for="description">
                                         Description:
                                         <button type="button" class="help-btn" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Required">
@@ -4671,8 +4672,21 @@
                                     </button>
                                 </div>
 
+                                <!-- show button for Chopper if file.filetype_id == 2 and file is present -->
+                                <div class="form_group">
+                                    <!-- ng-if="aFile.filetype_id === 2 && aFile.File" class="form-group"> -->
+                                    <label class="col-md-4 control-label"></label>
+                                    <div class="col-md-4 input-group" style="padding-right:14px;padding-left:14px">
+                                        <button type="button" class="btn btn-primary" ng-click="runChopper()">Run Chopper</button>
+                                    </div>
+                                </div>
+
+                                <div ng-if="chopperResponse">
+                                    <!-- highchart goes here -->
+                                    <hc-chart options="chartOptions"></hc-chart>
+                                </div>
                                 <!-- Good Data Start Time* (data) -->
-                                <div ng-if="aFile.filetype_id === 2" class="form-group" ng-class="{'has-error':DepSenFILEForm.good_start.$invalid && DepSenFILEForm.good_start.$dirty}" style="margin:0;padding:0">
+                                <div ng-if="aFile.filetype_id === 2" class="form-group" ng-class="{'has-error':DepSenFILEForm.good_start.$invalid && DepSenFILEForm.good_start.$dirty}" style="margin:0;padding:0;padding-top:5px;">
                                     <label class="col-md-4 control-label req" for="good_start" style="margin-top:4%">
                                         Good Data Start Time:
                                         <button type="button" class="help-btn" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Required">
@@ -4690,7 +4704,7 @@
                                 </div>
 
                                 <!-- Good Data End Time* (data)-->
-                                <div ng-if="aFile.filetype_id === 2" class="form-group" ng-class="{'has-error':DepSenFILEForm.good_end.$invalid && DepSenFILEForm.good_end.$dirty}" style="margin:0;padding:0">
+                                <div ng-if="aFile.filetype_id === 2" class="form-group" ng-class="{'has-error':DepSenFILEForm.good_end.$invalid && DepSenFILEForm.good_end.$dirty}" style="margin:0;padding:0;padding-top:5px;">
                                     <label class="col-md-4 control-label req" for="good_end" style="margin-top:4%">
                                         Good Data End Time:
                                         <button type="button" class="help-btn" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Required">
@@ -4710,7 +4724,7 @@
                                 <span class="error" ng-show="DepSenFILEForm.good_end.$error.higherThan">Max cannot be lower than min.</span>
 
                                 <!-- Timezone*: -->
-                                <div ng-if="aFile.filetype_id === 2" class="form-group" style="margin:0;padding:0">
+                                <div ng-if="aFile.filetype_id === 2" class="form-group" style="margin:0;padding:0;padding-top:5px;">
                                     <label class="col-md-4 control-label req">
                                         Time Zone:
                                         <button type="button" class="help-btn" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Required">
@@ -4728,7 +4742,7 @@
                                 </div>
 
                                 <!-- Elevation -->
-                                <div ng-if="aFile.filetype_id === 2" class="form-group" style="margin:0;padding:0">
+                                <div ng-if="aFile.filetype_id === 2" class="form-group" style="margin:0;padding:0;padding-top:5px;">
                                     <label class="col-md-4 control-label">Elevation:</label>
                                     <div class="col-md-6">
                                         <span class="radio-inline">
@@ -4749,7 +4763,7 @@
                                 </div>
 
                                 <!-- Photo Latitude (photo)-->
-                                <div ng-if="aFile.filetype_id === 1" class="form-group" style="margin:0;padding:0">
+                                <div ng-if="aFile.filetype_id === 1" class="form-group" style="margin:0;padding:0;padding-top:5px;">
                                     <label class="col-md-4 control-label" for="latitude_dd">Photo Latitude <br /> (if different):</label>
                                     <div class="col-md-6">
                                         <input class="form-control" ng-keypress="isNum($event)" name="latitude_dd" id="latitude_dd" ng-model="aFile.latitude_dd"
@@ -4758,7 +4772,7 @@
                                 </div>
 
                                 <!--Photo Longitude (photo)-->
-                                <div ng-if="aFile.filetype_id === 1" class="form-group" style="margin:0;padding:0">
+                                <div ng-if="aFile.filetype_id === 1" class="form-group" style="margin:0;padding:0;padding-top:5px;">
                                     <label class="col-md-4 control-label" for="longitude_dd">Photo Longitude <br /> (if different):</label>
                                     <div class="col-md-6">
                                         <input class="form-control" ng-keypress="isNum($event)" id="longitude_dd" name="longitude_dd" ng-model="aFile.longitude_dd"
@@ -4766,8 +4780,8 @@
                                     </div>
                                 </div>
 
-                                <div ng-if="aFile.filetype_id === 1" class="form-group" style="margin:0;padding:0">
-                                    <label class="col-md-4 control-label" for="Caption">Preview Caption:</button></label>
+                                <div ng-if="aFile.filetype_id === 1" class="form-group" style="margin:0;padding:0;padding-top:5px;">
+                                    <label class="col-md-4 control-label" for="Caption">Preview Caption:</label>
                                     <div class="col-md-6">
                                         <span>
                                             Photo of {{aFile.description || ' (Description HERE) '}} at {{thisSensorSite.site_description}}, {{thisSensorSite.county}}, {{thisSensorSite.state}}, {{aFile.photo_date | date: 'MM/dd/yyyy' || ' Date taken HERE '}}. Photograph by {{aSource.FULLname || ' Source Name HERE ' }}, {{agencyNameForCap || ' Agency HERE '}}.
