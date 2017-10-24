@@ -646,7 +646,8 @@
                     authenticate: true,
                     controller: ['$scope', '$stateParams', 'Site_Script', 'runningScript', function ($scope, $stateParams, Site_Script, runningScript) {
                         $scope.siteID = $stateParams.id;
-                        Site_Script.setIsScriptRunning(runningScript.value);
+                        if ($scope.siteID != "0") Site_Script.setIsScriptRunning(runningScript.value);
+                        else Site_Script.setIsScriptRunning("false");
                     }],
                     resolve: {
                         // site stuff
