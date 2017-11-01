@@ -74,10 +74,12 @@
                 for (var dt = 0; dt < $scope.deployTypeList.length; dt++) {
                     if ($scope.deployTypeList[dt].selected === true) {
                         var proposedToAdd = {}; var propStatToAdd = {};
-                       
+
                         if ($scope.deployTypeList[dt].method.substring(0, 4) == "Temp") {
                             //temperature proposed sensor
                             proposedToAdd = {
+                                event_id: 0,
+                                location_description: "Proposed sensor at this site. Change description when deploying sensor.",
                                 deployment_type_id: $scope.deployTypeList[dt].deployment_type_id,
                                 site_id: $scope.thisSite.site_id,
                                 sensor_type_id: $scope.deployTypeList[dt].method == "Temperature (Pressure Transducer)" ? 1 : 2,
@@ -93,6 +95,8 @@
                             });
                             //any other type
                             proposedToAdd = {
+                                event_id: 0,
+                                location_description: "Proposed sensor at this site. Change description when deploying sensor.",
                                 deployment_type_id: $scope.deployTypeList[dt].deployment_type_id,
                                 site_id: $scope.thisSite.site_id,
                                 sensor_type_id: sID
@@ -109,15 +113,15 @@
                                 sensor_type_id: response.sensor_type_id,
                                 instrument_id: response.instrument_id,
                                 deploymentType: $scope.deployTypeList.filter(function (dtl) { return dtl.deployment_type_id == response.deployment_type_id; })[0].method,
-                                sensorType: $scope.sensDepTypes.filter(function (s) { return s.sensor_type_id == response.sensor_type_id;})[0].sensor
+                                sensorType: $scope.sensDepTypes.filter(function (s) { return s.sensor_type_id == response.sensor_type_id; })[0].sensor
                             };
                             propStatToAdd = { instrument_id: response.instrument_id, status_type_id: 4, member_id: $cookies.get('mID'), time_stamp: Time_STAMP, time_zone: 'UTC', };
 
                             INSTRUMENT_STATUS.save(propStatToAdd).$promise.then(function (statResponse) {
                                 propStatToAdd.status = 'Proposed'; propStatToAdd.instrument_status_id = statResponse.instrument_status_id;
-                                createdPropSensor.instrument_status = [propStatToAdd];                               
+                                createdPropSensor.instrument_status = [propStatToAdd];
                                 $scope.ProposedSensors4Site.push(createdPropSensor);
-                                
+
                                 //clean up ...all unchecked and then hide
                                 for (var dep = 0; dep < $scope.deployTypeList.length; dep++) {
                                     $scope.deployTypeList[dep].selected = false;
