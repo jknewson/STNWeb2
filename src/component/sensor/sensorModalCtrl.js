@@ -50,7 +50,20 @@
                 var test = w;
             };
             $scope.runChopper = function () {
-                FILE.getTESTdata().$promise.then(function (response) {
+                $http.defaults.headers.common.Authorization = 'Basic ' + $cookies.get('STNCreds');
+                $http.defaults.headers.common.Accept = 'application/json';
+                var fileParts = {
+                    FileEntity: {
+                        site_id: $scope.thisSensorSite.site_id,
+                        instrument_id: thisSensor.instrument_id
+                    },
+                    File: $scope.aFile.File
+                };
+                //need to put the fileParts into correct format for send
+                var fd = new FormData();
+                fd.append("FileEntity", JSON.stringify(fileParts.FileEntity));
+                fd.append("File", fileParts.File);
+                DATA_FILE.runChopperScript(fd).$promise.then(function (response) {
                     $scope.chopperResponseKeys = Object.keys(response);
                     $scope.chartData = response.time.zip(response.pressure);
                     $scope.chartOptions = {
