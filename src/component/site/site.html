@@ -4672,12 +4672,13 @@
                                     </button>
                                 </div>
 
-                                <!-- show button for Chopper if file.filetype_id == 2 and file is present -->
-                                <div class="form_group">
+                                <!-- show button for Chopper if  and file is present -->
+                                <div class="form_group" ng-if="aFile.filetype_id == 2">
                                     <!-- ng-if="aFile.filetype_id === 2 && aFile.File" class="form-group"> -->
                                     <label class="col-md-4 control-label"></label>
                                     <div class="col-md-4 input-group" style="padding-right:14px;padding-left:14px">
                                         <button type="button" class="btn btn-primary" ng-click="runChopper()">Run Chopper</button>
+                                        <div ng-show="smlallLoaderGo"><img src="images/loading1.gif" /></div>
                                     </div>
                                 </div>
 
