@@ -321,7 +321,7 @@
 
         };
     });
-    /*STNControllers.directive('hcChart', function () {
+    /* STNControllers.directive('hcChart', function () {
         return {
             restrict: 'E',
             template: '<div></div>',
@@ -330,10 +330,26 @@
             },
             link: function (scope, element, attrs) {
                 Highcharts.chart(element[0], scope.options);
-                scope.$watch(function () { return attrs.chart; }, function () {
-                    if (!attrs.chart) return;
-                    var chart = scope.example_chart;
-                    element.highcharts(chart);
+                attrs.chart = new Highcharts(element[0], {
+                    chart: {
+                        type: 'line',
+                        zoomType: 'x',
+                        panning: true,
+                        panKey: 'shift'
+                    },
+                    boostThreshold: 2000,
+                    title: {
+                        text: 'Chopper Results'
+                    },
+                    subtitle: {
+                        text: 'Click and drag to zoom in. Hold down shift key to pan.'
+                    }
+                });
+                // Highcharts.chart(element[0], scope.options);
+                scope.$watch(function () {
+                    return attrs.series;
+                }, function () {
+                    attrs.chart.series.setData($parse(attrs.series)(scope).data);
                 });
             }
         };

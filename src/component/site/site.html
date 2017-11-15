@@ -4684,7 +4684,7 @@
 
                                 <div ng-if="chopperResponse">
                                     <!-- highchart goes here -->
-                                    <hc-chart options="chartOptions"></hc-chart>
+                                    <hc-chart id="chopperChart" options="chartOptions"></hc-chart>
                                 </div>
                                 <!-- Good Data Start Time* (data) -->
                                 <div ng-if="aFile.filetype_id === 2" class="form-group" ng-class="{'has-error':DepSenFILEForm.good_start.$invalid && DepSenFILEForm.good_start.$dirty}" style="margin:0;padding:0;padding-top:5px;">

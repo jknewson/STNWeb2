@@ -46,10 +46,15 @@
                     return [e, arr[i]];
                 })
             };
-            $scope.my_function = function (w) {
-                var test = w;
-            };
+
+            //$scope.renderer = new Highcharts.Renderer(
             $scope.runChopper = function () {
+                $scope.chartData = [];
+                $scope.chartOptions = {};
+                if ($scope.chartObj) {
+                    $scope.chartObj.xAxis[0].removePlotLine("start");
+                    $scope.chartObj.xAxis[0].removePlotLine("end");
+                }
                 if ($scope.aFile.File !== undefined) {
                     $http.defaults.headers.common.Authorization = 'Basic ' + $cookies.get('STNCreds');
                     $http.defaults.headers.common.Accept = 'application/json';
@@ -71,6 +76,11 @@
                         $scope.chartData = response.time.zip(response.pressure);
                         $scope.chartOptions = {
                             chart: {
+                                events: {
+                                    load: function () {
+                                        $scope.chartObj = this;
+                                    }
+                                },
                                 zoomType: 'x',
                                 panning: true,
                                 panKey: 'shift'
@@ -78,49 +88,63 @@
                             boostThreshold: 2000,
                             plotOptions: {
                                 series: {
+                                    events: {
+                                        click: function (event) {
+                                            var pointClick = $uibModal.open({
+                                                template: '<div class="modal-header"><h3 class="modal-title"></h3></div>' +
+                                                '<div class="modal-body"><p>Would you like to set this ({{thisDate}}) as:</p>' +
+                                                '<div style="text-align:center;"><span class="radio-inline"><input type="radio" name="whichDate" ng-model="whichDate" value="start" />Good Start Date</span>' +
+                                                '<span class="radio-inline"><input type="radio" name="whichDate" ng-model="whichDate" value="end" />Good End Date</span></div>' +
+                                                '</div>' +
+                                                '<div class="modal-footer"><button class="btn btn-primary" ng-enter="ok()" ng-click="ok()">OK</button>' +
+                                                '<button class="btn btn-primary" ng-enter="cancel()" ng-click="cancel()">Cancel</button></div>',
+                                                controller: ['$scope', '$uibModalInstance', 'chosenDate', 'xEvent', function ($scope, $uibModalInstance, chosenDate, xEvent) {
+                                                    $scope.ok = function () {
+                                                        if ($scope.whichDate == "") alert("No Date chosen");
+                                                        else {
+                                                            var parts = [$scope.whichDate, chosenDate, xEvent];
+                                                            $uibModalInstance.close(parts);
+                                                        };
+                                                    };
+                                                    $scope.cancel = function () {
+                                                        $uibModalInstance.dismiss();
+                                                    }
+                                                    $scope.whichDate = "";
+                                                    $scope.thisDate = new Date(chosenDate);
+                                                }],
+                                                resolve: {
+                                                    chosenDate: event.point.category,
+                                                    xEvent: event.chartX
+                                                },
+                                                size: 'sm'
+                                            });
+                                            pointClick.result.then(function (parts) {
+                                                var chart = $scope.chartObj.xAxis[0];
+                                                // check if there's already a plotline with this id and remove it if so
+                                                chart.removePlotLine(parts[0]);
+                                                // add the plot line to visually see where they added
+                                                chart.addPlotLine({
+                                                    value: chart.toValue(parts[2]),
+                                                    color: parts[0] == "start" ? '#00ff00' : '#ff0000',
+                                                    width: 2,
+                                                    id: parts[0],
+                                                    zIndex: 19999,
+                                                    label: { text: parts[0] }
+                                                });
+                                                var theDate = new Date(parts[1]).toISOString();
+                                                var d = getDateTimeParts(theDate);
+                                                if (parts[0] == "start") $scope.datafile.good_start = d;
+                                                else $scope.datafile.good_end = d;
+                                            });
+                                        }
+                                    },
+                                    allowPointSelect: true,
                                     cursor: 'pointer',
                                     point: {
                                         events: {
-                                            click: function () {
-                                                var pointClick = $uibModal.open({
-                                                    template: '<div class="modal-header"><h3 class="modal-title"></h3></div>' +
-                                                    '<div class="modal-body"><p>Would you like to set this ({{thisDate}}) as:</p>' +
-                                                    '<div style="text-align:center;"><span class="radio-inline"><input type="radio" name="whichDate" ng-model="whichDate" value="StartDate" />Good Start Date</span>' +
-                                                    '<span class="radio-inline"><input type="radio" name="whichDate" ng-model="whichDate" value="EndDate" />Good End Date</span></div>' +
-                                                    '</div>' +
-                                                    '<div class="modal-footer"><button class="btn btn-primary" ng-enter="ok()" ng-click="ok()">OK</button>' +
-                                                    '<button class="btn btn-primary" ng-enter="cancel()" ng-click="cancel()">Cancel</button></div>',
-                                                    controller: ['$scope', '$uibModalInstance', 'chosenDate', function ($scope, $uibModalInstance, chosenDate) {
-                                                        $scope.ok = function () {
-                                                            if ($scope.whichDate == "") alert("No Date chosen");
-                                                            else {
-                                                                var parts = [$scope.whichDate, chosenDate];
-                                                                $uibModalInstance.close(parts);
-                                                            };
-                                                        };
-                                                        $scope.cancel = function () {
-                                                            $uibModalInstance.dismiss();
-                                                        }
-                                                        $scope.whichDate = "";
-                                                        $scope.thisDate = new Date(chosenDate);
-                                                    }],
-                                                    resolve: {
-                                                        chosenDate: this.x
-                                                    },
-                                                    size: 'sm'
-                                                });
-                                                pointClick.result.then(function (parts) {
-                                                    var theDate = new Date(parts[1]).toISOString();
-                                                    var d = getDateTimeParts(theDate);
-                                                    if (parts[0] == "StartDate") $scope.datafile.good_start = d;
-                                                    else $scope.datafile.good_end = d;
-                                                });
-                                            },
                                             mouseOver: function () {
                                                 if (this.series.halo) {
-                                                    this.series.halo.attr({
-                                                        'class': 'highcharts-tracker'
-                                                    }).toFront();
+                                                    this.series.halo.attr({ 'class': 'highcharts-tracker' }).toFront();
                                                 }
                                             }
                                         }
@@ -161,9 +185,9 @@
                                 },
                                 offset: 10
                             },
-
                             series: [{
-                                data: $scope.chartData
+                                data: $scope.chartData,
+
                             }]
                         };
                         $scope.chopperResponse = true;
