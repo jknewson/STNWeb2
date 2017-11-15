@@ -37,9 +37,9 @@
             $scope.view = { DEPval: 'detail', RETval: 'detail' };
             $scope.sensorDataNWIS = false; //is this a rain gage, met station, or rdg sensor -- if so, data file must be created pointing to nwis (we don't store actual file, just metadata with link)
             $scope.s = { depOpen: true, sFileOpen: false, NWISFileOpen: false };
-            $scope.chopperResponse = false; //set to true and show highchart with chopper results
-            $scope.chopperResponseKeys = [];
-            $scope.chartOptions = {};
+            $scope.chopperResponse1 = false; //set to true and show highchart with chopper results
+            $scope.chopperResponse1Keys = [];
+            $scope.chartOptions1 = {};
             $scope.chartData = [];
             Array.prototype.zip = function (arr) {
                 return this.map(function (e, i) {
@@ -50,7 +50,9 @@
             //$scope.renderer = new Highcharts.Renderer(
             $scope.runChopper = function () {
                 $scope.chartData = [];
-                $scope.chartOptions = {};
+                $scope.chartOptions1 = {};
+                $scope.chopperResponse1 = false;
+                $scope.chopperResponse1Keys = [];
                 if ($scope.chartObj) {
                     $scope.chartObj.xAxis[0].removePlotLine("start");
                     $scope.chartObj.xAxis[0].removePlotLine("end");
@@ -72,125 +74,146 @@
                     $scope.smlallLoaderGo = true;
                     DATA_FILE.runChopperScript(fd).$promise.then(function (response) {
                         $scope.smlallLoaderGo = false;
-                        $scope.chopperResponseKeys = Object.keys(response);
-                        $scope.chartData = response.time.zip(response.pressure);
-                        $scope.chartOptions = {
-                            chart: {
-                                events: {
-                                    load: function () {
-                                        $scope.chartObj = this;
+                        $scope.chopperResponse1Keys = Object.keys(response);
+                        if (response.Error) {
+                            var errorMessage = response.Error;
+                            var failedChopper = $uibModal.open({
+                                template: '<div class="modal-header"><h3 class="modal-title">Error</h3></div>' +
+                                '<div class="modal-body"><p>There was an error running the chopper.</p><p>Error: {{errorMessage}}</p></div>' +
+                                '<div class="modal-footer"><button class="btn btn-primary" ng-enter="ok()" ng-click="ok()">OK</button></div>',
+                                controller: ['$scope', '$uibModalInstance', 'message', function ($scope, $uibModalInstance, message) {
+                                    $scope.errorMessage = message;
+                                    $scope.ok = function () {
+                                        $uibModalInstance.dismiss();
+                                    };
+                                }],
+                                resolve: {
+                                    message: function () {
+                                        return errorMessage;
                                     }
                                 },
-                                zoomType: 'x',
-                                panning: true,
-                                panKey: 'shift'
-                            },
-                            boostThreshold: 2000,
-                            plotOptions: {
-                                series: {
+                                size: 'sm'
+                            });
+                        } else {
+                            $scope.chartData = response.time.zip(response.pressure);
+                            $scope.chartOptions1 = {
+                                chart: {
                                     events: {
-                                        click: function (event) {
-                                            var pointClick = $uibModal.open({
-                                                template: '<div class="modal-header"><h3 class="modal-title"></h3></div>' +
-                                                '<div class="modal-body"><p>Would you like to set this ({{thisDate}}) as:</p>' +
-                                                '<div style="text-align:center;"><span class="radio-inline"><input type="radio" name="whichDate" ng-model="whichDate" value="start" />Good Start Date</span>' +
-                                                '<span class="radio-inline"><input type="radio" name="whichDate" ng-model="whichDate" value="end" />Good End Date</span></div>' +
-                                                '</div>' +
-                                                '<div class="modal-footer"><button class="btn btn-primary" ng-enter="ok()" ng-click="ok()">OK</button>' +
-                                                '<button class="btn btn-primary" ng-enter="cancel()" ng-click="cancel()">Cancel</button></div>',
-                                                controller: ['$scope', '$uibModalInstance', 'chosenDate', 'xEvent', function ($scope, $uibModalInstance, chosenDate, xEvent) {
-                                                    $scope.ok = function () {
-                                                        if ($scope.whichDate == "") alert("No Date chosen");
-                                                        else {
-                                                            var parts = [$scope.whichDate, chosenDate, xEvent];
-                                                            $uibModalInstance.close(parts);
-                                                        };
-                                                    };
-                                                    $scope.cancel = function () {
-                                                        $uibModalInstance.dismiss();
-                                                    }
-                                                    $scope.whichDate = "";
-                                                    $scope.thisDate = new Date(chosenDate);
-                                                }],
-                                                resolve: {
-                                                    chosenDate: event.point.category,
-                                                    xEvent: event.chartX
-                                                },
-                                                size: 'sm'
-                                            });
-                                            pointClick.result.then(function (parts) {
-                                                var chart = $scope.chartObj.xAxis[0];
-                                                // check if there's already a plotline with this id and remove it if so
-                                                chart.removePlotLine(parts[0]);
-                                                // add the plot line to visually see where they added
-                                                chart.addPlotLine({
-                                                    value: chart.toValue(parts[2]),
-                                                    color: parts[0] == "start" ? '#00ff00' : '#ff0000',
-                                                    width: 2,
-                                                    id: parts[0],
-                                                    zIndex: 19999,
-                                                    label: { text: parts[0] }
-                                                });
-                                                var theDate = new Date(parts[1]).toISOString();
-                                                var d = getDateTimeParts(theDate);
-                                                if (parts[0] == "start") $scope.datafile.good_start = d;
-                                                else $scope.datafile.good_end = d;
-                                            });
+                                        load: function () {
+                                            $scope.chartObj = this;
                                         }
                                     },
-                                    allowPointSelect: true,
-                                    cursor: 'pointer',
-                                    point: {
+                                    zoomType: 'x',
+                                    panning: true,
+                                    panKey: 'shift'
+                                },
+                                boostThreshold: 2000,
+                                plotOptions: {
+                                    series: {
                                         events: {
-                                            mouseOver: function () {
-                                                if (this.series.halo) {
-                                                    this.series.halo.attr({ 'class': 'highcharts-tracker' }).toFront();
+                                            click: function (event) {
+                                                var pointClick = $uibModal.open({
+                                                    template: '<div class="modal-header"><h3 class="modal-title"></h3></div>' +
+                                                    '<div class="modal-body"><p>Would you like to set this ({{thisDate}}) as:</p>' +
+                                                    '<div style="text-align:center;"><span class="radio-inline"><input type="radio" name="whichDate" ng-model="whichDate" value="start" />Good Start Date</span>' +
+                                                    '<span class="radio-inline"><input type="radio" name="whichDate" ng-model="whichDate" value="end" />Good End Date</span></div>' +
+                                                    '</div>' +
+                                                    '<div class="modal-footer"><button class="btn btn-primary" ng-enter="ok()" ng-click="ok()">OK</button>' +
+                                                    '<button class="btn btn-primary" ng-enter="cancel()" ng-click="cancel()">Cancel</button></div>',
+                                                    controller: ['$scope', '$uibModalInstance', 'chosenDate', 'xEvent', function ($scope, $uibModalInstance, chosenDate, xEvent) {
+                                                        $scope.ok = function () {
+                                                            if ($scope.whichDate == "") alert("No Date chosen");
+                                                            else {
+                                                                var parts = [$scope.whichDate, chosenDate, xEvent];
+                                                                $uibModalInstance.close(parts);
+                                                            };
+                                                        };
+                                                        $scope.cancel = function () {
+                                                            $uibModalInstance.dismiss();
+                                                        }
+                                                        $scope.whichDate = "";
+                                                        $scope.thisDate = new Date(chosenDate);
+                                                    }],
+                                                    resolve: {
+                                                        chosenDate: event.point.category,
+                                                        xEvent: event.chartX
+                                                    },
+                                                    size: 'sm'
+                                                });
+                                                pointClick.result.then(function (parts) {
+                                                    var chart = $scope.chartObj.xAxis[0];
+                                                    // check if there's already a plotline with this id and remove it if so
+                                                    chart.removePlotLine(parts[0]);
+                                                    // add the plot line to visually see where they added
+                                                    chart.addPlotLine({
+                                                        value: chart.toValue(parts[2]),
+                                                        color: parts[0] == "start" ? '#00ff00' : '#ff0000',
+                                                        width: 2,
+                                                        id: parts[0],
+                                                        zIndex: 19999,
+                                                        label: { text: parts[0] }
+                                                    });
+                                                    var theDate = new Date(parts[1]).toISOString();
+                                                    var d = getDateTimeParts(theDate);
+                                                    if (parts[0] == "start") $scope.datafile.good_start = d;
+                                                    else $scope.datafile.good_end = d;
+                                                });
+                                            }
+                                        },
+                                        allowPointSelect: true,
+                                        cursor: 'pointer',
+                                        point: {
+                                            events: {
+                                                mouseOver: function () {
+                                                    if (this.series.halo) {
+                                                        this.series.halo.attr({ 'class': 'highcharts-tracker' }).toFront();
+                                                    }
                                                 }
                                             }
+                                        },
+                                        marker: {
+                                            enabled: false // turn dots off
                                         }
-                                    },
-                                    marker: {
-                                        enabled: false // turn dots off
                                     }
-                                }
-                            },
-                            title: {
-                                text: 'Chopper Results'
-                            },
-                            subtitle: {
-                                text: 'Click and drag to zoom in. Hold down shift key to pan.'
-                            },
-                            xAxis: {
+                                },
                                 title: {
-                                    text: $scope.chopperResponseKeys[1]
+                                    text: 'Preview of Pressure Data'
                                 },
-                                type: 'datetime',
-                                dateTimeLabelFormats: {
-                                    second: '%Y-%m-%d<br/>%H:%M:%S',
-                                    minute: '%Y-%m-%d<br/>%H:%M',
-                                    hour: '%Y-%m-%d<br/>%H:%M',
-                                    day: '%Y<br/>%m-%d',
-                                    week: '%Y<br/>%m-%d',
-                                    month: '%Y-%m',
-                                    year: '%Y'
+                                subtitle: {
+                                    text: 'Click and drag to zoom in. Hold down shift key to pan. To select Good Start/End Date, click point on line.'
                                 },
-                                offset: 10
-                            },
-                            yAxis: {
-                                title: {
-                                    text: $scope.chopperResponseKeys[0]
+                                xAxis: {
+                                    title: {
+                                        text: $scope.chopperResponse1Keys[1]
+                                    },
+                                    type: 'datetime',
+                                    dateTimeLabelFormats: {
+                                        second: '%Y-%m-%d<br/>%H:%M:%S',
+                                        minute: '%Y-%m-%d<br/>%H:%M',
+                                        hour: '%Y-%m-%d<br/>%H:%M',
+                                        day: '%Y<br/>%m-%d',
+                                        week: '%Y<br/>%m-%d',
+                                        month: '%Y-%m',
+                                        year: '%Y'
+                                    },
+                                    offset: 10
                                 },
-                                labels: {
-                                    format: '{value} psi'
+                                yAxis: {
+                                    title: {
+                                        text: $scope.chopperResponse1Keys[0]
+                                    },
+                                    labels: {
+                                        format: '{value} psi'
+                                    },
+                                    offset: 10
                                 },
-                                offset: 10
-                            },
-                            series: [{
-                                data: $scope.chartData,
+                                series: [{
+                                    data: $scope.chartData,
 
-                            }]
-                        };
-                        $scope.chopperResponse = true;
+                                }]
+                            };
+                            $scope.chopperResponse1 = true;
+                        }
                     }, function (error) {
                         console.log(error);
                     });
@@ -2438,8 +2461,8 @@
                     var dt = getTimeZoneStamp();
                     $scope.datafile.collect_date = dt[0];
                     $scope.datafile.time_zone = dt[1]; //will be converted to utc on post/put 
-                    $scope.datafile.good_start = new Date();
-                    $scope.datafile.good_end = new Date();
+                    $scope.datafile.good_start = null;//new Date();
+                    $scope.datafile.good_end = null;//new Date();
                 } //end new file
                 $scope.showFileForm = true;
 
@@ -3063,6 +3086,193 @@
                     });
                 } // end else (airDF is undefined)
             };
+
+            $scope.chopperResponse2 = false; //set to true and show highchart with chopper results
+            $scope.chopperResponse2Keys = [];
+            $scope.chartOptions2 = {};
+            $scope.chartData = [];
+            Array.prototype.zip = function (arr) {
+                return this.map(function (e, i) {
+                    return [e, arr[i]];
+                })
+            };
+
+            //$scope.renderer = new Highcharts.Renderer(
+            $scope.runChopper = function () {
+                $scope.chartData = [];
+                $scope.chartOptions2 = {};
+                $scope.chopperResponse2 = false;
+                $scope.chopperResponse2Keys = [];
+                if ($scope.chartObj) {
+                    $scope.chartObj.xAxis[0].removePlotLine("start");
+                    $scope.chartObj.xAxis[0].removePlotLine("end");
+                }
+                if ($scope.aFile.File !== undefined) {
+                    $http.defaults.headers.common.Authorization = 'Basic ' + $cookies.get('STNCreds');
+                    $http.defaults.headers.common.Accept = 'application/json';
+                    var fileParts = {
+                        FileEntity: {
+                            site_id: $scope.thisSensorSite.site_id,
+                            instrument_id: thisSensor.instrument_id
+                        },
+                        File: $scope.aFile.File
+                    };
+                    //need to put the fileParts into correct format for send
+                    var fd = new FormData();
+                    fd.append("FileEntity", JSON.stringify(fileParts.FileEntity));
+                    fd.append("File", fileParts.File);
+                    $scope.smlallLoaderGo = true;
+                    DATA_FILE.runChopperScript(fd).$promise.then(function (response) {
+                        $scope.smlallLoaderGo = false;
+                        $scope.chopperResponse2Keys = Object.keys(response);
+                        if (response.Error) {
+                            var errorMessage = response.Error;
+                            var failedChopper = $uibModal.open({
+                                template: '<div class="modal-header"><h3 class="modal-title">Error</h3></div>' +
+                                '<div class="modal-body"><p>There was an error running the chopper.</p><p>Error: {{errorMessage}}</p></div>' +
+                                '<div class="modal-footer"><button class="btn btn-primary" ng-enter="ok()" ng-click="ok()">OK</button></div>',
+                                controller: ['$scope', '$uibModalInstance', 'message', function ($scope, $uibModalInstance, message) {
+                                    $scope.errorMessage = message;
+                                    $scope.ok = function () {
+                                        $uibModalInstance.dismiss();
+                                    };
+                                }],
+                                resolve: {
+                                    message: function () {
+                                        return errorMessage;
+                                    }
+                                },
+                                size: 'sm'
+                            });
+                        } else {
+                            $scope.chartData = response.time.zip(response.pressure);
+                            $scope.chartOptions2 = {
+                                chart: {
+                                    events: {
+                                        load: function () {
+                                            $scope.chartObj = this;
+                                        }
+                                    },
+                                    zoomType: 'x',
+                                    panning: true,
+                                    panKey: 'shift'
+                                },
+                                boostThreshold: 2000,
+                                plotOptions: {
+                                    series: {
+                                        events: {
+                                            click: function (event) {
+                                                var pointClick = $uibModal.open({
+                                                    template: '<div class="modal-header"><h3 class="modal-title"></h3></div>' +
+                                                    '<div class="modal-body"><p>Would you like to set this ({{thisDate}}) as:</p>' +
+                                                    '<div style="text-align:center;"><span class="radio-inline"><input type="radio" name="whichDate" ng-model="whichDate" value="start" />Good Start Date</span>' +
+                                                    '<span class="radio-inline"><input type="radio" name="whichDate" ng-model="whichDate" value="end" />Good End Date</span></div>' +
+                                                    '</div>' +
+                                                    '<div class="modal-footer"><button class="btn btn-primary" ng-enter="ok()" ng-click="ok()">OK</button>' +
+                                                    '<button class="btn btn-primary" ng-enter="cancel()" ng-click="cancel()">Cancel</button></div>',
+                                                    controller: ['$scope', '$uibModalInstance', 'chosenDate', 'xEvent', function ($scope, $uibModalInstance, chosenDate, xEvent) {
+                                                        $scope.ok = function () {
+                                                            if ($scope.whichDate == "") alert("No Date chosen");
+                                                            else {
+                                                                var parts = [$scope.whichDate, chosenDate, xEvent];
+                                                                $uibModalInstance.close(parts);
+                                                            };
+                                                        };
+                                                        $scope.cancel = function () {
+                                                            $uibModalInstance.dismiss();
+                                                        }
+                                                        $scope.whichDate = "";
+                                                        $scope.thisDate = new Date(chosenDate);
+                                                    }],
+                                                    resolve: {
+                                                        chosenDate: event.point.category,
+                                                        xEvent: event.chartX
+                                                    },
+                                                    size: 'sm'
+                                                });
+                                                pointClick.result.then(function (parts) {
+                                                    var chart = $scope.chartObj.xAxis[0];
+                                                    // check if there's already a plotline with this id and remove it if so
+                                                    chart.removePlotLine(parts[0]);
+                                                    // add the plot line to visually see where they added
+                                                    chart.addPlotLine({
+                                                        value: chart.toValue(parts[2]),
+                                                        color: parts[0] == "start" ? '#00ff00' : '#ff0000',
+                                                        width: 2,
+                                                        id: parts[0],
+                                                        zIndex: 19999,
+                                                        label: { text: parts[0] }
+                                                    });
+                                                    var theDate = new Date(parts[1]).toISOString();
+                                                    var d = getDateTimeParts(theDate);
+                                                    if (parts[0] == "start") $scope.datafile.good_start = d;
+                                                    else $scope.datafile.good_end = d;
+                                                });
+                                            }
+                                        },
+                                        allowPointSelect: true,
+                                        cursor: 'pointer',
+                                        point: {
+                                            events: {
+                                                mouseOver: function () {
+                                                    if (this.series.halo) {
+                                                        this.series.halo.attr({ 'class': 'highcharts-tracker' }).toFront();
+                                                    }
+                                                }
+                                            }
+                                        },
+                                        marker: {
+                                            enabled: false // turn dots off
+                                        }
+                                    }
+                                },
+                                title: {
+                                    text: 'Preview of Pressure Data'
+                                },
+                                subtitle: {
+                                    text: 'Click and drag to zoom in. Hold down shift key to pan. To select Good Start/End Date, click point on line.'
+                                },
+                                xAxis: {
+                                    title: {
+                                        text: $scope.chopperResponse2Keys[1]
+                                    },
+                                    type: 'datetime',
+                                    dateTimeLabelFormats: {
+                                        second: '%Y-%m-%d<br/>%H:%M:%S',
+                                        minute: '%Y-%m-%d<br/>%H:%M',
+                                        hour: '%Y-%m-%d<br/>%H:%M',
+                                        day: '%Y<br/>%m-%d',
+                                        week: '%Y<br/>%m-%d',
+                                        month: '%Y-%m',
+                                        year: '%Y'
+                                    },
+                                    offset: 10
+                                },
+                                yAxis: {
+                                    title: {
+                                        text: $scope.chopperResponse2Keys[0]
+                                    },
+                                    labels: {
+                                        format: '{value} psi'
+                                    },
+                                    offset: 10
+                                },
+                                series: [{
+                                    data: $scope.chartData,
+
+                                }]
+                            };
+                            $scope.chopperResponse2 = true;
+                        }
+                    }, function (error) {
+                        console.log(error);
+                    });
+                } else {
+                    //the file wasn't there..
+                    alert("You need to choose a file first");
+                }
+            };
+
             ///////////////////////////////////////////////////////////////////////
             // NWIS DATA_FILE
             if ($scope.sensorDataNWIS) {

@@ -4672,19 +4672,18 @@
                                     </button>
                                 </div>
 
-                                <!-- show button for Chopper if  and file is present -->
-                                <div class="form_group" ng-if="aFile.filetype_id == 2">
-                                    <!-- ng-if="aFile.filetype_id === 2 && aFile.File" class="form-group"> -->
+                                <!-- show button for Chopper if  and file is present  ng-if="aFile.filetype_id === 2 && (sensor.sensor_type_id == 1 && (sensor.deployment_type_id == 1 || sensor.deployment_type_id == 2 || sensor.deployment_type_id == 3))" -->
+                                <div class="form_group" ng-if="aFile.file_id == undefined && aFile.filetype_id == 2 && aSensor.sensor_type_id == 1 && aSensor.deployment_type_id < 4" style="padding-top: 10px;padding-bottom: 10px;">
                                     <label class="col-md-4 control-label"></label>
                                     <div class="col-md-4 input-group" style="padding-right:14px;padding-left:14px">
-                                        <button type="button" class="btn btn-primary" ng-click="runChopper()">Run Chopper</button>
+                                        <button type="button" class="btn btn-primary" ng-click="runChopper()">Preview Data</button>
                                         <div ng-show="smlallLoaderGo"><img src="images/loading1.gif" /></div>
                                     </div>
                                 </div>
 
-                                <div ng-if="chopperResponse">
+                                <div ng-if="chopperResponse1">
                                     <!-- highchart goes here -->
-                                    <hc-chart id="chopperChart" options="chartOptions"></hc-chart>
+                                    <hc-chart id="chopperChart1" options="chartOptions1"></hc-chart>
                                 </div>
                                 <!-- Good Data Start Time* (data) -->
                                 <div ng-if="aFile.filetype_id === 2" class="form-group" ng-class="{'has-error':DepSenFILEForm.good_start.$invalid && DepSenFILEForm.good_start.$dirty}" style="margin:0;padding:0;padding-top:5px;">
@@ -6519,6 +6518,20 @@
                                     <button ng-show="aFile.filetype_id == 1" type="button" class="col-md-1 borderLess pull-left" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Populates in Photo caption below. If a person or people appear in photo include name(s). If non-USGS personnel, ensure consent to publish name in caption is given.">
                                         <span class="glyphicon glyphicon-question-sign"></span>
                                     </button>
+                                </div>
+
+                                <!-- show button for Chopper if  and file is present -->
+                                <div class="form_group" ng-if="aFile.file_id == undefined && aFile.filetype_id == 2 && sensor.sensor_type_id == 1 && sensor.deployment_type_id < 4" style="padding-top: 10px;padding-bottom: 10px;">
+                                    <label class="col-md-4 control-label"></label>
+                                    <div class="col-md-4 input-group" style="padding-right:14px;padding-left:14px">
+                                        <button type="button" class="btn btn-primary" ng-click="runChopper()">Preview Data</button>
+                                        <div ng-show="smlallLoaderGo"><img src="images/loading1.gif" /></div>
+                                    </div>
+                                </div>
+
+                                <div ng-if="chopperResponse2">
+                                    <!-- highchart goes here -->
+                                    <hc-chart id="chopperChart2" options="chartOptions2"></hc-chart>
                                 </div>
 
                                 <!-- Good Data Start Time* (data) -->
