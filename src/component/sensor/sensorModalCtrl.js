@@ -435,6 +435,23 @@
                             valid = false;
                         });
                     }
+                    if (s == undefined || e == undefined) {
+                        valid = false;
+                        var missingDate = $uibModal.open({
+                            template: '<div class="modal-header"><h3 class="modal-title">Error</h3></div>' +
+                            '<div class="modal-body"><p>The good data start date or good data end date is missing. Either choose a date, or click Preview Data to get a chart of the data, where you can choose the dates.</p></div>' +
+                            '<div class="modal-footer"><button class="btn btn-primary" ng-enter="ok()" ng-click="ok()">OK</button></div>',
+                            controller: ['$scope', '$uibModalInstance', function ($scope, $uibModalInstance) {
+                                $scope.ok = function () {
+                                    $uibModalInstance.close();
+                                };
+                            }],
+                            size: 'sm'
+                        });
+                        missingDate.result.then(function () {
+                            valid = false;
+                        });
+                    }
                 }
                 if (valid) {
                     $scope.depSenfileIsUploading = true; //Loading...
@@ -2493,6 +2510,23 @@
                             size: 'sm'
                         });
                         fixDate.result.then(function () {
+                            valid = false;
+                        });
+                    }
+                    if (s == undefined || e == undefined) {
+                        valid = false;
+                        var missingDate = $uibModal.open({
+                            template: '<div class="modal-header"><h3 class="modal-title">Error</h3></div>' +
+                            '<div class="modal-body"><p>The good data start date or good data end date is missing. Either choose a date, or click Preview Data to get a chart of the data, where you can choose the dates.</p></div>' +
+                            '<div class="modal-footer"><button class="btn btn-primary" ng-enter="ok()" ng-click="ok()">OK</button></div>',
+                            controller: ['$scope', '$uibModalInstance', function ($scope, $uibModalInstance) {
+                                $scope.ok = function () {
+                                    $uibModalInstance.close();
+                                };
+                            }],
+                            size: 'sm'
+                        });
+                        missingDate.result.then(function () {
                             valid = false;
                         });
                     }

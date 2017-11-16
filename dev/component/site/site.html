@@ -4681,7 +4681,7 @@
                                     </div>
                                 </div>
 
-                                <div ng-if="chopperResponse1">
+                                <div ng-if="chopperResponse1 && aFile.file_id == undefined">
                                     <!-- highchart goes here -->
                                     <hc-chart id="chopperChart1" options="chartOptions1"></hc-chart>
                                 </div>
@@ -6529,7 +6529,7 @@
                                     </div>
                                 </div>
 
-                                <div ng-if="chopperResponse2">
+                                <div ng-if="chopperResponse2 && aFile.file_id == undefined">
                                     <!-- highchart goes here -->
                                     <hc-chart id="chopperChart2" options="chartOptions2"></hc-chart>
                                 </div>
