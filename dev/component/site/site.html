@@ -6728,16 +6728,16 @@
                                             <thead>
                                                 <tr>
                                                     <th></th>
-                                                    <th>Site No.</th>
-                                                    <th>Site distance</th>
-                                                    <th>Location</th>
-                                                    <th>Sensor Brand</th>
-                                                    <th>File Name</th>
-                                                    <th>Good Start</th>
-                                                    <th>Good End</th>
+                                                    <th class="site_no">Site No.&nbsp;<a ng-click="sort_by('site_no')"><i class="glyphicon glyphicon-sort"></i></a></th>
+                                                    <th class="distance">Site distance&nbsp;<a ng-click="sort_by('distance')"><i class="glyphicon glyphicon-sort"></i></a></th>
+                                                    <th class="county">Location&nbsp;<a ng-click="sort_by('county')"><i class="glyphicon glyphicon-sort"></i></a></th>
+                                                    <th class="brand_name">Sensor Brand&nbsp;<a ng-click="sort_by('brand_name')"><i class="glyphicon glyphicon-sort"></i></a></th>
+                                                    <th class="name">File Name&nbsp;<a ng-click="sort_by('name')"><i class="glyphicon glyphicon-sort"></i></a></th>
+                                                    <th class="good_start">Good Start&nbsp;<a ng-click="sort_by('good_start')"><i class="glyphicon glyphicon-sort"></i></a></th>
+                                                    <th class="good_end">Good End&nbsp;<a ng-click="sort_by('good_end')"><i class="glyphicon glyphicon-sort"></i></a></th>
                                                 </tr>
                                             </thead>
-                                            <tr ng-repeat="df in eventDataFiles">
+                                            <tr ng-repeat="df in eventDataFiles | orderBy:sortingOrder:reverse">
                                                 <td><input type="radio" name="selected" ng-model="df.selected" value="true" ng-change="updateChosenAirRadio($index)" /></td>
                                                 <td>{{df.site_no}}</td>
                                                 <td>{{df.distance | number:4}} mi.</td>
