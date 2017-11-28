@@ -3017,37 +3017,19 @@
             };
 
             var runTheStormScript = function (airDF) {
-                //get full airSensor required => air dep and retr status : sensor_elevation
                 INSTRUMENT.getFullInstrument({ id: airDF.instrument_id }).$promise.then(function (airSensor) {
                     var instrumentStats = airSensor.instrument_status;
-                    if (instrumentStats[0].sensor_elevation !== undefined && instrumentStats[1].sensor_elevation !== undefined) {
-                        //ALL THINGS ARE GOOD TO GO!
-                        var waterDF = $scope.datafile.data_file_id;
-                        var boolVal = $scope.is4Hz.selected;
-                        // run the script if airDF and waterDF are present                    
-                        DATA_FILE.runStormScript({ seaDFID: waterDF, airDFID: airDF.data_file_id, hertz: boolVal, username: $cookies.get('STNUsername') }).$promise.then(function () {
-                            var allDone = true;
-                        }, function error(errorResponse) {
-                            if (errorResponse.headers(["usgswim-messages"]) !== undefined) toastr.error("Error running Air Script: " + errorResponse.headers(["usgswim-messages"]));
-                            else toastr.error("Error running Air Script: " + errorResponse.statusText);
-                        });
-                        Site_Script.setIsScriptRunning("true"); //tell site.ctrl to show toastr notification
-                        $scope.cancelFile();
-                    } // end if air dep/retr has sensor_elevation
-                    else {
-                        var missingAirElev = $uibModal.open({
-                            template: '<div class="modal-header"><h3 class="modal-title">Error</h3></div>' +
-                            '<div class="modal-body"><p>The Barometric Sensor selected does not have a sensor elevation.</p>' +
-                            '<p>Please navigate to the Barometric sensor and update the tape down information, providing a sensor elevation for both the deployed and retrieved sections. This is required for the script.</p></div>' +
-                            '<div class="modal-footer"><button class="btn btn-primary" ng-enter="ok()" ng-click="ok()">OK</button></div>',
-                            controller: ['$scope', '$uibModalInstance', function ($scope, $uibModalInstance) {
-                                $scope.ok = function () {
-                                    $uibModalInstance.close();
-                                };
-                            }],
-                            size: 'sm'
-                        });
-                    } // end missingAirElev
+                    var waterDF = $scope.datafile.data_file_id;
+                    var boolVal = $scope.is4Hz.selected;
+                    // run the script if airDF and waterDF are present                    
+                    DATA_FILE.runStormScript({ seaDFID: waterDF, airDFID: airDF.data_file_id, hertz: boolVal, username: $cookies.get('STNUsername') }).$promise.then(function () {
+                        var allDone = true;
+                    }, function error(errorResponse) {
+                        if (errorResponse.headers(["usgswim-messages"]) !== undefined) toastr.error("Error running Air Script: " + errorResponse.headers(["usgswim-messages"]));
+                        else toastr.error("Error running Air Script: " + errorResponse.statusText);
+                    });
+                    Site_Script.setIsScriptRunning("true"); //tell site.ctrl to show toastr notification
+                    $scope.cancelFile();
                 }, function (error) {
                     toastr.error("Error retrieving Air Sensor: " + error.statusText);
                 });// end getFullInstrument
@@ -3058,87 +3040,71 @@
                 var airDF = $scope.eventDataFiles.filter(function (d) { return d.selected == "true"; })[0];
                 if (airDF !== undefined) {
                     // make sure they added a tapedown with the required fields for the script to run
-                    // required => sea dep and retr status: sensor_elevation && sea dep and retr status: gs_elevation
-                    if ($scope.DeployedSensorStat.sensor_elevation !== undefined && $scope.RetrievedSensorStat.sensor_elevation !== undefined &&
-                        $scope.DeployedSensorStat.gs_elevation !== undefined && $scope.RetrievedSensorStat.gs_elevation !== undefined) {
-                        var waterFile = $scope.sensorFiles.filter(function (f) { return f.data_file_id == $scope.datafile.data_file_id; })[0];
-                        var watAirIDS = waterFile.file_id + "_" + airDF.file_id;
-                        var alreadyRan = false;
-                        //has script been ran already with this water/air file combo?
-                        $scope.sensorFiles.forEach(function (sensFile) {
-                            if (sensFile.script_parent == watAirIDS)
-                                alreadyRan = true;
-                        });
-                        if (alreadyRan) {
-                            //already ran. show modal stating the script has already been run with this                            
-                            var rerunStormModal = $uibModal.open({
-                                backdrop: 'static',
-                                keyboard: false,
-                                template: '<div class="modal-header"><h3 class="modal-title">Warning</h3></div>' +
-                                '<div class="modal-body"><p>The Storm Script has already been processed for this sensor data file with this air data file. Would you like to delete the output files and rerun the script?</p>' +
-                                '<div class="modal-footer"><button class="btn btn-warning" ng-enter="no()" ng-click="no()">Cancel</button><button class="btn btn-primary" ng-enter="yes()" ng-click="yes()">Rerun Script</button></div>',
-                                controller: ['$scope', '$uibModalInstance', 'theAirFile', 'theWaterFile', function ($scope, $uibModalInstance, theAirFile, theWaterFile) {
-                                    $scope.no = function () {
-                                        $uibModalInstance.dismiss();
-                                    };
-                                    $scope.yes = function () {
-                                        var filesArray = [theAirFile, theWaterFile];
-                                        $uibModalInstance.close(filesArray);
-                                    };
-                                }],
-                                size: 'sm',
-                                resolve: {
-                                    theAirFile: function () {
-                                        return airDF;
-                                    },
-                                    theWaterFile: function () {
-                                        return waterFile;
-                                    }
-                                }
-                            });
-                            rerunStormModal.result.then(function (bothFiles) {
-                                $scope.showProcessing = true;
-                                //delete all the output files that have this file_id as their 'script_parent' value
-                                $http.defaults.headers.common.Authorization = 'Basic ' + $cookies.get('STNCreds');
-                                var processedFileCount = $scope.sensorFiles.filter(function (f) { return f.script_parent == bothFiles[1].file_id.toString() + "_" + bothFiles[0].file_id.toString(); });
-                                var matchCnt = 0;
-                                $scope.sensorFiles.forEach(function (f) {
-                                    if (f.script_parent == bothFiles[1].file_id.toString() + "_" + bothFiles[0].file_id.toString()) {
-                                        var deleteThis = f.file_id;
-                                        FILE.delete({ id: f.file_id }).$promise.then(function () {
-                                            matchCnt++;
-                                            $scope.sensorFiles.splice($scope.existFileIndex, 1);
-                                            $scope.allSFiles.splice($scope.allSFileIndex, 1);
-                                            $scope.sensImageFiles.splice($scope.existIMGFileIndex, 1);
-                                            Site_Files.setAllSiteFiles($scope.allSFiles); //updates the file list on the sitedashboard
-                                            if (matchCnt == processedFileCount.length) {
-                                                runTheStormScript(airDF);
-                                            }
-                                        }, function error(errorResponse) {
-                                            toastr.error("Error deleting output file: " + errorResponse.statusText);
-                                        });
-                                    }
-                                }); //end foreach                                
-                            });//end rerunModal.result.then
-                        }
-                        else {
-                            runTheStormScript(airDF);
-                        }// end if sea dep/retr has sensor_elevation && gs_elevation
-                    }
-                    else {
-                        var missingSeaElev = $uibModal.open({
-                            template: '<div class="modal-header"><h3 class="modal-title">Error</h3></div>' +
-                            '<div class="modal-body"><p>This Water Sensor does not have a sensor elevation or ground elevation.</p>' +
-                            '<p>Please update the water sensor, providing a sensor elevation and ground elevation for both the deployed section and retrieved section. This is required for the script.</p></div>' +
-                            '<div class="modal-footer"><button class="btn btn-primary" ng-enter="ok()" ng-click="ok()">OK</button></div>',
-                            controller: ['$scope', '$uibModalInstance', function ($scope, $uibModalInstance) {
-                                $scope.ok = function () {
-                                    $uibModalInstance.close();
+                    // required => sea dep and retr status: sensor_elevation && sea dep and retr status: gs_elevation                    
+                    var waterFile = $scope.sensorFiles.filter(function (f) { return f.data_file_id == $scope.datafile.data_file_id; })[0];
+                    var watAirIDS = waterFile.file_id + "_" + airDF.file_id;
+                    var alreadyRan = false;
+                    //has script been ran already with this water/air file combo?
+                    $scope.sensorFiles.forEach(function (sensFile) {
+                        if (sensFile.script_parent == watAirIDS)
+                            alreadyRan = true;
+                    });
+                    if (alreadyRan) {
+                        //already ran. show modal stating the script has already been run with this                            
+                        var rerunStormModal = $uibModal.open({
+                            backdrop: 'static',
+                            keyboard: false,
+                            template: '<div class="modal-header"><h3 class="modal-title">Warning</h3></div>' +
+                            '<div class="modal-body"><p>The Storm Script has already been processed for this sensor data file with this air data file. Would you like to delete the output files and rerun the script?</p>' +
+                            '<div class="modal-footer"><button class="btn btn-warning" ng-enter="no()" ng-click="no()">Cancel</button><button class="btn btn-primary" ng-enter="yes()" ng-click="yes()">Rerun Script</button></div>',
+                            controller: ['$scope', '$uibModalInstance', 'theAirFile', 'theWaterFile', function ($scope, $uibModalInstance, theAirFile, theWaterFile) {
+                                $scope.no = function () {
+                                    $uibModalInstance.dismiss();
+                                };
+                                $scope.yes = function () {
+                                    var filesArray = [theAirFile, theWaterFile];
+                                    $uibModalInstance.close(filesArray);
                                 };
                             }],
-                            size: 'sm'
+                            size: 'sm',
+                            resolve: {
+                                theAirFile: function () {
+                                    return airDF;
+                                },
+                                theWaterFile: function () {
+                                    return waterFile;
+                                }
+                            }
                         });
-                    } // end missingSeaElev                    
+                        rerunStormModal.result.then(function (bothFiles) {
+                            $scope.showProcessing = true;
+                            //delete all the output files that have this file_id as their 'script_parent' value
+                            $http.defaults.headers.common.Authorization = 'Basic ' + $cookies.get('STNCreds');
+                            var processedFileCount = $scope.sensorFiles.filter(function (f) { return f.script_parent == bothFiles[1].file_id.toString() + "_" + bothFiles[0].file_id.toString(); });
+                            var matchCnt = 0;
+                            $scope.sensorFiles.forEach(function (f) {
+                                if (f.script_parent == bothFiles[1].file_id.toString() + "_" + bothFiles[0].file_id.toString()) {
+                                    var deleteThis = f.file_id;
+                                    FILE.delete({ id: f.file_id }).$promise.then(function () {
+                                        matchCnt++;
+                                        $scope.sensorFiles.splice($scope.existFileIndex, 1);
+                                        $scope.allSFiles.splice($scope.allSFileIndex, 1);
+                                        $scope.sensImageFiles.splice($scope.existIMGFileIndex, 1);
+                                        Site_Files.setAllSiteFiles($scope.allSFiles); //updates the file list on the sitedashboard
+                                        if (matchCnt == processedFileCount.length) {
+                                            runTheStormScript(airDF);
+                                        }
+                                    }, function error(errorResponse) {
+                                        toastr.error("Error deleting output file: " + errorResponse.statusText);
+                                    });
+                                }
+                            }); //end foreach                                
+                        });//end rerunModal.result.then
+                    }
+                    else {
+                        runTheStormScript(airDF);
+                    }// end if sea dep/retr has sensor_elevation && gs_elevation
+
                 } // end if airDF != undefined
                 else {
                     var missingInfo = $uibModal.open({
@@ -3153,7 +3119,7 @@
                         size: 'sm'
                     });
                 } // end else (airDF is undefined)
-            };
+            }; // end runStormScript()
 
             $scope.chopperResponse2 = false; //set to true and show highchart with chopper results
             $scope.chopperResponse2Keys = [];
