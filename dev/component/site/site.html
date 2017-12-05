@@ -6727,7 +6727,7 @@
                                         <table class="table" style="display:inline-block;overflow:auto;">
                                             <thead>
                                                 <tr>
-                                                    <th></th>
+                                                    <th class="selected"></th>
                                                     <th class="site_no">Site No.&nbsp;<a ng-click="sort_by('site_no')"><i class="glyphicon glyphicon-sort"></i></a></th>
                                                     <th class="distance">Site distance&nbsp;<a ng-click="sort_by('distance')"><i class="glyphicon glyphicon-sort"></i></a></th>
                                                     <th class="county">Location&nbsp;<a ng-click="sort_by('county')"><i class="glyphicon glyphicon-sort"></i></a></th>
@@ -6738,14 +6738,14 @@
                                                 </tr>
                                             </thead>
                                             <tr ng-repeat="df in eventDataFiles | orderBy:sortingOrder:reverse">
-                                                <td><input type="radio" name="selected" ng-model="df.selected" value="true" ng-change="updateChosenAirRadio($index)" /></td>
+                                                <td><input type="radio" name="selected" ng-model="df.selected" value="true" ng-change="updateChosenAirRadio(df)" /></td>
                                                 <td>{{df.site_no}}</td>
                                                 <td>{{df.distance | number:4}} mi.</td>
                                                 <td>{{df.county}}, {{df.state}}</td>
                                                 <td>{{df.brand_name}}</td>
                                                 <td>{{df.name}}</td>
-                                                <td>{{df.good_start | date: 'MM/dd/yyyy' }}</td>
-                                                <td>{{df.good_end | date: 'MM/dd/yyyy'}}</td>
+                                                <td>{{df.good_start | date: 'MM/dd/yyyy hh:mm a' }}</td>
+                                                <td>{{df.good_end | date: 'MM/dd/yyyy hh:mm a'}}</td>
                                             </tr>
                                         </table>
                                         <div class="col-md-12">

@@ -96,6 +96,12 @@
                             });
                         } else {
                             $scope.chartData = response.time.zip(response.pressure);
+                            //preset the start/end dates to the 1st and last as the chartData.time
+                            var sDate = new Date(response.time[0]).toISOString();
+                            var eDate = new Date(response.time[response.time.length - 1]).toISOString();
+                            var sd = getDateTimeParts(sDate); var ed = getDateTimeParts(eDate);
+                            $scope.datafile.good_start = sd; $scope.datafile.good_end = ed;
+
                             $scope.chartOptions1 = {
                                 chart: {
                                     events: {
@@ -104,6 +110,14 @@
                                         }
                                     },
                                     zoomType: 'x',
+                                    resetZoomButton: {
+                                        position: {
+                                            align: 'left', // by default
+                                            verticalAlign: 'bottom', // by default
+                                            // x: 0,
+                                            y: 70
+                                        }
+                                    },
                                     panning: true,
                                     panKey: 'shift'
                                 },
@@ -3005,13 +3019,15 @@
                     if (df.script_parent === undefined || df.script_parent == "true")
                         $scope.eventDataFiles.push(df);
                 });
-                // how does $scope.eventDataFiles change if a datafile is added after this page loads??
-
+                // now sort by distance by default
+                $scope.eventDataFiles.sort(function (a, b) {
+                    return parseFloat(a.distance) - parseFloat(b.distance);
+                });
             };
 
-            $scope.updateChosenAirRadio = function (index) {
+            $scope.updateChosenAirRadio = function (dfile) {
                 for (var i = 0; i < $scope.eventDataFiles.length; i++) {
-                    if (index != i)
+                    if (dfile.data_file_id != $scope.eventDataFiles[i].data_file_id)
                         $scope.eventDataFiles[i].selected = 'false';
                 }
             };
