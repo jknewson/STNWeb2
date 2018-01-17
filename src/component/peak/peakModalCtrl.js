@@ -327,6 +327,9 @@
                             $scope.chosenDFList.splice(ind, 1);
                         }
                     }
+                }, function (errorResponse) {
+                    if (errorResponse.headers(["usgswim-messages"]) !== undefined) toastr.error("Error getting data file: " + errorResponse.headers(["usgswim-messages"]));
+                    else toastr.error("Error getting data file: " + errorResponse.statusText);
                 });
             };
 
@@ -346,9 +349,10 @@
                     $scope.DFBox.nwisFile = f.is_nwis == 1 ? true : false;
                     $scope.DFBox.fileURL = f.name;
                     $scope.dataFileDetail = true; $scope.hwmDetail = false; $scope.sensorDetail = false;
+                }, function error(errorResponse) {
+                    if (errorResponse.headers(["usgswim-messages"]) !== undefined) toastr.error("Error getting data file: " + errorResponse.headers(["usgswim-messages"]));
+                    else toastr.error("Error getting data file: " + errorResponse.statusText);
                 });
-
-
             };
             //use this hwm to populate peak parts (primary sensor for determining peak)
             /*'<div class="modal-body"><p>Are you sure you want to set this as the Primary Data file? Doing so will populate the Peak Date, Time and time zone, Stage, Vertical Datum and Height Above Ground.</p></div>' +
@@ -422,6 +426,9 @@
                         updatedPeak = response;
                         var sendBack = [updatedPeak, 'updated'];
                         $uibModalInstance.close(sendBack);
+                    }, function (errorResponse) {
+                        if (errorResponse.headers(["usgswim-messages"]) !== undefined) toastr.error("Error saving peak: " + errorResponse.headers(["usgswim-messages"]));
+                        else toastr.error("Error saving peak: " + errorResponse.statusText);
                     });
                 }
             };//end save()
@@ -434,6 +441,9 @@
                     $http.defaults.headers.common.Accept = 'application/json';
                     res.peak_summary_id = null;
                     DATA_FILE.update({ id: res.data_file_id }, res).$promise;
+                }, function (errorResponse) {
+                    if (errorResponse.headers(["usgswim-messages"]) !== undefined) toastr.error("Error getting data file: " + errorResponse.headers(["usgswim-messages"]));
+                    else toastr.error("Error getting data file: " + errorResponse.statusText);
                 });
             };
             //delete Peak
@@ -486,11 +496,10 @@
                         toastr.success("Peak Removed");
                         var sendBack = ["de", 'deleted'];
                         $uibModalInstance.close(sendBack);
-                    }, function error(errorResponse) {
-                        toastr.error("Error: " + errorResponse.statusText);
+                    }, function (errorResponse) {
+                        if (errorResponse.headers(["usgswim-messages"]) !== undefined) toastr.error("Error deleting peak: " + errorResponse.headers(["usgswim-messages"]));
+                        else toastr.error("Error deleting peak: " + errorResponse.statusText);
                     });
-                }, function () {
-                    //logic for cancel
                 });//end modal
             };
 
@@ -536,6 +545,9 @@
                             toastr.success("Peak created");
                             var sendBack = [createdPeak, 'created'];
                             $uibModalInstance.close(sendBack);
+                        }, function (errorResponse) {
+                            if (errorResponse.headers(["usgswim-messages"]) !== undefined) toastr.error("Error creating peak: " + errorResponse.headers(["usgswim-messages"]));
+                            else toastr.error("Error creating peak: " + errorResponse.statusText);
                         });
                     }
                 } else {

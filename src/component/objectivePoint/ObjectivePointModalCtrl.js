@@ -31,10 +31,12 @@
             $scope.showFileForm = false; //hidden form to add file to op
             //make uncertainty cleared and disabled when 'unquantified' is checked
             $scope.UnquantChecked = function () {
-                if ($scope.opCopy.unquantified == 1)
-                    $scope.opCopy.uncertainty = "";
+                if ($scope.opCopy !== undefined) {
+                    if ($scope.opCopy.unquantified == 1)
+                        $scope.opCopy.uncertainty = "";
+                };
             };
-            
+
             //#region FILE STUFF
             $scope.stamp = FILE_STAMP.getStamp(); $scope.fileItemExists = true;
             //need to reupload fileItem to this existing file OR Change out existing fileItem for new one
@@ -96,7 +98,8 @@
                     $scope.fileItemExists = true;
                 }, function (errorResponse) {
                     $scope.sFileIsUploading = false;
-                    toastr.error("Error saving file: " + errorResponse.statusText);
+                    if (errorResponse.headers(["usgswim-messages"]) !== undefined) toastr.error("Error creating file: " + errorResponse.headers(["usgswim-messages"]));
+                    else toastr.error("Error creating file: " + errorResponse.statusText);
                 });
             };
 
@@ -104,9 +107,9 @@
             $scope.showImageModal = function (image) {
                 var imageModal = $uibModal.open({
                     template: '<div class="modal-header"><h3 class="modal-title">Image File Preview</h3></div>' +
-                        '<div class="modal-body"><img ng-src="{{setSRC}}" /></div>' +
-                        '<div class="modal-footer"><button class="btn btn-primary" ng-enter="ok()" ng-click="ok()">OK</button></div>',
-                    controller:['$scope', '$uibModalInstance', function ($scope, $uibModalInstance) {
+                    '<div class="modal-body"><img ng-src="{{setSRC}}" /></div>' +
+                    '<div class="modal-footer"><button class="btn btn-primary" ng-enter="ok()" ng-click="ok()">OK</button></div>',
+                    controller: ['$scope', '$uibModalInstance', function ($scope, $uibModalInstance) {
                         $scope.ok = function () {
                             $uibModalInstance.close();
                         };
@@ -133,6 +136,9 @@
                     $scope.aFile.fileType = $scope.fileTypeList.filter(function (ft) { return ft.filetype_id == $scope.aFile.filetype_id; })[0].filetype;
                     FILE.getFileItem({ id: $scope.aFile.file_id }).$promise.then(function (response) {
                         $scope.fileItemExists = response.Length > 0 ? true : false;
+                    }, function (errorResponse) {
+                        if (errorResponse.headers(["usgswim-messages"]) !== undefined) toastr.error("Error getting file item: " + errorResponse.headers(["usgswim-messages"]));
+                        else toastr.error("Error getting file item: " + errorResponse.statusText);
                     });
                     //determine if existing file is a photo (even if type is not )
                     if ($scope.aFile.name !== undefined) {
@@ -152,6 +158,9 @@
                             //add agency name to photo caption
                             if ($scope.aFile.filetype_id == 1)
                                 $scope.agencyNameForCap = $scope.agencies.filter(function (a) { return a.agency_id == $scope.aSource.agency_id; })[0].agency_name;
+                        }, function (errorResponse) {
+                            if (errorResponse.headers(["usgswim-messages"]) !== undefined) toastr.error("Error getting source: " + errorResponse.headers(["usgswim-messages"]));
+                            else toastr.error("Error getting source: " + errorResponse.statusText);
                         });
                     }//end if source
                 }//end existing file
@@ -161,7 +170,7 @@
                     $scope.aSource.FULLname = $scope.aSource.fname + " " + $scope.aSource.lname;
                 } //end new file
                 $scope.showFileForm = true;
-                
+
                 $scope.updateAgencyForCaption = function () {
                     if ($scope.aFile.filetype_id == 1)
                         $scope.agencyNameForCap = $scope.agencies.filter(function (a) { return a.agency_id == $scope.aSource.agency_id; })[0].agency_name;
@@ -175,7 +184,7 @@
                     $http.defaults.headers.common.Accept = 'application/json';
                     //post source first to get source_id
                     if ($scope.aSource.agency_id !== null) {
-                        var theSource = { source_name: $scope.aSource.FULLname, agency_id: $scope.aSource.agency_id};
+                        var theSource = { source_name: $scope.aSource.FULLname, agency_id: $scope.aSource.agency_id };
                         //now POST SOURCE, 
                         SOURCE.save(theSource).$promise.then(function (response) {
                             //then POST fileParts (Services populate PATH)
@@ -211,11 +220,13 @@
                                 $scope.showFileForm = false; $scope.fileIsUploading = false;
                             }, function (errorResponse) {
                                 $scope.fileIsUploading = false;
-                                toastr.error("Error saving file: " + errorResponse.statusText);
+                                if (errorResponse.headers(["usgswim-messages"]) !== undefined) toastr.error("Error creating file: " + errorResponse.headers(["usgswim-messages"]));
+                                else toastr.error("Error creating file: " + errorResponse.statusText);
                             });
                         }, function (errorResponse) {
                             $scope.fileIsUploading = false;
-                            toastr.error("Error saving Source info: " + errorResponse.statusText);
+                            if (errorResponse.headers(["usgswim-messages"]) !== undefined) toastr.error("Error creating source: " + errorResponse.headers(["usgswim-messages"]));
+                            else toastr.error("Error creating source: " + errorResponse.statusText);
                         });//end source.save()
                     }
                 }//end valid
@@ -234,9 +245,7 @@
                         // post again (if no change, will return existing one. if edited, will create a new one --instead of editing all files that use this source)
                         var theSource = { source_name: $scope.aSource.FULLname, agency_id: $scope.aSource.agency_id };
                         SOURCE.save(theSource).$promise.then(function (response) {
-                            //SOURCE.update({ id: $scope.aSource.source_id }, $scope.aSource).$promise.then(function () {
                             $scope.aFile.source_id = response.source_id;
-                     //   SOURCE.update({ id: $scope.aSource.source_id }, $scope.aSource).$promise.then(function () {
                             FILE.update({ id: $scope.aFile.file_id }, $scope.aFile).$promise.then(function (fileResponse) {
                                 toastr.success("File Updated");
                                 fileResponse.fileBelongsTo = "Objective Point File";
@@ -246,11 +255,13 @@
                                 $scope.showFileForm = false; $scope.fileIsUploading = false;
                             }, function (errorResponse) {
                                 $scope.fileIsUploading = false;
-                                toastr.error("Error saving file: " + errorResponse.statusText);
+                                if (errorResponse.headers(["usgswim-messages"]) !== undefined) toastr.error("Error creating file: " + errorResponse.headers(["usgswim-messages"]));
+                                else toastr.error("Error creating file: " + errorResponse.statusText);
                             });
                         }, function (errorResponse) {
                             $scope.fileIsUploading = false; //Loading...
-                            toastr.error("Error saving source: " + errorResponse.statusText);
+                            if (errorResponse.headers(["usgswim-messages"]) !== undefined) toastr.error("Error creating source: " + errorResponse.headers(["usgswim-messages"]));
+                            else toastr.error("Error creating source: " + errorResponse.statusText);
                         });
                     }
                 }//end valid
@@ -280,9 +291,10 @@
                         $scope.allSFiles.splice($scope.allSFileIndex, 1);
                         $scope.opImageFiles.splice($scope.existIMGFileIndex, 1);
                         Site_Files.setAllSiteFiles($scope.allSFiles); //updates the file list on the sitedashboard
-                        $scope.showFileForm = false; 
-                    }, function error(errorResponse) {
-                        toastr.error("Error: " + errorResponse.statusText);
+                        $scope.showFileForm = false;
+                    }, function (errorResponse) {
+                        if (errorResponse.headers(["usgswim-messages"]) !== undefined) toastr.error("Error deleting file: " + errorResponse.headers(["usgswim-messages"]));
+                        else toastr.error("Error deleting file: " + errorResponse.statusText);
                     });
                 });//end DeleteModal.result.then
             };//end delete()
@@ -290,7 +302,7 @@
             $scope.cancelFile = function () {
                 $scope.aFile = {};
                 $scope.aSource = {};
-              //  $scope.datafile = {};
+                //  $scope.datafile = {};
                 $scope.showFileForm = false;
             };
             //#endregion FILE STUFF
@@ -355,13 +367,13 @@
 
             //want to add identifier
             $scope.addNewIdentifier = function () {
-                if ($scope.createOReditOP == 'edit') 
+                if ($scope.createOReditOP == 'edit')
                     $scope.addedIdentifiersCopy.push({ objective_point_id: $scope.OP.objective_point_id, identifier: "", identifier_type: "" });
-                else 
+                else
                     $scope.addedIdentifiers.push({ identifier: "", identifier_type: "" });
 
                 $scope.showControlIDinput = true;
-                
+
 
             };
 
@@ -434,8 +446,8 @@
                             //show modal telling them to populate all three (DMS) for conversion to work
                             var DMSModal = $uibModal.open({
                                 template: '<div class="modal-header"><h3 class="modal-title">Error</h3></div>' +
-                                    '<div class="modal-body"><p>Please populate all three inputs for conversion from DMS to Decimal Degrees to work.</p></div>' +
-                                    '<div class="modal-footer"><button type="button" class="btn btn-primary" ng-enter="ok()" ng-click="ok()">OK</button></div>',
+                                '<div class="modal-body"><p>Please populate all three inputs for conversion from DMS to Decimal Degrees to work.</p></div>' +
+                                '<div class="modal-footer"><button type="button" class="btn btn-primary" ng-enter="ok()" ng-click="ok()">OK</button></div>',
                                 controller: ['$scope', '$uibModalInstance', function ($scope, $uibModalInstance) {
                                     $scope.ok = function () {
                                         $uibModalInstance.close();
@@ -473,18 +485,18 @@
                     if ($scope.OP.decDegORdms == "dd") {
                         //they clicked Dec Deg..
                         if (($scope.DMS.LADeg !== undefined && $scope.DMS.LAMin !== undefined && $scope.DMS.LASec !== undefined) &&
-                            $scope.DMS.LODeg !== undefined && $scope.DMS.LOMin !== undefined && $scope.DMS.LOSec !== undefined) {  
+                            $scope.DMS.LODeg !== undefined && $scope.DMS.LOMin !== undefined && $scope.DMS.LOSec !== undefined) {
                             //convert what's here for each lat and long
                             $scope.OP.latitude_dd = azimuth($scope.DMS.LADeg, $scope.DMS.LAMin, $scope.DMS.LASec);
                             $scope.OP.longitude_dd = azimuth($scope.DMS.LODeg, $scope.DMS.LOMin, $scope.DMS.LOSec);
                             //clear
                             $scope.DMS = {};
                         } else {
-                        //show modal telling them to populate all three (DMS) for conversion to work
+                            //show modal telling them to populate all three (DMS) for conversion to work
                             var DMSddModal = $uibModal.open({
                                 template: '<div class="modal-header"><h3 class="modal-title">Error</h3></div>' +
-                                    '<div class="modal-body"><p>Please populate all three inputs for conversion from DMS to Decimal Degrees to work.</p></div>' +
-                                    '<div class="modal-footer"><button type="button" class="btn btn-primary" ng-enter="ok()" ng-click="ok()">OK</button></div>',
+                                '<div class="modal-body"><p>Please populate all three inputs for conversion from DMS to Decimal Degrees to work.</p></div>' +
+                                '<div class="modal-footer"><button type="button" class="btn btn-primary" ng-enter="ok()" ng-click="ok()">OK</button></div>',
                                 controller: ['$scope', '$uibModalInstance', function ($scope, $uibModalInstance) {
                                     $scope.ok = function () {
                                         $uibModalInstance.close();
@@ -549,7 +561,7 @@
             //cancel modal
             $scope.cancel = function () {
                 $uibModalInstance.close();
-             //   $uibModalInstance.dismiss('cancel');
+                //   $uibModalInstance.dismiss('cancel');
             };
 
             //fix default radios and lat/long
@@ -630,7 +642,8 @@
                                 }
                             }
                         }, function error(errorResponse) {
-                            toastr.error("Error creating Datum Location: " + errorResponse.statusText);
+                            if (errorResponse.headers(["usgswim-messages"]) !== undefined) toastr.error("Error creating datum location: " + errorResponse.headers(["usgswim-messages"]));
+                            else toastr.error("Error creating datum location: " + errorResponse.statusText);
                         }).$promise.then(function () {
                             var sendBack = [createdOP, 'created'];
                             $uibModalInstance.close(sendBack);
@@ -686,6 +699,9 @@
                                     var existIndex = $scope.addedIdentifiers.map(function (i) { return i.op_control_identifier_id; }).indexOf($scope.addedIdentifiersCopy[i].op_control_identifier_id);
                                     OP_CONTROL_IDENTIFIER.update({ id: $scope.addedIdentifiersCopy[i].op_control_identifier_id }, $scope.addedIdentifiersCopy[i]).$promise.then(function (response) {
                                         $scope.addedIdentifiers[existIndex] = response;
+                                    }, function (errorResponse) {
+                                        if (errorResponse.headers(["usgswim-messages"]) !== undefined) toastr.error("Error saving control identifier: " + errorResponse.headers(["usgswim-messages"]));
+                                        else toastr.error("Error saving control identifier: " + errorResponse.statusText);
                                     });
                                 } else {
                                     //post each one
@@ -693,6 +709,9 @@
                                     thisOPControlID.objective_point_id = $scope.OP.objective_point_id;
                                     OP_CONTROL_IDENTIFIER.save(thisOPControlID).$promise.then(function (response) {
                                         $scope.addedIdentifiers.push(response);
+                                    }, function (errorResponse) {
+                                        if (errorResponse.headers(["usgswim-messages"]) !== undefined) toastr.error("Error creating control identifier: " + errorResponse.headers(["usgswim-messages"]));
+                                        else toastr.error("Error creating control identifier: " + errorResponse.statusText);
                                     });
                                 }
                             }//end foreach addedIdentifier
@@ -704,6 +723,9 @@
                                 var deIndex = $scope.addedIdentifiers.map(function (ri) { return ri.op_control_identifier_id; }).indexOf($scope.removeOPCarray[r].op_control_identifier_id);
                                 OP_CONTROL_IDENTIFIER.delete({ id: $scope.removeOPCarray[r].op_control_identifier_id }).$promise.then(function () {
                                     $scope.addedIdentifiers.splice(deIndex, 1);
+                                }, function (errorResponse) {
+                                    if (errorResponse.headers(["usgswim-messages"]) !== undefined) toastr.error("Error deleting control identifier: " + errorResponse.headers(["usgswim-messages"]));
+                                    else toastr.error("Error deleting control identifier: " + errorResponse.statusText);
                                 });
                             }//end foreach removeOPCarray
                         }//end if there's removeOPCs
@@ -729,7 +751,8 @@
                             $scope.addedIdentifiersCopy = []; $scope.view.OPval = 'detail';
                             //    delete $http.defaults.headers.common['X-HTTP-Method-Override'];
                         }, function error(errorResponse) {
-                            toastr.error("Error updating Datum Location: " + errorResponse.statusText);
+                            if (errorResponse.headers(["usgswim-messages"]) !== undefined) toastr.error("Error saving datum location: " + errorResponse.headers(["usgswim-messages"]));
+                            else toastr.error("Error saving datum location: " + errorResponse.statusText);
                         }).$promise;
                     }//end lat/long are good
                 }// end valid
@@ -741,8 +764,8 @@
                     if (result.length > 0) {
                         var opOnTapedownModal = $uibModal.open({
                             template: '<div class="modal-header"><h3 class="modal-title">Cannot Delete</h3></div>' +
-                                '<div class="modal-body"><p>This Datum Location is being used for one or more sensor tape downs. Please delete the tape down before deleting the datum location.</p></div>' +
-                                '<div class="modal-footer"><button class="btn btn-primary" ng-enter="ok()" ng-click="ok()">OK</button></div>',
+                            '<div class="modal-body"><p>This Datum Location is being used for one or more sensor tape downs. Please delete the tape down before deleting the datum location.</p></div>' +
+                            '<div class="modal-footer"><button class="btn btn-primary" ng-enter="ok()" ng-click="ok()">OK</button></div>',
                             controller: ['$scope', '$uibModalInstance', function ($scope, $uibModalInstance) {
                                 $scope.ok = function () {
                                     $uibModalInstance.dismiss();
@@ -781,13 +804,15 @@
                                 toastr.success("Datum Location Removed");
                                 var sendBack = ["de", 'deleted'];
                                 $uibModalInstance.close(sendBack);
-                            }, function error(errorResponse) {
-                                toastr.error("Error: " + errorResponse.statusText);
+                            }, function (errorResponse) {
+                                if (errorResponse.headers(["usgswim-messages"]) !== undefined) toastr.error("Error deleting datum location: " + errorResponse.headers(["usgswim-messages"]));
+                                else toastr.error("Error deleting datum location: " + errorResponse.statusText);
                             });
-                        }, function () {
-                            //logic for cancel
                         });//end modal
                     }//end else (proceed with delete)
+                }, function (errorResponse) {
+                    if (errorResponse.headers(["usgswim-messages"]) !== undefined) toastr.error("Error getting datum location measures: " + errorResponse.headers(["usgswim-messages"]));
+                    else toastr.error("Error getting datum location measures: " + errorResponse.statusText);
                 }); //end get opmeasurements
             }; //end delete
 
@@ -795,8 +820,8 @@
             var openLatModal = function (w) {
                 var latModal = $uibModal.open({
                     template: '<div class="modal-header"><h3 class="modal-title">Error</h3></div>' +
-                        '<div class="modal-body"><p>The Latitude must be between 0 and 73.0</p></div>' +
-                        '<div class="modal-footer"><button class="btn btn-primary" ng-enter="ok()" ng-click="ok()">OK</button></div>',
+                    '<div class="modal-body"><p>The Latitude must be between 0 and 73.0</p></div>' +
+                    '<div class="modal-footer"><button class="btn btn-primary" ng-enter="ok()" ng-click="ok()">OK</button></div>',
                     controller: ['$scope', '$uibModalInstance', function ($scope, $uibModalInstance) {
                         $scope.ok = function () {
                             $uibModalInstance.close();
@@ -814,8 +839,8 @@
             var openLongModal = function (w) {
                 var longModal = $uibModal.open({
                     template: '<div class="modal-header"><h3 class="modal-title">Error</h3></div>' +
-                        '<div class="modal-body"><p>The Longitude must be between -175.0 and -60.0</p></div>' +
-                        '<div class="modal-footer"><button class="btn btn-primary" ng-enter="ok()" ng-click="ok()">OK</button></div>',
+                    '<div class="modal-body"><p>The Longitude must be between -175.0 and -60.0</p></div>' +
+                    '<div class="modal-footer"><button class="btn btn-primary" ng-enter="ok()" ng-click="ok()">OK</button></div>',
                     controller: ['$scope', '$uibModalInstance', function ($scope, $uibModalInstance) {
                         $scope.ok = function () {
                             $uibModalInstance.close();
@@ -876,10 +901,10 @@
             };
             $scope.cancelOPEdit = function () {
                 $scope.view.OPval = 'detail';
-                $scope.opCopy = [];               
+                $scope.opCopy = [];
             };
             $rootScope.stateIsLoading.showLoading = false;// loading..
-            
+
         }]);//end OPmodalCtrl
 
 })();

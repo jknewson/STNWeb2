@@ -5,7 +5,7 @@
     'use strict';
     var STNControllers = angular.module('STNControllers');
 
-    STNControllers.controller('MapFiltersController', ['$scope', '$http', '$rootScope', '$cookies', '$location', 'SITE', 'EVENT', 'Map_Filter', '$state',  'stateList', 'sensorTypes', 'networkNames', 'spinnerService',
+    STNControllers.controller('MapFiltersController', ['$scope', '$http', '$rootScope', '$cookies', '$location', 'SITE', 'EVENT', 'Map_Filter', '$state', 'stateList', 'sensorTypes', 'networkNames', 'spinnerService',
         function ($scope, $http, $rootScope, $cookies, $location, SITE, EVENT, Map_Filter, $state, stateList, sensorTypes, networkNames, spinnerService) {
             $scope.status = { siteOpen: true }; //accordion for siteInfo
 
@@ -16,9 +16,9 @@
             $scope.Chosen = {
                 network: null,
                 sensor: null,
-                survey:null
+                survey: null
             };
-            
+
             $scope.chosenStates = []; //used to join each abbrev to pass to call
             $scope.siteResponse = false;
             $scope.checkboxModel = {
@@ -33,7 +33,7 @@
                 //$rootScope.stateIsLoading.showLoading = true; // loading..
                 //store search in case they leave and click back
                 spinnerService.show("mapSpinner");
-                if ($scope.checkboxModel.eventSitesOnly === "1" && $scope.sessionEventExists === true ) {
+                if ($scope.checkboxModel.eventSitesOnly === "1" && $scope.sessionEventExists === true) {
                     var stateString = $scope.chosenStates.join();
                     $scope.siteResponse = false;
                     $scope.siteList = [];
@@ -50,16 +50,16 @@
                         OPDefined: $scope.checkboxModel.opDefined
                     };
                     SITE.getFilteredSites({
-                            Event: evID,
-                            State: stateString,
-                            SensorType: $scope.Chosen.sensor,
-                            NetworkName: $scope.Chosen.network,
-                            HWMOnly: $scope.checkboxModel.hwmOnly,
-                            HWMSurveyed: $scope.Chosen.survey,
-                            SensorOnly: $scope.checkboxModel.senOnly,
-                            RDGOnly: $scope.checkboxModel.rdgOnly,
-                            OPDefined: $scope.checkboxModel.opDefined
-                        },
+                        Event: evID,
+                        State: stateString,
+                        SensorType: $scope.Chosen.sensor,
+                        NetworkName: $scope.Chosen.network,
+                        HWMOnly: $scope.checkboxModel.hwmOnly,
+                        HWMSurveyed: $scope.Chosen.survey,
+                        SensorOnly: $scope.checkboxModel.senOnly,
+                        RDGOnly: $scope.checkboxModel.rdgOnly,
+                        OPDefined: $scope.checkboxModel.opDefined
+                    },
                         function success(response) {
                             // $scope.siteList = response;
                             // $scope.siteResponse = true;
@@ -69,9 +69,10 @@
 
                         }, function error(errorResponse) {
                             $rootScope.stateIsLoading.showLoading = false; // loading..
-                            alert("Error: " + errorResponse.statusText);
+                            if (errorResponse.headers(["usgswim-messages"]) !== undefined) toastr.error("Error getting filtered sites: " + errorResponse.headers(["usgswim-messages"]));
+                            else toastr.error("Error getting filtered sites: " + errorResponse.statusText);
                         });
-                } else if ($scope.checkboxModel.eventSitesOnly === "0" || $scope.sessionEventExists === false){
+                } else if ($scope.checkboxModel.eventSitesOnly === "0" || $scope.sessionEventExists === false) {
 
 
                     var stateString = $scope.chosenStates.join();
@@ -98,28 +99,23 @@
                     }
 
                     SITE.getFilteredSites({
-                            State: stateString,
-                            SensorType: $scope.Chosen.sensor,
-                            NetworkName: $scope.Chosen.network,
-                            HWMOnly: $scope.checkboxModel.hwmOnly,
-                            HWMSurveyed: $scope.Chosen.survey,
-                            SensorOnly: $scope.checkboxModel.senOnly,
-                            RDGOnly: $scope.checkboxModel.rdgOnly,
-                            OPDefined: $scope.checkboxModel.opDefined
-                        },
+                        State: stateString,
+                        SensorType: $scope.Chosen.sensor,
+                        NetworkName: $scope.Chosen.network,
+                        HWMOnly: $scope.checkboxModel.hwmOnly,
+                        HWMSurveyed: $scope.Chosen.survey,
+                        SensorOnly: $scope.checkboxModel.senOnly,
+                        RDGOnly: $scope.checkboxModel.rdgOnly,
+                        OPDefined: $scope.checkboxModel.opDefined
+                    },
                         function success(response) {
-                            // $scope.siteList = response;
-                            // $scope.siteResponse = true;
                             spinnerService.hide("mapSpinner");
-                            //$rootScope.stateIsLoading.showLoading = false; // loading..
                             Map_Filter.setFilteredSites(response);
-
                         }, function error(errorResponse) {
                             $rootScope.stateIsLoading.showLoading = false; // loading..
-                            alert("Error: " + errorResponse.statusText);
+                            if (errorResponse.headers(["usgswim-messages"]) !== undefined) toastr.error("Error getting filtered sites: " + errorResponse.headers(["usgswim-messages"]));
+                            else toastr.error("Error getting filtered sites: " + errorResponse.statusText);
                         });
-
-
                 }
             };//end searchSites click action
 
@@ -146,20 +142,20 @@
                     rdgOnly: 0,
                     opDefined: 0
                 };
-                $scope.Chosen = {}; 
+                $scope.Chosen = {};
                 $scope.chosenStates = [];
                 angular.forEach($scope.states, function (st) {
                     st.selected = false;
                 });
                 var evID = $cookies.get('SessionEventID') !== null && $cookies.get('SessionEventID') !== undefined ? $cookies.get('SessionEventID') : 0;
-                $scope.sitesPromise = EVENT.getEventSites({id: evID},//SITE.getAll({ Event: evID },
-                function success(response) {
-                    //spinnerService.hide("mapSpinner");
-                    Map_Filter.setFilteredSites(response);
-                    spinnerService.hide("mapSpinner");
-                }, function error(errorResponse) {
-
-                });
+                $scope.sitesPromise = EVENT.getEventSites({ id: evID },
+                    function success(response) {
+                        Map_Filter.setFilteredSites(response);
+                        spinnerService.hide("mapSpinner");
+                    }, function error(errorResponse) {
+                        if (errorResponse.headers(["usgswim-messages"]) !== undefined) toastr.error("Error getting sites: " + errorResponse.headers(["usgswim-messages"]));
+                        else toastr.error("Error getting sites: " + errorResponse.statusText);
+                    });
             };
 
             // $rootScope.$on('mapSiteClick', function (event, siteParts) {

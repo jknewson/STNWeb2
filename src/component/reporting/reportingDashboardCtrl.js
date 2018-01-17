@@ -2,7 +2,7 @@
     'use strict';
 
     var STNControllers = angular.module('STNControllers');
-    STNControllers.controller('reportingDashCtrl', ['$scope', '$cookies', '$filter', '$uibModal', '$state', '$http', 'CONTACT', 'MEMBER', 'allReportsAgain', 
+    STNControllers.controller('reportingDashCtrl', ['$scope', '$cookies', '$filter', '$uibModal', '$state', '$http', 'CONTACT', 'MEMBER', 'allReportsAgain',
         function ($scope, $cookies, $filter, $uibModal, $state, $http, CONTACT, MEMBER, allReportsAgain) {
             $scope.reportsToDate = allReportsAgain;
             $scope.todayRpts = []; $scope.yesterdayRpts = []; $scope.pickDateRpts = []; $scope.pickAdateReports = false;
@@ -11,7 +11,7 @@
             $scope.yesterday = new Date($scope.today);
             $scope.yesterday.setDate($scope.today.getDate() - 1);
             $scope.today = $scope.today.toISOString().substr(0, 10);
-            $scope.yesterday = $scope.yesterday.toISOString().substr(0,10);
+            $scope.yesterday = $scope.yesterday.toISOString().substr(0, 10);
 
             $scope.THIS_DATE = {};
             //View Report button clicked, get stuff and make a pdf 
@@ -96,7 +96,7 @@
             //complete the report button clicked -- send back to submit with report populated
             $scope.CompleteThisReport = function (rep) {
                 $scope.$parent.newReport = rep;
-               // $scope.$parent.newReport.report_date = new Date(rep.report_date); //keeps it valid
+                // $scope.$parent.newReport.report_date = new Date(rep.report_date); //keeps it valid
                 $scope.$parent.disabled = false;
                 $scope.$parent.needToComplete = true;
                 $http.defaults.headers.common.Authorization = 'Basic ' + $cookies.get('STNCreds');
@@ -111,6 +111,9 @@
                     } else {
                         $scope.$parent.DeployStaff = {}; $scope.$parent.GenStaff = {}; $scope.$parent.InlandStaff = {}; $scope.$parent.CoastStaff = {}; $scope.$parent.WaterStaff = {};
                     }
+                }, function error(errorResponse) {
+                    if (errorResponse.headers(["usgswim-messages"]) !== undefined) toastr.error("Error creating landowner contact: " + errorResponse.headers(["usgswim-messages"]));
+                    else toastr.error("Error creating landowner contact: " + errorResponse.statusText);
                 }).$promise.then(function () {
                     $state.go('reporting.submitReport');
                 });

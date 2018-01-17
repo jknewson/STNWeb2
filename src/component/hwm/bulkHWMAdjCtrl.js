@@ -22,7 +22,7 @@
                 $scope.HWM_params = {};
                 $scope.countyList = countyList;
                 $scope.countyArray = []; //holder of state counties (will change as they change state choice)
-                $scope.result = { 'searchClicked':false };
+                $scope.result = { 'searchClicked': false };
 
                 //called a few times to format just the date (no time)
                 var makeAdate = function (d) {
@@ -48,8 +48,8 @@
                         $scope.countyArray = [];
                     }
                 };
-                                
-                
+
+
                 //event,state,counties chosen, get hwms
                 $scope.getHWMs = function (valid) {
                     if (valid) {
@@ -77,7 +77,7 @@
                                 one.hwm_label = response[i].hwm_label;
                                 one.site_id = response[i].site_id;
                                 one.site_no = response[i].site_no,
-                                one.hwm_locationdescription = response[i].hwm_locationdescription;
+                                    one.hwm_locationdescription = response[i].hwm_locationdescription;
                                 one.latitude_dd = response[i].latitude_dd;
                                 one.longitude_dd = response[i].longitude_dd;
                                 if (response[i].survey_date !== "") {
@@ -88,12 +88,13 @@
                                 one.hwm_notes = response[i].hwm_notes;
                                 $scope.adjustHWMs.push(one);
                             }
-                        }, function (error) {
-                            toastr.error("Error getting hwms.");
+                        }, function (errorResponse) {
+                            if (errorResponse.headers(["usgswim-messages"]) !== undefined) toastr.error("Error getting hwms: " + errorResponse.headers(["usgswim-messages"]));
+                            else toastr.error("Error getting hwms: " + errorResponse.statusText);
                         });
                     }
                 };
-                
+
                 if (!angular.equals({}, HWM_Service.getBulkHWMSearch())) {
                     var theSearch = HWM_Service.getBulkHWMSearch();
                     $scope.HWM_params.event_id = theSearch.Event;
@@ -116,8 +117,8 @@
                 var requiredModal = function () {
                     var reqModal = $uibModal.open({
                         template: '<div class="modal-header"><h3 class="modal-title">Error</h3></div>' +
-                            '<div class="modal-body"><p>This field is required.</p></div>' +
-                            '<div class="modal-footer"><button class="btn btn-primary" ng-enter="ok()" ng-click="ok()">OK</button></div>',
+                        '<div class="modal-body"><p>This field is required.</p></div>' +
+                        '<div class="modal-footer"><button class="btn btn-primary" ng-enter="ok()" ng-click="ok()">OK</button></div>',
                         backdrop: 'static',
                         keyboard: false,
                         controller: function ($scope, $uibModalInstance) {
@@ -128,7 +129,7 @@
                         size: 'sm'
                     });
                 };
-               
+
                 //make readonly grey
                 var colorRenderer = function (instance, td, row, col, prop, value, cellProperties) {
                     Handsontable.renderers.TextRenderer.apply(this, arguments);
@@ -137,8 +138,8 @@
                 };
                 //make site_no a link
                 var siteNoRenderer = function (instance, td, row, col, prop, value, cellProperties) {
-                    Handsontable.renderers.TextRenderer.apply(this, arguments);              
-                    td.innerHTML = '<a ng-click="goToSite()">' + value + '</a>';                   
+                    Handsontable.renderers.TextRenderer.apply(this, arguments);
+                    td.innerHTML = '<a ng-click="goToSite()">' + value + '</a>';
                     td.style.background = '#F7F5F5';
                     return td;
                 };
@@ -152,8 +153,8 @@
                 };
                 $scope.numberValidator = function (value, callback) {
                     //handling this myself, never will be invalid
-                    callback(true);                    
-                };         
+                    callback(true);
+                };
                 //#endregion
 
                 //save updates
@@ -182,18 +183,22 @@
                                 $scope.adjustHWMs = []; $scope.eventStateHWMs = [];
                                 $scope.invalids = [];
                                 $scope.getHWMs(true);
-                            }, function (error) {
-                                toastr.error("Error updating HWMs");
+                            }, function (errorResponse) {
+                                if (errorResponse.headers(["usgswim-messages"]) !== undefined) toastr.error("Error updating hwm: " + errorResponse.headers(["usgswim-messages"]));
+                                else toastr.error("Error getting hwm: " + errorResponse.statusText);
                             });
                         });
+                    }, function (errorResponse) {
+                        if (errorResponse.headers(["usgswim-messages"]) !== undefined) toastr.error("Error getting hwms: " + errorResponse.headers(["usgswim-messages"]));
+                        else toastr.error("Error getting hwms: " + errorResponse.statusText);
                     });
                 };
                 //reset back 
                 $scope.reset = function () {
                     var resetModal = $uibModal.open({
                         template: '<div class="modal-header"><h3 class="modal-title"></h3></div>' +
-                            '<div class="modal-body"><p>Warning! This will revert the hwm data to the last saved version. All unsaved edits will be lost.</p></div>' +
-                            '<div class="modal-footer"><button class="btn btn-primary" ng-click="ok()">OK</button><button class="btn btn-primary" ng-click="cancel()">Cancel</button></div>',
+                        '<div class="modal-body"><p>Warning! This will revert the hwm data to the last saved version. All unsaved edits will be lost.</p></div>' +
+                        '<div class="modal-footer"><button class="btn btn-primary" ng-click="ok()">OK</button><button class="btn btn-primary" ng-click="cancel()">Cancel</button></div>',
                         backdrop: 'static',
                         keyboard: false,
                         controller: ['$scope', '$uibModalInstance', function ($scope, $uibModalInstance) {
@@ -209,13 +214,13 @@
                     resetModal.result.then(function () {
                         $scope.adjustHWMs = []; HWM_Service.setBulkHWMSearch({});
                         $scope.invalids = [];
-                        $scope.getHWMs(true);                        
+                        $scope.getHWMs(true);
                     });
                 };
 
                 //#region handsontable settings
                 $scope.tableSettings = {
-                  //  colHeaders: true,
+                    //  colHeaders: true,
                     rowHeaders: true,
                     //contextMenu: ['row_above', 'row_below', 'remove_row'],
                     minSpareRows: 0,
@@ -231,9 +236,9 @@
                     cells: function (row, col, prop) {
                         //first 6 are readonly (grey) and site_no is a link
                         var cellprops = {};
-                        if (col <= 6) cellprops.renderer = colorRenderer;                         
-                        if (col == 3) cellprops.renderer = siteNoRenderer;                            
-                        return cellprops;                        
+                        if (col <= 6) cellprops.renderer = colorRenderer;
+                        if (col == 3) cellprops.renderer = siteNoRenderer;
+                        return cellprops;
                     },
                     onBeforeChange: function (data) {
                         for (var i = data.length - 1; i >= 0; i--) {
@@ -244,8 +249,8 @@
                                     setTimeout(function () { $scope.hotInstance.deselectCell(); }, 100);
                                     var waterModal = $uibModal.open({
                                         template: '<div class="modal-header"><h3 class="modal-title">Error</h3></div>' +
-                                            '<div class="modal-body"><p>Value must be a number.</p></div>' +
-                                            '<div class="modal-footer"><button class="btn btn-primary" ng-enter="ok()" ng-click="ok()">OK</button></div>',
+                                        '<div class="modal-body"><p>Value must be a number.</p></div>' +
+                                        '<div class="modal-footer"><button class="btn btn-primary" ng-enter="ok()" ng-click="ok()">OK</button></div>',
                                         backdrop: 'static',
                                         keyboard: false,
                                         controller: ['$scope', '$uibModalInstance', function ($scope, $uibModalInstance) {
@@ -257,14 +262,14 @@
                                     });
                                 }
                             }
-                        }                        
+                        }
                     },
                     afterOnCellMouseDown: function (event, coords, td) {
                         //open multi-select modal for resources, media or frequencies
                         if (coords.col == 3) {
                             var site_number = $scope.hotInstance.getDataAtCell(coords.row, coords.col);
                             var siteId = $scope.adjustHWMs.filter(function (h) { return h.site_no == site_number; })[0].site_id;
-                            $state.go("site.dashboard", {id: siteId});
+                            $state.go("site.dashboard", { id: siteId });
                         }
                     },
                     onAfterValidate: function (isValid, value, row, prop, souce) {
@@ -282,7 +287,7 @@
                                 $scope.invalids.splice(vIndex, 1);
                         }
                     },
-                    fillHandle:{autoInsertRow:false},
+                    fillHandle: { autoInsertRow: false },
                     rowHeights: 50
                 };
                 //#endregion

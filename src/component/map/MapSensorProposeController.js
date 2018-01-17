@@ -50,8 +50,10 @@
                         sResponse[s].instrument_status = [];
                         sResponse[s].instrument_status = correctOrderSS;
                     }
-
                     $scope.ProposedSensors4Site = sResponse.filter(function (ss) { return ss.instrument_status[0].status_type_id == 4; });
+                }, function (errorResponse) {
+                    if (errorResponse.headers(["usgswim-messages"]) !== undefined) toastr.error("Error getting site sensors: " + errorResponse.headers(["usgswim-messages"]));
+                    else toastr.error("Error getting site sensors: " + errorResponse.statusText);
                 });
             };
 
@@ -105,8 +107,9 @@
                         //now post it (Instrument first, then Instrument Status
                         $http.defaults.headers.common.Authorization = 'Basic ' + $cookies.get('STNCreds');
                         $http.defaults.headers.common.Accept = 'application/json';
-
+                        var instrumentID = 0;
                         INSTRUMENT.save(proposedToAdd).$promise.then(function (response) {
+                            instrumentID = response.instrument_id;
                             var createdPropSensor = {
                                 deployment_type_id: response.deployment_type_id,
                                 site_id: response.site_id,
@@ -133,10 +136,15 @@
                                 });
 
                             }, function (errorResponse) {
-                                toastr.error("Error creating proposed instrument: " + errorResponse.statusText);
+                                // if status fails, delete the instrument too
+                                INSTRUMENT.delete({ id: instrumentID });
+                                angular.forEach($scope.deployTypeList, function (dt) { dt.selected = false; });
+                                if (errorResponse.headers(["usgswim-messages"]) !== undefined) toastr.error("Error creating proposed sensor: " + errorResponse.headers(["usgswim-messages"]));
+                                else toastr.error("Error creating proposed sensor: " + errorResponse.statusText);
                             });//end INSTRUMENT_STATUS.save
                         }, function (errorResponse) {
-                            toastr.error("Error creating proposed instrument: " + errorResponse.statusText);
+                            if (errorResponse.headers(["usgswim-messages"]) !== undefined) toastr.error("Error creating proposed sensor: " + errorResponse.headers(["usgswim-messages"]));
+                            else toastr.error("Error creating proposed sensor: " + errorResponse.statusText);
                         }); //end INSTRUMENT.save
                     }//end if selected == true
                 }//end foreach deployTypeList

@@ -4,8 +4,8 @@
     var STNControllers = angular.module('STNControllers');
 
     STNControllers.controller('siteCtrl', ['$scope', '$state', '$rootScope', '$cookies', '$location', '$http', '$uibModal', '$filter', 'thisSite', 'latlong', 'thisSiteNetworkNames', 'thisSiteNetworkTypes', 'thisSiteHousings',
-        'SITE', 'MEMBER', 'FILE_TYPE', 'AGENCY', 'allHorDatums', 'allHorCollMethods', 'allStates', 'allCounties', 'allDeployPriorities', 'allHousingTypes', 'allNetworkNames', 'allNetworkTypes', 'allDeployTypes', 'allSensorTypes',
-        function ($scope, $state, $rootScope, $cookies, $location, $http, $uibModal, $filter, thisSite, latlong, thisSiteNetworkNames, thisSiteNetworkTypes, thisSiteHousings, SITE, MEMBER, FILE_TYPE, AGENCY, allHorDatums,
+        'SITE', 'MEMBER', 'FILE_TYPE', 'AGENCY', 'Site_Script', 'allHorDatums', 'allHorCollMethods', 'allStates', 'allCounties', 'allDeployPriorities', 'allHousingTypes', 'allNetworkNames', 'allNetworkTypes', 'allDeployTypes', 'allSensorTypes',
+        function ($scope, $state, $rootScope, $cookies, $location, $http, $uibModal, $filter, thisSite, latlong, thisSiteNetworkNames, thisSiteNetworkTypes, thisSiteHousings, SITE, MEMBER, FILE_TYPE, AGENCY, Site_Script, allHorDatums,
             allHorCollMethods, allStates, allCounties, allDeployPriorities, allHousingTypes, allNetworkNames, allNetworkTypes, allDeployTypes, allSensorTypes) {
             if ($cookies.get('STNCreds') === undefined || $cookies.get('STNCreds') === "") {
                 $scope.auth = false;
@@ -13,18 +13,35 @@
             } else {
                 $rootScope.thisPage = "Site Dashboard";
                 $scope.aSite = {};
-                
+                // are there any scripts running against this site right now for air/water
+                var showScriptToast = function () {
+                    toastr.warning(
+                        "Data File Scripts are processing for this site and can take several minutes. Check back to the site dashboard later or refresh to see if script is complete and new files are ready. The output csv file contains success/error information.",
+                        null,
+                        { closeButton: true, positionClass: "toast-bottom-right", onclick: null, timeOut: 0, extendedTimeOut: 0 }
+                    );
+                };
+                if (Site_Script.getIsScriptRunning() == "true") {
+                    showScriptToast();
+                }
+                $scope.$on('siteDFScriptRunning', function (e, runningScript) {
+                    if (runningScript == "true") {
+                        showScriptToast();
+                    } else {
+                        toastr.clear();
+                    }
+                });
                 $scope.status = {
                     mapOpen: false, siteOpen: true, opOpen: false, sensorOpen: false, hwmOpen: false, filesOpen: false, peakOpen: false
                 };
                 $scope.thisSiteHouseTypeModel = []; //holder for when adding housing type to page from multiselect
-            
+
                 //open modal to edit or create a site
                 $scope.openSiteCreate = function () {
                     $rootScope.stateIsLoading.showLoading = true; // loading..
-                    var dropdownParts =[allHorDatums, allHorCollMethods, allStates, allCounties, allHousingTypes, allDeployPriorities,
+                    var dropdownParts = [allHorDatums, allHorCollMethods, allStates, allCounties, allHousingTypes, allDeployPriorities,
                         allNetworkNames, allNetworkTypes, allDeployTypes, allSensorTypes];
-                    var siteNNamesToPass =[]; //make sure only passing to edit those that are on this site (in case they edit, save, edit again)
+                    var siteNNamesToPass = []; //make sure only passing to edit those that are on this site (in case they edit, save, edit again)
                     if ($scope.siteNetworkNames !== undefined) {
                         for (var aNN = 0; aNN < allNetworkNames.length; aNN++) {
                             //if name matches any of the names in $scope.SiteNetworkNames, get the full network_name to pass to the modal
@@ -44,43 +61,43 @@
                     }
                     //modal
                     var modalInstance = $uibModal.open({
-                            templateUrl: 'SITEmodal.html',
-                            controller: 'siteModalCtrl',
-                            size: 'lg',
-                            keyboard: false,
-                            backdrop: 'static',
-                            windowClass: 'rep-dialog',
-                            resolve: {
-                                allDropDownParts: function () {
-                                    return dropdownParts;
-                                },
-                                thisSiteStuff: function () {
-                                    if ($scope.aSite.site_id !== undefined) {
-                                        var origSiteHouses = $scope.originalSiteHousings !== undefined ? $scope.originalSiteHousings : []; //needed for multi select to set prop selected
-                                        var sHouseTypeModel = $scope.thisSiteHouseTypeModel.length > 0 ? $scope.thisSiteHouseTypeModel : []; //here's what the site already has
-                                        var sNetNames = siteNNamesToPass.length > 0 ? siteNNamesToPass : [];
-                                        var sNetTypes = siteNTypesToPass.length > 0 ? siteNTypesToPass : [];
-                                        var lo = $scope.landowner !== undefined ? $scope.landowner : { };
-                                        var siteRelatedStuff = [$scope.aSite, origSiteHouses, sHouseTypeModel, sNetNames, sNetTypes, lo];
+                        templateUrl: 'SITEmodal.html',
+                        controller: 'siteModalCtrl',
+                        size: 'lg',
+                        keyboard: false,
+                        backdrop: 'static',
+                        windowClass: 'rep-dialog',
+                        resolve: {
+                            allDropDownParts: function () {
+                                return dropdownParts;
+                            },
+                            thisSiteStuff: function () {
+                                if ($scope.aSite.site_id !== undefined) {
+                                    var origSiteHouses = $scope.originalSiteHousings !== undefined ? $scope.originalSiteHousings : []; //needed for multi select to set prop selected
+                                    var sHouseTypeModel = $scope.thisSiteHouseTypeModel.length > 0 ? $scope.thisSiteHouseTypeModel : []; //here's what the site already has
+                                    var sNetNames = siteNNamesToPass.length > 0 ? siteNNamesToPass : [];
+                                    var sNetTypes = siteNTypesToPass.length > 0 ? siteNTypesToPass : [];
+                                    var lo = $scope.landowner !== undefined ? $scope.landowner : {};
+                                    var siteRelatedStuff = [$scope.aSite, origSiteHouses, sHouseTypeModel, sNetNames, sNetTypes, lo];
                                     return siteRelatedStuff;
-                                    }
-                                },
-                                fileTypes: function(){
-                                        return FILE_TYPE.getAll().$promise;                                    
-                                },
-                                allMembers: function () {
-                                    $http.defaults.headers.common.Authorization = 'Basic ' + $cookies.get('STNCreds');
-                                    $http.defaults.headers.common.Accept = 'application/json';
-                                    return MEMBER.getAll().$promise;
-                                },
-                                agencyList: function(){
-                                        return AGENCY.getAll().$promise;                                    
-                                },
-                                latlong: function () {
-                                    if (latlong !== undefined) {
-                                        return latlong;
-                                    }
                                 }
+                            },
+                            fileTypes: function () {
+                                return FILE_TYPE.getAll().$promise;
+                            },
+                            allMembers: function () {
+                                $http.defaults.headers.common.Authorization = 'Basic ' + $cookies.get('STNCreds');
+                                $http.defaults.headers.common.Accept = 'application/json';
+                                return MEMBER.getAll().$promise;
+                            },
+                            agencyList: function () {
+                                return AGENCY.getAll().$promise;
+                            },
+                            latlong: function () {
+                                if (latlong !== undefined) {
+                                    return latlong;
+                                }
+                            }
                         }
                     });
                     modalInstance.result.then(function (r) {
@@ -105,24 +122,24 @@
                 if (thisSite !== undefined) {
                     //#region existingSite
                     if (thisSite.site_id !== undefined) {
-                        $scope.aSite = thisSite;                  
+                        $scope.aSite = thisSite;
 
                         $scope.aSite.decDegORdms = 'dd';
                         $scope.aSite.HorizontalDatum = $scope.aSite.hdatum_id > 0 ? allHorDatums.filter(function (hd) { return hd.datum_id == $scope.aSite.hdatum_id; })[0].datum_name : "---";
                         $scope.aSite.HorizontalCollectMethod = $scope.aSite.hcollect_method_id !== undefined && $scope.aSite.hcollect_method_id > 0 ? allHorCollMethods.filter(function (hc) { return hc.hcollect_method_id == $scope.aSite.hcollect_method_id; })[0].hcollect_method : "---";
-                        $scope.aSite.PriorityName = $scope.aSite.priority_id !== undefined && $scope.aSite.priority_id > 0 ? allDeployPriorities.filter(function (dp) { return dp.priority_id == $scope.aSite.priority_id; })[0].priority_name: "---";
-                   
+                        $scope.aSite.PriorityName = $scope.aSite.priority_id !== undefined && $scope.aSite.priority_id > 0 ? allDeployPriorities.filter(function (dp) { return dp.priority_id == $scope.aSite.priority_id; })[0].priority_name : "---";
+
                         //apply any site housings
                         if (thisSiteHousings.length > 0) {
                             $scope.originalSiteHousings = angular.copy(thisSiteHousings);
                             $scope.showSiteHouseTable = true;
                             //format for table
                             for (var z = 0; z < $scope.originalSiteHousings.length; z++) {
-                                    //for each housingtypelist..make selected = true for these                       
+                                //for each housingtypelist..make selected = true for these                       
                                 var houseTypeName = allHousingTypes.filter(function (h) { return h.housing_type_id == $scope.originalSiteHousings[z].housing_type_id; })[0].type_name;
                                 var houseT = {
                                     type_name: houseTypeName,
-                                    housing_type_id : $scope.originalSiteHousings[z].housing_type_id,
+                                    housing_type_id: $scope.originalSiteHousings[z].housing_type_id,
                                     site_housing_id: $scope.originalSiteHousings[z].site_housing_id,
                                     length: $scope.originalSiteHousings[z].length,
                                     material: $scope.originalSiteHousings[z].material,
@@ -175,10 +192,11 @@
                                     $scope.landowner = response;
                                     $scope.addLandowner = true;
                                 }, function error(errorResponse) {
-                                    toastr.error("Error getting Landowner Information: " + errorResponse.statusText);
+                                    if (errorResponse.headers(["usgswim-messages"]) !== undefined) toastr.error("Error getting landowner: " + errorResponse.headers(["usgswim-messages"]));
+                                    else toastr.error("Error getting landowner: " + errorResponse.statusText);
                                 }).$promise;
                             }//end if site has landownercontact id
-                        }
+                        };
                         getLandOwnerContact(); //call it from here and from modalresponse;
 
                     } else {
@@ -187,11 +205,11 @@
                         $location.path('/Home').replace();
                         $scope.apply;
                     }
-                        //#endregion existingSite
+                    //#endregion existingSite
                 } else {
                     //open modal if new site for create
                     $scope.openSiteCreate();
                 }
             }//end else checkCreds is good
-        }]);    
+        }]);
 })();

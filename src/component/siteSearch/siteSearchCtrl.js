@@ -3,7 +3,7 @@
 
     var STNControllers = angular.module('STNControllers');
 
-    STNControllers.controller('siteSearchCtrl', ['$scope', '$cookies', '$rootScope', '$location', 'stateList', 'sensorTypes', 'networkNames', 'SITE', 
+    STNControllers.controller('siteSearchCtrl', ['$scope', '$cookies', '$rootScope', '$location', 'stateList', 'sensorTypes', 'networkNames', 'SITE',
         function ($scope, $cookies, $rootScope, $location, stateList, sensorTypes, networkNames, SITE) {
             if ($cookies.get('STNCreds') === undefined || $cookies.get('STNCreds') === "") {
                 $scope.auth = false;
@@ -11,7 +11,7 @@
             } else {
                 $rootScope.thisPage = "Site Search";
                 $rootScope.activeMenu = "sites"; // report, settings
-                             
+
                 // watch for the session event to change and update
                 $scope.$watch(function () { return $cookies.get('SessionEventName'); }, function (newValue) {
                     $scope.sessionEvent = $cookies.get('SessionEventName') !== null && $cookies.get('SessionEventName') !== undefined ? $cookies.get('SessionEventName') : "All Events";
@@ -84,20 +84,21 @@
                         RDGOnly: $scope.checkboxModel.rdgOnly,
                         OPDefined: $scope.checkboxModel.opDefined
                     },
-                    function success(response) {
-                        $scope.siteList = response;
-                        $scope.siteResponse = true;
-                        $rootScope.stateIsLoading.showLoading = false; // loading..
-                    }, function error(errorResponse) {
-                        $rootScope.stateIsLoading.showLoading = false; // loading..
-                        alert("Error: " + errorResponse.statusText);
-                    });
+                        function success(response) {
+                            $scope.siteList = response;
+                            $scope.siteResponse = true;
+                            $rootScope.stateIsLoading.showLoading = false; // loading..
+                        }, function error(errorResponse) {
+                            $rootScope.stateIsLoading.showLoading = false; // loading..
+                            if (errorResponse.headers(["usgswim-messages"]) !== undefined) toastr.error("Error getting filtered sites: " + errorResponse.headers(["usgswim-messages"]));
+                            else toastr.error("Error getting filtered sites: " + errorResponse.statusText);
+                        });
                 }
                 //filter options chosen, go get these sites to show in a table
                 $scope.searchSites = function () {
                     $rootScope.stateIsLoading.showLoading = true; // loading..
                     //store search in case they leave and click back
-                   
+
                     var stateString = $scope.chosenStates.join();
                     $scope.siteResponse = false;
                     $scope.siteList = [];
@@ -124,14 +125,15 @@
                         RDGOnly: $scope.checkboxModel.rdgOnly,
                         OPDefined: $scope.checkboxModel.opDefined
                     },
-                    function success(response) {
-                        $scope.siteList = response;
-                        $scope.siteResponse = true;
-                        $rootScope.stateIsLoading.showLoading = false; // loading..
-                    }, function error(errorResponse) {
-                        $rootScope.stateIsLoading.showLoading = false; // loading..
-                        alert("Error: " + errorResponse.statusText);
-                    });
+                        function success(response) {
+                            $scope.siteList = response;
+                            $scope.siteResponse = true;
+                            $rootScope.stateIsLoading.showLoading = false; // loading..
+                        }, function error(errorResponse) {
+                            $rootScope.stateIsLoading.showLoading = false; // loading..
+                            if (errorResponse.headers(["usgswim-messages"]) !== undefined) toastr.error("Error getting filtered sites: " + errorResponse.headers(["usgswim-messages"]));
+                            else toastr.error("Error filtered sites: " + errorResponse.statusText);
+                        });
                 };//end searchSites click action
 
                 //add each state to an array to be joined in the GET

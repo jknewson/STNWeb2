@@ -1,4 +1,3 @@
-/// <reference path="sensorModalCtrl.js" />
 (function () {
     'use strict';
 
@@ -38,11 +37,211 @@
             $scope.view = { DEPval: 'detail', RETval: 'detail' };
             $scope.sensorDataNWIS = false; //is this a rain gage, met station, or rdg sensor -- if so, data file must be created pointing to nwis (we don't store actual file, just metadata with link)
             $scope.s = { depOpen: true, sFileOpen: false, NWISFileOpen: false };
+            $scope.chopperResponse1 = false; //set to true and show highchart with chopper results
+            $scope.chopperResponse1Keys = [];
+            $scope.chartOptions1 = {};
+            $scope.chartData = [];
+            Array.prototype.zip = function (arr) {
+                return this.map(function (e, i) {
+                    return [e, arr[i]];
+                })
+            };
+
+            //$scope.renderer = new Highcharts.Renderer(
+            $scope.runChopper = function () {
+                $scope.chartData = [];
+                $scope.chartOptions1 = {};
+                $scope.chopperResponse1 = false;
+                $scope.chopperResponse1Keys = [];
+                if ($scope.chartObj) {
+                    $scope.chartObj.xAxis[0].removePlotLine("start");
+                    $scope.chartObj.xAxis[0].removePlotLine("end");
+                }
+                if ($scope.aFile.File !== undefined) {
+                    $http.defaults.headers.common.Authorization = 'Basic ' + $cookies.get('STNCreds');
+                    $http.defaults.headers.common.Accept = 'application/json';
+                    var fileParts = {
+                        FileEntity: {
+                            site_id: $scope.thisSensorSite.site_id,
+                            instrument_id: thisSensor.instrument_id
+                        },
+                        File: $scope.aFile.File
+                    };
+                    //need to put the fileParts into correct format for send
+                    var fd = new FormData();
+                    fd.append("FileEntity", JSON.stringify(fileParts.FileEntity));
+                    fd.append("File", fileParts.File);
+                    $scope.smlallLoaderGo = true;
+                    DATA_FILE.runChopperScript(fd).$promise.then(function (response) {
+                        $scope.smlallLoaderGo = false;
+                        $scope.chopperResponse1Keys = Object.keys(response);
+                        if (response.Error) {
+                            var errorMessage = response.Error;
+                            var failedChopper = $uibModal.open({
+                                template: '<div class="modal-header"><h3 class="modal-title">Error</h3></div>' +
+                                '<div class="modal-body"><p>There was an error running the chopper.</p><p>Error: {{errorMessage}}</p></div>' +
+                                '<div class="modal-footer"><button class="btn btn-primary" ng-enter="ok()" ng-click="ok()">OK</button></div>',
+                                controller: ['$scope', '$uibModalInstance', 'message', function ($scope, $uibModalInstance, message) {
+                                    $scope.errorMessage = message;
+                                    $scope.ok = function () {
+                                        $uibModalInstance.dismiss();
+                                    };
+                                }],
+                                resolve: {
+                                    message: function () {
+                                        return errorMessage;
+                                    }
+                                },
+                                size: 'sm'
+                            });
+                        } else {
+                            $scope.chartData = response.time.zip(response.pressure);
+                            //preset the start/end dates to the 1st and last as the chartData.time
+                            var sDate = new Date(response.time[0]).toISOString();
+                            var eDate = new Date(response.time[response.time.length - 1]).toISOString();
+                            var sd = getDateTimeParts(sDate); var ed = getDateTimeParts(eDate);
+                            $scope.datafile.good_start = sd; $scope.datafile.good_end = ed;
+
+                            $scope.chartOptions1 = {
+                                chart: {
+                                    events: {
+                                        load: function () {
+                                            $scope.chartObj = this;
+                                        }
+                                    },
+                                    zoomType: 'x',
+                                    resetZoomButton: {
+                                        position: {
+                                            align: 'left', // by default
+                                            verticalAlign: 'bottom', // by default
+                                            // x: 0,
+                                            y: 70
+                                        }
+                                    },
+                                    panning: true,
+                                    panKey: 'shift'
+                                },
+                                boostThreshold: 2000,
+                                plotOptions: {
+                                    series: {
+                                        events: {
+                                            click: function (event) {
+                                                var pointClick = $uibModal.open({
+                                                    template: '<div class="modal-header"><h3 class="modal-title"></h3></div>' +
+                                                    '<div class="modal-body"><p>Would you like to set this ({{thisDate}}) as:</p>' +
+                                                    '<div style="text-align:center;"><span class="radio-inline"><input type="radio" name="whichDate" ng-model="whichDate" value="start" />Good Start Date</span>' +
+                                                    '<span class="radio-inline"><input type="radio" name="whichDate" ng-model="whichDate" value="end" />Good End Date</span></div>' +
+                                                    '</div>' +
+                                                    '<div class="modal-footer"><button class="btn btn-primary" ng-enter="ok()" ng-click="ok()">OK</button>' +
+                                                    '<button class="btn btn-primary" ng-enter="cancel()" ng-click="cancel()">Cancel</button></div>',
+                                                    controller: ['$scope', '$uibModalInstance', 'chosenDate', 'xEvent', function ($scope, $uibModalInstance, chosenDate, xEvent) {
+                                                        $scope.ok = function () {
+                                                            if ($scope.whichDate == "") alert("No Date chosen");
+                                                            else {
+                                                                var parts = [$scope.whichDate, chosenDate, xEvent];
+                                                                $uibModalInstance.close(parts);
+                                                            };
+                                                        };
+                                                        $scope.cancel = function () {
+                                                            $uibModalInstance.dismiss();
+                                                        }
+                                                        $scope.whichDate = "";
+                                                        $scope.thisDate = new Date(chosenDate);
+                                                    }],
+                                                    resolve: {
+                                                        chosenDate: event.point.category,
+                                                        xEvent: event.chartX
+                                                    },
+                                                    size: 'sm'
+                                                });
+                                                pointClick.result.then(function (parts) {
+                                                    var chart = $scope.chartObj.xAxis[0];
+                                                    // check if there's already a plotline with this id and remove it if so
+                                                    chart.removePlotLine(parts[0]);
+                                                    // add the plot line to visually see where they added
+                                                    chart.addPlotLine({
+                                                        value: chart.toValue(parts[2]),
+                                                        color: parts[0] == "start" ? '#00ff00' : '#ff0000',
+                                                        width: 2,
+                                                        id: parts[0],
+                                                        zIndex: 19999,
+                                                        label: { text: parts[0] }
+                                                    });
+                                                    var theDate = new Date(parts[1]).toISOString();
+                                                    var d = getDateTimeParts(theDate);
+                                                    if (parts[0] == "start") $scope.datafile.good_start = d;
+                                                    else $scope.datafile.good_end = d;
+                                                });
+                                            }
+                                        },
+                                        allowPointSelect: true,
+                                        cursor: 'pointer',
+                                        point: {
+                                            events: {
+                                                mouseOver: function () {
+                                                    if (this.series.halo) {
+                                                        this.series.halo.attr({ 'class': 'highcharts-tracker' }).toFront();
+                                                    }
+                                                }
+                                            }
+                                        },
+                                        marker: {
+                                            enabled: false // turn dots off
+                                        }
+                                    }
+                                },
+                                title: {
+                                    text: 'Preview of Pressure Data'
+                                },
+                                subtitle: {
+                                    text: 'Click and drag to zoom in. Hold down shift key to pan. To select Good Start/End Date, click point on line.'
+                                },
+                                xAxis: {
+                                    title: {
+                                        text: $scope.chopperResponse1Keys[1]
+                                    },
+                                    type: 'datetime',
+                                    dateTimeLabelFormats: {
+                                        second: '%Y-%m-%d<br/>%H:%M:%S',
+                                        minute: '%Y-%m-%d<br/>%H:%M',
+                                        hour: '%Y-%m-%d<br/>%H:%M',
+                                        day: '%Y<br/>%m-%d',
+                                        week: '%Y<br/>%m-%d',
+                                        month: '%Y-%m',
+                                        year: '%Y'
+                                    },
+                                    offset: 10
+                                },
+                                yAxis: {
+                                    title: {
+                                        text: $scope.chopperResponse1Keys[0]
+                                    },
+                                    labels: {
+                                        format: '{value} psi'
+                                    },
+                                    offset: 10
+                                },
+                                series: [{
+                                    data: $scope.chartData,
+
+                                }]
+                            };
+                            $scope.chopperResponse1 = true;
+                        }
+                    }, function (error) {
+                        console.log(error);
+                    });
+                } else {
+                    //the file wasn't there..
+                    alert("You need to choose a file first");
+                }
+            };
+
             //formatting date and time properly for chrome and ff
             var getDateTimeParts = function (d) {
                 var theDate;
                 var isDate = Object.prototype.toString.call(d) === '[object Date]';
-                if (isDate === false) {
+                if (isDate === false) { // "2017-09-28T09:33:09"
                     var y = d.substr(0, 4);
                     var m = d.substr(5, 2) - 1; //subtract 1 for index value (January is 0)
                     var da = d.substr(8, 2);
@@ -73,63 +272,68 @@
             $scope.stamp = FILE_STAMP.getStamp(); $scope.fileItemExists = true;
             //need to reupload fileItem to this existing file OR Change out existing fileItem for new one
             $scope.saveFileUpload = function () {
-                $http.defaults.headers.common.Authorization = 'Basic ' + $cookies.get('STNCreds');
-                $http.defaults.headers.common.Accept = 'application/json';
-                $scope.sFileIsUploading = true;
-                var fileParts = {
-                    FileEntity: {
-                        file_id: $scope.aFile.file_id,
-                        name: $scope.aFile.name,
-                        description: $scope.aFile.description,
-                        photo_direction: $scope.aFile.photo_direction,
-                        latitude_dd: $scope.aFile.latitude_dd,
-                        longitude_dd: $scope.aFile.longitude_dd,
-                        file_date: $scope.aFile.file_date,
-                        hwm_id: $scope.aFile.hwm_id,
-                        site_id: $scope.aFile.site_id,
-                        filetype_id: $scope.aFile.filetype_id,
-                        source_id: $scope.aFile.source_id,
-                        path: $scope.aFile.path,
-                        data_file_id: $scope.aFile.data_file_id,
-                        instrument_id: $scope.aFile.instrument_id,
-                        photo_date: $scope.aFile.photo_date,
-                        is_nwis: $scope.aFile.is_nwis,
-                        objective_point_id: $scope.aFile.objective_point_id
-                    },
-                    File: $scope.aFile.File1 !== undefined ? $scope.aFile.File1 : $scope.aFile.File
-                };
-                //need to put the fileParts into correct format for post
-                var fd = new FormData();
-                fd.append("FileEntity", JSON.stringify(fileParts.FileEntity));
-                fd.append("File", fileParts.File);
-                //now POST it (fileparts)
-                FILE.uploadFile(fd).$promise.then(function (fresponse) {
-                    toastr.success("File Uploaded");
-                    $scope.src = $scope.serverURL + '/Files/' + $scope.aFile.file_id + '/Item' + FILE_STAMP.getStamp();
-                    FILE_STAMP.setStamp();
-                    $scope.stamp = FILE_STAMP.getStamp();
-                    if ($scope.aFile.File1.type.indexOf("image") > -1) {
-                        $scope.isPhoto = true;
-                    } else $scope.isPhoto = false;
-                    $scope.aFile.name = fresponse.name; $scope.aFile.path = fresponse.path;
-                    if ($scope.aFile.File1 !== undefined) {
-                        $scope.aFile.File = $scope.aFile.File1;
-                        $scope.aFile.File1 = undefined; //put it as file and remove it from 1
-                    }
-                    fresponse.fileBelongsTo = $scope.aFile.filetype_id == 2 ? "DataFile File" : "Sensor File";
-                    if (fresponse.filetype_id === 1) {
-                        $scope.depSensImageFiles.splice($scope.existIMGFileIndex, 1);
-                        $scope.depSensImageFiles.push(fresponse);
-                    }
-                    $scope.DepSensorFiles[$scope.existFileIndex] = fresponse;
-                    $scope.allSFiles[$scope.allSFileIndex] = fresponse;
-                    Site_Files.setAllSiteFiles($scope.allSFiles); //updates the file list on the sitedashboard
-                    $scope.sFileIsUploading = false;
-                    $scope.fileItemExists = true;
-                }, function (errorResponse) {
-                    $scope.sFileIsUploading = false;
-                    toastr.error("Error saving file: " + errorResponse.statusText);
-                });
+                if ($scope.aFile.File1 == undefined && $scope.aFile.File == undefined) {
+                    alert("You need to choose a file first");
+                } else {
+                    $http.defaults.headers.common.Authorization = 'Basic ' + $cookies.get('STNCreds');
+                    $http.defaults.headers.common.Accept = 'application/json';
+                    $scope.sFileIsUploading = true;
+                    var fileParts = {
+                        FileEntity: {
+                            file_id: $scope.aFile.file_id,
+                            name: $scope.aFile.name,
+                            description: $scope.aFile.description,
+                            photo_direction: $scope.aFile.photo_direction,
+                            latitude_dd: $scope.aFile.latitude_dd,
+                            longitude_dd: $scope.aFile.longitude_dd,
+                            file_date: $scope.aFile.file_date,
+                            hwm_id: $scope.aFile.hwm_id,
+                            site_id: $scope.aFile.site_id,
+                            filetype_id: $scope.aFile.filetype_id,
+                            source_id: $scope.aFile.source_id,
+                            path: $scope.aFile.path,
+                            data_file_id: $scope.aFile.data_file_id,
+                            instrument_id: $scope.aFile.instrument_id,
+                            photo_date: $scope.aFile.photo_date,
+                            is_nwis: $scope.aFile.is_nwis,
+                            objective_point_id: $scope.aFile.objective_point_id
+                        },
+                        File: $scope.aFile.File1 !== undefined ? $scope.aFile.File1 : $scope.aFile.File
+                    };
+                    //need to put the fileParts into correct format for post
+                    var fd = new FormData();
+                    fd.append("FileEntity", JSON.stringify(fileParts.FileEntity));
+                    fd.append("File", fileParts.File);
+                    //now POST it (fileparts)
+                    FILE.uploadFile(fd).$promise.then(function (fresponse) {
+                        toastr.success("File Uploaded");
+                        $scope.src = $scope.serverURL + '/Files/' + $scope.aFile.file_id + '/Item' + FILE_STAMP.getStamp();
+                        FILE_STAMP.setStamp();
+                        $scope.stamp = FILE_STAMP.getStamp();
+                        if ($scope.aFile.File1.type.indexOf("image") > -1) {
+                            $scope.isPhoto = true;
+                        } else $scope.isPhoto = false;
+                        $scope.aFile.name = fresponse.name; $scope.aFile.path = fresponse.path;
+                        if ($scope.aFile.File1 !== undefined) {
+                            $scope.aFile.File = $scope.aFile.File1;
+                            $scope.aFile.File1 = undefined; //put it as file and remove it from 1
+                        }
+                        fresponse.fileBelongsTo = $scope.aFile.filetype_id == 2 ? "DataFile File" : "Sensor File";
+                        if (fresponse.filetype_id === 1) {
+                            $scope.depSensImageFiles.splice($scope.existIMGFileIndex, 1);
+                            $scope.depSensImageFiles.push(fresponse);
+                        }
+                        $scope.DepSensorFiles[$scope.existFileIndex] = fresponse;
+                        $scope.allSFiles[$scope.allSFileIndex] = fresponse;
+                        Site_Files.setAllSiteFiles($scope.allSFiles); //updates the file list on the sitedashboard
+                        $scope.sFileIsUploading = false;
+                        $scope.fileItemExists = true;
+                    }, function (errorResponse) {
+                        $scope.sFileIsUploading = false;
+                        if (errorResponse.headers(["usgswim-messages"]) !== undefined) toastr.error("Error creating file: " + errorResponse.headers(["usgswim-messages"]));
+                        else toastr.error("Error creating file: " + errorResponse.statusText);
+                    });
+                }
             };
 
             //show a modal with the larger image as a preview on the photo file for this op
@@ -167,6 +371,9 @@
                     $scope.aFile = angular.copy(file);
                     FILE.getFileItem({ id: $scope.aFile.file_id }).$promise.then(function (response) {
                         $scope.fileItemExists = response.Length > 0 ? true : false;
+                    }, function (errorResponse) {
+                        if (errorResponse.headers(["usgswim-messages"]) !== undefined) toastr.error("Error getting file item: " + errorResponse.headers(["usgswim-messages"]));
+                        else toastr.error("Error getting file item: " + errorResponse.statusText);
                     });
                     $scope.aFile.fileType = $scope.fileTypeList.filter(function (ft) { return ft.filetype_id == $scope.aFile.filetype_id; })[0].filetype;
                     if ($scope.aFile.name !== undefined) {
@@ -186,6 +393,9 @@
                             //add agency name to photo caption
                             if ($scope.aFile.filetype_id == 1)
                                 $scope.agencyNameForCap = $scope.agencies.filter(function (a) { return a.agency_id == $scope.aSource.agency_id; })[0].agency_name;
+                        }, function (errorResponse) {
+                            if (errorResponse.headers(["usgswim-messages"]) !== undefined) toastr.error("Error getting source: " + errorResponse.headers(["usgswim-messages"]));
+                            else toastr.error("Error getting source: " + errorResponse.statusText);
                         });
                     }//end if source
                     if (file.data_file_id !== undefined) {
@@ -195,6 +405,9 @@
                             $scope.datafile.collect_date = new Date($scope.datafile.collect_date);
                             $scope.datafile.good_start = getDateTimeParts($scope.datafile.good_start);
                             $scope.datafile.good_end = getDateTimeParts($scope.datafile.good_end);
+                        }, function (errorResponse) {
+                            if (errorResponse.headers(["usgswim-messages"]) !== undefined) toastr.error("Error getting data file: " + errorResponse.headers(["usgswim-messages"]));
+                            else toastr.error("Error getting data file: " + errorResponse.statusText);
                         });
                     }
                 }//end existing file
@@ -206,9 +419,9 @@
                     $scope.processor = allMembers.filter(function (m) { return m.member_id == $cookies.get('mID'); })[0];
                     var dt = getTimeZoneStamp();
                     $scope.datafile.collect_date = dt[0];
-                    $scope.datafile.time_zone = dt[1]; //will be converted to utc on post/put 
-                    $scope.datafile.good_start = new Date();
-                    $scope.datafile.good_end = new Date();
+                    $scope.datafile.time_zone = "UTC";// dt[1]; //will be converted to utc on post/put
+                    $scope.datafile.good_start = null;//new Date();
+                    $scope.datafile.good_end = null;//new Date();
                 } //end new file
                 $scope.showFileForm = true;
 
@@ -219,110 +432,81 @@
             };
             //create this new file
             $scope.createFile = function (valid) {
-                if ($scope.aFile.filetype_id == 2) {
-                    //make sure end date is after start date
-                    var s = $scope.datafile.good_start;//need to get dep status date in same format as retrieved to compare
-                    var e = $scope.datafile.good_end; //stupid comma in there making it not the same
-                    if (new Date(e) < new Date(s)) {
-                        valid = false;
-                        var fixDate = $uibModal.open({
-                            template: '<div class="modal-header"><h3 class="modal-title">Error</h3></div>' +
-                            '<div class="modal-body"><p>The good end date must be after the good start date.</p></div>' +
-                            '<div class="modal-footer"><button class="btn btn-primary" ng-enter="ok()" ng-click="ok()">OK</button></div>',
-                            controller: ['$scope', '$uibModalInstance', function ($scope, $uibModalInstance) {
-                                $scope.ok = function () {
-                                    $uibModalInstance.close();
-                                };
-                            }],
-                            size: 'sm'
-                        });
-                        fixDate.result.then(function () {
-                            valid = false;
-                        });
-                    }
-                }
-                if (valid) {
-                    $scope.depSenfileIsUploading = true; //Loading...
-                    $http.defaults.headers.common.Authorization = 'Basic ' + $cookies.get('STNCreds');
-                    $http.defaults.headers.common.Accept = 'application/json';
-                    //post source or datafile first to get source_id or data_file_id
+                if ($scope.aFile.File !== undefined) {
                     if ($scope.aFile.filetype_id == 2) {
-                        //determine timezone
-                        if ($scope.datafile.time_zone != "UTC") {
-                            //convert it
-                            var utcStartDateTime = new Date($scope.datafile.good_start).toUTCString();
-                            var utcEndDateTime = new Date($scope.datafile.good_end).toUTCString();
-                            $scope.datafile.good_start = utcStartDateTime;
-                            $scope.datafile.good_end = utcEndDateTime;
-                            $scope.datafile.time_zone = 'UTC';
-                        } else {
-                            //make sure 'GMT' is tacked on so it doesn't try to add hrs to make the already utc a utc in db
-                            var si = $scope.datafile.good_start.toString().indexOf('GMT') + 3;
-                            var ei = $scope.datafile.good_end.toString().indexOf('GMT') + 3;
-                            $scope.datafile.good_start = $scope.datafile.good_start.toString().substring(0, si);
-                            $scope.datafile.good_end = $scope.datafile.good_end.toString().substring(0, ei);
-                        }
-                        $scope.datafile.instrument_id = thisSensor.instrument_id;
-                        $scope.datafile.processor_id = $cookies.get('mID');
-                        var datafileID = 0;
-                        DATA_FILE.save($scope.datafile).$promise.then(function (dfResponse) {
-                            datafileID = dfResponse.data_file_id;
-                            //then POST fileParts (Services populate PATH)
-                            var fileParts = {
-                                FileEntity: {
-                                    filetype_id: $scope.aFile.filetype_id,
-                                    name: $scope.aFile.File.name,
-                                    file_date: $scope.aFile.file_date,
-                                    description: $scope.aFile.description,
-                                    site_id: $scope.thisSensorSite.site_id,
-                                    data_file_id: dfResponse.data_file_id,
-                                    photo_direction: $scope.aFile.photo_direction,
-                                    latitude_dd: $scope.aFile.latitude_dd,
-                                    longitude_dd: $scope.aFile.longitude_dd,
-                                    instrument_id: thisSensor.instrument_id
-                                },
-                                File: $scope.aFile.File
-                            };
-                            //need to put the fileParts into correct format for post
-                            var fd = new FormData();
-                            fd.append("FileEntity", JSON.stringify(fileParts.FileEntity));
-                            fd.append("File", fileParts.File);
-                            //now POST it (fileparts)
-                            FILE.uploadFile(fd).$promise.then(function (fresponse) {
-                                toastr.success("File Uploaded");
-                                fresponse.fileBelongsTo = "DataFile File";
-                                $scope.DepSensorFiles.push(fresponse);
-                                $scope.allSFiles.push(fresponse);
-                                Site_Files.setAllSiteFiles($scope.allSFiles); //updates the file list on the sitedashboard
-                                if (fresponse.filetype_id === 1) $scope.depSensImageFiles.push(fresponse);
-                                $scope.showFileForm = false; $scope.depSenfileIsUploading = false;
-                            }, function (errorResponse) {
-                                $scope.depSenfileIsUploading = false;
-                                $scope.aFile = {}; $scope.aSource = {}; $scope.datafile = {}; $scope.showFileForm = false;
-                                // file did not get created, delete datafile
-                                DATA_FILE.delete({ id: datafileID });
-                                if (errorResponse.headers(["usgswim-messages"]) !== undefined) toastr.error("Error creating file: " + errorResponse.headers(["usgswim-messages"]));
-                                else toastr.error("Error creating file: " + errorResponse.statusText);
+                        //make sure end date is after start date
+                        var s = $scope.datafile.good_start;//need to get dep status date in same format as retrieved to compare
+                        var e = $scope.datafile.good_end; //stupid comma in there making it not the same
+                        if (new Date(e) < new Date(s)) {
+                            valid = false;
+                            var fixDate = $uibModal.open({
+                                template: '<div class="modal-header"><h3 class="modal-title">Error</h3></div>' +
+                                '<div class="modal-body"><p>The good end date must be after the good start date.</p></div>' +
+                                '<div class="modal-footer"><button class="btn btn-primary" ng-enter="ok()" ng-click="ok()">OK</button></div>',
+                                controller: ['$scope', '$uibModalInstance', function ($scope, $uibModalInstance) {
+                                    $scope.ok = function () {
+                                        $uibModalInstance.close();
+                                    };
+                                }],
+                                size: 'sm'
                             });
-                        }, function (errorResponse) {
-                            $scope.depSenfileIsUploading = false;
-                            toastr.error("Error saving Source info: " + errorResponse.statusText);
-                        });//end datafile.save()
-                    } else {
-                        //it's not a data file, so do the source
-                        var theSource = { source_name: $scope.aSource.FULLname, agency_id: $scope.aSource.agency_id };//, SOURCE_DATE: $scope.aSource.SOURCE_DATE };
-                        SOURCE.save(theSource).$promise.then(function (response) {
-                            if ($scope.aFile.filetype_id !== 8) {
+                            fixDate.result.then(function () {
+                                valid = false;
+                            });
+                        }
+                        if (s == undefined || e == undefined) {
+                            valid = false;
+                            var missingDate = $uibModal.open({
+                                template: '<div class="modal-header"><h3 class="modal-title">Error</h3></div>' +
+                                '<div class="modal-body"><p>The good data start date or good data end date is missing. Either choose a date, or click Preview Data to get a chart of the data, where you can choose the dates.</p></div>' +
+                                '<div class="modal-footer"><button class="btn btn-primary" ng-enter="ok()" ng-click="ok()">OK</button></div>',
+                                controller: ['$scope', '$uibModalInstance', function ($scope, $uibModalInstance) {
+                                    $scope.ok = function () {
+                                        $uibModalInstance.close();
+                                    };
+                                }],
+                                size: 'sm'
+                            });
+                            missingDate.result.then(function () {
+                                valid = false;
+                            });
+                        }
+                    }
+                    if (valid) {
+                        $scope.depSenfileIsUploading = true; //Loading...
+                        $http.defaults.headers.common.Authorization = 'Basic ' + $cookies.get('STNCreds');
+                        $http.defaults.headers.common.Accept = 'application/json';
+                        //post source or datafile first to get source_id or data_file_id
+                        if ($scope.aFile.filetype_id == 2) {
+                            //determine timezone
+                            if ($scope.datafile.time_zone != "UTC") {
+                                //convert it
+                                var utcStartDateTime = new Date($scope.datafile.good_start).toUTCString();
+                                var utcEndDateTime = new Date($scope.datafile.good_end).toUTCString();
+                                $scope.datafile.good_start = utcStartDateTime;
+                                $scope.datafile.good_end = utcEndDateTime;
+                                $scope.datafile.time_zone = 'UTC';
+                            } else {
+                                //make sure 'GMT' is tacked on so it doesn't try to add hrs to make the already utc a utc in db
+                                var si = $scope.datafile.good_start.toString().indexOf('GMT') + 3;
+                                var ei = $scope.datafile.good_end.toString().indexOf('GMT') + 3;
+                                $scope.datafile.good_start = $scope.datafile.good_start.toString().substring(0, si);
+                                $scope.datafile.good_end = $scope.datafile.good_end.toString().substring(0, ei);
+                            }
+                            $scope.datafile.instrument_id = thisSensor.instrument_id;
+                            $scope.datafile.processor_id = $cookies.get('mID');
+                            var datafileID = 0;
+                            DATA_FILE.save($scope.datafile).$promise.then(function (dfResponse) {
+                                datafileID = dfResponse.data_file_id;
                                 //then POST fileParts (Services populate PATH)
                                 var fileParts = {
                                     FileEntity: {
                                         filetype_id: $scope.aFile.filetype_id,
                                         name: $scope.aFile.File.name,
                                         file_date: $scope.aFile.file_date,
-                                        photo_date: $scope.aFile.photo_date,
                                         description: $scope.aFile.description,
                                         site_id: $scope.thisSensorSite.site_id,
-                                        source_id: response.source_id,
+                                        data_file_id: dfResponse.data_file_id,
                                         photo_direction: $scope.aFile.photo_direction,
                                         latitude_dd: $scope.aFile.latitude_dd,
                                         longitude_dd: $scope.aFile.longitude_dd,
@@ -337,7 +521,7 @@
                                 //now POST it (fileparts)
                                 FILE.uploadFile(fd).$promise.then(function (fresponse) {
                                     toastr.success("File Uploaded");
-                                    fresponse.fileBelongsTo = "Sensor File";
+                                    fresponse.fileBelongsTo = "DataFile File";
                                     $scope.DepSensorFiles.push(fresponse);
                                     $scope.allSFiles.push(fresponse);
                                     Site_Files.setAllSiteFiles($scope.allSFiles); //updates the file list on the sitedashboard
@@ -345,29 +529,83 @@
                                     $scope.showFileForm = false; $scope.depSenfileIsUploading = false;
                                 }, function (errorResponse) {
                                     $scope.depSenfileIsUploading = false;
-                                    toastr.error("Error saving file: " + errorResponse.statusText);
+                                    $scope.aFile = {}; $scope.aSource = {}; $scope.datafile = {}; $scope.showFileForm = false;
+                                    // file did not get created, delete datafile
+                                    DATA_FILE.delete({ id: datafileID });
+                                    if (errorResponse.headers(["usgswim-messages"]) !== undefined) toastr.error("Error creating file: " + errorResponse.headers(["usgswim-messages"]));
+                                    else toastr.error("Error creating file: " + errorResponse.statusText);
                                 });
-                            } else {
-                                //this is a link file, no fileItem
-                                $scope.aFile.source_id = response.source_id; $scope.aFile.site_id = $scope.thisSensorSite.site_id; $scope.aFile.instrument_id = thisSensor.instrument_id;
-                                FILE.save($scope.aFile).$promise.then(function (fresponse) {
-                                    toastr.success("File Uploaded");
-                                    fresponse.fileBelongsTo = "Sensor File";
-                                    $scope.DepSensorFiles.push(fresponse);
-                                    $scope.allSFiles.push(fresponse);
-                                    Site_Files.setAllSiteFiles($scope.allSFiles); //updates the file list on the sitedashboard
-                                    $scope.showFileForm = false; $scope.depSenfileIsUploading = false;
-                                }, function (errorResponse) {
-                                    $scope.depSenfileIsUploading = false;
-                                    toastr.error("Error saving file: " + errorResponse.statusText);
-                                });
-                            } //end else (it's a Link file)
-                        }, function (errorResponse) {
-                            $scope.depSenfileIsUploading = false;
-                            toastr.error("Error saving Source info: " + errorResponse.statusText);
-                        });//end source.save()
-                    }//end if source
-                }//end valid                   
+                            }, function (errorResponse) {
+                                $scope.depSenfileIsUploading = false;
+                                if (errorResponse.headers(["usgswim-messages"]) !== undefined) toastr.error("Error creating file's data file: " + errorResponse.headers(["usgswim-messages"]));
+                                else toastr.error("Error creating file's data file: " + errorResponse.statusText);
+                            });//end datafile.save()
+                        } else {
+                            //it's not a data file, so do the source
+                            var theSource = { source_name: $scope.aSource.FULLname, agency_id: $scope.aSource.agency_id };//, SOURCE_DATE: $scope.aSource.SOURCE_DATE };
+                            SOURCE.save(theSource).$promise.then(function (response) {
+                                if ($scope.aFile.filetype_id !== 8) {
+                                    //then POST fileParts (Services populate PATH)
+                                    var fileParts = {
+                                        FileEntity: {
+                                            filetype_id: $scope.aFile.filetype_id,
+                                            name: $scope.aFile.File.name,
+                                            file_date: $scope.aFile.file_date,
+                                            photo_date: $scope.aFile.photo_date,
+                                            description: $scope.aFile.description,
+                                            site_id: $scope.thisSensorSite.site_id,
+                                            source_id: response.source_id,
+                                            photo_direction: $scope.aFile.photo_direction,
+                                            latitude_dd: $scope.aFile.latitude_dd,
+                                            longitude_dd: $scope.aFile.longitude_dd,
+                                            instrument_id: thisSensor.instrument_id
+                                        },
+                                        File: $scope.aFile.File
+                                    };
+                                    //need to put the fileParts into correct format for post
+                                    var fd = new FormData();
+                                    fd.append("FileEntity", JSON.stringify(fileParts.FileEntity));
+                                    fd.append("File", fileParts.File);
+                                    //now POST it (fileparts)
+                                    FILE.uploadFile(fd).$promise.then(function (fresponse) {
+                                        toastr.success("File Uploaded");
+                                        fresponse.fileBelongsTo = "Sensor File";
+                                        $scope.DepSensorFiles.push(fresponse);
+                                        $scope.allSFiles.push(fresponse);
+                                        Site_Files.setAllSiteFiles($scope.allSFiles); //updates the file list on the sitedashboard
+                                        if (fresponse.filetype_id === 1) $scope.depSensImageFiles.push(fresponse);
+                                        $scope.showFileForm = false; $scope.depSenfileIsUploading = false;
+                                    }, function (errorResponse) {
+                                        $scope.depSenfileIsUploading = false;
+                                        if (errorResponse.headers(["usgswim-messages"]) !== undefined) toastr.error("Error creating file: " + errorResponse.headers(["usgswim-messages"]));
+                                        else toastr.error("Error creating file: " + errorResponse.statusText);
+                                    });
+                                } else {
+                                    //this is a link file, no fileItem
+                                    $scope.aFile.source_id = response.source_id; $scope.aFile.site_id = $scope.thisSensorSite.site_id; $scope.aFile.instrument_id = thisSensor.instrument_id;
+                                    FILE.save($scope.aFile).$promise.then(function (fresponse) {
+                                        toastr.success("File Uploaded");
+                                        fresponse.fileBelongsTo = "Sensor File";
+                                        $scope.DepSensorFiles.push(fresponse);
+                                        $scope.allSFiles.push(fresponse);
+                                        Site_Files.setAllSiteFiles($scope.allSFiles); //updates the file list on the sitedashboard
+                                        $scope.showFileForm = false; $scope.depSenfileIsUploading = false;
+                                    }, function (errorResponse) {
+                                        $scope.depSenfileIsUploading = false;
+                                        if (errorResponse.headers(["usgswim-messages"]) !== undefined) toastr.error("Error creating file: " + errorResponse.headers(["usgswim-messages"]));
+                                        else toastr.error("Error creating file: " + errorResponse.statusText);
+                                    });
+                                } //end else (it's a Link file)
+                            }, function (errorResponse) {
+                                $scope.depSenfileIsUploading = false;
+                                if (errorResponse.headers(["usgswim-messages"]) !== undefined) toastr.error("Error creating source: " + errorResponse.headers(["usgswim-messages"]));
+                                else toastr.error("Error creating source: " + errorResponse.statusText);
+                            });//end source.save()
+                        }//end if source
+                    }//end valid
+                } else {
+                    alert("You need to choose a file first");
+                }
             };//end create()
 
             $scope.saveFile = function (valid) {
@@ -426,11 +664,13 @@
                                 $scope.showFileForm = false; $scope.depSenfileIsUploading = false;
                             }, function (errorResponse) {
                                 $scope.depSenfileIsUploading = false;
-                                toastr.error("Error saving file: " + errorResponse.statusText);
+                                if (errorResponse.headers(["usgswim-messages"]) !== undefined) toastr.error("Error saving file: " + errorResponse.headers(["usgswim-messages"]));
+                                else toastr.error("Error saving file: " + errorResponse.statusText);
                             });
                         }, function (errorResponse) {
                             $scope.depSenfileIsUploading = false; //Loading...
-                            toastr.error("Error saving data file: " + errorResponse.statusText);
+                            if (errorResponse.headers(["usgswim-messages"]) !== undefined) toastr.error("Error saving file's data file: " + errorResponse.headers(["usgswim-messages"]));
+                            else toastr.error("Error saving file's data file: " + errorResponse.statusText);
                         });
                     } else {
                         //has SOURCE
@@ -438,7 +678,6 @@
                         var theSource = { source_name: $scope.aSource.FULLname, agency_id: $scope.aSource.agency_id };
                         SOURCE.save(theSource).$promise.then(function (response) {
                             $scope.aFile.source_id = response.source_id;
-                            //                       SOURCE.update({ id: $scope.aSource.source_id }, $scope.aSource).$promise.then(function () {
                             FILE.update({ id: $scope.aFile.file_id }, $scope.aFile).$promise.then(function (fileResponse) {
                                 toastr.success("File Updated");
                                 fileResponse.fileBelongsTo = "Sensor File";
@@ -448,11 +687,13 @@
                                 $scope.showFileForm = false; $scope.depSenfileIsUploading = false;
                             }, function (errorResponse) {
                                 $scope.depSenfileIsUploading = false;
-                                toastr.error("Error saving file: " + errorResponse.statusText);
+                                if (errorResponse.headers(["usgswim-messages"]) !== undefined) toastr.error("Error saving file: " + errorResponse.headers(["usgswim-messages"]));
+                                else toastr.error("Error saving file': " + errorResponse.statusText);
                             });
                         }, function (errorResponse) {
                             $scope.depSenfileIsUploading = false; //Loading...
-                            toastr.error("Error saving source: " + errorResponse.statusText);
+                            if (errorResponse.headers(["usgswim-messages"]) !== undefined) toastr.error("Error saving source: " + errorResponse.headers(["usgswim-messages"]));
+                            else toastr.error("Error saving source: " + errorResponse.statusText);
                         });
                     }
                 }//end valid
@@ -484,8 +725,9 @@
                         $scope.depSensImageFiles.splice($scope.existIMGFileIndex, 1);
                         Site_Files.setAllSiteFiles($scope.allSFiles); //updates the file list on the sitedashboard
                         $scope.showFileForm = false;
-                    }, function error(errorResponse) {
-                        toastr.error("Error: " + errorResponse.statusText);
+                    }, function (errorResponse) {
+                        if (errorResponse.headers(["usgswim-messages"]) !== undefined) toastr.error("Error deleting file: " + errorResponse.headers(["usgswim-messages"]));
+                        else toastr.error("Error deleting file: " + errorResponse.statusText);
                     });
                 });//end DeleteModal.result.then
             };//end delete()
@@ -516,6 +758,9 @@
                         $scope.NWISDF.collect_date = new Date($scope.NWISDF.collect_date);
                         $scope.NWISDF.good_start = getDateTimeParts($scope.NWISDF.good_start);
                         $scope.NWISDF.good_end = getDateTimeParts($scope.NWISDF.good_end);
+                    }, function (errorResponse) {
+                        if (errorResponse.headers(["usgswim-messages"]) !== undefined) toastr.error("Error getting data file: " + errorResponse.headers(["usgswim-messages"]));
+                        else toastr.error("Error getting data file: " + errorResponse.statusText);
                     });
                     //end existing file
                 } else {
@@ -546,6 +791,9 @@
             var postApprovalForNWISfile = function (DFid) {
                 DATA_FILE.approveNWISDF({ id: DFid }).$promise.then(function (approvalResponse) {
                     $scope.NWISDF.approval_id = approvalResponse.approval_id;
+                }, function (errorResponse) {
+                    if (errorResponse.headers(["usgswim-messages"]) !== undefined) toastr.error("Error approving nwis data file: " + errorResponse.headers(["usgswim-messages"]));
+                    else toastr.error("Error approving nwis data file: " + errorResponse.statusText);
                 });
             };
             $scope.createNWISFile = function (valid) {
@@ -601,7 +849,7 @@
                         $scope.NWISFile.path = '<link>';
                         delete $scope.NWISFile.FileType;
                         FILE.save($scope.NWISFile).$promise.then(function (Fresponse) {
-                            toastr.success("File Data saved");
+                            toastr.success("File created");
                             Fresponse.fileBelongsTo = "DataFile File";
                             $scope.sensorNWISFiles.push(Fresponse);
                             $scope.allSFiles.push(Fresponse);
@@ -617,7 +865,8 @@
                         });
                     }, function (errorResponse) {
                         $scope.depNWISSenfileIsUploading = false; //Loading...
-                        toastr.error("Error saving data file info: " + errorResponse.statusText);
+                        if (errorResponse.headers(["usgswim-messages"]) !== undefined) toastr.error("Error creating file's data file: " + errorResponse.headers(["usgswim-messages"]));
+                        else toastr.error("Error creating file's data file: " + errorResponse.statusText);
                     });//end source.save()
                 }//end valid
             };// end create NWIS file
@@ -671,10 +920,12 @@
                             Site_Files.setAllSiteFiles($scope.allSFiles); //updates the file list on the sitedashboard
                             $scope.showNWISFileForm = false;
                         }, function (errorResponse) {
-                            toastr.error("Error saving file: " + errorResponse.statusText);
+                            if (errorResponse.headers(["usgswim-messages"]) !== undefined) toastr.error("Error saving file: " + errorResponse.headers(["usgswim-messages"]));
+                            else toastr.error("Error saving file: " + errorResponse.statusText);
                         });
                     }, function (errorResponse) {
-                        toastr.error("Error saving data: " + errorResponse.statusText);
+                        if (errorResponse.headers(["usgswim-messages"]) !== undefined) toastr.error("Error saving file's data file: " + errorResponse.headers(["usgswim-messages"]));
+                        else toastr.error("Error saving file's data file: " + errorResponse.statusText);
                     });
                 }//end valid
             };//end save()
@@ -704,8 +955,9 @@
                         $scope.allSFiles.splice($scope.allSFileIndex, 1);
                         Site_Files.setAllSiteFiles($scope.allSFiles); //updates the file list on the sitedashboard
                         $scope.showNWISFileForm = false;
-                    }, function error(errorResponse) {
-                        toastr.error("Error: " + errorResponse.statusText);
+                    }, function (errorResponse) {
+                        if (errorResponse.headers(["usgswim-messages"]) !== undefined) toastr.error("Error deleting file: " + errorResponse.headers(["usgswim-messages"]));
+                        else toastr.error("Error deleting file: " + errorResponse.statusText);
                     });
                 });//end DeleteModal.result.then
             };//end delete()
@@ -1130,7 +1382,6 @@
                     $scope.NWISFile = {};
                     $scope.NWISDF = {};
                 }
-
                 //are we deploying a proposed sensor or editing a deployed sensor??
                 if (thisSensor.instrument_status[0].status == "Proposed") {
                     //deploying proposed
@@ -1179,6 +1430,9 @@
                                 $scope.OPsForTapeDown[i].selected = false;
                         }
                         //end if thisSiteHousings != undefined
+                    }, function (errorResponse) {
+                        if (errorResponse.headers(["usgswim-messages"]) !== undefined) toastr.error("Error getting sensor status measurement: " + errorResponse.headers(["usgswim-messages"]));
+                        else toastr.error("Error getting sensor status measurement: " + errorResponse.statusText);
                     });
                 }
                 $rootScope.stateIsLoading.showLoading = false;// loading..
@@ -1190,7 +1444,7 @@
                 //displaying date / time it user's timezone
                 var DeptimeParts = getTimeZoneStamp();
                 $scope.aSensStatus.time_stamp = DeptimeParts[0];
-                $scope.aSensStatus.time_zone = DeptimeParts[1]; //will be converted to utc on post/put          
+                $scope.aSensStatus.time_zone = "UTC";// DeptimeParts[1]; //will be converted to utc on post/put
                 $scope.aSensStatus.member_id = $cookies.get('mID'); // member logged in is deploying it
                 $scope.EventName = $cookies.get('SessionEventName');
                 $scope.Deployer = $scope.LoggedInMember;
@@ -1347,6 +1601,9 @@
                     sensMeasures.op_name = whichOP.name;
                     $scope.DEPtapeDownTable.push(sensMeasures);
                 }
+            }, function (errorResponse) {
+                if (errorResponse.headers(["usgswim-messages"]) !== undefined) toastr.error("Error getting sensor status measurement: " + errorResponse.headers(["usgswim-messages"]));
+                else toastr.error("Error getting sensor status measurement: " + errorResponse.statusText);
             });
 
             //#endregion tape down section 
@@ -1451,7 +1708,13 @@
                                     var sendBack = [updatedSensor, state];
                                     $uibModalInstance.close(sendBack);
                                 });
+                            }, function (errorResponse) {
+                                if (errorResponse.headers(["usgswim-messages"]) !== undefined) toastr.error("Error retrieving sensor: " + errorResponse.headers(["usgswim-messages"]));
+                                else toastr.error("Error retrieving sensor: " + errorResponse.statusText);
                             });
+                        }, function (errorResponse) {
+                            if (errorResponse.headers(["usgswim-messages"]) !== undefined) toastr.error("Error saving sensor: " + errorResponse.headers(["usgswim-messages"]));
+                            else toastr.error("Error saving sensor: " + errorResponse.statusText);
                         });
                     } //end retr date is correct
                 }//end if valid
@@ -1460,11 +1723,16 @@
         }]);//end sensorRetrievalModalCtrl
 
     // view/edit retrieved sensor (deployed included here) modal
-    ModalControllers.controller('fullSensorModalCtrl', ['$scope', '$rootScope', '$filter', '$timeout', '$cookies', '$http', '$uibModalInstance', '$uibModal', 'SERVER_URL', 'FILE_STAMP', 'allDepDropdowns', 'agencyList', 'Site_Files', 'allStatusTypes', 'allInstCollCond', 'allEvents', 'allDepTypes', 'thisSensor', 'SensorSite', 'siteOPs', 'allMembers', 'INSTRUMENT', 'INSTRUMENT_STATUS', 'DATA_FILE', 'FILE', 'SOURCE', 'OP_MEASURE',
-        function ($scope, $rootScope, $filter, $timeout, $cookies, $http, $uibModalInstance, $uibModal, SERVER_URL, FILE_STAMP, allDepDropdowns, agencyList, Site_Files, allStatusTypes, allInstCollCond, allEvents, allDepTypes, thisSensor, SensorSite, siteOPs, allMembers, INSTRUMENT, INSTRUMENT_STATUS, DATA_FILE, FILE, SOURCE, OP_MEASURE) {
+    ModalControllers.controller('fullSensorModalCtrl', ['$scope', '$rootScope', '$filter', '$timeout', '$cookies', '$http', '$uibModalInstance', '$uibModal', 'SERVER_URL', 'FILE_STAMP', 'allDepDropdowns',
+        'agencyList', 'Site_Files', 'allStatusTypes', 'allInstCollCond', 'allEvents', 'allDepTypes', 'thisSensor', 'SensorSite', 'siteOPs', 'allMembers', 'allEventDataFiles',
+        'INSTRUMENT', 'INSTRUMENT_STATUS', 'DATA_FILE', 'FILE', 'SOURCE', 'OP_MEASURE', 'Site_Script',
+        function ($scope, $rootScope, $filter, $timeout, $cookies, $http, $uibModalInstance, $uibModal, SERVER_URL, FILE_STAMP, allDepDropdowns, agencyList, Site_Files, allStatusTypes, allInstCollCond, allEvents,
+            allDepTypes, thisSensor, SensorSite, siteOPs, allMembers, allEventDataFiles, INSTRUMENT, INSTRUMENT_STATUS, DATA_FILE, FILE, SOURCE, OP_MEASURE, Site_Script) {
             /*allSensorTypes, allSensorBrands, allHousingTypes, allSensDeps*/
             $scope.serverURL = SERVER_URL;
             $scope.fullSenfileIsUploading = false; //Loading...   
+            $scope.showProcessing = false; // processing script...
+            $scope.stormSection = false; // section holding all baro pressure sensors for this event.
             $scope.sensorTypeList = allDepDropdowns[0];
             $scope.sensorBrandList = allDepDropdowns[1];
             $scope.houseTypeList = allDepDropdowns[2];
@@ -1472,7 +1740,7 @@
             $scope.vertDatumList = allDepDropdowns[4];
             $scope.allSFiles = Site_Files.getAllSiteFiles();
             $scope.sensorFiles = thisSensor !== "empty" ? $scope.allSFiles.filter(function (sf) { return sf.instrument_id == thisSensor.instrument_id; }) : [];// holder for hwm files added
-            $scope.sensImageFiles = $scope.sensorFiles.filter(function (hf) { return hf.filetype_id === 1; }); //image files for carousel
+            $scope.sensImageFiles = $scope.sensorFiles.filter(function (hf) { return hf.filetype_id === 1; }); //image files for carousel            
             $scope.showFileForm = false; //hidden form to add file to sensor
             $scope.showNWISFileForm = false; //hidden form to add nwis file to sensor
             $scope.sensorDataNWIS = false; //is this a rain gage, met station, or rdg sensor -- if so, data file must be created pointing to nwis (we don't store actual file, just metadata with link)
@@ -1484,6 +1752,9 @@
             $scope.filteredDeploymentTypes = []; //will be populated based on the sensor type chosen
             $scope.timeZoneList = ['UTC', 'PST', 'MST', 'CST', 'EST'];
             $scope.statusTypeList = allStatusTypes.filter(function (s) { return s.status == 'Retrieved' || s.status == 'Lost'; });
+            $scope.eventDataFiles = [];
+
+            $scope.is4Hz = { selected: false };
             //default setting for interval
             $scope.IntervalType = { type: 'Seconds' };
             //ng-show determines whether they are editing or viewing details
@@ -1543,8 +1814,6 @@
             //deploy part //////////////////
             $scope.DeployedSensorStat = angular.copy(thisSensor.instrument_status.filter(function (inst) { return inst.status === "Deployed"; })[0]);
             $scope.DeployedSensorStat.time_stamp = getDateTimeParts($scope.DeployedSensorStat.time_stamp); //this keeps it as utc in display
-            //if ($scope.DeployedSensorStat.vdatum_id !== undefined)
-            //    $scope.DeployedSensorStat.vdatumName = $scope.vertDatumList.filter(function (vd) { return vd.datum_id == $scope.DeployedSensorStat.vdatum_id; })[0].datum_abbreviation;
             $scope.Deployer = allMembers.filter(function (m) { return m.member_id === $scope.DeployedSensorStat.member_id; })[0];
             $scope.DEPremoveOPList = [];
             $scope.DEPtapeDownTable = []; //holder of tapedown OP_MEASUREMENTS
@@ -1624,6 +1893,9 @@
                             $scope.DEPOPsForTapeDown[i].selected = false;
                     }
                     //end if thisSiteHousings != undefined
+                }, function (errorResponse) {
+                    if (errorResponse.headers(["usgswim-messages"]) !== undefined) toastr.error("Error getting sensor status measurement: " + errorResponse.headers(["usgswim-messages"]));
+                    else toastr.error("Error getting sensor status measurement: " + errorResponse.statusText);
                 });
             }
             //retrieve part //////////////////
@@ -1717,6 +1989,9 @@
                         if (RETresponse.length === 0)
                             $scope.RETOPsForTapeDown[i].selected = false;
                     }
+                }, function (errorResponse) {
+                    if (errorResponse.headers(["usgswim-messages"]) !== undefined) toastr.error("Error getting sensor status measurement: " + errorResponse.headers(["usgswim-messages"]));
+                    else toastr.error("Error getting sensor status measurement: " + errorResponse.statusText);
                 });
             }
 
@@ -1725,7 +2000,7 @@
             //accordion open/close glyphs
             $scope.s = { depOpen: false, retOpen: true, sFileOpen: false, NWISFileOpen: false };
 
-            //#region datetimepicker
+            // datetimepicker
             $scope.dateOptions = {
                 startingDay: 1,
                 showWeeks: false
@@ -1798,14 +2073,13 @@
                 }
             };
 
-            //#region deploy edit
+            // deploy edit
             //edit button clicked. make copy of deployed info 
             $scope.wannaEditDep = function () {
                 $scope.view.DEPval = 'edit';
                 $scope.depStuffCopy = [angular.copy($scope.sensor), angular.copy($scope.DeployedSensorStat)];
                 $scope.depTapeCopy = angular.copy($scope.DEPtapeDownTable);
             };
-
 
             //save Deployed sensor info
             $scope.saveDeployed = function (valid) {
@@ -1868,10 +2142,12 @@
                             $scope.view.DEPval = 'detail';
                             toastr.success("Sensor Updated");
                         }, function (errorResponse) {
-                            toastr.error("error saving sensor status: " + errorResponse.statusText);
+                            if (errorResponse.headers(["usgswim-messages"]) !== undefined) toastr.error("Error saving sensor's status: " + errorResponse.headers(["usgswim-messages"]));
+                            else toastr.error("Error saving sensor's status: " + errorResponse.statusText);
                         });
                     }, function (errorResponse) {
-                        toastr.error("error saving sensor: " + errorResponse.statusText);
+                        if (errorResponse.headers(["usgswim-messages"]) !== undefined) toastr.error("Error saving sensor: " + errorResponse.headers(["usgswim-messages"]));
+                        else toastr.error("Error saving sensor: " + errorResponse.statusText);
                     });
                 }//end if valid
             };//end saveDeployed()
@@ -1963,10 +2239,12 @@
                             $scope.view.RETval = 'detail';
                             toastr.success("Sensor updated");
                         }, function (errorResponse) {
-                            toastr.error("error saving sensor status: " + errorResponse.statusText);
+                            if (errorResponse.headers(["usgswim-messages"]) !== undefined) toastr.error("Error saving sensor's status: " + errorResponse.headers(["usgswim-messages"]));
+                            else toastr.error("Error saving sensor's status: " + errorResponse.statusText);
                         });
                     }, function (errorResponse) {
-                        toastr.error("error saving sensor: " + errorResponse.statusText);
+                        if (errorResponse.headers(["usgswim-messages"]) !== undefined) toastr.error("Error saving sensor: " + errorResponse.headers(["usgswim-messages"]));
+                        else toastr.error("Error saving sensor: " + errorResponse.statusText);
                     });
                 }//end if valid
             };//end saveRetrieved()            
@@ -2029,75 +2307,79 @@
                         toastr.success("Sensor Removed");
                         var sendBack = ["de", 'deleted'];
                         $uibModalInstance.close(sendBack);
-                    }, function error(errorResponse) {
-                        toastr.error("Error: " + errorResponse.statusText);
+                    }, function (errorResponse) {
+                        if (errorResponse.headers(["usgswim-messages"]) !== undefined) toastr.error("Error deleting sensor: " + errorResponse.headers(["usgswim-messages"]));
+                        else toastr.error("Error deleting sensor: " + errorResponse.statusText);
                     });
-                }, function () {
-                    //logic for cancel
                 });//end modal
             };
 
-            //#region FILE STUFF
+            // FILE STUFF
             $scope.stamp = FILE_STAMP.getStamp(); $scope.fileItemExists = true;
             //need to reupload fileItem to this existing file OR Change out existing fileItem for new one
             $scope.saveFileUpload = function () {
-                $http.defaults.headers.common.Authorization = 'Basic ' + $cookies.get('STNCreds');
-                $http.defaults.headers.common.Accept = 'application/json';
-                $scope.sFileIsUploading = true;
-                var fileParts = {
-                    FileEntity: {
-                        file_id: $scope.aFile.file_id,
-                        name: $scope.aFile.name,
-                        description: $scope.aFile.description,
-                        photo_direction: $scope.aFile.photo_direction,
-                        latitude_dd: $scope.aFile.latitude_dd,
-                        longitude_dd: $scope.aFile.longitude_dd,
-                        file_date: $scope.aFile.file_date,
-                        hwm_id: $scope.aFile.hwm_id,
-                        site_id: $scope.aFile.site_id,
-                        filetype_id: $scope.aFile.filetype_id,
-                        source_id: $scope.aFile.source_id,
-                        path: $scope.aFile.path,
-                        data_file_id: $scope.aFile.data_file_id,
-                        instrument_id: $scope.aFile.instrument_id,
-                        photo_date: $scope.aFile.photo_date,
-                        is_nwis: $scope.aFile.is_nwis,
-                        objective_point_id: $scope.aFile.objective_point_id
-                    },
-                    File: $scope.aFile.File1 !== undefined ? $scope.aFile.File1 : $scope.aFile.File
-                };
-                //need to put the fileParts into correct format for post
-                var fd = new FormData();
-                fd.append("FileEntity", JSON.stringify(fileParts.FileEntity));
-                fd.append("File", fileParts.File);
-                //now POST it (fileparts)
-                FILE.uploadFile(fd).$promise.then(function (fresponse) {
-                    toastr.success("File Uploaded");
-                    $scope.src = $scope.serverURL + '/Files/' + $scope.aFile.file_id + '/Item' + FILE_STAMP.getStamp();
-                    FILE_STAMP.setStamp();
-                    $scope.stamp = FILE_STAMP.getStamp();
-                    if ($scope.aFile.File1.type.indexOf("image") > -1) {
-                        $scope.isPhoto = true;
-                    } else $scope.isPhoto = false;
-                    $scope.aFile.name = fresponse.name; $scope.aFile.path = fresponse.path;
-                    if ($scope.aFile.File1 !== undefined) {
-                        $scope.aFile.File = $scope.aFile.File1;
-                        $scope.aFile.File1 = undefined; //put it as file and remove it from 1
-                    }
-                    fresponse.fileBelongsTo = $scope.aFile.filetype_id == 2 ? "DataFile File" : "Sensor File";
-                    if (fresponse.filetype_id === 1) {
-                        $scope.sensImageFiles.splice($scope.existIMGFileIndex, 1);
-                        $scope.sensImageFiles.push(fresponse);
-                    }
-                    $scope.sensorFiles[$scope.existFileIndex] = fresponse;
-                    $scope.allSFiles[$scope.allSFileIndex] = fresponse;
-                    Site_Files.setAllSiteFiles($scope.allSFiles); //updates the file list on the sitedashboard
-                    $scope.sFileIsUploading = false;
-                    $scope.fileItemExists = true;
-                }, function (errorResponse) {
-                    $scope.sFileIsUploading = false;
-                    toastr.error("Error saving file: " + errorResponse.statusText);
-                });
+                if ($scope.aFile.File == undefined && $scope.aFile.File1 == undefined) {
+                    alert("You need to choose a file first");
+                } else {
+                    $http.defaults.headers.common.Authorization = 'Basic ' + $cookies.get('STNCreds');
+                    $http.defaults.headers.common.Accept = 'application/json';
+                    $scope.sFileIsUploading = true;
+                    var fileParts = {
+                        FileEntity: {
+                            file_id: $scope.aFile.file_id,
+                            name: $scope.aFile.name,
+                            description: $scope.aFile.description,
+                            photo_direction: $scope.aFile.photo_direction,
+                            latitude_dd: $scope.aFile.latitude_dd,
+                            longitude_dd: $scope.aFile.longitude_dd,
+                            file_date: $scope.aFile.file_date,
+                            hwm_id: $scope.aFile.hwm_id,
+                            site_id: $scope.aFile.site_id,
+                            filetype_id: $scope.aFile.filetype_id,
+                            source_id: $scope.aFile.source_id,
+                            path: $scope.aFile.path,
+                            data_file_id: $scope.aFile.data_file_id,
+                            instrument_id: $scope.aFile.instrument_id,
+                            photo_date: $scope.aFile.photo_date,
+                            is_nwis: $scope.aFile.is_nwis,
+                            objective_point_id: $scope.aFile.objective_point_id
+                        },
+                        File: $scope.aFile.File1 !== undefined ? $scope.aFile.File1 : $scope.aFile.File
+                    };
+                    //need to put the fileParts into correct format for post
+                    var fd = new FormData();
+                    fd.append("FileEntity", JSON.stringify(fileParts.FileEntity));
+                    fd.append("File", fileParts.File);
+                    //now POST it (fileparts)
+                    FILE.uploadFile(fd).$promise.then(function (fresponse) {
+                        toastr.success("File Uploaded");
+                        $scope.src = $scope.serverURL + '/Files/' + $scope.aFile.file_id + '/Item' + FILE_STAMP.getStamp();
+                        FILE_STAMP.setStamp();
+                        $scope.stamp = FILE_STAMP.getStamp();
+                        if ($scope.aFile.File1.type.indexOf("image") > -1) {
+                            $scope.isPhoto = true;
+                        } else $scope.isPhoto = false;
+                        $scope.aFile.name = fresponse.name; $scope.aFile.path = fresponse.path;
+                        if ($scope.aFile.File1 !== undefined) {
+                            $scope.aFile.File = $scope.aFile.File1;
+                            $scope.aFile.File1 = undefined; //put it as file and remove it from 1
+                        }
+                        fresponse.fileBelongsTo = $scope.aFile.filetype_id == 2 ? "DataFile File" : "Sensor File";
+                        if (fresponse.filetype_id === 1) {
+                            $scope.sensImageFiles.splice($scope.existIMGFileIndex, 1);
+                            $scope.sensImageFiles.push(fresponse);
+                        }
+                        $scope.sensorFiles[$scope.existFileIndex] = fresponse;
+                        $scope.allSFiles[$scope.allSFileIndex] = fresponse;
+                        Site_Files.setAllSiteFiles($scope.allSFiles); //updates the file list on the sitedashboard
+                        $scope.sFileIsUploading = false;
+                        $scope.fileItemExists = true;
+                    }, function (errorResponse) {
+                        $scope.sFileIsUploading = false;
+                        if (errorResponse.headers(["usgswim-messages"]) !== undefined) toastr.error("Error creating file: " + errorResponse.headers(["usgswim-messages"]));
+                        else toastr.error("Error creating file: " + errorResponse.statusText);
+                    });
+                }
             };
             //show a modal with the larger image as a preview on the photo file for this op
             $scope.showImageModal = function (image) {
@@ -2134,6 +2416,9 @@
                     $scope.aFile = angular.copy(file);
                     FILE.getFileItem({ id: $scope.aFile.file_id }).$promise.then(function (response) {
                         $scope.fileItemExists = response.Length > 0 ? true : false;
+                    }, function (errorResponse) {
+                        if (errorResponse.headers(["usgswim-messages"]) !== undefined) toastr.error("Error getting file item: " + errorResponse.headers(["usgswim-messages"]));
+                        else toastr.error("Error getting file item: " + errorResponse.statusText);
                     });
                     $scope.aFile.fileType = $scope.fileTypeList.filter(function (ft) { return ft.filetype_id == $scope.aFile.filetype_id; })[0].filetype;
                     //determine if existing file is a photo (even if type is not )
@@ -2154,6 +2439,9 @@
                             //add agency name to photo caption
                             if ($scope.aFile.filetype_id == 1)
                                 $scope.agencyNameForCap = $scope.agencies.filter(function (a) { return a.agency_id == $scope.aSource.agency_id; })[0].agency_name;
+                        }, function (errorResponse) {
+                            if (errorResponse.headers(["usgswim-messages"]) !== undefined) toastr.error("Error getting source: " + errorResponse.headers(["usgswim-messages"]));
+                            else toastr.error("Error getting source: " + errorResponse.statusText);
                         });
                     }//end if source
                     if (file.data_file_id !== undefined) {
@@ -2169,9 +2457,13 @@
                                     $scope.ApprovalInfo.approvalDate = new Date(approvalResponse.approval_date); //include note that it's displayed in their local time but stored in UTC
                                     $scope.ApprovalInfo.Member = allMembers.filter(function (amem) { return amem.member_id == approvalResponse.member_id; })[0];
                                 }, function error(errorResponse) {
-                                    toastr.error("Error getting data file approval information");
+                                    if (errorResponse.headers(["usgswim-messages"]) !== undefined) toastr.error("Error getting data file approval: " + errorResponse.headers(["usgswim-messages"]));
+                                    else toastr.error("Error getting data file approval: " + errorResponse.statusText);
                                 });
                             }
+                        }, function (errorResponse) {
+                            if (errorResponse.headers(["usgswim-messages"]) !== undefined) toastr.error("Error getting data file: " + errorResponse.headers(["usgswim-messages"]));
+                            else toastr.error("Error getting data file: " + errorResponse.statusText);
                         });
                     }
                 }//end existing file
@@ -2184,8 +2476,8 @@
                     var dt = getTimeZoneStamp();
                     $scope.datafile.collect_date = dt[0];
                     $scope.datafile.time_zone = dt[1]; //will be converted to utc on post/put 
-                    $scope.datafile.good_start = new Date();
-                    $scope.datafile.good_end = new Date();
+                    $scope.datafile.good_start = null;//new Date();
+                    $scope.datafile.good_end = null;//new Date();
                 } //end new file
                 $scope.showFileForm = true;
 
@@ -2198,139 +2490,163 @@
 
             //create this new file
             $scope.createFile = function (valid) {
-                if ($scope.aFile.filetype_id == 2) {
-                    //make sure end date is after start date
-                    var s = $scope.datafile.good_start;//need to get dep status date in same format as retrieved to compare
-                    var e = $scope.datafile.good_end; //stupid comma in there making it not the same
-                    if (new Date(e) < new Date(s)) {
-                        valid = false;
-                        var fixDate = $uibModal.open({
-                            template: '<div class="modal-header"><h3 class="modal-title">Error</h3></div>' +
-                            '<div class="modal-body"><p>The good end date must be after the good start date.</p></div>' +
-                            '<div class="modal-footer"><button class="btn btn-primary" ng-enter="ok()" ng-click="ok()">OK</button></div>',
-                            controller: ['$scope', '$uibModalInstance', function ($scope, $uibModalInstance) {
-                                $scope.ok = function () {
-                                    $uibModalInstance.close();
-                                };
-                            }],
-                            size: 'sm'
-                        });
-                        fixDate.result.then(function () {
-                            valid = false;
-                        });
-                    }
-                }
-                if (valid) {
-                    $scope.fullSenfileIsUploading = true;
-                    $http.defaults.headers.common.Authorization = 'Basic ' + $cookies.get('STNCreds');
-                    $http.defaults.headers.common.Accept = 'application/json';
-                    //post source or datafile first to get source_id or data_file_id
+                if ($scope.aFile.File !== undefined) {
                     if ($scope.aFile.filetype_id == 2) {
-                        //determine timezone
-                        if ($scope.datafile.time_zone != "UTC") {
-                            //convert it
-                            var utcStartDateTime = new Date($scope.datafile.good_start).toUTCString();
-                            var utcEndDateTime = new Date($scope.datafile.good_end).toUTCString();
-                            $scope.datafile.good_start = utcStartDateTime;
-                            $scope.datafile.good_end = utcEndDateTime;
-                            $scope.datafile.time_zone = 'UTC';
-                        } else {
-                            //make sure 'GMT' is tacked on so it doesn't try to add hrs to make the already utc a utc in db
-                            var si = $scope.datafile.good_start.toString().indexOf('GMT') + 3;
-                            var ei = $scope.datafile.good_end.toString().indexOf('GMT') + 3;
-                            $scope.datafile.good_start = $scope.datafile.good_start.toString().substring(0, si);
-                            $scope.datafile.good_end = $scope.datafile.good_end.toString().substring(0, ei);
+                        //make sure end date is after start date
+                        var s = $scope.datafile.good_start;//need to get dep status date in same format as retrieved to compare
+                        var e = $scope.datafile.good_end; //stupid comma in there making it not the same
+                        if (new Date(e) < new Date(s)) {
+                            valid = false;
+                            var fixDate = $uibModal.open({
+                                template: '<div class="modal-header"><h3 class="modal-title">Error</h3></div>' +
+                                '<div class="modal-body"><p>The good end date must be after the good start date.</p></div>' +
+                                '<div class="modal-footer"><button class="btn btn-primary" ng-enter="ok()" ng-click="ok()">OK</button></div>',
+                                controller: ['$scope', '$uibModalInstance', function ($scope, $uibModalInstance) {
+                                    $scope.ok = function () {
+                                        $uibModalInstance.close();
+                                    };
+                                }],
+                                size: 'sm'
+                            });
+                            fixDate.result.then(function () {
+                                valid = false;
+                            });
                         }
-                        $scope.datafile.instrument_id = thisSensor.instrument_id;
-                        $scope.datafile.processor_id = $cookies.get('mID');
-                        var datafileID = 0;
-                        DATA_FILE.save($scope.datafile).$promise.then(function (dfResponse) {
-                            datafileID = dfResponse.data_file_id;
-                            //then POST fileParts (Services populate PATH)
-                            var fileParts = {
-                                FileEntity: {
-                                    filetype_id: $scope.aFile.filetype_id,
-                                    name: $scope.aFile.File.name,
-                                    file_date: $scope.aFile.file_date,
-                                    description: $scope.aFile.description,
-                                    site_id: $scope.thisSensorSite.site_id,
-                                    data_file_id: dfResponse.data_file_id,
-                                    photo_direction: $scope.aFile.photo_direction,
-                                    latitude_dd: $scope.aFile.latitude_dd,
-                                    longitude_dd: $scope.aFile.longitude_dd,
-                                    instrument_id: thisSensor.instrument_id
-                                },
-                                File: $scope.aFile.File
-                            };
-                            //need to put the fileParts into correct format for post
-                            var fd = new FormData();
-                            fd.append("FileEntity", JSON.stringify(fileParts.FileEntity));
-                            fd.append("File", fileParts.File);
-                            //now POST it (fileparts)
-                            FILE.uploadFile(fd).$promise.then(function (fresponse) {
-                                toastr.success("File Uploaded");
-                                fresponse.fileBelongsTo = "DataFile File";
-                                $scope.sensorFiles.push(fresponse);
-                                $scope.allSFiles.push(fresponse);
-                                Site_Files.setAllSiteFiles($scope.allSFiles); //updates the file list on the sitedashboard
-                                if (fresponse.filetype_id === 1) $scope.sensImageFiles.push(fresponse);
-                                $scope.showFileForm = false; $scope.fullSenfileIsUploading = false;
-                            }, function (errorResponse) {
-                                // file did not get created, delete datafile
-                                DATA_FILE.delete({ id: datafileID });
-                                $scope.aFile = {}; $scope.aSource = {}; $scope.datafile = {}; $scope.showFileForm = false;
-                                $scope.fullSenfileIsUploading = false;
-                                if (errorResponse.headers(["usgswim-messages"]) !== undefined) toastr.error("Error creating file: " + errorResponse.headers(["usgswim-messages"]));
-                                else toastr.error("Error creating file: " + errorResponse.statusText);
+                        if (s == undefined || e == undefined) {
+                            valid = false;
+                            var missingDate = $uibModal.open({
+                                template: '<div class="modal-header"><h3 class="modal-title">Error</h3></div>' +
+                                '<div class="modal-body"><p>The good data start date or good data end date is missing. Either choose a date, or click Preview Data to get a chart of the data, where you can choose the dates.</p></div>' +
+                                '<div class="modal-footer"><button class="btn btn-primary" ng-enter="ok()" ng-click="ok()">OK</button></div>',
+                                controller: ['$scope', '$uibModalInstance', function ($scope, $uibModalInstance) {
+                                    $scope.ok = function () {
+                                        $uibModalInstance.close();
+                                    };
+                                }],
+                                size: 'sm'
                             });
-                        }, function (errorResponse) {
-                            $scope.fullSenfileIsUploading = false;
-                            toastr.error("Error saving data file: " + errorResponse.statusText);
-                        });//end datafile.save()
-                    } else {
-                        //it's not a data file, so do the source
-                        var theSource = { source_name: $scope.aSource.FULLname, agency_id: $scope.aSource.agency_id };
-                        SOURCE.save(theSource).$promise.then(function (response) {
-                            //then POST fileParts (Services populate PATH)
-                            var fileParts = {
-                                FileEntity: {
-                                    filetype_id: $scope.aFile.filetype_id,
-                                    name: $scope.aFile.File.name,
-                                    file_date: $scope.aFile.file_date,
-                                    photo_date: $scope.aFile.photo_date,
-                                    description: $scope.aFile.description,
-                                    site_id: $scope.thisSensorSite.site_id,
-                                    source_id: response.source_id,
-                                    photo_direction: $scope.aFile.photo_direction,
-                                    latitude_dd: $scope.aFile.latitude_dd,
-                                    longitude_dd: $scope.aFile.longitude_dd,
-                                    instrument_id: thisSensor.instrument_id
-                                },
-                                File: $scope.aFile.File
-                            };
-                            //need to put the fileParts into correct format for post
-                            var fd = new FormData();
-                            fd.append("FileEntity", JSON.stringify(fileParts.FileEntity));
-                            fd.append("File", fileParts.File);
-                            //now POST it (fileparts)
-                            FILE.uploadFile(fd).$promise.then(function (fresponse) {
-                                toastr.success("File Uploaded");
-                                fresponse.fileBelongsTo = "Sensor File";
-                                $scope.sensorFiles.push(fresponse);
-                                $scope.allSFiles.push(fresponse);
-                                Site_Files.setAllSiteFiles($scope.allSFiles); //updates the file list on the sitedashboard
-                                if (fresponse.filetype_id === 1) $scope.sensImageFiles.push(fresponse);
-                                $scope.showFileForm = false; $scope.fullSenfileIsUploading = false;
+                            missingDate.result.then(function () {
+                                valid = false;
+                            });
+                        }
+                    }
+                    if (valid) {
+                        $scope.fullSenfileIsUploading = true;
+                        $http.defaults.headers.common.Authorization = 'Basic ' + $cookies.get('STNCreds');
+                        $http.defaults.headers.common.Accept = 'application/json';
+                        //post source or datafile first to get source_id or data_file_id
+                        if ($scope.aFile.filetype_id == 2) {
+                            //determine timezone
+                            if ($scope.datafile.time_zone != "UTC") {
+                                //convert it
+                                var utcStartDateTime = new Date($scope.datafile.good_start).toUTCString();
+                                var utcEndDateTime = new Date($scope.datafile.good_end).toUTCString();
+                                $scope.datafile.good_start = utcStartDateTime;
+                                $scope.datafile.good_end = utcEndDateTime;
+                                $scope.datafile.time_zone = 'UTC';
+                            } else {
+                                //make sure 'GMT' is tacked on so it doesn't try to add hrs to make the already utc a utc in db
+                                var si = $scope.datafile.good_start.toString().indexOf('GMT') + 3;
+                                var ei = $scope.datafile.good_end.toString().indexOf('GMT') + 3;
+                                $scope.datafile.good_start = $scope.datafile.good_start.toString().substring(0, si);
+                                $scope.datafile.good_end = $scope.datafile.good_end.toString().substring(0, ei);
+                            }
+                            $scope.datafile.instrument_id = thisSensor.instrument_id;
+                            $scope.datafile.processor_id = $cookies.get('mID');
+                            var datafileID = 0;
+                            DATA_FILE.save($scope.datafile).$promise.then(function (dfResponse) {
+                                datafileID = dfResponse.data_file_id;
+                                //then POST fileParts (Services populate PATH)
+                                var fileParts = {
+                                    FileEntity: {
+                                        filetype_id: $scope.aFile.filetype_id,
+                                        name: $scope.aFile.File.name,
+                                        file_date: $scope.aFile.file_date,
+                                        description: $scope.aFile.description,
+                                        site_id: $scope.thisSensorSite.site_id,
+                                        data_file_id: dfResponse.data_file_id,
+                                        photo_direction: $scope.aFile.photo_direction,
+                                        latitude_dd: $scope.aFile.latitude_dd,
+                                        longitude_dd: $scope.aFile.longitude_dd,
+                                        instrument_id: thisSensor.instrument_id
+                                    },
+                                    File: $scope.aFile.File
+                                };
+                                //need to put the fileParts into correct format for post
+                                var fd = new FormData();
+                                fd.append("FileEntity", JSON.stringify(fileParts.FileEntity));
+                                fd.append("File", fileParts.File);
+                                //now POST it (fileparts)
+                                FILE.uploadFile(fd).$promise.then(function (fresponse) {
+                                    toastr.success("File Uploaded");
+                                    fresponse.fileBelongsTo = "DataFile File";
+                                    $scope.sensorFiles.push(fresponse);
+                                    $scope.allSFiles.push(fresponse);
+                                    Site_Files.setAllSiteFiles($scope.allSFiles); //updates the file list on the sitedashboard
+                                    if (fresponse.filetype_id === 1) $scope.sensImageFiles.push(fresponse);
+                                    $scope.showFileForm = false; $scope.fullSenfileIsUploading = false;
+                                }, function (errorResponse) {
+                                    // file did not get created, delete datafile
+                                    DATA_FILE.delete({ id: datafileID });
+                                    $scope.aFile = {}; $scope.aSource = {}; $scope.datafile = {}; $scope.showFileForm = false;
+                                    $scope.fullSenfileIsUploading = false;
+                                    if (errorResponse.headers(["usgswim-messages"]) !== undefined) toastr.error("Error creating file: " + errorResponse.headers(["usgswim-messages"]));
+                                    else toastr.error("Error creating file: " + errorResponse.statusText);
+                                });
                             }, function (errorResponse) {
                                 $scope.fullSenfileIsUploading = false;
-                                toastr.error("Error saving file: " + errorResponse.statusText);
-                            });
-                        }, function (errorResponse) {
-                            $scope.fullSenfileIsUploading = false;
-                            toastr.error("Error saving source info: " + errorResponse.statusText);
-                        });//end source.save()
-                    }//end if source
-                }//end valid
+                                if (errorResponse.headers(["usgswim-messages"]) !== undefined) toastr.error("Error creating file's data file: " + errorResponse.headers(["usgswim-messages"]));
+                                else toastr.error("Error creating file's data file: " + errorResponse.statusText);
+                            });//end datafile.save()
+                        } else {
+                            //it's not a data file, so do the source
+                            var theSource = { source_name: $scope.aSource.FULLname, agency_id: $scope.aSource.agency_id };
+                            SOURCE.save(theSource).$promise.then(function (response) {
+                                //then POST fileParts (Services populate PATH)
+                                var fileParts = {
+                                    FileEntity: {
+                                        filetype_id: $scope.aFile.filetype_id,
+                                        name: $scope.aFile.File.name,
+                                        file_date: $scope.aFile.file_date,
+                                        photo_date: $scope.aFile.photo_date,
+                                        description: $scope.aFile.description,
+                                        site_id: $scope.thisSensorSite.site_id,
+                                        source_id: response.source_id,
+                                        photo_direction: $scope.aFile.photo_direction,
+                                        latitude_dd: $scope.aFile.latitude_dd,
+                                        longitude_dd: $scope.aFile.longitude_dd,
+                                        instrument_id: thisSensor.instrument_id
+                                    },
+                                    File: $scope.aFile.File
+                                };
+                                //need to put the fileParts into correct format for post
+                                var fd = new FormData();
+                                fd.append("FileEntity", JSON.stringify(fileParts.FileEntity));
+                                fd.append("File", fileParts.File);
+                                //now POST it (fileparts)
+                                FILE.uploadFile(fd).$promise.then(function (fresponse) {
+                                    toastr.success("File Uploaded");
+                                    fresponse.fileBelongsTo = "Sensor File";
+                                    $scope.sensorFiles.push(fresponse);
+                                    $scope.allSFiles.push(fresponse);
+                                    Site_Files.setAllSiteFiles($scope.allSFiles); //updates the file list on the sitedashboard
+                                    if (fresponse.filetype_id === 1) $scope.sensImageFiles.push(fresponse);
+                                    $scope.showFileForm = false; $scope.fullSenfileIsUploading = false;
+                                }, function (errorResponse) {
+                                    $scope.fullSenfileIsUploading = false;
+                                    if (errorResponse.headers(["usgswim-messages"]) !== undefined) toastr.error("Error creating file: " + errorResponse.headers(["usgswim-messages"]));
+                                    else toastr.error("Error creating file: " + errorResponse.statusText);
+                                });
+                            }, function (errorResponse) {
+                                $scope.fullSenfileIsUploading = false;
+                                if (errorResponse.headers(["usgswim-messages"]) !== undefined) toastr.error("Error creating source: " + errorResponse.headers(["usgswim-messages"]));
+                                else toastr.error("Error creating source: " + errorResponse.statusText);
+                            });//end source.save()
+                        }//end if source
+                    }//end valid
+                } else {
+                    alert("You need to choose a file first");
+                }
             };//end create()
 
             //update this file
@@ -2390,11 +2706,13 @@
                                 $scope.showFileForm = false; $scope.fullSenfileIsUploading = false;
                             }, function (errorResponse) {
                                 $scope.fullSenfileIsUploading = false;
-                                toastr.error("Error saving file: " + errorResponse.statusText);
+                                if (errorResponse.headers(["usgswim-messages"]) !== undefined) toastr.error("Error saving file: " + errorResponse.headers(["usgswim-messages"]));
+                                else toastr.error("Error saving file: " + errorResponse.statusText);
                             });
                         }, function (errorResponse) {
                             $scope.fullSenfileIsUploading = false; //Loading...
-                            toastr.error("Error saving data file: " + errorResponse.statusText);
+                            if (errorResponse.headers(["usgswim-messages"]) !== undefined) toastr.error("Error saving file's data file: " + errorResponse.headers(["usgswim-messages"]));
+                            else toastr.error("Error saving file's data file: " + errorResponse.statusText);
                         });
                     } else {
                         //has SOURCE
@@ -2402,8 +2720,6 @@
                         var theSource = { source_name: $scope.aSource.FULLname, agency_id: $scope.aSource.agency_id };
                         SOURCE.save(theSource).$promise.then(function (response) {
                             $scope.aFile.source_id = response.source_id;
-                            //$scope.aSource.source_name = $scope.aSource.FULLname;
-                            // SOURCE.update({ id: $scope.aSource.source_id }, $scope.aSource).$promise.then(function () {
                             FILE.update({ id: $scope.aFile.file_id }, $scope.aFile).$promise.then(function (fileResponse) {
                                 toastr.success("File Updated");
                                 fileResponse.fileBelongsTo = "Sensor File";
@@ -2413,11 +2729,13 @@
                                 $scope.showFileForm = false; $scope.fullSenfileIsUploading = false;
                             }, function (errorResponse) {
                                 $scope.fullSenfileIsUploading = false;
-                                toastr.error("Error saving file: " + errorResponse.statusText);
+                                if (errorResponse.headers(["usgswim-messages"]) !== undefined) toastr.error("Error saving file: " + errorResponse.headers(["usgswim-messages"]));
+                                else toastr.error("Error saving file: " + errorResponse.statusText);
                             });
                         }, function (errorResponse) {
                             $scope.fullSenfileIsUploading = false; //Loading...
-                            toastr.error("Error saving source: " + errorResponse.statusText);
+                            if (errorResponse.headers(["usgswim-messages"]) !== undefined) toastr.error("Error saving source: " + errorResponse.headers(["usgswim-messages"]));
+                            else toastr.error("Error saving source: " + errorResponse.statusText);
                         });
                     }
                 }//end valid
@@ -2450,8 +2768,9 @@
                         $scope.sensImageFiles.splice($scope.existIMGFileIndex, 1);
                         Site_Files.setAllSiteFiles($scope.allSFiles); //updates the file list on the sitedashboard
                         $scope.showFileForm = false;
-                    }, function error(errorResponse) {
-                        toastr.error("Error: " + errorResponse.statusText);
+                    }, function (errorResponse) {
+                        if (errorResponse.headers(["usgswim-messages"]) !== undefined) toastr.error("Error deleting file: " + errorResponse.headers(["usgswim-messages"]));
+                        else toastr.error("Error deleting file: " + errorResponse.statusText);
                     });
                 });//end DeleteModal.result.then
             };//end delete()
@@ -2461,6 +2780,10 @@
                 $scope.aSource = {};
                 $scope.datafile = {};
                 $scope.showFileForm = false;
+                $scope.showProcessing = false;
+                $scope.stormSection = false; // in case they clicked run script
+                $scope.eventDataFiles = [];
+                $scope.is4Hz = { selected: false };
             };
 
             //approve this datafile (if admin or manager)
@@ -2490,11 +2813,10 @@
                         toastr.success("Data File Approved");
                         $scope.ApprovalInfo.approvalDate = new Date(approvalResponse.approval_date); //include note that it's displayed in their local time but stored in UTC
                         $scope.ApprovalInfo.Member = allMembers.filter(function (amem) { return amem.member_id == approvalResponse.member_id; })[0];
-                    }, function error(errorResponse) {
-                        toastr.error("Error: " + errorResponse.statusText);
+                    }, function (errorResponse) {
+                        if (errorResponse.headers(["usgswim-messages"]) !== undefined) toastr.error("Error approving data file: " + errorResponse.headers(["usgswim-messages"]));
+                        else toastr.error("Error approving data file: " + errorResponse.statusText);
                     });
-                }, function () {
-                    //logic for cancel
                 });//end modal
             };
 
@@ -2524,16 +2846,474 @@
                         $scope.datafile = df;
                         toastr.success("Data File Unapproved");
                         $scope.ApprovalInfo = {};
-                    }, function error(errorResponse) {
-                        toastr.error("Error: " + errorResponse.statusText);
+                    }, function (errorResponse) {
+                        if (errorResponse.headers(["usgswim-messages"]) !== undefined) toastr.error("Error unapproving data file: " + errorResponse.headers(["usgswim-messages"]));
+                        else toastr.error("Error unapproving data file: " + errorResponse.statusText);
                     });
-                }, function () {
-                    //logic for cancel
                 });//end modal
             };
-            //#endregion FILE STUFF
 
-            //#region NWIS DATA_FILE
+            // this is a pressure transducer sensor's data file, run air script using the data file id
+            $scope.runAirScript = function () {
+                // ensure the air sensor has a tapedown with the sensor_elevation on both dep and retrieved
+                if ($scope.DeployedSensorStat.sensor_elevation !== undefined && $scope.RetrievedSensorStat.sensor_elevation !== undefined) {
+                    if ($scope.aFile.script_parent == 'true') {
+                        // show modal asking if they want to delete all the processed files
+                        var rerunModal = $uibModal.open({
+                            backdrop: 'static',
+                            keyboard: false,
+                            template: '<div class="modal-header"><h3 class="modal-title">Warning</h3></div>' +
+                            '<div class="modal-body"><p>The Air Script has already been processed for this sensor data file. Would you like to delete the output files and rerun the script?</p>' +
+                            '<div class="modal-footer"><button class="btn btn-warning" ng-enter="no()" ng-click="no()">Cancel</button><button class="btn btn-primary" ng-enter="yes()" ng-click="yes()">Rerun Script</button></div>',
+                            controller: ['$scope', '$uibModalInstance', 'theFile', function ($scope, $uibModalInstance, theFile) {
+                                $scope.no = function () {
+                                    $uibModalInstance.dismiss();
+                                };
+                                $scope.yes = function () {
+                                    $uibModalInstance.close(theFile);
+                                };
+                            }],
+                            size: 'sm',
+                            resolve: {
+                                theFile: function () {
+                                    return $scope.aFile;
+                                }
+                            }
+                        });
+                        rerunModal.result.then(function (afile) {
+                            $scope.showProcessing = true;
+                            //delete all the output files that have this file_id as their 'script_parent' value
+                            $http.defaults.headers.common.Authorization = 'Basic ' + $cookies.get('STNCreds');
+                            var processedFileCount = $scope.sensorFiles.filter(function (f) { return f.script_parent == afile.file_id.toString(); });
+                            var matchCnt = 0;
+                            if (processedFileCount == 0) {
+                                //all done, run it again now
+                                DATA_FILE.runAirScript({ airDFID: afile.data_file_id, username: $cookies.get('STNUsername') }).$promise.then(function () {
+                                    $scope.showProcessing = false;
+                                }, function error(errorResponse) {
+                                    if (errorResponse.headers(["usgswim-messages"]) !== undefined) toastr.error("Error running Air Script: " + errorResponse.headers(["usgswim-messages"]));
+                                    else toastr.error("Error running Air Script: " + errorResponse.statusText);
+                                });
+                                Site_Script.setIsScriptRunning("true"); //tell site.ctrl to show toastr notification
+                                $scope.cancelFile();
+                            }
+                            $scope.sensorFiles.forEach(function (f) {
+                                if (f.script_parent == afile.file_id.toString()) {
+                                    FILE.delete({ id: f.file_id }).$promise.then(function () {
+                                        matchCnt++;
+                                        $scope.sensorFiles.splice($scope.existFileIndex, 1);
+                                        $scope.allSFiles.splice($scope.allSFileIndex, 1);
+                                        $scope.sensImageFiles.splice($scope.existIMGFileIndex, 1);
+                                        Site_Files.setAllSiteFiles($scope.allSFiles); //updates the file list on the sitedashboard
+                                        if (matchCnt == processedFileCount.length) {
+                                            //all done, run it again now
+                                            DATA_FILE.runAirScript({ airDFID: afile.data_file_id, username: $cookies.get('STNUsername') }).$promise.then(function () {
+                                                $scope.showProcessing = false;
+                                            }, function error(errorResponse) {
+                                                if (errorResponse.headers(["usgswim-messages"]) !== undefined) toastr.error("Error running Air Script: " + errorResponse.headers(["usgswim-messages"]));
+                                                else toastr.error("Error running Air Script: " + errorResponse.statusText);
+                                            });
+                                            Site_Script.setIsScriptRunning("true"); //tell site.ctrl to show toastr notification
+                                            $scope.cancelFile();
+                                        }
+                                    }, function error(errorResponse) {
+                                        toastr.error("Error deleting output file: " + errorResponse.statusText);
+                                    });
+                                }
+                            }); //end foreach                                
+                        });//end rerunModal.result.then
+                    } else {
+                        // script_parent is not true, never been run before
+                        $scope.showProcessing = true;
+                        DATA_FILE.runAirScript({ airDFID: $scope.datafile.data_file_id, username: $cookies.get('STNUsername') }).$promise.then(function () {
+                            $scope.showProcessing = false;
+                        }, function error(errorResponse) {
+                            if (errorResponse.headers(["usgswim-messages"]) !== undefined) toastr.error("Error running Air Script: " + errorResponse.headers(["usgswim-messages"]));
+                            else toastr.error("Error running Air Script: " + errorResponse.statusText);
+                        });
+                        Site_Script.setIsScriptRunning("true"); //tell site.ctrl to show toastr notification
+                        $scope.cancelFile();
+                    }
+                } else {
+                    var missingSeaElev = $uibModal.open({
+                        template: '<div class="modal-header"><h3 class="modal-title">Error</h3></div>' +
+                        '<div class="modal-body"><p>This Pressure Transducer Sensor does not have a sensor elevation.</p>' +
+                        '<p>Please update the sensor, providing a sensor elevation for both the deployed section and retrieved section. This is required for the script.</p></div>' +
+                        '<div class="modal-footer"><button class="btn btn-primary" ng-enter="ok()" ng-click="ok()">OK</button></div>',
+                        controller: ['$scope', '$uibModalInstance', function ($scope, $uibModalInstance) {
+                            $scope.ok = function () {
+                                $uibModalInstance.close();
+                            };
+                        }],
+                        size: 'sm'
+                    });
+                }
+            };
+
+            function calcDistance(lat1, lon1) {
+                // http://www.geodatasource.com/developers/javascript
+                var radlat1 = Math.PI * lat1 / 180;
+                var radlat2 = Math.PI * $scope.thisSensorSite.latitude_dd / 180;
+                var theta = lon1 - $scope.thisSensorSite.longitude_dd;
+                var radtheta = Math.PI * theta / 180;
+                var dist = Math.sin(radlat1) * Math.sin(radlat2) + Math.cos(radlat1) * Math.cos(radlat2) * Math.cos(radtheta);
+                dist = Math.acos(dist);
+                dist = dist * 180 / Math.PI;
+                dist = dist * 60 * 1.1515; // miles
+                return dist;
+            }
+
+            $scope.showStormSection = function () {
+                $scope.stormSection = true;
+                var parentFileName = "";
+                angular.forEach(allEventDataFiles, function (df) {
+                    df.selected = false;
+                    df.distance = calcDistance(df.latitude_dd, df.longitude_dd);
+                    if (df.script_parent === undefined || df.script_parent == "true")
+                        $scope.eventDataFiles.push(df);
+                });
+                // now sort by distance by default
+                $scope.eventDataFiles.sort(function (a, b) {
+                    return parseFloat(a.distance) - parseFloat(b.distance);
+                });
+            };
+
+            // add PAGINATION stuff 
+            // change sorting order
+            $scope.sort_by = function (newSortingOrder) {
+                if ($scope.sortingOrder == newSortingOrder) {
+                    $scope.reverse = !$scope.reverse;
+                }
+                $scope.sortingOrder = newSortingOrder;
+                // icon setup
+                $('th i').each(function () {
+                    // icon reset
+                    $(this).removeClass().addClass('glyphicon glyphicon-sort');
+                });
+                if ($scope.reverse) {
+                    $('th.' + newSortingOrder + ' i').removeClass().addClass('glyphicon glyphicon-chevron-up');
+                } else {
+                    $('th.' + newSortingOrder + ' i').removeClass().addClass('glyphicon glyphicon-chevron-down');
+                }
+            };
+
+            $scope.pagination = {
+                currentPage: 1,
+                maxPaginationSize: 200
+            };
+
+            $scope.itemsPerPage = 10;
+            // update the beginning and end points for shown people
+            // this will be called when the user changes page in the pagination bar
+            $scope.updatePageIndexes = function (a) {
+                console.log('Page changed to: ' + $scope.pagination.currentPage);
+                $scope.firstIndex = ($scope.pagination.currentPage - 1) * $scope.itemsPerPage;
+                $scope.lastIndex = $scope.pagination.currentPage * $scope.itemsPerPage;
+            };
+            $scope.updatePageIndexes();
+
+            //end PAGINATION stuff 
+
+            $scope.updateChosenAirRadio = function (dfile) {
+                for (var i = 0; i < $scope.eventDataFiles.length; i++) {
+                    if (dfile.data_file_id != $scope.eventDataFiles[i].data_file_id)
+                        $scope.eventDataFiles[i].selected = 'false';
+                }
+            };
+
+            var runTheStormScript = function (airDF) {
+                INSTRUMENT.getFullInstrument({ id: airDF.instrument_id }).$promise.then(function (airSensor) {
+                    var instrumentStats = airSensor.instrument_status;
+                    var waterDF = $scope.datafile.data_file_id;
+                    var boolVal = $scope.is4Hz.selected;
+                    // run the script if airDF and waterDF are present                    
+                    DATA_FILE.runStormScript({ seaDFID: waterDF, airDFID: airDF.data_file_id, hertz: boolVal, username: $cookies.get('STNUsername') }).$promise.then(function () {
+                        var allDone = true;
+                    }, function error(errorResponse) {
+                        if (errorResponse.headers(["usgswim-messages"]) !== undefined) toastr.error("Error running Air Script: " + errorResponse.headers(["usgswim-messages"]));
+                        else toastr.error("Error running Air Script: " + errorResponse.statusText);
+                    });
+                    Site_Script.setIsScriptRunning("true"); //tell site.ctrl to show toastr notification
+                    $scope.cancelFile();
+                }, function (error) {
+                    toastr.error("Error retrieving Air Sensor: " + error.statusText);
+                });// end getFullInstrument
+            };
+
+            // this is a water sensor's data file, run storm script using air and water data file ids           
+            $scope.runStormScript = function () {
+                var airDF = $scope.eventDataFiles.filter(function (d) { return d.selected == "true"; })[0];
+                if (airDF !== undefined) {
+                    // make sure they added a tapedown with the required fields for the script to run
+                    // required => sea dep and retr status: sensor_elevation && sea dep and retr status: gs_elevation                    
+                    var waterFile = $scope.sensorFiles.filter(function (f) { return f.data_file_id == $scope.datafile.data_file_id; })[0];
+                    var watAirIDS = waterFile.file_id + "_" + airDF.file_id;
+                    var alreadyRan = false;
+                    //has script been ran already with this water/air file combo?
+                    $scope.sensorFiles.forEach(function (sensFile) {
+                        if (sensFile.script_parent == watAirIDS)
+                            alreadyRan = true;
+                    });
+                    if (alreadyRan) {
+                        //already ran. show modal stating the script has already been run with this                            
+                        var rerunStormModal = $uibModal.open({
+                            backdrop: 'static',
+                            keyboard: false,
+                            template: '<div class="modal-header"><h3 class="modal-title">Warning</h3></div>' +
+                            '<div class="modal-body"><p>The Storm Script has already been processed for this sensor data file with this air data file. Would you like to delete the output files and rerun the script?</p>' +
+                            '<div class="modal-footer"><button class="btn btn-warning" ng-enter="no()" ng-click="no()">Cancel</button><button class="btn btn-primary" ng-enter="yes()" ng-click="yes()">Rerun Script</button></div>',
+                            controller: ['$scope', '$uibModalInstance', 'theAirFile', 'theWaterFile', function ($scope, $uibModalInstance, theAirFile, theWaterFile) {
+                                $scope.no = function () {
+                                    $uibModalInstance.dismiss();
+                                };
+                                $scope.yes = function () {
+                                    var filesArray = [theAirFile, theWaterFile];
+                                    $uibModalInstance.close(filesArray);
+                                };
+                            }],
+                            size: 'sm',
+                            resolve: {
+                                theAirFile: function () {
+                                    return airDF;
+                                },
+                                theWaterFile: function () {
+                                    return waterFile;
+                                }
+                            }
+                        });
+                        rerunStormModal.result.then(function (bothFiles) {
+                            $scope.showProcessing = true;
+                            //delete all the output files that have this file_id as their 'script_parent' value
+                            $http.defaults.headers.common.Authorization = 'Basic ' + $cookies.get('STNCreds');
+                            var processedFileCount = $scope.sensorFiles.filter(function (f) { return f.script_parent == bothFiles[1].file_id.toString() + "_" + bothFiles[0].file_id.toString(); });
+                            var matchCnt = 0;
+                            $scope.sensorFiles.forEach(function (f) {
+                                if (f.script_parent == bothFiles[1].file_id.toString() + "_" + bothFiles[0].file_id.toString()) {
+                                    var deleteThis = f.file_id;
+                                    FILE.delete({ id: f.file_id }).$promise.then(function () {
+                                        matchCnt++;
+                                        $scope.sensorFiles.splice($scope.existFileIndex, 1);
+                                        $scope.allSFiles.splice($scope.allSFileIndex, 1);
+                                        $scope.sensImageFiles.splice($scope.existIMGFileIndex, 1);
+                                        Site_Files.setAllSiteFiles($scope.allSFiles); //updates the file list on the sitedashboard
+                                        if (matchCnt == processedFileCount.length) {
+                                            runTheStormScript(airDF);
+                                        }
+                                    }, function error(errorResponse) {
+                                        toastr.error("Error deleting output file: " + errorResponse.statusText);
+                                    });
+                                }
+                            }); //end foreach                                
+                        });//end rerunModal.result.then
+                    }
+                    else {
+                        runTheStormScript(airDF);
+                    }// end if sea dep/retr has sensor_elevation && gs_elevation
+
+                } // end if airDF != undefined
+                else {
+                    var missingInfo = $uibModal.open({
+                        template: '<div class="modal-header"><h3 class="modal-title">Error</h3></div>' +
+                        '<div class="modal-body"><p>Please choose an air data file to use for the storm script.</p></div>' +
+                        '<div class="modal-footer"><button class="btn btn-primary" ng-enter="ok()" ng-click="ok()">OK</button></div>',
+                        controller: ['$scope', '$uibModalInstance', function ($scope, $uibModalInstance) {
+                            $scope.ok = function () {
+                                $uibModalInstance.close();
+                            };
+                        }],
+                        size: 'sm'
+                    });
+                } // end else (airDF is undefined)
+            }; // end runStormScript()
+
+            $scope.chopperResponse2 = false; //set to true and show highchart with chopper results
+            $scope.chopperResponse2Keys = [];
+            $scope.chartOptions2 = {};
+            $scope.chartData = [];
+            Array.prototype.zip = function (arr) {
+                return this.map(function (e, i) {
+                    return [e, arr[i]];
+                })
+            };
+
+            //$scope.renderer = new Highcharts.Renderer(
+            $scope.runChopper = function () {
+                $scope.chartData = [];
+                $scope.chartOptions2 = {};
+                $scope.chopperResponse2 = false;
+                $scope.chopperResponse2Keys = [];
+                if ($scope.chartObj) {
+                    $scope.chartObj.xAxis[0].removePlotLine("start");
+                    $scope.chartObj.xAxis[0].removePlotLine("end");
+                }
+                if ($scope.aFile.File !== undefined) {
+                    $http.defaults.headers.common.Authorization = 'Basic ' + $cookies.get('STNCreds');
+                    $http.defaults.headers.common.Accept = 'application/json';
+                    var fileParts = {
+                        FileEntity: {
+                            site_id: $scope.thisSensorSite.site_id,
+                            instrument_id: thisSensor.instrument_id
+                        },
+                        File: $scope.aFile.File
+                    };
+                    //need to put the fileParts into correct format for send
+                    var fd = new FormData();
+                    fd.append("FileEntity", JSON.stringify(fileParts.FileEntity));
+                    fd.append("File", fileParts.File);
+                    $scope.smlallLoaderGo = true;
+                    DATA_FILE.runChopperScript(fd).$promise.then(function (response) {
+                        $scope.smlallLoaderGo = false;
+                        $scope.chopperResponse2Keys = Object.keys(response);
+                        if (response.Error) {
+                            var errorMessage = response.Error;
+                            var failedChopper = $uibModal.open({
+                                template: '<div class="modal-header"><h3 class="modal-title">Error</h3></div>' +
+                                '<div class="modal-body"><p>There was an error running the chopper.</p><p>Error: {{errorMessage}}</p></div>' +
+                                '<div class="modal-footer"><button class="btn btn-primary" ng-enter="ok()" ng-click="ok()">OK</button></div>',
+                                controller: ['$scope', '$uibModalInstance', 'message', function ($scope, $uibModalInstance, message) {
+                                    $scope.errorMessage = message;
+                                    $scope.ok = function () {
+                                        $uibModalInstance.dismiss();
+                                    };
+                                }],
+                                resolve: {
+                                    message: function () {
+                                        return errorMessage;
+                                    }
+                                },
+                                size: 'sm'
+                            });
+                        } else {
+                            $scope.chartData = response.time.zip(response.pressure);
+                            $scope.chartOptions2 = {
+                                chart: {
+                                    events: {
+                                        load: function () {
+                                            $scope.chartObj = this;
+                                        }
+                                    },
+                                    zoomType: 'x',
+                                    panning: true,
+                                    panKey: 'shift'
+                                },
+                                boostThreshold: 2000,
+                                plotOptions: {
+                                    series: {
+                                        events: {
+                                            click: function (event) {
+                                                var pointClick = $uibModal.open({
+                                                    template: '<div class="modal-header"><h3 class="modal-title"></h3></div>' +
+                                                    '<div class="modal-body"><p>Would you like to set this ({{thisDate}}) as:</p>' +
+                                                    '<div style="text-align:center;"><span class="radio-inline"><input type="radio" name="whichDate" ng-model="whichDate" value="start" />Good Start Date</span>' +
+                                                    '<span class="radio-inline"><input type="radio" name="whichDate" ng-model="whichDate" value="end" />Good End Date</span></div>' +
+                                                    '</div>' +
+                                                    '<div class="modal-footer"><button class="btn btn-primary" ng-enter="ok()" ng-click="ok()">OK</button>' +
+                                                    '<button class="btn btn-primary" ng-enter="cancel()" ng-click="cancel()">Cancel</button></div>',
+                                                    controller: ['$scope', '$uibModalInstance', 'chosenDate', 'xEvent', function ($scope, $uibModalInstance, chosenDate, xEvent) {
+                                                        $scope.ok = function () {
+                                                            if ($scope.whichDate == "") alert("No Date chosen");
+                                                            else {
+                                                                var parts = [$scope.whichDate, chosenDate, xEvent];
+                                                                $uibModalInstance.close(parts);
+                                                            };
+                                                        };
+                                                        $scope.cancel = function () {
+                                                            $uibModalInstance.dismiss();
+                                                        }
+                                                        $scope.whichDate = "";
+                                                        $scope.thisDate = new Date(chosenDate);
+                                                    }],
+                                                    resolve: {
+                                                        chosenDate: event.point.category,
+                                                        xEvent: event.chartX
+                                                    },
+                                                    size: 'sm'
+                                                });
+                                                pointClick.result.then(function (parts) {
+                                                    var chart = $scope.chartObj.xAxis[0];
+                                                    // check if there's already a plotline with this id and remove it if so
+                                                    chart.removePlotLine(parts[0]);
+                                                    // add the plot line to visually see where they added
+                                                    chart.addPlotLine({
+                                                        value: chart.toValue(parts[2]),
+                                                        color: parts[0] == "start" ? '#00ff00' : '#ff0000',
+                                                        width: 2,
+                                                        id: parts[0],
+                                                        zIndex: 19999,
+                                                        label: { text: parts[0] }
+                                                    });
+                                                    var theDate = new Date(parts[1]).toISOString();
+                                                    var d = getDateTimeParts(theDate);
+                                                    if (parts[0] == "start") $scope.datafile.good_start = d;
+                                                    else $scope.datafile.good_end = d;
+                                                });
+                                            }
+                                        },
+                                        allowPointSelect: true,
+                                        cursor: 'pointer',
+                                        point: {
+                                            events: {
+                                                mouseOver: function () {
+                                                    if (this.series.halo) {
+                                                        this.series.halo.attr({ 'class': 'highcharts-tracker' }).toFront();
+                                                    }
+                                                }
+                                            }
+                                        },
+                                        marker: {
+                                            enabled: false // turn dots off
+                                        }
+                                    }
+                                },
+                                title: {
+                                    text: 'Preview of Pressure Data'
+                                },
+                                subtitle: {
+                                    text: 'Click and drag to zoom in. Hold down shift key to pan. To select Good Start/End Date, click point on line.'
+                                },
+                                xAxis: {
+                                    title: {
+                                        text: $scope.chopperResponse2Keys[1]
+                                    },
+                                    type: 'datetime',
+                                    dateTimeLabelFormats: {
+                                        second: '%Y-%m-%d<br/>%H:%M:%S',
+                                        minute: '%Y-%m-%d<br/>%H:%M',
+                                        hour: '%Y-%m-%d<br/>%H:%M',
+                                        day: '%Y<br/>%m-%d',
+                                        week: '%Y<br/>%m-%d',
+                                        month: '%Y-%m',
+                                        year: '%Y'
+                                    },
+                                    offset: 10
+                                },
+                                yAxis: {
+                                    title: {
+                                        text: $scope.chopperResponse2Keys[0]
+                                    },
+                                    labels: {
+                                        format: '{value} psi'
+                                    },
+                                    offset: 10
+                                },
+                                series: [{
+                                    data: $scope.chartData,
+
+                                }]
+                            };
+                            $scope.chopperResponse2 = true;
+                        }
+                    }, function (error) {
+                        console.log(error);
+                    });
+                } else {
+                    //the file wasn't there..
+                    alert("You need to choose a file first");
+                }
+            };
+
+            ///////////////////////////////////////////////////////////////////////
+            // NWIS DATA_FILE
             if ($scope.sensorDataNWIS) {
                 //FILE.VALIDATED being used to store 1 if this is an nwis file metadata link
                 $scope.sensorNWISFiles = [];
@@ -2564,6 +3344,9 @@
                         $scope.NWISDF.collect_date = new Date($scope.NWISDF.collect_date);
                         $scope.NWISDF.good_start = getDateTimeParts($scope.NWISDF.good_start);
                         $scope.NWISDF.good_end = getDateTimeParts($scope.NWISDF.good_end);
+                    }, function (errorResponse) {
+                        if (errorResponse.headers(["usgswim-messages"]) !== undefined) toastr.error("Error getting data file: " + errorResponse.headers(["usgswim-messages"]));
+                        else toastr.error("Error getting data file: " + errorResponse.statusText);
                     });
                     //end existing file
                 } else {
@@ -2594,6 +3377,9 @@
             var postApprovalForNWISfile = function (DFid) {
                 DATA_FILE.approveNWISDF({ id: DFid }).$promise.then(function (approvalResponse) {
                     $scope.NWISFile.approval_id = approvalResponse.approval_id;
+                }, function (errorResponse) {
+                    if (errorResponse.headers(["usgswim-messages"]) !== undefined) toastr.error("Error approving nwis data file: " + errorResponse.headers(["usgswim-messages"]));
+                    else toastr.error("Error approving nwis data file: " + errorResponse.statusText);
                 });
             };
             $scope.createNWISFile = function (valid) {
@@ -2636,10 +3422,12 @@
                         $scope.NWISDF.good_start = $scope.NWISDF.good_start.toString().substring(0, si);
                         $scope.NWISDF.good_end = $scope.NWISDF.good_end.toString().substring(0, ei);
                     }
-                    DATA_FILE.save($scope.NWISDF).$promise.then(function (NdfResonse) {
+                    var datafileID = 0;
+                    DATA_FILE.save($scope.NWISDF).$promise.then(function (NdfResponse) {
+                        datafileID = NdfResponse.data_file_id;
                         //then POST fileParts (Services populate PATH)
-                        $scope.NWISFile.data_file_id = NdfResonse.data_file_id;
-                        postApprovalForNWISfile(NdfResonse.data_file_id); //process approval
+                        $scope.NWISFile.data_file_id = NdfResponse.data_file_id;
+                        postApprovalForNWISfile(NdfResponse.data_file_id); //process approval
                         //now POST File
                         FILE.save($scope.NWISFile).$promise.then(function (Fresponse) {
                             toastr.success("File Data saved");
@@ -2649,8 +3437,17 @@
                             $scope.allSFiles.push(Fresponse);
                             Site_Files.setAllSiteFiles($scope.allSFiles); //updates the file list on the sitedashboard                            
                             $scope.showNWISFileForm = false;
+                        }, function (errorResponse) {
+                            // file did not get created, delete datafile
+                            DATA_FILE.delete({ id: datafileID });
+                            $scope.NWISFile = {}; $scope.NWISDF = {}; $scope.showNWISFileForm = false;
+                            if (errorResponse.headers(["usgswim-messages"]) !== undefined) toastr.error("Error creating file: " + errorResponse.headers(["usgswim-messages"]));
+                            else toastr.error("Error creating file: " + errorResponse.statusText);
                         });
-                    });
+                    }, function (errorResponse) {
+                        if (errorResponse.headers(["usgswim-messages"]) !== undefined) toastr.error("Error creating file's data file: " + errorResponse.headers(["usgswim-messages"]));
+                        else toastr.error("Error creating file's data file: " + errorResponse.statusText);
+                    });//end datafile.save()
                 }//end valid
             };// end create NWIS file
             //update this NWIS file
@@ -2702,7 +3499,13 @@
                             $scope.allSFiles[$scope.allSFileIndex] = fileResponse;
                             Site_Files.setAllSiteFiles($scope.allSFiles); //updates the file list on the sitedashboard
                             $scope.showNWISFileForm = false;
+                        }, function (errorResponse) {
+                            if (errorResponse.headers(["usgswim-messages"]) !== undefined) toastr.error("Error saving nwis file: " + errorResponse.headers(["usgswim-messages"]));
+                            else toastr.error("Error saving nwis file: " + errorResponse.statusText);
                         });
+                    }, function (errorResponse) {
+                        if (errorResponse.headers(["usgswim-messages"]) !== undefined) toastr.error("Error saving nwis data file: " + errorResponse.headers(["usgswim-messages"]));
+                        else toastr.error("Error saving nwis data file: " + errorResponse.statusText);
                     });
                 }//end valid
             };//end save()
@@ -2733,8 +3536,9 @@
                         $scope.allSFiles.splice($scope.allSFileIndex, 1);
                         Site_Files.setAllSiteFiles($scope.allSFiles); //updates the file list on the sitedashboard
                         $scope.showNWISFileForm = false;
-                    }, function error(errorResponse) {
-                        toastr.error("Error: " + errorResponse.statusText);
+                    }, function (errorResponse) {
+                        if (errorResponse.headers(["usgswim-messages"]) !== undefined) toastr.error("Error deleting file: " + errorResponse.headers(["usgswim-messages"]));
+                        else toastr.error("Error deleting file: " + errorResponse.statusText);
                     });
                 });//end DeleteModal.result.then
             };//end delete()
@@ -2744,7 +3548,7 @@
                 $scope.NWISDF = {};
                 $scope.showNWISFileForm = false;
             };
-            //#endregion
+
             $rootScope.stateIsLoading.showLoading = false;
         }]);//end fullSensorModalCtrl
 })();

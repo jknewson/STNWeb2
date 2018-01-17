@@ -4,11 +4,12 @@
         ['ngResource', 'ui.router', 'ngCookies', 'ui.mask', 'ui.bootstrap', 'isteven-multi-select', 'ngInputModified', 'ui.validate', 'cgBusy',
             'angular.filter', 'xeditable', 'checklist-model', 'ngFileUpload', 'STNResource', 'ui.bootstrap.datetimepicker', 'leaflet-directive', 'ngHandsontable',
             'STNControllers', 'LogInOutController', 'ModalControllers', 'SettingsControllers', 'WiM.Services', 'WiM.Event', 'wim_angular', 'angularSpinners']);
+
     app.constant('SERVER_URL', 'https://stn.wim.usgs.gov/STNServices');
-    //  app.constant('SERVER_URL', 'https://stntest.wim.usgs.gov/STNServices2');
+    //app.constant('SERVER_URL', 'https://stntest.wim.usgs.gov/STNServices2');
     //app.constant('SERVER_URL', 'http://localhost/STNServices2');
 
-    //app.constant('ENVIRONMENT', 'Testing');
+    // app.constant('ENVIRONMENT', 'Testing');
     app.constant('ENVIRONMENT', 'Production');
 
     app.run(['$rootScope', '$uibModalStack', '$cookies', '$state', 'ENVIRONMENT', function ($rootScope, $uibModalStack, $cookies, $state, ENVIRONMENT) {
@@ -105,7 +106,6 @@
                         }
                     }
                 })
-
                 // approval page
                 .state("approval", {
                     url: "/Approval",
@@ -116,6 +116,10 @@
                         s: 'STATE',
                         stateList: function (s) {
                             return s.getAll().$promise;
+                        },
+                        c: 'COUNTIES',
+                        countyList: function (c) {
+                            return c.getAll().$promise;
                         },
                         i: 'INSTRUMENT',
                         instrumentList: function (i) {
@@ -128,10 +132,17 @@
                         dt: 'DEPLOYMENT_TYPE',
                         allDepTypes: function (dt) {
                             return dt.getAll().$promise;
+                        },
+                        hq: 'HWM_QUALITY',
+                        hwmQualList: function (hq) {
+                            return hq.getAll().$promise;
+                        },
+                        ht: 'HWM_TYPE',
+                        hwmTypeList: function (ht) {
+                            return ht.getAll().$promise;
                         }
                     }
                 })
-
                 // sitesSearch 
                 .state("siteSearch", {
                     url: "/SiteSearch",
@@ -153,7 +164,6 @@
                         }
                     }
                 })
-
                 // reporting
                 .state("reporting", {
                     url: "/Reporting",
@@ -214,14 +224,12 @@
                     controller: "submitReportCtrl",
                     authenticate: true,
                 })
-
                 // reporting.GenerateReport
                 .state("reporting.generateReport", {
                     url: "/GenerateReport",
                     templateUrl: "component/reporting/generateReport.html",
                     authenticate: true,
                 })
-
                 // settings 
                 .state("settings", {
                     url: "/Settings",
@@ -297,7 +305,6 @@
                     templateUrl: "component/event/eventsList.html",
                     authenticate: true
                 })
-
                 // events.EventInfof
                 .state("events.EventInfo", {
                     url: "/eventInfo/:id",
@@ -315,7 +322,6 @@
                         }
                     }
                 })
-
                 // resources    
                 .state("resources", {
                     url: "/Resources",
@@ -638,12 +644,19 @@
                     },
                     templateUrl: "component/site/site.html",
                     authenticate: true,
-                    controller: ['$scope', '$stateParams', function ($scope, $stateParams) {
+                    controller: ['$scope', '$stateParams', 'Site_Script', 'runningScript', function ($scope, $stateParams, Site_Script, runningScript) {
                         $scope.siteID = $stateParams.id;
+                        if ($scope.siteID != "0") Site_Script.setIsScriptRunning(runningScript.value);
+                        else Site_Script.setIsScriptRunning("false");
                     }],
                     resolve: {
                         // site stuff
                         s: 'SITE',
+                        runningScript: function (s, $stateParams) {
+                            if ($stateParams.id > 0) {
+                                return s.sensorScriptRunning({ id: $stateParams.id }).$promise;
+                            }
+                        },
                         thisSite: function (s, $stateParams) {
                             if ($stateParams.id > 0) {
                                 return s.query({ id: $stateParams.id }).$promise;
@@ -943,7 +956,7 @@
                         allOPQualities: function (opQual) {
                             return opQual.getAll().$promise;
                         },
-                        // hwm stuff (if id='hwm'
+                        // hwm stuff (if id='hwm')
                         hwmt: 'HWM_TYPE',
                         allHWMTypes: function (hwmt, $stateParams) {
                             if ($stateParams.id == 'HWM') return hwmt.getAll().$promise;

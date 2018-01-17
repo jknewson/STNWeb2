@@ -7,9 +7,9 @@
         'EVENT_TYPE', 'FILE_TYPE', 'HORIZONTAL_COLL_METHODS', 'HORIZONTAL_DATUM', 'HOUSING_TYPE', 'HWM_QUALITY', 'HWM_TYPE', 'INST_COLL_CONDITION', 'MARKER', 'NETWORK_NAME', 'OP_QUALITY',
         'OP_TYPE', 'SENSOR_BRAND', 'DEPLOYMENT_TYPE', 'SENSOR_TYPE', 'NETWORK_TYPE', 'STATUS_TYPE', 'VERTICAL_COLL_METHOD', 'VERTICAL_DATUM', 'allStates', 'allAgencies', 'allContactTypes', 'allDeployPriorities', 'allEventStats', 'allEventTypes',
         'allFileTypes', 'allHorCollMethods', 'allHorDatums', 'allHouseTypes', 'allHWMqualities', 'allHWMtypes', 'allInstCollectConditions', 'allMarkers', 'allNetworkNames', 'allObjPtQualities',
-        'allObjPtTypes', 'allSensorBrands', 'allDeploymentTypes', 'allStatusTypes', 'allSensorTypes', 'allNetworkTypes', 'allVerticalCollMethods', 'allVerticalDatums', 
-        function ($scope, $rootScope, $cookies, $location, $state, $http, $filter, $uibModal, AGENCY, CONTACT_TYPE, DEPLOYMENT_PRIORITY, EVENT_STATUS, EVENT_TYPE, FILE_TYPE, 
-            HORIZONTAL_COLL_METHODS, HORIZONTAL_DATUM, HOUSING_TYPE, HWM_QUALITY, HWM_TYPE, INST_COLL_CONDITION, MARKER, NETWORK_NAME, OP_QUALITY, OP_TYPE, SENSOR_BRAND, DEPLOYMENT_TYPE, 
+        'allObjPtTypes', 'allSensorBrands', 'allDeploymentTypes', 'allStatusTypes', 'allSensorTypes', 'allNetworkTypes', 'allVerticalCollMethods', 'allVerticalDatums',
+        function ($scope, $rootScope, $cookies, $location, $state, $http, $filter, $uibModal, AGENCY, CONTACT_TYPE, DEPLOYMENT_PRIORITY, EVENT_STATUS, EVENT_TYPE, FILE_TYPE,
+            HORIZONTAL_COLL_METHODS, HORIZONTAL_DATUM, HOUSING_TYPE, HWM_QUALITY, HWM_TYPE, INST_COLL_CONDITION, MARKER, NETWORK_NAME, OP_QUALITY, OP_TYPE, SENSOR_BRAND, DEPLOYMENT_TYPE,
             SENSOR_TYPE, NETWORK_TYPE, STATUS_TYPE, VERTICAL_COLL_METHOD, VERTICAL_DATUM, allStates, allAgencies, allContactTypes, allDeployPriorities, allEventStats, allEventTypes, allFileTypes,
             allHorCollMethods, allHorDatums, allHouseTypes, allHWMqualities, allHWMtypes, allInstCollectConditions, allMarkers, allNetworkNames, allObjPtQualities, allObjPtTypes,
             allSensorBrands, allDeploymentTypes, allStatusTypes, allSensorTypes, allNetworkTypes, allVerticalCollMethods, allVerticalDatums) {
@@ -73,7 +73,8 @@
                             $scope.addAgButtonShowing = true; //show the button again
                             toastr.success("Agency Added");
                         }, function error(errorResponse) {
-                            toastr.error("Error: " + errorResponse.statusText);
+                            if (errorResponse.headers(["usgswim-messages"]) !== undefined) toastr.error("Error creating agency: " + errorResponse.headers(["usgswim-messages"]));
+                            else toastr.error("Error creating agency: " + errorResponse.statusText);
                         });
                     }
                 };
@@ -86,7 +87,8 @@
                         toastr.success("Agency Updated");
                     }, function error(errorResponse) {
                         retur = false;
-                        toastr.error("Error: " + errorResponse.statusText);
+                        if (errorResponse.headers(["usgswim-messages"]) !== undefined) toastr.error("Error saving agency: " + errorResponse.headers(["usgswim-messages"]));
+                        else toastr.error("Error saving agency: " + errorResponse.statusText);
                     });
                     return retur;
                 };
@@ -114,7 +116,8 @@
                             $scope.agencyList.splice(index, 1);
                             toastr.success("Agency Removed");
                         }, function error(errorResponse) {
-                            toastr.error("Error: " + errorResponse.statusText);
+                            if (errorResponse.headers(["usgswim-messages"]) !== undefined) toastr.error("Error deleting agency: " + errorResponse.headers(["usgswim-messages"]));
+                            else toastr.error("Error deleting agency: " + errorResponse.statusText);
                         });
                     }, function () {
                         //logic for cancel
@@ -159,7 +162,8 @@
                             $scope.addCTButtonShowing = true; //show the button again
                             toastr.success("Contact Type Added");
                         }, function error(errorResponse) {
-                            toastr.error("Error: " + errorResponse.statusText);
+                            if (errorResponse.headers(["usgswim-messages"]) !== undefined) toastr.error("Error creating contact type: " + errorResponse.headers(["usgswim-messages"]));
+                            else toastr.error("Error creating contact type: " + errorResponse.statusText);
                         });
                     }
                 };
@@ -173,7 +177,8 @@
                         toastr.success("Contact Type Updated");
                     }, function error(errorResponse) {
                         retur = false;
-                        toastr.error("Error: " + errorResponse.statusText);
+                        if (errorResponse.headers(["usgswim-messages"]) !== undefined) toastr.error("Error updating contact type: " + errorResponse.headers(["usgswim-messages"]));
+                        else toastr.error("Error updating contact type: " + errorResponse.statusText);
                     });
                     return retur;
                 };
@@ -202,10 +207,9 @@
                             $scope.contactTypeList.splice(index, 1);
                             toastr.success("Contact Type Removed");
                         }, function error(errorResponse) {
-                            toastr.error("Error: " + errorResponse.statusText);
+                            if (errorResponse.headers(["usgswim-messages"]) !== undefined) toastr.error("Error deleting contact type: " + errorResponse.headers(["usgswim-messages"]));
+                            else toastr.error("Error deleting contact type: " + errorResponse.statusText);
                         });
-                    }, function () {
-                        //logic for cancel
                     });//end modal
                 };
                 //#endregion ContactType Add/Update/Delete
@@ -238,7 +242,8 @@
                             $scope.addDPButtonShowing = true; //show the button again
                             toastr.success("Deployment Priority Added");
                         }, function error(errorResponse) {
-                            toastr.error("Error: " + errorResponse.statusText);
+                            if (errorResponse.headers(["usgswim-messages"]) !== undefined) toastr.error("Error creating deployment priority: " + errorResponse.headers(["usgswim-messages"]));
+                            else toastr.error("Error creating deployment priority: " + errorResponse.statusText);
                         });
                     }
                 };
@@ -251,7 +256,8 @@
                         toastr.success("Deployment Priority Updated");
                     }, function error(errorResponse) {
                         retur = false;
-                        toastr.error("Error: " + errorResponse.statusText);
+                        if (errorResponse.headers(["usgswim-messages"]) !== undefined) toastr.error("Error saving deployment priority: " + errorResponse.headers(["usgswim-messages"]));
+                        else toastr.error("Error saving deployment priority: " + errorResponse.statusText);
                     });
                     return retur;
                 };
@@ -276,10 +282,9 @@
                             $scope.deployPriorityList.splice(index, 1);
                             toastr.success("Deployment Priority Removed");
                         }, function error(errorResponse) {
-                            toastr.error("Error: " + errorResponse.statusText);
+                            if (errorResponse.headers(["usgswim-messages"]) !== undefined) toastr.error("Error deleting deployment priority: " + errorResponse.headers(["usgswim-messages"]));
+                            else toastr.error("Error deleting deployment priority: " + errorResponse.statusText);
                         });
-                    }, function () {
-                        //logic for cancel
                     });//end modal
                 };
                 //#endregion deploymentPriority Add/Update/Delete
@@ -312,7 +317,8 @@
                             $scope.addESButtonShowing = true; //show the button again
                             toastr.success("Event Status Added");
                         }, function error(errorResponse) {
-                            toastr.error("Error: " + errorResponse.statusText);
+                            if (errorResponse.headers(["usgswim-messages"]) !== undefined) toastr.error("Error creating event status: " + errorResponse.headers(["usgswim-messages"]));
+                            else toastr.error("Error creating event status: " + errorResponse.statusText);
                         });
                     }
                 };
@@ -325,7 +331,8 @@
                         toastr.success("Event Status Updated");
                     }, function error(errorResponse) {
                         retur = false;
-                        toastr.error("Error: " + errorResponse.statusText);
+                        if (errorResponse.headers(["usgswim-messages"]) !== undefined) toastr.error("Error saving event status: " + errorResponse.headers(["usgswim-messages"]));
+                        else toastr.error("Error saving event status: " + errorResponse.statusText);
                     });
                     return retur;
                 };
@@ -350,10 +357,9 @@
                             $scope.eventStatList.splice(index, 1);
                             toastr.success("Event Status Removed");
                         }, function error(errorResponse) {
-                            toastr.error("Error: " + errorResponse.statusText);
+                            if (errorResponse.headers(["usgswim-messages"]) !== undefined) toastr.error("Error deleting event status: " + errorResponse.headers(["usgswim-messages"]));
+                            else toastr.error("Error deleting event status: " + errorResponse.statusText);
                         });
-                    }, function () {
-                        //logic for cancel
                     });//end modal
                 };
                 //#endregion eventStatus Add/Update/Delete
@@ -387,7 +393,8 @@
                             $scope.addETButtonShowing = true; //show the button again
                             toastr.success("Event Type Added");
                         }, function error(errorResponse) {
-                            toastr.error("Error: " + errorResponse.statusText);
+                            if (errorResponse.headers(["usgswim-messages"]) !== undefined) toastr.error("Error creating event type: " + errorResponse.headers(["usgswim-messages"]));
+                            else toastr.error("Error creating event type: " + errorResponse.statusText);
                         });
                     }
                 };
@@ -401,7 +408,8 @@
                         toastr.success("Event Type Updated");
                     }, function error(errorResponse) {
                         retur = false;
-                        toastr.error("Error: " + errorResponse.statusText);
+                        if (errorResponse.headers(["usgswim-messages"]) !== undefined) toastr.error("Error saving event type: " + errorResponse.headers(["usgswim-messages"]));
+                        else toastr.error("Error saving event type: " + errorResponse.statusText);
                     });
                     return retur;
                 };
@@ -430,10 +438,9 @@
                             $scope.eventTypeList.splice(index, 1);
                             toastr.success("Event Type Removed");
                         }, function error(errorResponse) {
-                            toastr.error("Error: " + errorResponse.statusText);
+                            if (errorResponse.headers(["usgswim-messages"]) !== undefined) toastr.error("Error deleting event type: " + errorResponse.headers(["usgswim-messages"]));
+                            else toastr.error("Error deleting event type: " + errorResponse.statusText);
                         });
-                    }, function () {
-                        //logic for cancel
                     });//end modal
                 };
                 //#endregion EventType Add/Update/Delete
@@ -466,7 +473,8 @@
                             $scope.addFTButtonShowing = true; //show the button again
                             toastr.success("File Type Added");
                         }, function error(errorResponse) {
-                            toastr.error("Error: " + errorResponse.statusText);
+                            if (errorResponse.headers(["usgswim-messages"]) !== undefined) toastr.error("Error creating file type: " + errorResponse.headers(["usgswim-messages"]));
+                            else toastr.error("Error creating file type: " + errorResponse.statusText);
                         });
                     }
                 };
@@ -479,7 +487,8 @@
                         toastr.success("File Type Updated");
                     }, function error(errorResponse) {
                         retur = false;
-                        toastr.error("Error: " + errorResponse.statusText);
+                        if (errorResponse.headers(["usgswim-messages"]) !== undefined) toastr.error("Error saving file type: " + errorResponse.headers(["usgswim-messages"]));
+                        else toastr.error("Error saving file type: " + errorResponse.statusText);
                     });
                     return retur;
                 };
@@ -504,10 +513,9 @@
                             $scope.fileTypeList.splice(index, 1);
                             toastr.success("File Type Removed");
                         }, function error(errorResponse) {
-                            toastr.error("Error: " + errorResponse.statusText);
+                            if (errorResponse.headers(["usgswim-messages"]) !== undefined) toastr.error("Error deleting file type: " + errorResponse.headers(["usgswim-messages"]));
+                            else toastr.error("Error deleting file type: " + errorResponse.statusText);
                         });
-                    }, function () {
-                        //logic for cancel
                     });//end modal
                 };
                 //#endregion fileType Add/Update/Delete
@@ -540,7 +548,8 @@
                             $scope.addHCMButtonShowing = true; //show the button again
                             toastr.success("Horizontal Collection Method Added");
                         }, function error(errorResponse) {
-                            toastr.error("Error: " + errorResponse.statusText);
+                            if (errorResponse.headers(["usgswim-messages"]) !== undefined) toastr.error("Error creating horizontal collection method: " + errorResponse.headers(["usgswim-messages"]));
+                            else toastr.error("Error creating horizontal collection method: " + errorResponse.statusText);
                         });
                     }
                 };
@@ -553,7 +562,8 @@
                         toastr.success("Horizontal Collection Method Updated");
                     }, function error(errorResponse) {
                         retur = false;
-                        toastr.error("Error: " + errorResponse.statusText);
+                        if (errorResponse.headers(["usgswim-messages"]) !== undefined) toastr.error("Error saving horizontal collection method: " + errorResponse.headers(["usgswim-messages"]));
+                        else toastr.error("Error saving horizontal collection method: " + errorResponse.statusText);
                     });
                     return retur;
                 };
@@ -578,10 +588,9 @@
                             $scope.horColMethList.splice(index, 1);
                             toastr.success("Horizontal Collection Method Removed");
                         }, function error(errorResponse) {
-                            toastr.error("Error: " + errorResponse.statusText);
+                            if (errorResponse.headers(["usgswim-messages"]) !== undefined) toastr.error("Error deleting horizontal collection method: " + errorResponse.headers(["usgswim-messages"]));
+                            else toastr.error("Error deleting horizontal collection method: " + errorResponse.statusText);
                         });
-                    }, function () {
-                        //logic for cancel
                     });//end modal
                 };
                 //#endregion HorCollMethods Add/Update/Delete
@@ -615,7 +624,8 @@
                             $scope.addHDButtonShowing = true; //show the button again
                             toastr.success("Horizontal Datum Added");
                         }, function error(errorResponse) {
-                            toastr.error("Error: " + errorResponse.statusText);
+                            if (errorResponse.headers(["usgswim-messages"]) !== undefined) toastr.error("Error creating horizontal datum: " + errorResponse.headers(["usgswim-messages"]));
+                            else toastr.error("Error creating horizontal datum: " + errorResponse.statusText);
                         });
                     }
                 };
@@ -629,7 +639,8 @@
                         toastr.success("Horizontal Datum Updated");
                     }, function error(errorResponse) {
                         retur = false;
-                        toastr.error("Error: " + errorResponse.statusText);
+                        if (errorResponse.headers(["usgswim-messages"]) !== undefined) toastr.error("Error saving horizontal datum: " + errorResponse.headers(["usgswim-messages"]));
+                        else toastr.error("Error saving horizontal datum: " + errorResponse.statusText);
                     });
                     return retur;
                 };
@@ -658,10 +669,9 @@
                             $scope.horDatList.splice(index, 1);
                             toastr.success("Horizontal Datum Removed");
                         }, function error(errorResponse) {
-                            toastr.error("Error: " + errorResponse.statusText);
+                            if (errorResponse.headers(["usgswim-messages"]) !== undefined) toastr.error("Error deleting horizontal datum: " + errorResponse.headers(["usgswim-messages"]));
+                            else toastr.error("Error deleting horizontal datum: " + errorResponse.statusText);
                         });
-                    }, function () {
-                        //logic for cancel
                     });//end modal
                 };
                 //#endregion HorDatum Add/Update/Delete
@@ -694,7 +704,8 @@
                             $scope.addHTButtonShowing = true; //show the button again
                             toastr.success("Housing Type Added");
                         }, function error(errorResponse) {
-                            toastr.error("Error: " + errorResponse.statusText);
+                            if (errorResponse.headers(["usgswim-messages"]) !== undefined) toastr.error("Error creating housing type: " + errorResponse.headers(["usgswim-messages"]));
+                            else toastr.error("Error creating housing type: " + errorResponse.statusText);
                         });
                     }
                 };
@@ -707,7 +718,8 @@
                         toastr.success("Housing Type Updated");
                     }, function error(errorResponse) {
                         retur = false;
-                        toastr.error("Error: " + errorResponse.statusText);
+                        if (errorResponse.headers(["usgswim-messages"]) !== undefined) toastr.error("Error saving housing type: " + errorResponse.headers(["usgswim-messages"]));
+                        else toastr.error("Error saving housing type: " + errorResponse.statusText);
                     });
                     return retur;
                 };
@@ -732,10 +744,9 @@
                             $scope.houseTypeList.splice(index, 1);
                             toastr.success("Housing Type Removed");
                         }, function error(errorResponse) {
-                            toastr.error("Error: " + errorResponse.statusText);
+                            if (errorResponse.headers(["usgswim-messages"]) !== undefined) toastr.error("Error deleting housing type: " + errorResponse.headers(["usgswim-messages"]));
+                            else toastr.error("Error deleting housing type: " + errorResponse.statusText);
                         });
-                    }, function () {
-                        //logic for cancel
                     });//end modal
                 };
                 //#endregion housingType Add/Update/Delete
@@ -768,7 +779,8 @@
                             $scope.addHWMQButtonShowing = true; //show the button again
                             toastr.success("HWM Quality Added");
                         }, function error(errorResponse) {
-                            toastr.error("Error: " + errorResponse.statusText);
+                            if (errorResponse.headers(["usgswim-messages"]) !== undefined) toastr.error("Error creating hwm quality: " + errorResponse.headers(["usgswim-messages"]));
+                            else toastr.error("Error creating hwm quality: " + errorResponse.statusText);
                         });
                     }
                 };
@@ -781,7 +793,8 @@
                         toastr.success("HWM Quality Updated");
                     }, function error(errorResponse) {
                         retur = false;
-                        toastr.error("Error: " + errorResponse.statusText);
+                        if (errorResponse.headers(["usgswim-messages"]) !== undefined) toastr.error("Error saving hwm quality: " + errorResponse.headers(["usgswim-messages"]));
+                        else toastr.error("Error saving hwm quality: " + errorResponse.statusText);
                     });
                     return retur;
                 };
@@ -806,10 +819,9 @@
                             $scope.hwmQualList.splice(index, 1);
                             toastr.success("HWM Quality Removed");
                         }, function error(errorResponse) {
-                            toastr.error("Error: " + errorResponse.statusText);
+                            if (errorResponse.headers(["usgswim-messages"]) !== undefined) toastr.error("Error deleting hwm quality: " + errorResponse.headers(["usgswim-messages"]));
+                            else toastr.error("Error deleting hwm quality: " + errorResponse.statusText);
                         });
-                    }, function () {
-                        //logic for cancel
                     });//end modal
                 };
                 //#endregion eventStatus Add/Update/Delete
@@ -843,7 +855,8 @@
                             $scope.addHWMTButtonShowing = true; //show the button again
                             toastr.success("HWM Type Added");
                         }, function error(errorResponse) {
-                            toastr.error("Error: " + errorResponse.statusText);
+                            if (errorResponse.headers(["usgswim-messages"]) !== undefined) toastr.error("Error creating hwm type: " + errorResponse.headers(["usgswim-messages"]));
+                            else toastr.error("Error creating hwm type: " + errorResponse.statusText);
                         });
                     }
                 };
@@ -857,7 +870,8 @@
                         toastr.success("HWM Type Updated");
                     }, function error(errorResponse) {
                         retur = false;
-                        toastr.error("Error: " + errorResponse.statusText);
+                        if (errorResponse.headers(["usgswim-messages"]) !== undefined) toastr.error("Error saving hwm type: " + errorResponse.headers(["usgswim-messages"]));
+                        else toastr.error("Error saving hwm type: " + errorResponse.statusText);
                     });
                     return retur;
                 };
@@ -886,10 +900,9 @@
                             $scope.hwmTypeList.splice(index, 1);
                             toastr.success("HWM Type Removed");
                         }, function error(errorResponse) {
-                            toastr.error("Error: " + errorResponse.statusText);
+                            if (errorResponse.headers(["usgswim-messages"]) !== undefined) toastr.error("Error deleting hwm type: " + errorResponse.headers(["usgswim-messages"]));
+                            else toastr.error("Error deleting hwm type: " + errorResponse.statusText);
                         });
-                    }, function () {
-                        //logic for cancel
                     });//end modal
                 };
                 //#endregion HwmType Add/Update/Delete
@@ -922,7 +935,8 @@
                             $scope.addICCButtonShowing = true; //show the button again
                             toastr.success("Instrument Collection Condition Added");
                         }, function error(errorResponse) {
-                            toastr.error("Error: " + errorResponse.statusText);
+                            if (errorResponse.headers(["usgswim-messages"]) !== undefined) toastr.error("Error creating instrument collection condition: " + errorResponse.headers(["usgswim-messages"]));
+                            else toastr.error("Error creating instrument collection condition: " + errorResponse.statusText);
                         });
                     }
                 };
@@ -935,7 +949,8 @@
                         toastr.success("Instrument Collection Condition Updated");
                     }, function error(errorResponse) {
                         retur = false;
-                        toastr.error("Error: " + errorResponse.statusText);
+                        if (errorResponse.headers(["usgswim-messages"]) !== undefined) toastr.error("Error saving instrument collection condition: " + errorResponse.headers(["usgswim-messages"]));
+                        else toastr.error("Error saving instrument collection condition: " + errorResponse.statusText);
                     });
                     return retur;
                 };
@@ -960,10 +975,9 @@
                             $scope.instColCondList.splice(index, 1);
                             toastr.success("Instrument Collection Condition Removed");
                         }, function error(errorResponse) {
-                            toastr.error("Error: " + errorResponse.statusText);
+                            if (errorResponse.headers(["usgswim-messages"]) !== undefined) toastr.error("Error deleting instrument collection condition: " + errorResponse.headers(["usgswim-messages"]));
+                            else toastr.error("Error deleting instrument collection condition: " + errorResponse.statusText);
                         });
-                    }, function () {
-                        //logic for cancel
                     });//end modal
                 };
                 //#endregion InstColCond Add/Update/Delete
@@ -996,7 +1010,8 @@
                             $scope.addMButtonShowing = true; //show the button again
                             toastr.success("Marker Added");
                         }, function error(errorResponse) {
-                            toastr.error("Error: " + errorResponse.statusText);
+                            if (errorResponse.headers(["usgswim-messages"]) !== undefined) toastr.error("Error creating marker: " + errorResponse.headers(["usgswim-messages"]));
+                            else toastr.error("Error creating marker: " + errorResponse.statusText);
                         });
                     }
                 };
@@ -1009,7 +1024,8 @@
                         toastr.success("Marker Updated");
                     }, function error(errorResponse) {
                         retur = false;
-                        toastr.error("Error: " + errorResponse.statusText);
+                        if (errorResponse.headers(["usgswim-messages"]) !== undefined) toastr.error("Error saving marker: " + errorResponse.headers(["usgswim-messages"]));
+                        else toastr.error("Error saving marker: " + errorResponse.statusText);
                     });
                     return retur;
                 };
@@ -1034,10 +1050,9 @@
                             $scope.markList.splice(index, 1);
                             toastr.success("Marker Removed");
                         }, function error(errorResponse) {
-                            toastr.error("Error: " + errorResponse.statusText);
+                            if (errorResponse.headers(["usgswim-messages"]) !== undefined) toastr.error("Error deleting marker: " + errorResponse.headers(["usgswim-messages"]));
+                            else toastr.error("Error deleting marker: " + errorResponse.statusText);
                         });
-                    }, function () {
-                        //logic for cancel
                     });//end modal
                 };
                 //#endregion Marker Add/Update/Delete
@@ -1070,7 +1085,8 @@
                             $scope.addNNButtonShowing = true; //show the button again
                             toastr.success("Network Name Added");
                         }, function error(errorResponse) {
-                            toastr.error("Error: " + errorResponse.statusText);
+                            if (errorResponse.headers(["usgswim-messages"]) !== undefined) toastr.error("Error creating network name: " + errorResponse.headers(["usgswim-messages"]));
+                            else toastr.error("Error creating network name: " + errorResponse.statusText);
                         });
                     }
                 };
@@ -1083,7 +1099,8 @@
                         toastr.success("Network Name Updated");
                     }, function error(errorResponse) {
                         retur = false;
-                        toastr.error("Error: " + errorResponse.statusText);
+                        if (errorResponse.headers(["usgswim-messages"]) !== undefined) toastr.error("Error saving network name: " + errorResponse.headers(["usgswim-messages"]));
+                        else toastr.error("Error saving network name: " + errorResponse.statusText);
                     });
                     return retur;
                 };
@@ -1108,10 +1125,9 @@
                             $scope.netNameList.splice(index, 1);
                             toastr.success("Network Name Removed");
                         }, function error(errorResponse) {
-                            toastr.error("Error: " + errorResponse.statusText);
+                            if (errorResponse.headers(["usgswim-messages"]) !== undefined) toastr.error("Error deleting network name: " + errorResponse.headers(["usgswim-messages"]));
+                            else toastr.error("Error deleting network name: " + errorResponse.statusText);
                         });
-                    }, function () {
-                        //logic for cancel
                     });//end modal
                 };
                 //#endregion NetworkName Add/Update/Delete
@@ -1143,9 +1159,10 @@
                             $scope.newOPQ = {};
                             $scope.showAddOPQForm = false; //hide the form
                             $scope.addOPQButtonShowing = true; //show the button again
-                            toastr.success("Objective Point Quality Added");
+                            toastr.success("Datum Location Quality Added");
                         }, function error(errorResponse) {
-                            toastr.error("Error: " + errorResponse.statusText);
+                            if (errorResponse.headers(["usgswim-messages"]) !== undefined) toastr.error("Error creating datum location quality: " + errorResponse.headers(["usgswim-messages"]));
+                            else toastr.error("Error creating datum location quality: " + errorResponse.statusText);
                         });
                     }
                 };
@@ -1156,10 +1173,11 @@
                     $http.defaults.headers.common.Accept = 'application/json';
                     OP_QUALITY.update({ id: id }, data, function success(response) {
                         retur = response;
-                        toastr.success("Objective Point Quality Updated");
+                        toastr.success("Datum Location Quality Updated");
                     }, function error(errorResponse) {
                         retur = false;
-                        toastr.error("Error: " + errorResponse.statusText);
+                        if (errorResponse.headers(["usgswim-messages"]) !== undefined) toastr.error("Error saving datum location quality: " + errorResponse.headers(["usgswim-messages"]));
+                        else toastr.error("Error saving datum location quality: " + errorResponse.statusText);
                     });
                     return retur;
                 };
@@ -1186,12 +1204,11 @@
                         $http.defaults.headers.common.Authorization = 'Basic ' + $cookies.get('STNCreds');
                         OP_QUALITY.delete({ id: opq.op_quality_id }, opq, function success(response) {
                             $scope.opQualList.splice(index, 1);
-                            toastr.success("Objective Point Quality Removed");
+                            toastr.success("Datum Location Quality Removed");
                         }, function error(errorResponse) {
-                            toastr.error("Error: " + errorResponse.statusText);
+                            if (errorResponse.headers(["usgswim-messages"]) !== undefined) toastr.error("Error deleting datum location quality: " + errorResponse.headers(["usgswim-messages"]));
+                            else toastr.error("Error deleting datum location quality: " + errorResponse.statusText);
                         });
-                    }, function () {
-                        //logic for cancel
                     });//end modal
                 };
                 //#endregion OPQuality Add/Update/Delete
@@ -1222,9 +1239,10 @@
                             $scope.newOPT = {};
                             $scope.showAddOPTForm = false; //hide the form
                             $scope.addOPTButtonShowing = true; //show the button again
-                            toastr.success("Objective Point Type Added");
+                            toastr.success("Datum Location Type Added");
                         }, function error(errorResponse) {
-                            toastr.error("Error: " + errorResponse.statusText);
+                            if (errorResponse.headers(["usgswim-messages"]) !== undefined) toastr.error("Error creating datum location type: " + errorResponse.headers(["usgswim-messages"]));
+                            else toastr.error("Error creating datum location type: " + errorResponse.statusText);
                         });
                     }
                 };
@@ -1234,10 +1252,11 @@
                     $http.defaults.headers.common.Accept = 'application/json';
                     OP_TYPE.update({ id: id }, data, function success(response) {
                         retur = response;
-                        toastr.success("Objective Point Type Updated");
+                        toastr.success("Datum Location Type Updated");
                     }, function error(errorResponse) {
                         retur = false;
-                        toastr.error("Error: " + errorResponse.statusText);
+                        if (errorResponse.headers(["usgswim-messages"]) !== undefined) toastr.error("Error saving datum location type: " + errorResponse.headers(["usgswim-messages"]));
+                        else toastr.error("Error saving datum location type: " + errorResponse.statusText);
                     });
                     return retur;
                 };
@@ -1260,12 +1279,11 @@
                         $http.defaults.headers.common.Authorization = 'Basic ' + $cookies.get('STNCreds');
                         OP_TYPE.delete({ id: opt.objective_point_type_id }, opt, function success(response) {
                             $scope.opTypeList.splice(index, 1);
-                            toastr.success("Objective Point Type Removed");
+                            toastr.success("Datum Location Type Removed");
                         }, function error(errorResponse) {
-                            toastr.error("Error: " + errorResponse.statusText);
+                            if (errorResponse.headers(["usgswim-messages"]) !== undefined) toastr.error("Error deleting datum location type: " + errorResponse.headers(["usgswim-messages"]));
+                            else toastr.error("Error deleting datum location type: " + errorResponse.statusText);
                         });
-                    }, function () {
-                        //logic for cancel
                     });//end modal
                 };
                 //#endregion OPType Add/Update/Delete
@@ -1298,7 +1316,8 @@
                             $scope.addSBButtonShowing = true; //show the button again
                             toastr.success("Sensor Brand Added");
                         }, function error(errorResponse) {
-                            toastr.error("Error: " + errorResponse.statusText);
+                            if (errorResponse.headers(["usgswim-messages"]) !== undefined) toastr.error("Error creating sensor brand: " + errorResponse.headers(["usgswim-messages"]));
+                            else toastr.error("Error creating sensor brand: " + errorResponse.statusText);
                         });
                     }
                 };
@@ -1311,7 +1330,8 @@
                         toastr.success("Sensor Brand Updated");
                     }, function error(errorResponse) {
                         retur = false;
-                        toastr.error("Error: " + errorResponse.statusText);
+                        if (errorResponse.headers(["usgswim-messages"]) !== undefined) toastr.error("Error saving sensor brand: " + errorResponse.headers(["usgswim-messages"]));
+                        else toastr.error("Error saving sensor brand: " + errorResponse.statusText);
                     });
                     return retur;
                 };
@@ -1336,10 +1356,9 @@
                             $scope.sensBrandList.splice(index, 1);
                             toastr.success("Sensor Brand Removed");
                         }, function error(errorResponse) {
-                            toastr.error("Error: " + errorResponse.statusText);
+                            if (errorResponse.headers(["usgswim-messages"]) !== undefined) toastr.error("Error deleting sensor brand: " + errorResponse.headers(["usgswim-messages"]));
+                            else toastr.error("Error deleting sensor brand: " + errorResponse.statusText);
                         });
-                    }, function () {
-                        //logic for cancel
                     });//end modal
                 };
                 //#endregion SensorBrand Add/Update/Delete
@@ -1373,7 +1392,8 @@
                             $scope.addDTButtonShowing = true; //show the button again
                             toastr.success("Deployment Type Added");
                         }, function error(errorResponse) {
-                            toastr.error("Error: " + errorResponse.statusText);
+                            if (errorResponse.headers(["usgswim-messages"]) !== undefined) toastr.error("Error creating deployment type: " + errorResponse.headers(["usgswim-messages"]));
+                            else toastr.error("Error creating deployment type: " + errorResponse.statusText);
                         });
                     }
                 };
@@ -1387,7 +1407,8 @@
                         toastr.success("Deployment Type Updated");
                     }, function error(errorResponse) {
                         retur = false;
-                        toastr.error("Error: " + errorResponse.statusText);
+                        if (errorResponse.headers(["usgswim-messages"]) !== undefined) toastr.error("Error saving deployment type: " + errorResponse.headers(["usgswim-messages"]));
+                        else toastr.error("Error saving deployment type: " + errorResponse.statusText);
                     });
                     return retur;
                 };
@@ -1416,10 +1437,9 @@
                             $scope.depTypeList.splice(index, 1);
                             toastr.success("Deployment Type Removed");
                         }, function error(errorResponse) {
-                            toastr.error("Error: " + errorResponse.statusText);
+                            if (errorResponse.headers(["usgswim-messages"]) !== undefined) toastr.error("Error deleting deployment type: " + errorResponse.headers(["usgswim-messages"]));
+                            else toastr.error("Error deleting deployment type: " + errorResponse.statusText);
                         });
-                    }, function () {
-                        //logic for cancel
                     });//end modal
                 };
                 //#endregion DepType Add/Update/Delete
@@ -1452,7 +1472,8 @@
                             $scope.addStatTButtonShowing = true; //show the button again
                             toastr.success("Status Type Added");
                         }, function error(errorResponse) {
-                            toastr.error("Error: " + errorResponse.statusText);
+                            if (errorResponse.headers(["usgswim-messages"]) !== undefined) toastr.error("Error creating status type: " + errorResponse.headers(["usgswim-messages"]));
+                            else toastr.error("Error creating status type: " + errorResponse.statusText);
                         });
                     }
                 };
@@ -1465,7 +1486,8 @@
                         toastr.success("Status Type Updated");
                     }, function error(errorResponse) {
                         retur = false;
-                        toastr.error("Error: " + errorResponse.statusText);
+                        if (errorResponse.headers(["usgswim-messages"]) !== undefined) toastr.error("Error saving status type: " + errorResponse.headers(["usgswim-messages"]));
+                        else toastr.error("Error saving status type: " + errorResponse.statusText);
                     });
                     return retur;
                 };
@@ -1490,10 +1512,9 @@
                             $scope.statTypeList.splice(index, 1);
                             toastr.success("Status Type Removed");
                         }, function error(errorResponse) {
-                            toastr.error("Error: " + errorResponse.statusText);
+                            if (errorResponse.headers(["usgswim-messages"]) !== undefined) toastr.error("Error deleting status type: " + errorResponse.headers(["usgswim-messages"]));
+                            else toastr.error("Error deleting status type: " + errorResponse.statusText);
                         });
-                    }, function () {
-                        //logic for cancel
                     });//end modal
                 };
                 //#endregion StatusType Add/Update/Delete
@@ -1517,6 +1538,9 @@
                             });
                         }
                         $scope.formattedSensTypeList.push(sensType);
+                    }, function error(errorResponse) {
+                        if (errorResponse.headers(["usgswim-messages"]) !== undefined) toastr.error("Error getting sensor deployment types: " + errorResponse.headers(["usgswim-messages"]));
+                        else toastr.error("Error getting sensor deployment types: " + errorResponse.statusText);
                     }).$promise;
                 });
 
@@ -1612,10 +1636,11 @@
                                 angular.forEach($scope.newDepTypeRelating, function (ndt) {
                                     delete ndt.selected;
                                     relatedDeps.push(ndt.deployment_type_id);
-                                    SENSOR_TYPE.addSensorDeploymentType({ sensorTypeId: newSensor.sensor_type_id,deploymentTypeId: ndt.deployment_type_id }, function success(response1) {
+                                    SENSOR_TYPE.addSensorDeploymentType({ sensorTypeId: newSensor.sensor_type_id, deploymentTypeId: ndt.deployment_type_id }, function success(response1) {
                                         var test;
                                     }, function error(errorResponse) {
-                                        var what = errorResponse.statusText;
+                                        if (errorResponse.headers(["usgswim-messages"]) !== undefined) toastr.error("Error adding sensor deployment type: " + errorResponse.headers(["usgswim-messages"]));
+                                        else toastr.error("Error adding sensor deployment type: " + errorResponse.statusText);
                                     });
                                 });
                             }
@@ -1623,7 +1648,8 @@
                             $scope.formattedSensTypeList.push(newSensor);
                             toastr.success("Sensor Type Added");
                         }, function error(errorResponse) {
-                            toastr.error("Error: " + errorResponse.statusText);
+                            if (errorResponse.headers(["usgswim-messages"]) !== undefined) toastr.error("Error creating sensor type: " + errorResponse.headers(["usgswim-messages"]));
+                            else toastr.error("Error creating sensor type: " + errorResponse.statusText);
                         });
                     }
                 };
@@ -1648,23 +1674,26 @@
                             SENSOR_TYPE.addSensorDeploymentType({ sensorTypeId: id, deploymentTypeId: ndt.deployment_type_id }, dt, function success(response1) {
                                 toastr.success("Deployment Type is now related");
                             }, function error(errorResponse1) {
-                                var what = errorResponse1.statusText;
+                                if (errorResponse1.headers(["usgswim-messages"]) !== undefined) toastr.error("Error relating deployment type: " + errorResponse1.headers(["usgswim-messages"]));
+                                else toastr.error("Error relating deployment type: " + errorResponse1.statusText);
                             });
                         });
                         toastr.success("Sensor Type Updated");
                     }, function error(errorResponse) {
                         retur = false;
-                        toastr.error("Error: " + errorResponse.statusText);
+                        if (errorResponse.headers(["usgswim-messages"]) !== undefined) toastr.error("Error saving sensor type: " + errorResponse.headers(["usgswim-messages"]));
+                        else toastr.error("Error saving sensor type: " + errorResponse.statusText);
                     }).$promise.then(
                         //remove those
                         angular.forEach($scope.removeTheseDepTypes, function (rdt) {
                             SENSOR_TYPE.removeSensorDeploymentType({ sensorTypeId: id, DeploymentTypeId: rdt.deployment_type_id }, function success(response2) {
                                 toastr.success("Deployment Type is no longer related");
                             }, function error(errorResponse) {
-                                var what = errorResponse.statusText;
+                                if (errorResponse.headers(["usgswim-messages"]) !== undefined) toastr.error("Error unrelating deployment type: " + errorResponse.headers(["usgswim-messages"]));
+                                else toastr.error("Error unrelating deployment type: " + errorResponse.statusText);
                             });
                         })
-                    );
+                        );
                     //now make sure $scope model is updated?
                     return retur;
                 };
@@ -1694,6 +1723,9 @@
                                 var thisDT = { deployment_type_id: s.deployment_type_id, method: s.method };
                                 SENSOR_TYPE.removeSensorDeploymentType({ sensorTypeId: ST.sensor_type_id, DeploymentTypeId: thisDT.deployment_type_id }, function success(response2) {
                                     var removed;
+                                }, function error(errorResponse) {
+                                    if (errorResponse.headers(["usgswim-messages"]) !== undefined) toastr.error("Error unrelating deployment type: " + errorResponse.headers(["usgswim-messages"]));
+                                    else toastr.error("Error unrelating deployment type: " + errorResponse.statusText);
                                 });
                             }
                         });
@@ -1701,13 +1733,11 @@
                         SENSOR_TYPE.delete({ id: ST.sensor_type_id }, ST, function success(response) {
                             $scope.formattedSensTypeList.splice(index, 1);
                             //get the Deployment Types from the list of ids in data.DepTypes
-
                             toastr.success("Sensor Type Removed");
                         }, function error(errorResponse) {
-                            toastr.error("Error: " + errorResponse.statusText);
+                            if (errorResponse.headers(["usgswim-messages"]) !== undefined) toastr.error("Error deleting sensor type: " + errorResponse.headers(["usgswim-messages"]));
+                            else toastr.error("Error deleting sensor type: " + errorResponse.statusText);
                         });
-                    }, function () {
-                        //logic for cancel
                     });//end modal
                 };
                 //#endregion SensorType Add/Update/Delete
@@ -1741,7 +1771,8 @@
                             $scope.addNTButtonShowing = true; //show the button again
                             toastr.success("Network Type Added");
                         }, function error(errorResponse) {
-                            toastr.error("Error: " + errorResponse.statusText);
+                            if (errorResponse.headers(["usgswim-messages"]) !== undefined) toastr.error("Error creating network type: " + errorResponse.headers(["usgswim-messages"]));
+                            else toastr.error("Error creating network type: " + errorResponse.statusText);
                         });
                     }
                 };
@@ -1755,7 +1786,8 @@
                         toastr.success("Network Type Updated");
                     }, function error(errorResponse) {
                         retur = false;
-                        toastr.error("Error: " + errorResponse.statusText);
+                        if (errorResponse.headers(["usgswim-messages"]) !== undefined) toastr.error("Error saving network type: " + errorResponse.headers(["usgswim-messages"]));
+                        else toastr.error("Error saving network type: " + errorResponse.statusText);
                     });
                     return retur;
                 };
@@ -1784,10 +1816,9 @@
                             $scope.netTypeList.splice(index, 1);
                             toastr.success("Network Type Removed");
                         }, function error(errorResponse) {
-                            toastr.error("Error: " + errorResponse.statusText);
+                            if (errorResponse.headers(["usgswim-messages"]) !== undefined) toastr.error("Error deleting network type: " + errorResponse.headers(["usgswim-messages"]));
+                            else toastr.error("Error deleting network type: " + errorResponse.statusText);
                         });
-                    }, function () {
-                        //logic for cancel
                     });//end modal
                 };
                 //#endregion NetType Add/Update/Delete
@@ -1820,7 +1851,8 @@
                             $scope.addVCMButtonShowing = true; //show the button again
                             toastr.success("Vertical Collection Method Added");
                         }, function error(errorResponse) {
-                            toastr.error("Error: " + errorResponse.statusText);
+                            if (errorResponse.headers(["usgswim-messages"]) !== undefined) toastr.error("Error creating vertical collection method: " + errorResponse.headers(["usgswim-messages"]));
+                            else toastr.error("Error creating vertical collection method: " + errorResponse.statusText);
                         });
                     }
                 };
@@ -1833,7 +1865,8 @@
                         toastr.success("Vertical Collection Method Updated");
                     }, function error(errorResponse) {
                         retur = false;
-                        toastr.error("Error: " + errorResponse.statusText);
+                        if (errorResponse.headers(["usgswim-messages"]) !== undefined) toastr.error("Error saving vertical collection method: " + errorResponse.headers(["usgswim-messages"]));
+                        else toastr.error("Error saving vertical collection method: " + errorResponse.statusText);
                     });
                     return retur;
                 };
@@ -1858,10 +1891,9 @@
                             $scope.vertColMethList.splice(index, 1);
                             toastr.success("Vertical Collection Method Removed");
                         }, function error(errorResponse) {
-                            toastr.error("Error: " + errorResponse.statusText);
+                            if (errorResponse.headers(["usgswim-messages"]) !== undefined) toastr.error("Error deleting vertical collection method: " + errorResponse.headers(["usgswim-messages"]));
+                            else toastr.error("Error deleting vertical collection method: " + errorResponse.statusText);
                         });
-                    }, function () {
-                        //logic for cancel
                     });//end modal
                 };
                 //#endregion VertColMeth Add/Update/Delete
@@ -1894,7 +1926,8 @@
                             $scope.addVDButtonShowing = true; //show the button again
                             toastr.success("Vertical Datum Added");
                         }, function error(errorResponse) {
-                            toastr.error("Error: " + errorResponse.statusText);
+                            if (errorResponse.headers(["usgswim-messages"]) !== undefined) toastr.error("Error creating vertical datum: " + errorResponse.headers(["usgswim-messages"]));
+                            else toastr.error("Error creating vertical datum: " + errorResponse.statusText);
                         });
                     }
                 };
@@ -1907,7 +1940,8 @@
                         toastr.success("Vertical Datum Updated");
                     }, function error(errorResponse) {
                         retur = false;
-                        toastr.error("Error: " + errorResponse.statusText);
+                        if (errorResponse.headers(["usgswim-messages"]) !== undefined) toastr.error("Error saving vertical datum: " + errorResponse.headers(["usgswim-messages"]));
+                        else toastr.error("Error saving vertical datum: " + errorResponse.statusText);
                     });
                     return retur;
                 };
@@ -1932,10 +1966,9 @@
                             $scope.vertDatList.splice(index, 1);
                             toastr.success("Vertical Datum Removed");
                         }, function error(errorResponse) {
-                            toastr.error("Error: " + errorResponse.statusText);
+                            if (errorResponse.headers(["usgswim-messages"]) !== undefined) toastr.error("Error deleting vertical datum: " + errorResponse.headers(["usgswim-messages"]));
+                            else toastr.error("Error deleting vertical datum: " + errorResponse.statusText);
                         });
-                    }, function () {
-                        //logic for cancel
                     });//end modal
                 };
                 //#endregion VertDatum Add/Update/Delete

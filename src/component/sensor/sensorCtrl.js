@@ -3,8 +3,11 @@
 
     var STNControllers = angular.module('STNControllers');
 
-    STNControllers.controller('sensorCtrl', ['$scope', '$rootScope', '$q', '$cookies', '$location', '$state', '$http', '$uibModal', '$filter', '$timeout', 'thisSite', 'Instrument_Service', 'thisSiteSensors', 'allSensorBrands', 'allAgencies', 'allVertDatums', 'allDeployTypes', 'allSensorTypes', 'allHousingTypes', 'allEvents', 'allFileTypes', 'INSTRUMENT', 'INSTRUMENT_STATUS', 'SITE', 'MEMBER', 'DEPLOYMENT_TYPE', 'STATUS_TYPE', 'INST_COLL_CONDITION',
-        function ($scope, $rootScope, $q, $cookies, $location, $state, $http, $uibModal, $filter, $timeout, thisSite, Instrument_Service, thisSiteSensors, allSensorBrands, allAgencies, allVertDatums, allDeployTypes, allSensorTypes, allHousingTypes, allEvents, allFileTypes, INSTRUMENT, INSTRUMENT_STATUS, SITE, MEMBER, DEPLOYMENT_TYPE, STATUS_TYPE, INST_COLL_CONDITION) {
+    STNControllers.controller('sensorCtrl', ['$scope', '$rootScope', '$q', '$cookies', '$location', '$state', '$http', '$uibModal', '$filter', '$timeout', 'thisSite', 'Instrument_Service', 'thisSiteSensors',
+        'allSensorBrands', 'allAgencies', 'allVertDatums', 'allDeployTypes', 'allSensorTypes', 'allHousingTypes', 'allEvents', 'allFileTypes', 'INSTRUMENT', 'INSTRUMENT_STATUS', 'SITE', 'MEMBER', 'DEPLOYMENT_TYPE', 'STATUS_TYPE',
+        'INST_COLL_CONDITION', 'DATA_FILE',
+        function ($scope, $rootScope, $q, $cookies, $location, $state, $http, $uibModal, $filter, $timeout, thisSite, Instrument_Service, thisSiteSensors, allSensorBrands, allAgencies, allVertDatums, allDeployTypes,
+            allSensorTypes, allHousingTypes, allEvents, allFileTypes, INSTRUMENT, INSTRUMENT_STATUS, SITE, MEMBER, DEPLOYMENT_TYPE, STATUS_TYPE, INST_COLL_CONDITION, DATA_FILE) {
             if ($cookies.get('STNCreds') === undefined || $cookies.get('STNCreds') === "") {
                 $scope.auth = false;
                 $location.path('/login');
@@ -94,8 +97,9 @@
                             //now post it (Instrument first, then Instrument Status
                             $http.defaults.headers.common.Authorization = 'Basic ' + $cookies.get('STNCreds');
                             $http.defaults.headers.common.Accept = 'application/json';
-
+                            var instrumentID = 0;
                             INSTRUMENT.save(proposedToAdd).$promise.then(function (response) {
+                                instrumentID = response.instrument_id;
                                 var createdPropSensor = {
                                     deployment_type_id: response.deployment_type_id,
                                     site_id: response.site_id,
@@ -125,10 +129,14 @@
                                     });
 
                                 }, function (errorResponse) {
-                                    toastr.error("Error saving Sensor: " + errorResponse.statusText);
+                                    // if status fails, need to delete the sensor too
+                                    INSTRUMENT.delete({ id: instrumentID });
+                                    if (errorResponse.headers(["usgswim-messages"]) !== undefined) toastr.error("Error creating sensor: " + errorResponse.headers(["usgswim-messages"]));
+                                    else toastr.error("Error creating sensor: " + errorResponse.statusText);
                                 });//end INSTRUMENT_STATUS.save
                             }, function (errorResponse) {
-                                toastr.error("Error saving Sensor: " + errorResponse.statusText);
+                                if (errorResponse.headers(["usgswim-messages"]) !== undefined) toastr.error("Error creating sensor: " + errorResponse.headers(["usgswim-messages"]));
+                                else toastr.error("Error creating sensor: " + errorResponse.statusText);
                             }); //end INSTRUMENT.save
                         }//end if selected == true
                     }//end foreach deployTypeList
@@ -236,7 +244,8 @@
                                 Instrument_Service.setAllSiteSensors($scope.SiteSensors);
                                 toastr.success("Proposed sensor deleted");
                             }, function (errorResponse) {
-                                toastr.error("Error deleting proposed sensor. Refresh and try again. Error: " + errorResponse.statusText);
+                                if (errorResponse.headers(["usgswim-messages"]) !== undefined) toastr.error("Error deleting proposed sensor: " + errorResponse.headers(["usgswim-messages"]));
+                                else toastr.error("Error deleting proposed sensor: " + errorResponse.statusText);
                             });
                         }
                     });
@@ -356,6 +365,9 @@
                                 $http.defaults.headers.common.Authorization = 'Basic ' + $cookies.get('STNCreds');
                                 $http.defaults.headers.common.Accept = 'application/json';
                                 return MEMBER.getAll().$promise;
+                            },
+                            allEventDataFiles: function () {
+                                return DATA_FILE.getEventDataView({ eventId: sensorClicked.event_id }).$promise;
                             }
                         }
                     });

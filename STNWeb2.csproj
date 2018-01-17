@@ -17,6 +17,7 @@
     <IISExpressWindowsAuthentication />
     <IISExpressUseClassicPipelineMode />
     <UseGlobalApplicationHostFile />
+    <Use64BitIISExpress />
   </PropertyGroup>
   <ItemGroup>
     <Content Include="src\app.js" />
@@ -139,6 +140,7 @@
     <Content Include="src\images\loading1.gif" />
     <Content Include="src\images\Members1.png" />
     <Content Include="src\images\MeteorologicalSensor.png" />
+    <Content Include="src\images\processing.gif" />
     <Content Include="src\images\raingage.png" />
     <Content Include="src\images\RapidDeploymentGage.png" />
     <Content Include="src\images\RealTimeStreamGage.png" />
@@ -170,9 +172,7 @@
       <DependentUpon>web.config</DependentUpon>
     </None>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="dist\" />
-  </ItemGroup>
+  <ItemGroup />
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">12.0</VisualStudioVersion>
   </PropertyGroup>

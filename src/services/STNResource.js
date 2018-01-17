@@ -3,9 +3,10 @@
 
     //look up common service module, and register the new factory with that module 
     var STNResource = angular.module('STNResource', ['ngResource']);
+
     var rootURL = "https://stn.wim.usgs.gov/STNServices";
-    //  var rootURL = "https://stntest.wim.usgs.gov/STNServices2";
-    //var rootURL = "http://localhost/STNServices2";
+    //var rootURL = "https://stntest.wim.usgs.gov/STNServices2";
+    // var rootURL = "http://localhost/STNServices2";
 
     // GEOCODE https://geocoding.geo.census.gov/geocoder/geographies/coordinates?benchmark=4&vintage=4&format=json
     STNResource.factory('GEOCODE', ['$resource', function ($resource) {
@@ -66,10 +67,15 @@
                 query: {},
                 getAll: { method: 'GET', isArray: true },
                 getDFApproval: { method: 'GET', cache: false, isArray: false, url: rootURL + '/DataFiles/:id/Approval.json' },
-                getUnapprovedDFs: { method: 'GET', isArray: true, cache: false }, //?IsApproved={approved}&Event={eventId}&Processor={memberId}&State={state}
+                getUnapprovedDFs: { method: 'GET', isArray: true, cache: false }, //?IsApproved={approved}&Event={eventId}&Counties={counties}&State={state}
+                getEventDataView: { method: 'GET', isArray: true, cache: false, url: rootURL + '/DataFileView?EventId=:eventId' },
+                runStormScript: { method: 'GET', url: rootURL + '/DataFiles/RunStormScript?SeaDataFileID=:seaDFID&AirDataFileID=:airDFID&Hertz=:hertz&Username=:username' },
+                runAirScript: { method: 'GET', url: rootURL + '/DataFiles/RunAirScript?AirDataFileID=:airDFID&Username=:username' },
+                runChopperScript: { method: 'POST', url: rootURL + '/Files/RunChopperScript', headers: { 'Content-Type': undefined }, transformRequest: angular.identity, cache: false, isArray: false }, //?SensorId=:sensorId&FileName=:fileName
                 approveDF: { method: 'POST', cache: false, isArray: false, params: { id: '@id' }, url: rootURL + '/datafiles/:id/Approve.json' }, //posts an APPROVAL, updates the data file with approval_id and returns APPROVAL
                 approveNWISDF: { method: 'POST', cache: false, isArray: false, params: { id: '@id' }, url: rootURL + '/datafiles/:id/NWISApprove.json' }, //posts an APPROVAL (using EventCoord), updates the data file with approval_id and returns APPROVAL
                 unApproveDF: { method: 'DELETE', cache: false, isArray: false, url: rootURL + '/datafiles/:id/Unapprove.json' }, //posts an APPROVAL, updates the datafile with approval_id and returns APPROVAL
+                stormScript: { method: 'GET', cache: false, isArray: false, url: rootURL + '/DataFiles/RunScript?SeaDataFileID=:seaDataFileId&AirDataFileID=:airDataFileId&Hertz=:hertz&Username=username' },
                 update: { method: 'PUT', cache: false, isArray: false },
                 save: { method: 'POST', cache: false, isArray: false },
                 delete: { method: 'DELETE', cache: false, isArray: false }
@@ -140,6 +146,7 @@
                 query: {},
                 getAll: { method: 'GET', isArray: true },
                 getFileItem: { method: 'GET', isArray: false, url: rootURL + '/Files/:id/Item' },
+                getTESTdata: { method: 'GET', url: rootURL + '/Files/testDataFile' },
                 update: { method: 'PUT', cache: false, isArray: false },
                 uploadFile: { method: 'POST', url: rootURL + '/Files/bytes', headers: { 'Content-Type': undefined }, transformRequest: angular.identity, cache: false, isArray: false },
                 downloadZip: {
@@ -343,8 +350,13 @@
                     SITE.getSitePeaks({ id: siteId }).$promise.then(function (pResponse) {
                         MapSiteParts.push(pResponse);
                         $rootScope.$broadcast('mapSiteClickResults', MapSiteParts);
-                        //$rootScope.stateIsLoading.showLoading = false;
+                    }, function (errorResponse) {
+                        if (errorResponse.headers(["usgswim-messages"]) !== undefined) toastr.error("Error getting site peak: " + errorResponse.headers(["usgswim-messages"]));
+                        else toastr.error("Error getting site peak: " + errorResponse.statusText);
                     });
+                }, function (errorResponse) {
+                    if (errorResponse.headers(["usgswim-messages"]) !== undefined) toastr.error("Error getting site: " + errorResponse.headers(["usgswim-messages"]));
+                    else toastr.error("Error getting site: " + errorResponse.statusText);
                 });
             }
         };
@@ -531,6 +543,7 @@
     //            delete: { method: 'DELETE', cache: false, isArray: false }
     //        });
     //}]);
+
     // SENSOR_TYPE
     STNResource.factory('SENSOR_TYPE', ['$resource', function ($resource) {
         return $resource(rootURL + '/SensorTypes/:id.json',
@@ -550,6 +563,7 @@
         return $resource(rootURL + '/Sites/:id.json',
             {}, {
                 query: {},
+                sensorScriptRunning: { method: 'GET', isArray: false, transformResponse: function (data) { return { value: angular.fromJson(data) } }, url: rootURL + '/Sites/:id/GetDataFileScript.json' },
                 getProximitySites: { method: 'GET', isArray: true, params: { Latitude: '@latitude', Longitude: '@longitude', Buffer: '@buffer' } },
                 getAll: { method: 'GET', isArray: true },
                 getSearchedSite: { method: 'GET', isArray: false, url: rootURL + '/Sites/Search' }, //?bySiteNo={siteNo}&bySiteName={siteName}&bySiteId={siteId} (only going to populate 1 of these params
@@ -573,11 +587,26 @@
                 getSiteHWMs: { method: 'GET', isArray: true, url: rootURL + '/Sites/:id/HWMs.json' },
                 getSiteFiles: { method: 'GET', isArray: true, url: rootURL + '/Sites/:id/Files.json' },
                 getSitePeaks: { method: 'GET', isArray: true, url: rootURL + '/Sites/:id/PeakSummaryView.json' },
+                getPeaklessSites: { method: 'GET', isArray: true, url: rootURL + '/Events/:id/PeaklessSites.json' },
                 //just the Site
                 update: { method: 'PUT', cache: false, isArray: false },
                 save: { method: 'POST', cache: false, isArray: false },
                 delete: { method: 'DELETE', cache: false, isArray: false }
             });
+    }]);
+
+    // IsScriptRunning Service
+    STNResource.factory('Site_Script', ['$cookies', '$rootScope', function ($cookies, $rootScope) {
+        var isRunning;
+        return {
+            getIsScriptRunning: function () {
+                return isRunning;
+            },
+            setIsScriptRunning: function (running) {
+                isRunning = running;
+                $rootScope.$broadcast('siteDFScriptRunning', isRunning);
+            }
+        };
     }]);
     // Site_Files
     STNResource.factory('Site_Files', ['$cookies', '$rootScope', function ($cookies, $rootScope) {
@@ -666,5 +695,4 @@
                 getNewsFeed: { method: 'GET', url: rootURL + "/Confluence/STNNewsFeed" }
             });
     }]);
-
 })();
