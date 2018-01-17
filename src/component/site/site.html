@@ -4676,7 +4676,11 @@
                                 <div class="form_group" ng-if="aFile.file_id == undefined && aFile.filetype_id == 2 && aSensor.sensor_type_id == 1 && aSensor.deployment_type_id < 4" style="padding-top: 10px;padding-bottom: 10px;">
                                     <label class="col-md-4 control-label"></label>
                                     <div class="col-md-4 input-group" style="padding-right:14px;padding-left:14px">
-                                        <button type="button" class="btn btn-primary" ng-click="runChopper()">Preview Data</button>
+                                        <button type="button" class="btn btn-primary pull-left" ng-click="runChopper()">Preview Data</button>
+                                        <button type="button" style="margin-top:4%" class="col-md-1 borderLess" tooltip-placement="right-top" tooltip-append-to-body="false"
+                                                uib-tooltip="Upload a csv file outputted by HoboWare or TruWare software. (These refer to the specific csv files that the script will ingest for Hobo and TruBlue respectively)">
+                                            <span class="glyphicon glyphicon-question-sign"></span>
+                                        </button>
                                         <div ng-show="smlallLoaderGo"><img src="images/loading1.gif" /></div>
                                     </div>
                                 </div>
@@ -6524,7 +6528,11 @@
                                 <div class="form_group" ng-if="aFile.file_id == undefined && aFile.filetype_id == 2 && sensor.sensor_type_id == 1 && sensor.deployment_type_id < 4" style="padding-top: 10px;padding-bottom: 10px;">
                                     <label class="col-md-4 control-label"></label>
                                     <div class="col-md-4 input-group" style="padding-right:14px;padding-left:14px">
-                                        <button type="button" class="btn btn-primary" ng-click="runChopper()">Preview Data</button>
+                                        <button type="button" class="btn btn-primary pull-left" ng-click="runChopper()">Preview Data</button>
+                                        <button type="button" style="margin-top:4%" class="col-md-1 borderLess" tooltip-placement="right-top" tooltip-append-to-body="false"
+                                                uib-tooltip="Upload a csv file outputted by HoboWare or TruWare software. (These refer to the specific csv files that the script will ingest for Hobo and TruBlue respectively)">
+                                            <span class="glyphicon glyphicon-question-sign"></span>
+                                        </button>
                                         <div ng-show="smlallLoaderGo"><img src="images/loading1.gif" /></div>
                                     </div>
                                 </div>
@@ -6724,6 +6732,7 @@
                                 <div ng-if="stormSection">
                                     <div ng-if="eventDataFiles.length > 0">
                                         <h4 style="margin-top:1em;">Select the raw csv barometric sensor file that you would like to use.</h4>
+
                                         <table class="table" style="display:inline-block;overflow:auto;">
                                             <thead>
                                                 <tr>
@@ -6737,24 +6746,35 @@
                                                     <th class="good_end">Good End&nbsp;<a ng-click="sort_by('good_end')"><i class="glyphicon glyphicon-sort"></i></a></th>
                                                 </tr>
                                             </thead>
-                                            <tr ng-repeat="df in eventDataFiles | orderBy:sortingOrder:reverse">
-                                                <td><input type="radio" name="selected" ng-model="df.selected" value="true" ng-change="updateChosenAirRadio(df)" /></td>
-                                                <td>{{df.site_no}}</td>
-                                                <td>{{df.distance | number:4}} mi.</td>
-                                                <td>{{df.county}}, {{df.state}}</td>
-                                                <td>{{df.brand_name}}</td>
-                                                <td>{{df.name}}</td>
-                                                <td>{{df.good_start | date: 'MM/dd/yyyy hh:mm a' }}</td>
-                                                <td>{{df.good_end | date: 'MM/dd/yyyy hh:mm a'}}</td>
-                                            </tr>
+                                            <tbody>
+                                                <tr ng-repeat="df in eventDataFiles | orderBy:sortingOrder:reverse" ng-show="($index >= firstIndex) && ($index < lastIndex)">
+                                                    <td><input type="radio" name="selected" ng-model="df.selected" value="true" ng-change="updateChosenAirRadio(df)" /></td>
+                                                    <td>{{df.site_no}}</td>
+                                                    <td>{{df.distance | number:4}} mi.</td>
+                                                    <td>{{df.county}}, {{df.state}}</td>
+                                                    <td>{{df.brand_name}}</td>
+                                                    <td>{{df.name}}</td>
+                                                    <td>{{df.good_start | date: 'MM/dd/yyyy hh:mm a' }}</td>
+                                                    <td>{{df.good_end | date: 'MM/dd/yyyy hh:mm a'}}</td>
+                                                </tr>
+                                            </tbody>
                                         </table>
+                                        <div class="text-center">
+                                            <uib-pagination ng-model="pagination.currentPage" max-size="pagination.maxPaginationSize" total-items="(eventDataFiles).length"
+                                                            ng-change="updatePageIndexes()" items-per-page="itemsPerPage" boundary-links="true" previous-text="&lsaquo;"
+                                                            next-text="&rsaquo;" first-text="&laquo;" last-text="&raquo;">
+                                            </uib-pagination>
+                                        </div>
                                         <div class="col-md-12">
                                             <div style="margin-bottom:15px" class="chx">
                                                 <label>
                                                     <input style="margin:0!important;" class="col-md-1" type="checkbox" ng-model="is4Hz.selected" ng-true-value="'true'" ng-false-value="'false'" /> Sensor is 4 Hz
+                                                    <button type="button" class="help-btn borderLess" tooltip-placement="right" tooltip-append-to-body="false"
+                                                            uib-tooltip="Select this option if your instrument was sampled at 4hz, otherwise leave unchecked.">
+                                                        <span class="glyphicon glyphicon-question-sign"></span>
+                                                    </button>
                                                 </label>
                                             </div>
-
                                             <div class="col-md-7"><button class="btn btn-primary" ng-click="runStormScript()">Run Script</button></div>
                                         </div>
                                     </div>

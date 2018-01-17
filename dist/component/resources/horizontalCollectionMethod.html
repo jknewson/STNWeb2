@@ -1,0 +1,86 @@
+<div ng-if="accountRole == 'Admin'">
+    <table class="table">
+        <thead>
+            <tr>
+                <th style="width:0"></th>
+                <th>Horizontal Collection Method</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr ng-repeat="hcm in horColMethList | orderBy: 'hcollect_method'">
+                <td style="white-space: nowrap">
+                    <!-- form -->
+                    <form editable-form name="HCMrowform" onaftersave="saveHorCollMethod($data, hcm.hcollect_method_id)" ng-show="HCMrowform.$visible" class="form-buttons form-inline" shown="inserted == hcm">
+                        <button type="submit" ng-disabled="HCMrowform.$waiting" class="btn btn-primary">
+                            save
+                        </button>
+                        <button type="button" ng-disabled="HCMrowform.$waiting" ng-click="HCMrowform.$cancel()" class="btn btn-default">
+                            cancel
+                        </button>
+                    </form>
+                    <div class="buttons" ng-show="!HCMrowform.$visible">
+                        <button class="btn btn-primary" ng-click="HCMrowform.$show()">edit</button>
+                        <button class="btn btn-danger" ng-click="deleteHorCollMethod(hcm)">del</button>
+                    </div>
+                </td>
+                <td>
+                    <div style="display:none"><span editable-text="hcm.hcollect_method_id" e-form="HCMrowform" e-name="hcollect_method_id">{{hcm.hcollect_method_id}}</span></div>
+                    <span editable-text="hcm.hcollect_method" e-name="hcollect_method" e-form="HCMrowform">{{ hcm.hcollect_method || '' }}</span>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+    <hr />
+
+    <button ng-show="addHCMButtonShowing" class="btn btn-primary" ng-click="showAddHCMClicked()">Add New Horizontal Collection Method</button>
+
+    <div ng-show="showAddHCMForm">
+        <form class="form-horizontal" name="lookupForm.eventStatFm">
+            <fieldset>
+
+                <div class="form-group">
+                    <label class="col-md-3 control-label req" for="hcollect_method">
+                        Horizontal Collection Method:
+                        <button type="button" class="help-btn" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Required">
+                            <span class="glyphicon glyphicon-asterisk" style="color:#d00;font-size:xx-small;"></span>
+                        </button>
+                    </label>
+                    <div class="col-md-6">
+                        <input class="form-control" id="hcollect_method" name="hcollect_method" type="text" placeholder="" ng-model="newHCM.hcollect_method" required />
+                    </div>
+                </div>
+
+
+                <!--submit button-->
+                <div class="form-group">
+                    <div class="col-md-2 col-md-offset-2">
+                        <button class="btn btn-primary" ng-click="AddHorCollMethod(lookupForm.eventStatFm.$valid, newHCM)">Add</button>                  
+                    </div>
+                </div>
+
+            </fieldset>
+        </form><button class="btn btn-default center-block" style="margin-top:-48px;" ng-click="NeverMindHCM()">
+            Never Mind
+        </button>
+    </div>
+</div><!--end admin view-->
+<div ng-if="accountRole !='Admin'">
+    <script>
+        var sortingOrder = 'hcollect_method';
+    </script>
+
+    <table class="table table-striped table-condensed">
+        <thead>
+            <tr>
+                <th class="hcollect_method">Horizontal Collection Method&nbsp;<a ng-click="sort_by('hcollect_method')"><i class="glyphicon glyphicon-sort"></i></a></th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr ng-repeat="hcm in horColMethList | orderBy:sortingOrder:reverse">
+                <td>{{ hcm.hcollect_method || '' }}</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+

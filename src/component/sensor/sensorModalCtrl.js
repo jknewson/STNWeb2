@@ -1815,24 +1815,6 @@
                 return sendThis;
             };
 
-            // change sorting order
-            $scope.sort_by = function (newSortingOrder) {
-                if ($scope.sortingOrder == newSortingOrder) {
-                    $scope.reverse = !$scope.reverse;
-                }
-                $scope.sortingOrder = newSortingOrder;
-                // icon setup
-                $('th i').each(function () {
-                    // icon reset
-                    $(this).removeClass().addClass('glyphicon glyphicon-sort');
-                });
-                if ($scope.reverse) {
-                    $('th.' + newSortingOrder + ' i').removeClass().addClass('glyphicon glyphicon-chevron-up');
-                } else {
-                    $('th.' + newSortingOrder + ' i').removeClass().addClass('glyphicon glyphicon-chevron-down');
-                }
-            };
-
             //formatting date and time properly for chrome and ff
             var getDateTimeParts = function (d) {
                 var theDate;
@@ -3012,7 +2994,6 @@
             $scope.showStormSection = function () {
                 $scope.stormSection = true;
                 var parentFileName = "";
-                // START HERE ON MONDAY!!!!
                 angular.forEach(allEventDataFiles, function (df) {
                     df.selected = false;
                     df.distance = calcDistance(df.latitude_dd, df.longitude_dd);
@@ -3024,6 +3005,42 @@
                     return parseFloat(a.distance) - parseFloat(b.distance);
                 });
             };
+
+            // add PAGINATION stuff 
+            // change sorting order
+            $scope.sort_by = function (newSortingOrder) {
+                if ($scope.sortingOrder == newSortingOrder) {
+                    $scope.reverse = !$scope.reverse;
+                }
+                $scope.sortingOrder = newSortingOrder;
+                // icon setup
+                $('th i').each(function () {
+                    // icon reset
+                    $(this).removeClass().addClass('glyphicon glyphicon-sort');
+                });
+                if ($scope.reverse) {
+                    $('th.' + newSortingOrder + ' i').removeClass().addClass('glyphicon glyphicon-chevron-up');
+                } else {
+                    $('th.' + newSortingOrder + ' i').removeClass().addClass('glyphicon glyphicon-chevron-down');
+                }
+            };
+
+            $scope.pagination = {
+                currentPage: 1,
+                maxPaginationSize: 200
+            };
+
+            $scope.itemsPerPage = 10;
+            // update the beginning and end points for shown people
+            // this will be called when the user changes page in the pagination bar
+            $scope.updatePageIndexes = function (a) {
+                console.log('Page changed to: ' + $scope.pagination.currentPage);
+                $scope.firstIndex = ($scope.pagination.currentPage - 1) * $scope.itemsPerPage;
+                $scope.lastIndex = $scope.pagination.currentPage * $scope.itemsPerPage;
+            };
+            $scope.updatePageIndexes();
+
+            //end PAGINATION stuff 
 
             $scope.updateChosenAirRadio = function (dfile) {
                 for (var i = 0; i < $scope.eventDataFiles.length; i++) {
