@@ -23,6 +23,10 @@
 
 <!-- Style for 'graying' out proposed sensor parts -->
 <style type="text/css">
+    .tooltip-wide {
+        width: 100% !important;
+    }
+
     .darkClass {
         filter: alpha(opacity=50); /* IE */
         opacity: 0.5; /* Safari, Opera */
@@ -78,6 +82,10 @@
 
     .custom-file-input:active::before, .custom-file-inputChange::before {
         background: -webkit-linear-gradient(top, #e3e3e3, #f9f9f9);
+    }
+
+    .multiSelect .checkBoxContainer {
+        overflow-y: auto !important;
     }
 </style>
 
@@ -3468,7 +3476,7 @@
             <fieldset>
                 <!-- Event: -->
                 <div class="form-group">
-                    <label class="col-md-3 control-label" for="event_id">
+                    <label class="col-md-4 control-label" for="event_id">
                         <button type="button" class="help-btn" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Displayed publicly.">
                             <span class="glyphicon glyphicon-eye-open"></span>
                         </button> Event:
@@ -3477,7 +3485,7 @@
                         <div class="col-md-8">
                             {{EventName}}
                         </div>
-                        <div class="col-md-3" ng-show="userRole == 'Admin' && whichButton == 'edit'">
+                        <div class="col-md-4" ng-show="userRole == 'Admin' && whichButton == 'edit'">
                             <button type="button" ng-click="showChangeEventDD()" class="btn btn-primary">Change Event</button>
                         </div>
                     </div>
@@ -3486,14 +3494,14 @@
                 <!--Event dropdown for admin -->
                 <div ng-show="showEventDD">
                     <div class="form-group">
-                        <label class="col-md-3 control-label" for="event_id">
+                        <label class="col-md-4 control-label" for="event_id">
                             <button type="button" class="help-btn" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Displayed publicly.">
                                 <span class="glyphicon glyphicon-eye-open"></span>
                             </button> Events:
                         </label>
                         <div class="col-md-6">
-                            <select class="form-control" id="event_id" name="event_id" ng-model="adminChanged.event_id" ng-change="ChangeEvent()"
-                                    ng-options="e.event_id as (e.event_name + ' --- ' + (e.event_start_date | date: 'MM/dd/yyyy') + ' to ' + ((e.event_end_date || '-Not Set-') | date: 'MM/dd/yyyy'))  for e in eventList | orderBy: '-event_start_date'"
+                            <select class="form-control" id="event_id" name="event_id" ng-model="adminChanged.event_id" ng-change="ChangeEvent()">
+                                ng-options="e.event_id as (e.event_name + ' --- ' + (e.event_start_date | date: 'MM/dd/yyyy') + ' to ' + ((e.event_end_date || '-Not Set-') | date: 'MM/dd/yyyy'))  for e in eventList | orderBy: '-event_start_date'"
                                 <option value=""></option>
                             </select>
                         </div>
@@ -3502,7 +3510,7 @@
 
                 <!-- Sensor Type:* -->
                 <div class="form-group" ng-class="{'has-error':SensorForm.sensor_type_id.$invalid && SensorForm.sensor_type_id.$dirty}">
-                    <label class="col-md-3 control-label req" for="sensor_type_id">
+                    <label class="col-md-4 control-label req" for="sensor_type_id">
                         <button type="button" class="help-btn" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Displayed publicly.">
                             <span class="glyphicon glyphicon-eye-open"></span>
                         </button> Sensor Type:
@@ -3520,7 +3528,7 @@
 
                 <!-- Sensor Brand:* -->
                 <div class="form-group" ng-class="{'has-error':SensorForm.sensor_brand_id.$invalid && SensorForm.sensor_brand_id.$dirty}">
-                    <label class="col-md-3 control-label req" for="sensor_brand_id">
+                    <label class="col-md-4 control-label req" for="sensor_brand_id">
                         <button type="button" class="help-btn" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Displayed publicly.">
                             <span class="glyphicon glyphicon-eye-open"></span>
                         </button> Sensor Brand:
@@ -3538,7 +3546,7 @@
 
                 <!-- Serial Number:* -->
                 <div class="form-group" ng-class="{'has-error':SensorForm.serial_number.$invalid && SensorForm.serial_number.$dirty}">
-                    <label class="col-md-3 control-label req" for="serial_number">
+                    <label class="col-md-4 control-label req" for="serial_number">
                         <button type="button" class="help-btn" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Displayed publicly.">
                             <span class="glyphicon glyphicon-eye-open"></span>
                         </button> Serial Number:
@@ -3556,7 +3564,7 @@
 
                 <!-- Housing Serial Number: -->
                 <div class="form-group">
-                    <label class="col-md-3 control-label" for="housing_serial_number">
+                    <label class="col-md-4 control-label" for="housing_serial_number">
                         <button type="button" class="help-btn" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Displayed publicly.">
                             <span class="glyphicon glyphicon-eye-open"></span>
                         </button> Housing Serial Number:
@@ -3571,7 +3579,7 @@
 
                 <!-- Housing Types: -->
                 <div class="form-group">
-                    <label class="col-md-3 control-label" for="housing_type_id">Housing Types:</label>
+                    <label class="col-md-4 control-label" for="housing_type_id">Housing Types:</label>
                     <div class="col-md-6">
                         <select class="form-control" id="housing_type_id" name="housing_type_id" ng-model="aSensor.housing_type_id"
                                 ng-options="ht.housing_type_id as ht.type_name for ht in houseTypeList">
@@ -3685,9 +3693,9 @@
                                 </tbody>
                             </table>
                             <!-- Sensor status fields for tapedown -->
-                            <div class="col-md-7">
+                            <div class="col-md-10">
                                 <div class="form-group" style="margin-bottom:0">
-                                    <label class="col-md-6 control-label" for="sensor_elevation">
+                                    <label class="col-md-5 control-label" for="sensor_elevation">
                                         <button type="button" class="help-btn" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Displayed publicly.">
                                             <span class="glyphicon glyphicon-eye-open"></span>
                                         </button> Sensor Elevation:
@@ -3695,13 +3703,13 @@
                                     <div class="col-md-5">
                                         <input class="form-control" ng-keypress="isNum($event)" name="sensor_elevation" ng-model="aSensStatus.sensor_elevation" type="text" />
                                     </div>
-                                    <button type="button" class="col-md-1 borderLess pull-left" tooltip-placement="right-top" tooltip-append-to-body="false" uib-tooltip="Using the offset correction, elevation of the sensor orifice.">
+                                    <button type="button" class="col-md-1 borderLess pull-left" tooltip-placement="right-top" tooltip-append-to-body="false" uib-tooltip="Using the offset correction, elevation of the sensor orifice." tooltip-class="tooltip-wide">
                                         <span class="glyphicon glyphicon-question-sign"></span>
                                     </button>
                                 </div>
 
                                 <div class="form-group" style="margin-bottom:0">
-                                    <label class="col-md-6 control-label" for="ws_elevation">
+                                    <label class="col-md-5 control-label" for="ws_elevation">
                                         <button type="button" class="help-btn" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Displayed publicly.">
                                             <span class="glyphicon glyphicon-eye-open"></span>
                                         </button> Water Surface Elevation:
@@ -3709,13 +3717,13 @@
                                     <div class="col-md-5">
                                         <input class="form-control" ng-keypress="isNum($event)" name="ws_elevation" ng-model="aSensStatus.ws_elevation" type="text" />
                                     </div>
-                                    <button type="button" class="col-md-1 borderLess pull-left" tooltip-placement="right-top" tooltip-append-to-body="false" uib-tooltip="Using the water surface tape down, elevation of the water surface.">
+                                    <button type="button" class="col-md-1 borderLess pull-left" tooltip-placement="right-top" tooltip-append-to-body="false" uib-tooltip="Using the water surface tape down, elevation of the water surface." tooltip-class="tooltip-wide">
                                         <span class="glyphicon glyphicon-question-sign"></span>
                                     </button>
                                 </div>
 
                                 <div class="form-group" style="margin-bottom:0">
-                                    <label class="col-md-6 control-label" for="gs_elevation">
+                                    <label class="col-md-5 control-label" for="gs_elevation">
                                         <button type="button" class="help-btn" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Displayed publicly.">
                                             <span class="glyphicon glyphicon-eye-open"></span>
                                         </button> Ground Elevation:
@@ -3723,13 +3731,13 @@
                                     <div class="col-md-5">
                                         <input class="form-control" ng-keypress="isNum($event)" name="gs_elevation" ng-model="aSensStatus.gs_elevation" type="text" />
                                     </div>
-                                    <button type="button" class="col-md-1 borderLess pull-left" tooltip-placement="right-top" tooltip-append-to-body="false" uib-tooltip="Using the ground surface tape down, elevation of the ground surface.">
+                                    <button type="button" class="col-md-1 borderLess pull-left" tooltip-placement="right-top" tooltip-append-to-body="false" uib-tooltip="Using the ground surface tape down, elevation of the ground surface." tooltip-class="tooltip-wide">
                                         <span class="glyphicon glyphicon-question-sign"></span>
                                     </button>
                                 </div>
 
                                 <div class="form-group">
-                                    <label class="col-md-6 control-label req" for="vdatum_id">
+                                    <label class="col-md-5 control-label req" for="vdatum_id">
                                         <button type="button" class="help-btn" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Displayed publicly.">
                                             <span class="glyphicon glyphicon-eye-open"></span>
                                         </button> In feet above:
@@ -3757,7 +3765,7 @@
                 <!-- Vented (only if Sensor Type is Pressure Transducer)-->
                 <div ng-show="aSensor.sensor_type_id == 1">
                     <div class="form-group">
-                        <label class="col-md-3 control-label">
+                        <label class="col-md-4 control-label">
                             <button type="button" class="help-btn" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Displayed publicly.">
                                 <span class="glyphicon glyphicon-eye-open"></span>
                             </button> Vented:
@@ -3775,7 +3783,7 @@
 
                 <!-- Deployment Type: -->
                 <div class="form-group">
-                    <label class="col-md-3 control-label req" for="deployment_type_id">
+                    <label class="col-md-4 control-label req" for="deployment_type_id">
                         <button type="button" class="help-btn" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Displayed publicly.">
                             <span class="glyphicon glyphicon-eye-open"></span>
                         </button> Deployment Type:
@@ -3790,7 +3798,7 @@
 
                 <!-- Location Description: -->
                 <div class="form-group" ng-class="{'has-error':SensorForm.location_description.$invalid && SensorForm.location_description.$dirty}">
-                    <label class="col-md-3 control-label" for="location_description">
+                    <label class="col-md-4 control-label" for="location_description">
                         <button type="button" class="help-btn" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Displayed publicly.">
                             <span class="glyphicon glyphicon-eye-open"></span>
                         </button> Location Description:
@@ -3798,14 +3806,14 @@
                     <div class="col-md-6">
                         <textarea class="form-control" name="location_description" type="text" rows="3" ng-model="aSensor.location_description" />
                     </div>
-                    <button type="button" class="col-md-1 borderLess pull-left" tooltip-placement="right" tooltip-append-to-body="false" uib-tooltip="Please be specific so someone else can find this sensor later. This field is public.">
+                    <button type="button" class="col-md-1 borderLess pull-left" tooltip-placement="bottom" tooltip-append-to-body="false" uib-tooltip="Please be specific so someone else can find this sensor later. This field is public.">
                         <span class="glyphicon glyphicon-question-sign"></span>
                     </button>
                 </div>
 
                 <!-- Interval: -->
                 <div>
-                    <label class="col-md-3 control-label"></label>
+                    <label class="col-md-4 control-label"></label>
                     <div class="col-md-6">
                         <span class="radio-inline">
                             <input type="radio" name="intervalType" ng-model="IntervalType.type" value="Minutes" />Minutes
@@ -3816,7 +3824,7 @@
                     </div>
                 </div><br clear="all" />
                 <div class="form-group">
-                    <label class="col-md-3 control-label" for="interval">
+                    <label class="col-md-4 control-label" for="interval">
                         <button type="button" class="help-btn" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Displayed publicly.">
                             <span class="glyphicon glyphicon-eye-open"></span>
                         </button> Interval:
@@ -3829,7 +3837,7 @@
 
                 <!-- Deploy Time: * -->
                 <div class="form-group" ng-class="{'has-error':SensorForm.time_stamp.$invalid && SensorForm.time_stamp.$dirty}">
-                    <label class="col-md-3 control-label req" style="margin-top:3%" for="time_stamp">
+                    <label class="col-md-4 control-label req" style="margin-top:3%" for="time_stamp">
                         <button type="button" class="help-btn" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Displayed publicly.">
                             <span class="glyphicon glyphicon-eye-open"></span>
                         </button> Deploy Time:
@@ -3847,7 +3855,7 @@
 
                 <!-- Time Zone:* -->
                 <div class="form-group">
-                    <label class="col-md-3 control-label" for="time_zone">
+                    <label class="col-md-4 control-label" for="time_zone">
                         <button type="button" class="help-btn" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Displayed publicly.">
                             <span class="glyphicon glyphicon-eye-open"></span>
                         </button> Time Zone:
@@ -3868,7 +3876,7 @@
 
                 <!-- Note: -->
                 <div class="form-group">
-                    <label class="col-md-3 control-label" for="notes">
+                    <label class="col-md-4 control-label" for="notes">
                         <button type="button" class="help-btn" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Displayed publicly.">
                             <span class="glyphicon glyphicon-eye-open"></span>
                         </button> Note:
@@ -3880,7 +3888,7 @@
 
                 <!-- Collection Member: -->
                 <div class="form-group">
-                    <label class="col-md-3 control-label">
+                    <label class="col-md-4 control-label">
                         <button type="button" class="help-btn" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Displayed publicly.">
                             <span class="glyphicon glyphicon-eye-open"></span>
                         </button> Deploy Member:
@@ -3931,7 +3939,7 @@
                         </div>
                         <!-- Event: -->
                         <div class="form-group" ng-if="view.DEPval == 'edit'">
-                            <label class="col-md-3 col-md-offset-1 control-label">
+                            <label class="col-md-4 control-label">
                                 <button type="button" class="help-btn" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Displayed publicly.">
                                     <span class="glyphicon glyphicon-eye-open"></span>
                                 </button> Event:
@@ -3945,7 +3953,7 @@
                         <!--Event dropdown for admin -->
                         <div ng-show="showEventDD && view.DEPval == 'edit'">
                             <div class="form-group">
-                                <label class="col-md-3 col-md-offset-1 control-label" for="event_id">
+                                <label class="col-md-4 control-label" for="event_id">
                                     <button type="button" class="help-btn" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Displayed publicly.">
                                         <span class="glyphicon glyphicon-eye-open"></span>
                                     </button> Events:
@@ -3966,7 +3974,7 @@
                         </div>
                         <!-- Sensor Type*:(edit) -->
                         <div class="form-group" ng-class="{'has-error':editDeployedForm.sensor_type_id.$invalid && editDeployedForm.sensor_type_id.$dirty}" ng-if="view.DEPval == 'edit'">
-                            <label class="col-md-3 col-md-offset-1 req control-label">
+                            <label class="col-md-4 req control-label">
                                 <button type="button" class="help-btn" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Displayed publicly.">
                                     <span class="glyphicon glyphicon-eye-open"></span>
                                 </button> Sensor Type:
@@ -3989,7 +3997,7 @@
                         </div>
                         <!-- Sensor Brand*:(edit) -->
                         <div class="form-group" ng-class="{'has-error':editDeployedForm.sensor_brand_id.$invalid && editDeployedForm.sensor_brand_id.$dirty}" ng-if="view.DEPval == 'edit'">
-                            <label class="col-md-3 col-md-offset-1 req control-label">
+                            <label class="col-md-4 req control-label">
                                 <button type="button" class="help-btn" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Displayed publicly.">
                                     <span class="glyphicon glyphicon-eye-open"></span>
                                 </button> Sensor Brand:
@@ -4012,7 +4020,7 @@
                         </div>
                         <!-- Serial Number*:(edit) -->
                         <div class="form-group" ng-class="{'has-error':editDeployedForm.serial_number.$invalid && editDeployedForm.serial_number.$dirty}" ng-if="view.DEPval == 'edit'">
-                            <label class="col-md-3 col-md-offset-1 req control-label">
+                            <label class="col-md-4 req control-label">
                                 <button type="button" class="help-btn" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Displayed publicly.">
                                     <span class="glyphicon glyphicon-eye-open"></span>
                                 </button> Serial Number:
@@ -4035,7 +4043,7 @@
                         </div>
                         <!-- Housing Serial Number:(edit) -->
                         <div class="form-group" ng-if="view.DEPval == 'edit'">
-                            <label class="col-md-3 col-md-offset-1 control-label">
+                            <label class="col-md-4 control-label">
                                 <button type="button" class="help-btn" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Displayed publicly.">
                                     <span class="glyphicon glyphicon-eye-open"></span>
                                 </button> Housing Serial Number:
@@ -4055,7 +4063,7 @@
                         </div>
                         <!-- Housing Types: (edit) -->
                         <div class="form-group" ng-if="view.DEPval == 'edit'">
-                            <label class="col-md-3 col-md-offset-1 control-label">
+                            <label class="col-md-4 control-label">
                                 <button type="button" class="help-btn" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Displayed publicly.">
                                     <span class="glyphicon glyphicon-eye-open"></span>
                                 </button> Housing Types:
@@ -4100,14 +4108,14 @@
                             </div>
                         </div><!--end details for Tapedowns-->
                         <div class="form-group" ng-if="view.DEPval == 'edit'">
-                            <label class="col-md-3 col-md-offset-1 control-label">Tapedowns:</label>
+                            <label class="col-md-4 control-label">Tapedowns:</label>
                             <div class="col-md-6"></div>
                             <button type="button" class="col-md-1 borderLess pull-left" tooltip-placement="left" tooltip-append-to-body="false" uib-tooltip="These elevations and tape down data are used for both field activities and final products. Please pay attention to how your data is entered.">
                                 <span class="glyphicon glyphicon-question-sign"></span>
                             </button>
                             <div class="col-md-12">
                                 <!--start add tapedown area -->
-                                <div ng-if="OPsPresent" class="col-md-8 pull-right">
+                                <div ng-if="OPsPresent" class="col-md-9 pull-right">
                                     <label class="col-md-4 control-label">Datum Locations:</label>
                                     <div class="col-md-6">
                                         <div isteven-multi-select
@@ -4202,7 +4210,7 @@
                             <div class="col-md-4">{{aSensStatus.sensor_elevation || '--'}}</div>
                         </div>
                         <!--sensor elevation (edit)-->
-                        <div ng-if="OPsPresent && view.DEPval == 'edit'" class="form-group">
+                        <div class="form-group" ng-if="OPsPresent && view.DEPval == 'edit'">
                             <label class="col-md-4 col-md-offset-1 control-label">
                                 <button type="button" class="help-btn" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Displayed publicly.">
                                     <span class="glyphicon glyphicon-eye-open"></span>
@@ -4288,7 +4296,7 @@
                         <!-- Vented (only if Sensor Type is Pressure Transducer) (edit)-->
                         <div ng-show="(aSensor.sensor_type_id == 1 || depStuffCopy[0].sensor_type_id == 1) && view.DEPval == 'edit'">
                             <div class="form-group">
-                                <label class="col-md-3 col-md-offset-1 control-label">
+                                <label class="col-md-4 control-label">
                                     <button type="button" class="help-btn" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Displayed publicly.">
                                         <span class="glyphicon glyphicon-eye-open"></span>
                                     </button> Vented:
@@ -4311,7 +4319,7 @@
                         </div>
                         <!-- Deployment Type: (edit) -->
                         <div class="form-group" ng-if="view.DEPval == 'edit'">
-                            <label class="col-md-3 col-md-offset-1 control-label">
+                            <label class="col-md-4 control-label">
                                 <button type="button" class="help-btn" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Displayed publicly.">
                                     <span class="glyphicon glyphicon-eye-open"></span>
                                 </button> Deployment Type:
@@ -4331,7 +4339,7 @@
                         </div>
                         <!-- Location Description: (edit) -->
                         <div class="form-group" ng-if="view.DEPval == 'edit'" ng-class="{'has-error':editDeployedForm.location_description.$invalid && editDeployedForm.location_description.$dirty}">
-                            <label class="col-md-3 col-md-offset-1 control-label">
+                            <label class="col-md-4 control-label">
                                 <button type="button" class="help-btn" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Displayed publicly.">
                                     <span class="glyphicon glyphicon-eye-open"></span>
                                 </button> Location Description:
@@ -4339,14 +4347,14 @@
                             <div class="col-md-6">
                                 <textarea class="form-control" name="location_description" type="text" rows="3" ng-model="depStuffCopy[0].location_description" />
                             </div>
-                            <button type="button" class="col-md-1 borderLess pull-left" tooltip-placement="right" tooltip-append-to-body="false" uib-tooltip="Please be specific so someone else can find this sensor later. This field is public.">
+                            <button type="button" class="col-md-1 borderLess pull-left" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Please be specific so someone else can find this sensor later. This field is public.">
                                 <span class="glyphicon glyphicon-question-sign"></span>
                             </button>
                         </div>
 
                         <!-- Interval: -->
                         <div class="form-group" ng-show="view.DEPval == 'edit'">
-                            <label class="col-md-3 control-label"></label>
+                            <label class="col-md-4"></label>
                             <div class="col-md-6 col-md-offset-1" style="padding-top:5px;">
                                 <span class="radio-inline">
                                     <input type="radio" name="intervalType" ng-model="IntervalType.type" value="Minutes" />Minutes
@@ -4363,7 +4371,7 @@
                         </div>
                         <!--Interval (edit)-->
                         <div class="form-group" ng-if="view.DEPval == 'edit'">
-                            <label class="col-md-3 col-md-offset-1 control-label">
+                            <label class="col-md-4 control-label">
                                 <button type="button" class="help-btn" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Displayed publicly.">
                                     <span class="glyphicon glyphicon-eye-open"></span>
                                 </button> Interval:
@@ -4380,7 +4388,7 @@
                         </div>
                         <!-- Deploy Date*: (edit) -->
                         <div class="form-group" ng-class="{'has-error':editDeployedForm.time_stamp.$invalid && editDeployedForm.time_stamp.$dirty}" ng-if="view.DEPval == 'edit'">
-                            <label class="col-md-3 col-md-offset-1 control-label topPad">
+                            <label class="col-md-4 control-label topPad">
                                 <button type="button" class="help-btn" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Displayed publicly.">
                                     <span class="glyphicon glyphicon-eye-open"></span>
                                 </button> Deploy Date:
@@ -4403,7 +4411,7 @@
                         </div>
                         <!-- Deploy timezone*: (edit)-->
                         <div class="form-group" ng-if="view.DEPval == 'edit'">
-                            <label class="col-md-3 col-md-offset-1 req control-label">
+                            <label class="col-md-4 req control-label">
                                 <button type="button" class="help-btn" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Displayed publicly.">
                                     <span class="glyphicon glyphicon-eye-open"></span>
                                 </button> Time Zone:
@@ -4428,7 +4436,7 @@
                         </div>
                         <!-- Note: (edit)-->
                         <div class="form-group" ng-if="view.DEPval == 'edit'">
-                            <label class="col-md-3 col-md-offset-1 control-label">
+                            <label class="col-md-4 control-label">
                                 <button type="button" class="help-btn" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Displayed publicly.">
                                     <span class="glyphicon glyphicon-eye-open"></span>
                                 </button> Note:
@@ -4445,7 +4453,7 @@
                         </div>
                         <!-- Deploy Member: (edit) -->
                         <div class="form-group" ng-if="view.DEPval == 'edit'">
-                            <label class="col-md-3 col-md-offset-1 control-label">
+                            <label class="col-md-4 control-label">
                                 <button type="button" class="help-btn" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Displayed publicly.">
                                     <span class="glyphicon glyphicon-eye-open"></span>
                                 </button> Deploy Member:
@@ -4672,13 +4680,13 @@
                                     </button>
                                 </div>
 
-                                <!-- show button for Chopper if  and file is present  ng-if="aFile.filetype_id === 2 && (sensor.sensor_type_id == 1 && (sensor.deployment_type_id == 1 || sensor.deployment_type_id == 2 || sensor.deployment_type_id == 3))" -->
+                                <!-- show button for Chopper if  and file is present  ng-if="aFile.filetype_id === 2 && (sensor.sensor_type_id == 1 && (sensor.deployment_type_id == 1 || sensor.deployment_type_id == 2 || sensor.deployment_type_id == 3))"-->
                                 <div class="form_group" ng-if="aFile.file_id == undefined && aFile.filetype_id == 2 && aSensor.sensor_type_id == 1 && aSensor.deployment_type_id < 4" style="padding-top: 10px;padding-bottom: 10px;">
                                     <label class="col-md-4 control-label"></label>
                                     <div class="col-md-4 input-group" style="padding-right:14px;padding-left:14px">
                                         <button type="button" class="btn btn-primary pull-left" ng-click="runChopper()">Preview Data</button>
-                                        <button type="button" style="margin-top:4%" class="col-md-1 borderLess" tooltip-placement="right-top" tooltip-append-to-body="false"
-                                                uib-tooltip="Upload a csv file outputted by HoboWare or TruWare software. (These refer to the specific csv files that the script will ingest for Hobo and TruBlue respectively)">
+                                        <button type="button" style="margin-top:4%" class="col-md-1 borderLess" tooltip-placement="right-top" tooltip-append-to-body="false" tooltip-class="tooltip-wide"
+                                                uib-tooltip="Upload a csv file outputted by HoboWare or TruWare software. (These refer to the specific csv files that the script will ingest for Hobo and TruBlue respectively). Depending on the size of the csv, this process can take up to a few minutes to run. Ensure that the sensor has all required fields populated first.">
                                             <span class="glyphicon glyphicon-question-sign"></span>
                                         </button>
                                         <div ng-show="smlallLoaderGo"><img src="images/loading1.gif" /></div>
@@ -5171,7 +5179,7 @@
                 <label>Retrieval Information</label>
                 <!-- Status Type:* -->
                 <div class="form-group" ng-class="{'has-error':SensorFormR.status_type_id.$invalid && SensorFormR.status_type_id.$dirty}">
-                    <label class="col-md-3 control-label req" for="status_type_id">
+                    <label class="col-md-5 control-label req" for="status_type_id">
                         <button type="button" class="help-btn" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Displayed publicly.">
                             <span class="glyphicon glyphicon-eye-open"></span>
                         </button> Status:
@@ -5189,7 +5197,7 @@
 
                 <!-- Collection Condition:* -->
                 <div class="form-group" ng-class="{'has-error':SensorFormR.inst_collection_id.$invalid && SensorFormR.inst_collection_id.$dirty}">
-                    <label class="col-md-3 control-label req" for="inst_collection_id">
+                    <label class="col-md-5 control-label req" for="inst_collection_id">
                         <button type="button" class="help-btn" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Displayed publicly.">
                             <span class="glyphicon glyphicon-eye-open"></span>
                         </button> Collection Conditions:
@@ -5207,7 +5215,7 @@
 
                 <!-- Note: -->
                 <div class="form-group">
-                    <label class="col-md-3 control-label" for="notes">
+                    <label class="col-md-5 control-label" for="notes">
                         <button type="button" class="help-btn" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Displayed publicly.">
                             <span class="glyphicon glyphicon-eye-open"></span>
                         </button> Note:
@@ -5219,7 +5227,7 @@
 
                 <!-- Retrieve Time: * -->
                 <div class="form-group" ng-class="{'has-error':SensorFormR.time_stamp.$invalid && SensorFormR.time_stamp.$dirty}">
-                    <label class="col-md-3 control-label req" style="margin-top:3%" for="time_stamp">
+                    <label class="col-md-5 control-label req" style="margin-top:3%" for="time_stamp">
                         <button type="button" class="help-btn" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Displayed publicly.">
                             <span class="glyphicon glyphicon-eye-open"></span>
                         </button> Date and Time:
@@ -5237,7 +5245,7 @@
 
                 <!-- Time Zone:* -->
                 <div class="form-group">
-                    <label class="col-md-3 control-label" for="time_zone">
+                    <label class="col-md-5 control-label" for="time_zone">
                         <button type="button" class="help-btn" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Displayed publicly.">
                             <span class="glyphicon glyphicon-eye-open"></span>
                         </button> Time Zone:
@@ -5353,17 +5361,17 @@
                                 </tbody>
                             </table>
                             <!-- Sensor status fields for tapedown -->
-                            <div class="col-md-6">
+                            <div class="col-md-10">
                                 <div class="form-group" style="margin-bottom:0">
                                     <label class="col-md-6 control-label" for="sensor_elevation">
                                         <button type="button" class="help-btn" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Displayed publicly.">
                                             <span class="glyphicon glyphicon-eye-open"></span>
                                         </button> Sensor Elevation:
                                     </label>
-                                    <div class="col-md-6">
+                                    <div class="col-md-5">
                                         <input class="form-control" ng-keypress="isNum($event)" name="sensor_elevation" ng-model="aRetrieval.sensor_elevation" type="text" />
                                     </div>
-                                    <button type="button" class="col-md-1 borderLess pull-left" tooltip-placement="right-top" tooltip-append-to-body="false" uib-tooltip="Using the offset correction, elevation of the sensor orifice.">
+                                    <button type="button" class="col-md-1 borderLess pull-left" tooltip-placement="right-top" tooltip-append-to-body="false" uib-tooltip="Using the offset correction, elevation of the sensor orifice." tooltip-class="tooltip-wide">
                                         <span class="glyphicon glyphicon-question-sign"></span>
                                     </button>
                                 </div>
@@ -5374,10 +5382,10 @@
                                             <span class="glyphicon glyphicon-eye-open"></span>
                                         </button> Water Surface Elevation:
                                     </label>
-                                    <div class="col-md-6">
+                                    <div class="col-md-5">
                                         <input class="form-control" ng-keypress="isNum($event)" name="ws_elevation" ng-model="aRetrieval.ws_elevation" type="text" />
                                     </div>
-                                    <button type="button" class="col-md-1 borderLess pull-left" tooltip-placement="right-top" tooltip-append-to-body="false" uib-tooltip="Using the water surface tape down, elevation of the water surface.">
+                                    <button type="button" class="col-md-1 borderLess pull-left" tooltip-placement="right-top" tooltip-append-to-body="false" uib-tooltip="Using the water surface tape down, elevation of the water surface." tooltip-class="tooltip-wide">
                                         <span class="glyphicon glyphicon-question-sign"></span>
                                     </button>
                                 </div>
@@ -5388,10 +5396,10 @@
                                             <span class="glyphicon glyphicon-eye-open"></span>
                                         </button> Ground Elevation:
                                     </label>
-                                    <div class="col-md-6">
+                                    <div class="col-md-5">
                                         <input class="form-control" ng-keypress="isNum($event)" name="gs_elevation" ng-model="aRetrieval.gs_elevation" type="text" />
                                     </div>
-                                    <button type="button" class="col-md-1 borderLess pull-left" tooltip-placement="right-top" tooltip-append-to-body="false" uib-tooltip="Using the ground surface tape down, elevation of the ground surface.">
+                                    <button type="button" class="col-md-1 borderLess pull-left" tooltip-placement="right-top" tooltip-append-to-body="false" uib-tooltip="Using the ground surface tape down, elevation of the ground surface." tooltip-class="tooltip-wide">
                                         <span class="glyphicon glyphicon-question-sign"></span>
                                     </button>
                                 </div>
@@ -5402,7 +5410,7 @@
                                             <span class="glyphicon glyphicon-eye-open"></span>
                                         </button> In feet above:
                                     </label>
-                                    <div class="col-md-6">
+                                    <div class="col-md-5">
                                         <select class="form-control" id="vdatum_id" name="vdatum_id" ng-model="aRetrieval.vdatum_id"
                                                 ng-options="vd.datum_id as vd.datum_abbreviation for vd in vertDatumList">
                                             <option value=""></option>
@@ -5419,7 +5427,7 @@
                 <!-- -------------------------- END TAPEDOWN SECTION --------------------------------  -->
                 <!-- Retrieve Member: -->
                 <div class="form-group">
-                    <label class="col-md-3 control-label">
+                    <label class="col-md-5 control-label">
                         <button type="button" class="help-btn" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Displayed publicly.">
                             <span class="glyphicon glyphicon-eye-open"></span>
                         </button> Retrieve Member:
@@ -5990,7 +5998,7 @@
                         </div>
                         <!-- Status Type:*(edit) -->
                         <div class="form-group" ng-if="view.RETval == 'edit'">
-                            <label class="col-md-4 col-md-offset-1 control-label req">
+                            <label class="col-md-5 control-label req">
                                 <button type="button" class="help-btn" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Displayed publicly.">
                                     <span class="glyphicon glyphicon-eye-open"></span>
                                 </button> Status:
@@ -6012,7 +6020,7 @@
                         </div>
                         <!-- Collection Condition:* (edit)-->
                         <div class="form-group" ng-if="view.RETval == 'edit'">
-                            <label class="col-md-4 col-md-offset-1 control-label req" for="inst_collection_id">
+                            <label class="col-md-5 control-label req" for="inst_collection_id">
                                 <button type="button" class="help-btn" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Displayed publicly.">
                                     <span class="glyphicon glyphicon-eye-open"></span>
                                 </button> Collection Conditions:
@@ -6035,7 +6043,7 @@
                         </div>
                         <!-- Note:(edit) -->
                         <div class="form-group" ng-if="view.RETval == 'edit'">
-                            <label class="col-md-4 col-md-offset-1 control-label" for="notes">
+                            <label class="col-md-5 control-label" for="notes">
                                 <button type="button" class="help-btn" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Displayed publicly.">
                                     <span class="glyphicon glyphicon-eye-open"></span>
                                 </button> Note:
@@ -6052,7 +6060,7 @@
                         </div>
                         <!-- Retrieve Date: *(edit) -->
                         <div class="form-group" ng-if="view.RETval == 'edit'">
-                            <label class="col-md-4 col-md-offset-1 control-label topPad">
+                            <label class="col-md-5 control-label topPad">
                                 <button type="button" class="help-btn" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Displayed publicly.">
                                     <span class="glyphicon glyphicon-eye-open"></span>
                                 </button> Retrieve Date:
@@ -6074,7 +6082,7 @@
                         </div>
                         <!-- Timezone*: (edit)-->
                         <div class="form-group" ng-if="view.RETval == 'edit'">
-                            <label class="col-md-4 col-md-offset-1 req control-label">
+                            <label class="col-md-5 req control-label">
                                 <button type="button" class="help-btn" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Displayed publicly.">
                                     <span class="glyphicon glyphicon-eye-open"></span>
                                 </button> Time Zone:
@@ -6127,13 +6135,13 @@
                         </div><!--end tapedown detail -->
                         <!-- tapedown (edit)-->
                         <div class="form-group" ng-if="view.RETval == 'edit'">
-                            <label class="col-md-4 col-md-offset-1 control-label">Tapedowns:</label>
+                            <label class="col-md-5 control-label">Tapedowns:</label>
                             <div class="col-md-6"></div>
                             <button type="button" class="col-md-1 borderLess pull-left" tooltip-placement="left" tooltip-append-to-body="false" uib-tooltip="These elevations and tape down data are used for both field activities and final products. Please pay attention to how your data is entered.">
                                 <span class="glyphicon glyphicon-question-sign"></span>
                             </button>
                             <div class="col-md-12">
-                                <div ng-if="OPsPresent" class="col-md-8 pull-right">
+                                <div ng-if="OPsPresent" class="col-md-10 pull-right">
                                     <label class="col-md-4 control-label">Datum Locations:</label>
                                     <div class="col-md-6">
                                         <div isteven-multi-select
@@ -6301,7 +6309,7 @@
                         </div>
                         <!-- Retrieve Member: (edit) -->
                         <div class="form-group" ng-if="view.RETval == 'edit'">
-                            <label class="col-md-4 col-md-offset-1 control-label">
+                            <label class="col-md-5 control-label">
                                 <button type="button" class="help-btn" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Displayed publicly.">
                                     <span class="glyphicon glyphicon-eye-open"></span>
                                 </button> Member:
@@ -6529,8 +6537,8 @@
                                     <label class="col-md-4 control-label"></label>
                                     <div class="col-md-4 input-group" style="padding-right:14px;padding-left:14px">
                                         <button type="button" class="btn btn-primary pull-left" ng-click="runChopper()">Preview Data</button>
-                                        <button type="button" style="margin-top:4%" class="col-md-1 borderLess" tooltip-placement="right-top" tooltip-append-to-body="false"
-                                                uib-tooltip="Upload a csv file outputted by HoboWare or TruWare software. (These refer to the specific csv files that the script will ingest for Hobo and TruBlue respectively)">
+                                        <button type="button" style="margin-top:4%" class="col-md-1 borderLess" tooltip-placement="right-top" tooltip-append-to-body="false" tooltip-class="tooltip-wide"
+                                                uib-tooltip="Upload a csv file outputted by HoboWare or TruWare software. (These refer to the specific csv files that the script will ingest for Hobo and TruBlue respectively). Depending on the size of the csv, this process can take up to a few minutes to run. Ensure the sensor has all required fields populated first.">
                                             <span class="glyphicon glyphicon-question-sign"></span>
                                         </button>
                                         <div ng-show="smlallLoaderGo"><img src="images/loading1.gif" /></div>
@@ -6541,7 +6549,6 @@
                                     <!-- highchart goes here -->
                                     <hc-chart id="chopperChart2" options="chartOptions2"></hc-chart>
                                 </div>
-
                                 <!-- Good Data Start Time* (data) -->
                                 <div ng-if="aFile.filetype_id === 2" class="form-group" ng-class="{'has-error':DepSenFILEForm.good_start.$invalid && DepSenFILEForm.good_start.$dirty}" style="margin:0;padding:0">
                                     <label class="col-md-4 control-label req" for="good_start" style="margin-top:4%">
@@ -6732,7 +6739,6 @@
                                 <div ng-if="stormSection">
                                     <div ng-if="eventDataFiles.length > 0">
                                         <h4 style="margin-top:1em;">Select the raw csv barometric sensor file that you would like to use.</h4>
-
                                         <table class="table" style="display:inline-block;overflow:auto;">
                                             <thead>
                                                 <tr>

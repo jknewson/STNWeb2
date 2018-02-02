@@ -1145,6 +1145,27 @@
                 }
             };
 
+            // remove all the related stuff from this sensor
+            var extractJustInstrumentForPUT = function (fullSensor) {
+                var basicInstrument = angular.copy(fullSensor);
+                var returnInstrument = {};
+                returnInstrument.instrument_id = basicInstrument.instrument_id;
+                if (basicInstrument.sensor_type_id) returnInstrument.sensor_type_id = basicInstrument.sensor_type_id;//sensor_type_id
+                if (basicInstrument.deployment_type_id) returnInstrument.deployment_type_id = basicInstrument.deployment_type_id;//deployment_type_id
+                if (basicInstrument.location_description) returnInstrument.location_description = basicInstrument.location_description;//location_description
+                if (basicInstrument.serial_number) returnInstrument.serial_number = basicInstrument.serial_number;//serial_number
+                if (basicInstrument.housing_serial_number) returnInstrument.housing_serial_number = basicInstrument.housing_serial_number;//housing_serial_number
+                if (basicInstrument.interval) returnInstrument.interval = basicInstrument.interval;//interval
+                if (basicInstrument.site_id) returnInstrument.site_id = basicInstrument.site_id; //site_id
+                if (basicInstrument.event_id) returnInstrument.event_id = basicInstrument.event_id; //event_id
+                if (basicInstrument.inst_collection_id) returnInstrument.inst_collection_id = basicInstrument.inst_collection_id;//inst_collection_id
+                if (basicInstrument.housing_type_id) returnInstrument.housing_type_id = basicInstrument.housing_type_id;//housing_type_id
+                if (basicInstrument.sensor_brand_id) returnInstrument.sensor_brand_id = basicInstrument.sensor_brand_id; //sensor_brand_id
+                if (basicInstrument.vented) returnInstrument.vented = basicInstrument.vented;//vented
+                if (basicInstrument.last_updated) returnInstrument.last_updated = basicInstrument.last_updated; //last_updated
+                if (basicInstrument.last_updated_by) returnInstrument.last_updated_by = basicInstrument.last_updated_by;//last_updated_by
+                return returnInstrument;
+            }
             //save aSensor
             $scope.save = function (valid) {
                 if (valid) {
@@ -1161,7 +1182,8 @@
                     dealWithTimeStampb4Send('saving'); //UTC or local?
                     $http.defaults.headers.common.Authorization = 'Basic ' + $cookies.get('STNCreds');
                     $http.defaults.headers.common.Accept = 'application/json';
-                    INSTRUMENT.update({ id: $scope.depStuffCopy[0].instrument_id }, $scope.depStuffCopy[0]).$promise.then(function (response) {
+                    var basicInstrument = extractJustInstrumentForPUT($scope.depStuffCopy[0]);
+                    INSTRUMENT.update({ id: $scope.depStuffCopy[0].instrument_id }, basicInstrument).$promise.then(function (response) {
                         updatedSensor = response;
                         updatedSensor.deploymentType = $scope.depStuffCopy[0].deployment_type_id > 0 ? $scope.depTypeList.filter(function (d) { return d.deployment_type_id == $scope.depStuffCopy[0].deployment_type_id; })[0].method : '';
                         updatedSensor.housingType = $scope.depStuffCopy[0].housing_type_id > 0 ? $scope.houseTypeList.filter(function (h) { return h.housing_type_id == $scope.depStuffCopy[0].housing_type_id; })[0].type_name : '';
@@ -1648,6 +1670,28 @@
                 $uibModalInstance.dismiss('cancel');
             };
 
+            // remove all the related stuff from this sensor
+            var extractJustInstrumentForPUT = function (fullSensor) {
+                var basicInstrument = angular.copy(fullSensor);
+                var returnInstrument = {};
+                returnInstrument.instrument_id = basicInstrument.instrument_id;
+                if (basicInstrument.sensor_type_id) returnInstrument.sensor_type_id = basicInstrument.sensor_type_id;//sensor_type_id
+                if (basicInstrument.deployment_type_id) returnInstrument.deployment_type_id = basicInstrument.deployment_type_id;//deployment_type_id
+                if (basicInstrument.location_description) returnInstrument.location_description = basicInstrument.location_description;//location_description
+                if (basicInstrument.serial_number) returnInstrument.serial_number = basicInstrument.serial_number;//serial_number
+                if (basicInstrument.housing_serial_number) returnInstrument.housing_serial_number = basicInstrument.housing_serial_number;//housing_serial_number
+                if (basicInstrument.interval) returnInstrument.interval = basicInstrument.interval;//interval
+                if (basicInstrument.site_id) returnInstrument.site_id = basicInstrument.site_id; //site_id
+                if (basicInstrument.event_id) returnInstrument.event_id = basicInstrument.event_id; //event_id
+                if (basicInstrument.inst_collection_id) returnInstrument.inst_collection_id = basicInstrument.inst_collection_id;//inst_collection_id
+                if (basicInstrument.housing_type_id) returnInstrument.housing_type_id = basicInstrument.housing_type_id;//housing_type_id
+                if (basicInstrument.sensor_brand_id) returnInstrument.sensor_brand_id = basicInstrument.sensor_brand_id; //sensor_brand_id
+                if (basicInstrument.vented) returnInstrument.vented = basicInstrument.vented;//vented
+                if (basicInstrument.last_updated) returnInstrument.last_updated = basicInstrument.last_updated; //last_updated
+                if (basicInstrument.last_updated_by) returnInstrument.last_updated_by = basicInstrument.last_updated_by;//last_updated_by
+                return returnInstrument;
+            }
+
             //retrieve the sensor
             $scope.retrieveS = function (valid) {
                 if (valid) {
@@ -1677,7 +1721,9 @@
                         $http.defaults.headers.common.Authorization = 'Basic ' + $cookies.get('STNCreds');
                         $http.defaults.headers.common.Accept = 'application/json';
                         var updatedSensor = {}; var createRetSens = {};
-                        INSTRUMENT.update({ id: $scope.aSensor.instrument_id }, $scope.aSensor).$promise.then(function (response) {
+                        var justTheInstrument = extractJustInstrumentForPUT($scope.aSensor);
+
+                        INSTRUMENT.update({ id: $scope.aSensor.instrument_id }, justTheInstrument).$promise.then(function (response) {
                             //create instrumentstatus too need: status_type_id and instrument_id
                             updatedSensor = response;
                             updatedSensor.deploymentType = $scope.aSensor.deploymentType;
@@ -2073,6 +2119,28 @@
                 }
             };
 
+            // remove all the related stuff from this sensor
+            var extractJustInstrumentForPUT = function (fullSensor) {
+                var basicInstrument = angular.copy(fullSensor);
+                var returnInstrument = {};
+                returnInstrument.instrument_id = basicInstrument.instrument_id;
+                if (basicInstrument.sensor_type_id) returnInstrument.sensor_type_id = basicInstrument.sensor_type_id;//sensor_type_id
+                if (basicInstrument.deployment_type_id) returnInstrument.deployment_type_id = basicInstrument.deployment_type_id;//deployment_type_id
+                if (basicInstrument.location_description) returnInstrument.location_description = basicInstrument.location_description;//location_description
+                if (basicInstrument.serial_number) returnInstrument.serial_number = basicInstrument.serial_number;//serial_number
+                if (basicInstrument.housing_serial_number) returnInstrument.housing_serial_number = basicInstrument.housing_serial_number;//housing_serial_number
+                if (basicInstrument.interval) returnInstrument.interval = basicInstrument.interval;//interval
+                if (basicInstrument.site_id) returnInstrument.site_id = basicInstrument.site_id; //site_id
+                if (basicInstrument.event_id) returnInstrument.event_id = basicInstrument.event_id; //event_id
+                if (basicInstrument.inst_collection_id) returnInstrument.inst_collection_id = basicInstrument.inst_collection_id;//inst_collection_id
+                if (basicInstrument.housing_type_id) returnInstrument.housing_type_id = basicInstrument.housing_type_id;//housing_type_id
+                if (basicInstrument.sensor_brand_id) returnInstrument.sensor_brand_id = basicInstrument.sensor_brand_id; //sensor_brand_id
+                if (basicInstrument.vented) returnInstrument.vented = basicInstrument.vented;//vented
+                if (basicInstrument.last_updated) returnInstrument.last_updated = basicInstrument.last_updated; //last_updated
+                if (basicInstrument.last_updated_by) returnInstrument.last_updated_by = basicInstrument.last_updated_by;//last_updated_by
+                return returnInstrument;
+            }
+
             // deploy edit
             //edit button clicked. make copy of deployed info 
             $scope.wannaEditDep = function () {
@@ -2092,7 +2160,8 @@
                     dealWithTimeStampb4Send('deployed'); //UTC or local?                    
                     $http.defaults.headers.common.Authorization = 'Basic ' + $cookies.get('STNCreds');
                     $http.defaults.headers.common.Accept = 'application/json';
-                    INSTRUMENT.update({ id: $scope.depStuffCopy[0].instrument_id }, $scope.depStuffCopy[0]).$promise.then(function (response) {
+                    var basicInstrumentD = extractJustInstrumentForPUT($scope.depStuffCopy[0]);
+                    INSTRUMENT.update({ id: $scope.depStuffCopy[0].instrument_id }, basicInstrumentD).$promise.then(function (response) {
                         updatedSensor = response;
                         updatedSensor.deploymentType = $scope.depStuffCopy[0].deployment_type_id > 0 ? $scope.depTypeList.filter(function (d) { return d.deployment_type_id === $scope.depStuffCopy[0].deployment_type_id; })[0].method : '';
                         updatedSensor.housingType = $scope.depStuffCopy[0].housing_type_id > 0 ? $scope.houseTypeList.filter(function (h) { return h.housing_type_id === $scope.depStuffCopy[0].housing_type_id; })[0].type_name : '';
@@ -2191,7 +2260,8 @@
                     // $scope.retStuffCopy[1].time_stamp = new Date($scope.retStuffCopy[1].time_stamp);//datetime is annoying
                     $http.defaults.headers.common.Authorization = 'Basic ' + $cookies.get('STNCreds');
                     $http.defaults.headers.common.Accept = 'application/json';
-                    INSTRUMENT.update({ id: $scope.retStuffCopy[0].instrument_id }, $scope.retStuffCopy[0]).$promise.then(function (response) {
+                    var basicInstrumentR = extractJustInstrumentForPUT($scope.retStuffCopy[0]);
+                    INSTRUMENT.update({ id: $scope.retStuffCopy[0].instrument_id }, basicInstrumentR).$promise.then(function (response) {
                         updatedRetSensor = response;
                         updatedRetSensor.deploymentType = $scope.retStuffCopy[0].deployment_type_id > 0 ? $scope.depTypeList.filter(function (d) { return d.deployment_type_id === $scope.retStuffCopy[0].deployment_type_id; })[0].method : '';
                         updatedRetSensor.housingType = $scope.retStuffCopy[0].housing_type_id > 0 ? $scope.houseTypeList.filter(function (h) { return h.housing_type_id === $scope.retStuffCopy[0].housing_type_id; })[0].type_name : '';
