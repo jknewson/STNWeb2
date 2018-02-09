@@ -1,0 +1,46 @@
+[
+  {
+    "name": "STNWeb",
+    "organization": "U.S. Geological Survey",
+    "description": "Data management application for the USGS Short-Term Network (STN) database",
+    "version": "v2.2.0",
+    "status": "Production"
+
+    "permissions": {
+      "usageType": "openSource",
+      "licenses": [
+        {
+          "name": "Public Domain",
+          "URL": "https://github.com/USGS-WiM/STNWeb/blob/master/LICENSE.md"
+        }
+      ]
+    },
+
+    "homepageURL": "https://stn.wim.usgs.gov/stnweb/",
+    "downloadURL": "https://github.com/USGS-WiM/STNWeb/archive/master.zip",
+    "disclaimerURL": "https://github.com/USGS-WiM/STNWeb/blob/master/LICENSE.md",
+    "repositoryUrl": "https://github.com/USGS-WiM/STNWeb",
+    "vcs": "git",
+
+    "laborHours": null,
+
+    "tags": [
+      "data management",
+      "stn",
+      "short-term network"
+    ],
+
+    "languages": [
+      "javascript"
+    ],
+
+    "contact": {
+      "name": "Tonia Roddick",
+      "email": "troddick@usgs.gov"
+    },
+
+    "date": {
+      "metadataLastUpdated": "2018-02-09"
+    }
+  }
+]
