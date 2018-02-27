@@ -5,8 +5,8 @@
     var STNResource = angular.module('STNResource', ['ngResource']);
 
     // ***** SWITCH BACK AND FORTH DEPENDING ON IF TEST OR PRODUCTION ***
-    var rootURL = "https://stn.wim.usgs.gov/STNServices";
-    //var rootURL = "https://stntest.wim.usgs.gov/STNServices2";
+    /* var rootURL = "https://stn.wim.usgs.gov/STNServices"; */
+    var rootURL = "https://stntest.wim.usgs.gov/STNServices2";
     // var rootURL = "http://localhost/STNServices2";
 
     // GEOCODE https://geocoding.geo.census.gov/geocoder/geographies/coordinates?benchmark=4&vintage=4&format=json
@@ -70,8 +70,8 @@
                 getDFApproval: { method: 'GET', cache: false, isArray: false, url: rootURL + '/DataFiles/:id/Approval.json' },
                 getUnapprovedDFs: { method: 'GET', isArray: true, cache: false }, //?IsApproved={approved}&Event={eventId}&Counties={counties}&State={state}
                 getEventDataView: { method: 'GET', isArray: true, cache: false, url: rootURL + '/DataFileView?EventId=:eventId' },
-                runStormScript: { method: 'GET', url: rootURL + '/DataFiles/RunStormScript?SeaDataFileID=:seaDFID&AirDataFileID=:airDFID&Hertz=:hertz&Username=:username' },
-                runAirScript: { method: 'GET', url: rootURL + '/DataFiles/RunAirScript?AirDataFileID=:airDFID&Username=:username' },
+                runStormScript: { method: 'GET', url: rootURL + '/DataFiles/RunStormScript?SeaDataFileID=:seaDFID&AirDataFileID=:airDFID&Hertz=:hertz&DaylightSavings=:daylightSavings&Username=:username' },
+                runAirScript: { method: 'GET', url: rootURL + '/DataFiles/RunAirScript?AirDataFileID=:airDFID&DaylightSavings=:daylightSavings&Username=:username' },
                 runChopperScript: { method: 'POST', url: rootURL + '/Files/RunChopperScript', headers: { 'Content-Type': undefined }, transformRequest: angular.identity, cache: false, isArray: false }, //?SensorId=:sensorId&FileName=:fileName
                 approveDF: { method: 'POST', cache: false, isArray: false, params: { id: '@id' }, url: rootURL + '/datafiles/:id/Approve.json' }, //posts an APPROVAL, updates the data file with approval_id and returns APPROVAL
                 approveNWISDF: { method: 'POST', cache: false, isArray: false, params: { id: '@id' }, url: rootURL + '/datafiles/:id/NWISApprove.json' }, //posts an APPROVAL (using EventCoord), updates the data file with approval_id and returns APPROVAL
