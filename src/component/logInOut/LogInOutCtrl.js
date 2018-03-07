@@ -63,13 +63,22 @@
             $scope.serverURL = SERVER_URL;
             $rootScope.environment = ENVIRONMENT;
             $scope.submit = function () {
+                // checking if email was included
+                var userName = $scope.username
+                if (userName.includes('@')) {
+                    var n = userName.indexOf('@');
+                    userName = userName.substring(0, n != -1 ? n : s.length);
+                }
+
+                //userName = userName.substring(0, userName.indexOf('@'));
+
                 //$scope.sub = true;
                 $rootScope.stateIsLoading.showLoading = true;// loading..
                 var postData = {
-                    "username": $scope.username,
+                    "username": userName,
                     "password": $scope.password
                 };
-                var up = $scope.username + ":" + $scope.password;
+                var up = userName + ":" + $scope.password;
                 $http.defaults.headers.common.Authorization = 'Basic ' + btoa(up);
                 $http.defaults.headers.common.Accept = 'application/json';
 
@@ -79,11 +88,11 @@
                         if (user !== undefined) {
                             //set user cookies (cred, username, name, role
                             var usersNAME = user.fname + " " + user.lname;
-                            var enc = btoa($scope.username.concat(":", $scope.password));
+                            var enc = btoa(userName.concat(":", $scope.password));
                             //set expiration on cookies
                             var expireDate = new Date().addHours(8);
                             $cookies.put('STNCreds', enc, { expires: expireDate });
-                            $cookies.put('STNUsername', $scope.username);
+                            $cookies.put('STNUsername', userName);
                             $cookies.put('usersName', usersNAME);
                             $cookies.put('mID', user.member_id);
                             var roleName;
