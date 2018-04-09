@@ -1604,7 +1604,7 @@
                             <div class="col-md-12" ng-if="view.OPval == 'detail'">
                                 <div class="col-md-4"><label>Uncertainty:</label></div>
                                 <div class="col-md-6">
-                                    <div>{{OP.unquantified == 1 ? 'Unquantified' : OP.uncertainty}}<span ng-show="OP.uncertainty"> ft.</span></div>
+                                    <div>{{OP.unquantified == '1' ? 'Unquantified' : OP.uncertainty}}<span ng-show="OP.uncertainty"> ft.</span></div>
                                 </div>
                             </div>
                             <!-- Uncertainty: (edit) -->
@@ -1615,7 +1615,7 @@
                                         <div class="col-md-5" style="padding-left: 0;"><input class="form-control" ng-disabled="opCopy.unquantified==1" ng-keypress="isNum($event)" ng-model="opCopy.uncertainty" type="text" /></div>
                                         <div class="col-md-1" style="text-decoration:underline;padding:0">OR</span></div>
                                         <div class="col-md-5">
-                                            <input type="checkbox" ng-model="opCopy.unquantified" ng-checked="opCopy.unquantified==1" ng-true-value="1" ng-false-value="0" ng-click="UnquantChecked()" />
+                                            <input type="checkbox" ng-model="opCopy.unquantified" ng-checked="opCopy.unquantified=='1'" ng-true-value="'1'" ng-false-value="'0'" ng-click="UnquantChecked()" />
                                             <span style="margin-left:10px">Unquantified</span>
                                         </div>
                                     </div>
