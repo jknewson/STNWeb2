@@ -1711,7 +1711,7 @@
                             <div class="form-group">
                                 <div class="col-md-12">
                                     <button ng-show="view.OPval == 'detail'" type="button" class="btn btn-primary" ng-click="wannaEditOP()">Edit Datum Location</button>
-                                    <button ng-show="view.OPval == 'edit'" class="btn btn-primary" ng-click="save(OPEditForm.$valid)">Save</button>
+                                    <button ng-show="view.OPval == 'edit'" class="btn btn-primary" ng-click="save(OPEditForm.$valid); reloadPage();">Save</button>
                                     <button ng-show="view.OPval == 'edit'" type="button" class="btn btn-warning" ng-click="cancelOPEdit()">Cancel Edit</button>
                                 </div>
                             </div>
