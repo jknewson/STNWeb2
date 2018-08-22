@@ -24,6 +24,7 @@
                 $scope.siteResponse = false;
                 $scope.checkboxModel = {
                     hwmOnly: 0,
+                    housingTypeOne: 0,
                     senOnly: 0,
                     rdgOnly: 0,
                     opDefined: 0
@@ -70,6 +71,7 @@
                     $scope.Chosen.network = thisSearch.NetworkName;
                     $scope.Chosen.survey = thisSearch.HWMSurveyed;
                     $scope.checkboxModel.hwmOnly = thisSearch.HWMOnly;
+                    $scope.checkboxModel.housingTypeOne = thisSearch.HousingTypeOne;
                     $scope.checkboxModel.senOnly = thisSearch.SensorOnly;
                     $scope.checkboxModel.rdgOnly = thisSearch.RDGOnly;
                     $scope.checkboxModel.opDefined = thisSearch.OPDefined;
@@ -79,6 +81,7 @@
                         SensorType: $scope.Chosen.sensor,
                         NetworkName: $scope.Chosen.network,
                         HWMOnly: $scope.checkboxModel.hwmOnly,
+                        HousingTypeOne: $scope.checkboxModel.housingTypeOne,
                         HWMSurveyed: $scope.Chosen.survey,
                         SensorOnly: $scope.checkboxModel.senOnly,
                         RDGOnly: $scope.checkboxModel.rdgOnly,
@@ -109,6 +112,7 @@
                         SensorType: $scope.Chosen.sensor,
                         NetworkName: $scope.Chosen.network,
                         HWMOnly: $scope.checkboxModel.hwmOnly,
+                        HousingTypeOne: $scope.checkboxModel.housingTypeOne,
                         HWMSurveyed: $scope.Chosen.survey,
                         SensorOnly: $scope.checkboxModel.senOnly,
                         RDGOnly: $scope.checkboxModel.rdgOnly,
@@ -120,6 +124,7 @@
                         SensorType: $scope.Chosen.sensor,
                         NetworkName: $scope.Chosen.network,
                         HWMOnly: $scope.checkboxModel.hwmOnly,
+                        HousingTypeOne: $scope.checkboxModel.housingTypeOne,
                         HWMSurveyed: $scope.Chosen.survey,
                         SensorOnly: $scope.checkboxModel.senOnly,
                         RDGOnly: $scope.checkboxModel.rdgOnly,
@@ -153,6 +158,7 @@
                 $scope.clearFilters = function () {
                     $scope.checkboxModel = {
                         hwmOnly: 0,
+                        housingTypeOne: 0,
                         senOnly: 0,
                         rdgOnly: 0,
                         opDefined: 0
