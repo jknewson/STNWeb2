@@ -6,7 +6,7 @@
             <span class="badge pull-right">{{sensorCount.total}}</span>
         </uib-accordion-heading>
         <div class="col-md-12" ng-show="!sessionEventExists" style="border:solid 1px red">To deploy or retrieve a sensor, first choose an Event above.</div>
-        <label class="col-md-9">-- Proposed Sensors --</label>
+        <!-- <label class="col-md-9">-- Proposed Sensors --</label>
         <div class="btn-group pull-right">
             <div class="btn-group">
                 <button type="button" class="borderLess" ng-click="showHideProposed()" tooltip-append-to-body="true" tooltip-placement="left" uib-tooltip="Show/Hide Proposed Sensors">
@@ -25,9 +25,9 @@
                 <button type="button" class="btn btn-primary center-block" ng-click="AddProposed()">Add</button>
             </div>
         </div>
-        <br clear="all" />
+        <br clear="all" /> -->
         <!-- only proposed sensors here -->
-        <div ng-repeat="s in SiteSensors">
+        <!-- <div ng-repeat="s in SiteSensors">
             <div ng-if="s.instrument_status[0].status_type_id == 4">
                 <ul>
                     <li style="list-style:none;padding-bottom: 15px;">
@@ -41,7 +41,7 @@
                     </li>
                 </ul>
             </div>
-        </div>
+        </div> -->
 
         <label class="col-md-9">-- Deployed Sensors --</label>
         <div ng-show="sessionEventExists" class="btn-group pull-right">

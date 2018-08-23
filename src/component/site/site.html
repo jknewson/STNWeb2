@@ -1604,7 +1604,7 @@
                             <div class="col-md-12" ng-if="view.OPval == 'detail'">
                                 <div class="col-md-4"><label>Uncertainty:</label></div>
                                 <div class="col-md-6">
-                                    <div>{{OP.unquantified == 1 ? 'Unquantified' : OP.uncertainty}}<span ng-show="OP.uncertainty"> ft.</span></div>
+                                    <div>{{OP.unquantified == '1' ? 'Unquantified' : OP.uncertainty}}<span ng-show="OP.uncertainty"> ft.</span></div>
                                 </div>
                             </div>
                             <!-- Uncertainty: (edit) -->
@@ -1615,7 +1615,7 @@
                                         <div class="col-md-5" style="padding-left: 0;"><input class="form-control" ng-disabled="opCopy.unquantified==1" ng-keypress="isNum($event)" ng-model="opCopy.uncertainty" type="text" /></div>
                                         <div class="col-md-1" style="text-decoration:underline;padding:0">OR</span></div>
                                         <div class="col-md-5">
-                                            <input type="checkbox" ng-model="opCopy.unquantified" ng-checked="opCopy.unquantified==1" ng-true-value="1" ng-false-value="0" ng-click="UnquantChecked()" />
+                                            <input type="checkbox" ng-model="opCopy.unquantified" ng-checked="opCopy.unquantified=='1'" ng-true-value="'1'" ng-false-value="'0'" ng-click="UnquantChecked()" />
                                             <span style="margin-left:10px">Unquantified</span>
                                         </div>
                                     </div>
@@ -1711,7 +1711,7 @@
                             <div class="form-group">
                                 <div class="col-md-12">
                                     <button ng-show="view.OPval == 'detail'" type="button" class="btn btn-primary" ng-click="wannaEditOP()">Edit Datum Location</button>
-                                    <button ng-show="view.OPval == 'edit'" class="btn btn-primary" ng-click="save(OPEditForm.$valid)">Save</button>
+                                    <button ng-show="view.OPval == 'edit'" class="btn btn-primary" ng-click="save(OPEditForm.$valid); reloadPage();">Save</button>
                                     <button ng-show="view.OPval == 'edit'" type="button" class="btn btn-warning" ng-click="cancelOPEdit()">Cancel Edit</button>
                                 </div>
                             </div>
@@ -4683,10 +4683,11 @@
                                 <!-- show button for Chopper if  and file is present  ng-if="aFile.filetype_id === 2 && (sensor.sensor_type_id == 1 && (sensor.deployment_type_id == 1 || sensor.deployment_type_id == 2 || sensor.deployment_type_id == 3))"-->
                                 <div class="form_group" ng-if="aFile.file_id == undefined && aFile.filetype_id == 2 && aSensor.sensor_type_id == 1 && aSensor.deployment_type_id < 4" style="padding-top: 10px;padding-bottom: 10px;">
                                     <label class="col-md-4 control-label"></label>
-                                    <div class="col-md-4 input-group" style="padding-right:14px;padding-left:14px">
+                                    <div class="col-md-9 col-md-offset-4 input-group" style="padding-right:14px;padding-left:14px">
+                                        <!-- <label class="col-md-5" style="margin-top: 10px;"><input style="margin:0!important;" type="checkbox" class="col-md-1" name="daylightSavingsChop" ng-model="daylightSavingsChop.selected" ng-true-value="'true'" ng-false-value="'false'" /> &nbsp;&nbsp;Daylight Savings?</label> -->
                                         <button type="button" class="btn btn-primary pull-left" ng-click="runChopper()">Preview Data</button>
-                                        <button type="button" style="margin-top:4%" class="col-md-1 borderLess" tooltip-placement="right-top" tooltip-append-to-body="false" tooltip-class="tooltip-wide"
-                                                uib-tooltip="Upload a csv file outputted by HoboWare or TruWare software. (These refer to the specific csv files that the script will ingest for Hobo and TruBlue respectively). Depending on the size of the csv, this process can take up to a few minutes to run. Ensure that the sensor has all required fields populated first.">
+                                        <button type="button" style="float: inherit; margin-left: 15px;" class="col-md-1 borderLess" tooltip-placement="right-top" tooltip-append-to-body="false" tooltip-class="tooltip-wide"
+                                                uib-tooltip="Upload a csv file outputted by HoboWare or TruWare software. (These refer to the specific csv files that the script will ingest for Hobo and TruBlue respectively). Depending on the size of the csv, this process can take up to a few minutes to run. Ensure the sensor has all required fields populated first."> <!--  Check Daylight Savings if data was recorded in Daylight Savings. -->
                                             <span class="glyphicon glyphicon-question-sign"></span>
                                         </button>
                                         <div ng-show="smlallLoaderGo"><img src="images/loading1.gif" /></div>
@@ -6535,13 +6536,14 @@
                                 <!-- show button for Chopper if  and file is present -->
                                 <div class="form_group" ng-if="aFile.file_id == undefined && aFile.filetype_id == 2 && sensor.sensor_type_id == 1 && sensor.deployment_type_id < 4" style="padding-top: 10px;padding-bottom: 10px;">
                                     <label class="col-md-4 control-label"></label>
-                                    <div class="col-md-4 input-group" style="padding-right:14px;padding-left:14px">
-                                        <button type="button" class="btn btn-primary pull-left" ng-click="runChopper()">Preview Data</button>
-                                        <button type="button" style="margin-top:4%" class="col-md-1 borderLess" tooltip-placement="right-top" tooltip-append-to-body="false" tooltip-class="tooltip-wide"
-                                                uib-tooltip="Upload a csv file outputted by HoboWare or TruWare software. (These refer to the specific csv files that the script will ingest for Hobo and TruBlue respectively). Depending on the size of the csv, this process can take up to a few minutes to run. Ensure the sensor has all required fields populated first.">
-                                            <span class="glyphicon glyphicon-question-sign"></span>
-                                        </button>
-                                        <div ng-show="smlallLoaderGo"><img src="images/loading1.gif" /></div>
+                                    <div class="col-md-9 col-md-offset-4 input-group" style="padding-right:14px;padding-left:14px">
+                                            <label class="col-md-5" style="margin-top: 10px;"><input style="margin:0!important;" type="checkbox" class="col-md-1" name="daylightSavingsChop" ng-model="daylightSavingsChop.selected" ng-true-value="'true'" ng-false-value="'false'" /> &nbsp;&nbsp;Daylight Savings?</label>
+                                            <button type="button" class="btn btn-primary pull-left" ng-click="runChopper()">Preview Data</button>
+                                            <button type="button" style="float: inherit; margin-left: 15px;" class="col-md-1 borderLess" tooltip-placement="right-top" tooltip-append-to-body="false" tooltip-class="tooltip-wide"
+                                                    uib-tooltip="Upload a csv file outputted by HoboWare or TruWare software. (These refer to the specific csv files that the script will ingest for Hobo and TruBlue respectively). Depending on the size of the csv, this process can take up to a few minutes to run. Ensure the sensor has all required fields populated first. Check Daylight Savings if data was recorded in Daylight Savings.">
+                                                <span class="glyphicon glyphicon-question-sign"></span>
+                                            </button>
+                                        <div ng-show="smlallLoaderGo" style="display: inline;"><img src="images/loading1.gif" /></div>
                                     </div>
                                 </div>
 
@@ -6729,8 +6731,8 @@
                                     </span>
                                     <span ng-show="(aFile.script_parent == undefined || aFile.script_parent == '') || (aFile.script_parent != undefined && aFile.script_parent == 'true')">
                                         <!-- don't show the button for outputs of other scripts ran -->
-                                        <!-- button to run AIR script if this existing data file is on a air sensor (sensor_type_id == 1 && deployment_type_id == 3 )-->
-                                        <button type="button" class="btn btn-primary" ng-if="aFile.file_id != undefined && aFile.filetype_id === 2 && (sensor.sensor_type_id == 1 && sensor.deployment_type_id == 3)" ng-click="runAirScript()">Process Air Data File</button>
+                                        <!-- button to run AIR script if this existing data file is on a air sensor (sensor_type_id == 1 && deployment_type_id == 3 ) -->
+                                        <button type="button" class="btn btn-primary" ng-if="aFile.file_id != undefined && aFile.filetype_id === 2 && (sensor.sensor_type_id == 1 && sensor.deployment_type_id == 3)" ng-click="showdlSection()">Process Air Data File</button>
                                     </span>
                                 </div>
                                 <div ng-show="fullSenfileIsUploading"><img src="images/fileUpload.gif" /></div>
@@ -6779,6 +6781,9 @@
                                                             uib-tooltip="Select this option if your instrument was sampled at 4hz, otherwise leave unchecked.">
                                                         <span class="glyphicon glyphicon-question-sign"></span>
                                                     </button>
+                                                    <br/>
+                                                    <br clear="all"/>
+                                                    <input style="margin:0!important;" type="checkbox" class="col-md-1" name="daylightSavingsStorm" ng-model="daylightSavingsStorm.selected" ng-true-value="'true'" ng-false-value="'false'" /> Check this box if data was recorded in Daylight Savings?
                                                 </label>
                                             </div>
                                             <div class="col-md-7"><button class="btn btn-primary" ng-click="runStormScript()">Run Script</button></div>
@@ -6788,6 +6793,13 @@
                                         <span>This script requires a barometric sensor data file (at this event) to be used for processing with this water data file.</span>
                                     </div>
                                 </div> <!-- end stormSection -->
+                                <!-- Section for air data file DLS checkbox -->
+                                <div ng-if="dl.showdlSection" style="margin: 15px;">
+                                    <input style="margin:0!important;" type="checkbox" class="col-md-1" name="daylightSavingsAir" ng-model="daylightSavingsAir.selected" ng-true-value="'true'" ng-false-value="'false'" /> Check this box if data was recorded in Daylight Savings?
+                                    <br/>
+                                    <br clear="all"/>
+                                    <button type="button" class="btn btn-primary" ng-click="runAirScript()">Run Script</button>
+                                </div>
                             </fieldset>
                         </form>
                     </div>

@@ -24,6 +24,7 @@
             $scope.checkboxModel = {
                 eventSitesOnly: '1',
                 hwmOnly: '0',
+                housingTypeOne: '0',
                 senOnly: '0',
                 rdgOnly: '0',
                 opDefined: '0'
@@ -44,6 +45,7 @@
                         SensorType: $scope.Chosen.sensor,
                         NetworkName: $scope.Chosen.network,
                         HWMOnly: $scope.checkboxModel.hwmOnly,
+                        HousingTypeOne: $scope.checkboxModel.housingTypeOne, // new checkbox showing only housing type 1
                         HWMSurveyed: $scope.Chosen.survey,
                         SensorOnly: $scope.checkboxModel.senOnly,
                         RDGOnly: $scope.checkboxModel.rdgOnly,
@@ -55,6 +57,7 @@
                         SensorType: $scope.Chosen.sensor,
                         NetworkName: $scope.Chosen.network,
                         HWMOnly: $scope.checkboxModel.hwmOnly,
+                        HousingTypeOne: $scope.checkboxModel.housingTypeOne,
                         HWMSurveyed: $scope.Chosen.survey,
                         SensorOnly: $scope.checkboxModel.senOnly,
                         RDGOnly: $scope.checkboxModel.rdgOnly,
@@ -84,6 +87,7 @@
                         SensorType: $scope.Chosen.sensor,
                         NetworkName: $scope.Chosen.network,
                         HWMOnly: $scope.checkboxModel.hwmOnly,
+                        HousingTypeOne: $scope.checkboxModel.housingTypeOne,
                         HWMSurveyed: $scope.Chosen.survey,
                         SensorOnly: $scope.checkboxModel.senOnly,
                         RDGOnly: $scope.checkboxModel.rdgOnly,
@@ -91,7 +95,7 @@
                     };
 
                     var sp = $rootScope.searchParams;
-                    if (sp.HWMOnly === "0" && sp.HWMSurveyed === null && sp.NetworkName === null && sp.OPDefined === "0" && sp.RDGOnly === "0" && sp.SensorOnly === "0" && sp.SensorType === null && sp.state.length === 0) {
+                    if (sp.HWMOnly === "0" && sp.HousingTypeOne === "0" && sp.HWMSurveyed === null && sp.NetworkName === null && sp.OPDefined === "0" && sp.RDGOnly === "0" && sp.SensorOnly === "0" && sp.SensorType === null && sp.state.length === 0) {
                         spinnerService.hide("mapSpinner");
                         toastr.options.positionClass = "toast-bottom-right";
                         toastr.warning("Please select at least one search parameter.", "Map Filters");
@@ -103,6 +107,7 @@
                         SensorType: $scope.Chosen.sensor,
                         NetworkName: $scope.Chosen.network,
                         HWMOnly: $scope.checkboxModel.hwmOnly,
+                        HousingTypeOne: $scope.checkboxModel.housingTypeOne,
                         HWMSurveyed: $scope.Chosen.survey,
                         SensorOnly: $scope.checkboxModel.senOnly,
                         RDGOnly: $scope.checkboxModel.rdgOnly,
@@ -138,6 +143,7 @@
                 $scope.checkboxModel = {
                     eventSitesOnly: 1,
                     hwmOnly: 0,
+                    housingTypeOne: 0,
                     senOnly: 0,
                     rdgOnly: 0,
                     opDefined: 0

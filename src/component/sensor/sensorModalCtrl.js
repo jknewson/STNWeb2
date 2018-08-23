@@ -47,7 +47,8 @@
                 })
             };
 
-            //$scope.renderer = new Highcharts.Renderer(
+            $scope.daylightSavingsChop = { selected: false};
+
             $scope.runChopper = function () {
                 $scope.chartData = [];
                 $scope.chartOptions1 = {};
@@ -63,11 +64,12 @@
                     var fileParts = {
                         FileEntity: {
                             site_id: $scope.thisSensorSite.site_id,
-                            instrument_id: thisSensor.instrument_id
+                            instrument_id: thisSensor.instrument_id,
+                            description: $scope.daylightSavingsChop.selected // holder of the daylight savings true/false value. Services parsed it out.
                         },
                         File: $scope.aFile.File
                     };
-                    //need to put the fileParts into correct format for send
+                    //need to put the fileParts into correct format for send 
                     var fd = new FormData();
                     fd.append("FileEntity", JSON.stringify(fileParts.FileEntity));
                     fd.append("File", fileParts.File);
@@ -79,8 +81,8 @@
                             var errorMessage = response.Error;
                             var failedChopper = $uibModal.open({
                                 template: '<div class="modal-header"><h3 class="modal-title">Error</h3></div>' +
-                                '<div class="modal-body"><p>There was an error running the chopper.</p><p>Error: {{errorMessage}}</p></div>' +
-                                '<div class="modal-footer"><button class="btn btn-primary" ng-enter="ok()" ng-click="ok()">OK</button></div>',
+                                    '<div class="modal-body"><p>There was an error running the chopper.</p><p>Error: {{errorMessage}}</p></div>' +
+                                    '<div class="modal-footer"><button class="btn btn-primary" ng-enter="ok()" ng-click="ok()">OK</button></div>',
                                 controller: ['$scope', '$uibModalInstance', 'message', function ($scope, $uibModalInstance, message) {
                                     $scope.errorMessage = message;
                                     $scope.ok = function () {
@@ -128,12 +130,12 @@
                                             click: function (event) {
                                                 var pointClick = $uibModal.open({
                                                     template: '<div class="modal-header"><h3 class="modal-title"></h3></div>' +
-                                                    '<div class="modal-body"><p>Would you like to set this ({{thisDate}}) as:</p>' +
-                                                    '<div style="text-align:center;"><span class="radio-inline"><input type="radio" name="whichDate" ng-model="whichDate" value="start" />Good Start Date</span>' +
-                                                    '<span class="radio-inline"><input type="radio" name="whichDate" ng-model="whichDate" value="end" />Good End Date</span></div>' +
-                                                    '</div>' +
-                                                    '<div class="modal-footer"><button class="btn btn-primary" ng-enter="ok()" ng-click="ok()">OK</button>' +
-                                                    '<button class="btn btn-primary" ng-enter="cancel()" ng-click="cancel()">Cancel</button></div>',
+                                                        '<div class="modal-body"><p>Would you like to set this ({{thisDate}}) as:</p>' +
+                                                        '<div style="text-align:center;"><span class="radio-inline"><input type="radio" name="whichDate" ng-model="whichDate" value="start" />Good Start Date</span>' +
+                                                        '<span class="radio-inline"><input type="radio" name="whichDate" ng-model="whichDate" value="end" />Good End Date</span></div>' +
+                                                        '</div>' +
+                                                        '<div class="modal-footer"><button class="btn btn-primary" ng-enter="ok()" ng-click="ok()">OK</button>' +
+                                                        '<button class="btn btn-primary" ng-enter="cancel()" ng-click="cancel()">Cancel</button></div>',
                                                     controller: ['$scope', '$uibModalInstance', 'chosenDate', 'xEvent', function ($scope, $uibModalInstance, chosenDate, xEvent) {
                                                         $scope.ok = function () {
                                                             if ($scope.whichDate == "") alert("No Date chosen");
@@ -340,8 +342,8 @@
             $scope.showImageModal = function (image) {
                 var imageModal = $uibModal.open({
                     template: '<div class="modal-header"><h3 class="modal-title">Image File Preview</h3></div>' +
-                    '<div class="modal-body"><img ng-src="{{setSRC}}" /></div>' +
-                    '<div class="modal-footer"><button class="btn btn-primary" ng-enter="ok()" ng-click="ok()">OK</button></div>',
+                        '<div class="modal-body"><img ng-src="{{setSRC}}" /></div>' +
+                        '<div class="modal-footer"><button class="btn btn-primary" ng-enter="ok()" ng-click="ok()">OK</button></div>',
                     controller: ['$scope', '$uibModalInstance', function ($scope, $uibModalInstance) {
                         $scope.ok = function () {
                             $uibModalInstance.close();
@@ -441,8 +443,8 @@
                             valid = false;
                             var fixDate = $uibModal.open({
                                 template: '<div class="modal-header"><h3 class="modal-title">Error</h3></div>' +
-                                '<div class="modal-body"><p>The good end date must be after the good start date.</p></div>' +
-                                '<div class="modal-footer"><button class="btn btn-primary" ng-enter="ok()" ng-click="ok()">OK</button></div>',
+                                    '<div class="modal-body"><p>The good end date must be after the good start date.</p></div>' +
+                                    '<div class="modal-footer"><button class="btn btn-primary" ng-enter="ok()" ng-click="ok()">OK</button></div>',
                                 controller: ['$scope', '$uibModalInstance', function ($scope, $uibModalInstance) {
                                     $scope.ok = function () {
                                         $uibModalInstance.close();
@@ -458,8 +460,8 @@
                             valid = false;
                             var missingDate = $uibModal.open({
                                 template: '<div class="modal-header"><h3 class="modal-title">Error</h3></div>' +
-                                '<div class="modal-body"><p>The good data start date or good data end date is missing. Either choose a date, or click Preview Data to get a chart of the data, where you can choose the dates.</p></div>' +
-                                '<div class="modal-footer"><button class="btn btn-primary" ng-enter="ok()" ng-click="ok()">OK</button></div>',
+                                    '<div class="modal-body"><p>The good data start date or good data end date is missing. Either choose a date, or click Preview Data to get a chart of the data, where you can choose the dates.</p></div>' +
+                                    '<div class="modal-footer"><button class="btn btn-primary" ng-enter="ok()" ng-click="ok()">OK</button></div>',
                                 controller: ['$scope', '$uibModalInstance', function ($scope, $uibModalInstance) {
                                     $scope.ok = function () {
                                         $uibModalInstance.close();
@@ -617,8 +619,8 @@
                         valid = false;
                         var fixDate = $uibModal.open({
                             template: '<div class="modal-header"><h3 class="modal-title">Error</h3></div>' +
-                            '<div class="modal-body"><p>The good end date must be after the good start date.</p></div>' +
-                            '<div class="modal-footer"><button class="btn btn-primary" ng-enter="ok()" ng-click="ok()">OK</button></div>',
+                                '<div class="modal-body"><p>The good end date must be after the good start date.</p></div>' +
+                                '<div class="modal-footer"><button class="btn btn-primary" ng-enter="ok()" ng-click="ok()">OK</button></div>',
                             controller: ['$scope', '$uibModalInstance', function ($scope, $uibModalInstance) {
                                 $scope.ok = function () {
                                     $uibModalInstance.close();
@@ -804,8 +806,8 @@
                     valid = false;
                     var fixDate = $uibModal.open({
                         template: '<div class="modal-header"><h3 class="modal-title">Error</h3></div>' +
-                        '<div class="modal-body"><p>The good end date must be after the good start date.</p></div>' +
-                        '<div class="modal-footer"><button class="btn btn-primary" ng-enter="ok()" ng-click="ok()">OK</button></div>',
+                            '<div class="modal-body"><p>The good end date must be after the good start date.</p></div>' +
+                            '<div class="modal-footer"><button class="btn btn-primary" ng-enter="ok()" ng-click="ok()">OK</button></div>',
                         controller: ['$scope', '$uibModalInstance', function ($scope, $uibModalInstance) {
                             $scope.ok = function () {
                                 $uibModalInstance.close();
@@ -879,8 +881,8 @@
                     valid = false;
                     var fixDate = $uibModal.open({
                         template: '<div class="modal-header"><h3 class="modal-title">Error</h3></div>' +
-                        '<div class="modal-body"><p>The good end date must be after the good start date.</p></div>' +
-                        '<div class="modal-footer"><button class="btn btn-primary" ng-enter="ok()" ng-click="ok()">OK</button></div>',
+                            '<div class="modal-body"><p>The good end date must be after the good start date.</p></div>' +
+                            '<div class="modal-footer"><button class="btn btn-primary" ng-enter="ok()" ng-click="ok()">OK</button></div>',
                         controller: ['$scope', '$uibModalInstance', function ($scope, $uibModalInstance) {
                             $scope.ok = function () {
                                 $uibModalInstance.close();
@@ -994,8 +996,8 @@
                         backdrop: 'static',
                         keyboard: false,
                         template: '<div class="modal-header"><h3 class="modal-title">Remove OP Measure</h3></div>' +
-                        '<div class="modal-body"><p>Are you sure you want to remove this OP Measurement from this sensor?</p></div>' +
-                        '<div class="modal-footer"><button class="btn btn-primary" ng-enter="ok()" ng-click="ok()">OK</button><button class="btn btn-primary" ng-click="cancel()">Cancel</button></div>',
+                            '<div class="modal-body"><p>Are you sure you want to remove this OP Measurement from this sensor?</p></div>' +
+                            '<div class="modal-footer"><button class="btn btn-primary" ng-enter="ok()" ng-click="ok()">OK</button><button class="btn btn-primary" ng-click="cancel()">Cancel</button></div>',
                         controller: ['$scope', '$uibModalInstance', function ($scope, $uibModalInstance) {
                             $scope.ok = function () {
                                 $uibModalInstance.close('remove');
@@ -1327,8 +1329,8 @@
                         //show modal to tell them to update the location_description before deploying sensor
                         var updateDescrModal = $uibModal.open({
                             template: '<div class="modal-header"><h3 class="modal-title">Error</h3></div>' +
-                            '<div class="modal-body"><p>You must update the Location Description when deploying a proposed sensor.</p></div>' +
-                            '<div class="modal-footer"><button class="btn btn-primary" ng-enter="ok()" ng-click="ok()">OK</button></div>',
+                                '<div class="modal-body"><p>You must update the Location Description when deploying a proposed sensor.</p></div>' +
+                                '<div class="modal-footer"><button class="btn btn-primary" ng-enter="ok()" ng-click="ok()">OK</button></div>',
                             controller: ['$scope', '$uibModalInstance', function ($scope, $uibModalInstance) {
                                 $scope.ok = function () {
                                     $uibModalInstance.close();
@@ -1584,8 +1586,8 @@
                         backdrop: 'static',
                         keyboard: false,
                         template: '<div class="modal-header"><h3 class="modal-title">Remove OP Measure</h3></div>' +
-                        '<div class="modal-body"><p>Are you sure you want to remove this OP Measurement from this sensor?</p></div>' +
-                        '<div class="modal-footer"><button class="btn btn-primary" ng-enter="ok()" ng-click="ok()">OK</button><button class="btn btn-primary" ng-click="cancel()">Cancel</button></div>',
+                            '<div class="modal-body"><p>Are you sure you want to remove this OP Measurement from this sensor?</p></div>' +
+                            '<div class="modal-footer"><button class="btn btn-primary" ng-enter="ok()" ng-click="ok()">OK</button><button class="btn btn-primary" ng-click="cancel()">Cancel</button></div>',
                         controller: ['$scope', '$uibModalInstance', function ($scope, $uibModalInstance) {
                             $scope.ok = function () {
                                 $uibModalInstance.close('remove');
@@ -1701,8 +1703,8 @@
                     if (new Date(retSenTS) < new Date(depSenTS)) {
                         var fixDate = $uibModal.open({
                             template: '<div class="modal-header"><h3 class="modal-title">Error</h3></div>' +
-                            '<div class="modal-body"><p>The retrieval date must be after the deployed date.</p></div>' +
-                            '<div class="modal-footer"><button class="btn btn-primary" ng-enter="ok()" ng-click="ok()">OK</button></div>',
+                                '<div class="modal-body"><p>The retrieval date must be after the deployed date.</p></div>' +
+                                '<div class="modal-footer"><button class="btn btn-primary" ng-enter="ok()" ng-click="ok()">OK</button></div>',
                             controller: ['$scope', '$uibModalInstance', function ($scope, $uibModalInstance) {
                                 $scope.ok = function () {
                                     $uibModalInstance.close();
@@ -1799,8 +1801,11 @@
             $scope.timeZoneList = ['UTC', 'PST', 'MST', 'CST', 'EST'];
             $scope.statusTypeList = allStatusTypes.filter(function (s) { return s.status == 'Retrieved' || s.status == 'Lost'; });
             $scope.eventDataFiles = [];
-
+            
+            $scope.daylightSavingsStorm = { selected: false};
+            $scope.daylightSavingsAir = { selected: false};
             $scope.is4Hz = { selected: false };
+            $scope.dl = { showdlSection: false };
             //default setting for interval
             $scope.IntervalType = { type: 'Seconds' };
             //ng-show determines whether they are editing or viewing details
@@ -1883,8 +1888,8 @@
                         backdrop: 'static',
                         keyboard: false,
                         template: '<div class="modal-header"><h3 class="modal-title">Remove OP Measure</h3></div>' +
-                        '<div class="modal-body"><p>Are you sure you want to remove this OP Measurement from this deployed sensor?</p></div>' +
-                        '<div class="modal-footer"><button class="btn btn-primary" ng-click="DEPok()">OK</button><button class="btn btn-primary" ng-click="DEPcancel()">Cancel</button></div>',
+                            '<div class="modal-body"><p>Are you sure you want to remove this OP Measurement from this deployed sensor?</p></div>' +
+                            '<div class="modal-footer"><button class="btn btn-primary" ng-click="DEPok()">OK</button><button class="btn btn-primary" ng-click="DEPcancel()">Cancel</button></div>',
                         controller: ['$scope', '$uibModalInstance', function ($scope, $uibModalInstance) {
                             $scope.DEPok = function () {
                                 $uibModalInstance.close('remove');
@@ -1979,8 +1984,8 @@
                         backdrop: 'static',
                         keyboard: false,
                         template: '<div class="modal-header"><h3 class="modal-title">Remove OP Measure</h3></div>' +
-                        '<div class="modal-body"><p>Are you sure you want to remove this OP Measurement from this retrieved sensor?</p></div>' +
-                        '<div class="modal-footer"><button class="btn btn-primary" ng-click="RETok()">OK</button><button class="btn btn-primary" ng-click="RETcancel()">Cancel</button></div>',
+                            '<div class="modal-body"><p>Are you sure you want to remove this OP Measurement from this retrieved sensor?</p></div>' +
+                            '<div class="modal-footer"><button class="btn btn-primary" ng-click="RETok()">OK</button><button class="btn btn-primary" ng-click="RETcancel()">Cancel</button></div>',
                         controller: ['$scope', '$uibModalInstance', function ($scope, $uibModalInstance) {
                             $scope.RETok = function () {
                                 $uibModalInstance.close('remove');
@@ -2455,8 +2460,8 @@
             $scope.showImageModal = function (image) {
                 var imageModal = $uibModal.open({
                     template: '<div class="modal-header"><h3 class="modal-title">Image File Preview</h3></div>' +
-                    '<div class="modal-body"><img ng-src="{{setSRC}}" /></div>' +
-                    '<div class="modal-footer"><button class="btn btn-primary" ng-enter="ok()" ng-click="ok()">OK</button></div>',
+                        '<div class="modal-body"><img ng-src="{{setSRC}}" /></div>' +
+                        '<div class="modal-footer"><button class="btn btn-primary" ng-enter="ok()" ng-click="ok()">OK</button></div>',
                     controller: ['$scope', '$uibModalInstance', function ($scope, $uibModalInstance) {
                         $scope.ok = function () {
                             $uibModalInstance.close();
@@ -2569,8 +2574,8 @@
                             valid = false;
                             var fixDate = $uibModal.open({
                                 template: '<div class="modal-header"><h3 class="modal-title">Error</h3></div>' +
-                                '<div class="modal-body"><p>The good end date must be after the good start date.</p></div>' +
-                                '<div class="modal-footer"><button class="btn btn-primary" ng-enter="ok()" ng-click="ok()">OK</button></div>',
+                                    '<div class="modal-body"><p>The good end date must be after the good start date.</p></div>' +
+                                    '<div class="modal-footer"><button class="btn btn-primary" ng-enter="ok()" ng-click="ok()">OK</button></div>',
                                 controller: ['$scope', '$uibModalInstance', function ($scope, $uibModalInstance) {
                                     $scope.ok = function () {
                                         $uibModalInstance.close();
@@ -2586,8 +2591,8 @@
                             valid = false;
                             var missingDate = $uibModal.open({
                                 template: '<div class="modal-header"><h3 class="modal-title">Error</h3></div>' +
-                                '<div class="modal-body"><p>The good data start date or good data end date is missing. Either choose a date, or click Preview Data to get a chart of the data, where you can choose the dates.</p></div>' +
-                                '<div class="modal-footer"><button class="btn btn-primary" ng-enter="ok()" ng-click="ok()">OK</button></div>',
+                                    '<div class="modal-body"><p>The good data start date or good data end date is missing. Either choose a date, or click Preview Data to get a chart of the data, where you can choose the dates.</p></div>' +
+                                    '<div class="modal-footer"><button class="btn btn-primary" ng-enter="ok()" ng-click="ok()">OK</button></div>',
                                 controller: ['$scope', '$uibModalInstance', function ($scope, $uibModalInstance) {
                                     $scope.ok = function () {
                                         $uibModalInstance.close();
@@ -2729,8 +2734,8 @@
                         valid = false;
                         var fixDate = $uibModal.open({
                             template: '<div class="modal-header"><h3 class="modal-title">Error</h3></div>' +
-                            '<div class="modal-body"><p>The good end date must be after the good start date.</p></div>' +
-                            '<div class="modal-footer"><button class="btn btn-primary" ng-enter="ok()" ng-click="ok()">OK</button></div>',
+                                '<div class="modal-body"><p>The good end date must be after the good start date.</p></div>' +
+                                '<div class="modal-footer"><button class="btn btn-primary" ng-enter="ok()" ng-click="ok()">OK</button></div>',
                             controller: ['$scope', '$uibModalInstance', function ($scope, $uibModalInstance) {
                                 $scope.ok = function () {
                                     $uibModalInstance.close();
@@ -2854,6 +2859,8 @@
                 $scope.stormSection = false; // in case they clicked run script
                 $scope.eventDataFiles = [];
                 $scope.is4Hz = { selected: false };
+                $scope.daylightSavingsStorm = { selected: false };
+                $scope.daylightSavingsAir = { selected: false };
             };
 
             //approve this datafile (if admin or manager)
@@ -2862,8 +2869,8 @@
                 var thisDF = $scope.datafile;
                 var approveModal = $uibModal.open({
                     template: "<div class='modal-header'><h3 class='modal-title'>Approve Data File</h3></div>" +
-                    "<div class='modal-body'><p>Are you ready to approve this Data File?</p></div>" +
-                    "<div class='modal-footer'><button class='btn btn-primary' ng-click='approveIt()'>Approve</button><button class='btn btn-warning' ng-click='cancel()'>Cancel</button></div>",
+                        "<div class='modal-body'><p>Are you ready to approve this Data File?</p></div>" +
+                        "<div class='modal-footer'><button class='btn btn-primary' ng-click='approveIt()'>Approve</button><button class='btn btn-warning' ng-click='cancel()'>Cancel</button></div>",
                     controller: ['$scope', '$uibModalInstance', function ($scope, $uibModalInstance) {
                         $scope.cancel = function () {
                             $uibModalInstance.dismiss('cancel');
@@ -2896,8 +2903,8 @@
                 var thisDF = $scope.datafile;
                 var unapproveModal = $uibModal.open({
                     template: "<div class='modal-header'><h3 class='modal-title'>Remove Approval</h3></div>" +
-                    "<div class='modal-body'><p>Are you sure you wan to unapprove this Data File?</p></div>" +
-                    "<div class='modal-footer'><button class='btn btn-primary' ng-click='unApproveIt()'>Unapprove</button><button class='btn btn-warning' ng-click='cancel()'>Cancel</button></div>",
+                        "<div class='modal-body'><p>Are you sure you wan to unapprove this Data File?</p></div>" +
+                        "<div class='modal-footer'><button class='btn btn-primary' ng-click='unApproveIt()'>Unapprove</button><button class='btn btn-warning' ng-click='cancel()'>Cancel</button></div>",
                     controller: ['$scope', '$uibModalInstance', function ($scope, $uibModalInstance) {
                         $scope.cancel = function () {
                             $uibModalInstance.dismiss('cancel');
@@ -2923,6 +2930,10 @@
                 });//end modal
             };
 
+            $scope.showdlSection = function () {
+                $scope.dl.showdlSection = true;
+            }
+
             // this is a pressure transducer sensor's data file, run air script using the data file id
             $scope.runAirScript = function () {
                 // ensure the air sensor has a tapedown with the sensor_elevation on both dep and retrieved
@@ -2933,8 +2944,8 @@
                             backdrop: 'static',
                             keyboard: false,
                             template: '<div class="modal-header"><h3 class="modal-title">Warning</h3></div>' +
-                            '<div class="modal-body"><p>The Air Script has already been processed for this sensor data file. Would you like to delete the output files and rerun the script?</p>' +
-                            '<div class="modal-footer"><button class="btn btn-warning" ng-enter="no()" ng-click="no()">Cancel</button><button class="btn btn-primary" ng-enter="yes()" ng-click="yes()">Rerun Script</button></div>',
+                                '<div class="modal-body"><p>The Air Script has already been processed for this sensor data file. Would you like to delete the output files and rerun the script?</p>' +
+                                '<div class="modal-footer"><button class="btn btn-warning" ng-enter="no()" ng-click="no()">Cancel</button><button class="btn btn-primary" ng-enter="yes()" ng-click="yes()">Rerun Script</button></div>',
                             controller: ['$scope', '$uibModalInstance', 'theFile', function ($scope, $uibModalInstance, theFile) {
                                 $scope.no = function () {
                                     $uibModalInstance.dismiss();
@@ -2952,13 +2963,14 @@
                         });
                         rerunModal.result.then(function (afile) {
                             $scope.showProcessing = true;
+                            $scope.dl.showdlSection = false;
                             //delete all the output files that have this file_id as their 'script_parent' value
                             $http.defaults.headers.common.Authorization = 'Basic ' + $cookies.get('STNCreds');
                             var processedFileCount = $scope.sensorFiles.filter(function (f) { return f.script_parent == afile.file_id.toString(); });
                             var matchCnt = 0;
                             if (processedFileCount == 0) {
                                 //all done, run it again now
-                                DATA_FILE.runAirScript({ airDFID: afile.data_file_id, username: $cookies.get('STNUsername') }).$promise.then(function () {
+                                DATA_FILE.runAirScript({ airDFID: afile.data_file_id, daylightSavings: $scope.daylightSavingsAir.selected, username: $cookies.get('STNUsername') }).$promise.then(function () {
                                     $scope.showProcessing = false;
                                 }, function error(errorResponse) {
                                     if (errorResponse.headers(["usgswim-messages"]) !== undefined) toastr.error("Error running Air Script: " + errorResponse.headers(["usgswim-messages"]));
@@ -2977,7 +2989,7 @@
                                         Site_Files.setAllSiteFiles($scope.allSFiles); //updates the file list on the sitedashboard
                                         if (matchCnt == processedFileCount.length) {
                                             //all done, run it again now
-                                            DATA_FILE.runAirScript({ airDFID: afile.data_file_id, username: $cookies.get('STNUsername') }).$promise.then(function () {
+                                            DATA_FILE.runAirScript({ airDFID: afile.data_file_id, daylightSavings: $scope.daylightSavingsAir.selected, username: $cookies.get('STNUsername') }).$promise.then(function () {
                                                 $scope.showProcessing = false;
                                             }, function error(errorResponse) {
                                                 if (errorResponse.headers(["usgswim-messages"]) !== undefined) toastr.error("Error running Air Script: " + errorResponse.headers(["usgswim-messages"]));
@@ -2994,8 +3006,9 @@
                         });//end rerunModal.result.then
                     } else {
                         // script_parent is not true, never been run before
+                        $scope.dl.showdlSection = false;
                         $scope.showProcessing = true;
-                        DATA_FILE.runAirScript({ airDFID: $scope.datafile.data_file_id, username: $cookies.get('STNUsername') }).$promise.then(function () {
+                        DATA_FILE.runAirScript({ airDFID: $scope.datafile.data_file_id, daylightSavings: $scope.daylightSavingsAir.selected, username: $cookies.get('STNUsername') }).$promise.then(function () {
                             $scope.showProcessing = false;
                         }, function error(errorResponse) {
                             if (errorResponse.headers(["usgswim-messages"]) !== undefined) toastr.error("Error running Air Script: " + errorResponse.headers(["usgswim-messages"]));
@@ -3007,9 +3020,9 @@
                 } else {
                     var missingSeaElev = $uibModal.open({
                         template: '<div class="modal-header"><h3 class="modal-title">Error</h3></div>' +
-                        '<div class="modal-body"><p>This Pressure Transducer Sensor does not have a sensor elevation.</p>' +
-                        '<p>Please update the sensor, providing a sensor elevation for both the deployed section and retrieved section. This is required for the script.</p></div>' +
-                        '<div class="modal-footer"><button class="btn btn-primary" ng-enter="ok()" ng-click="ok()">OK</button></div>',
+                            '<div class="modal-body"><p>This Pressure Transducer Sensor does not have a sensor elevation.</p>' +
+                            '<p>Please update the sensor, providing a sensor elevation for both the deployed section and retrieved section. This is required for the script.</p></div>' +
+                            '<div class="modal-footer"><button class="btn btn-primary" ng-enter="ok()" ng-click="ok()">OK</button></div>',
                         controller: ['$scope', '$uibModalInstance', function ($scope, $uibModalInstance) {
                             $scope.ok = function () {
                                 $uibModalInstance.close();
@@ -3093,11 +3106,13 @@
 
             var runTheStormScript = function (airDF) {
                 INSTRUMENT.getFullInstrument({ id: airDF.instrument_id }).$promise.then(function (airSensor) {
+                    /* Why are we doing this? var instrumentstats */
                     var instrumentStats = airSensor.instrument_status;
                     var waterDF = $scope.datafile.data_file_id;
-                    var boolVal = $scope.is4Hz.selected;
+                    var hertzBool = $scope.is4Hz.selected;
+                    var daylightBool = $scope.daylightSavingsStorm.selected;
                     // run the script if airDF and waterDF are present                    
-                    DATA_FILE.runStormScript({ seaDFID: waterDF, airDFID: airDF.data_file_id, hertz: boolVal, username: $cookies.get('STNUsername') }).$promise.then(function () {
+                    DATA_FILE.runStormScript({ seaDFID: waterDF, airDFID: airDF.data_file_id, hertz: hertzBool, daylightSavings: daylightBool, username: $cookies.get('STNUsername') }).$promise.then(function () {
                         var allDone = true;
                     }, function error(errorResponse) {
                         if (errorResponse.headers(["usgswim-messages"]) !== undefined) toastr.error("Error running Air Script: " + errorResponse.headers(["usgswim-messages"]));
@@ -3130,8 +3145,8 @@
                             backdrop: 'static',
                             keyboard: false,
                             template: '<div class="modal-header"><h3 class="modal-title">Warning</h3></div>' +
-                            '<div class="modal-body"><p>The Storm Script has already been processed for this sensor data file with this air data file. Would you like to delete the output files and rerun the script?</p>' +
-                            '<div class="modal-footer"><button class="btn btn-warning" ng-enter="no()" ng-click="no()">Cancel</button><button class="btn btn-primary" ng-enter="yes()" ng-click="yes()">Rerun Script</button></div>',
+                                '<div class="modal-body"><p>The Storm Script has already been processed for this sensor data file with this air data file. Would you like to delete the output files and rerun the script?</p>' +
+                                '<div class="modal-footer"><button class="btn btn-warning" ng-enter="no()" ng-click="no()">Cancel</button><button class="btn btn-primary" ng-enter="yes()" ng-click="yes()">Rerun Script</button></div>',
                             controller: ['$scope', '$uibModalInstance', 'theAirFile', 'theWaterFile', function ($scope, $uibModalInstance, theAirFile, theWaterFile) {
                                 $scope.no = function () {
                                     $uibModalInstance.dismiss();
@@ -3184,8 +3199,8 @@
                 else {
                     var missingInfo = $uibModal.open({
                         template: '<div class="modal-header"><h3 class="modal-title">Error</h3></div>' +
-                        '<div class="modal-body"><p>Please choose an air data file to use for the storm script.</p></div>' +
-                        '<div class="modal-footer"><button class="btn btn-primary" ng-enter="ok()" ng-click="ok()">OK</button></div>',
+                            '<div class="modal-body"><p>Please choose an air data file to use for the storm script.</p></div>' +
+                            '<div class="modal-footer"><button class="btn btn-primary" ng-enter="ok()" ng-click="ok()">OK</button></div>',
                         controller: ['$scope', '$uibModalInstance', function ($scope, $uibModalInstance) {
                             $scope.ok = function () {
                                 $uibModalInstance.close();
@@ -3206,7 +3221,7 @@
                 })
             };
 
-            //$scope.renderer = new Highcharts.Renderer(
+            $scope.daylightSavingsChop = { selected: false };
             $scope.runChopper = function () {
                 $scope.chartData = [];
                 $scope.chartOptions2 = {};
@@ -3222,7 +3237,8 @@
                     var fileParts = {
                         FileEntity: {
                             site_id: $scope.thisSensorSite.site_id,
-                            instrument_id: thisSensor.instrument_id
+                            instrument_id: thisSensor.instrument_id,
+                            description: $scope.daylightSavingsChop.selected // holder of the daylight savings true/false value. Services parsed it out.
                         },
                         File: $scope.aFile.File
                     };
@@ -3238,8 +3254,8 @@
                             var errorMessage = response.Error;
                             var failedChopper = $uibModal.open({
                                 template: '<div class="modal-header"><h3 class="modal-title">Error</h3></div>' +
-                                '<div class="modal-body"><p>There was an error running the chopper.</p><p>Error: {{errorMessage}}</p></div>' +
-                                '<div class="modal-footer"><button class="btn btn-primary" ng-enter="ok()" ng-click="ok()">OK</button></div>',
+                                    '<div class="modal-body"><p>There was an error running the chopper.</p><p>Error: {{errorMessage}}</p></div>' +
+                                    '<div class="modal-footer"><button class="btn btn-primary" ng-enter="ok()" ng-click="ok()">OK</button></div>',
                                 controller: ['$scope', '$uibModalInstance', 'message', function ($scope, $uibModalInstance, message) {
                                     $scope.errorMessage = message;
                                     $scope.ok = function () {
@@ -3273,12 +3289,12 @@
                                             click: function (event) {
                                                 var pointClick = $uibModal.open({
                                                     template: '<div class="modal-header"><h3 class="modal-title"></h3></div>' +
-                                                    '<div class="modal-body"><p>Would you like to set this ({{thisDate}}) as:</p>' +
-                                                    '<div style="text-align:center;"><span class="radio-inline"><input type="radio" name="whichDate" ng-model="whichDate" value="start" />Good Start Date</span>' +
-                                                    '<span class="radio-inline"><input type="radio" name="whichDate" ng-model="whichDate" value="end" />Good End Date</span></div>' +
-                                                    '</div>' +
-                                                    '<div class="modal-footer"><button class="btn btn-primary" ng-enter="ok()" ng-click="ok()">OK</button>' +
-                                                    '<button class="btn btn-primary" ng-enter="cancel()" ng-click="cancel()">Cancel</button></div>',
+                                                        '<div class="modal-body"><p>Would you like to set this ({{thisDate}}) as:</p>' +
+                                                        '<div style="text-align:center;"><span class="radio-inline"><input type="radio" name="whichDate" ng-model="whichDate" value="start" />Good Start Date</span>' +
+                                                        '<span class="radio-inline"><input type="radio" name="whichDate" ng-model="whichDate" value="end" />Good End Date</span></div>' +
+                                                        '</div>' +
+                                                        '<div class="modal-footer"><button class="btn btn-primary" ng-enter="ok()" ng-click="ok()">OK</button>' +
+                                                        '<button class="btn btn-primary" ng-enter="cancel()" ng-click="cancel()">Cancel</button></div>',
                                                     controller: ['$scope', '$uibModalInstance', 'chosenDate', 'xEvent', function ($scope, $uibModalInstance, chosenDate, xEvent) {
                                                         $scope.ok = function () {
                                                             if ($scope.whichDate == "") alert("No Date chosen");
@@ -3460,8 +3476,8 @@
                     valid = false;
                     var fixDate = $uibModal.open({
                         template: '<div class="modal-header"><h3 class="modal-title">Error</h3></div>' +
-                        '<div class="modal-body"><p>The good end date must be after the good start date.</p></div>' +
-                        '<div class="modal-footer"><button class="btn btn-primary" ng-enter="ok()" ng-click="ok()">OK</button></div>',
+                            '<div class="modal-body"><p>The good end date must be after the good start date.</p></div>' +
+                            '<div class="modal-footer"><button class="btn btn-primary" ng-enter="ok()" ng-click="ok()">OK</button></div>',
                         controller: ['$scope', '$uibModalInstance', function ($scope, $uibModalInstance) {
                             $scope.ok = function () {
                                 $uibModalInstance.close();
@@ -3529,8 +3545,8 @@
                     valid = false;
                     var fixDate = $uibModal.open({
                         template: '<div class="modal-header"><h3 class="modal-title">Error</h3></div>' +
-                        '<div class="modal-body"><p>The good end date must be after the good start date.</p></div>' +
-                        '<div class="modal-footer"><button class="btn btn-primary" ng-enter="ok()" ng-click="ok()">OK</button></div>',
+                            '<div class="modal-body"><p>The good end date must be after the good start date.</p></div>' +
+                            '<div class="modal-footer"><button class="btn btn-primary" ng-enter="ok()" ng-click="ok()">OK</button></div>',
                         controller: ['$scope', '$uibModalInstance', function ($scope, $uibModalInstance) {
                             $scope.ok = function () {
                                 $uibModalInstance.close();

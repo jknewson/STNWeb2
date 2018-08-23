@@ -60,6 +60,7 @@ pipes.validatedAppScripts = function () {
 
 pipes.builtAppScriptsDev = function () {
     return pipes.validatedAppScripts()
+        // Comment out line 64 when developing locally
         .pipe(rev())
         .pipe(gulp.dest(paths.dev));
 };
@@ -149,6 +150,7 @@ pipes.builtPartialsProd = function () {
 ///stripped out sass compiler - sass not in use
 pipes.builtAppStylesDev = function () {
     return gulp.src(paths.appStyles)
+        // Comment out line 154 when developing locally
         .pipe(rev())
         .pipe(gulp.dest(paths.dev));
 };
