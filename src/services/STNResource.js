@@ -5,9 +5,10 @@
     var STNResource = angular.module('STNResource', ['ngResource']);
 
     // ***** SWITCH BACK AND FORTH DEPENDING ON IF TEST OR PRODUCTION ***
-    var rootURL = "https://stn.wim.usgs.gov/STNServices";
-    /* var rootURL = "https://stntest.wim.usgs.gov/STNServices2"; */
-    // var rootURL = "http://localhost/STNServices2";
+    /* var rootURL = "https://stn.wim.usgs.gov/STNServices"; */
+    // var rootURL = "https://stntest.wim.usgs.gov/STNServices2";
+    // var rootURL = "https://stntest.wim.usgs.gov/STNServices2";
+    var rootURL = "https://stnpseudoprod.wim.usgs.gov/STNServicesNew";
 
     // GEOCODE https://geocoding.geo.census.gov/geocoder/geographies/coordinates?benchmark=4&vintage=4&format=json
     STNResource.factory('GEOCODE', ['$resource', function ($resource) {
@@ -18,7 +19,7 @@
     }]);
     // AGENCY
     STNResource.factory('AGENCY', ['$resource', function ($resource) {
-        return $resource(rootURL + '/Agencies/:id.json',
+        return $resource(rootURL + '/Agencies/:id',
             {}, {
                 query: {},
                 getAll: { method: 'GET', isArray: true },
@@ -29,7 +30,7 @@
     }]);
     // CONTACT_TYPE
     STNResource.factory('CONTACT_TYPE', ['$resource', function ($resource) {
-        return $resource(rootURL + '/ContactTypes/:id.json',
+        return $resource(rootURL + '/ContactTypes/:id',
             {}, {
                 query: {},
                 getAll: { method: 'GET', isArray: true },
@@ -40,7 +41,7 @@
     }]);
     // CONTACT
     STNResource.factory('CONTACT', ['$resource', function ($resource) {
-        return $resource(rootURL + '/Contacts/:id.json',
+        return $resource(rootURL + '/Contacts/:id',
             {}, {
                 query: {},
                 getContactModel: { method: 'GET', isArray: true },
@@ -52,7 +53,7 @@
     }]);
     // COUNTIES
     STNResource.factory('COUNTIES', ['$resource', function ($resource) {
-        return $resource(rootURL + '/Counties/:id.json',
+        return $resource(rootURL + '/Counties/:id',
             {}, {
                 query: {},
                 getAll: { method: 'GET', isArray: true },
@@ -63,19 +64,19 @@
     }]);
     // DATA_FILE
     STNResource.factory('DATA_FILE', ['$resource', function ($resource) {
-        return $resource(rootURL + '/DataFiles/:id.json',
+        return $resource(rootURL + '/DataFiles/:id',
             {}, {
                 query: {},
                 getAll: { method: 'GET', isArray: true },
-                getDFApproval: { method: 'GET', cache: false, isArray: false, url: rootURL + '/DataFiles/:id/Approval.json' },
+                getDFApproval: { method: 'GET', cache: false, isArray: false, url: rootURL + '/DataFiles/:id/Approval' },
                 getUnapprovedDFs: { method: 'GET', isArray: true, cache: false }, //?IsApproved={approved}&Event={eventId}&Counties={counties}&State={state}
                 getEventDataView: { method: 'GET', isArray: true, cache: false, url: rootURL + '/DataFileView?EventId=:eventId' },
                 runStormScript: { method: 'GET', url: rootURL + '/DataFiles/RunStormScript?SeaDataFileID=:seaDFID&AirDataFileID=:airDFID&Hertz=:hertz&DaylightSavings=:daylightSavings&Username=:username' },
                 runAirScript: { method: 'GET', url: rootURL + '/DataFiles/RunAirScript?AirDataFileID=:airDFID&DaylightSavings=:daylightSavings&Username=:username' },
                 runChopperScript: { method: 'POST', url: rootURL + '/Files/RunChopperScript', headers: { 'Content-Type': undefined }, transformRequest: angular.identity, cache: false, isArray: false }, //?SensorId=:sensorId&FileName=:fileName
-                approveDF: { method: 'POST', cache: false, isArray: false, params: { id: '@id' }, url: rootURL + '/datafiles/:id/Approve.json' }, //posts an APPROVAL, updates the data file with approval_id and returns APPROVAL
-                approveNWISDF: { method: 'POST', cache: false, isArray: false, params: { id: '@id' }, url: rootURL + '/datafiles/:id/NWISApprove.json' }, //posts an APPROVAL (using EventCoord), updates the data file with approval_id and returns APPROVAL
-                unApproveDF: { method: 'DELETE', cache: false, isArray: false, url: rootURL + '/datafiles/:id/Unapprove.json' }, //posts an APPROVAL, updates the datafile with approval_id and returns APPROVAL
+                approveDF: { method: 'POST', cache: false, isArray: false, params: { id: '@id' }, url: rootURL + '/datafiles/:id/Approve' }, //posts an APPROVAL, updates the data file with approval_id and returns APPROVAL
+                approveNWISDF: { method: 'POST', cache: false, isArray: false, params: { id: '@id' }, url: rootURL + '/datafiles/:id/NWISApprove' }, //posts an APPROVAL (using EventCoord), updates the data file with approval_id and returns APPROVAL
+                unApproveDF: { method: 'DELETE', cache: false, isArray: false, url: rootURL + '/datafiles/:id/Unapprove' }, //posts an APPROVAL, updates the datafile with approval_id and returns APPROVAL
                 stormScript: { method: 'GET', cache: false, isArray: false, url: rootURL + '/DataFiles/RunScript?SeaDataFileID=:seaDataFileId&AirDataFileID=:airDataFileId&Hertz=:hertz&Username=username' },
                 update: { method: 'PUT', cache: false, isArray: false },
                 save: { method: 'POST', cache: false, isArray: false },
@@ -84,7 +85,7 @@
     }]);
     // DEPLOYMENT_PRIORITY
     STNResource.factory('DEPLOYMENT_PRIORITY', ['$resource', function ($resource) {
-        return $resource(rootURL + '/DeploymentPriorities/:id.json',
+        return $resource(rootURL + '/DeploymentPriorities/:id',
             {}, {
                 query: {},
                 getAll: { method: 'GET', isArray: true },
@@ -95,10 +96,10 @@
     }]);
     // DEPLOYMENT_TYPE
     STNResource.factory('DEPLOYMENT_TYPE', ['$resource', function ($resource) {
-        return $resource(rootURL + '/DeploymentTypes/:id.json',
+        return $resource(rootURL + '/DeploymentTypes/:id',
             {}, {
                 query: {},
-                getDepSensType: { method: 'GET', isArray: false, url: rootURL + '/DeploymentTypes/:id/SensorType.json' },
+                getDepSensType: { method: 'GET', isArray: false, url: rootURL + '/DeploymentTypes/:id/SensorType' },
                 getAll: { method: 'GET', isArray: true },
                 update: { method: 'PUT', cache: false, isArray: false },
                 save: { method: 'POST', cache: false, isArray: false },
@@ -107,12 +108,12 @@
     }]);
     // EVENT
     STNResource.factory('EVENT', ['$resource', function ($resource) {
-        return $resource(rootURL + '/Events/:id.json',
+        return $resource(rootURL + '/Events/:id',
             {}, {
                 query: {},
                 getAll: { method: 'GET', isArray: true },
-                getEventSites: { method: 'GET', isArray: true, url: rootURL + '/Events/:id/Sites.json' },
-                getFilteredEvents: { method: 'GET', isArray: true, url: rootURL + '/Events/FilteredEvents.json' }, //?Date: null, Type: 0, State: null
+                getEventSites: { method: 'GET', isArray: true, url: rootURL + '/Events/:id/Sites' },
+                getFilteredEvents: { method: 'GET', isArray: true, url: rootURL + '/Events/FilteredEvents' }, //?Date: null, Type: 0, State: null
                 update: { method: 'PUT', cache: false, isArray: false },
                 save: { method: 'POST', cache: false, isArray: false },
                 delete: { method: 'DELETE', cache: false, isArray: false }
@@ -120,7 +121,7 @@
     }]);
     // EVENT_STATUS
     STNResource.factory('EVENT_STATUS', ['$resource', function ($resource) {
-        return $resource(rootURL + '/EventStatus/:id.json',
+        return $resource(rootURL + '/EventStatus/:id',
             {}, {
                 query: {},
                 getAll: { method: 'GET', isArray: true },
@@ -131,7 +132,7 @@
     }]);
     // EVENT_TYPE
     STNResource.factory('EVENT_TYPE', ['$resource', function ($resource) {
-        return $resource(rootURL + '/EventTypes/:id.json',
+        return $resource(rootURL + '/EventTypes/:id',
             {}, {
                 query: {},
                 getAll: { method: 'GET', isArray: true },
@@ -142,7 +143,7 @@
     }]);
     // FILE    
     STNResource.factory('FILE', ['$resource', function ($resource) {
-        return $resource(rootURL + '/Files/:id.json',
+        return $resource(rootURL + '/Files/:id',
             {}, {
                 query: {},
                 getAll: { method: 'GET', isArray: true },
@@ -173,7 +174,7 @@
     }]);
     // FILE_TYPE
     STNResource.factory('FILE_TYPE', ['$resource', function ($resource) {
-        return $resource(rootURL + '/FileTypes/:id.json',
+        return $resource(rootURL + '/FileTypes/:id',
             {}, {
                 query: {},
                 getAll: { method: 'GET', isArray: true },
@@ -184,7 +185,7 @@
     }]);
     // HORIZONTAL_COLL_METHODS
     STNResource.factory('HORIZONTAL_COLL_METHODS', ['$resource', function ($resource) {
-        return $resource(rootURL + '/HorizontalMethods/:id.json',
+        return $resource(rootURL + '/HorizontalMethods/:id',
             {}, {
                 query: {},
                 getAll: { method: 'GET', isArray: true },
@@ -195,7 +196,7 @@
     }]);
     // HORIZONTAL_DATUM
     STNResource.factory('HORIZONTAL_DATUM', ['$resource', function ($resource) {
-        return $resource(rootURL + '/HorizontalDatums/:id.json',
+        return $resource(rootURL + '/HorizontalDatums/:id',
             {}, {
                 query: {},
                 getAll: { method: 'GET', isArray: true },
@@ -206,7 +207,7 @@
     }]);
     // HOUSING_TYPE
     STNResource.factory('HOUSING_TYPE', ['$resource', function ($resource) {
-        return $resource(rootURL + '/HousingTypes/:id.json',
+        return $resource(rootURL + '/HousingTypes/:id',
             {}, {
                 query: {},
                 getAll: { method: 'GET', isArray: true },
@@ -217,17 +218,17 @@
     }]);
     // HWM
     STNResource.factory('HWM', ['$resource', function ($resource) {
-        return $resource(rootURL + '/hwms/:id.json',
+        return $resource(rootURL + '/hwms/:id',
             {}, {
                 query: {},
                 getAll: { method: 'GET', isArray: true },
-                getEventStateHWMs: { method: 'GET', isArray: true, url: rootURL + '/Events/:eventId/stateHWMs.json?State=:state' },
-                getEventSiteHWMs: { method: 'GET', isArray: true, url: rootURL + '/Sites/:siteId/EventHWMs.json' },//?Event=:eventId
-                getFilteredHWMs: { method: 'GET', isArray: true, url: rootURL + '/HWMs/FilteredHWMs.json' }, //Event={eventIds}&EventType={eventTypeIDs}&EventStatus={eventStatusID}&States={states}&County={counties}&HWMType={hwmTypeIDs}&HWMQuality={hwmQualIDs}&HWMEnvironment={hwmEnvironment}&SurveyComplete={surveyComplete}&StillWater={stillWater}
+                getEventStateHWMs: { method: 'GET', isArray: true, url: rootURL + '/Events/:eventId/stateHWMs?State=:state' },
+                getEventSiteHWMs: { method: 'GET', isArray: true, url: rootURL + '/Sites/:siteId/EventHWMs' },//?Event=:eventId
+                getFilteredHWMs: { method: 'GET', isArray: true, url: rootURL + '/HWMs/FilteredHWMs' }, //Event={eventIds}&EventType={eventTypeIDs}&EventStatus={eventStatusID}&States={states}&County={counties}&HWMType={hwmTypeIDs}&HWMQuality={hwmQualIDs}&HWMEnvironment={hwmEnvironment}&SurveyComplete={surveyComplete}&StillWater={stillWater}
                 getUnapprovedHWMs: { method: 'GET', isArray: true, cache: false }, //IsApproved={'true'/'false'}&Event={eventId}&Member={memberId}&State={state}
-                getHWMApproval: { method: 'GET', cache: false, isArray: false, url: rootURL + '/hwms/:id/Approval.json' },
-                approveHWM: { method: 'POST', cache: false, isArray: false, params: { id: '@id' }, url: rootURL + '/hwms/:id/Approve.json' }, //posts an APPROVAL, updates the HWM with approval_id and returns APPROVAL
-                unApproveHWM: { method: 'DELETE', cache: false, isArray: false, url: rootURL + '/hwms/:id/Unapprove.json' }, //posts an APPROVAL, updates the HWM with approval_id and returns APPROVAL
+                getHWMApproval: { method: 'GET', cache: false, isArray: false, url: rootURL + '/hwms/:id/Approval' },
+                approveHWM: { method: 'POST', cache: false, isArray: false, params: { id: '@id' }, url: rootURL + '/hwms/:id/Approve' }, //posts an APPROVAL, updates the HWM with approval_id and returns APPROVAL
+                unApproveHWM: { method: 'DELETE', cache: false, isArray: false, url: rootURL + '/hwms/:id/Unapprove' }, //posts an APPROVAL, updates the HWM with approval_id and returns APPROVAL
                 update: { method: 'PUT', cache: false, isArray: false },
                 save: { method: 'POST', cache: false, isArray: false },
                 delete: { method: 'DELETE', cache: false, isArray: false }
@@ -255,7 +256,7 @@
     }]);
     // HWM_QUALITY
     STNResource.factory('HWM_QUALITY', ['$resource', function ($resource) {
-        return $resource(rootURL + '/HWMQualities/:id.json',
+        return $resource(rootURL + '/HWMQualities/:id',
             {}, {
                 query: {},
                 getAll: { method: 'GET', isArray: true },
@@ -266,7 +267,7 @@
     }]);
     // HWM_TYPE
     STNResource.factory('HWM_TYPE', ['$resource', function ($resource) {
-        return $resource(rootURL + '/HWMTypes/:id.json',
+        return $resource(rootURL + '/HWMTypes/:id',
             {}, {
                 query: {},
                 getAll: { method: 'GET', isArray: true },
@@ -277,14 +278,14 @@
     }]);
     // INSTRUMENT
     STNResource.factory('INSTRUMENT', ['$resource', function ($resource) {
-        return $resource(rootURL + '/Instruments/:id.json',
+        return $resource(rootURL + '/Instruments/:id',
             {}, {
                 query: {},
                 getAll: { method: 'GET', isArray: true },
-                getSensorView: { method: 'GET', isArray: true, url: rootURL + '/SensorViews.json' }, //?ViewType={}&Event={}
-                getstatusInstruments: { method: 'GET', isArray: true, url: rootURL + '/Instruments.json' }, //CurrentStatus: 1, Event: $scope.evID 
-                getFullInstrument: { method: 'GET', url: rootURL + '/Instruments/:id/FullInstrument.json' }, //gets instrument and it's stats together
-                getInstrumentStatus: { method: 'GET', url: rootURL + '/Instruments/:id/InstrumentStatus.json' },
+                getSensorView: { method: 'GET', isArray: true, url: rootURL + '/SensorViews' }, //?ViewType={}&Event={}
+                getstatusInstruments: { method: 'GET', isArray: true, url: rootURL + '/Instruments' }, //CurrentStatus: 1, Event: $scope.evID 
+                getFullInstrument: { method: 'GET', url: rootURL + '/Instruments/:id/FullInstrument' }, //gets instrument and it's stats together
+                getInstrumentStatus: { method: 'GET', url: rootURL + '/Instruments/:id/InstrumentStatus' },
                 update: { method: 'PUT', cache: false, isArray: false },
                 save: { method: 'POST', cache: false, isArray: false },
                 delete: { method: 'DELETE', cache: false, isArray: false }
@@ -305,7 +306,7 @@
     }]);
     // INSTRUMENT_STATUS
     STNResource.factory('INSTRUMENT_STATUS', ['$resource', function ($resource) {
-        return $resource(rootURL + '/InstrumentStatus/:id.json',
+        return $resource(rootURL + '/InstrumentStatus/:id',
             {}, {
                 query: {},
                 getAll: { method: 'GET', isArray: true },
@@ -316,7 +317,7 @@
     }]);
     // INST_COLL_CONDITION
     STNResource.factory('INST_COLL_CONDITION', ['$resource', function ($resource) {
-        return $resource(rootURL + '/InstrCollectConditions/:id.json',
+        return $resource(rootURL + '/InstrCollectConditions/:id',
             {}, {
                 query: {},
                 getAll: { method: 'GET', isArray: true },
@@ -327,7 +328,7 @@
     }]);
     // LANDOWNER_CONTACT
     STNResource.factory('LANDOWNER_CONTACT', ['$resource', function ($resource) {
-        return $resource(rootURL + '/LandOwners/:id.json',
+        return $resource(rootURL + '/LandOwners/:id',
             {}, {
                 query: {},
                 getAll: { method: 'GET', isArray: true },
@@ -378,7 +379,7 @@
     }]);
     // MARKER
     STNResource.factory('MARKER', ['$resource', function ($resource) {
-        return $resource(rootURL + '/Markers/:id.json',
+        return $resource(rootURL + '/Markers/:id',
             {}, {
                 query: {},
                 getAll: { method: 'GET', isArray: true },
@@ -389,14 +390,14 @@
     }]);
     // MEMBER
     STNResource.factory('MEMBER', ['$resource', function ($resource) {
-        return $resource(rootURL + '/Members/:id.json',
+        return $resource(rootURL + '/Members/:id',
             {}, {
                 query: {},
                 getAll: { method: 'GET', isArray: true },
-                getRoleMembers: { method: 'GET', isArray: true, url: rootURL + '/Roles/:roleId/Members.json' },
-                getEventPeople: { method: 'GET', isArray: true, url: rootURL + '/Events/:Eventid/Members.json' },
+                getRoleMembers: { method: 'GET', isArray: true, url: rootURL + '/Roles/:roleId/Members' },
+                getEventPeople: { method: 'GET', isArray: true, url: rootURL + '/Events/:Eventid/Members' },
 
-                changePW: { method: 'GET', isArray: false, url: rootURL + '/Members.json' },
+                changePW: { method: 'GET', isArray: false, url: rootURL + '/Members' },
                 addMember: { method: 'POST', cache: false, isArray: false, url: rootURL + '/Members/:pass/addMember' },
                 update: { method: 'PUT', cache: false, isArray: false },
                 save: { method: 'POST', cache: false, isArray: false },
@@ -405,7 +406,7 @@
     }]);
     // NETWORK_NAME
     STNResource.factory('NETWORK_NAME', ['$resource', function ($resource) {
-        return $resource(rootURL + '/NetworkNames/:id.json',
+        return $resource(rootURL + '/NetworkNames/:id',
             {}, {
                 query: {},
                 getAll: { method: 'GET', isArray: true },
@@ -416,7 +417,7 @@
     }]);
     // NETWORK_TYPE
     STNResource.factory('NETWORK_TYPE', ['$resource', function ($resource) {
-        return $resource(rootURL + '/NetworkTypes/:id.json',
+        return $resource(rootURL + '/NetworkTypes/:id',
             {}, {
                 query: {},
                 getAll: { method: 'GET', isArray: true },
@@ -427,7 +428,7 @@
     }]);
     // OBJECTIVE_POINT
     STNResource.factory('OBJECTIVE_POINT', ['$resource', function ($resource) {
-        return $resource(rootURL + '/ObjectivePoints/:id.json',
+        return $resource(rootURL + '/ObjectivePoints/:id',
             {}, {
                 query: {},
                 getAll: { method: 'GET', isArray: true },
@@ -440,7 +441,7 @@
     }]);
     // OP_CONTROL_IDENTIFIER
     STNResource.factory('OP_CONTROL_IDENTIFIER', ['$resource', function ($resource) {
-        return $resource(rootURL + '/OPControlIdentifiers/:id.json',
+        return $resource(rootURL + '/OPControlIdentifiers/:id',
             {}, {
                 query: {},
                 getAll: { method: 'GET', isArray: true },
@@ -451,7 +452,7 @@
     }]);
     // OP_MEASURE
     STNResource.factory('OP_MEASURE', ['$resource', function ($resource) {
-        return $resource(rootURL + '/OPMeasurements/:id.json',
+        return $resource(rootURL + '/OPMeasurements/:id',
             {}, {
                 query: {},
                 getAll: { method: 'GET', isArray: true },
@@ -464,7 +465,7 @@
     }]);
     // OP_QUALITY
     STNResource.factory('OP_QUALITY', ['$resource', function ($resource) {
-        return $resource(rootURL + '/ObjectivePointQualities/:id.json',
+        return $resource(rootURL + '/ObjectivePointQualities/:id',
             {}, {
                 query: {},
                 getAll: { method: 'GET', isArray: true },
@@ -475,7 +476,7 @@
     }]);
     // OP_TYPE
     STNResource.factory('OP_TYPE', ['$resource', function ($resource) {
-        return $resource(rootURL + '/OPTypes/:id.json',
+        return $resource(rootURL + '/OPTypes/:id',
             {}, {
                 query: {},
                 getAll: { method: 'GET', isArray: true },
@@ -486,11 +487,11 @@
     }]);
     // PEAK
     STNResource.factory('PEAK', ['$resource', function ($resource) {
-        return $resource(rootURL + '/PeakSummaries/:id.json',
+        return $resource(rootURL + '/PeakSummaries/:id',
             {}, {
                 query: {},
                 getAll: { method: 'GET', isArray: true },
-                getPeakSummaryDFs: { method: 'GET', isArray: true, cache: false, url: rootURL + '/PeakSummaries/:id/DataFiles.json' },
+                getPeakSummaryDFs: { method: 'GET', isArray: true, cache: false, url: rootURL + '/PeakSummaries/:id/DataFiles' },
                 update: { method: 'PUT', cache: false, isArray: false },
                 save: { method: 'POST', cache: false, isArray: false },
                 delete: { method: 'DELETE', cache: false, isArray: false }
@@ -498,14 +499,14 @@
     }]);
     // REPORT
     STNResource.factory('REPORT', ['$resource', function ($resource) {
-        return $resource(rootURL + '/ReportingMetrics/:id.json',
+        return $resource(rootURL + '/ReportingMetrics/:id',
             {}, {
                 query: {},
                 getReportByEvSt: { method: 'GET', isArray: true },
                 getDailyReportTots: { method: 'GET', url: rootURL + '/ReportingMetrics/DailyReportTotals' },
-                getMemberReports: { method: 'GET', isArray: true, url: rootURL + '/Members/:memberId/Reports.json' },
-                getFilteredReports: { method: 'GET', isArray: true, url: rootURL + '/ReportingMetrics/FilteredReports.json' },
-                getReportwithContacts: { method: 'GET', isArray: true, url: rootURL + '/ReportResource/FilteredReportModel.json' },
+                getMemberReports: { method: 'GET', isArray: true, url: rootURL + '/Members/:memberId/Reports' },
+                getFilteredReports: { method: 'GET', isArray: true, url: rootURL + '/ReportingMetrics/FilteredReports' },
+                getReportwithContacts: { method: 'GET', isArray: true, url: rootURL + '/ReportResource/FilteredReportModel' },
                 getReportsCSV: { method: 'GET', url: rootURL + '/ReportingMetrics/FilteredReports.csv' },
                 getAll: { method: 'GET', isArray: true },
                 update: { method: 'PUT', cache: false, isArray: false },
@@ -516,7 +517,7 @@
     }]);
     // ROLE
     STNResource.factory('ROLE', ['$resource', function ($resource) {
-        return $resource(rootURL + '/Roles/:id.json',
+        return $resource(rootURL + '/Roles/:id',
             {}, {
                 query: {},
                 getAll: { method: 'GET', isArray: true }
@@ -524,7 +525,7 @@
     }]);
     // SENSOR_BRAND
     STNResource.factory('SENSOR_BRAND', ['$resource', function ($resource) {
-        return $resource(rootURL + '/SensorBrands/:id.json',
+        return $resource(rootURL + '/SensorBrands/:id',
             {}, {
                 query: {},
                 getAll: { method: 'GET', isArray: true },
@@ -535,7 +536,7 @@
     }]);
     // SENSOR_DEPLOYMENT --- no longer needed since SENSOR_TYPE returns as this relationship now
     //STNResource.factory('SENSOR_DEPLOYMENT', ['$resource', function ($resource) {
-    //    return $resource(rootURL + '/SensorDeployments/:id.json',
+    //    return $resource(rootURL + '/SensorDeployments/:id',
     //        {}, {
     //            query: {},
     //            getAll: { method: 'GET', isArray: true },               
@@ -547,11 +548,11 @@
 
     // SENSOR_TYPE
     STNResource.factory('SENSOR_TYPE', ['$resource', function ($resource) {
-        return $resource(rootURL + '/SensorTypes/:id.json',
+        return $resource(rootURL + '/SensorTypes/:id',
             {}, {
                 query: {},
                 getAll: { method: 'GET', isArray: true }, //this returns sensortypes with list of deploymenttypes for each one
-                getSensorDeploymentTypes: { method: 'GET', isArray: true, url: rootURL + '/SensorTypes/:id/DeploymentTypes.json' },
+                getSensorDeploymentTypes: { method: 'GET', isArray: true, url: rootURL + '/SensorTypes/:id/DeploymentTypes' },
                 addSensorDeploymentType: { method: 'POST', cache: false, isArray: true, params: { sensorTypeId: '@sensorTypeId', DeploymentTypeId: '@deploymentTypeId' }, url: rootURL + '/SensorTypes/:sensorTypeId/addDeploymentType' },//?DeploymentTypeId={deploymentTypeId}"
                 removeSensorDeploymentType: { method: 'POST', isArray: false, params: { sensorTypeId: '@sensorTypeId', DeploymentTypeId: '@deploymentTypeId' }, url: rootURL + '/SensorTypes/:sensorTypeId/removeDeploymentType' },//?DeploymentTypeId={deploymentTypeId}"
                 update: { method: 'PUT', cache: false, isArray: false },
@@ -561,34 +562,34 @@
     }]);
     // SITE
     STNResource.factory('SITE', ['$resource', function ($resource) {
-        return $resource(rootURL + '/Sites/:id.json',
+        return $resource(rootURL + '/Sites/:id',
             {}, {
                 query: {},
-                sensorScriptRunning: { method: 'GET', isArray: false, transformResponse: function (data) { return { value: angular.fromJson(data) } }, url: rootURL + '/Sites/:id/GetDataFileScript.json' },
+                sensorScriptRunning: { method: 'GET', isArray: false, transformResponse: function (data) { return { value: angular.fromJson(data) } }, url: rootURL + '/Sites/:id/GetDataFileScript' },
                 getProximitySites: { method: 'GET', isArray: true, params: { Latitude: '@latitude', Longitude: '@longitude', Buffer: '@buffer' } },
                 getAll: { method: 'GET', isArray: true },
                 getSearchedSite: { method: 'GET', isArray: false, url: rootURL + '/Sites/Search' }, //?bySiteNo={siteNo}&bySiteName={siteName}&bySiteId={siteId} (only going to populate 1 of these params
-                getFilteredSites: { method: 'GET', isArray: true, url: rootURL + '/Sites/FilteredSites.json' }, //accepts optional parameters: Event={eventId}&State={stateNames}&SensorType={sensorTypeId}&NetworkName={networkNameId}&OPDefined={opDefined}&HWMOnly={hwmOnlySites}&&HWMSurveyed={surveyedHWMs}
+                getFilteredSites: { method: 'GET', isArray: true, url: rootURL + '/Sites/FilteredSites' }, //accepts optional parameters: Event={eventId}&State={stateNames}&SensorType={sensorTypeId}&NetworkName={networkNameId}&OPDefined={opDefined}&HWMOnly={hwmOnlySites}&&HWMSurveyed={surveyedHWMs}
                 //landowner
-                getSiteLandOwner: { method: 'GET', url: rootURL + '/Sites/:id/LandOwner.json' },
+                getSiteLandOwner: { method: 'GET', url: rootURL + '/Sites/:id/LandOwner' },
                 //Site NetworkTypes
-                getSiteNetworkTypes: { method: 'GET', isArray: true, url: rootURL + '/sites/:id/networkTypes.json' },
+                getSiteNetworkTypes: { method: 'GET', isArray: true, url: rootURL + '/sites/:id/networkTypes' },
                 postSiteNetworkType: { method: 'POST', cache: false, params: { siteId: '@siteId', NetworkTypeId: '@networkTypeId' }, isArray: true, url: rootURL + '/sites/:siteId/AddNetworkType' }, //?NetworkTypeId= {networkTypeId}
                 deleteSiteNetworkType: { method: 'DELETE', cache: false, isArray: false, url: rootURL + '/sites/:siteId/removeNetworkType?NetworkTypeId=:networkTypeId' },
                 //Site Network Names
-                getSiteNetworkNames: { method: 'GET', isArray: true, url: rootURL + '/sites/:id/networkNames.json' },
+                getSiteNetworkNames: { method: 'GET', isArray: true, url: rootURL + '/sites/:id/networkNames' },
                 postSiteNetworkName: { method: 'POST', cache: false, params: { siteId: '@siteId', NetworkNameId: '@networkNameId' }, isArray: true, url: rootURL + '/sites/:siteId/AddNetworkName' }, //?NetworkNameId= {networkNameId}
                 deleteSiteNetworkName: { method: 'DELETE', cache: false, isArray: false, url: rootURL + '/sites/:siteId/removeNetworkName?NetworkNameId=:networkNameId' },
                 //Site Housings
-                getSiteHousings: { method: 'GET', isArray: true, url: rootURL + '/sites/:id/SiteHousings.json' },
-                //  postSiteHousing: {method: 'POST', cache: false, isArray:true, url: rootURL + '/site/:id/AddSiteSiteHousing.json'},
+                getSiteHousings: { method: 'GET', isArray: true, url: rootURL + '/sites/:id/SiteHousings' },
+                //  postSiteHousing: {method: 'POST', cache: false, isArray:true, url: rootURL + '/site/:id/AddSiteSiteHousing'},
                 //Site Parts
-                getSiteOPs: { method: 'GET', isArray: true, url: rootURL + '/Sites/:id/ObjectivePoints.json' },
-                getSiteSensors: { method: 'GET', isArray: true, url: rootURL + '/Sites/:id/SiteFullInstrumentList.json' }, //all instruments and their stats together
-                getSiteHWMs: { method: 'GET', isArray: true, url: rootURL + '/Sites/:id/HWMs.json' },
-                getSiteFiles: { method: 'GET', isArray: true, url: rootURL + '/Sites/:id/Files.json' },
-                getSitePeaks: { method: 'GET', isArray: true, url: rootURL + '/Sites/:id/PeakSummaryView.json' },
-                getPeaklessSites: { method: 'GET', isArray: true, url: rootURL + '/Events/:id/PeaklessSites.json' },
+                getSiteOPs: { method: 'GET', isArray: true, url: rootURL + '/Sites/:id/ObjectivePoints' },
+                getSiteSensors: { method: 'GET', isArray: true, url: rootURL + '/Sites/:id/SiteFullInstrumentList' }, //all instruments and their stats together
+                getSiteHWMs: { method: 'GET', isArray: true, url: rootURL + '/Sites/:id/HWMs' },
+                getSiteFiles: { method: 'GET', isArray: true, url: rootURL + '/Sites/:id/Files' },
+                getSitePeaks: { method: 'GET', isArray: true, url: rootURL + '/Sites/:id/PeakSummaryView' },
+                getPeaklessSites: { method: 'GET', isArray: true, url: rootURL + '/Events/:id/PeaklessSites' },
                 //just the Site
                 update: { method: 'PUT', cache: false, isArray: false },
                 save: { method: 'POST', cache: false, isArray: false },
@@ -624,7 +625,7 @@
     }]);
     // STATE
     STNResource.factory('STATE', ['$resource', function ($resource) {
-        return $resource(rootURL + '/States/:id.json',
+        return $resource(rootURL + '/States/:id',
             {}, {
                 query: {},
                 getAll: { method: 'GET', isArray: true },
@@ -635,7 +636,7 @@
     }]);
     // SITE_HOUSING
     STNResource.factory('SITE_HOUSING', ['$resource', function ($resource) {
-        return $resource(rootURL + '/SiteHousings/:id.json',
+        return $resource(rootURL + '/SiteHousings/:id',
             {}, {
                 query: {},
                 getAll: { method: 'GET', isArray: true },
@@ -646,7 +647,7 @@
     }]);
     // STATUS_TYPE
     STNResource.factory('STATUS_TYPE', ['$resource', function ($resource) {
-        return $resource(rootURL + '/StatusTypes/:id.json',
+        return $resource(rootURL + '/StatusTypes/:id',
             {}, {
                 query: {},
                 getAll: { method: 'GET', isArray: true },
@@ -657,7 +658,7 @@
     }]);
     // SOURCE
     STNResource.factory('SOURCE', ['$resource', function ($resource) {
-        return $resource(rootURL + '/Sources/:id.json',
+        return $resource(rootURL + '/Sources/:id',
             {}, {
                 query: {},
                 getAll: { method: 'GET', isArray: true },
@@ -668,7 +669,7 @@
     }]);
     // VERTICAL_COLL_METHOD
     STNResource.factory('VERTICAL_COLL_METHOD', ['$resource', function ($resource) {
-        return $resource(rootURL + '/VerticalMethods/:id.json',
+        return $resource(rootURL + '/VerticalMethods/:id',
             {}, {
                 query: {},
                 getAll: { method: 'GET', isArray: true },
@@ -679,7 +680,7 @@
     }]);
     // VERTICAL_DATUM
     STNResource.factory('VERTICAL_DATUM', ['$resource', function ($resource) {
-        return $resource(rootURL + '/VerticalDatums/:id.json',
+        return $resource(rootURL + '/VerticalDatums/:id',
             {}, {
                 query: {},
                 getAll: { method: 'GET', isArray: true },

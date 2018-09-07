@@ -34,7 +34,7 @@
 <body ng-app="app" ng-strict-di>
 
     <!--HEADER START navCtrl-->
-    <div ng-controller="mainCtrl" class="app-nav" ng-class="{testEnvir: environment == 'Testing'}">
+    <div ng-controller="mainCtrl" class="app-nav" ng-class="{testEnvir: environment == 'Testing',testEnvir: environment == 'Testing New Services'}">
         <h1 class="nav-header">Short-Term Network<span ng-if="thisPage"> - {{thisPage}}</span></h1>
         <i ng-show="isAuth.val" class="mobile-menu-btn ion-navicon" id="mobile-menu-btn"></i>
 
