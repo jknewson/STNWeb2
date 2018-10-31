@@ -38,7 +38,7 @@ var paths = {
 var pipes = {};
 
 pipes.orderedVendorScripts = function () {
-    return plugins.order(['jquery.js', 'angular.js', 'leaflet-src.js', 'esri-leaflet.js', 'angular-leaflet-directive.js', 'directives.module.js', 'service.module.js', 'RequestInfo.js', 'HTTPServiceBase.js', 'Delegate.js', 'RequestTransform.js', 'EventManager.js', 'EventArgs.js', 'wimLegend.js']);
+    return plugins.order(['jquery.js', 'angular.js', 'leaflet-src.js', 'esri-leaflet.js', 'angular-leaflet-directive.js', 'directives.module.js', 'service.module.js', 'RequestInfo.js', 'HTTPServiceBase.js', 'Delegate.js', 'RequestTransform.js', 'EventManager.js', 'EventArgs.js', 'wimLegend.js','moment.js', 'moment-timezone.js']);
 };
 
 //this angularFilesort plugin may not work because each file does not have a uniquely named module(needed, acc. to docs)
@@ -61,7 +61,7 @@ pipes.validatedAppScripts = function () {
 pipes.builtAppScriptsDev = function () {
     return pipes.validatedAppScripts()
         // Comment out line 64 when developing locally
-        .pipe(rev())
+        //.pipe(rev())
         .pipe(gulp.dest(paths.dev));
 };
 
@@ -151,7 +151,7 @@ pipes.builtPartialsProd = function () {
 pipes.builtAppStylesDev = function () {
     return gulp.src(paths.appStyles)
         // Comment out line 154 when developing locally
-        .pipe(rev())
+        //.pipe(rev())
         .pipe(gulp.dest(paths.dev));
 };
 
