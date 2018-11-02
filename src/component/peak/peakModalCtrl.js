@@ -72,9 +72,18 @@
                 }//end if this is a datafile requiring sensor
             }//);
 
-
+            /* $scope.$watch('aPeak.peak_date.date', function(newValues){
+                console.log('*** Watched has been fired. ***');
+                console.log('New Cities :', newValues);
+            });
+            $scope.$watch('aPeak.peak_date.time', function(newValues){
+                console.log('*** Watched has been fired. ***');
+                console.log('New Cities :', newValues);
+            }); */
+            
             // $scope.siteFilesForSensors = allSiteFiles.filter(function (f) { return f.instrument_id !== null && f.instrument_id > 0; });
             $scope.timeZoneList = ['UTC', 'PST', 'MST', 'CST', 'EST', 'PDT', 'MDT', 'CDT', 'EDT'];
+            $scope.timePreview = {};
             $scope.LoggedInMember = allMembers.filter(function (m) { return m.member_id == $cookies.get('mID'); })[0];
             $scope.chosenHWMList = [];//holder of chosen hwms for this peak
             $scope.removedChosenHWMList = []; //holder for removed ones for PUT (if this is edit)
@@ -99,16 +108,23 @@
                 var theDate = new Date(y, m, da, h, mi, sec);
                 return theDate;
             };
-            var getDateTimePartsForConversion = function (d) {
-                var y = d.substr(0, 4);
-                var m = d.substr(5, 2) - 1; //subtract 1 for index value (January is 0)
-                var da = d.substr(8, 2);
-                var h = d.substr(11, 2);
-                var mi = d.substr(14, 2);
-                var sec = d.substr(17, 2);
-                var theDate = new Date(y, m, da, h, mi, sec);
-                return theDate;
-            };
+
+            /* var getDatePreveiw = function (d) {
+                // Date the user enters is in their computer's timezone, so we need to clone it and change the timezone. This way the values stay the same.
+                var enteredDate = $scope.aPeak.peak_date.date;
+                enteredDate = moment(enteredDate);
+                
+                // Cloning date and changing the timezone
+                var correctedDate = enteredDate.clone();
+                correctedDate = correctedDate.tz('Etc/GMT', true).format();
+                
+                // formatting in UTC
+                var utcDate = moment.utc(correctedDate).toDate().toUTCString();
+                
+                return utcDate;
+                
+            } */
+
             //get timezone and timestamp for user's timezone for showing.. post/put will convert it to utc
             var getTimeZoneStamp = function (dsent) {
                 var sendThis = [];
@@ -292,6 +308,20 @@
                     
                     $scope.aPeak.peak_date = utcDate;
                     $scope.aPeak.time_zone = 'UTC';
+                } if ($scope.aPeak.time_zone == "UTC") {
+                    // Date the user enters is in their computer's timezone, so we need to clone it and change the timezone. This way the values stay the same.
+                    var enteredDate = $scope.aPeak.peak_date;
+                    enteredDate = moment(enteredDate);
+                    
+                    // Cloning date and changing the timezone
+                    var correctedDate = enteredDate.clone();
+                    correctedDate = correctedDate.tz('Etc/GMT', true).format();
+                    
+                    // formatting in UTC
+                    var utcDate = moment.utc(correctedDate).toDate().toUTCString();
+                    
+                    $scope.aPeak.peak_date = utcDate;
+                    $scope.aPeak.time_zone = 'UTC';
                 }
                  else {
                     //make sure 'GMT' is tacked on so it doesn't try to add hrs to make the already utc a utc in db
@@ -320,6 +350,7 @@
                 //#region existing PEAK
                 $scope.aPeak = angular.copy(thisPeak);
                 $scope.aPeak.peak_date = { date: getDateTimeParts($scope.aPeak.peak_date), time: getDateTimeParts($scope.aPeak.peak_date) };
+                /* $scope.timePreview ={ date: getDatePreveiw($scope.aPeak.peak_date)}; */
                 //get peak creator name
                 $scope.PeakCreator = allMembers.filter(function (m) { return m.member_id == $scope.aPeak.member_id; })[0];
                 //check off those hwms used for this peak
@@ -364,6 +395,8 @@
                     size: 'md'
                 });
             };
+
+            
 
             //#region hwm list stuff
             var formatSelectedHWM = function (h) {
