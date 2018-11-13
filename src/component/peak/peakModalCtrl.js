@@ -181,6 +181,21 @@
             //is it UTC or local time..make sure it stays UTC
             var dealWithTimeStampb4Send = function () {
                 //check and see if they are not using UTC
+                if ($scope.aPeak.time_zone == "UTC") {
+                    // Date the user enters is in their computer's timezone, so we need to clone it and change the timezone. This way the values stay the same.
+                    var enteredDate = $scope.aPeak.peak_date;
+                    enteredDate = moment(enteredDate);
+                    
+                    // Cloning date and changing the timezone
+                    var correctedDate = enteredDate.clone();
+                    correctedDate = correctedDate.tz('Etc/GMT', true).format();
+                    
+                    // formatting in UTC
+                    var utcDate = moment.utc(correctedDate).toDate().toUTCString();
+                    
+                    $scope.aPeak.peak_date = utcDate;
+                    $scope.aPeak.time_zone = 'UTC';
+                }
                 if ($scope.aPeak.time_zone == "EST") {
                      
                     // Date the user enters is in their computer's timezone, so we need to clone it and change the timezone. This way the values stay the same.
@@ -302,20 +317,6 @@
                     // Cloning date and changing the timezone
                     var correctedDate = enteredDate.clone();
                     correctedDate = correctedDate.tz('America/Denver', true).format();
-                    
-                    // formatting in UTC
-                    var utcDate = moment.utc(correctedDate).toDate().toUTCString();
-                    
-                    $scope.aPeak.peak_date = utcDate;
-                    $scope.aPeak.time_zone = 'UTC';
-                } if ($scope.aPeak.time_zone == "UTC") {
-                    // Date the user enters is in their computer's timezone, so we need to clone it and change the timezone. This way the values stay the same.
-                    var enteredDate = $scope.aPeak.peak_date;
-                    enteredDate = moment(enteredDate);
-                    
-                    // Cloning date and changing the timezone
-                    var correctedDate = enteredDate.clone();
-                    correctedDate = correctedDate.tz('Etc/GMT', true).format();
                     
                     // formatting in UTC
                     var utcDate = moment.utc(correctedDate).toDate().toUTCString();
