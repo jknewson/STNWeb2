@@ -7986,7 +7986,7 @@
                 </div>
 
                 <!-- Peak Date: * -->
-                <div class="form-group" ng-class="{'has-error':peakForm.peak_date.date.$invalid && peakForm.peak_date.date.$dirty}">
+                <div class="form-group" ng-class="{'has-error':peakForm.peak_date.date.$invalid && peakForm.peak_date.date.$dirty}" id="test">
                     <label class="col-md-4 control-label req" for="peak_date.date">
                         Peak Date:
                         <button type="button" class="help-btn" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Required">
@@ -8036,7 +8036,7 @@
                         </button>
                     </label>
                     <div class="col-md-5">
-                        <select class="form-control" name="time_zone" ng-model="aPeak.time_zone"
+                        <select class="form-control" name="time_zone" ng-model="aPeak.time_zone" ng-change="change()"
                                 ng-options="vcm for vcm in timeZoneList" required>
                             <option value=""></option>
                         </select>
@@ -8045,6 +8045,18 @@
                         <span class="glyphicon glyphicon-question-sign"></span>
                     </button>
                 </div>
+
+                <!-- Time Preview:* -->
+                <div class="form-group">
+                        <label class="col-md-4 control-label">
+                                <button type="button" class="btn btn-primary" ng-click="previewTime()" ng-disabled="aPeak.time_zone == undefined" ng-model="aPeak.time_zone == undefined" tooltip-enable="aPeak.time_zone == undefined" tooltip-placement="top" ng-style="{'pointer-events':disableButton ? 'none' : ''}" uib-tooltip="Select a timezone in the dropdown above to see conversion">  
+                                    <span style="color:#fff;">Preview time in UTC</span>
+                                </button> 
+                        </label>
+                        <div class="col-md-5">
+                                 : {{timePreview}}
+                        </div>
+                    </div>
 
                 <!-- Peak Stage-->
                 <div class="form-group">
