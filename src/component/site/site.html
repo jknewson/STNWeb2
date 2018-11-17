@@ -3874,6 +3874,18 @@
                     </button>
                 </div>
 
+                <!-- Time Preview:* -->
+                <div class="form-group">
+                        <label class="col-md-4 control-label">
+                            <button type="button" class="btn btn-primary" ng-click="previewSensTime()" ng-disabled="aSensStatus.time_zone == undefined">
+                                <span style="color:#fff;">Preview time in UTC</span>
+                            </button>
+                        </label>
+                        <div class="col-md-5" style="padding-top:10px;" placeholder="{{test}}">
+                            : {{timePreviewSens}}
+                        </div>
+                    </div>
+
                 <!-- Note: -->
                 <div class="form-group">
                     <label class="col-md-4 control-label" for="notes">
@@ -4429,6 +4441,18 @@
                             </button>
                         </div>
 
+                        <!-- Time Preview:* -->
+                        <div class="form-group" ng-if="view.DEPval == 'edit'">
+                                <label class="col-md-4 control-label">
+                                    <button type="button" class="btn btn-primary" ng-click="previewDepTime()" ng-disabled="depStuffCopy[1].time_zone == undefined">
+                                        <span style="color:#fff;">Preview time in UTC</span>
+                                    </button>
+                                </label>
+                                <div class="col-md-5" style="padding-top:10px;" placeholder="{{test}}">
+                                    : {{timePreviewDep}}
+                                </div>
+                            </div>
+
                         <!-- Note: (detail)-->
                         <div class="col-md-12" ng-if="view.DEPval == 'detail'">
                             <div class="col-md-3 col-md-offset-1"><label>Note:</label></div>
@@ -4754,6 +4778,19 @@
                                     </button>
                                 </div>
 
+                                <!-- Time Preview:* -->
+                            <div class="form-group" ng-if="aFile.filetype_id === 2">
+                                    <label class="col-md-4 control-label">
+                                        <button type="button" class="btn btn-primary" ng-click="previewDataTimeDepFile()" ng-disabled="datafile.time_zone == undefined">
+                                            <span style="color:#fff;">Preview time in UTC</span>
+                                        </button>
+                                    </label>
+                                    <div class="col-md-5" style="padding-top:10px;" placeholder="{{test}}">
+                                        Start - {{timePreviewStart}} <br>
+                                        End - {{timePreviewEnd}}
+                                    </div>
+                                </div>
+
                                 <!-- Elevation -->
                                 <div ng-if="aFile.filetype_id === 2" class="form-group" style="margin:0;padding:0;padding-top:5px;">
                                     <label class="col-md-4 control-label">Elevation:</label>
@@ -5018,6 +5055,18 @@
                                         </button>
                                     </div>
 
+                                    <!-- Time Preview:* -->
+                                    <div class="form-group">
+                                            <label class="col-md-4 control-label">
+                                                <button type="button" class="btn btn-primary" ng-click="previewDataTimeNWISFile()" ng-disabled="NWISDF.time_zone == undefined">
+                                                    <span style="color:#fff;">Preview time in UTC</span>
+                                                </button>
+                                            </label>
+                                            <div class="col-md-5" style="padding-top:10px;" placeholder="{{test}}">
+                                                : {{timePreview}}
+                                            </div>
+                                        </div>
+
                                     <!-- Elevation -->
                                     <div class="form-group" style="margin:0;padding:0">
                                         <label class="col-md-4 control-label">Elevation:</label>
@@ -5264,6 +5313,18 @@
                         <span class="glyphicon glyphicon-question-sign"></span>
                     </button>
                 </div>
+
+                <!-- Time Preview:* -->
+                <div class="form-group">
+                        <label class="col-md-4 control-label">
+                            <button type="button" class="btn btn-primary" ng-click="previewTime()" ng-disabled="aRetrieval.time_zone == undefined">
+                                <span style="color:#fff;">Preview time in UTC</span>
+                            </button>
+                        </label>
+                        <div class="col-md-5" style="padding-top:10px;" placeholder="{{test}}">
+                            : {{timePreview}}
+                        </div>
+                    </div>
 
                 <!-- -------------------------- START TAPEDOWN SECTION --------------------------------  -->
                 <uib-accordion close-others="false">
@@ -5941,6 +6002,18 @@
                             </button>
                         </div>
 
+                        <!-- Time Preview:* -->
+                        <div class="form-group" ng-if="view.DEPval == 'detail'">
+                                <label class="col-md-4 control-label">
+                                    <button type="button" class="btn btn-primary" ng-click="previewTime()" ng-disabled="depStuffCopy[1].time_zone == undefined">
+                                        <span style="color:#fff;">Preview time in UTC</span>
+                                    </button>
+                                </label>
+                                <div class="col-md-5" style="padding-top:10px;" placeholder="{{test}}">
+                                    : {{timePreview}}
+                                </div>
+                            </div>
+
                         <!-- Note: (detail)-->
                         <div class="col-md-12" ng-if="view.DEPval == 'detail'">
                             <div class="col-md-4 col-md-offset-1"><label>Note:</label></div>
@@ -6100,6 +6173,18 @@
                                 <span class="glyphicon glyphicon-question-sign"></span>
                             </button>
                         </div>
+
+                        <!-- Time Preview:* -->
+                        <div class="form-group" ng-if="view.RETval == 'edit'">
+                                <label class="col-md-4 control-label">
+                                    <button type="button" class="btn btn-primary" ng-click="previewTimeRet()" ng-disabled="retStuffCopy[1].time_zone == undefined">
+                                        <span style="color:#fff;">Preview time in UTC</span>
+                                    </button>
+                                </label>
+                                <div class="col-md-5" style="padding-top:10px;" placeholder="{{test}}">
+                                    : {{timePreview}}
+                                </div>
+                            </div>
 
                         <br clear="all" /><hr />
 
@@ -6605,6 +6690,19 @@
                                     </button>
                                 </div>
 
+                                <!-- Time Preview:* -->
+                                <div class="form-group" ng-if="aFile.filetype_id === 2">
+                                        <label class="col-md-4 control-label">
+                                            <button type="button" class="btn btn-primary" ng-click="previewDataTimeDepFile()" ng-disabled="datafile.time_zone == undefined">
+                                                <span style="color:#fff;">Preview time in UTC</span>
+                                            </button>
+                                        </label>
+                                        <div class="col-md-5" style="padding-top:10px;" placeholder="{{test}}">
+                                                Start - {{timePreviewStart}} <br>
+                                                End - {{timePreviewEnd}}
+                                        </div>
+                                    </div>
+
                                 <!-- Elevation -->
                                 <div ng-if="aFile.filetype_id === 2" class="form-group" style="margin:0;padding:0">
                                     <label class="col-md-4 control-label">Elevation:</label>
@@ -6967,6 +7065,18 @@
                                         </button>
                                     </div>
 
+                                    <!-- Time Preview:* -->
+                                    <div class="form-group">
+                                            <label class="col-md-4 control-label">
+                                                <button type="button" class="btn btn-primary" ng-click="previewTime()" ng-disabled="NWISDF.time_zone == undefined">
+                                                    <span style="color:#fff;">Preview time in UTC</span>
+                                                </button>
+                                            </label>
+                                            <div class="col-md-5" style="padding-top:10px;" placeholder="{{test}}">
+                                                : {{timePreview}}
+                                            </div>
+                                        </div>
+
                                     <!-- Elevation -->
                                     <div class="form-group" style="margin:0;padding:0">
                                         <label class="col-md-4 control-label">Elevation:</label>
@@ -7225,6 +7335,19 @@
                         <span class="glyphicon glyphicon-question-sign"></span>
                     </button>
                 </div>
+
+                <!-- Time Preview:* -->
+                <div class="form-group" ng-if="aFile.filetype_id === 2">
+                        <label class="col-md-4 control-label">
+                            <button type="button" class="btn btn-primary" ng-click="previewDataTime()" ng-disabled="datafile.time_zone == undefined">
+                                <span style="color:#fff;">Preview time in UTC</span>
+                            </button>
+                        </label>
+                        <div class="col-md-5" style="padding-top:10px;" placeholder="{{test}}">
+                                Start - {{timePreviewStart}} <br>
+                                End - {{timePreviewEnd}}
+                        </div>
+                    </div>
 
                 <div ng-if="aFile.filetype_id === 2" class="form-group">
                     <label class="col-md-3 control-label">Elevation:</label>
@@ -7588,6 +7711,18 @@
                         <span class="glyphicon glyphicon-question-sign"></span>
                     </button>
                 </div>
+
+                <!-- Time Preview:* -->
+                <div class="form-group" ng-if="view.FILEval == 'detail' && aFile.filetype_id === 2">
+                        <label class="col-md-4 control-label">
+                            <button type="button" class="btn btn-primary" ng-click="previewTime()" ng-disabled="dfCopy.time_zone == undefined">
+                                <span style="color:#fff;">Preview time in UTC</span>
+                            </button>
+                        </label>
+                        <div class="col-md-5" style="padding-top:10px;" placeholder="{{test}}">
+                            : {{timePreview}}
+                        </div>
+                    </div>
 
                 <!--elevation (detail)-->
                 <div ng-if="view.FILEval == 'detail' && aFile.filetype_id === 2" class="col-md-12">
@@ -8049,11 +8184,11 @@
                 <!-- Time Preview:* -->
                 <div class="form-group">
                         <label class="col-md-4 control-label">
-                                <button type="button" class="btn btn-primary" ng-click="previewTime()" ng-disabled="aPeak.time_zone == undefined" ng-model="aPeak.time_zone == undefined" tooltip-enable="aPeak.time_zone == undefined" tooltip-placement="top" ng-style="{'pointer-events':disableButton ? 'none' : ''}" uib-tooltip="Select a timezone in the dropdown above to see conversion">  
+                                <button type="button" class="btn btn-primary" ng-click="previewTime()" ng-disabled="aPeak.time_zone == undefined">  
                                     <span style="color:#fff;">Preview time in UTC</span>
                                 </button> 
                         </label>
-                        <div class="col-md-5">
+                        <div class="col-md-5" style="padding-top:10px;" placeholder="{{test}}">
                                  : {{timePreview}}
                         </div>
                     </div>

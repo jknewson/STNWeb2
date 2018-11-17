@@ -83,7 +83,7 @@
             
             // $scope.siteFilesForSensors = allSiteFiles.filter(function (f) { return f.instrument_id !== null && f.instrument_id > 0; });
             $scope.timeZoneList = ['UTC', 'PST', 'MST', 'CST', 'EST', 'PDT', 'MDT', 'CDT', 'EDT'];
-            $scope.timePreview = [];
+            $scope.timePreview = "";
             $scope.LoggedInMember = allMembers.filter(function (m) { return m.member_id == $cookies.get('mID'); })[0];
             $scope.chosenHWMList = [];//holder of chosen hwms for this peak
             $scope.removedChosenHWMList = []; //holder for removed ones for PUT (if this is edit)
@@ -235,10 +235,23 @@
                     // Date the user enters is in their computer's timezone, so we need to clone it and change the timezone. This way the values stay the same.
                     var enteredDate = $scope.aPeak.peak_date;
                     enteredDate = moment(enteredDate);
-                    
-                    // Cloning date and changing the timezone
-                    var correctedDate = enteredDate.clone();
-                    correctedDate = correctedDate.tz('America/Los_Angeles', true).format();
+                    var isaylightSavings = enteredDate._i.toString();
+                    var correctedDate;
+
+                    if (isaylightSavings.indexOf('Daylight') >= 0){
+
+                        // Cloning date and changing the timezone
+                        correctedDate = enteredDate.clone();
+                        correctedDate.add(1, 'hours');
+                        correctedDate = correctedDate.tz('America/Los_Angeles', true).format();
+
+                    }
+
+                    if (isaylightSavings.indexOf('Standard') >= 0) {
+                        // Cloning date and changing the timezone
+                        correctedDate = enteredDate.clone();
+                        correctedDate = correctedDate.tz('America/Los_Angeles', true).format();
+                    }
                     
                     // formatting in UTC
                     var utcDate = moment.utc(correctedDate).toDate().toUTCString();
@@ -251,10 +264,23 @@
                     // Date the user enters is in their computer's timezone, so we need to clone it and change the timezone. This way the values stay the same.
                     var enteredDate = $scope.aPeak.peak_date;
                     enteredDate = moment(enteredDate);
-                    
-                    // Cloning date and changing the timezone
-                    var correctedDate = enteredDate.clone();
-                    correctedDate = correctedDate.tz('America/Chicago', true).format();
+                    var isaylightSavings = enteredDate._i.toString();
+                    var correctedDate;
+
+                    if (isaylightSavings.indexOf('Daylight') >= 0){
+
+                        // Cloning date and changing the timezone
+                        correctedDate = enteredDate.clone();
+                        correctedDate.add(1, 'hours');
+                        correctedDate = correctedDate.tz('America/Chicago', true).format();
+
+                    }
+
+                    if (isaylightSavings.indexOf('Standard') >= 0) {
+                        // Cloning date and changing the timezone
+                        correctedDate = enteredDate.clone();
+                        correctedDate = correctedDate.tz('America/Chicago', true).format();
+                    }
                     
                     // formatting in UTC
                     var utcDate = moment.utc(correctedDate).toDate().toUTCString();
@@ -266,11 +292,24 @@
                     
                     // Date the user enters is in their computer's timezone, so we need to clone it and change the timezone. This way the values stay the same.
                     var enteredDate = $scope.aPeak.peak_date;
-                    enteredDate = moment(enteredDate);
-                    
-                    // Cloning date and changing the timezone
-                    var correctedDate = enteredDate.clone();
-                    correctedDate = correctedDate.tz('America/Denver', true).format();
+                    enteredDate = moment(enteredDate);    
+                    var isaylightSavings = enteredDate._i.toString();     
+                    var correctedDate;
+
+                    if (isaylightSavings.indexOf('Daylight') >= 0){
+
+                        // Cloning date and changing the timezone
+                        correctedDate = enteredDate.clone();
+                        correctedDate.add(1, 'hours');
+                        correctedDate = correctedDate.tz('America/Denver', true).format();
+
+                    }
+
+                    if (isaylightSavings.indexOf('Standard') >= 0) {
+                        // Cloning date and changing the timezone
+                        correctedDate = enteredDate.clone();
+                        correctedDate = correctedDate.tz('America/Denver', true).format();
+                    }
                     
                     // formatting in UTC
                     var utcDate = moment.utc(correctedDate).toDate().toUTCString();
@@ -283,6 +322,23 @@
                     // Date the user enters is in their computer's timezone, so we need to clone it and change the timezone. This way the values stay the same.
                     var enteredDate = $scope.aPeak.peak_date;
                     enteredDate = moment(enteredDate);
+                    var isaylightSavings = enteredDate._i.toString();
+                    var correctedDate;
+
+                    if (isaylightSavings.indexOf('Daylight') >= 0){
+
+                        // Cloning date and changing the timezone
+                        correctedDate = enteredDate.clone();
+                        correctedDate = correctedDate.tz('America/Denver', true).format();
+
+                    }
+
+                    if (isaylightSavings.indexOf('Standard') >= 0) {
+                        // Cloning date and changing the timezone
+                        correctedDate = enteredDate.clone();
+                        correctedDate.subtract(1, 'hours');
+                        correctedDate = correctedDate.tz('America/Denver', true).format();
+                    }
                     
                     // Cloning date and changing the timezone
                     var correctedDate = enteredDate.clone();
@@ -299,10 +355,23 @@
                     // Date the user enters is in their computer's timezone, so we need to clone it and change the timezone. This way the values stay the same.
                     var enteredDate = $scope.aPeak.peak_date;
                     enteredDate = moment(enteredDate);
-                    
-                    // Cloning date and changing the timezone
-                    var correctedDate = enteredDate.clone();
-                    correctedDate = correctedDate.tz('America/New_York', true).format();
+                    var isaylightSavings = enteredDate._i.toString();
+                    var correctedDate;
+
+                    if (isaylightSavings.indexOf('Daylight') >= 0){
+
+                        // Cloning date and changing the timezone
+                        correctedDate = enteredDate.clone();
+                        correctedDate = correctedDate.tz('America/New_York', true).format();
+
+                    }
+
+                    if (isaylightSavings.indexOf('Standard') >= 0) {
+                        // Cloning date and changing the timezone
+                        correctedDate = enteredDate.clone();
+                        correctedDate.subtract(1, 'hours');
+                        correctedDate = correctedDate.tz('America/New_York', true).format();
+                    }
                     
                     // formatting in UTC
                     var utcDate = moment.utc(correctedDate).toDate().toUTCString();
@@ -315,10 +384,23 @@
                     // Date the user enters is in their computer's timezone, so we need to clone it and change the timezone. This way the values stay the same.
                     var enteredDate = $scope.aPeak.peak_date;
                     enteredDate = moment(enteredDate);
-                    
-                    // Cloning date and changing the timezone
-                    var correctedDate = enteredDate.clone();
-                    correctedDate = correctedDate.tz('America/Chicago', true).format();
+                    var isaylightSavings = enteredDate._i.toString();
+                    var correctedDate;
+
+                    if (isaylightSavings.indexOf('Daylight') >= 0){
+
+                        // Cloning date and changing the timezone
+                        correctedDate = enteredDate.clone();
+                        correctedDate = correctedDate.tz('America/Chicago', true).format();
+
+                    }
+
+                    if (isaylightSavings.indexOf('Standard') >= 0) {
+                        // Cloning date and changing the timezone
+                        correctedDate = enteredDate.clone();
+                        correctedDate.subtract(1, 'hours');
+                        correctedDate = correctedDate.tz('America/Chicago', true).format();
+                    }
                     
                     // formatting in UTC
                     var utcDate = moment.utc(correctedDate).toDate().toUTCString();
@@ -331,10 +413,23 @@
                     // Date the user enters is in their computer's timezone, so we need to clone it and change the timezone. This way the values stay the same.
                     var enteredDate = $scope.aPeak.peak_date;
                     enteredDate = moment(enteredDate);
-                    
-                    // Cloning date and changing the timezone
-                    var correctedDate = enteredDate.clone();
-                    correctedDate = correctedDate.tz('America/Denver', true).format();
+                    var isaylightSavings = enteredDate._i.toString();
+                    var correctedDate;
+
+                    if (isaylightSavings.indexOf('Daylight') >= 0){
+
+                        // Cloning date and changing the timezone
+                        correctedDate = enteredDate.clone();
+                        correctedDate = correctedDate.tz('America/Denver', true).format();
+
+                    }
+
+                    if (isaylightSavings.indexOf('Standard') >= 0) {
+                        // Cloning date and changing the timezone
+                        correctedDate = enteredDate.clone();
+                        correctedDate.subtract(1, 'hours');
+                        correctedDate = correctedDate.tz('America/Denver', true).format();
+                    }
                     
                     // formatting in UTC
                     var utcDate = moment.utc(correctedDate).toDate().toUTCString();
@@ -349,6 +444,7 @@
                 }
             };
             
+            // preview time in peak modal
             $scope.previewTime = function () {
 
                 // getting the time initally set for peak date
@@ -406,10 +502,23 @@
                     // Date the user enters is in their computer's timezone, so we need to clone it and change the timezone. This way the values stay the same.
                     var enteredDate =  $scope.timePreview;
                     enteredDate = moment(enteredDate);
+                    var isaylightSavings = enteredDate._i.toString();
+                    var correctedDate;
 
-                    // Cloning date and changing the timezone
-                    var correctedDate = enteredDate.clone();
-                    correctedDate = correctedDate.tz('America/Los_Angeles', true).format();
+                    if (isaylightSavings.indexOf('Daylight') >= 0){
+
+                        // Cloning date and changing the timezone
+                        correctedDate = enteredDate.clone();
+                        correctedDate.add(1, 'hours');
+                        correctedDate = correctedDate.tz('America/Los_Angeles', true).format();
+
+                    }
+
+                    if (isaylightSavings.indexOf('Standard') >= 0) {
+                        // Cloning date and changing the timezone
+                        correctedDate = enteredDate.clone();
+                        correctedDate = correctedDate.tz('America/Los_Angeles', true).format();
+                    }
 
                     // formatting in UTC
                     var utcDate = moment.utc(correctedDate).toDate().toUTCString();
@@ -421,10 +530,23 @@
                     // Date the user enters is in their computer's timezone, so we need to clone it and change the timezone. This way the values stay the same.
                     var enteredDate = $scope.timePreview;
                     enteredDate = moment(enteredDate);
+                    var isaylightSavings = enteredDate._i.toString();
+                    var correctedDate;
 
-                    // Cloning date and changing the timezone
-                    var correctedDate = enteredDate.clone();
-                    correctedDate = correctedDate.tz('America/Chicago', true).format();
+                    if (isaylightSavings.indexOf('Daylight') >= 0){
+
+                        // Cloning date and changing the timezone
+                        correctedDate = enteredDate.clone();
+                        correctedDate.add(1, 'hours');
+                        correctedDate = correctedDate.tz('America/Chicago', true).format();
+
+                    }
+
+                    if (isaylightSavings.indexOf('Standard') >= 0) {
+                        // Cloning date and changing the timezone
+                        correctedDate = enteredDate.clone();
+                        correctedDate = correctedDate.tz('America/Chicago', true).format();
+                    }
 
                     // formatting in UTC
                     var utcDate = moment.utc(correctedDate).toDate().toUTCString();
@@ -436,10 +558,23 @@
                     // Date the user enters is in their computer's timezone, so we need to clone it and change the timezone. This way the values stay the same.
                     var enteredDate = $scope.timePreview;
                     enteredDate = moment(enteredDate);
+                    var isaylightSavings = enteredDate._i.toString();
+                    var correctedDate;
 
-                    // Cloning date and changing the timezone
-                    var correctedDate = enteredDate.clone();
-                    correctedDate = correctedDate.tz('America/Denver', true).format();
+                    if (isaylightSavings.indexOf('Daylight') >= 0){
+
+                        // Cloning date and changing the timezone
+                        correctedDate = enteredDate.clone();
+                        correctedDate.add(1, 'hours');
+                        correctedDate = correctedDate.tz('America/Denver', true).format();
+
+                    }
+
+                    if (isaylightSavings.indexOf('Standard') >= 0) {
+                        // Cloning date and changing the timezone
+                        correctedDate = enteredDate.clone();
+                        correctedDate = correctedDate.tz('America/Denver', true).format();
+                    }
 
                     // formatting in UTC
                     var utcDate = moment.utc(correctedDate).toDate().toUTCString();
@@ -451,10 +586,23 @@
                     // Date the user enters is in their computer's timezone, so we need to clone it and change the timezone. This way the values stay the same.
                     var enteredDate = $scope.timePreview;
                     enteredDate = moment(enteredDate);
+                    var isaylightSavings = enteredDate._i.toString();
+                    var correctedDate;
 
-                    // Cloning date and changing the timezone
-                    var correctedDate = enteredDate.clone();
-                    correctedDate = correctedDate.tz('America/Los_Angeles', true).format();
+                    if (isaylightSavings.indexOf('Daylight') >= 0){
+
+                        // Cloning date and changing the timezone
+                        correctedDate = enteredDate.clone();
+                        correctedDate = correctedDate.tz('America/Los_Angeles', true).format();
+
+                    }
+
+                    if (isaylightSavings.indexOf('Standard') >= 0) {
+                        // Cloning date and changing the timezone
+                        correctedDate = enteredDate.clone();
+                        correctedDate.subtract(1, 'hours');
+                        correctedDate = correctedDate.tz('America/Los_Angeles', true).format();
+                    }
 
                     // formatting in UTC
                     var utcDate = moment.utc(correctedDate).toDate().toUTCString();
@@ -466,10 +614,23 @@
                     // Date the user enters is in their computer's timezone, so we need to clone it and change the timezone. This way the values stay the same.
                     var enteredDate = $scope.timePreview;
                     enteredDate = moment(enteredDate);
+                    var isaylightSavings = enteredDate._i.toString();
+                    var correctedDate;
 
-                    // Cloning date and changing the timezone
-                    var correctedDate = enteredDate.clone();
-                    correctedDate = correctedDate.tz('America/New_York', true).format();
+                    if (isaylightSavings.indexOf('Daylight') >= 0){
+
+                        // Cloning date and changing the timezone
+                        correctedDate = enteredDate.clone();
+                        correctedDate = correctedDate.tz('America/New_York', true).format();
+
+                    }
+
+                    if (isaylightSavings.indexOf('Standard') >= 0) {
+                        // Cloning date and changing the timezone
+                        correctedDate = enteredDate.clone();
+                        correctedDate.subtract(1, 'hours');
+                        correctedDate = correctedDate.tz('America/New_York', true).format();
+                    }
 
                     // formatting in UTC
                     var utcDate = moment.utc(correctedDate).toDate().toUTCString();
@@ -481,10 +642,23 @@
                     // Date the user enters is in their computer's timezone, so we need to clone it and change the timezone. This way the values stay the same.
                     var enteredDate = $scope.timePreview;
                     enteredDate = moment(enteredDate);
+                    var isaylightSavings = enteredDate._i.toString();
+                    var correctedDate;
 
-                    // Cloning date and changing the timezone
-                    var correctedDate = enteredDate.clone();
-                    correctedDate = correctedDate.tz('America/Chicago', true).format();
+                    if (isaylightSavings.indexOf('Daylight') >= 0){
+
+                        // Cloning date and changing the timezone
+                        correctedDate = enteredDate.clone();
+                        correctedDate = correctedDate.tz('America/Chicago', true).format();
+
+                    }
+
+                    if (isaylightSavings.indexOf('Standard') >= 0) {
+                        // Cloning date and changing the timezone
+                        correctedDate = enteredDate.clone();
+                        correctedDate.subtract(1, 'hours');
+                        correctedDate = correctedDate.tz('America/Chicago', true).format();
+                    }
 
                     // formatting in UTC
                     var utcDate = moment.utc(correctedDate).toDate().toUTCString();
@@ -496,10 +670,23 @@
                     // Date the user enters is in their computer's timezone, so we need to clone it and change the timezone. This way the values stay the same.
                     var enteredDate = $scope.timePreview;
                     enteredDate = moment(enteredDate);
+                    var isaylightSavings = enteredDate._i.toString();
+                    var correctedDate;
 
-                    // Cloning date and changing the timezone
-                    var correctedDate = enteredDate.clone();
-                    correctedDate = correctedDate.tz('America/Denver', true).format();
+                    if (isaylightSavings.indexOf('Daylight') >= 0){
+
+                        // Cloning date and changing the timezone
+                        correctedDate = enteredDate.clone();
+                        correctedDate = correctedDate.tz('America/Denver', true).format();
+
+                    }
+
+                    if (isaylightSavings.indexOf('Standard') >= 0) {
+                        // Cloning date and changing the timezone
+                        correctedDate = enteredDate.clone();
+                        correctedDate.subtract(1, 'hours');
+                        correctedDate = correctedDate.tz('America/Denver', true).format();
+                    }
 
                     // formatting in UTC
                     var utcDate = moment.utc(correctedDate).toDate().toUTCString();

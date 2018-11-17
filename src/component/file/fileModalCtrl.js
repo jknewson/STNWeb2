@@ -292,13 +292,31 @@
     
                                 var enteredUtcEndDateTime = $scope.dfCopy.good_end;
                                 enteredUtcEndDateTime = moment(enteredUtcEndDateTime);
-    
-                                // Cloning date and changing the timezone
-                                var correctedutcStartDateTime = enteredUtcStartDateTime.clone();
-                                correctedutcStartDateTime = correctedutcStartDateTime.tz('America/New_York', true).format();
-    
-                                var correctedutcEndDateTime = enteredUtcEndDateTime.clone();
-                                correctedutcEndDateTime = correctedutcEndDateTime.tz('America/New_York', true).format();
+
+                                var isaylightSavings = enteredDate._i.toString();
+                                var correctedutcStartDateTime;
+                                var correctedutcEndDateTime;
+
+                                if (isaylightSavings.indexOf('Daylight') >= 0) {
+
+                                    correctedutcStartDateTime = enteredUtcStartDateTime.clone();
+                                    correctedutcStartDateTime.add(1, 'hours');
+                                    correctedutcStartDateTime = correctedutcStartDateTime.tz('America/New_York', true).format();
+
+                                    correctedutcEndDateTime = enteredUtcEndDateTime.clone();
+                                    correctedutcEndDateTime.add(1, 'hours');
+                                    correctedutcEndDateTime = correctedutcEndDateTime.tz('America/New_York', true).format();
+
+                                }
+
+                                if (isaylightSavings.indexOf('Standard') >= 0) {
+                                    // Cloning date and changing the timezone
+                                    correctedutcStartDateTime = enteredUtcStartDateTime.clone();
+                                    correctedutcStartDateTime = correctedutcStartDateTime.tz('America/New_York', true).format();
+
+                                    correctedutcEndDateTime = enteredUtcEndDateTime.clone();
+                                    correctedutcEndDateTime = correctedutcEndDateTime.tz('America/New_York', true).format();
+                                }
     
                                 // formatting in UTC
                                 var utcStartDateTime = moment.utc(correctedutcStartDateTime).toDate().toUTCString();
@@ -314,13 +332,31 @@
     
                                 var enteredUtcEndDateTime = $scope.dfCopy.good_end;
                                 enteredUtcEndDateTime = moment(enteredUtcEndDateTime);
-    
-                                // Cloning date and changing the timezone
-                                var correctedutcStartDateTime = enteredUtcStartDateTime.clone();
-                                correctedutcStartDateTime = correctedutcStartDateTime.tz('America/Los_Angeles', true).format();
-    
-                                var correctedutcEndDateTime = enteredUtcEndDateTime.clone();
-                                correctedutcEndDateTime = correctedutcEndDateTime.tz('America/Los_Angeles', true).format();
+
+                                var isaylightSavings = enteredDate._i.toString();
+                                var correctedutcStartDateTime;
+                                var correctedutcEndDateTime;
+
+                                if (isaylightSavings.indexOf('Daylight') >= 0) {
+
+                                    correctedutcStartDateTime = enteredUtcStartDateTime.clone();
+                                    correctedutcStartDateTime.add(1, 'hours');
+                                    correctedutcStartDateTime = correctedutcStartDateTime.tz('America/Los_Angeles', true).format();
+
+                                    correctedutcEndDateTime = enteredUtcEndDateTime.clone();
+                                    correctedutcEndDateTime.add(1, 'hours');
+                                    correctedutcEndDateTime = correctedutcEndDateTime.tz('America/Los_Angeles', true).format();
+
+                                }
+
+                                if (isaylightSavings.indexOf('Standard') >= 0) {
+                                    // Cloning date and changing the timezone
+                                    correctedutcStartDateTime = enteredUtcStartDateTime.clone();
+                                     correctedutcStartDateTime = correctedutcStartDateTime.tz('America/Los_Angeles', true).format();
+
+                                    correctedutcEndDateTime = enteredUtcEndDateTime.clone();
+                                    correctedutcEndDateTime = correctedutcEndDateTime.tz('America/Los_Angeles', true).format();
+                                }
     
                                 // formatting in UTC
                                 var utcStartDateTime = moment.utc(correctedutcStartDateTime).toDate().toUTCString();
@@ -336,13 +372,30 @@
     
                                 var enteredUtcEndDateTime = $scope.dfCopy.good_end;
                                 enteredUtcEndDateTime = moment(enteredUtcEndDateTime);
-    
-                                // Cloning date and changing the timezone
-                                var correctedutcStartDateTime = enteredUtcStartDateTime.clone();
-                                correctedutcStartDateTime = correctedutcStartDateTime.tz('America/Chicago', true).format();
-    
-                                var correctedutcEndDateTime = enteredUtcEndDateTime.clone();
-                                correctedutcEndDateTime = correctedutcEndDateTime.tz('America/Chicago', true).format();
+
+                                var isaylightSavings = enteredDate._i.toString();
+                                var correctedutcStartDateTime;
+                                var correctedutcEndDateTime;
+
+                                if (isaylightSavings.indexOf('Daylight') >= 0) {
+
+                                    correctedutcStartDateTime = enteredUtcStartDateTime.clone();
+                                    correctedutcStartDateTime.add(1, 'hours');
+                                    correctedutcStartDateTime = correctedutcStartDateTime.tz('America/Chicago', true).format();
+
+                                    correctedutcEndDateTime = enteredUtcEndDateTime.clone();
+                                    correctedutcEndDateTime.add(1, 'hours');
+                                    correctedutcEndDateTime = correctedutcEndDateTime.tz('America/Chicago', true).format();
+
+                                }
+
+                                if (isaylightSavings.indexOf('Standard') >= 0) {
+                                    correctedutcStartDateTime = enteredUtcStartDateTime.clone();
+                                    correctedutcStartDateTime = correctedutcStartDateTime.tz('America/Chicago', true).format();
+
+                                    correctedutcEndDateTime = enteredUtcEndDateTime.clone();
+                                    correctedutcEndDateTime = correctedutcEndDateTime.tz('America/Chicago', true).format();
+                                }
     
                                 // formatting in UTC
                                 var utcStartDateTime = moment.utc(correctedutcStartDateTime).toDate().toUTCString();
@@ -358,13 +411,30 @@
     
                                 var enteredUtcEndDateTime = $scope.dfCopy.good_end;
                                 enteredUtcEndDateTime = moment(enteredUtcEndDateTime);
-    
-                                // Cloning date and changing the timezone
-                                var correctedutcStartDateTime = enteredUtcStartDateTime.clone();
-                                correctedutcStartDateTime = correctedutcStartDateTime.tz('America/Denver', true).format();
-    
-                                var correctedutcEndDateTime = enteredUtcEndDateTime.clone();
-                                correctedutcEndDateTime = correctedutcEndDateTime.tz('America/Denver', true).format();
+
+                                var isaylightSavings = enteredDate._i.toString();
+                                var correctedutcStartDateTime;
+                                var correctedutcEndDateTime;
+
+                                if (isaylightSavings.indexOf('Daylight') >= 0) {
+
+                                    correctedutcStartDateTime = enteredUtcStartDateTime.clone();
+                                    correctedutcStartDateTime.add(1, 'hours');
+                                    correctedutcStartDateTime = correctedutcStartDateTime.tz('America/Denver', true).format();
+
+                                    correctedutcEndDateTime = enteredUtcEndDateTime.clone();
+                                    correctedutcEndDateTime.add(1, 'hours');
+                                    correctedutcEndDateTime = correctedutcEndDateTime.tz('America/Denver', true).format();
+
+                                }
+
+                                if (isaylightSavings.indexOf('Standard') >= 0) {
+                                    correctedutcStartDateTime = enteredUtcStartDateTime.clone();
+                                     correctedutcStartDateTime = correctedutcStartDateTime.tz('America/Denver', true).format();
+
+                                    correctedutcEndDateTime = enteredUtcEndDateTime.clone();
+                                    correctedutcEndDateTime = correctedutcEndDateTime.tz('America/Denver', true).format();
+                                }
     
                                 // formatting in UTC
                                 var utcStartDateTime = moment.utc(correctedutcStartDateTime).toDate().toUTCString();
@@ -380,13 +450,30 @@
     
                                 var enteredUtcEndDateTime = $scope.dfCopy.good_end;
                                 enteredUtcEndDateTime = moment(enteredUtcEndDateTime);
-    
-                                // Cloning date and changing the timezone
-                                var correctedutcStartDateTime = enteredUtcStartDateTime.clone();
-                                correctedutcStartDateTime = correctedutcStartDateTime.tz('America/Los_Angeles', true).format();
-    
-                                var correctedutcEndDateTime = enteredUtcEndDateTime.clone();
-                                correctedutcEndDateTime = correctedutcEndDateTime.tz('America/Los_Angeles', true).format();
+
+                                var isaylightSavings = enteredDate._i.toString();
+                                var correctedutcStartDateTime;
+                                var correctedutcEndDateTime;
+
+                                if (isaylightSavings.indexOf('Daylight') >= 0) {
+
+                                    correctedutcStartDateTime = enteredUtcStartDateTime.clone();
+                                    correctedutcStartDateTime = correctedutcStartDateTime.tz('America/Los_Angeles', true).format();
+
+                                    correctedutcEndDateTime = enteredUtcEndDateTime.clone();
+                                    correctedutcEndDateTime = correctedutcEndDateTime.tz('America/Los_Angeles', true).format();
+
+                                }
+
+                                if (isaylightSavings.indexOf('Standard') >= 0) {
+                                    correctedutcStartDateTime = enteredUtcStartDateTime.clone();
+                                    correctedutcStartDateTime.subract(1, 'hours');
+                                    correctedutcStartDateTime = correctedutcStartDateTime.tz('America/Los_Angeles', true).format();
+
+                                    correctedutcEndDateTime = enteredUtcEndDateTime.clone();
+                                    correctedutcEndDateTime.subract(1, 'hours');
+                                    correctedutcEndDateTime = correctedutcEndDateTime.tz('America/Los_Angeles', true).format();
+                                }
     
                                 // formatting in UTC
                                 var utcStartDateTime = moment.utc(correctedutcStartDateTime).toDate().toUTCString();
@@ -402,13 +489,30 @@
     
                                 var enteredUtcEndDateTime = $scope.dfCopy.good_end;
                                 enteredUtcEndDateTime = moment(enteredUtcEndDateTime);
-    
-                                // Cloning date and changing the timezone
-                                var correctedutcStartDateTime = enteredUtcStartDateTime.clone();
-                                correctedutcStartDateTime = correctedutcStartDateTime.tz('America/New_York', true).format();
-    
-                                var correctedutcEndDateTime = enteredUtcEndDateTime.clone();
-                                correctedutcEndDateTime = correctedutcEndDateTime.tz('America/New_York', true).format();
+
+                                var isaylightSavings = enteredDate._i.toString();
+                                var correctedutcStartDateTime;
+                                var correctedutcEndDateTime;
+
+                                if (isaylightSavings.indexOf('Daylight') >= 0) {
+
+                                    correctedutcStartDateTime = enteredUtcStartDateTime.clone();
+                                    correctedutcStartDateTime = correctedutcStartDateTime.tz('America/New_York', true).format();
+
+                                    correctedutcEndDateTime = enteredUtcEndDateTime.clone();
+                                    correctedutcEndDateTime = correctedutcEndDateTime.tz('America/New_York', true).format();
+
+                                }
+
+                                if (isaylightSavings.indexOf('Standard') >= 0) {
+                                    correctedutcStartDateTime = enteredUtcStartDateTime.clone();
+                                    correctedutcStartDateTime.subract(1, 'hours');
+                                    correctedutcStartDateTime = correctedutcStartDateTime.tz('America/New_York', true).format();
+
+                                    correctedutcEndDateTime = enteredUtcEndDateTime.clone();
+                                    correctedutcEndDateTime.subract(1, 'hours');
+                                    correctedutcEndDateTime = correctedutcEndDateTime.tz('America/New_York', true).format();
+                                }
     
                                 // formatting in UTC
                                 var utcStartDateTime = moment.utc(correctedutcStartDateTime).toDate().toUTCString();
@@ -424,13 +528,30 @@
     
                                 var enteredUtcEndDateTime = $scope.dfCopy.good_end;
                                 enteredUtcEndDateTime = moment(enteredUtcEndDateTime);
-    
-                                // Cloning date and changing the timezone
-                                var correctedutcStartDateTime = enteredUtcStartDateTime.clone();
-                                correctedutcStartDateTime = correctedutcStartDateTime.tz('America/Chicago', true).format();
-    
-                                var correctedutcEndDateTime = enteredUtcEndDateTime.clone();
-                                correctedutcEndDateTime = correctedutcEndDateTime.tz('America/Chicago', true).format();
+
+                                var isaylightSavings = enteredDate._i.toString();
+                                var correctedutcStartDateTime;
+                                var correctedutcEndDateTime;
+
+                                if (isaylightSavings.indexOf('Daylight') >= 0) {
+
+                                    correctedutcStartDateTime = enteredUtcStartDateTime.clone();
+                                    correctedutcStartDateTime = correctedutcStartDateTime.tz('America/Chicago', true).format();
+
+                                    correctedutcEndDateTime = enteredUtcEndDateTime.clone();
+                                    correctedutcEndDateTime = correctedutcEndDateTime.tz('America/Chicago', true).format();
+
+                                }
+
+                                if (isaylightSavings.indexOf('Standard') >= 0) {
+                                    correctedutcStartDateTime = enteredUtcStartDateTime.clone();
+                                    correctedutcStartDateTime.subract(1, 'hours');
+                                    correctedutcStartDateTime = correctedutcStartDateTime.tz('America/Chicago', true).format();
+
+                                    correctedutcEndDateTime = enteredUtcEndDateTime.clone();
+                                    correctedutcEndDateTime.subract(1, 'hours');
+                                    correctedutcEndDateTime = correctedutcEndDateTime.tz('America/Chicago', true).format();
+                                }
     
                                 // formatting in UTC
                                 var utcStartDateTime = moment.utc(correctedutcStartDateTime).toDate().toUTCString();
@@ -446,13 +567,30 @@
     
                                 var enteredUtcEndDateTime = $scope.dfCopy.good_end;
                                 enteredUtcEndDateTime = moment(enteredUtcEndDateTime);
-    
-                                // Cloning date and changing the timezone
-                                var correctedutcStartDateTime = enteredUtcStartDateTime.clone();
-                                correctedutcStartDateTime = correctedutcStartDateTime.tz('America/Denver', true).format();
-    
-                                var correctedutcEndDateTime = enteredUtcEndDateTime.clone();
-                                correctedutcEndDateTime = correctedutcEndDateTime.tz('America/Denver', true).format();
+
+                                var isaylightSavings = enteredDate._i.toString();
+                                var correctedutcStartDateTime;
+                                var correctedutcEndDateTime;
+
+                                if (isaylightSavings.indexOf('Daylight') >= 0) {
+
+                                    correctedutcStartDateTime = enteredUtcStartDateTime.clone();
+                                    correctedutcStartDateTime = correctedutcStartDateTime.tz('America/Denver', true).format();
+
+                                    correctedutcEndDateTime = enteredUtcEndDateTime.clone();
+                                    correctedutcEndDateTime = correctedutcEndDateTime.tz('America/Denver', true).format();
+
+                                }
+
+                                if (isaylightSavings.indexOf('Standard') >= 0) {
+                                    correctedutcStartDateTime = enteredUtcStartDateTime.clone();
+                                    correctedutcStartDateTime.subract(1, 'hours');
+                                    correctedutcStartDateTime = correctedutcStartDateTime.tz('America/Denver', true).format();
+
+                                    correctedutcEndDateTime = enteredUtcEndDateTime.clone();
+                                    correctedutcEndDateTime.subract(1, 'hours');
+                                    correctedutcEndDateTime = correctedutcEndDateTime.tz('America/Denver', true).format();
+                                }
     
                                 // formatting in UTC
                                 var utcStartDateTime = moment.utc(correctedutcStartDateTime).toDate().toUTCString();
