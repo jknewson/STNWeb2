@@ -72,14 +72,6 @@
                 }//end if this is a datafile requiring sensor
             }//);
 
-            /* $scope.$watch('aPeak.peak_date.date', function(newValues){
-                console.log('*** Watched has been fired. ***');
-                console.log('New Cities :', newValues);
-            });
-            $scope.$watch('aPeak.peak_date.time', function(newValues){
-                console.log('*** Watched has been fired. ***');
-                console.log('New Cities :', newValues);
-            }); */
             
             // $scope.siteFilesForSensors = allSiteFiles.filter(function (f) { return f.instrument_id !== null && f.instrument_id > 0; });
             $scope.timeZoneList = ['UTC', 'PST', 'MST', 'CST', 'EST', 'PDT', 'MDT', 'CDT', 'EDT'];
@@ -99,19 +91,25 @@
             //formatting date and time properly for chrome and ff
             
             var getDateTimeParts = function (d) {
-                var y = d.substr(0, 4);
-                var m = d.substr(5, 2) - 1; //subtract 1 for index value (January is 0)
-                var da = d.substr(8, 2);
-                var h = d.substr(11, 2);
-                var mi = d.substr(14, 2);
-                var sec = d.substr(17, 2);
-                var theDate = new Date(y, m, da, h, mi, sec);
+                var theDate;
+                var isDate = Object.prototype.toString.call(d) === '[object Date]';
+                if (isDate === false) { // "2017-09-28T09:33:09"
+                    var y = d.substr(0, 4);
+                    var m = d.substr(5, 2) - 1; //subtract 1 for index value (January is 0)
+                    var da = d.substr(8, 2);
+                    var h = d.substr(11, 2);
+                    var mi = d.substr(14, 2);
+                    var sec = d.substr(17, 2);
+                    theDate = new Date(y, m, da, h, mi, sec);
+                } else {
+                    theDate = d;
+                }
                 return theDate;
             };
 
             /* var getDatePreveiw = function (d) {
                 // Date the user enters is in their computer's timezone, so we need to clone it and change the timezone. This way the values stay the same.
-                var enteredDate = $scope.aPeak.peak_date.date;
+                var enteredDate = $scope.aPeak.peak_date;
                 enteredDate = moment(enteredDate);
                 
                 // Cloning date and changing the timezone
@@ -178,10 +176,9 @@
                 $scope.datepickrs[which] = true;
             };
 
-            $scope.$watch('aPeak.peak_date.date',function(val){
-                //to do       
-                console.log(val)
-             })
+            /* $scope.$watch('aPeak.peak_date',function(val){
+                previewTime()
+             }) */
 
             //is it UTC or local time..make sure it stays UTC
             var dealWithTimeStampb4Send = function () {
@@ -444,14 +441,17 @@
                 }
             };
             
-            // preview time in peak modal
-            $scope.previewTime = function () {
+            var getinitialtimepreview = function () { 
+                /* $scope.$watch('aPeak.peak_date', function(newValues, oldvalues){ */
+                    //console.log(newValues + "and " + oldvalues);
+
+                // preview time in peak modal Peak Date:
 
                 // getting the time initally set for peak date
-                if ($scope.aPeak.peak_date.date != undefined) {
-                    $scope.timePreview = $scope.aPeak.peak_date.date;
+                if ($scope.aPeak.peak_date != undefined) {
+                    $scope.timePreview = $scope.aPeak.peak_date;
                 } else {
-                    $scope.timePreview = $scope.aPeak.peak_date.date;
+                    $scope.timePreview = $scope.aPeak.peak_date;
                 }
 
                 //check and see if they are not using UTC
@@ -698,7 +698,267 @@
                     var i = $scope.timePreview.toString().indexOf('GMT') + 3;
                     $scope.timePreview = $scope.timePreview.toString().substring(0, i);
                 }
+                
+            };
+            
+                $scope.change = function (dt) { 
+                /* $scope.$watch('aPeak.peak_date', function(newValues, oldvalues){ */
+                    //console.log(newValues + "and " + oldvalues);
 
+                // preview time in peak modal Peak Date:
+
+                // getting the time initally set for peak date
+                if ($scope.aPeak.peak_date != undefined) {
+                    $scope.timePreview = $scope.aPeak.peak_date;
+                } else {
+                    $scope.timePreview = $scope.aPeak.peak_date;
+                }
+
+                //check and see if they are not using UTC
+                if ($scope.aPeak.time_zone == "UTC") {
+                    // Date the user enters is in their computer's timezone, so we need to clone it and change the timezone. This way the values stay the same.
+                    var enteredDate = $scope.timePreview;
+                    enteredDate = moment(enteredDate);
+
+                    // Cloning date and changing the timezone
+                    var correctedDate = enteredDate.clone();
+                    correctedDate = correctedDate.tz('Etc/GMT', true).format();
+
+                    // formatting in UTC
+                    var utcDate = moment.utc(correctedDate).toDate().toUTCString();
+
+                    $scope.timePreview = utcDate;
+                }
+                if ($scope.aPeak.time_zone == "EST") { // +5
+                    // + 5
+                    // Date the user enters is in their computer's timezone, so we need to clone it and change the timezone. This way the values stay the same.
+                    var enteredDate =  $scope.timePreview;
+                    enteredDate = moment(enteredDate);
+                    var isaylightSavings = enteredDate._i.toString();
+                    var correctedDate;
+
+                    if (isaylightSavings.indexOf('Daylight') >= 0) {
+
+                        // Cloning date and changing the timezone
+                        correctedDate = enteredDate.clone();
+                        correctedDate.add(1, 'hours');
+                        correctedDate = correctedDate.tz('America/New_York', true).format();
+
+                    }
+
+                    if (isaylightSavings.indexOf('Standard') >= 0) {
+                        // Cloning date and changing the timezone
+                        correctedDate = enteredDate.clone();
+                        correctedDate = correctedDate.tz('America/New_York', true).format();
+                    }
+
+                    // formatting in UTC
+                    var utcDate = moment.utc(correctedDate).toDate().toUTCString();
+
+                    $scope.timePreview = utcDate;
+
+                } if ($scope.aPeak.time_zone == "PST") {
+
+                    // Date the user enters is in their computer's timezone, so we need to clone it and change the timezone. This way the values stay the same.
+                    var enteredDate =  $scope.timePreview;
+                    enteredDate = moment(enteredDate);
+                    var isaylightSavings = enteredDate._i.toString();
+                    var correctedDate;
+
+                    if (isaylightSavings.indexOf('Daylight') >= 0){
+
+                        // Cloning date and changing the timezone
+                        correctedDate = enteredDate.clone();
+                        correctedDate.add(1, 'hours');
+                        correctedDate = correctedDate.tz('America/Los_Angeles', true).format();
+
+                    }
+
+                    if (isaylightSavings.indexOf('Standard') >= 0) {
+                        // Cloning date and changing the timezone
+                        correctedDate = enteredDate.clone();
+                        correctedDate = correctedDate.tz('America/Los_Angeles', true).format();
+                    }
+
+                    // formatting in UTC
+                    var utcDate = moment.utc(correctedDate).toDate().toUTCString();
+
+                    $scope.timePreview = utcDate;
+
+                } if ($scope.aPeak.time_zone == "CST") {
+
+                    // Date the user enters is in their computer's timezone, so we need to clone it and change the timezone. This way the values stay the same.
+                    var enteredDate = $scope.timePreview;
+                    enteredDate = moment(enteredDate);
+                    var isaylightSavings = enteredDate._i.toString();
+                    var correctedDate;
+
+                    if (isaylightSavings.indexOf('Daylight') >= 0){
+
+                        // Cloning date and changing the timezone
+                        correctedDate = enteredDate.clone();
+                        correctedDate.add(1, 'hours');
+                        correctedDate = correctedDate.tz('America/Chicago', true).format();
+
+                    }
+
+                    if (isaylightSavings.indexOf('Standard') >= 0) {
+                        // Cloning date and changing the timezone
+                        correctedDate = enteredDate.clone();
+                        correctedDate = correctedDate.tz('America/Chicago', true).format();
+                    }
+
+                    // formatting in UTC
+                    var utcDate = moment.utc(correctedDate).toDate().toUTCString();
+
+                    $scope.timePreview = utcDate;
+
+                } if ($scope.aPeak.time_zone == "MST") {
+
+                    // Date the user enters is in their computer's timezone, so we need to clone it and change the timezone. This way the values stay the same.
+                    var enteredDate = $scope.timePreview;
+                    enteredDate = moment(enteredDate);
+                    var isaylightSavings = enteredDate._i.toString();
+                    var correctedDate;
+
+                    if (isaylightSavings.indexOf('Daylight') >= 0){
+
+                        // Cloning date and changing the timezone
+                        correctedDate = enteredDate.clone();
+                        correctedDate.add(1, 'hours');
+                        correctedDate = correctedDate.tz('America/Denver', true).format();
+
+                    }
+
+                    if (isaylightSavings.indexOf('Standard') >= 0) {
+                        // Cloning date and changing the timezone
+                        correctedDate = enteredDate.clone();
+                        correctedDate = correctedDate.tz('America/Denver', true).format();
+                    }
+
+                    // formatting in UTC
+                    var utcDate = moment.utc(correctedDate).toDate().toUTCString();
+
+                    $scope.timePreview = utcDate;
+
+                } if ($scope.aPeak.time_zone == "PDT") {
+
+                    // Date the user enters is in their computer's timezone, so we need to clone it and change the timezone. This way the values stay the same.
+                    var enteredDate = $scope.timePreview;
+                    enteredDate = moment(enteredDate);
+                    var isaylightSavings = enteredDate._i.toString();
+                    var correctedDate;
+
+                    if (isaylightSavings.indexOf('Daylight') >= 0){
+
+                        // Cloning date and changing the timezone
+                        correctedDate = enteredDate.clone();
+                        correctedDate = correctedDate.tz('America/Los_Angeles', true).format();
+
+                    }
+
+                    if (isaylightSavings.indexOf('Standard') >= 0) {
+                        // Cloning date and changing the timezone
+                        correctedDate = enteredDate.clone();
+                        correctedDate.subtract(1, 'hours');
+                        correctedDate = correctedDate.tz('America/Los_Angeles', true).format();
+                    }
+
+                    // formatting in UTC
+                    var utcDate = moment.utc(correctedDate).toDate().toUTCString();
+
+                    $scope.timePreview = utcDate;
+
+                } if ($scope.aPeak.time_zone == "EDT") {
+
+                    // Date the user enters is in their computer's timezone, so we need to clone it and change the timezone. This way the values stay the same.
+                    var enteredDate = $scope.timePreview;
+                    enteredDate = moment(enteredDate);
+                    var isaylightSavings = enteredDate._i.toString();
+                    var correctedDate;
+
+                    if (isaylightSavings.indexOf('Daylight') >= 0){
+
+                        // Cloning date and changing the timezone
+                        correctedDate = enteredDate.clone();
+                        correctedDate = correctedDate.tz('America/New_York', true).format();
+
+                    }
+
+                    if (isaylightSavings.indexOf('Standard') >= 0) {
+                        // Cloning date and changing the timezone
+                        correctedDate = enteredDate.clone();
+                        correctedDate.subtract(1, 'hours');
+                        correctedDate = correctedDate.tz('America/New_York', true).format();
+                    }
+
+                    // formatting in UTC
+                    var utcDate = moment.utc(correctedDate).toDate().toUTCString();
+
+                    $scope.timePreview = utcDate;
+
+                } if ($scope.aPeak.time_zone == "CDT") {
+
+                    // Date the user enters is in their computer's timezone, so we need to clone it and change the timezone. This way the values stay the same.
+                    var enteredDate = $scope.timePreview;
+                    enteredDate = moment(enteredDate);
+                    var isaylightSavings = enteredDate._i.toString();
+                    var correctedDate;
+
+                    if (isaylightSavings.indexOf('Daylight') >= 0){
+
+                        // Cloning date and changing the timezone
+                        correctedDate = enteredDate.clone();
+                        correctedDate = correctedDate.tz('America/Chicago', true).format();
+
+                    }
+
+                    if (isaylightSavings.indexOf('Standard') >= 0) {
+                        // Cloning date and changing the timezone
+                        correctedDate = enteredDate.clone();
+                        correctedDate.subtract(1, 'hours');
+                        correctedDate = correctedDate.tz('America/Chicago', true).format();
+                    }
+
+                    // formatting in UTC
+                    var utcDate = moment.utc(correctedDate).toDate().toUTCString();
+
+                    $scope.timePreview = utcDate;
+
+                } if ($scope.aPeak.time_zone == "MDT") {
+
+                    // Date the user enters is in their computer's timezone, so we need to clone it and change the timezone. This way the values stay the same.
+                    var enteredDate = $scope.timePreview;
+                    enteredDate = moment(enteredDate);
+                    var isaylightSavings = enteredDate._i.toString();
+                    var correctedDate;
+
+                    if (isaylightSavings.indexOf('Daylight') >= 0){
+
+                        // Cloning date and changing the timezone
+                        correctedDate = enteredDate.clone();
+                        correctedDate = correctedDate.tz('America/Denver', true).format();
+
+                    }
+
+                    if (isaylightSavings.indexOf('Standard') >= 0) {
+                        // Cloning date and changing the timezone
+                        correctedDate = enteredDate.clone();
+                        correctedDate.subtract(1, 'hours');
+                        correctedDate = correctedDate.tz('America/Denver', true).format();
+                    }
+
+                    // formatting in UTC
+                    var utcDate = moment.utc(correctedDate).toDate().toUTCString();
+
+                    $scope.timePreview = utcDate;
+                }
+                else {
+                    //make sure 'GMT' is tacked on so it doesn't try to add hrs to make the already utc a utc in db
+                    var i = $scope.timePreview.toString().indexOf('GMT') + 3;
+                    $scope.timePreview = $scope.timePreview.toString().substring(0, i);
+                }
+                
             };
 
             //cancel
@@ -720,7 +980,7 @@
             if (thisPeak != "empty") {
                 //#region existing PEAK
                 $scope.aPeak = angular.copy(thisPeak);
-                $scope.aPeak.peak_date = { date: getDateTimeParts($scope.aPeak.peak_date), time: getDateTimeParts($scope.aPeak.peak_date) };
+                $scope.aPeak.peak_date = getDateTimeParts($scope.aPeak.peak_date);
                 /* $scope.timePreview ={ date: getDatePreveiw($scope.aPeak.peak_date)}; */
                 //get peak creator name
                 $scope.PeakCreator = allMembers.filter(function (m) { return m.member_id == $scope.aPeak.member_id; })[0];
@@ -744,9 +1004,9 @@
             } else {
                 //#region new PEAK
                 var timeParts = getTimeZoneStamp();
-                $scope.aPeak = { peak_date: { date: timeParts[0], time: timeParts[0] }, member_id: $cookies.get('mID') }; //time_zone: timeParts[1],
+                $scope.aPeak = { peak_date:  timeParts[0] , member_id: $cookies.get('mID') }; //time_zone: timeParts[1],
                 $scope.PeakCreator = allMembers.filter(function (m) { return m.member_id == $cookies.get('mID'); })[0];
-
+                getinitialtimepreview();
                 //#endregion new PEAK
             }
 
@@ -844,7 +1104,7 @@
                 });
                 setPrimHWM.result.then(function (setIt) {
                     if (setIt == 'Yes') {
-                        $scope.aPeak.peak_date.date = new Date(h.flag_date);
+                        $scope.aPeak.peak_date = new Date(h.flag_date);
                         $scope.aPeak.peak_stage = h.elev_ft;
                         $scope.aPeak.vdatum_id = h.vdatum_id;
                         $scope.aPeak.height_above_gnd = h.height_above_gnd;
@@ -924,7 +1184,7 @@
                 });
                 setPrimeDF.result.then(function (setIt) {
                     if (setIt == 'Yes') {
-                        //$scope.aPeak.peak_date.date = h.flag_date;
+                        //$scope.aPeak.peak_date = h.flag_date;
                         //$scope.aPeak.peak_stage = h.elev_ft;
                         //$scope.aPeak.vdatum_id = h.vdatum_id
                         //$scope.aPeak.height_above_gnd = h.height_above_gnd;
@@ -941,9 +1201,7 @@
             $scope.savePeak = function (valid) {
                 if (valid) {
                     var updatedPeak = {};
-                    var datetime = new Date($scope.aPeak.peak_date.date.getFullYear(), $scope.aPeak.peak_date.date.getMonth(), $scope.aPeak.peak_date.date.getDate(),
-                        $scope.aPeak.peak_date.time.getHours(), $scope.aPeak.peak_date.time.getMinutes(), $scope.aPeak.peak_date.time.getSeconds());
-                    $scope.aPeak.peak_date = datetime;
+                    $scope.aPeak.peak_date = getDateTimeParts($scope.aPeak.peak_date);
                     dealWithTimeStampb4Send(); //UTC or local?
 
                     $http.defaults.headers.common.Authorization = 'Basic ' + $cookies.get('STNCreds');
@@ -1015,9 +1273,7 @@
 
                 deletePeakMdl.result.then(function () {
                     var peakID = $scope.aPeak.peak_summary_id;
-                    var datetime = new Date($scope.aPeak.peak_date.date.getFullYear(), $scope.aPeak.peak_date.date.getMonth(), $scope.aPeak.peak_date.date.getDate(),
-                        $scope.aPeak.peak_date.time.getHours(), $scope.aPeak.peak_date.time.getMinutes(), $scope.aPeak.peak_date.time.getSeconds());
-                    $scope.aPeak.peak_date = datetime;
+                    $scope.aPeak.peak_date = getDateTimeParts($scope.aPeak.peak_date);
                     //delete the peak and then PUT all hwm and df that have peakID
                     $http.defaults.headers.common.Authorization = 'Basic ' + $cookies.get('STNCreds');
                     $http.defaults.headers.common.Accept = 'application/json';
@@ -1083,9 +1339,7 @@
                     if (valid) {
                         var createdPeak = {};
                         //format to combine the date and time back together into 1 date object
-                        var datetime = new Date($scope.aPeak.peak_date.date.getFullYear(), $scope.aPeak.peak_date.date.getMonth(), $scope.aPeak.peak_date.date.getDate(),
-                            $scope.aPeak.peak_date.time.getHours(), $scope.aPeak.peak_date.time.getMinutes(), $scope.aPeak.peak_date.time.getSeconds());
-                        $scope.aPeak.peak_date = datetime;
+                        $scope.aPeak.peak_date = getDateTimeParts($scope.aPeak.peak_date);
                         dealWithTimeStampb4Send(); //UTC or local?
 
                         $http.defaults.headers.common.Authorization = 'Basic ' + $cookies.get('STNCreds');

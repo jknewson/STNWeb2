@@ -8120,8 +8120,38 @@
                     </div>
                 </div>
 
+                <!-- Peak Date*: (edit) -->
+                <div class="form-group" ng-class="{'has-error':peakForm.peak_date.$invalid && peakForm.peak_date.$dirty}" ng-mouseover="change(dt)">
+                    <label class="col-md-4 control-label topPad" for="peak_date.peak_date">
+                        <button type="button" class="help-btn" tooltip-placement="top" tooltip-append-to-body="false">
+                            <span class="glyphicon glyphicon-eye-open"></span>
+                        </button> Peak Date:
+                        <button type="button" class="help-btn" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Required">
+                            <span class="glyphicon glyphicon-asterisk" style="color:#d00;font-size:xx-small;"></span>
+                        </button>
+                    </label>
+                    <div class="col-md-6">
+                        <datetimepicker hour-step="1" minute-step="1" ng-model="aPeak.peak_date" show-meridian="true"
+                                        date-format="MM/dd/yyyy" readonly-date="false" readonly-time="false" date-options="dateOptions"
+                                        hidden-time="false" id="test" hidden-date="false" show-spinners="true" required>
+                        </datetimepicker>
+                    </div>
+                    <div class="col-md-1" style="font-size: 12px;">
+                        Date Estimated? <!-- {{aPeak.peak_date | date: "HH:mm:ss"}} -->
+                        <span tooltip-placement="right" uib-tooltip="Date Estimated?">
+                            <input type="checkbox" name="is_peak_estimated" ng-model="aPeak.is_peak_estimated" ng-true-value="1" ng-false-value="0" />
+                        </span>
+                    </div>
+                    <div class="col-md-1" style="font-size: 12px; display: inline-table;">
+                            Time Estimated?
+                            <span tooltip-placement="right" uib-tooltip="Time Estimated?">
+                                <input type="checkbox" name="is_peak_time_estimated" ng-model="aPeak.is_peak_time_estimated" ng-true-value="1" ng-false-value="0" />
+                            </span>
+                        </div>
+                </div>
+
                 <!-- Peak Date: * -->
-                <div class="form-group" ng-class="{'has-error':peakForm.peak_date.date.$invalid && peakForm.peak_date.date.$dirty}" id="test">
+                <!-- <div class="form-group" ng-class="{'has-error':peakForm.peak_date.date.$invalid && peakForm.peak_date.date.$dirty}" id="test">
                     <label class="col-md-4 control-label req" for="peak_date.date">
                         Peak Date:
                         <button type="button" class="help-btn" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Required">
@@ -8139,10 +8169,10 @@
                             <input type="checkbox" name="is_peak_estimated" ng-model="aPeak.is_peak_estimated" ng-true-value="1" ng-false-value="0" />
                         </span>
                     </div>
-                </div>
+                </div> -->
 
                 <!-- Peak Time: * -->
-                <div class="form-group" ng-class="{'has-error':peakForm.peak_date.time.$invalid && peakForm.peak_date.time.$dirty}">
+                <!-- <div class="form-group" ng-class="{'has-error':peakForm.peak_date.time.$invalid && peakForm.peak_date.time.$dirty}">
                     <label class="col-md-4 control-label req" style="margin-top:4%" for="peak_time.time">
                         Peak Time:
                         <button type="button" class="help-btn" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Required">
@@ -8160,10 +8190,10 @@
                             <input type="checkbox" name="is_peak_time_estimated" ng-model="aPeak.is_peak_time_estimated" ng-true-value="1" ng-false-value="0" />
                         </span>
                     </div>
-                </div>
+                </div> -->
 
                 <!-- Time Zone:* -->
-                <div class="form-group">
+                <div class="form-group" ng-mouseover="change(dt)">
                     <label class="col-md-4 control-label" for="time_zone">
                         Peak Recorded In:
                         <button type="button" class="help-btn" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Required">
@@ -8171,7 +8201,7 @@
                         </button>
                     </label>
                     <div class="col-md-5">
-                        <select class="form-control" name="time_zone" ng-model="aPeak.time_zone" ng-change="change()"
+                        <select class="form-control" name="time_zone" ng-model="aPeak.time_zone" 
                                 ng-options="vcm for vcm in timeZoneList" required>
                             <option value=""></option>
                         </select>
@@ -8182,19 +8212,17 @@
                 </div>
 
                 <!-- Time Preview:* -->
-                <div class="form-group">
+                <div class="form-group" ng-mouseover="change(dt)">
                         <label class="col-md-4 control-label">
-                                <button type="button" class="btn btn-primary" ng-click="previewTime()" ng-disabled="aPeak.time_zone == undefined">  
-                                    <span style="color:#fff;">Preview time in UTC</span>
-                                </button> 
+                            Preview time in UTC:
                         </label>
                         <div class="col-md-5" style="padding-top:10px;" placeholder="{{test}}">
-                                 : {{timePreview}}
+                                {{timePreview}}
                         </div>
                     </div>
 
                 <!-- Peak Stage-->
-                <div class="form-group">
+                <div class="form-group" ng-mouseover="change(dt)">
                     <label class="col-md-4 control-label" for="peak_stage">Peak Stage (elevation ft):</label>
                     <div class="col-md-5">
                         <input class="form-control" ng-keypress="isNum($event)" name="peak_stage" ng-model="aPeak.peak_stage" type="text" />
@@ -8207,7 +8235,7 @@
                 </div>
 
                 <!-- Vertical Datum: -->
-                <div class="form-group" ng-class="{'required': aPeak.peak_stage}">
+                <div class="form-group" ng-class="{'required': aPeak.peak_stage}" ng-mouseover="change(dt)">
                     <label class="col-md-4 control-label" ng-class="{'req': aPeak.peak_stage}" for="vdatum_id">Vertical Datum:</label>
                     <div class="col-md-5">
                         <select class="form-control" name="vdatum_id" ng-model="aPeak.vdatum_id"
