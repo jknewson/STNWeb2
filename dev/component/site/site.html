@@ -3471,7 +3471,7 @@
     <div class="modal-header">
         <h3 class="modal-title">Deploy Sensor<button class="close" type="button" ng-click="cancel()" aria-hidden="true" style="color:gray;">&times;</button></h3>
     </div>
-    <div class="modal-body">
+    <div class="modal-body" ng-click="change(dt)">
         <form class="form-horizontal" name="SensorForm">
             <fieldset>
                 <!-- Event: -->
@@ -3797,7 +3797,7 @@
                 </div>
 
                 <!-- Location Description: -->
-                <div class="form-group" ng-class="{'has-error':SensorForm.location_description.$invalid && SensorForm.location_description.$dirty}">
+                <div class="form-group" ng-click="previewSensTime()" ng-class="{'has-error':SensorForm.location_description.$invalid && SensorForm.location_description.$dirty}">
                     <label class="col-md-4 control-label" for="location_description">
                         <button type="button" class="help-btn" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Displayed publicly.">
                             <span class="glyphicon glyphicon-eye-open"></span>
@@ -3812,7 +3812,7 @@
                 </div>
 
                 <!-- Interval: -->
-                <div>
+                <div ng-click="previewSensTime()">
                     <label class="col-md-4 control-label"></label>
                     <div class="col-md-6">
                         <span class="radio-inline">
@@ -3836,7 +3836,7 @@
 
 
                 <!-- Deploy Time: * -->
-                <div class="form-group" ng-class="{'has-error':SensorForm.time_stamp.$invalid && SensorForm.time_stamp.$dirty}">
+                <div class="form-group" ng-click="previewSensTime()" ng-class="{'has-error':SensorForm.time_stamp.$invalid && SensorForm.time_stamp.$dirty}">
                     <label class="col-md-4 control-label req" style="margin-top:3%" for="time_stamp">
                         <button type="button" class="help-btn" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Displayed publicly.">
                             <span class="glyphicon glyphicon-eye-open"></span>
@@ -3854,7 +3854,7 @@
                 </div>
 
                 <!-- Time Zone:* -->
-                <div class="form-group">
+                <div class="form-group" ng-click="previewSensTime()" >
                     <label class="col-md-4 control-label" for="time_zone">
                         <button type="button" class="help-btn" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Displayed publicly.">
                             <span class="glyphicon glyphicon-eye-open"></span>
@@ -3875,19 +3875,29 @@
                 </div>
 
                 <!-- Time Preview:* -->
-                <div class="form-group">
+                    <div class="form-group" ng-click="previewSensTime()" >
                         <label class="col-md-4 control-label">
-                            <button type="button" class="btn btn-primary" ng-click="previewSensTime()" ng-disabled="aSensStatus.time_zone == undefined">
+                            Preview time in UTC:
+                        </label>
+                        <div class="col-md-5" style="padding-top:10px;" placeholder="{{test}}">
+                                {{timePreviewSens}}
+                        </div>
+                    </div>
+
+                    <!-- <div class="form-group">
+                        <label class="col-md-4 control-label">
+                            <button type="button" class="btn btn-primary"  ng-disabled="aSensStatus.time_zone == undefined">
                                 <span style="color:#fff;">Preview time in UTC</span>
                             </button>
                         </label>
                         <div class="col-md-5" style="padding-top:10px;" placeholder="{{test}}">
-                            : {{timePreviewSens}}
+                            {{timePreviewSens}}
                         </div>
-                    </div>
+                    </div> -->
+                    
 
                 <!-- Note: -->
-                <div class="form-group">
+                <div class="form-group" ng-click="previewSensTime()" >
                     <label class="col-md-4 control-label" for="notes">
                         <button type="button" class="help-btn" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Displayed publicly.">
                             <span class="glyphicon glyphicon-eye-open"></span>
@@ -3899,7 +3909,7 @@
                 </div>
 
                 <!-- Collection Member: -->
-                <div class="form-group">
+                <div class="form-group" ng-click="previewSensTime()" >
                     <label class="col-md-4 control-label">
                         <button type="button" class="help-btn" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Displayed publicly.">
                             <span class="glyphicon glyphicon-eye-open"></span>
@@ -4399,7 +4409,7 @@
                             <div class="col-md-6">{{aSensStatus.time_stamp | date: 'MM/dd/yyyy hh:mm a'}}</div>
                         </div>
                         <!-- Deploy Date*: (edit) -->
-                        <div class="form-group" ng-class="{'has-error':editDeployedForm.time_stamp.$invalid && editDeployedForm.time_stamp.$dirty}" ng-if="view.DEPval == 'edit'">
+                        <div class="form-group" ng-click="previewDepTime()" ng-class="{'has-error':editDeployedForm.time_stamp.$invalid && editDeployedForm.time_stamp.$dirty}" ng-if="view.DEPval == 'edit'">
                             <label class="col-md-4 control-label topPad">
                                 <button type="button" class="help-btn" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Displayed publicly.">
                                     <span class="glyphicon glyphicon-eye-open"></span>
@@ -4421,6 +4431,7 @@
                             <div class="col-md-3 col-md-offset-1"><label>Time Zone:</label></div>
                             <div class="col-md-6">{{aSensStatus.time_zone}}</div>
                         </div>
+                        
                         <!-- Deploy timezone*: (edit)-->
                         <div class="form-group" ng-if="view.DEPval == 'edit'">
                             <label class="col-md-4 req control-label">
@@ -4443,15 +4454,13 @@
 
                         <!-- Time Preview:* -->
                         <div class="form-group" ng-if="view.DEPval == 'edit'">
-                                <label class="col-md-4 control-label">
-                                    <button type="button" class="btn btn-primary" ng-click="previewDepTime()" ng-disabled="depStuffCopy[1].time_zone == undefined">
-                                        <span style="color:#fff;">Preview time in UTC</span>
-                                    </button>
-                                </label>
-                                <div class="col-md-5" style="padding-top:10px;" placeholder="{{test}}">
-                                    : {{timePreviewDep}}
-                                </div>
+                            <label style="padding:15px;" class="col-md-4 control-label">
+                                Preview time in UTC:
+                            </label>
+                            <div class="col-md-5" style="padding:15px;" placeholder="{{test}}">
+                                    {{timePreviewDep}}
                             </div>
+                        </div>
 
                         <!-- Note: (detail)-->
                         <div class="col-md-12" ng-if="view.DEPval == 'detail'">
@@ -4689,7 +4698,7 @@
                                 </div>
 
                                 <!--Description*(photo, data, allother)-->
-                                <div ng-if="aFile.filetype_id > 0" class="form-group" ng-class="{'has-error':DepSenFILEForm.description.$invalid && DepSenFILEForm.description.$dirty}" style="margin:0;padding:0;padding-top:5px;">
+                                <div ng-click="previewDataTimeDepFile()" ng-if="aFile.filetype_id > 0" class="form-group" ng-class="{'has-error':DepSenFILEForm.description.$invalid && DepSenFILEForm.description.$dirty}" style="margin:0;padding:0;padding-top:5px;">
                                     <label class="col-md-4 control-label req" for="description">
                                         Description:
                                         <button type="button" class="help-btn" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Required">
@@ -4705,15 +4714,15 @@
                                 </div>
 
                                 <!-- show button for Chopper if  and file is present  ng-if="aFile.filetype_id === 2 && (sensor.sensor_type_id == 1 && (sensor.deployment_type_id == 1 || sensor.deployment_type_id == 2 || sensor.deployment_type_id == 3))"-->
-                                <div class="form_group" ng-if="aFile.file_id == undefined && aFile.filetype_id == 2 && aSensor.sensor_type_id == 1 && aSensor.deployment_type_id < 4" style="padding-top: 10px;padding-bottom: 10px;">
+                                <div ng-click="previewDataTimeDepFile()" class="form_group" ng-if="aFile.file_id == undefined && aFile.filetype_id == 2 && aSensor.sensor_type_id == 1 && aSensor.deployment_type_id < 4" style="padding-top: 10px;padding-bottom: 10px;">
                                     <label class="col-md-4 control-label"></label>
                                     <div class="col-md-9 col-md-offset-4 input-group" style="padding-right:14px;padding-left:14px">
                                         <!-- <label class="col-md-5" style="margin-top: 10px;"><input style="margin:0!important;" type="checkbox" class="col-md-1" name="daylightSavingsChop" ng-model="daylightSavingsChop.selected" ng-true-value="'true'" ng-false-value="'false'" /> &nbsp;&nbsp;Daylight Savings?</label> -->
-                                        <button type="button" class="btn btn-primary pull-left" ng-click="runChopper()">Preview Data</button>
+                                        <!-- <button type="button" class="btn btn-primary pull-left" ng-click="runChopper()">Preview Data</button>
                                         <button type="button" style="float: inherit; margin-left: 15px;" class="col-md-1 borderLess" tooltip-placement="right-top" tooltip-append-to-body="false" tooltip-class="tooltip-wide"
-                                                uib-tooltip="Upload a csv file outputted by HoboWare or TruWare software. (These refer to the specific csv files that the script will ingest for Hobo and TruBlue respectively). Depending on the size of the csv, this process can take up to a few minutes to run. Ensure the sensor has all required fields populated first."> <!--  Check Daylight Savings if data was recorded in Daylight Savings. -->
+                                                uib-tooltip="Upload a csv file outputted by HoboWare or TruWare software. (These refer to the specific csv files that the script will ingest for Hobo and TruBlue respectively). Depending on the size of the csv, this process can take up to a few minutes to run. Ensure the sensor has all required fields populated first.">
                                             <span class="glyphicon glyphicon-question-sign"></span>
-                                        </button>
+                                        </button> -->
                                         <div ng-show="smlallLoaderGo"><img src="images/loading1.gif" /></div>
                                     </div>
                                 </div>
@@ -4723,7 +4732,7 @@
                                     <hc-chart id="chopperChart1" options="chartOptions1"></hc-chart>
                                 </div>
                                 <!-- Good Data Start Time* (data) -->
-                                <div ng-if="aFile.filetype_id === 2" class="form-group" ng-class="{'has-error':DepSenFILEForm.good_start.$invalid && DepSenFILEForm.good_start.$dirty}" style="margin:0;padding:0;padding-top:5px;">
+                                <div ng-click="previewDataTimeDepFile()" ng-if="aFile.filetype_id === 2" class="form-group" ng-class="{'has-error':DepSenFILEForm.good_start.$invalid && DepSenFILEForm.good_start.$dirty}" style="margin:0;padding:0;padding-top:5px;">
                                     <label class="col-md-4 control-label req" for="good_start" style="margin-top:4%">
                                         Good Data Start Time:
                                         <button type="button" class="help-btn" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Required">
@@ -4741,7 +4750,7 @@
                                 </div>
 
                                 <!-- Good Data End Time* (data)-->
-                                <div ng-if="aFile.filetype_id === 2" class="form-group" ng-class="{'has-error':DepSenFILEForm.good_end.$invalid && DepSenFILEForm.good_end.$dirty}" style="margin:0;padding:0;padding-top:5px;">
+                                <div ng-if="aFile.filetype_id === 2" ng-click="previewDataTimeDepFile()" class="form-group" ng-class="{'has-error':DepSenFILEForm.good_end.$invalid && DepSenFILEForm.good_end.$dirty}" style="margin:0;padding:0;padding-top:5px;">
                                     <label class="col-md-4 control-label req" for="good_end" style="margin-top:4%">
                                         Good Data End Time:
                                         <button type="button" class="help-btn" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Required">
@@ -4761,7 +4770,7 @@
                                 <span class="error" ng-show="DepSenFILEForm.good_end.$error.higherThan">Max cannot be lower than min.</span>
 
                                 <!-- Timezone*: -->
-                                <div ng-if="aFile.filetype_id === 2" class="form-group" style="margin:0;padding:0;padding-top:5px;">
+                                <div ng-click="previewDataTimeDepFile()" ng-if="aFile.filetype_id === 2" class="form-group" style="margin:0;padding:0;padding-top:5px;">
                                     <label class="col-md-4 control-label req">
                                         Time Zone:
                                         <button type="button" class="help-btn" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Required">
@@ -4779,11 +4788,9 @@
                                 </div>
 
                                 <!-- Time Preview:* -->
-                            <div class="form-group" ng-if="aFile.filetype_id === 2">
+                                <div ng-click="previewDataTimeDepFile()" class="form-group" ng-if="aFile.filetype_id === 2">
                                     <label class="col-md-4 control-label">
-                                        <button type="button" class="btn btn-primary" ng-click="previewDataTimeDepFile()" ng-disabled="datafile.time_zone == undefined">
-                                            <span style="color:#fff;">Preview time in UTC</span>
-                                        </button>
+                                        Preview time in UTC:
                                     </label>
                                     <div class="col-md-5" style="padding-top:10px;" placeholder="{{test}}">
                                         Start - {{timePreviewStart}} <br>
@@ -4791,8 +4798,20 @@
                                     </div>
                                 </div>
 
+                           <!--  <div class="form-group" ng-if="aFile.filetype_id === 2">
+                                    <label class="col-md-4 control-label">
+                                        <button type="button" class="btn btn-primary" ng-disabled="datafile.time_zone == undefined">
+                                            <span style="color:#fff;">Preview time in UTC</span>
+                                        </button>
+                                    </label>
+                                    <div class="col-md-5" style="padding-top:10px;" placeholder="{{test}}">
+                                        Start - {{timePreviewStart}} <br>
+                                        End - {{timePreviewEnd}}
+                                    </div>
+                                </div> -->
+
                                 <!-- Elevation -->
-                                <div ng-if="aFile.filetype_id === 2" class="form-group" style="margin:0;padding:0;padding-top:5px;">
+                                <div ng-click="previewDataTimeDepFile()" ng-if="aFile.filetype_id === 2" class="form-group" style="margin:0;padding:0;padding-top:5px;">
                                     <label class="col-md-4 control-label">Elevation:</label>
                                     <div class="col-md-6">
                                         <span class="radio-inline">
@@ -4971,7 +4990,7 @@
                                     </div>
 
                                     <!-- Date Uploaded* -->
-                                    <div class="form-group" ng-class="{'has-error':NWISSenFILEForm.file_date.$invalid && NWISSenFILEForm.file_date.$dirty}" style="margin:0;padding:0">
+                                    <div class="form-group" ng-click="previewDataTimeNWISFile()" ng-class="{'has-error':NWISSenFILEForm.file_date.$invalid && NWISSenFILEForm.file_date.$dirty}" style="margin:0;padding:0">
                                         <label class="col-md-4 control-label req" for="file_date">
                                             Date Uploaded:
                                             <button type="button" class="help-btn" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Required">
@@ -4989,7 +5008,7 @@
                                     </div>
 
                                     <!--Description*-->
-                                    <div class="form-group" ng-class="{'has-error':NWISSenFILEForm.description.$invalid && NWISSenFILEForm.description.$dirty}" style="margin:0;padding:0">
+                                    <div class="form-group" ng-click="previewDataTimeNWISFile()" ng-class="{'has-error':NWISSenFILEForm.description.$invalid && NWISSenFILEForm.description.$dirty}" style="margin:0;padding:0">
                                         <label class="col-md-4 control-label req" for="description">
                                             Description:
                                             <button type="button" class="help-btn" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Required">
@@ -5002,7 +5021,7 @@
                                     </div>
 
                                     <!-- Good Data Start Time* (data) -->
-                                    <div class="form-group" ng-class="{'has-error':NWISSenFILEForm.good_start.$invalid && NWISSenFILEForm.good_start.$dirty}" style="margin:0;padding:0">
+                                    <div class="form-group" ng-click="previewDataTimeNWISFile()" ng-class="{'has-error':NWISSenFILEForm.good_start.$invalid && NWISSenFILEForm.good_start.$dirty}" style="margin:0;padding:0">
                                         <label class="col-md-4 control-label req" for="good_start" style="margin-top:4%">
                                             Good Data Start Time:
                                             <button type="button" class="help-btn" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Required">
@@ -5020,7 +5039,7 @@
                                     </div>
 
                                     <!-- Good Data End Time* (data)-->
-                                    <div class="form-group" ng-class="{'has-error':NWISSenFILEForm.good_end.$invalid && NWISSenFILEForm.good_end.$dirty}" style="margin:0;padding:0">
+                                    <div class="form-group" ng-click="previewDataTimeNWISFile()" ng-class="{'has-error':NWISSenFILEForm.good_end.$invalid && NWISSenFILEForm.good_end.$dirty}" style="margin:0;padding:0">
                                         <label class="col-md-4 control-label req" for="good_end" style="margin-top:4%">
                                             Good Data End Time:
                                             <button type="button" class="help-btn" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Required">
@@ -5038,7 +5057,7 @@
                                     </div>
 
                                     <!-- Timezone*: -->
-                                    <div class="form-group" style="margin:0;padding:0">
+                                    <div class="form-group" style="margin:0;padding:0" ng-click="previewDataTimeNWISFile()">
                                         <label class="col-md-4 control-label req">
                                             Time Zone:
                                             <button type="button" class="help-btn" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Required">
@@ -5056,19 +5075,29 @@
                                     </div>
 
                                     <!-- Time Preview:* -->
-                                    <div class="form-group">
+                                    <div class="form-group" ng-click="previewDataTimeNWISFile()">
+                                        <label class="col-md-4 control-label">
+                                            Preview time in UTC:
+                                        </label>
+                                        <div class="col-md-5" style="padding-top:10px;" placeholder="{{test}}">
+                                            Start - {{timePreviewStart}} <br>
+                                            End - {{timePreviewEnd}}
+                                        </div>
+                                    </div>
+
+                                    <!-- <div class="form-group">
                                             <label class="col-md-4 control-label">
-                                                <button type="button" class="btn btn-primary" ng-click="previewDataTimeNWISFile()" ng-disabled="NWISDF.time_zone == undefined">
+                                                <button type="button" class="btn btn-primary" ng-disabled="NWISDF.time_zone == undefined">
                                                     <span style="color:#fff;">Preview time in UTC</span>
                                                 </button>
                                             </label>
                                             <div class="col-md-5" style="padding-top:10px;" placeholder="{{test}}">
-                                                : {{timePreview}}
+                                                {{timePreview}}
                                             </div>
-                                        </div>
+                                        </div> -->
 
                                     <!-- Elevation -->
-                                    <div class="form-group" style="margin:0;padding:0">
+                                    <div class="form-group" style="margin:0;padding:0" ng-click="previewDataTimeNWISFile()">
                                         <label class="col-md-4 control-label">Elevation:</label>
                                         <div class="col-md-6">
                                             <span class="radio-inline">
@@ -5246,7 +5275,7 @@
                 </div>
 
                 <!-- Collection Condition:* -->
-                <div class="form-group" ng-class="{'has-error':SensorFormR.inst_collection_id.$invalid && SensorFormR.inst_collection_id.$dirty}">
+                <div ng-click="previewRetDateTime()" class="form-group" ng-class="{'has-error':SensorFormR.inst_collection_id.$invalid && SensorFormR.inst_collection_id.$dirty}">
                     <label class="col-md-5 control-label req" for="inst_collection_id">
                         <button type="button" class="help-btn" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Displayed publicly.">
                             <span class="glyphicon glyphicon-eye-open"></span>
@@ -5264,7 +5293,7 @@
                 </div>
 
                 <!-- Note: -->
-                <div class="form-group">
+                <div class="form-group" ng-click="previewRetDateTime()">
                     <label class="col-md-5 control-label" for="notes">
                         <button type="button" class="help-btn" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Displayed publicly.">
                             <span class="glyphicon glyphicon-eye-open"></span>
@@ -5276,7 +5305,7 @@
                 </div>
 
                 <!-- Retrieve Time: * -->
-                <div class="form-group" ng-class="{'has-error':SensorFormR.time_stamp.$invalid && SensorFormR.time_stamp.$dirty}">
+                <div ng-click="previewRetDateTime()" class="form-group" ng-class="{'has-error':SensorFormR.time_stamp.$invalid && SensorFormR.time_stamp.$dirty}">
                     <label class="col-md-5 control-label req" style="margin-top:3%" for="time_stamp">
                         <button type="button" class="help-btn" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Displayed publicly.">
                             <span class="glyphicon glyphicon-eye-open"></span>
@@ -5294,7 +5323,7 @@
                 </div>
 
                 <!-- Time Zone:* -->
-                <div class="form-group">
+                <div class="form-group" ng-click="previewRetDateTime()">
                     <label class="col-md-5 control-label" for="time_zone">
                         <button type="button" class="help-btn" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Displayed publicly.">
                             <span class="glyphicon glyphicon-eye-open"></span>
@@ -5315,16 +5344,25 @@
                 </div>
 
                 <!-- Time Preview:* -->
-                <div class="form-group">
+                <div class="form-group" ng-click="previewRetDateTime()">
+                    <label class="col-md-4 control-label">
+                        Preview time in UTC:
+                    </label>
+                    <div class="col-md-5" style="padding-top:10px;" placeholder="{{test}}">
+                        {{timePreview}}
+                    </div>
+                </div>
+
+                <!-- <div class="form-group">
                         <label class="col-md-4 control-label">
                             <button type="button" class="btn btn-primary" ng-click="previewTime()" ng-disabled="aRetrieval.time_zone == undefined">
                                 <span style="color:#fff;">Preview time in UTC</span>
                             </button>
                         </label>
                         <div class="col-md-5" style="padding-top:10px;" placeholder="{{test}}">
-                            : {{timePreview}}
+                            {{timePreview}}
                         </div>
-                    </div>
+                    </div> -->
 
                 <!-- -------------------------- START TAPEDOWN SECTION --------------------------------  -->
                 <uib-accordion close-others="false">
@@ -6004,15 +6042,24 @@
 
                         <!-- Time Preview:* -->
                         <div class="form-group" ng-if="view.DEPval == 'detail'">
+                            <label class="col-md-4 control-label">
+                                Preview time in UTC:
+                            </label>
+                            <div class="col-md-5" style="padding-top:10px;" placeholder="{{test}}">
+                                {{timePreview}}
+                            </div>
+                        </div>
+
+                        <!-- <div class="form-group" ng-if="view.DEPval == 'detail'">
                                 <label class="col-md-4 control-label">
                                     <button type="button" class="btn btn-primary" ng-click="previewTime()" ng-disabled="depStuffCopy[1].time_zone == undefined">
                                         <span style="color:#fff;">Preview time in UTC</span>
                                     </button>
                                 </label>
                                 <div class="col-md-5" style="padding-top:10px;" placeholder="{{test}}">
-                                    : {{timePreview}}
+                                    {{timePreview}}
                                 </div>
-                            </div>
+                            </div> -->
 
                         <!-- Note: (detail)-->
                         <div class="col-md-12" ng-if="view.DEPval == 'detail'">
@@ -6071,7 +6118,7 @@
                             <div class="col-md-6">{{RetrievedSensorStat.status || '---'}}</div>
                         </div>
                         <!-- Status Type:*(edit) -->
-                        <div class="form-group" ng-if="view.RETval == 'edit'">
+                        <div class="form-group" ng-if="view.RETval == 'edit'" ng-click="previewTimeRet()">
                             <label class="col-md-5 control-label req">
                                 <button type="button" class="help-btn" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Displayed publicly.">
                                     <span class="glyphicon glyphicon-eye-open"></span>
@@ -6093,7 +6140,7 @@
                             <div class="col-md-6">{{sensor.instCollection || '---'}}</div>
                         </div>
                         <!-- Collection Condition:* (edit)-->
-                        <div class="form-group" ng-if="view.RETval == 'edit'">
+                        <div class="form-group" ng-if="view.RETval == 'edit'" ng-click="previewTimeRet()">
                             <label class="col-md-5 control-label req" for="inst_collection_id">
                                 <button type="button" class="help-btn" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Displayed publicly.">
                                     <span class="glyphicon glyphicon-eye-open"></span>
@@ -6116,7 +6163,7 @@
                             <div class="col-md-6">{{RetrievedSensorStat.notes || '---'}}</div>
                         </div>
                         <!-- Note:(edit) -->
-                        <div class="form-group" ng-if="view.RETval == 'edit'">
+                        <div class="form-group" ng-if="view.RETval == 'edit'" ng-click="previewTimeRet()">
                             <label class="col-md-5 control-label" for="notes">
                                 <button type="button" class="help-btn" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Displayed publicly.">
                                     <span class="glyphicon glyphicon-eye-open"></span>
@@ -6133,7 +6180,7 @@
                             <div class="col-md-6">{{RetrievedSensorStat.time_stamp | date: 'MM/dd/yyyy hh:mm a'}}</div>
                         </div>
                         <!-- Retrieve Date: *(edit) -->
-                        <div class="form-group" ng-if="view.RETval == 'edit'">
+                        <div class="form-group" ng-if="view.RETval == 'edit'" ng-click="previewTimeRet()">
                             <label class="col-md-5 control-label topPad">
                                 <button type="button" class="help-btn" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Displayed publicly.">
                                     <span class="glyphicon glyphicon-eye-open"></span>
@@ -6155,7 +6202,7 @@
                             <div class="col-md-6">{{RetrievedSensorStat.time_zone}}</div>
                         </div>
                         <!-- Timezone*: (edit)-->
-                        <div class="form-group" ng-if="view.RETval == 'edit'">
+                        <div class="form-group" ng-if="view.RETval == 'edit'" ng-click="previewTimeRet()">
                             <label class="col-md-5 req control-label">
                                 <button type="button" class="help-btn" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Displayed publicly.">
                                     <span class="glyphicon glyphicon-eye-open"></span>
@@ -6175,16 +6222,25 @@
                         </div>
 
                         <!-- Time Preview:* -->
-                        <div class="form-group" ng-if="view.RETval == 'edit'">
+                        <div class="form-group" ng-if="view.RETval == 'edit'" ng-click="previewTimeRet()">
+                            <label class="col-md-4 control-label" style="padding:15px;">
+                                Preview time in UTC:
+                            </label>
+                            <div class="col-md-5" style="padding:15px;" placeholder="{{test}}">
+                                {{timePreview}}
+                            </div>
+                        </div>
+
+                        <!-- <div class="form-group" >
                                 <label class="col-md-4 control-label">
-                                    <button type="button" class="btn btn-primary" ng-click="previewTimeRet()" ng-disabled="retStuffCopy[1].time_zone == undefined">
+                                    <button type="button" class="btn btn-primary"  ng-disabled="retStuffCopy[1].time_zone == undefined">
                                         <span style="color:#fff;">Preview time in UTC</span>
                                     </button>
                                 </label>
                                 <div class="col-md-5" style="padding-top:10px;" placeholder="{{test}}">
-                                    : {{timePreview}}
+                                    {{timePreview}}
                                 </div>
-                            </div>
+                            </div> -->
 
                         <br clear="all" /><hr />
 
@@ -6220,7 +6276,7 @@
                             </div>
                         </div><!--end tapedown detail -->
                         <!-- tapedown (edit)-->
-                        <div class="form-group" ng-if="view.RETval == 'edit'">
+                        <div class="form-group" ng-if="view.RETval == 'edit'" ng-click="previewTimeRet()">
                             <label class="col-md-5 control-label">Tapedowns:</label>
                             <div class="col-md-6"></div>
                             <button type="button" class="col-md-1 borderLess pull-left" tooltip-placement="left" tooltip-append-to-body="false" uib-tooltip="These elevations and tape down data are used for both field activities and final products. Please pay attention to how your data is entered.">
@@ -6585,7 +6641,7 @@
                                 </div>
 
                                 <!-- Date Uploaded* (photo, data, allother) -->
-                                <div ng-if="aFile.filetype_id > 0" class="form-group" ng-class="{'has-error':DepSenFILEForm.file_date.$invalid && DepSenFILEForm.file_date.$dirty}" style="margin:0;padding:0">
+                                <div ng-click="previewDataTimeDepFile()" ng-if="aFile.filetype_id > 0" class="form-group" ng-class="{'has-error':DepSenFILEForm.file_date.$invalid && DepSenFILEForm.file_date.$dirty}" style="margin:0;padding:0">
                                     <label class="col-md-4 control-label req" for="file_date">
                                         Date Uploaded:
                                         <button type="button" class="help-btn" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Required">
@@ -6603,7 +6659,7 @@
                                 </div>
 
                                 <!--Description*(photo, data, allother)-->
-                                <div ng-if="aFile.filetype_id > 0" class="form-group" ng-class="{'has-error':DepSenFILEForm.description.$invalid && DepSenFILEForm.description.$dirty}" style="margin:0;padding:0">
+                                <div ng-click="previewDataTimeRetFile()" ng-if="aFile.filetype_id > 0" class="form-group" ng-class="{'has-error':DepSenFILEForm.description.$invalid && DepSenFILEForm.description.$dirty}" style="margin:0;padding:0">
                                     <label class="col-md-4 control-label req" for="description">
                                         Description:
                                         <button type="button" class="help-btn" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Required">
@@ -6623,11 +6679,11 @@
                                     <label class="col-md-4 control-label"></label>
                                     <div class="col-md-9 col-md-offset-4 input-group" style="padding-right:14px;padding-left:14px">
                                             <!-- <label class="col-md-5" style="margin-top: 10px;"><input style="margin:0!important;" type="checkbox" class="col-md-1" name="daylightSavingsChop" ng-model="daylightSavingsChop.selected" ng-true-value="'true'" ng-false-value="'false'" /> &nbsp;&nbsp;Daylight Savings?</label> -->
-                                            <button type="button" class="btn btn-primary pull-left" ng-click="runChopper()">Preview Data</button>
+                                            <!-- <button type="button" class="btn btn-primary pull-left" ng-click="runChopper()">Preview Data</button>
                                             <button type="button" style="float: inherit; margin-left: 15px;" class="col-md-1 borderLess" tooltip-placement="right-top" tooltip-append-to-body="false" tooltip-class="tooltip-wide"
-                                                    uib-tooltip="Upload a csv file outputted by HoboWare or TruWare software. (These refer to the specific csv files that the script will ingest for Hobo and TruBlue respectively). Depending on the size of the csv, this process can take up to a few minutes to run. Ensure the sensor has all required fields populated first."> <!-- Check Daylight Savings if data was recorded in Daylight Savings. -->
+                                                    uib-tooltip="Upload a csv file outputted by HoboWare or TruWare software. (These refer to the specific csv files that the script will ingest for Hobo and TruBlue respectively). Depending on the size of the csv, this process can take up to a few minutes to run. Ensure the sensor has all required fields populated first.">
                                                 <span class="glyphicon glyphicon-question-sign"></span>
-                                            </button>
+                                            </button> -->
                                         <div ng-show="smlallLoaderGo" style="display: inline;"><img src="images/loading1.gif" /></div>
                                     </div>
                                 </div>
@@ -6637,7 +6693,7 @@
                                     <hc-chart id="chopperChart2" options="chartOptions2"></hc-chart>
                                 </div>
                                 <!-- Good Data Start Time* (data) -->
-                                <div ng-if="aFile.filetype_id === 2" class="form-group" ng-class="{'has-error':DepSenFILEForm.good_start.$invalid && DepSenFILEForm.good_start.$dirty}" style="margin:0;padding:0">
+                                <div ng-if="aFile.filetype_id === 2" ng-click="previewDataTimeRetFile()" class="form-group" ng-class="{'has-error':DepSenFILEForm.good_start.$invalid && DepSenFILEForm.good_start.$dirty}" style="margin:0;padding:0">
                                     <label class="col-md-4 control-label req" for="good_start" style="margin-top:4%">
                                         Good Data Start Time:
                                         <button type="button" class="help-btn" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Required">
@@ -6655,7 +6711,7 @@
                                 </div>
 
                                 <!-- Good Data End Time* (data)-->
-                                <div ng-if="aFile.filetype_id === 2" class="form-group" ng-class="{'has-error':DepSenFILEForm.good_end.$invalid && DepSenFILEForm.good_end.$dirty}" style="margin:0;padding:0">
+                                <div ng-if="aFile.filetype_id === 2" class="form-group" ng-click="previewDataTimeRetFile()" ng-class="{'has-error':DepSenFILEForm.good_end.$invalid && DepSenFILEForm.good_end.$dirty}" style="margin:0;padding:0">
                                     <label class="col-md-4 control-label req" for="good_end" style="margin-top:4%">
                                         Good Data End Time:
                                         <button type="button" class="help-btn" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Required">
@@ -6673,7 +6729,7 @@
                                 </div>
 
                                 <!-- Timezone*: -->
-                                <div ng-if="aFile.filetype_id === 2" class="form-group" style="margin:0;padding:0">
+                                <div ng-click="previewDataTimeRetFile()" ng-if="aFile.filetype_id === 2" class="form-group" style="margin:0;padding:0">
                                     <label class="col-md-4 control-label req">
                                         Time Zone:
                                         <button type="button" class="help-btn" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Required">
@@ -6691,9 +6747,19 @@
                                 </div>
 
                                 <!-- Time Preview:* -->
-                                <div class="form-group" ng-if="aFile.filetype_id === 2">
+                                <div ng-click="previewDataTimeRetFile()" class="form-group" ng-if="aFile.filetype_id === 2">
+                                    <label class="col-md-4 control-label">
+                                        Preview time in UTC:
+                                    </label>
+                                    <div class="col-md-5" style="padding-top:10px;" placeholder="{{test}}">
+                                        Start - {{timePreviewStart}} <br>
+                                        End - {{timePreviewEnd}}
+                                    </div>
+                                </div>
+
+                                <!-- <div class="form-group" ng-if="aFile.filetype_id === 2">
                                         <label class="col-md-4 control-label">
-                                            <button type="button" class="btn btn-primary" ng-click="previewDataTimeDepFile()" ng-disabled="datafile.time_zone == undefined">
+                                            <button type="button" class="btn btn-primary" ng-disabled="datafile.time_zone == undefined">
                                                 <span style="color:#fff;">Preview time in UTC</span>
                                             </button>
                                         </label>
@@ -6701,7 +6767,7 @@
                                                 Start - {{timePreviewStart}} <br>
                                                 End - {{timePreviewEnd}}
                                         </div>
-                                    </div>
+                                    </div> -->
 
                                 <!-- Elevation -->
                                 <div ng-if="aFile.filetype_id === 2" class="form-group" style="margin:0;padding:0">
@@ -6825,7 +6891,7 @@
                                     <!-- button to run STORM script if this existing data file is on a water sensor (sensor_type_id == 1 && (deployment_type_id == 1 || deployment_type_id == 2) )-->
                                     <span ng-show="(aFile.script_parent == undefined  || aFile.script_parent == '') || aFile.script_parent.indexOf('_') == -1">
                                         <!-- don't show the button for outputs of other scripts ran -->
-                                        <button type="button" class="btn btn-primary" ng-if="aFile.file_id != undefined && aFile.filetype_id === 2 && (sensor.sensor_type_id == 1 && (sensor.deployment_type_id == 1 || sensor.deployment_type_id == 2))" ng-click="showStormSection()">Run Storm Script</button>
+                                        <!-- <button type="button" class="btn btn-primary" ng-if="aFile.file_id != undefined && aFile.filetype_id === 2 && (sensor.sensor_type_id == 1 && (sensor.deployment_type_id == 1 || sensor.deployment_type_id == 2))" ng-click="showStormSection()">Run Storm Script</button> -->
                                     </span>
                                     <span ng-show="(aFile.script_parent == undefined || aFile.script_parent == '') || (aFile.script_parent != undefined && aFile.script_parent == 'true')">
                                         <!-- don't show the button for outputs of other scripts ran -->
@@ -7067,15 +7133,24 @@
 
                                     <!-- Time Preview:* -->
                                     <div class="form-group">
+                                        <label class="col-md-4 control-label">
+                                            Preview time in UTC:
+                                        </label>
+                                        <div class="col-md-5" style="padding-top:10px;" placeholder="{{test}}">
+                                            {{timePreview}}
+                                        </div>
+                                    </div>
+
+                                    <!-- <div class="form-group">
                                             <label class="col-md-4 control-label">
                                                 <button type="button" class="btn btn-primary" ng-click="previewTime()" ng-disabled="NWISDF.time_zone == undefined">
                                                     <span style="color:#fff;">Preview time in UTC</span>
                                                 </button>
                                             </label>
                                             <div class="col-md-5" style="padding-top:10px;" placeholder="{{test}}">
-                                                : {{timePreview}}
+                                                {{timePreview}}
                                             </div>
-                                        </div>
+                                        </div> -->
 
                                     <!-- Elevation -->
                                     <div class="form-group" style="margin:0;padding:0">
@@ -7267,7 +7342,7 @@
                 </div>
 
                 <!--Description*(photo, data, allother)-->
-                <div ng-if="aFile.filetype_id > 0" class="form-group" ng-class="{'has-error':FILEcreateForm.description.$invalid && FILEcreateForm.description.$dirty}">
+                <div ng-click="previewDataTimeRetFile()" ng-if="aFile.filetype_id > 0" class="form-group" ng-class="{'has-error':FILEcreateForm.description.$invalid && FILEcreateForm.description.$dirty}">
                     <label class="col-md-3 control-label req" for="description">
                         Description:
                         <button type="button" class="help-btn" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Required">
@@ -7283,7 +7358,7 @@
                 </div>
 
                 <!-- Good Data Start Time* (data) -->
-                <div ng-if="aFile.filetype_id === 2" class="form-group" ng-class="{'has-error':FILEcreateForm.good_start.$invalid && FILEcreateForm.good_start.$dirty}">
+                <div  ng-click="previewDataTimeRetFile()" ng-if="aFile.filetype_id === 2" class="form-group" ng-class="{'has-error':FILEcreateForm.good_start.$invalid && FILEcreateForm.good_start.$dirty}">
                     <label class="col-md-3 control-label req" for="good_start">
                         Good Data Start Time:
                         <button type="button" class="help-btn" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Required">
@@ -7301,7 +7376,7 @@
                 </div>
 
                 <!-- Good Data End Time* (data) -->
-                <div ng-if="aFile.filetype_id === 2" class="form-group" ng-class="{'has-error':FILEcreateForm.good_end.$invalid && FILEcreateForm.good_end.$dirty}">
+                <div  ng-click="previewDataTimeRetFile()" ng-if="aFile.filetype_id === 2" class="form-group" ng-class="{'has-error':FILEcreateForm.good_end.$invalid && FILEcreateForm.good_end.$dirty}">
                     <label class="col-md-3 control-label req" for="good_end">
                         Good Data End Time:
                         <button type="button" class="help-btn" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Required">
@@ -7319,7 +7394,7 @@
                 </div>
 
                 <!-- Timezone*:-->
-                <div ng-if="aFile.filetype_id === 2" class="form-group">
+                <div  ng-click="previewDataTimeRetFile()" ng-if="aFile.filetype_id === 2" class="form-group">
                     <label class="col-md-3 control-label req">
                         Time Zone:
                         <button type="button" class="help-btn" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Required">
@@ -7337,9 +7412,19 @@
                 </div>
 
                 <!-- Time Preview:* -->
-                <div class="form-group" ng-if="aFile.filetype_id === 2">
+                <div  ng-click="previewDataTimeRetFile()" class="form-group" ng-if="aFile.filetype_id === 2">
+                    <label class="col-md-4 control-label">
+                        Preview time in UTC:
+                    </label>
+                    <div class="col-md-5" style="padding-top:10px;" placeholder="{{test}}">
+                        Start - {{timePreviewStart}} <br>
+                        End - {{timePreviewEnd}}
+                    </div>
+                </div>
+
+                <!-- <div class="form-group" ng-if="aFile.filetype_id === 2">
                         <label class="col-md-4 control-label">
-                            <button type="button" class="btn btn-primary" ng-click="previewDataTime()" ng-disabled="datafile.time_zone == undefined">
+                            <button type="button" class="btn btn-primary" ng-disabled="datafile.time_zone == undefined">
                                 <span style="color:#fff;">Preview time in UTC</span>
                             </button>
                         </label>
@@ -7347,9 +7432,9 @@
                                 Start - {{timePreviewStart}} <br>
                                 End - {{timePreviewEnd}}
                         </div>
-                    </div>
+                    </div> -->
 
-                <div ng-if="aFile.filetype_id === 2" class="form-group">
+                <div  ng-click="previewDataTimeRetFile()" ng-if="aFile.filetype_id === 2" class="form-group">
                     <label class="col-md-3 control-label">Elevation:</label>
                     <div class="col-md-6">
                         <span class="radio-inline">
@@ -7714,15 +7799,24 @@
 
                 <!-- Time Preview:* -->
                 <div class="form-group" ng-if="view.FILEval == 'detail' && aFile.filetype_id === 2">
+                    <label class="col-md-4 control-label">
+                        Preview time in UTC:
+                    </label>
+                    <div class="col-md-5" style="padding-top:10px;" placeholder="{{test}}">
+                        {{timePreview}}
+                    </div>
+                </div>
+
+                <!-- <div class="form-group" ng-if="view.FILEval == 'detail' && aFile.filetype_id === 2">
                         <label class="col-md-4 control-label">
                             <button type="button" class="btn btn-primary" ng-click="previewTime()" ng-disabled="dfCopy.time_zone == undefined">
                                 <span style="color:#fff;">Preview time in UTC</span>
                             </button>
                         </label>
                         <div class="col-md-5" style="padding-top:10px;" placeholder="{{test}}">
-                            : {{timePreview}}
+                            {{timePreview}}
                         </div>
-                    </div>
+                    </div> -->
 
                 <!--elevation (detail)-->
                 <div ng-if="view.FILEval == 'detail' && aFile.filetype_id === 2" class="col-md-12">
@@ -7942,7 +8036,7 @@
     </div>
     <form class="form-horizontal" name="peakForm" role="form">
         <fieldset>
-            <div class="modal-body">
+            <div class="modal-body" ng-click="change(dt)">
                 <!-- Start SENSORs and HWMs used for Peak -->
                 <label class="col-md-6 text-center">Select Data used for Interpretation</label>
                 <!-- HWM list-->
@@ -8121,11 +8215,11 @@
                 </div>
 
                 <!-- Peak Date*: (edit) -->
-                <div class="form-group" ng-class="{'has-error':peakForm.peak_date.$invalid && peakForm.peak_date.$dirty}" ng-mouseover="change(dt)">
+                <div class="form-group" ng-class="{'has-error':peakForm.peak_date.$invalid && peakForm.peak_date.$dirty}" >
                     <label class="col-md-4 control-label topPad" for="peak_date.peak_date">
                         <button type="button" class="help-btn" tooltip-placement="top" tooltip-append-to-body="false">
                             <span class="glyphicon glyphicon-eye-open"></span>
-                        </button> Peak Date:
+                        </button> Peak Date & Time:
                         <button type="button" class="help-btn" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Required">
                             <span class="glyphicon glyphicon-asterisk" style="color:#d00;font-size:xx-small;"></span>
                         </button>
@@ -8193,7 +8287,7 @@
                 </div> -->
 
                 <!-- Time Zone:* -->
-                <div class="form-group" ng-mouseover="change(dt)">
+                <div class="form-group" ng-click="change(dt)">
                     <label class="col-md-4 control-label" for="time_zone">
                         Peak Recorded In:
                         <button type="button" class="help-btn" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Required">
@@ -8212,7 +8306,7 @@
                 </div>
 
                 <!-- Time Preview:* -->
-                <div class="form-group" ng-mouseover="change(dt)">
+                <div class="form-group">
                         <label class="col-md-4 control-label">
                             Preview time in UTC:
                         </label>
@@ -8222,7 +8316,7 @@
                     </div>
 
                 <!-- Peak Stage-->
-                <div class="form-group" ng-mouseover="change(dt)">
+                <div class="form-group">
                     <label class="col-md-4 control-label" for="peak_stage">Peak Stage (elevation ft):</label>
                     <div class="col-md-5">
                         <input class="form-control" ng-keypress="isNum($event)" name="peak_stage" ng-model="aPeak.peak_stage" type="text" />
@@ -8235,7 +8329,7 @@
                 </div>
 
                 <!-- Vertical Datum: -->
-                <div class="form-group" ng-class="{'required': aPeak.peak_stage}" ng-mouseover="change(dt)">
+                <div class="form-group" ng-class="{'required': aPeak.peak_stage}"  >
                     <label class="col-md-4 control-label" ng-class="{'req': aPeak.peak_stage}" for="vdatum_id">Vertical Datum:</label>
                     <div class="col-md-5">
                         <select class="form-control" name="vdatum_id" ng-model="aPeak.vdatum_id"
@@ -8249,7 +8343,7 @@
                 </div>
 
                 <!-- Height Above Ground (ft)-->
-                <div class="form-group">
+                <div class="form-group"  >
                     <label class="col-md-4 control-label" for="height_above_gnd">Height Above Ground <br />(depth of water in ft):</label>
                     <div class="col-md-5">
                         <input class="form-control" ng-keypress="isNum($event)" name="height_above_gnd" ng-model="aPeak.height_above_gnd" type="text" />

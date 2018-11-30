@@ -176,10 +176,6 @@
                 $scope.datepickrs[which] = true;
             };
 
-            /* $scope.$watch('aPeak.peak_date',function(val){
-                previewTime()
-             }) */
-
             //is it UTC or local time..make sure it stays UTC
             var dealWithTimeStampb4Send = function () {
                 //check and see if they are not using UTC
@@ -1203,6 +1199,7 @@
                     var updatedPeak = {};
                     $scope.aPeak.peak_date = getDateTimeParts($scope.aPeak.peak_date);
                     dealWithTimeStampb4Send(); //UTC or local?
+                    getinitialtimepreview();
 
                     $http.defaults.headers.common.Authorization = 'Basic ' + $cookies.get('STNCreds');
                     $http.defaults.headers.common.Accept = 'application/json';
