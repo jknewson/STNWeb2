@@ -1240,6 +1240,18 @@
                                 </div>
                             </div>
 
+                            <!-- Time Preview:* -->
+                            <div class="form-group">
+                                <label class="col-md-4 control-label">
+                                    <button type="button" class="btn btn-primary" ng-click="previewTime()" ng-disabled="aSensStatus.time_zone == undefined">
+                                        <span style="color:#fff;">Preview time in UTC</span>
+                                    </button>
+                                </label>
+                                <div class="col-md-5" style="padding-top:10px;" placeholder="{{test}}">
+                                    : {{timePreview}}
+                                </div>
+                            </div>
+
                             <!-- Note: -->
                             <div class="form-group">
                                 <label class="col-md-4 control-label" for="notes">
