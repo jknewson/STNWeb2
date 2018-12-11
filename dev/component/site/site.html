@@ -7065,7 +7065,7 @@
                                     </div>
 
                                     <!--Description*-->
-                                    <div class="form-group" ng-class="{'has-error':NWISSenFILEForm.description.$invalid && NWISSenFILEForm.description.$dirty}" style="margin:0;padding:0">
+                                    <div ng-click="previewRETNWISTime()" class="form-group" ng-class="{'has-error':NWISSenFILEForm.description.$invalid && NWISSenFILEForm.description.$dirty}" style="margin:0;padding:0">
                                         <label class="col-md-4 control-label req" for="description">
                                             Description:
                                             <button type="button" class="help-btn" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Required">
@@ -7078,7 +7078,7 @@
                                     </div>
 
                                     <!-- Good Data Start Time* (data) -->
-                                    <div class="form-group" ng-class="{'has-error':NWISSenFILEForm.good_start.$invalid && NWISSenFILEForm.good_start.$dirty}" style="margin:0;padding:0">
+                                    <div ng-click="previewRETNWISTime()" class="form-group" ng-class="{'has-error':NWISSenFILEForm.good_start.$invalid && NWISSenFILEForm.good_start.$dirty}" style="margin:0;padding:0">
                                         <label class="col-md-4 control-label req" for="good_start" style="margin-top:4%">
                                             Good Data Start Time:
                                             <button type="button" class="help-btn" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Required">
@@ -7096,7 +7096,7 @@
                                     </div>
 
                                     <!-- Good Data End Time* (data)-->
-                                    <div class="form-group" ng-class="{'has-error':NWISSenFILEForm.good_end.$invalid && NWISSenFILEForm.good_end.$dirty}" style="margin:0;padding:0">
+                                    <div ng-click="previewRETNWISTime()" class="form-group" ng-class="{'has-error':NWISSenFILEForm.good_end.$invalid && NWISSenFILEForm.good_end.$dirty}" style="margin:0;padding:0">
                                         <label class="col-md-4 control-label req" for="good_end" style="margin-top:4%">
                                             Good Data End Time:
                                             <button type="button" class="help-btn" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Required">
@@ -7114,7 +7114,7 @@
                                     </div>
 
                                     <!-- Timezone*: -->
-                                    <div class="form-group" style="margin:0;padding:0">
+                                    <div class="form-group" style="margin:0;padding:0" ng-click="previewRETNWISTime()">
                                         <label class="col-md-4 control-label req">
                                             Time Zone:
                                             <button type="button" class="help-btn" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Required">
@@ -7132,12 +7132,13 @@
                                     </div>
 
                                     <!-- Time Preview:* -->
-                                    <div class="form-group">
+                                    <div class="form-group" ng-click="previewRETNWISTime()">
                                         <label class="col-md-4 control-label">
                                             Preview time in UTC:
                                         </label>
                                         <div class="col-md-5" style="padding-top:10px;" placeholder="{{test}}">
-                                            {{timePreview}}
+                                            Start - {{timePreviewStart}} <br>
+                                            End - {{timePreviewEnd}}
                                         </div>
                                     </div>
 
@@ -7153,7 +7154,7 @@
                                         </div> -->
 
                                     <!-- Elevation -->
-                                    <div class="form-group" style="margin:0;padding:0">
+                                    <div class="form-group" style="margin:0;padding:0" ng-click="previewRETNWISTime()">
                                         <label class="col-md-4 control-label">Elevation:</label>
                                         <div class="col-md-6">
                                             <span class="radio-inline">

@@ -10756,11 +10756,727 @@
                         $scope.sensorFiles.splice(ai, 1);
                     }
                 }
+            
                 var dt = getTimeZoneStamp();
-                getinitialtimepreviewNWIS();
                 $scope.NWISFile = {};
                 $scope.NWISDF = {};
             }
+            var getinitialtimepreviewNWIS = function () { 
+                // getting the time initally set for peak date
+                if ($scope.NWISDF.good_start != undefined) {
+                    $scope.timePreviewStart = $scope.NWISDF.good_start;
+                    $scope.timePreviewEnd = $scope.NWISDF.good_end;
+                } else {
+                    $scope.timePreviewStart = $scope.NWISDF.good_start;
+                    $scope.timePreviewEnd = $scope.NWISDF.good_end;
+                }
+
+                //check and see if they are not using UTC
+                if ($scope.NWISDF.time_zone == "UTC") {
+                    // Date the user enters is in their computer's timezone, so we need to clone it and change the timezone. This way the values stay the same.
+                    var enteredDateStart = $scope.timePreviewStart;
+                    var enteredDateEnd = $scope.timePreviewEnd;
+                    enteredDateStart = moment(enteredDateStart);
+                    enteredDateEnd = moment(enteredDateEnd);
+
+                    // Cloning date and changing the timezone
+                    var correctedDateStart = enteredDateStart.clone();
+                    var correctedDateEnd = enteredDateEnd.clone();
+                    correctedDateStart = correctedDateStart.tz('Etc/GMT', true).format();
+                    correctedDateEnd = correctedDateEnd.tz('Etc/GMT', true).format();
+
+                    // formatting in UTC
+                    var utcDateStart = moment.utc(correctedDateStart).toDate().toUTCString();
+                    var utcDateEnd = moment.utc(correctedDateEnd).toDate().toUTCString();
+
+                    $scope.timePreviewStart = utcDateStart;
+                    $scope.timePreviewEnd = utcDateEnd;
+                }
+                if ($scope.NWISDF.time_zone == "EST") { // +5
+                    // + 5
+                    // Date the user enters is in their computer's timezone, so we need to clone it and change the timezone. This way the values stay the same.
+                    var enteredDateStart = $scope.timePreviewStart;
+                    var enteredDateEnd = $scope.timePreviewEnd;
+                    enteredDateStart = moment(enteredDateStart);
+                    enteredDateEnd = moment(enteredDateEnd);
+                    var isaylightSavings = enteredDateStart._d.toString();
+                    var correctedDateStart;
+                    var correctedDateEnd;
+
+                    if (isaylightSavings.indexOf('Daylight') >= 0) {
+
+                        // Cloning date and changing the timezone
+                        correctedDateStart = enteredDateStart.clone();
+                        correctedDateStart.add(1, 'hours');
+                        correctedDateStart = correctedDateStart.tz('America/New_York', true).format();
+
+                        correctedDateEnd = enteredDateEnd.clone();
+                        correctedDateEnd.add(1, 'hours');
+                        correctedDateEnd = correctedDateEnd.tz('America/New_York', true).format();
+
+                    }
+
+                    if (isaylightSavings.indexOf('Standard') >= 0) {
+                        // Cloning date and changing the timezone
+                        correctedDateStart = enteredDateStart.clone();
+                        correctedDateStart = correctedDateStart.tz('America/New_York', true).format();
+
+                        correctedDateEnd = enteredDateEnd.clone();
+                        correctedDateEnd = correctedDateEnd.tz('America/New_York', true).format();
+                    }
+
+                    // formatting in UTC
+                    var utcDateStart = moment.utc(correctedDateStart).toDate().toUTCString();
+                    var utcDateEnd = moment.utc(correctedDateEnd).toDate().toUTCString();
+
+                    $scope.timePreviewStart = utcDateStart;
+                    $scope.timePreviewEnd = utcDateEnd;
+
+                } if ($scope.NWISDF.time_zone == "PST") {
+
+                    var enteredDateStart = $scope.timePreviewStart;
+                    var enteredDateEnd = $scope.timePreviewEnd;
+                    enteredDateStart = moment(enteredDateStart);
+                    enteredDateEnd = moment(enteredDateEnd);
+
+                    var isaylightSavings = enteredDateStart._d.toString();
+                    var correctedDateStart;
+                    var correctedDateEnd;
+
+                    if (isaylightSavings.indexOf('Daylight') >= 0) {
+
+                        // Cloning date and changing the timezone
+                        correctedDateStart = enteredDateStart.clone();
+                        correctedDateStart.add(1, 'hours');
+                        correctedDateStart = correctedDateStart.tz('America/Los_Angeles', true).format();
+
+                        correctedDateEnd = enteredDateEnd.clone();
+                        correctedDateEnd.add(1, 'hours');
+                        correctedDateEnd = correctedDateEnd.tz('America/Los_Angeles', true).format();
+
+                    }
+
+                    if (isaylightSavings.indexOf('Standard') >= 0) {
+                        // Cloning date and changing the timezone
+                        correctedDateStart = enteredDateStart.clone();
+                        correctedDateStart = correctedDateStart.tz('America/Los_Angeles', true).format();
+
+                        correctedDateEnd = enteredDateEnd.clone();
+                        correctedDateEnd = correctedDateEnd.tz('America/Los_Angeles', true).format();
+                    }
+                    // formatting in UTC
+                    var utcDateStart = moment.utc(correctedDateStart).toDate().toUTCString();
+                    var utcDateEnd = moment.utc(correctedDateEnd).toDate().toUTCString();
+
+                    $scope.timePreviewStart = utcDateStart;
+                    $scope.timePreviewEnd = utcDateEnd;
+
+                } if ($scope.NWISDF.time_zone == "CST") {
+
+                    var enteredDateStart = $scope.timePreviewStart;
+                    var enteredDateEnd = $scope.timePreviewEnd;
+                    enteredDateStart = moment(enteredDateStart);
+                    enteredDateEnd = moment(enteredDateEnd);
+                    
+                    var isaylightSavings = enteredDateStart._d.toString();
+                    var correctedDateStart;
+                    var correctedDateEnd;
+
+                    if (isaylightSavings.indexOf('Daylight') >= 0) {
+
+                        // Cloning date and changing the timezone
+                        correctedDateStart = enteredDateStart.clone();
+                        correctedDatestart.add(1, 'hours');
+                        correctedDateStart = correctedDateStart.tz('America/Chicago', true).format();
+
+                        correctedDateEnd = enteredDateEnd.clone();
+                        correctedDateEnd.add(1, 'hours');
+                        correctedDateEnd = correctedDateEnd.tz('America/Chicago', true).format();
+
+                    }
+
+                    if (isaylightSavings.indexOf('Standard') >= 0) {
+                        // Cloning date and changing the timezone
+                        correctedDateStart = enteredDateStart.clone();
+                        correctedDateStart = correctedDateStart.tz('America/Chicago', true).format();
+
+                        correctedDateEnd = enteredDateEnd.clone();
+                        correctedDateEnd = correctedDateEnd.tz('America/Chicago', true).format();
+                    }
+
+                    // formatting in UTC
+                    var utcDateStart = moment.utc(correctedDateStart).toDate().toUTCString();
+                    var utcDateEnd = moment.utc(correctedDateEnd).toDate().toUTCString();
+
+                    $scope.timePreviewStart = utcDateStart;
+                    $scope.timePreviewEnd = utcDateEnd;
+
+                } if ($scope.NWISDF.time_zone == "MST") {
+
+                    var enteredDateStart = $scope.timePreviewStart;
+                    var enteredDateEnd = $scope.timePreviewEnd;
+                    enteredDateStart = moment(enteredDateStart);
+                    enteredDateEnd = moment(enteredDateEnd);
+                    
+                    var isaylightSavings = enteredDateStart._d.toString();
+                    var correctedDateStart;
+                    var correctedDateEnd;
+
+                    if (isaylightSavings.indexOf('Daylight') >= 0) {
+
+                        // Cloning date and changing the timezone
+                        correctedDateStart = enteredDateStart.clone();
+                        correctedDatestart.add(1, 'hours');
+                        correctedDateStart = correctedDateStart.tz('America/Denver', true).format();
+
+                        correctedDateEnd = enteredDateEnd.clone();
+                        correctedDateEnd.add(1, 'hours');
+                        correctedDateEnd = correctedDateEnd.tz('America/Denver', true).format();
+
+                    }
+
+                    if (isaylightSavings.indexOf('Standard') >= 0) {
+                        // Cloning date and changing the timezone
+                        correctedDateStart = enteredDateStart.clone();
+                        correctedDateStart = correctedDateStart.tz('America/Denver', true).format();
+
+                        correctedDateEnd = enteredDateEnd.clone();
+                        correctedDateEnd = correctedDateEnd.tz('America/Denver', true).format();
+                    }
+
+                    // formatting in UTC
+                    var utcDateStart = moment.utc(correctedDateStart).toDate().toUTCString();
+                    var utcDateEnd = moment.utc(correctedDateEnd).toDate().toUTCString();
+
+                    $scope.timePreviewStart = utcDateStart;
+                    $scope.timePreviewEnd = utcDateEnd;
+                } if ($scope.NWISDF.time_zone == "PDT") {
+
+                    // Date the user enters is in their computer's timezone, so we need to clone it and change the timezone. This way the values stay the same.
+                    var enteredDateStart = $scope.timePreviewStart;
+                    var enteredDateEnd = $scope.timePreviewEnd;
+                    enteredDateStart = moment(enteredDateStart);
+                    enteredDateEnd = moment(enteredDateEnd);
+                    
+                    var isaylightSavings = enteredDateStart._d.toString();
+                    var correctedDateStart;
+                    var correctedDateEnd;
+
+                    if (isaylightSavings.indexOf('Daylight') >= 0) {
+
+                        // Cloning date and changing the timezone
+                        correctedDateStart = enteredDateStart.clone();
+                        correctedDateStart = correctedDateStart.tz('America/Los_Angeles', true).format();
+
+                        correctedDateEnd = enteredDateEnd.clone();
+                        correctedDateEnd = correctedDateEnd.tz('America/Los_Angeles', true).format();
+
+                    }
+
+                    if (isaylightSavings.indexOf('Standard') >= 0) {
+                        // Cloning date and changing the timezone
+                        correctedDateStart = enteredDateStart.clone();
+                        correctedDateStart.subtract(1, 'hours');
+                        correctedDateStart = correctedDateStart.tz('America/Los_Angeles', true).format();
+
+                        correctedDateEnd = enteredDateEnd.clone();
+                        correctedDateEnd.subtract(1, 'hours');
+                        correctedDateEnd = correctedDateEnd.tz('America/Los_Angeles', true).format();
+                    }
+
+                    // formatting in UTC
+                    var utcDateStart = moment.utc(correctedDateStart).toDate().toUTCString();
+                    var utcDateEnd = moment.utc(correctedDateEnd).toDate().toUTCString();
+
+                    $scope.timePreviewStart = utcDateStart;
+                    $scope.timePreviewEnd = utcDateEnd;
+                } if ($scope.NWISDF.time_zone == "EDT") {
+
+                    var enteredDateStart = $scope.timePreviewStart;
+                    var enteredDateEnd = $scope.timePreviewEnd;
+                    enteredDateStart = moment(enteredDateStart);
+                    enteredDateEnd = moment(enteredDateEnd);
+                    
+                    var isaylightSavings = enteredDateStart._d.toString();
+                    var correctedDateStart;
+                    var correctedDateEnd;
+
+                    if (isaylightSavings.indexOf('Daylight') >= 0) {
+
+                        // Cloning date and changing the timezone
+                        correctedDateStart = enteredDateStart.clone();
+                        correctedDateStart = correctedDateStart.tz('America/New_York', true).format();
+
+                        correctedDateEnd = enteredDateEnd.clone();
+                        correctedDateEnd = correctedDateEnd.tz('America/New_York', true).format();
+
+                    }
+
+                    if (isaylightSavings.indexOf('Standard') >= 0) {
+                        // Cloning date and changing the timezone
+                        correctedDateStart = enteredDateStart.clone();
+                        correctedDateStart.subtract(1, 'hours');
+                        correctedDateStart = correctedDateStart.tz('America/New_York', true).format();
+
+                        correctedDateEnd = enteredDateEnd.clone();
+                        correctedDateEnd.subtract(1, 'hours');
+                        correctedDateEnd = correctedDateEnd.tz('America/New_York', true).format();
+                    }
+
+                    // formatting in UTC
+                    var utcDateStart = moment.utc(correctedDateStart).toDate().toUTCString();
+                    var utcDateEnd = moment.utc(correctedDateEnd).toDate().toUTCString();
+
+                    $scope.timePreviewStart = utcDateStart;
+                    $scope.timePreviewEnd = utcDateEnd;
+                } if ($scope.NWISDF.time_zone == "CDT") {
+
+                    var enteredDateStart = $scope.timePreviewStart;
+                    var enteredDateEnd = $scope.timePreviewEnd;
+                    enteredDateStart = moment(enteredDateStart);
+                    enteredDateEnd = moment(enteredDateEnd);
+                    
+                    var isaylightSavings = enteredDateStart._d.toString();
+                    var correctedDateStart;
+                    var correctedDateEnd;
+
+                    if (isaylightSavings.indexOf('Daylight') >= 0) {
+
+                        // Cloning date and changing the timezone
+                        correctedDateStart = enteredDateStart.clone();
+                        correctedDateStart = correctedDateStart.tz('America/Chicago', true).format();
+
+                        correctedDateEnd = enteredDateEnd.clone();
+                        correctedDateEnd = correctedDateEnd.tz('America/Chicago', true).format();
+
+                    }
+
+                    if (isaylightSavings.indexOf('Standard') >= 0) {
+                        // Cloning date and changing the timezone
+                        correctedDateStart = enteredDateStart.clone();
+                        correctedDateStart.subtract(1, 'hours');
+                        correctedDateStart = correctedDateStart.tz('America/Chicago', true).format();
+
+                        correctedDateEnd = enteredDateEnd.clone();
+                        correctedDateEnd.subtract(1, 'hours');
+                        correctedDateEnd = correctedDateEnd.tz('America/Chicago', true).format();
+                    }
+
+                    // formatting in UTC
+                    var utcDateStart = moment.utc(correctedDateStart).toDate().toUTCString();
+                    var utcDateEnd = moment.utc(correctedDateEnd).toDate().toUTCString();
+
+                    $scope.timePreviewStart = utcDateStart;
+                    $scope.timePreviewEnd = utcDateEnd;
+
+                } if ($scope.NWISDF.time_zone == "MDT") {
+
+                    var enteredDateStart = $scope.timePreviewStart;
+                    var enteredDateEnd = $scope.timePreviewEnd;
+                    enteredDateStart = moment(enteredDateStart);
+                    enteredDateEnd = moment(enteredDateEnd);
+                    
+                    var isaylightSavings = enteredDateStart._d.toString();
+                    var correctedDateStart;
+                    var correctedDateEnd;
+
+                    if (isaylightSavings.indexOf('Daylight') >= 0) {
+
+                        // Cloning date and changing the timezone
+                        correctedDateStart = enteredDateStart.clone();
+                        correctedDateStart = correctedDateStart.tz('America/Denver', true).format();
+
+                        correctedDateEnd = enteredDateEnd.clone();
+                        correctedDateEnd = correctedDateEnd.tz('America/Denver', true).format();
+
+                    }
+
+                    if (isaylightSavings.indexOf('Standard') >= 0) {
+                        // Cloning date and changing the timezone
+                        correctedDateStart = enteredDateStart.clone();
+                        correctedDateStart.subtract(1, 'hours');
+                        correctedDateStart = correctedDateStart.tz('America/Denver', true).format();
+
+                        correctedDateEnd = enteredDateEnd.clone();
+                        correctedDateEnd.subtract(1, 'hours');
+                        correctedDateEnd = correctedDateEnd.tz('America/Denver', true).format();
+                    }
+
+                    // formatting in UTC
+                    var utcDateStart = moment.utc(correctedDateStart).toDate().toUTCString();
+                    var utcDateEnd = moment.utc(correctedDateEnd).toDate().toUTCString();
+
+                    $scope.timePreviewStart = utcDateStart;
+                    $scope.timePreviewEnd = utcDateEnd;
+                }
+                else {
+                    //make sure 'GMT' is tacked on so it doesn't try to add hrs to make the already utc a utc in db
+                    var i = $scope.timePreviewStart.toString().indexOf('GMT') + 3;
+                    var d = $scope.timePreviewEnd.toString().indexOf('GMT') + 3;
+                    $scope.timePreviewStart = $scope.timePreviewStart.toString().substring(0, i);
+                    $scope.timePreviewEnd = $scope.timePreviewEnd.toString().substring(0, d);
+                }
+
+            };
+
+            $scope.previewRETNWISTime = function () { 
+                // getting the time initally set for peak date
+                if ($scope.NWISDF.good_start != undefined) {
+                    $scope.timePreviewStart = $scope.NWISDF.good_start;
+                    $scope.timePreviewEnd = $scope.NWISDF.good_end;
+                } else {
+                    $scope.timePreviewStart = $scope.NWISDF.good_start;
+                    $scope.timePreviewEnd = $scope.NWISDF.good_end;
+                }
+
+                //check and see if they are not using UTC
+                if ($scope.NWISDF.time_zone == "UTC") {
+                    // Date the user enters is in their computer's timezone, so we need to clone it and change the timezone. This way the values stay the same.
+                    var enteredDateStart = $scope.timePreviewStart;
+                    var enteredDateEnd = $scope.timePreviewEnd;
+                    enteredDateStart = moment(enteredDateStart);
+                    enteredDateEnd = moment(enteredDateEnd);
+
+                    // Cloning date and changing the timezone
+                    var correctedDateStart = enteredDateStart.clone();
+                    var correctedDateEnd = enteredDateEnd.clone();
+                    correctedDateStart = correctedDateStart.tz('Etc/GMT', true).format();
+                    correctedDateEnd = correctedDateEnd.tz('Etc/GMT', true).format();
+
+                    // formatting in UTC
+                    var utcDateStart = moment.utc(correctedDateStart).toDate().toUTCString();
+                    var utcDateEnd = moment.utc(correctedDateEnd).toDate().toUTCString();
+
+                    $scope.timePreviewStart = utcDateStart;
+                    $scope.timePreviewEnd = utcDateEnd;
+                }
+                if ($scope.NWISDF.time_zone == "EST") { // +5
+                    // + 5
+                    // Date the user enters is in their computer's timezone, so we need to clone it and change the timezone. This way the values stay the same.
+                    var enteredDateStart = $scope.timePreviewStart;
+                    var enteredDateEnd = $scope.timePreviewEnd;
+                    enteredDateStart = moment(enteredDateStart);
+                    enteredDateEnd = moment(enteredDateEnd);
+                    var isaylightSavings = enteredDateStart._d.toString();
+                    var correctedDateStart;
+                    var correctedDateEnd;
+
+                    if (isaylightSavings.indexOf('Daylight') >= 0) {
+
+                        // Cloning date and changing the timezone
+                        correctedDateStart = enteredDateStart.clone();
+                        correctedDateStart.add(1, 'hours');
+                        correctedDateStart = correctedDateStart.tz('America/New_York', true).format();
+
+                        correctedDateEnd = enteredDateEnd.clone();
+                        correctedDateEnd.add(1, 'hours');
+                        correctedDateEnd = correctedDateEnd.tz('America/New_York', true).format();
+
+                    }
+
+                    if (isaylightSavings.indexOf('Standard') >= 0) {
+                        // Cloning date and changing the timezone
+                        correctedDateStart = enteredDateStart.clone();
+                        correctedDateStart = correctedDateStart.tz('America/New_York', true).format();
+
+                        correctedDateEnd = enteredDateEnd.clone();
+                        correctedDateEnd = correctedDateEnd.tz('America/New_York', true).format();
+                    }
+
+                    // formatting in UTC
+                    var utcDateStart = moment.utc(correctedDateStart).toDate().toUTCString();
+                    var utcDateEnd = moment.utc(correctedDateEnd).toDate().toUTCString();
+
+                    $scope.timePreviewStart = utcDateStart;
+                    $scope.timePreviewEnd = utcDateEnd;
+
+                } if ($scope.NWISDF.time_zone == "PST") {
+
+                    var enteredDateStart = $scope.timePreviewStart;
+                    var enteredDateEnd = $scope.timePreviewEnd;
+                    enteredDateStart = moment(enteredDateStart);
+                    enteredDateEnd = moment(enteredDateEnd);
+
+                    var isaylightSavings = enteredDateStart._d.toString();
+                    var correctedDateStart;
+                    var correctedDateEnd;
+
+                    if (isaylightSavings.indexOf('Daylight') >= 0) {
+
+                        // Cloning date and changing the timezone
+                        correctedDateStart = enteredDateStart.clone();
+                        correctedDateStart.add(1, 'hours');
+                        correctedDateStart = correctedDateStart.tz('America/Los_Angeles', true).format();
+
+                        correctedDateEnd = enteredDateEnd.clone();
+                        correctedDateEnd.add(1, 'hours');
+                        correctedDateEnd = correctedDateEnd.tz('America/Los_Angeles', true).format();
+
+                    }
+
+                    if (isaylightSavings.indexOf('Standard') >= 0) {
+                        // Cloning date and changing the timezone
+                        correctedDateStart = enteredDateStart.clone();
+                        correctedDateStart = correctedDateStart.tz('America/Los_Angeles', true).format();
+
+                        correctedDateEnd = enteredDateEnd.clone();
+                        correctedDateEnd = correctedDateEnd.tz('America/Los_Angeles', true).format();
+                    }
+                    // formatting in UTC
+                    var utcDateStart = moment.utc(correctedDateStart).toDate().toUTCString();
+                    var utcDateEnd = moment.utc(correctedDateEnd).toDate().toUTCString();
+
+                    $scope.timePreviewStart = utcDateStart;
+                    $scope.timePreviewEnd = utcDateEnd;
+
+                } if ($scope.NWISDF.time_zone == "CST") {
+
+                    var enteredDateStart = $scope.timePreviewStart;
+                    var enteredDateEnd = $scope.timePreviewEnd;
+                    enteredDateStart = moment(enteredDateStart);
+                    enteredDateEnd = moment(enteredDateEnd);
+                    
+                    var isaylightSavings = enteredDateStart._d.toString();
+                    var correctedDateStart;
+                    var correctedDateEnd;
+
+                    if (isaylightSavings.indexOf('Daylight') >= 0) {
+
+                        // Cloning date and changing the timezone
+                        correctedDateStart = enteredDateStart.clone();
+                        correctedDatestart.add(1, 'hours');
+                        correctedDateStart = correctedDateStart.tz('America/Chicago', true).format();
+
+                        correctedDateEnd = enteredDateEnd.clone();
+                        correctedDateEnd.add(1, 'hours');
+                        correctedDateEnd = correctedDateEnd.tz('America/Chicago', true).format();
+
+                    }
+
+                    if (isaylightSavings.indexOf('Standard') >= 0) {
+                        // Cloning date and changing the timezone
+                        correctedDateStart = enteredDateStart.clone();
+                        correctedDateStart = correctedDateStart.tz('America/Chicago', true).format();
+
+                        correctedDateEnd = enteredDateEnd.clone();
+                        correctedDateEnd = correctedDateEnd.tz('America/Chicago', true).format();
+                    }
+
+                    // formatting in UTC
+                    var utcDateStart = moment.utc(correctedDateStart).toDate().toUTCString();
+                    var utcDateEnd = moment.utc(correctedDateEnd).toDate().toUTCString();
+
+                    $scope.timePreviewStart = utcDateStart;
+                    $scope.timePreviewEnd = utcDateEnd;
+
+                } if ($scope.NWISDF.time_zone == "MST") {
+
+                    var enteredDateStart = $scope.timePreviewStart;
+                    var enteredDateEnd = $scope.timePreviewEnd;
+                    enteredDateStart = moment(enteredDateStart);
+                    enteredDateEnd = moment(enteredDateEnd);
+                    
+                    var isaylightSavings = enteredDateStart._d.toString();
+                    var correctedDateStart;
+                    var correctedDateEnd;
+
+                    if (isaylightSavings.indexOf('Daylight') >= 0) {
+
+                        // Cloning date and changing the timezone
+                        correctedDateStart = enteredDateStart.clone();
+                        correctedDatestart.add(1, 'hours');
+                        correctedDateStart = correctedDateStart.tz('America/Denver', true).format();
+
+                        correctedDateEnd = enteredDateEnd.clone();
+                        correctedDateEnd.add(1, 'hours');
+                        correctedDateEnd = correctedDateEnd.tz('America/Denver', true).format();
+
+                    }
+
+                    if (isaylightSavings.indexOf('Standard') >= 0) {
+                        // Cloning date and changing the timezone
+                        correctedDateStart = enteredDateStart.clone();
+                        correctedDateStart = correctedDateStart.tz('America/Denver', true).format();
+
+                        correctedDateEnd = enteredDateEnd.clone();
+                        correctedDateEnd = correctedDateEnd.tz('America/Denver', true).format();
+                    }
+
+                    // formatting in UTC
+                    var utcDateStart = moment.utc(correctedDateStart).toDate().toUTCString();
+                    var utcDateEnd = moment.utc(correctedDateEnd).toDate().toUTCString();
+
+                    $scope.timePreviewStart = utcDateStart;
+                    $scope.timePreviewEnd = utcDateEnd;
+                } if ($scope.NWISDF.time_zone == "PDT") {
+
+                    // Date the user enters is in their computer's timezone, so we need to clone it and change the timezone. This way the values stay the same.
+                    var enteredDateStart = $scope.timePreviewStart;
+                    var enteredDateEnd = $scope.timePreviewEnd;
+                    enteredDateStart = moment(enteredDateStart);
+                    enteredDateEnd = moment(enteredDateEnd);
+                    
+                    var isaylightSavings = enteredDateStart._d.toString();
+                    var correctedDateStart;
+                    var correctedDateEnd;
+
+                    if (isaylightSavings.indexOf('Daylight') >= 0) {
+
+                        // Cloning date and changing the timezone
+                        correctedDateStart = enteredDateStart.clone();
+                        correctedDateStart = correctedDateStart.tz('America/Los_Angeles', true).format();
+
+                        correctedDateEnd = enteredDateEnd.clone();
+                        correctedDateEnd = correctedDateEnd.tz('America/Los_Angeles', true).format();
+
+                    }
+
+                    if (isaylightSavings.indexOf('Standard') >= 0) {
+                        // Cloning date and changing the timezone
+                        correctedDateStart = enteredDateStart.clone();
+                        correctedDateStart.subtract(1, 'hours');
+                        correctedDateStart = correctedDateStart.tz('America/Los_Angeles', true).format();
+
+                        correctedDateEnd = enteredDateEnd.clone();
+                        correctedDateEnd.subtract(1, 'hours');
+                        correctedDateEnd = correctedDateEnd.tz('America/Los_Angeles', true).format();
+                    }
+
+                    // formatting in UTC
+                    var utcDateStart = moment.utc(correctedDateStart).toDate().toUTCString();
+                    var utcDateEnd = moment.utc(correctedDateEnd).toDate().toUTCString();
+
+                    $scope.timePreviewStart = utcDateStart;
+                    $scope.timePreviewEnd = utcDateEnd;
+                } if ($scope.NWISDF.time_zone == "EDT") {
+
+                    var enteredDateStart = $scope.timePreviewStart;
+                    var enteredDateEnd = $scope.timePreviewEnd;
+                    enteredDateStart = moment(enteredDateStart);
+                    enteredDateEnd = moment(enteredDateEnd);
+                    
+                    var isaylightSavings = enteredDateStart._d.toString();
+                    var correctedDateStart;
+                    var correctedDateEnd;
+
+                    if (isaylightSavings.indexOf('Daylight') >= 0) {
+
+                        // Cloning date and changing the timezone
+                        correctedDateStart = enteredDateStart.clone();
+                        correctedDateStart = correctedDateStart.tz('America/New_York', true).format();
+
+                        correctedDateEnd = enteredDateEnd.clone();
+                        correctedDateEnd = correctedDateEnd.tz('America/New_York', true).format();
+
+                    }
+
+                    if (isaylightSavings.indexOf('Standard') >= 0) {
+                        // Cloning date and changing the timezone
+                        correctedDateStart = enteredDateStart.clone();
+                        correctedDateStart.subtract(1, 'hours');
+                        correctedDateStart = correctedDateStart.tz('America/New_York', true).format();
+
+                        correctedDateEnd = enteredDateEnd.clone();
+                        correctedDateEnd.subtract(1, 'hours');
+                        correctedDateEnd = correctedDateEnd.tz('America/New_York', true).format();
+                    }
+
+                    // formatting in UTC
+                    var utcDateStart = moment.utc(correctedDateStart).toDate().toUTCString();
+                    var utcDateEnd = moment.utc(correctedDateEnd).toDate().toUTCString();
+
+                    $scope.timePreviewStart = utcDateStart;
+                    $scope.timePreviewEnd = utcDateEnd;
+                } if ($scope.NWISDF.time_zone == "CDT") {
+
+                    var enteredDateStart = $scope.timePreviewStart;
+                    var enteredDateEnd = $scope.timePreviewEnd;
+                    enteredDateStart = moment(enteredDateStart);
+                    enteredDateEnd = moment(enteredDateEnd);
+                    
+                    var isaylightSavings = enteredDateStart._d.toString();
+                    var correctedDateStart;
+                    var correctedDateEnd;
+
+                    if (isaylightSavings.indexOf('Daylight') >= 0) {
+
+                        // Cloning date and changing the timezone
+                        correctedDateStart = enteredDateStart.clone();
+                        correctedDateStart = correctedDateStart.tz('America/Chicago', true).format();
+
+                        correctedDateEnd = enteredDateEnd.clone();
+                        correctedDateEnd = correctedDateEnd.tz('America/Chicago', true).format();
+
+                    }
+
+                    if (isaylightSavings.indexOf('Standard') >= 0) {
+                        // Cloning date and changing the timezone
+                        correctedDateStart = enteredDateStart.clone();
+                        correctedDateStart.subtract(1, 'hours');
+                        correctedDateStart = correctedDateStart.tz('America/Chicago', true).format();
+
+                        correctedDateEnd = enteredDateEnd.clone();
+                        correctedDateEnd.subtract(1, 'hours');
+                        correctedDateEnd = correctedDateEnd.tz('America/Chicago', true).format();
+                    }
+
+                    // formatting in UTC
+                    var utcDateStart = moment.utc(correctedDateStart).toDate().toUTCString();
+                    var utcDateEnd = moment.utc(correctedDateEnd).toDate().toUTCString();
+
+                    $scope.timePreviewStart = utcDateStart;
+                    $scope.timePreviewEnd = utcDateEnd;
+
+                } if ($scope.NWISDF.time_zone == "MDT") {
+
+                    var enteredDateStart = $scope.timePreviewStart;
+                    var enteredDateEnd = $scope.timePreviewEnd;
+                    enteredDateStart = moment(enteredDateStart);
+                    enteredDateEnd = moment(enteredDateEnd);
+                    
+                    var isaylightSavings = enteredDateStart._d.toString();
+                    var correctedDateStart;
+                    var correctedDateEnd;
+
+                    if (isaylightSavings.indexOf('Daylight') >= 0) {
+
+                        // Cloning date and changing the timezone
+                        correctedDateStart = enteredDateStart.clone();
+                        correctedDateStart = correctedDateStart.tz('America/Denver', true).format();
+
+                        correctedDateEnd = enteredDateEnd.clone();
+                        correctedDateEnd = correctedDateEnd.tz('America/Denver', true).format();
+
+                    }
+
+                    if (isaylightSavings.indexOf('Standard') >= 0) {
+                        // Cloning date and changing the timezone
+                        correctedDateStart = enteredDateStart.clone();
+                        correctedDateStart.subtract(1, 'hours');
+                        correctedDateStart = correctedDateStart.tz('America/Denver', true).format();
+
+                        correctedDateEnd = enteredDateEnd.clone();
+                        correctedDateEnd.subtract(1, 'hours');
+                        correctedDateEnd = correctedDateEnd.tz('America/Denver', true).format();
+                    }
+
+                    // formatting in UTC
+                    var utcDateStart = moment.utc(correctedDateStart).toDate().toUTCString();
+                    var utcDateEnd = moment.utc(correctedDateEnd).toDate().toUTCString();
+
+                    $scope.timePreviewStart = utcDateStart;
+                    $scope.timePreviewEnd = utcDateEnd;
+                }
+                else {
+                    //make sure 'GMT' is tacked on so it doesn't try to add hrs to make the already utc a utc in db
+                    var i = $scope.timePreviewStart.toString().indexOf('GMT') + 3;
+                    var d = $scope.timePreviewEnd.toString().indexOf('GMT') + 3;
+                    $scope.timePreviewStart = $scope.timePreviewStart.toString().substring(0, i);
+                    $scope.timePreviewEnd = $scope.timePreviewEnd.toString().substring(0, d);
+                }
+
+            };
+
             $scope.showNWISFile = function (f) {
                 //want to add or edit file
                 $scope.existFileIndex = -1;
@@ -10778,6 +11494,7 @@
                         $scope.NWISDF.collect_date = new Date($scope.NWISDF.collect_date);
                         $scope.NWISDF.good_start = getDateTimeParts($scope.NWISDF.good_start);
                         $scope.NWISDF.good_end = getDateTimeParts($scope.NWISDF.good_end);
+                        getinitialtimepreviewNWIS();
                     }, function (errorResponse) {
                         if (errorResponse.headers(["usgswim-messages"]) !== undefined) toastr.error("Error getting data file: " + errorResponse.headers(["usgswim-messages"]));
                         else toastr.error("Error getting data file: " + errorResponse.statusText);
@@ -10804,6 +11521,7 @@
                         good_start: new Date(),
                         good_end: new Date()
                     };
+                    getinitialtimepreviewNWIS();
                     $scope.nwisProcessor = allMembers.filter(function (m) { return m.member_id == $cookies.get('mID'); })[0];
                 } //end new file
                 $scope.showNWISFileForm = true;
@@ -10875,7 +11593,7 @@
                         var enteredUtcEndDateTime = $scope.NWISDF.good_end;
                         enteredUtcEndDateTime = moment(enteredUtcEndDateTime);
 
-                        var isaylightSavings = enteredDate._i.toString();
+                        var isaylightSavings = enteredUtcEndDateTime._d.toString();
                                 var correctedutcStartDateTime;
                                 var correctedutcEndDateTime;
 
@@ -10949,7 +11667,7 @@
                         var enteredUtcEndDateTime = $scope.NWISDF.good_end;
                         enteredUtcEndDateTime = moment(enteredUtcEndDateTime);
 
-                        var isaylightSavings = enteredDate._i.toString();
+                        var isaylightSavings = enteredUtcEndDateTime._d.toString();
                                 var correctedutcStartDateTime;
                                 var correctedutcEndDateTime;
 
@@ -10987,7 +11705,7 @@
                         var enteredUtcEndDateTime = $scope.NWISDF.good_end;
                         enteredUtcEndDateTime = moment(enteredUtcEndDateTime);
 
-                        var isaylightSavings = enteredDate._i.toString();
+                        var isaylightSavings = enteredUtcEndDateTime._d.toString();
                                 var correctedutcStartDateTime;
                                 var correctedutcEndDateTime;
 
@@ -11025,7 +11743,7 @@
                         var enteredUtcEndDateTime = $scope.NWISDF.good_end;
                         enteredUtcEndDateTime = moment(enteredUtcEndDateTime);
 
-                        var isaylightSavings = enteredDate._i.toString();
+                        var isaylightSavings = enteredUtcEndDateTime._d.toString();
                                 var correctedutcStartDateTime;
                                 var correctedutcEndDateTime;
 
@@ -11063,7 +11781,7 @@
                         var enteredUtcEndDateTime = $scope.NWISDF.good_end;
                         enteredUtcEndDateTime = moment(enteredUtcEndDateTime);
 
-                        var isaylightSavings = enteredDate._i.toString();
+                        var isaylightSavings = enteredUtcEndDateTime._d.toString();
                                 var correctedutcStartDateTime;
                                 var correctedutcEndDateTime;
 
@@ -11101,7 +11819,7 @@
                         var enteredUtcEndDateTime = $scope.NWISDF.good_end;
                         enteredUtcEndDateTime = moment(enteredUtcEndDateTime);
 
-                        var isaylightSavings = enteredDate._i.toString();
+                        var isaylightSavings = enteredUtcEndDateTime._d.toString();
                                 var correctedutcStartDateTime;
                                 var correctedutcEndDateTime;
 
@@ -11139,7 +11857,7 @@
                         var enteredUtcEndDateTime = $scope.NWISDF.good_end;
                         enteredUtcEndDateTime = moment(enteredUtcEndDateTime);
 
-                        var isaylightSavings = enteredDate._i.toString();
+                        var isaylightSavings = enteredUtcEndDateTime._d.toString();
                                 var correctedutcStartDateTime;
                                 var correctedutcEndDateTime;
 
@@ -11275,7 +11993,7 @@
                         var enteredUtcEndDateTime = $scope.NWISDF.good_end;
                         enteredUtcEndDateTime = moment(enteredUtcEndDateTime);
 
-                        var isaylightSavings = enteredDate._i.toString();
+                        var isaylightSavings = enteredUtcEndDateTime._d.toString();
                                 var correctedutcStartDateTime;
                                 var correctedutcEndDateTime;
 
@@ -11349,7 +12067,7 @@
                         var enteredUtcEndDateTime = $scope.NWISDF.good_end;
                         enteredUtcEndDateTime = moment(enteredUtcEndDateTime);
 
-                        var isaylightSavings = enteredDate._i.toString();
+                        var isaylightSavings = enteredUtcEndDateTime._d.toString();
                                 var correctedutcStartDateTime;
                                 var correctedutcEndDateTime;
 
@@ -11387,7 +12105,7 @@
                         var enteredUtcEndDateTime = $scope.NWISDF.good_end;
                         enteredUtcEndDateTime = moment(enteredUtcEndDateTime);
 
-                        var isaylightSavings = enteredDate._i.toString();
+                        var isaylightSavings = enteredUtcEndDateTime._d.toString();
                                 var correctedutcStartDateTime;
                                 var correctedutcEndDateTime;
 
@@ -11425,7 +12143,7 @@
                         var enteredUtcEndDateTime = $scope.NWISDF.good_end;
                         enteredUtcEndDateTime = moment(enteredUtcEndDateTime);
 
-                        var isaylightSavings = enteredDate._i.toString();
+                        var isaylightSavings = enteredUtcEndDateTime._d.toString();
                                 var correctedutcStartDateTime;
                                 var correctedutcEndDateTime;
 
@@ -11463,7 +12181,7 @@
                         var enteredUtcEndDateTime = $scope.NWISDF.good_end;
                         enteredUtcEndDateTime = moment(enteredUtcEndDateTime);
 
-                        var isaylightSavings = enteredDate._i.toString();
+                        var isaylightSavings = enteredUtcEndDateTime._d.toString();
                                 var correctedutcStartDateTime;
                                 var correctedutcEndDateTime;
 
@@ -11501,7 +12219,7 @@
                         var enteredUtcEndDateTime = $scope.NWISDF.good_end;
                         enteredUtcEndDateTime = moment(enteredUtcEndDateTime);
 
-                        var isaylightSavings = enteredDate._i.toString();
+                        var isaylightSavings = enteredUtcEndDateTime._d.toString();
                                 var correctedutcStartDateTime;
                                 var correctedutcEndDateTime;
 
@@ -11539,7 +12257,7 @@
                         var enteredUtcEndDateTime = $scope.NWISDF.good_end;
                         enteredUtcEndDateTime = moment(enteredUtcEndDateTime);
 
-                        var isaylightSavings = enteredDate._i.toString();
+                        var isaylightSavings = enteredUtcEndDateTime._d.toString();
                                 var correctedutcStartDateTime;
                                 var correctedutcEndDateTime;
 
