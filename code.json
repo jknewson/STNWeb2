@@ -4,6 +4,7 @@
     "organization": "U.S. Geological Survey",
     "description": "Data management application for the USGS Short-Term Network (STN) database",
     "version": "v2.2.4",
+
     "status": "Production",
 
     "permissions": {
