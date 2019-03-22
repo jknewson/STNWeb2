@@ -75,9 +75,10 @@
                 if (whichQuick == 'HWM') {
                     $scope.aHWM = { hwm_label: 'hwm-1', hwm_environment: 'Riverine', event_id: $cookies.get('SessionEventID'), bank: 'N/A', flag_date: makeAdate(""), stillwater: 0, flag_member_id: $cookies.get('mID') };
                     $scope.hwmTypeList = allHWMTypes; $scope.hwmQualList = allHWMQualities; $scope.markerList = allMarkers;
-                    /* var vdatumWoNad27 = [];
+                    var vdatumWoNad27 = [];
                     $scope.vertDatumList = allVertDatums;
                     // creating a new site
+                    // this affects the Datum Location Vert list in the Quick HWM page
                     angular.forEach($scope.vertDatumList, function (value, key) {
 
                         if (value.datum_id == 4) {
@@ -86,7 +87,7 @@
                             vdatumWoNad27.push(value);
                         }
                     });
-                    $scope.vertDatumList = vdatumWoNad27; */
+                    $scope.vertDatumList = vdatumWoNad27;
                 }
                 //sensor dropdowns
                 if (whichQuick == 'Sensor') {
@@ -97,7 +98,7 @@
                         if (dsent !== undefined) d = new Date(dsent);
                         else d = new Date();
 
-                        var offset = (d.toString()).substring(35);
+                        /* var offset = (d.toString()).substring(35);
                         var zone = "";
                         switch (offset.substr(0, 3)) {
                             case "Cen":
@@ -112,13 +113,13 @@
                             case "Pac":
                                 zone = 'PST';
                                 break;
-                        }
-                        sendThis = [d, zone];
+                        } */
+                        sendThis = [d];
                         return sendThis;
                     };
                     $scope.depTypeList = allDeployTypes; //get fresh version so not messed up with the Temperature twice
                     $scope.houseTypeList = allHousingTypes;
-                    $scope.timeZoneList = ['UTC', 'PST', 'MST', 'CST', 'EST'];
+                    $scope.timeZoneList = ['UTC', 'PST', 'MST', 'CST', 'EST', 'PDT', 'MDT', 'CDT', 'EDT'];
                     $scope.aSensor = { event_id: $cookies.get('SessionEventID'), };
                     $scope.aSensStatus = { status_type_id: 1, member_id: $cookies.get('mID') };
                     $scope.eventList = allEvents; $scope.sensorTypeList = allSensorTypes; $scope.sensorBrandList = allSensorBrands;
@@ -154,12 +155,260 @@
                 //is it UTC or local time..make sure it stays UTC
                 var dealWithTimeStampb4Send = function () {
                     //check and see if they are not using UTC
-                    if ($scope.aSensStatus.time_zone != "UTC") {
+                    if ($scope.aSensStatus.time_zone == "UTC") {
+                        // Date the user enters is in their computer's timezone, so we need to clone it and change the timezone. This way the values stay the same.
+                        var enteredDate = $scope.aSensStatus.time_stamp;
+                        enteredDate = moment(enteredDate);
+
+                        // Cloning date and changing the timezone
+                        var correctedDate = enteredDate.clone();
+                        correctedDate = correctedDate.tz('Etc/GMT', true).format();
+
+                        // formatting in UTC
+                        var utcDate = moment.utc(correctedDate).toDate().toUTCString();
+
+                        $scope.aSensStatus.time_stamp = utcDate;
+                        $scope.aSensStatus.time_zone = 'UTC';
+                    }
+
+                    if ($scope.aSensStatus.time_zone == "EST") {
+
+                        // Date the user enters is in their computer's timezone, so we need to clone it and change the timezone. This way the values stay the same.
+                        var enteredDate = $scope.aSensStatus.time_stamp;
+                        enteredDate = moment(enteredDate);
+                        var isaylightSavings = enteredDate._i.toString();
+                        var correctedDate;
+
+                        if (isaylightSavings.indexOf('Daylight') >= 0) {
+
+                            // Cloning date and changing the timezone
+                            correctedDate = enteredDate.clone();
+                            correctedDate.add(1, 'hours');
+                            correctedDate = correctedDate.tz('America/New_York', true).format();
+
+                        }
+
+                        if (isaylightSavings.indexOf('Standard') >= 0) {
+                            // Cloning date and changing the timezone
+                            correctedDate = enteredDate.clone();
+                            correctedDate = correctedDate.tz('America/New_York', true).format();
+                        }
+
+                        // formatting in UTC
+                        var utcDate = moment.utc(correctedDate).toDate().toUTCString();
+
+                        $scope.aSensStatus.time_stamp = utcDate;
+                        $scope.aSensStatus.time_zone = 'UTC';
+
+                    } if ($scope.aSensStatus.time_zone == "PST") {
+
+                        // Date the user enters is in their computer's timezone, so we need to clone it and change the timezone. This way the values stay the same.
+                        var enteredDate = $scope.aSensStatus.time_stamp;
+                        enteredDate = moment(enteredDate);
+                        var isaylightSavings = enteredDate._i.toString();
+                        var correctedDate;
+
+                        if (isaylightSavings.indexOf('Daylight') >= 0) {
+
+                            // Cloning date and changing the timezone
+                            correctedDate = enteredDate.clone();
+                            correctedDate.add(1, 'hours');
+                            correctedDate = correctedDate.tz('America/Los_Angeles', true).format();
+
+                        }
+
+                        if (isaylightSavings.indexOf('Standard') >= 0) {
+                            // Cloning date and changing the timezone
+                            correctedDate = enteredDate.clone();
+                            correctedDate = correctedDate.tz('America/Los_Angeles', true).format();
+                        }
+
+                        // formatting in UTC
+                        var utcDate = moment.utc(correctedDate).toDate().toUTCString();
+
+                        $scope.aSensStatus.time_stamp = utcDate;
+                        $scope.aSensStatus.time_zone = 'UTC';
+
+                    } if ($scope.aSensStatus.time_zone == "CST") {
+
+                        // Date the user enters is in their computer's timezone, so we need to clone it and change the timezone. This way the values stay the same.
+                        var enteredDate = $scope.aSensStatus.time_stamp;
+                        enteredDate = moment(enteredDate);
+                        var isaylightSavings = enteredDate._i.toString();
+                        var correctedDate;
+
+                        if (isaylightSavings.indexOf('Daylight') >= 0) {
+
+                            // Cloning date and changing the timezone
+                            correctedDate = enteredDate.clone();
+                            correctedDate.add(1, 'hours');
+                            correctedDate = correctedDate.tz('America/Chicago', true).format();
+
+                        }
+
+                        if (isaylightSavings.indexOf('Standard') >= 0) {
+                            // Cloning date and changing the timezone
+                            correctedDate = enteredDate.clone();
+                            correctedDate = correctedDate.tz('America/Chicago', true).format();
+                        }
+
+                        // formatting in UTC
+                        var utcDate = moment.utc(correctedDate).toDate().toUTCString();
+
+                        $scope.aSensStatus.time_stamp = utcDate;
+                        $scope.aSensStatus.time_zone = 'UTC';
+
+                    } if ($scope.aSensStatus.time_zone == "MST") {
+
+                        // Date the user enters is in their computer's timezone, so we need to clone it and change the timezone. This way the values stay the same.
+                        var enteredDate = $scope.aSensStatus.time_stamp;
+                        enteredDate = moment(enteredDate);
+                        var isaylightSavings = enteredDate._i.toString();
+                        var correctedDate;
+
+                        if (isaylightSavings.indexOf('Daylight') >= 0) {
+
+                            // Cloning date and changing the timezone
+                            correctedDate = enteredDate.clone();
+                            correctedDate.add(1, 'hours');
+                            correctedDate = correctedDate.tz('America/Denver', true).format();
+
+                        }
+
+                        if (isaylightSavings.indexOf('Standard') >= 0) {
+                            // Cloning date and changing the timezone
+                            correctedDate = enteredDate.clone();
+                            correctedDate = correctedDate.tz('America/Denver', true).format();
+                        }
+
+                        // formatting in UTC
+                        var utcDate = moment.utc(correctedDate).toDate().toUTCString();
+
+                        $scope.aSensStatus.time_stamp = utcDate;
+                        $scope.aSensStatus.time_zone = 'UTC';
+
+                    } if ($scope.aSensStatus.time_zone == "PDT") {
+
+                        // Date the user enters is in their computer's timezone, so we need to clone it and change the timezone. This way the values stay the same.
+                        var enteredDate = $scope.aSensStatus.time_stamp;
+                        enteredDate = moment(enteredDate);
+                        var isaylightSavings = enteredDate._i.toString();
+                        var correctedDate;
+
+                        if (isaylightSavings.indexOf('Daylight') >= 0) {
+
+                            // Cloning date and changing the timezone
+                            correctedDate = enteredDate.clone();
+                            correctedDate = correctedDate.tz('America/Los_Angeles', true).format();
+
+                        }
+
+                        if (isaylightSavings.indexOf('Standard') >= 0) {
+                            // Cloning date and changing the timezone
+                            correctedDate = enteredDate.clone();
+                            correctedDate.subtract(1, 'hours');
+                            correctedDate = correctedDate.tz('America/Los_Angeles', true).format();
+                        }
+
+                        // formatting in UTC
+                        var utcDate = moment.utc(correctedDate).toDate().toUTCString();
+
+                        $scope.aSensStatus.time_stamp = utcDate;
+                        $scope.aSensStatus.time_zone = 'UTC';
+
+                    } if ($scope.aSensStatus.time_zone == "EDT") {
+
+                        // Date the user enters is in their computer's timezone, so we need to clone it and change the timezone. This way the values stay the same.
+                        var enteredDate = $scope.aSensStatus.time_stamp;
+                        enteredDate = moment(enteredDate);
+                        var isaylightSavings = enteredDate._i.toString();
+                        var correctedDate;
+
+                        if (isaylightSavings.indexOf('Daylight') >= 0) {
+
+                            // Cloning date and changing the timezone
+                            correctedDate = enteredDate.clone();
+                            correctedDate = correctedDate.tz('America/New_York', true).format();
+
+                        }
+
+                        if (isaylightSavings.indexOf('Standard') >= 0) {
+                            // Cloning date and changing the timezone
+                            correctedDate = enteredDate.clone();
+                            correctedDate.subtract(1, 'hours');
+                            correctedDate = correctedDate.tz('America/New_York', true).format();
+                        }
+
+                        // formatting in UTC
+                        var utcDate = moment.utc(correctedDate).toDate().toUTCString();
+
+                        $scope.aSensStatus.time_stamp = utcDate;
+                        $scope.aSensStatus.time_zone = 'UTC';
+
+                    } if ($scope.aSensStatus.time_zone == "CDT") {
+
+                        // Date the user enters is in their computer's timezone, so we need to clone it and change the timezone. This way the values stay the same.
+                        var enteredDate = $scope.aSensStatus.time_stamp;
+                        enteredDate = moment(enteredDate);
+                        var isaylightSavings = enteredDate._i.toString();
+                        var correctedDate;
+
+                        if (isaylightSavings.indexOf('Daylight') >= 0) {
+
+                            // Cloning date and changing the timezone
+                            correctedDate = enteredDate.clone();
+                            correctedDate = correctedDate.tz('America/Chicago', true).format();
+
+                        }
+
+                        if (isaylightSavings.indexOf('Standard') >= 0) {
+                            // Cloning date and changing the timezone
+                            correctedDate = enteredDate.clone();
+                            correctedDate.subtract(1, 'hours');
+                            correctedDate = correctedDate.tz('America/Chicago', true).format();
+                        }
+
+                        // formatting in UTC
+                        var utcDate = moment.utc(correctedDate).toDate().toUTCString();
+
+                        $scope.aSensStatus.time_stamp = utcDate;
+                        $scope.aSensStatus.time_zone = 'UTC';
+
+                    } if ($scope.aSensStatus.time_zone == "MDT") {
+
+                        // Date the user enters is in their computer's timezone, so we need to clone it and change the timezone. This way the values stay the same.
+                        var enteredDate = $scope.aSensStatus.time_stamp;
+                        enteredDate = moment(enteredDate);
+                        var isaylightSavings = enteredDate._i.toString();
+                        var correctedDate;
+
+                        if (isaylightSavings.indexOf('Daylight') >= 0) {
+
+                            // Cloning date and changing the timezone
+                            correctedDate = enteredDate.clone();
+                            correctedDate = correctedDate.tz('America/Denver', true).format();
+
+                        }
+
+                        if (isaylightSavings.indexOf('Standard') >= 0) {
+                            // Cloning date and changing the timezone
+                            correctedDate = enteredDate.clone();
+                            correctedDate.subtract(1, 'hours');
+                            correctedDate = correctedDate.tz('America/Denver', true).format();
+                        }
+
+                        // formatting in UTC
+                        var utcDate = moment.utc(correctedDate).toDate().toUTCString();
+
+                        $scope.aSensStatus.time_stamp = utcDate;
+                        $scope.aSensStatus.time_zone = 'UTC';
+                    }
+                   /*if ($scope.aSensStatus.time_zone != "UTC") {
                         //convert it
                         var utcDateTime = new Date($scope.aSensStatus.time_stamp).toUTCString();
                         $scope.aSensStatus.time_stamp = utcDateTime;
                         $scope.aSensStatus.time_zone = 'UTC';
-                    } else {
+                    } */ else {
                         //make sure 'GMT' is tacked on so it doesn't try to add hrs to make the already utc a utc in db
                         var i = $scope.aSensStatus.time_stamp.toString().indexOf('GMT') + 3;
                         $scope.aSensStatus.time_stamp = $scope.aSensStatus.time_stamp.toString().substring(0, i);

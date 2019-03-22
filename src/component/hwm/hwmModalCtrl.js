@@ -11,8 +11,65 @@
             $scope.hwmTypeList = allDropdowns[0];
             $scope.hwmQualList = allDropdowns[1];
             $scope.HDatumsList = allDropdowns[2];
+            var hdatumWoNad27 = [];
+            // if a site already exists
+            if (thisHWM != undefined) {
+                if (thisHWM.hdatum_id != 3) {
+                    angular.forEach($scope.HDatumsList, function (value, key) {
+
+                        if (value.datum_id == 3) {
+                            // don't add it to the array
+                        } else {
+                            hdatumWoNad27.push(value);
+                        }
+                    });
+                    $scope.HDatumsList = hdatumWoNad27;
+                } else {
+                    $scope.HDatumsList = allDropdowns[2];
+                }
+            } else {
+                // creating a new site
+                angular.forEach($scope.HDatumsList, function (value, key) {
+
+                    if (value.datum_id == 3) {
+                        // don't add it to the array
+                    } else {
+                        hdatumWoNad27.push(value);
+                    }
+                });
+                $scope.HDatumsList = hdatumWoNad27;
+            }
+
             $scope.hCollMList = allDropdowns[3];
             $scope.VDatumsList = allDropdowns[4];
+            var vdatumWoNad27 = [];
+
+            if (thisHWM != undefined) {
+                if (thisHWM.vdatum_id != 4) {
+                    angular.forEach($scope.VDatumsList, function (value, key) {
+
+                        if (value.datum_id == 4) {
+                            // don't add it to the array
+                        } else {
+                            vdatumWoNad27.push(value);
+                        }
+                    });
+                    $scope.VDatumsList = vdatumWoNad27;
+                } else {
+                    $scope.VDatumsList = allDropdowns[2];
+                }
+            } else {
+                // creating a new site
+                angular.forEach($scope.VDatumsList, function (value, key) {
+
+                    if (value.datum_id == 4) {
+                        // don't add it to the array
+                    } else {
+                        vdatumWoNad27.push(value);
+                    }
+                });
+                $scope.VDatumsList = vdatumWoNad27;
+            }
             $scope.vCollMList = allDropdowns[5];
             $scope.markerList = allDropdowns[6];
             $scope.eventList = allDropdowns[7];

@@ -67,7 +67,7 @@
                     if (value.datum_id == 4) {
                         // don't add it to the array
                     } else {
-                        hdatumWoNad27.push(value);
+                        vdatumWoNad27.push(value);
                     }
                 });
                 $scope.vertDatumList = vdatumWoNad27;

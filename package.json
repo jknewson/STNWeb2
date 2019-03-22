@@ -23,7 +23,7 @@
     "bower": "^1.7.2",
     "browser-sync": "2.6.5",
     "del": "^2.2.0",
-    "event-stream": "^3.3.2",
+    "event-stream": "3.3.4",
     "express": "^4.13.2",
     "gulp": "^3.9.0",
     "gulp-angular-filesort": "^1.1.1",
@@ -58,13 +58,15 @@
     "protractor": "^1.1.1",
     "q": "^1.1.2",
     "rev-del": "^1.0.5",
-    "shelljs": "^0.2.6"
+    "shelljs": "^0.2.6",
+    "moment-timezone": "^0.5.23"
   },
   "dependencies": {
     "checklist-model": "^0.9.0",
     "gulp": "^3.9.1",
     "gulp-filter": "^3.0.1",
     "leaflet.markercluster": "^1.0.3",
+    "moment-timezone": "^0.5.23",
     "wiredep": "^3.0.0"
   }
 }
