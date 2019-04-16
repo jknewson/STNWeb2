@@ -9,6 +9,16 @@
             SITE_HOUSING, Site_Files, MEMBER, INSTRUMENT, INSTRUMENT_STATUS, LANDOWNER_CONTACT, GEOCODE, FILE_STAMP, FILE, SOURCE, SERVER_URL) {
             //dropdowns 
             $scope.HorizontalDatumList = allDropDownParts[0];
+            var hdatumWoNad27 = [];
+                angular.forEach($scope.HorizontalDatumList, function (value, key) {
+
+                    if (value.datum_id == 3) {
+                        // don't add it to the array
+                    } else {
+                        hdatumWoNad27.push(value);
+                    }
+                });
+            $scope.HorizontalDatumList = hdatumWoNad27;
             $scope.HorCollMethodList = allDropDownParts[1];
             $scope.StateList = allDropDownParts[2];
             $scope.AllCountyList = allDropDownParts[3];

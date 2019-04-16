@@ -5770,6 +5770,16 @@
             $scope.OPsForTapeDown = siteOPs;
             $scope.OPsPresent = siteOPs.length > 0 ? true : false;
             $scope.vertDatumList = allVDatumList;
+            /* var vdatumWo29 = [];
+                angular.forEach($scope.vertDatumList, function (value, key) {
+
+                    if (value.datum_id == 4) {
+                        // don't add it to the array
+                    } else {
+                        hdatumWoNad27.push(value);
+                    }
+                }); */
+            $scope.vertDatumList = vdatumWo29;
             $scope.removeOPList = [];
             $scope.tapeDownTable = []; //holder of tapedown OP_MEASUREMENTS
             $scope.DEPtapeDownTable = []; //holds any deployed tapedowns
@@ -6973,6 +6983,18 @@
             if ($scope.RetrievedSensorStat.vdatum_id !== undefined && $scope.RetrievedSensorStat.vdatum_id > 0) {
                 $scope.RetrievedSensorStat.vdatumName = $scope.vertDatumList.filter(function (vd) { return vd.datum_id == $scope.RetrievedSensorStat.vdatum_id; })[0].datum_abbreviation;
             }
+            if ($scope.RetrievedSensorStat.vdatum_id == undefined) {
+            var vdatum29 = [];
+                angular.forEach($scope.vertDatumList, function (value, key) {
+
+                    if (value.datum_id == 4) {
+                        // don't add it to the array
+                    } else {
+                        vdatum29.push(value);
+                    }
+                });
+            $scope.vertDatumList = vdatum29;
+            }
             $scope.RetrievedSensorStat.time_stamp = getDateTimeParts($scope.RetrievedSensorStat.time_stamp); //this keeps it as utc in display
             $scope.Retriever = allMembers.filter(function (m) { return m.member_id === $scope.RetrievedSensorStat.member_id; })[0];
             $scope.RETremoveOPList = [];
@@ -6985,7 +7007,7 @@
                     $scope.RETOPMeasure = {};
                     $scope.RETOPMeasure.op_name = RETopChosen.name;
                     $scope.RETOPMeasure.elevation = RETopChosen.elev_ft;
-                    $scope.RETOPMeasure.Vdatum = $scope.vertDatumList.filter(function (vd) { return vd.datum_id == RETopChosen.vdatum_id; })[0].datum_abbreviation;
+                    $scope.RETOPMeasure.Vdatum = $scope.ALLvertDatumList.filter(function (vd) { return vd.datum_id == RETopChosen.vdatum_id; })[0].datum_abbreviation;
                     $scope.RETOPMeasure.objective_point_id = RETopChosen.objective_point_id;
                     $scope.retTapeCopy.push($scope.RETOPMeasure);
                     $scope.retStuffCopy[1].vdatum_id = RETopChosen.vdatum_id;

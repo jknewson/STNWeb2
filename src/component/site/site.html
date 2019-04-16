@@ -4229,7 +4229,8 @@
                         <!--sensor elevation (details)-->
                         <div ng-if="OPsPresent && view.DEPval == 'detail'" class="col-md-12">
                             <div class="col-md-4 col-md-offset-1"><label>Sensor Elevation:</label></div>
-                            <div class="col-md-4">{{aSensStatus.sensor_elevation || '--'}}</div>
+                            <div class="col-md-4" ng-if="aSensStatus.sensor_elevation == 0">{{aSensStatus.sensor_elevation}}</div>
+                            <div class="col-md-4" ng-if="aSensStatus.sensor_elevation != 0">{{aSensStatus.sensor_elevation || '--'}}</div>
                         </div>
                         <!--sensor elevation (edit)-->
                         <div class="form-group" ng-if="OPsPresent && view.DEPval == 'edit'">
@@ -6374,7 +6375,8 @@
                         <!--sensor Elevation (detail)-->
                         <div ng-if="OPsPresent && view.RETval == 'detail'" class="col-md-12">
                             <div class="col-md-4 col-md-offset-1"><label>Sensor Elevation:</label></div>
-                            <div class="col-md-6">{{RetrievedSensorStat.sensor_elevation || '--'}}</div>
+                            <div class="col-md-4" ng-if="RetrievedSensorStat.sensor_elevation == 0">{{RetrievedSensorStat.sensor_elevation}}</div>
+                            <div class="col-md-4" ng-if="RetrievedSensorStat.sensor_elevation != 0">{{RetrievedSensorStat.sensor_elevation || '--'}}</div>
                         </div>
                         <!--sensor Elevation (edit)-->
                         <div ng-if="OPsPresent && view.RETval == 'edit'" class="form-group">
@@ -8289,7 +8291,7 @@
 
                 <!-- Time Zone:* -->
                 <div class="form-group" ng-click="change(dt)">
-                    <label class="col-md-4 control-label" for="time_zone">
+                    <label class="col-md-4 control-label" for="time_zone" style="font-size: 12px; display: inline-table;">
                         Peak Recorded In:
                         <button type="button" class="help-btn" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Required">
                             <span class="glyphicon glyphicon-asterisk" style="color:#d00;font-size:xx-small;"></span>
@@ -8323,8 +8325,9 @@
                         <input class="form-control" ng-keypress="isNum($event)" name="peak_stage" ng-model="aPeak.peak_stage" type="text" />
                     </div>
                     <div class="col-md-1">
-                        <span tooltip-placement="right" uib-tooltip="Peak Stage Estimated?">
+                        <span tooltip-placement="right" uib-tooltip="Peak Stage Estimated?" style="font-size: 12px; position: fixed;">
                             <input type="checkbox" name="is_peak_stage_estimated" ng-model="aPeak.is_peak_stage_estimated" ng-true-value="1" ng-false-value="0" />
+                            Peak Stage Estimated?
                         </span>
                     </div>
                 </div>
@@ -8350,8 +8353,9 @@
                         <input class="form-control" ng-keypress="isNum($event)" name="height_above_gnd" ng-model="aPeak.height_above_gnd" type="text" />
                     </div>
                     <div class="col-md-1">
-                        <span tooltip-placement="right" uib-tooltip="HAG Estimated?">
+                        <span tooltip-placement="right" uib-tooltip="HAG Estimated?" style="font-size: 12px; position: fixed;">
                             <input type="checkbox" name="is_hag_estimated" ng-model="aPeak.is_hag_estimated" ng-true-value="1" ng-false-value="0" />
+                            Height Above Ground Estimated?
                         </span>
                     </div>
                 </div>
@@ -8371,8 +8375,9 @@
                                 <input class="form-control" ng-keypress="isNum($event)" name="peak_discharge" ng-model="aPeak.peak_discharge" type="text" />
                             </div>
                             <div class="col-md-1">
-                                <span tooltip-placement="right" uib-tooltip="Peak Discharge Estimated?">
+                                <span tooltip-placement="right" uib-tooltip="Peak Discharge Estimated?" style="font-size: 12px; position: fixed;">
                                     <input type="checkbox" name="is_peak_discharge_estimated" ng-model="aPeak.is_peak_discharge_estimated" ng-true-value="1" ng-false-value="0" />
+                                    Peak Discharge Estimated?
                                 </span>
                             </div>
                         </div>
