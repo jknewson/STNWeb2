@@ -248,7 +248,7 @@
                                 <td>{{h.hwm_label}}</td>
                                 <td>{{h.waterbody || '---'}}</td>
                                 <td>{{(hwmTypes | filter: {hwm_type_id: h.hwm_type_id})[0].hwm_type || '---'}}</td>
-                                <td ng-if="h.marker_id">{{(markers | filter: {marker_id: h.marker_id})[0].marker1}}</td>
+                                <td ng-if="h.marker_id">{{(markers | filter: {marker_id: h.marker_id})[0].marker}}</td>
                                 <td ng-if="!h.marker_id">---</td>
                                 <td>{{h.hwm_environment || '---'}}</td>
                                 <td>{{h.hwm_uncertainty || '---'}}</td>
@@ -636,7 +636,7 @@
                         <!-- Marker: (details) -->
                         <div class="col-md-12" ng-if="view.HWMval== 'detail'">
                             <div class="col-md-4"><label>Marker:</label></div>
-                            <div class="col-md-6">{{((markerList | filter: {marker_id: aHWM.marker_id})[0].marker1) || '---'}}</div>
+                            <div class="col-md-6">{{((markerList | filter: {marker_id: aHWM.marker_id})[0].marker) || '---'}}</div>
                         </div>
                         <!-- Marker: (edit) -->
                         <div class="form-group" ng-if="view.HWMval== 'edit'">
@@ -647,7 +647,7 @@
                             </label>
                             <div class="col-md-6">
                                 <select class="form-control" name="marker_id" ng-model="hwmCopy.marker_id"
-                                        ng-options="vd.marker_id as vd.marker1 for vd in markerList">
+                                        ng-options="vd.marker_id as vd.marker for vd in markerList">
                                     <option value=""></option>
                                 </select>
                             </div>

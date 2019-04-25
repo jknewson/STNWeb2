@@ -42,7 +42,7 @@
                 angular.forEach(hwmTypeList, function (ht) { $scope.hwmTypeArray.push(ht.hwm_type); });
                 $scope.envirArray = ["Coastal", "Riverine"];
                 $scope.markerArray = [];
-                angular.forEach(markerList, function (m) { $scope.markerArray.push(m.marker1); });
+                angular.forEach(markerList, function (m) { $scope.markerArray.push(m.marker); });
                 $scope.qualArray = [];
                 angular.forEach(hwmQualList, function (hq) { $scope.qualArray.push(hq.hwm_quality); });
                 $scope.bankArray = ["Left", "Right", "N/A"];
@@ -426,7 +426,7 @@
                     var hdName = horizDatumList.filter(function (hd) { return hd.datum_id == successfulHWM.hdatum_id; })[0].datum_name;
                     var hwmQName = hwmQualList.filter(function (hq) { return hq.hwm_quality_id == successfulHWM.hwm_quality_id; })[0].hwm_quality;
                     var hwmTName = hwmTypeList.filter(function (ht) { return ht.hwm_type_id == successfulHWM.hwm_type_id; })[0].hwm_type;
-                    var mark = successfulHWM.marker_id !== undefined ? markerList.filter(function (m) { return m.marker_id == successfulHWM.marker_id; })[0].marker1 : undefined;
+                    var mark = successfulHWM.marker_id !== undefined ? markerList.filter(function (m) { return m.marker_id == successfulHWM.marker_id; })[0].marker : undefined;
                     var vcmName = successfulHWM.vcollect_method_id !== undefined ? vertCollMethList.filter(function (vcm) { return vcm.vcollect_method_id == successfulHWM.vcollect_method_id; })[0].vcollect_method : undefined;
                     var vdName = successfulHWM.vdatum_id !== undefined ? vertDatumList.filter(function (vd) { return vd.datum_id == successfulHWM.vdatum_id; })[0].datum_abbreviation : undefined;
                     var hag = successfulHWM.height_above_gnd !== undefined ? Number(successfulHWM.height_above_gnd) : undefined;
@@ -571,7 +571,7 @@
                                 hwm.hdatum_id = horizDatumList.filter(function (hd) { return hd.datum_name == hwm.hdatum_id; })[0].datum_id;
                                 hwm.hwm_quality_id = hwmQualList.filter(function (hq) { return hq.hwm_quality == hwm.hwm_quality_id; })[0].hwm_quality_id;
                                 hwm.hwm_type_id = hwmTypeList.filter(function (ht) { return ht.hwm_type == hwm.hwm_type_id; })[0].hwm_type_id;
-                                hwm.marker_id = hwm.marker_id !== "" && hwm.marker_id !== undefined ? markerList.filter(function (m) { return m.marker1 == hwm.marker_id; })[0].marker_id : undefined;
+                                hwm.marker_id = hwm.marker_id !== "" && hwm.marker_id !== undefined ? markerList.filter(function (m) { return m.marker == hwm.marker_id; })[0].marker_id : undefined;
                                 if (hwm.stillwater !== "" && hwm.stillwater !== undefined) hwm.stillwater = hwm.stillwater == "No" ? "0" : "1";
                                 hwm.vcollect_method_id = hwm.vcollect_method_id !== "" && hwm.vcollect_method_id !== undefined ? vertCollMethList.filter(function (vcm) { return vcm.vcollect_method == hwm.vcollect_method_id; })[0].vcollect_method_id : undefined;
                                 hwm.vdatum_id = hwm.vdatum_id !== "" && hwm.vdatum_id !== undefined ? vertDatumList.filter(function (vd) { return vd.datum_abbreviation == hwm.vdatum_id; })[0].datum_id : undefined;

@@ -8,8 +8,8 @@
     // ***** SWITCH BACK AND FORTH DEPENDING ON IF TEST OR PRODUCTION ***
     /* app.constant('SERVER_URL', 'https://stn.wim.usgs.gov/STNServices'); */ // PROD
     /* app.constant('SERVER_URL', 'https://stntest.wim.usgs.gov/STNServices2'); */ // TEST
-    app.constant('SERVER_URL', 'https://stnpseudoprod.wim.usgs.gov/STNServicesNew'); // TEST 2.0
-    //app.constant('SERVER_URL', 'http://localhost/STNServices2');
+    //app.constant('SERVER_URL', 'https://stnpseudoprod.wim.usgs.gov/STNServicesNew'); // TEST 2.0
+    app.constant('SERVER_URL', 'http://localhost:53820');
 
     app.constant('ENVIRONMENT', 'Testing');
     //app.constant('ENVIRONMENT', 'Testing New Services');

@@ -8,7 +8,7 @@
     /* var rootURL = "https://stn.wim.usgs.gov/STNServices"; */
     // var rootURL = "https://stntest.wim.usgs.gov/STNServices2";
     // var rootURL = "https://stntest.wim.usgs.gov/STNServices2";
-    var rootURL = "https://stnpseudoprod.wim.usgs.gov/STNServicesNew";
+    var rootURL = "http://localhost:53820";
 
     // GEOCODE https://geocoding.geo.census.gov/geocoder/geographies/coordinates?benchmark=4&vintage=4&format=json
     STNResource.factory('GEOCODE', ['$resource', function ($resource) {
