@@ -225,6 +225,7 @@
                 getEventStateHWMs: { method: 'GET', isArray: true, url: rootURL + '/Events/:eventId/stateHWMs?State=:state' },
                 getEventSiteHWMs: { method: 'GET', isArray: true, url: rootURL + '/Sites/:siteId/EventHWMs' },//?Event=:eventId
                 getFilteredHWMs: { method: 'GET', isArray: true, url: rootURL + '/HWMs/FilteredHWMs' }, //Event={eventIds}&EventType={eventTypeIDs}&EventStatus={eventStatusID}&States={states}&County={counties}&HWMType={hwmTypeIDs}&HWMQuality={hwmQualIDs}&HWMEnvironment={hwmEnvironment}&SurveyComplete={surveyComplete}&StillWater={stillWater}
+                // ONE OF THESE NEEDS TO BE FIXED
                 getUnapprovedHWMs: { method: 'GET', isArray: true, cache: false }, //IsApproved={'true'/'false'}&Event={eventId}&Member={memberId}&State={state}
                 getHWMApproval: { method: 'GET', cache: false, isArray: false, url: rootURL + '/hwms/:id/Approval' },
                 approveHWM: { method: 'POST', cache: false, isArray: false, params: { id: '@id' }, url: rootURL + '/hwms/:id/Approve' }, //posts an APPROVAL, updates the HWM with approval_id and returns APPROVAL
@@ -434,7 +435,7 @@
                 getAll: { method: 'GET', isArray: true },
                 update: { method: 'PUT', cache: false, isArray: false },
                 getOPFiles: { method: 'GET', isArray: true, url: rootURL + "/ObjectivePoints/:id/Files" },
-                getOPControls: { method: 'GET', cache: false, isArray: true, url: rootURL + "/ObjectivePoints/:id/OPControls.json" },
+                getOPControls: { method: 'GET', cache: false, isArray: true, url: rootURL + "/ObjectivePoints/:id/OPControls" },
                 save: { method: 'POST', cache: false, isArray: false },
                 delete: { method: 'DELETE', cache: false, isArray: false }
             });
