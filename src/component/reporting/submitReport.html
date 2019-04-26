@@ -84,8 +84,8 @@
                     <td></td>
                     <td></td>
                     <td style="font-family: 'BryantBold';">Total</td>
-                    <td style="font-family: 'BryantBold';">Surfacewater</td>
-                    <td style="font-family: 'BryantBold';">Water Quality and Other</td>
+                    <td style="font-family: 'BryantBold';"><span class="glyphicon glyphicon-asterisk" style="color:#d00;font-size:xx-small;"></span>Surfacewater</td>
+                    <td style="font-family: 'BryantBold';"><span class="glyphicon glyphicon-asterisk" style="color:#d00;font-size:xx-small;"></span>Water Quality and Other</td>
                 </tr>
                 <tr>
                     <td colspan="2">
@@ -121,6 +121,7 @@
                             Yesterday
                             <button type="button" class="help-btn" tooltip-placement="right" tooltip-append-to-body="false" uib-tooltip="Verify and enter the number of people you had in the field yesterday for SW and QW work.">
                                 <span class="glyphicon glyphicon-question-sign"></span>
+                                <span class="glyphicon glyphicon-asterisk" style="color:#d00;font-size:xx-small;"></span>
                             </button>
                         </label>
                     </td>
@@ -137,6 +138,7 @@
                             Today
                             <button type="button" class="help-btn" tooltip-placement="right" tooltip-append-to-body="false" uib-tooltip="Enter the number of people you have in the field today for SW and QW work.">
                                 <span class="glyphicon glyphicon-question-sign"></span>
+                                <span class="glyphicon glyphicon-asterisk" style="color:#d00;font-size:xx-small;"></span>
                             </button>
                         </label>
                     </td>
@@ -153,6 +155,7 @@
                             Tomorrow
                             <button type="button" class="help-btn" tooltip-placement="right" tooltip-append-to-body="false" uib-tooltip="Estimate the number of people you expect to have in the field tomorrow for SW adn QW work.">
                                 <span class="glyphicon glyphicon-question-sign"></span>
+                                <span class="glyphicon glyphicon-asterisk" style="color:#d00;font-size:xx-small;"></span>
                             </button>
                         </label>
                     </td>
@@ -177,6 +180,7 @@
                             Yesterday
                             <button type="button" class="help-btn" tooltip-placement="right" tooltip-append-to-body="false" uib-tooltip="Verify and enter the number of people you had in the office yesterday to support SW and QW work.">
                                 <span class="glyphicon glyphicon-question-sign"></span>
+                                <span class="glyphicon glyphicon-asterisk" style="color:#d00;font-size:xx-small;"></span>
                             </button>
                         </label>
                     </td>
@@ -193,12 +197,13 @@
                             Today
                             <button type="button" class="help-btn" tooltip-placement="right" tooltip-append-to-body="false" uib-tooltip="Enter the number of people you have in the office today to support SW and QW work.">
                                 <span class="glyphicon glyphicon-question-sign"></span>
+                                <span class="glyphicon glyphicon-asterisk" style="color:#d00;font-size:xx-small;"></span>
                             </button>
                         </label>
                     </td>
                     <td>
                         <input ng-readonly="isCompleted" class="form-control" name="newReport.tod_officepers"
-                               ng-model="newReport.tod_officepers" type="text" numeric-only ng-required="newReport.complete == 1" />
+                               ng-model="newReport.tod_officepers" type="text" numeric-only ng-required="newReport.complete == 1" />                               
                     </td>
                     <td></td>
                     <td></td>
@@ -210,12 +215,13 @@
                             Tomorrow
                             <button type="button" class="help-btn" tooltip-placement="right" tooltip-append-to-body="false" uib-tooltip="Estimate the number of people you expect to have in the office tomorrow to support SW and QW work.">
                                 <span class="glyphicon glyphicon-question-sign"></span>
+                                <span class="glyphicon glyphicon-asterisk" style="color:#d00;font-size:xx-small;"></span>
                             </button>
                         </label>
                     </td>
                     <td>
                         <input ng-readonly="isCompleted" class="form-control" name="newReport.tmw_officepers"
-                               ng-model="newReport.tmw_officepers" type="text" numeric-only ng-required="newReport.complete == 1" />
+                               ng-model="newReport.tmw_officepers" type="text" numeric-only ng-required="newReport.complete == 1" />       
                     </td>
                     <td></td>
                     <td></td>
@@ -235,6 +241,7 @@
                             Gage visits (cumulative)
                             <button type="button" class="help-btn" tooltip-placement="right" tooltip-append-to-body="false" uib-tooltip="Total number of special gage visits to date during this flood.">
                                 <span class="glyphicon glyphicon-question-sign"></span>
+                                <span class="glyphicon glyphicon-asterisk" style="color:#d00;font-size:xx-small;"></span>
                             </button>
                         </label>
                     </td>
@@ -249,6 +256,7 @@
                             Gages down at present
                             <button type="button" class="help-btn" tooltip-placement="right" tooltip-append-to-body="false" uib-tooltip="Total number of gages down at the moment.">
                                 <span class="glyphicon glyphicon-question-sign"></span>
+                                <span class="glyphicon glyphicon-asterisk" style="color:#d00;font-size:xx-small;"></span>
                             </button>
                         </label>
                     </td>
@@ -268,6 +276,7 @@
                             To date
                             <button type="button" class="help-btn" tooltip-placement="right" tooltip-append-to-body="false" uib-tooltip="Total number of special discharge measurements made to date during this flood.">
                                 <span class="glyphicon glyphicon-question-sign"></span>
+                                <span class="glyphicon glyphicon-asterisk" style="color:#d00;font-size:xx-small;"></span>
                             </button>
                         </label>
                     </td>
@@ -282,6 +291,7 @@
                             Planned
                             <button type="button" class="help-btn" tooltip-placement="right" tooltip-append-to-body="false" uib-tooltip="How many additional special discharge measurements do you anticipate.">
                                 <span class="glyphicon glyphicon-question-sign"></span>
+                                <span class="glyphicon glyphicon-asterisk" style="color:#d00;font-size:xx-small;"></span>
                             </button>
                         </label>
                     </td>
@@ -296,6 +306,7 @@
                             Indirect measurements planned
                             <button type="button" class="help-btn" tooltip-placement="right" tooltip-append-to-body="false" uib-tooltip="Total number of indirects you anticipate having to make.">
                                 <span class="glyphicon glyphicon-question-sign"></span>
+                                <span class="glyphicon glyphicon-asterisk" style="color:#d00;font-size:xx-small;"></span>
                             </button>
                         </label>
                     </td>
@@ -310,6 +321,7 @@
                             Rating extensions
                             <button type="button" class="help-btn" tooltip-placement="right" tooltip-append-to-body="false" uib-tooltip="Total number of rating extensions you have done.">
                                 <span class="glyphicon glyphicon-question-sign"></span>
+                                <span class="glyphicon glyphicon-asterisk" style="color:#d00;font-size:xx-small;"></span>
                             </button>
                         </label>
                     </td>
@@ -324,6 +336,7 @@
                             Peaks of record on gages to date<br /> ( &#62; 20 years of record)
                             <button type="button" class="help-btn" tooltip-placement="right" tooltip-append-to-body="false" uib-tooltip="Total number of peaks of record experienced.">
                                 <span class="glyphicon glyphicon-question-sign"></span>
+                                <span class="glyphicon glyphicon-asterisk" style="color:#d00;font-size:xx-small;"></span>
                             </button>
                         </label>
                     </td>
@@ -341,6 +354,7 @@
                             Planned
                             <button type="button" class="help-btn" tooltip-placement="right" tooltip-append-to-body="false" uib-tooltip="RDG's planned but not yet deployed for this flood:  NOTE: RDG have the ability to sense the parameter and transmit in real time.">
                                 <span class="glyphicon glyphicon-question-sign"></span>
+                                <span class="glyphicon glyphicon-asterisk" style="color:#d00;font-size:xx-small;"></span>
                             </button>
                         </label>
                     </td>
@@ -355,6 +369,7 @@
                             Deployed
                             <button type="button" class="help-btn" tooltip-placement="right" tooltip-append-to-body="false" uib-tooltip="RDG's deployed and transmitting in the field for this flood:  NOTE: RDG have the ability to sense the parameter and transmit in real time.">
                                 <span class="glyphicon glyphicon-question-sign"></span>
+                                <span class="glyphicon glyphicon-asterisk" style="color:#d00;font-size:xx-small;"></span>
                             </button>
                         </label>
                     </td>
@@ -369,6 +384,7 @@
                             Recovered
                             <button type="button" class="help-btn" tooltip-placement="right" tooltip-append-to-body="false" uib-tooltip="RDG's that were deployed in the field for this flood and have now been successfully recovered:  NOTE: RDG have the ability to sense the parameter and transmit in real time.">
                                 <span class="glyphicon glyphicon-question-sign"></span>
+                                <span class="glyphicon glyphicon-asterisk" style="color:#d00;font-size:xx-small;"></span>
                             </button>
                         </label>
                     </td>
@@ -383,6 +399,7 @@
                             Lost
                             <button type="button" class="help-btn" tooltip-placement="right" tooltip-append-to-body="false" uib-tooltip="RDG's lost/destroyed during this flood.">
                                 <span class="glyphicon glyphicon-question-sign"></span>
+                                <span class="glyphicon glyphicon-asterisk" style="color:#d00;font-size:xx-small;"></span>
                             </button>
                         </label>
                     </td>
@@ -400,6 +417,7 @@
                             Planned
                             <button type="button" class="help-btn" tooltip-placement="right" tooltip-append-to-body="false" uib-tooltip="Water Level Sensor planned but not yet deployed for this flood.  NOTE: Water Level Sensors have no ability to  transmit in real time.">
                                 <span class="glyphicon glyphicon-question-sign"></span>
+                                <span class="glyphicon glyphicon-asterisk" style="color:#d00;font-size:xx-small;"></span>
                             </button>
                         </label>
                     </td>
@@ -414,6 +432,7 @@
                             Deployed
                             <button type="button" class="help-btn" tooltip-placement="right" tooltip-append-to-body="false" uib-tooltip="Water Level Sensor currently deployed in the field for this flood.  NOTE: Water Level Sensors have no ability to  transmit in real time.">
                                 <span class="glyphicon glyphicon-question-sign"></span>
+                                <span class="glyphicon glyphicon-asterisk" style="color:#d00;font-size:xx-small;"></span>
                             </button>
                         </label>
                     </td>
@@ -428,6 +447,7 @@
                             Recovered
                             <button type="button" class="help-btn" tooltip-placement="right" tooltip-append-to-body="false" uib-tooltip="Water Level Sensor successfully recovered from deployment in the field for this flood.  NOTE: Water Level Sensors have no ability to  transmit in real time.">
                                 <span class="glyphicon glyphicon-question-sign"></span>
+                                <span class="glyphicon glyphicon-asterisk" style="color:#d00;font-size:xx-small;"></span>
                             </button>
                         </label>
                     </td>
@@ -442,6 +462,7 @@
                             Lost
                             <button type="button" class="help-btn" tooltip-placement="right" tooltip-append-to-body="false" uib-tooltip="Water Level Sensor lost/destroyed for this flood.  NOTE: Water Level Sensors have no ability to  transmit in real time.">
                                 <span class="glyphicon glyphicon-question-sign"></span>
+                                <span class="glyphicon glyphicon-asterisk" style="color:#d00;font-size:xx-small;"></span>
                             </button>
                         </label>
                     </td>
@@ -459,6 +480,7 @@
                             Planned
                             <button type="button" class="help-btn" tooltip-placement="right" tooltip-append-to-body="false" uib-tooltip="Wave Sensor planned but not yet deployed for this event.  NOTE: Wave Sensors collect at sufficient frequency to determine wave action.">
                                 <span class="glyphicon glyphicon-question-sign"></span>
+                                <span class="glyphicon glyphicon-asterisk" style="color:#d00;font-size:xx-small;"></span>
                             </button>
                         </label>
                     </td>
@@ -473,6 +495,7 @@
                             Deployed
                             <button type="button" class="help-btn" tooltip-placement="right" tooltip-append-to-body="false" uib-tooltip="Wave Sensor currently deployed for this event.  NOTE: Wave Sensors collect at sufficient frequency to determine wave action.">
                                 <span class="glyphicon glyphicon-question-sign"></span>
+                                <span class="glyphicon glyphicon-asterisk" style="color:#d00;font-size:xx-small;"></span>
                             </button>
                         </label>
                     </td>
@@ -487,6 +510,7 @@
                             Recovered
                             <button type="button" class="help-btn" tooltip-placement="right" tooltip-append-to-body="false" uib-tooltip="Wave Sensor successfully recovered from deployment in the field for this event.  NOTE: Wave Sensors collect at sufficient frequency to determine wave action.">
                                 <span class="glyphicon glyphicon-question-sign"></span>
+                                <span class="glyphicon glyphicon-asterisk" style="color:#d00;font-size:xx-small;"></span>
                             </button>
                         </label>
                     </td>
@@ -501,6 +525,7 @@
                             Lost
                             <button type="button" class="help-btn" tooltip-placement="right" tooltip-append-to-body="false" uib-tooltip="Wave Sensor lost/destroyed for this event. NOTE: Wave Sensors collect at sufficient frequency to determine wave action.">
                                 <span class="glyphicon glyphicon-question-sign"></span>
+                                <span class="glyphicon glyphicon-asterisk" style="color:#d00;font-size:xx-small;"></span>
                             </button>
                         </label>
                     </td>
@@ -518,6 +543,7 @@
                             Planned
                             <button type="button" class="help-btn" tooltip-placement="right" tooltip-append-to-body="false" uib-tooltip="Baro Sensor planned but not yet deployed for this event.">
                                 <span class="glyphicon glyphicon-question-sign"></span>
+                                <span class="glyphicon glyphicon-asterisk" style="color:#d00;font-size:xx-small;"></span>
                             </button>
                         </label>
                     </td>
@@ -532,6 +558,7 @@
                             Deployed
                             <button type="button" class="help-btn" tooltip-placement="right" tooltip-append-to-body="false" uib-tooltip="Baro Sensor currently deployed for this event.">
                                 <span class="glyphicon glyphicon-question-sign"></span>
+                                <span class="glyphicon glyphicon-asterisk" style="color:#d00;font-size:xx-small;"></span>
                             </button>
                         </label>
                     </td>
@@ -546,6 +573,7 @@
                             Recovered
                             <button type="button" class="help-btn" tooltip-placement="right" tooltip-append-to-body="false" uib-tooltip="Baro Sensor successfully recovered from deployment in the field for this event.">
                                 <span class="glyphicon glyphicon-question-sign"></span>
+                                <span class="glyphicon glyphicon-asterisk" style="color:#d00;font-size:xx-small;"></span>
                             </button>
                         </label>
                     </td>
@@ -560,6 +588,7 @@
                             Lost
                             <button type="button" class="help-btn" tooltip-placement="right" tooltip-append-to-body="false" uib-tooltip="Baro Sensor lost/destroyed for this event.">
                                 <span class="glyphicon glyphicon-question-sign"></span>
+                                <span class="glyphicon glyphicon-asterisk" style="color:#d00;font-size:xx-small;"></span>
                             </button>
                         </label>
                     </td>
@@ -577,6 +606,7 @@
                             Planned
                             <button type="button" class="help-btn" tooltip-placement="right" tooltip-append-to-body="false" uib-tooltip="Met Sensor planned but not yet deployed for this event.">
                                 <span class="glyphicon glyphicon-question-sign"></span>
+                                <span class="glyphicon glyphicon-asterisk" style="color:#d00;font-size:xx-small;"></span>
                             </button>
                         </label>
                     </td>
@@ -591,6 +621,7 @@
                             Deployed
                             <button type="button" class="help-btn" tooltip-placement="right" tooltip-append-to-body="false" uib-tooltip="Met Sensor currently deployed for this event.">
                                 <span class="glyphicon glyphicon-question-sign"></span>
+                                <span class="glyphicon glyphicon-asterisk" style="color:#d00;font-size:xx-small;"></span>
                             </button>
                         </label>
                     </td>
@@ -605,6 +636,7 @@
                             Recovered
                             <button type="button" class="help-btn" tooltip-placement="right" tooltip-append-to-body="false" uib-tooltip="Met Sensor successfully recovered from deployment in the field for this event.">
                                 <span class="glyphicon glyphicon-question-sign"></span>
+                                <span class="glyphicon glyphicon-asterisk" style="color:#d00;font-size:xx-small;"></span>
                             </button>
                         </label>
                     </td>
@@ -619,6 +651,7 @@
                             Lost
                             <button type="button" class="help-btn" tooltip-placement="right" tooltip-append-to-body="false" uib-tooltip="Met Sensor lost/destroyed for this event.">
                                 <span class="glyphicon glyphicon-question-sign"></span>
+                                <span class="glyphicon glyphicon-asterisk" style="color:#d00;font-size:xx-small;"></span>
                             </button>
                         </label>
                     </td>
@@ -636,6 +669,7 @@
                             Flagged
                             <button type="button" class="help-btn" tooltip-placement="right" tooltip-append-to-body="false" uib-tooltip="Total Number of HWM flagged for this event.">
                                 <span class="glyphicon glyphicon-question-sign"></span>
+                                <span class="glyphicon glyphicon-asterisk" style="color:#d00;font-size:xx-small;"></span>
                             </button>
                         </label>
                     </td>
@@ -650,6 +684,7 @@
                             Collected
                             <button type="button" class="help-btn" tooltip-placement="right" tooltip-append-to-body="false" uib-tooltip="Total number of HWM surveyed into a datum for this event.">
                                 <span class="glyphicon glyphicon-question-sign"></span>
+                                <span class="glyphicon glyphicon-asterisk" style="color:#d00;font-size:xx-small;"></span>
                             </button>
                         </label>
                     </td>
@@ -664,6 +699,7 @@
                             Discrete QW samples collected
                             <button type="button" class="help-btn" tooltip-placement="right" tooltip-append-to-body="false" uib-tooltip="Total number of discrete water quality samplese collected for this event.">
                                 <span class="glyphicon glyphicon-question-sign"></span>
+                                <span class="glyphicon glyphicon-asterisk" style="color:#d00;font-size:xx-small;"></span>
                             </button>
                         </label>
                     </td>
@@ -678,6 +714,7 @@
                             Sediment samples collected
                             <button type="button" class="help-btn" tooltip-placement="right" tooltip-append-to-body="false" uib-tooltip="Total number of sediment samples collected for this event.">
                                 <span class="glyphicon glyphicon-question-sign"></span>
+                                <span class="glyphicon glyphicon-asterisk" style="color:#d00;font-size:xx-small;"></span>
                             </button>
                         </label>
                     </td>
