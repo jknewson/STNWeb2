@@ -1,6 +1,6 @@
 workflow "Deploy to S3" {
   on = "push"
-  resolves = ["Github Action for Slack"]
+  resolves = ["GitHub Action for Slack"]
 }
  
 action "Filters for GitHub Actions" {
