@@ -566,7 +566,8 @@
         return $resource(rootURL + '/Sites/:id',
             {}, {
                 query: {},
-                sensorScriptRunning: { method: 'GET', isArray: false, transformResponse: function (data) { return { value: angular.fromJson(data) } }, url: rootURL + '/Sites/:id/GetDataFileScript' },
+                //Data file scripts are now being ran outside of STNservices & STNWeb
+                //sensorScriptRunning: { method: 'GET', isArray: false, transformResponse: function (data) { return { value: angular.fromJson(data) } }, url: rootURL + '/Sites/:id/GetDataFileScript' },
                 getProximitySites: { method: 'GET', isArray: true, url: rootURL + '/ByDistance' , params: { Latitude: '@latitude', Longitude: '@longitude', Buffer: '@buffer' } },
                 getAll: { method: 'GET', isArray: true },
                 getSearchedSite: { method: 'GET', isArray: false, url: rootURL + '/Sites/Search' }, //?bySiteNo={siteNo}&bySiteName={siteName}&bySiteId={siteId} (only going to populate 1 of these params

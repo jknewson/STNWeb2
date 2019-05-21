@@ -14,7 +14,7 @@
                 $rootScope.thisPage = "Site Dashboard";
                 $scope.aSite = {};
                 // are there any scripts running against this site right now for air/water
-                var showScriptToast = function () {
+                /* var showScriptToast = function () {
                     toastr.warning(
                         "Data File Scripts are processing for this site and can take several minutes. Check back to the site dashboard later or refresh to see if script is complete and new files are ready. The output csv file contains success/error information.",
                         null,
@@ -30,7 +30,7 @@
                     } else {
                         toastr.clear();
                     }
-                });
+                }); */
                 $scope.status = {
                     mapOpen: false, siteOpen: true, opOpen: false, sensorOpen: false, hwmOpen: false, filesOpen: false, peakOpen: false
                 };

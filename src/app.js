@@ -647,19 +647,19 @@
                     },
                     templateUrl: "component/site/site.html",
                     authenticate: true,
-                    controller: ['$scope', '$stateParams', 'Site_Script', 'runningScript', function ($scope, $stateParams, Site_Script, runningScript) {
+                    controller: ['$scope', '$stateParams', 'Site_Script', function ($scope, $stateParams, Site_Script ) { // 'runningScript' runningScript
                         $scope.siteID = $stateParams.id;
-                        if ($scope.siteID != "0") Site_Script.setIsScriptRunning(runningScript.value);
-                        else Site_Script.setIsScriptRunning("false");
+                        /* if ($scope.siteID != "0") Site_Script.setIsScriptRunning(runningScript.value);
+                        else Site_Script.setIsScriptRunning("false"); */
                     }],
                     resolve: {
                         // site stuff
                         s: 'SITE',
-                        runningScript: function (s, $stateParams) {
+                        /* runningScript: function (s, $stateParams) {
                             if ($stateParams.id > 0) {
                                 return s.sensorScriptRunning({ id: $stateParams.id }).$promise;
                             }
-                        },
+                        }, */ // not longer using scripts integrated in STNServices
                         thisSite: function (s, $stateParams) {
                             if ($stateParams.id > 0) {
                                 return s.query({ id: $stateParams.id }).$promise;
