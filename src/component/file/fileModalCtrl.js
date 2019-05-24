@@ -25,7 +25,13 @@
                     if (theEvent.preventDefault) theEvent.preventDefault();
                 }
             };
-            $scope.fileItemExists = fileExists === undefined || fileExists.Length > 0 ? true : false;
+            $scope.fileItemExists = fileExists !== undefined || fileExists != 0 ? true : false;
+
+            /* if (fileExists != 0){
+                return true
+            } else {
+                return false
+            } */
 
             //#region Datepicker
             $scope.datepickrs = {};
