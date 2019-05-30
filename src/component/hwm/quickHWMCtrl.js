@@ -40,10 +40,12 @@
                 $scope.addedIdentifiers = []; //holder for added Identifiers
                 $scope.showControlIDinput = false; //initially hide the area containing added control Identifiers
                 //dropdowns
-                var hdatumWoNad27 = [];
                 $scope.horDatumList = allHorDatums;
                 // if a site already exists
                 // creating a new site
+                
+                // commented out method to hide datum
+                /* var hdatumWoNad27 = [];
                 angular.forEach($scope.horDatumList, function (value, key) {
 
                     if (value.datum_id == 3) {
@@ -52,13 +54,15 @@
                         hdatumWoNad27.push(value);
                     }
                 });
-                $scope.HorizontalDatumList = hdatumWoNad27;
+                $scope.HorizontalDatumList = hdatumWoNad27; */
 
                 $scope.horDatumList = allHorDatums;
                 $scope.horCollMethodList = allHorCollMethods;
                 $scope.stateList = allStates; $scope.allCountyList = allCounties; $scope.stateCountyList = [];
                 $scope.opTypeList = allOPTypes;
-                var vdatumWoNad27 = [];
+
+                // commented out method to hide datum
+                /* var vdatumWoNad27 = [];
                 $scope.vertDatumList = allVertDatums;
                 // if a site already exists
                 // creating a new site
@@ -70,7 +74,7 @@
                         vdatumWoNad27.push(value);
                     }
                 });
-                $scope.vertDatumList = vdatumWoNad27;
+                $scope.vertDatumList = vdatumWoNad27; */
                 $scope.vertCollMethodList = allVertColMethods; $scope.opQualList = allOPQualities;
                 $scope.hwmTypeList = allHWMTypes; $scope.hwmQualList = allHWMQualities; $scope.markerList = allMarkers;
                 //default radios

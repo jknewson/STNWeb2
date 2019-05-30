@@ -11,7 +11,9 @@
             $scope.hwmTypeList = allDropdowns[0];
             $scope.hwmQualList = allDropdowns[1];
             $scope.HDatumsList = allDropdowns[2];
-            var hdatumWoNad27 = [];
+
+            // commented out method to hide datum
+            /* var hdatumWoNad27 = [];
             // if a site already exists
             if (thisHWM != undefined) {
                 if (thisHWM.hdatum_id != 3) {
@@ -38,11 +40,13 @@
                     }
                 });
                 $scope.HDatumsList = hdatumWoNad27;
-            }
+            } */
 
             $scope.hCollMList = allDropdowns[3];
             $scope.VDatumsList = allDropdowns[4];
-            var vdatumWoNad27 = [];
+
+            // commented out method to hid datum
+            /* var vdatumWoNad27 = [];
 
             if (thisHWM != undefined) {
                 if (thisHWM.vdatum_id != 4) {
@@ -69,7 +73,7 @@
                     }
                 });
                 $scope.VDatumsList = vdatumWoNad27;
-            }
+            } */
             $scope.vCollMList = allDropdowns[5];
             $scope.markerList = allDropdowns[6];
             $scope.eventList = allDropdowns[7];

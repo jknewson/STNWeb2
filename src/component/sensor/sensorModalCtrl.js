@@ -14,7 +14,9 @@
             $scope.eventList = allDropdowns[3];
             $scope.fileTypeList = allDropdowns[4]; //used if creating/editing depSens file
             $scope.vertDatumList = allDropdowns[5];
-            var vdatumWoNad29 = [];
+
+            // commented out method to hide datum
+            /* var vdatumWoNad29 = [];
             angular.forEach($scope.vertDatumList, function (value, key) {
 
                 if (value.datum_id == 4) {
@@ -23,7 +25,7 @@
                     vdatumWoNad29.push(value);
                 }
             });
-            $scope.vertDatumList = vdatumWoNad29;
+            $scope.vertDatumList = vdatumWoNad29; */
             $scope.depSenfileIsUploading = false; //Loading...
             $scope.allSFiles = Site_Files.getAllSiteFiles();
             $scope.DepSensorFiles = thisSensor !== "empty" ? $scope.allSFiles.filter(function (sf) { return sf.instrument_id == thisSensor.instrument_id; }) : [];// holder for hwm files added

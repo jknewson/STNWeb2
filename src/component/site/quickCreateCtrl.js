@@ -54,9 +54,11 @@
 
                 //dropdowns
                 $scope.horCollMethodList = allHorCollMethods;
-                var hdatumWoNad27 = [];
+                //var hdatumWoNad27 = [];
                 $scope.horDatumList = allHorDatums;
-                angular.forEach($scope.horDatumList, function (value, key) {
+
+                // commented out method to hide datum
+                /* angular.forEach($scope.horDatumList, function (value, key) {
 
                     if (value.datum_id == 3) {
                         // don't add it to the array
@@ -64,7 +66,7 @@
                         hdatumWoNad27.push(value);
                     }
                 });
-                $scope.horDatumList = hdatumWoNad27;
+                $scope.horDatumList = hdatumWoNad27; */
 
                 $scope.horCollMethodList = allHorCollMethods;
                 $scope.stateList = allStates; $scope.allCountyList = allCounties; $scope.stateCountyList = [];
@@ -75,19 +77,8 @@
                 if (whichQuick == 'HWM') {
                     $scope.aHWM = { hwm_label: 'hwm-1', hwm_environment: 'Riverine', event_id: $cookies.get('SessionEventID'), bank: 'N/A', flag_date: makeAdate(""), stillwater: 0, flag_member_id: $cookies.get('mID') };
                     $scope.hwmTypeList = allHWMTypes; $scope.hwmQualList = allHWMQualities; $scope.markerList = allMarkers;
-                    var vdatumWoNad27 = [];
                     $scope.vertDatumList = allVertDatums;
                     // creating a new site
-                    // this affects the Datum Location Vert list in the Quick HWM page
-                    angular.forEach($scope.vertDatumList, function (value, key) {
-
-                        if (value.datum_id == 4) {
-                            // don't add it to the array
-                        } else {
-                            vdatumWoNad27.push(value);
-                        }
-                    });
-                    $scope.vertDatumList = vdatumWoNad27;
                 }
                 //sensor dropdowns
                 if (whichQuick == 'Sensor') {

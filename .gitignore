@@ -169,6 +169,7 @@ node_modules/
 # RIA/Silverlight projects
 Generated_Code/
 
+bower_components/
 # Backup & report files from converting an old project file
 # to a newer Visual Studio version. Backup files are not needed,
 # because we have git ;-)
@@ -197,3 +198,4 @@ dev/component/logInOut/logInOutCtrl.js
 
 # Ignore dev folder
 dev/*
+dist/*
