@@ -150,7 +150,7 @@
                 getFileItem: { method: 'GET', isArray: false, url: rootURL + '/Files/:id/Item' },
                 getTESTdata: { method: 'GET', url: rootURL + '/Files/testDataFile' },
                 update: { method: 'PUT', cache: false, isArray: false },
-                uploadFile: { method: 'POST', url: rootURL + '/Files/bytes', headers: { 'Content-Type': undefined }, transformRequest: angular.identity, cache: false, isArray: false },
+                uploadFile: { method: 'POST', url: rootURL + '/Files', headers: { 'Content-Type': undefined }, transformRequest: angular.identity, cache: false, isArray: false },
                 downloadZip: {
                     method: 'GET', responseType: 'arraybuffer', cache: false, url: rootURL + '/Events/:eventId/EventFileItems'
                 },//?HWMFiles={hwmFiles}&HWMFileType={hwmFileTypes}&SensorFiles={sensorFiles}&SensorFileTypes={sensorFileTypes}"
