@@ -12,13 +12,7 @@
     //app.constant('SERVER_URL', 'http://localhost/STNServices2');
 
     //app.constant('ENVIRONMENT', 'Testing');
-    //app.constant('ENVIRONMENT', 'Production');
-
-    app.constant('SERVICESRUNNING', 'True')
-
-    
-   
-    
+    app.constant('ENVIRONMENT', 'Production');
 
     app.run(['$rootScope', '$uibModalStack', '$cookies', '$state', 'ENVIRONMENT', function ($rootScope, $uibModalStack, $cookies, $state, ENVIRONMENT) {
         $rootScope.$on('$stateChangeStart', function (event, toState, toParams, fromState, fromParams) {
@@ -39,30 +33,6 @@
             }
             $rootScope.environment = ENVIRONMENT;
         });
-
-        /* function UrlExists(url, cb){
-            jQuery.ajax({
-                url:      url,
-                dataType: 'text',
-                type:     'GET',
-                complete:  function(xhr){
-                    if(typeof cb === 'function')
-                       cb.apply(this, [xhr.status]);
-                }
-            });
-        }
-        var areServicesRunning;
-        UrlExists('https://stntest.wim.usgs.gov/stnservices/events', function(status){
-            if(status === 200){
-               // file was found
-               areServicesRunning = true;
-            }
-            else if(status === 404){
-               // 404 not found
-               console.log('services not running')
-               areServicesRunning = false;
-            }
-        }); */
 
         $rootScope.$on('$stateChangeSuccess', function (event, toState, toParams, fromState, fromParams, error) {
             $rootScope.stateIsLoading.showLoading = false;
