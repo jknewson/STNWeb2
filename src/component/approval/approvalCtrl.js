@@ -60,7 +60,7 @@
                 $scope.unApprovedHWMs = []; $scope.showHWMbox = false;
                 $scope.unApprovedDFs = []; $scope.showDFbox = false;
                 $scope.sitesWOpeaks = []; $scope.showPeakbox = false;
-
+                $scope.ApprovalInfo = {};
 
                 $scope.search = function () {
                     //clear contents in case they are searching multiple times
@@ -217,13 +217,16 @@
                         else toastr.error("Error getting unapproved data files: " + errorResponse.statusText);
                     });
                 }
-
+        
+                var checkedArray = [];
                 //once they check 'approve' checkbox, show the approve these button
                 $scope.approveCheck = function (hArray) {
+                    
                     if (hArray) {
+                        
                         return hArray.some(function (h) {
                             return h.selected === true;
-                        });
+                        });       
                     }
                 };
                 $scope.approveThese = function () {
@@ -235,7 +238,7 @@
                             $scope.cancel = function () {
                                 $uibModalInstance.dismiss('cancel');
                             };
-                            $scope.approveIt = function () {
+                            $scope.approveIt = function () {                                                 
                                 //delete the site and all things 
                                 $uibModalInstance.close();
                             };
@@ -243,7 +246,36 @@
                         size: 'sm'
                     });
                     approveModal.result.then(function () {
-                        var test = $scope.unApprovedHWMs;
+                        /* getCheckedHWMs(cb) {
+                            var checkboxes = document.getElementById()
+                            } */
+                        var hwms = $scope.unApprovedHWMs;
+                        var selectedHWMs = [];
+
+                        angular.forEach($scope.unApprovedHWMs, function(value, key){
+                            console.log(value +" : " + key);
+                            if (value.selected === true){
+                                selectedHWMs.push(value);
+                            }
+                        })
+                        console.log("Selected HWMs: " + selectedHWMs);
+
+                        angular.forEach(selectedHWMs, function (h, key) {
+                            HWM.approveHWM({ id: h.hwm_id }).$promise.then(function (approvalResponse) {
+                                h.approval_id = approvalResponse.approval_id;
+                                toastr.success("HWM Approved");
+                                $scope.ApprovalInfo.approvalDate = new Date(approvalResponse.approval_date); //include note that it's displayed in their local time but stored in UTC
+                                $scope.ApprovalInfo.Member = $scope.allMembers.filter(function (amem) { return amem.member_id == approvalResponse.member_id; })[0];
+                                $state.reload();
+                                //var sendBack = [h, 'updated'];
+                                //$uibModalInstance.close(sendBack);
+                            }, function (errorResponse) {
+                                if (errorResponse.headers(["usgswim-messages"]) !== undefined) toastr.error("Error approving hwm: " + errorResponse.headers(["usgswim-messages"]));
+                                else toastr.error("Error approving hwm: " + errorResponse.statusText);
+                            });
+                           // countyNames.push(c.county_name);
+                        });
+                        
                         // for everyone that has .selected = true, 
                         //remove .selected property, remove site_no, and change the stillwater back to 0/1, approve it, which should remove it from this list
                     });

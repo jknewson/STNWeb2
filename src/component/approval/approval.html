@@ -99,7 +99,7 @@
                 No HWMs returned from query.
             </div>
         </uib-accordion-group>
-        <uib-accordion-group  ng-if="showDFbox" is-open="accords.dlOpen" panel-class="{{getPanelClass()}}">
+        <!-- <uib-accordion-group  ng-if="showDFbox" is-open="accords.dlOpen" panel-class="{{getPanelClass()}}">
             <uib-accordion-heading>
                 Unapproved  Instrument Data Files <span style="font-size:small;color:grey" class="ng-binding">(count: {{unApprovedDFs.length}})</span>
                 <i style="margin-right:10px" class="pull-left glyphicon" ng-class="{'glyphicon-chevron-down': accords.dlOpen, 'glyphicon-chevron-right': !accords.dlOpen}"></i>
@@ -112,7 +112,7 @@
             <div ng-show="unApprovedDFs.length == 0" class="results-box-no-result">
                 No Data Files returned from query.
             </div>
-        </uib-accordion-group>
+        </uib-accordion-group> -->
         <uib-accordion-group ng-if="showPeakbox" is-open="accords.pkOpen" panel-class="{{getPanelClass()}}">
             <uib-accordion-heading>
                 Peak Information <span style="font-size:small;color:grey" class="ng-binding">(count: {{sitesWOpeaks.length}})</span>
