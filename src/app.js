@@ -9,7 +9,7 @@
     app.constant('SERVER_URL', 'https://stn.wim.usgs.gov/STNServices');
     //app.constant('SERVER_URL', 'https://stntest.wim.usgs.gov/stnservices');
     
-    //app.constant('SERVER_URL', 'http://localhost/STNServices2');
+    //app.constant('SERVER_URL', 'http://localhost:36992');
 
     //app.constant('ENVIRONMENT', 'Testing');
     app.constant('ENVIRONMENT', 'Production');
