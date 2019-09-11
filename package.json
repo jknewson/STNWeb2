@@ -6,7 +6,10 @@
   "scripts": {
     "postinstall": "bower install",
     "prestart": "npm install",
-    "start": "node server.js"
+    "start": "node server.js",
+    "install-dep": "npm install -g bower && npm install -g gulp && npm install && bower install",
+    "build-dev": "npm run-script install-dep && gulp build-app-dev",
+    "build-prod": "npm run-script install-dep && gulp build-app-prod"
   },
   "repository": {
     "type": "git",
