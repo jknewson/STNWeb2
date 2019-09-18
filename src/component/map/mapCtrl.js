@@ -584,6 +584,16 @@
                                     opacity: 1
                                 }
                             },
+                            /* meow: {
+                                name: "MEOW",
+                                type: "agsDynamic",
+                                url: "",
+                                visible: true,
+                                layerOptions: {
+                                    layers: [0],
+                                    opacity: 1
+                                }
+                            }, */
                             // floodThresholds : {
                             //     name: "NWS WFO Coastal Flood Thresholds",
                             //     type: "agsDynamic",
