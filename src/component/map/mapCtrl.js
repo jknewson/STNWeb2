@@ -398,6 +398,11 @@
                         zoomLevel: 15
                     });
                     geoSearchControl.addTo(map);
+
+                    /* L.esri.tiledMapLayer({
+                        url: "https://tiles.arcgis.com/tiles/C8EMgrsFcRFL6LrL/arcgis/rest/services/data4_Hawaii_SLOSH_MOMs_cat4/MapServer",
+                        minZoom: 6
+                    }).addTo(map); */
                 });
 
                 delete $http.defaults.headers.common.Authorization;
@@ -584,16 +589,17 @@
                                     opacity: 1
                                 }
                             },
-                            /* meow: {
-                                name: "MEOW",
-                                type: "agsDynamic",
+                            slosh: {
+                                id: "slosh",
+                                name: "SLOSH",
+                                type: "agsTiled",
                                 url: "",
                                 visible: true,
                                 layerOptions: {
-                                    layers: [0],
+                                    /* layers:[0], */
                                     opacity: 1
                                 }
-                            }, */
+                            },
                             // floodThresholds : {
                             //     name: "NWS WFO Coastal Flood Thresholds",
                             //     type: "agsDynamic",

@@ -88,6 +88,31 @@ var WiM;
                     }, function (error) {
                     });
                 }
+                if (mlyr.type == "agsTiled") {
+                    var url = mlyr.url + "/legend?f=pjson";
+                    var request = new WiM.Services.Helpers.RequestInfo(url, true);
+                    this.Execute(request).then(function (response) {
+                        if (response.data.layers.length > 0) {
+                            mlyr.isOpen = true;
+                            mlyr.layerArray = [];
+                            if (mlyr.layerOptions.layers) {
+                                var visibleLayers = mlyr.layerOptions.layers;
+                                for (var i = 0; i < visibleLayers.length; i++) {
+                                    for (var j = 0; j < response.data.layers.length; j++) {
+                                        if (visibleLayers[i] == response.data.layers[j].layerId) {
+                                            mlyr.layerArray.push(response.data.layers[j]);
+                                        }
+                                    }
+                                }
+                            }
+                            else {
+                                mlyr.layerArray = response.data.layers;
+                            }
+                            console.log(mlyr);
+                        }
+                    }, function (error) {
+                    });
+                }
                 if (mlyr.type == "agsFeature") {
                     var url = mlyr.url.slice(0, -2) + "/legend?f=pjson";
                     var layerId = mlyr.url.substr(mlyr.url.length - 1);
@@ -226,7 +251,7 @@ var WiM;
                     '                    <i ng-class="!layer.isOpen ? \'fa fa-chevron-up pull-right\': \'fa fa-chevron-down pull-right\'" ng-click="layer.isOpen=(layer.isOpen) ? false : true;"></i>' +
                     '                </div>' +
                     '                <div ng-hide="layer.isOpen">' +
-                    '                    <div class="legendGroup" ng-if="layer.type == \'agsDynamic\' || layer.type == \'agsFeature\'">' +
+                    '                    <div class="legendGroup" ng-if="layer.type == \'agsDynamic\' || layer.type == \'agsFeature\' || layer.type == \'agsTiled\'">' +
                     '                        <div ng-repeat="lyr in layer.layerArray ">' +
                     '                            <label>{{lyr.layerName}}</label>' +
                     '                            <div ng-repeat="leg in lyr.legend ">' +
