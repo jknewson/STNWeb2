@@ -25,8 +25,9 @@
                 eventSitesOnly: '1',
                 hwmOnly: '0',
                 housingTypeOne: '0',
+                housingTypeSeven: '0',
                 senOnly: '0',
-                rdgOnly: '0',
+                rdgOnly: '0',    
                 opDefined: '0'
             };
 
@@ -46,9 +47,11 @@
                         NetworkName: $scope.Chosen.network,
                         HWMOnly: $scope.checkboxModel.hwmOnly,
                         HousingTypeOne: $scope.checkboxModel.housingTypeOne, // new checkbox showing only housing type 1
+                        HousingTypeSeven: $scope.checkboxModel.housingTypeSeven, // new checkbox showing only housing type 
                         HWMSurveyed: $scope.Chosen.survey,
                         SensorOnly: $scope.checkboxModel.senOnly,
                         RDGOnly: $scope.checkboxModel.rdgOnly,
+                        HousingTypeSeven: $scope.checkboxModel.housingTypeSeven,
                         OPDefined: $scope.checkboxModel.opDefined
                     };
                     SITE.getFilteredSites({
@@ -58,6 +61,7 @@
                         NetworkName: $scope.Chosen.network,
                         HWMOnly: $scope.checkboxModel.hwmOnly,
                         HousingTypeOne: $scope.checkboxModel.housingTypeOne,
+                        HousingTypeSeven: $scope.checkboxModel.housingTypeSeven,
                         HWMSurveyed: $scope.Chosen.survey,
                         SensorOnly: $scope.checkboxModel.senOnly,
                         RDGOnly: $scope.checkboxModel.rdgOnly,
@@ -88,6 +92,7 @@
                         NetworkName: $scope.Chosen.network,
                         HWMOnly: $scope.checkboxModel.hwmOnly,
                         HousingTypeOne: $scope.checkboxModel.housingTypeOne,
+                        HousingTypeSeven: $scope.checkboxModel.housingTypeSeven,
                         HWMSurveyed: $scope.Chosen.survey,
                         SensorOnly: $scope.checkboxModel.senOnly,
                         RDGOnly: $scope.checkboxModel.rdgOnly,
@@ -95,7 +100,7 @@
                     };
 
                     var sp = $rootScope.searchParams;
-                    if (sp.HWMOnly === "0" && sp.HousingTypeOne === "0" && sp.HWMSurveyed === null && sp.NetworkName === null && sp.OPDefined === "0" && sp.RDGOnly === "0" && sp.SensorOnly === "0" && sp.SensorType === null && sp.state.length === 0) {
+                    if (sp.HWMOnly === "0" && sp.HousingTypeOne === "0" && sp.HWMSurveyed === null && sp.NetworkName === null && sp.OPDefined === "0" && sp.RDGOnly === "0" && sp.HousingTypeSeven === "0" && sp.SensorOnly === "0" && sp.SensorType === null && sp.state.length === 0) {
                         spinnerService.hide("mapSpinner");
                         toastr.options.positionClass = "toast-bottom-right";
                         toastr.warning("Please select at least one search parameter.", "Map Filters");
@@ -108,6 +113,7 @@
                         NetworkName: $scope.Chosen.network,
                         HWMOnly: $scope.checkboxModel.hwmOnly,
                         HousingTypeOne: $scope.checkboxModel.housingTypeOne,
+                        HousingTypeSeven: $scope.checkboxModel.housingTypeSeven,
                         HWMSurveyed: $scope.Chosen.survey,
                         SensorOnly: $scope.checkboxModel.senOnly,
                         RDGOnly: $scope.checkboxModel.rdgOnly,
@@ -146,6 +152,7 @@
                     housingTypeOne: 0,
                     senOnly: 0,
                     rdgOnly: 0,
+                    housingTypeSeven: 0,
                     opDefined: 0
                 };
                 $scope.Chosen = {};

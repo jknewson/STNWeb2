@@ -398,6 +398,59 @@
                         zoomLevel: 15
                     });
                     geoSearchControl.addTo(map);
+
+                    var editableLayers = new L.FeatureGroup();
+                    map.addLayer(editableLayers);
+
+                    var options = {
+                        position: 'topleft',
+                        draw: {
+                            polyline: {
+                                shapeOptions: {
+                                    color: '#0000ff',
+                                    weight: 6,
+                                }
+                            },
+                            polygon: false,
+                            circle: false, // Turns off this drawing tool
+                            rectangle: false,
+                            marker: false
+                        },
+                        edit: {
+                            featureGroup: editableLayers, //REQUIRED!!
+                            remove: true
+                        }
+                    };
+
+                    var drawControl = new L.Control.Draw(options);
+                    map.addControl(drawControl);
+
+                    map.on(L.Draw.Event.CREATED, function (e) {
+                        var type = e.layerType,
+                            layer = e.layer;
+
+                        if (type === 'polyline') {
+
+
+                            // Calculating the distance of the polyline
+                            var tempLatLng = null;
+                            var totalDistance = 0.00000;
+                            $.each(e.layer._latlngs, function (i, latlng) {
+                                if (tempLatLng == null) {
+                                    tempLatLng = latlng;
+                                    return;
+                                }
+
+                                totalDistance += tempLatLng.distanceTo(latlng);
+                                tempLatLng = latlng;
+                            });
+                            e.layer.bindLabel((totalDistance).toFixed(2) + ' meters');
+                        }
+
+                        editableLayers.addLayer(layer);
+                    });
+
+
                 });
 
                 delete $http.defaults.headers.common.Authorization;
@@ -584,6 +637,16 @@
                                     opacity: 1
                                 }
                             },
+                            /* meow: {
+                                name: "MEOW",
+                                type: "agsDynamic",
+                                url: "",
+                                visible: true,
+                                layerOptions: {
+                                    layers: [0],
+                                    opacity: 1
+                                }
+                            }, */
                             // floodThresholds : {
                             //     name: "NWS WFO Coastal Flood Thresholds",
                             //     type: "agsDynamic",

@@ -32,7 +32,7 @@
                     var hwmFileTypes = allFileTypes.filter(function (hft) {
                         //Photo (1), Historic (3), Field Sheets (4), Level Notes (5), Other (7), Link (8), Sketch (10)
                         return hft.filetype === 'Photo' || hft.filetype === 'Historic Citation' || hft.filetype === 'Field Sheets' || hft.filetype === 'Level Notes' ||
-                            hft.filetype === 'Other' || hft.filetype === 'Link' || hft.filetype === 'Sketch';
+                            hft.filetype === 'Other' || hft.filetype === 'Link' || hft.filetype === 'Sketch' || hft.filetype === 'Hydrograph';
                     });
                     var passAllLists = [allHWMTypes, allHWMQualities, allHorDatums, allHorCollMethods, allVertDatums, allVertColMethods, allMarkers, allEvents, hwmFileTypes];
                     var indexClicked = $scope.SiteHWMs.indexOf(HWMclicked);

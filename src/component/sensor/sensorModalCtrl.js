@@ -5780,8 +5780,8 @@
                     } else {
                         hdatumWoNad27.push(value);
                     }
-                }); */
-            $scope.vertDatumList = vdatumWo29;
+                }); 
+            $scope.vertDatumList = vdatumWo29;*/
             $scope.removeOPList = [];
             $scope.tapeDownTable = []; //holder of tapedown OP_MEASUREMENTS
             $scope.DEPtapeDownTable = []; //holds any deployed tapedowns

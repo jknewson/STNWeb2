@@ -54,7 +54,7 @@
                 var SensFileTypes = allFileTypes.filter(function (sft) {
                     //Photo (1), Data (2), Historic (3), Field Sheets (4), Level Notes (5), Other (7), Link (8), Sketch (10)
                     return sft.filetype === 'Photo' || sft.filetype === 'Data' || sft.filetype === 'Historic Citation' || sft.filetype === 'Field Sheets' || sft.filetype === 'Level Notes' ||
-                       sft.filetype === 'Other' || sft.filetype === 'Link' || sft.filetype === 'Sketch';
+                       sft.filetype === 'Other' || sft.filetype === 'Link' || sft.filetype === 'Sketch' || sft.filetype === 'Hydrograph';
                 });
                 //show/hide proposed sensors to add
                 $scope.showHideProposed = function () {

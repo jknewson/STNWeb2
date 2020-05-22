@@ -45,7 +45,7 @@
             $scope.hCollMList = allDropdowns[3];
             $scope.VDatumsList = allDropdowns[4];
 
-            // commented out method to hid datum
+            // commented out method to hide datum
             /* var vdatumWoNad27 = [];
 
             if (thisHWM != undefined) {

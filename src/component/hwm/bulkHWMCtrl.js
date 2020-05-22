@@ -69,7 +69,7 @@
                             function ($scope, $cookies, $uibModal, $uibModalInstance, fileTypeList, agencyList, thisMember) {
                                 $scope.hwmFileTypes = fileTypeList.filter(function (hft) {
                                     return hft.filetype === 'Photo' || hft.filetype === 'Historic Citation' || hft.filetype === 'Field Sheets' ||
-                                        hft.filetype === 'Level Notes' || hft.filetype === 'Other' || hft.filetype === 'Link' || hft.filetype === 'Sketch';
+                                        hft.filetype === 'Level Notes' || hft.filetype === 'Other' || hft.filetype === 'Link' || hft.filetype === 'Sketch' || hft.filetype === 'Hydrograph';
                                 });
                                 $scope.aFile = {}; //holder for file
                                 $scope.aFile.filetype_id = 7;
@@ -1398,7 +1398,7 @@
             $scope.fileTypeList = fileTypes.filter(function (hft) {
                 //Photo (1), Historic (3), Field Sheets (4), Level Notes (5), Other (7), Link (8), Sketch (10)
                 return hft.filetype === 'Photo' || hft.filetype === 'Historic Citation' || hft.filetype === 'Field Sheets' || hft.filetype === 'Level Notes' ||
-                    hft.filetype === 'Other' || hft.filetype === 'Link' || hft.filetype === 'Sketch';
+                    hft.filetype === 'Other' || hft.filetype === 'Link' || hft.filetype === 'Sketch' || hft.filetype === 'Hydrograph';
             });
 
 
