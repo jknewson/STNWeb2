@@ -175,15 +175,15 @@
                     $scope.siteFileTypes = allFileTypes.filter(function (ft) {
                         return ft.filetype === 'Photo' || ft.filetype === 'Historic Citation' || ft.filetype === 'Field Sheets' ||
                             ft.filetype === 'Level Notes' || ft.filetype === 'Site Sketch' || ft.filetype === 'Other' || ft.filetype === 'Link' || ft.filetype === 'Sketch' ||
-                            ft.filetype === 'Landowner Permission Form';
+                            ft.filetype === 'Landowner Permission Form' || ft.filetype === 'Hydrograph';
                     });
-                    $scope.hwmFileTypes = allFileTypes.filter(function (hft){ 
+                    $scope.siteFileTypes = allFileTypes.filter(function (hft){ 
                         return hft.filetype === 'Photo' || hft.filetype === 'Historic Citation' || hft.filetype === 'Field Sheets' ||
-                            hft.filetype === 'Level Notes' || hft.filetype === 'Other' || hft.filetype === 'Link' || hft.filetype === 'Sketch';
+                            hft.filetype === 'Level Notes' || hft.filetype === 'Other' || hft.filetype === 'Link' || hft.filetype === 'Sketch' || hft.filetype === 'Hydrograph';
                     });
                     $scope.sensorFileTypes = allFileTypes.filter(function (sft){
                         return sft.filetype === 'Photo' || sft.filetype === 'Data' || sft.filetype === 'Historic Citation' || sft.filetype === 'Field Sheets' ||
-                           sft.filetype === 'Level Notes' || sft.filetype === 'Other' || sft.filetype === 'Link' || sft.filetype === 'Sketch';
+                           sft.filetype === 'Level Notes' || sft.filetype === 'Other' || sft.filetype === 'Link' || sft.filetype === 'Sketch' || sft.filetype === 'Hydrograph';
                     });
                     $scope.opFileTypes = allFileTypes.filter(function (oft) {
                         return oft.filetype === 'Photo' || oft.filetype === 'Field Sheets' || oft.filetype === 'Level Notes' ||

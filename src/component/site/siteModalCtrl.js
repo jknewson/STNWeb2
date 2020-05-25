@@ -247,7 +247,7 @@
             $scope.fileTypeList = fileTypes.filter(function (ft) {
                 return ft.filetype === 'Photo' || ft.filetype === 'Historic Citation' || ft.filetype === 'Field Sheets' ||
                     ft.filetype === 'Level Notes' || ft.filetype === 'Site Sketch' || ft.filetype === 'Other' || ft.filetype === 'Link' || ft.filetype === 'Sketch' ||
-                    ft.filetype === 'Landowner Permission Form';
+                    ft.filetype === 'Landowner Permission Form' || ft.filetype === 'Hydrograph';
             });
             $scope.allSFiles = Site_Files.getAllSiteFiles();
             //if thisSiteStuff is not undefined, filter the allSFiles and give me just those for the site ONLY
