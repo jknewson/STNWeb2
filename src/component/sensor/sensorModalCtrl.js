@@ -29,7 +29,7 @@
             $scope.depSenfileIsUploading = false; //Loading...
             $scope.allSFiles = Site_Files.getAllSiteFiles();
             $scope.DepSensorFiles = thisSensor !== "empty" ? $scope.allSFiles.filter(function (sf) { return sf.instrument_id == thisSensor.instrument_id; }) : [];// holder for hwm files added
-            $scope.depSensImageFiles = $scope.DepSensorFiles.filter(function (hf) { return hf.filetype_id === 1; }); //image files for carousel
+            $scope.depSensImageFiles = $scope.DepSensorFiles.filter(function (hf) { return ((hf.filetype_id === 1 || hf.filetype_id === 13)); }); //image files for carousel
             $scope.showFileForm = false; //hidden form to add file to hwm
             $scope.showNWISFileForm = false; //hidden form to add nwis file to sensor
             $scope.OPsPresent = siteOPs.length > 0 ? true : false;
@@ -335,7 +335,7 @@
                             $scope.aFile.File1 = undefined; //put it as file and remove it from 1
                         }
                         fresponse.fileBelongsTo = $scope.aFile.filetype_id == 2 ? "DataFile File" : "Sensor File";
-                        if (fresponse.filetype_id === 1) {
+                        if ((fresponse.filetype_id === 1) || (fresponse.filetype_id === 13)) {
                             $scope.depSensImageFiles.splice($scope.existIMGFileIndex, 1);
                             $scope.depSensImageFiles.push(fresponse);
                         }
@@ -876,7 +876,7 @@
                                     $scope.DepSensorFiles.push(fresponse);
                                     $scope.allSFiles.push(fresponse);
                                     Site_Files.setAllSiteFiles($scope.allSFiles); //updates the file list on the sitedashboard
-                                    if (fresponse.filetype_id === 1) $scope.depSensImageFiles.push(fresponse);
+                                    if ((fresponse.filetype_id === 1) || (fresponse.filetype_id === 13)) $scope.depSensImageFiles.push(fresponse);
                                     $scope.showFileForm = false; $scope.depSenfileIsUploading = false;
                                 }, function (errorResponse) {
                                     $scope.depSenfileIsUploading = false;
@@ -924,7 +924,7 @@
                                         $scope.DepSensorFiles.push(fresponse);
                                         $scope.allSFiles.push(fresponse);
                                         Site_Files.setAllSiteFiles($scope.allSFiles); //updates the file list on the sitedashboard
-                                        if (fresponse.filetype_id === 1) $scope.depSensImageFiles.push(fresponse);
+                                        if ((fresponse.filetype_id === 1) || (fresponse.filetype_id === 13)) $scope.depSensImageFiles.push(fresponse);
                                         $scope.showFileForm = false; $scope.depSenfileIsUploading = false;
                                     }, function (errorResponse) {
                                         $scope.depSenfileIsUploading = false;
@@ -6812,7 +6812,7 @@
             $scope.vertDatumList = allDepDropdowns[4];
             $scope.allSFiles = Site_Files.getAllSiteFiles();
             $scope.sensorFiles = thisSensor !== "empty" ? $scope.allSFiles.filter(function (sf) { return sf.instrument_id == thisSensor.instrument_id; }) : [];// holder for hwm files added
-            $scope.sensImageFiles = $scope.sensorFiles.filter(function (hf) { return hf.filetype_id === 1; }); //image files for carousel            
+            $scope.sensImageFiles = $scope.sensorFiles.filter(function (hf) { return ((hf.filetype_id === 1) || (hf.filetype_id === 13)); }); //image files for carousel            
             $scope.showFileForm = false; //hidden form to add file to sensor
             $scope.showNWISFileForm = false; //hidden form to add nwis file to sensor
             $scope.sensorDataNWIS = false; //is this a rain gage, met station, or rdg sensor -- if so, data file must be created pointing to nwis (we don't store actual file, just metadata with link)
