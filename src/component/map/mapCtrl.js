@@ -504,16 +504,16 @@
                     //////////!!!need to add legend="legend" back to map directive if using this!!!!!!!!
                     layers: {
                         baselayers: {
-                            gray: {
-                                name: "Gray",
-                                type: "agsBase",
-                                layer: "Gray",
-                                visible: false
-                            },
                             streets: {
                                 name: "Streets",
                                 type: "agsBase",
                                 layer: "Streets",
+                                visible: false
+                            },
+                            gray: {
+                                name: "Gray",
+                                type: "agsBase",
+                                layer: "Gray",
                                 visible: false
                             },
                             topo: {

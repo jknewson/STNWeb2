@@ -25,7 +25,7 @@
 
                 $scope.paths = {};
                 $scope.markers = [];
-                                
+
                 ///need to watch for session event id, do new call to server when that changes
                 $scope.$watch(function () { return $cookies.get('SessionEventID'); }, function (newValue) {
                     $scope.markers = [];
@@ -59,7 +59,7 @@
                             }//end if event_id == newVal
                         }
                         //filter all sensor types
-                        addSensors(newValue);                       
+                        addSensors(newValue);
                     } else {
                         for (var noEventH = 0; noEventH < $scope.allSiteHWMs.length; noEventH++) {
                             var eachnoEHWM = $scope.allSiteHWMs[noEventH];
@@ -75,7 +75,7 @@
                         }
                         //filter all sensor types
                         addSensors(0);
-                    }                    
+                    }
                 });
 
                 //called from $watch on event change to update all the sensor types viewed from sitemap
@@ -238,7 +238,7 @@
                                 icon: icons.baroIcon,
                                 title: 'Baro Sensor',
                                 eventID: noEbSensor.event_id
-                            });                            
+                            });
                         }
                         //met
                         for (var noEms = 0; noEms < $scope.allSiteMetSensors.length; noEms++) {
@@ -252,7 +252,7 @@
                                 icon: icons.metIcon,
                                 title: 'Met Sensor',
                                 eventID: noEmSensor.event_id
-                            });                            
+                            });
                         }
                         //rdg
                         for (var noErs = 0; noErs < $scope.allSiteRDGSensors.length; noErs++) {
@@ -266,7 +266,7 @@
                                 icon: icons.rdgIcon,
                                 title: 'RDG Sensor',
                                 eventID: noErSensor.event_id
-                            });                            
+                            });
                         }
                         //storm
                         for (var noEss = 0; noEss < $scope.allSiteStormSensors.length; noEss++) {
@@ -281,7 +281,7 @@
                                 title: 'Stormtide Sensor',
                                 eventID: noEsSensor.event_id
                             });
-                            
+
                         }
                         //wave
                         for (var noEws = 0; noEws < $scope.allSiteWaveSensors.length; noEws++) {
@@ -295,7 +295,7 @@
                                 icon: icons.waveIcon,
                                 title: 'Waveheight Sensor',
                                 eventID: noEwSensor.event_id
-                            });                            
+                            });
                         }
                         //pressureTemp
                         for (var noEps = 0; noEps < $scope.allSitePresTempSensors.length; noEps++) {
@@ -309,7 +309,7 @@
                                 icon: icons.pressureIcon,
                                 title: 'PressureTemp Sensor',
                                 eventID: noEpSensor.event_id
-                            });                            
+                            });
                         }
                         //thermometer
                         for (var noEts = 0; noEts < $scope.allSiteThermSensors.length; noEts++) {
@@ -323,7 +323,7 @@
                                 icon: icons.thermIcon,
                                 title: 'Thermometer Sensor',
                                 eventID: noEtSensor.event_id
-                            });                            
+                            });
                         }
                         //webcam
                         for (var noEwebs = 0; noEwebs < $scope.allSiteWebSensors.length; noEwebs++) {
@@ -337,7 +337,7 @@
                                 icon: icons.webcamIcon,
                                 title: 'Webcam Sensor',
                                 eventID: noEwebSensor.event_id
-                            });                            
+                            });
                         }
                         //raingage
                         for (var noErains = 0; noErains < $scope.allSiteRainSensors.length; noErains++) {
@@ -443,7 +443,7 @@
                         minZoom: 16
                     },
                     markers: $scope.markers,
-                    markersLatLngArray: [],                    
+                    markersLatLngArray: [],
                     layers: {
                         baselayers: {
                             topo: {
