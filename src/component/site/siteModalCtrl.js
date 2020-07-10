@@ -697,7 +697,10 @@
                 } else if ($scope.bmap == "st") {
                     document.getElementById('imagerybmap').checked = false;
                     leafletData.getMap("siteMap").then(function (map) {
-                          var streets = new L.esri.basemapLayer('Streets');
+                          var streets = L.tileLayer( 'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+                            subdomains: ['a','b','c']
+                        }); 
                           map.addLayer(streets);
                     });
                     document.getElementsByClassName( 'leaflet-control-attribution' )[0].style.display = 'none';
