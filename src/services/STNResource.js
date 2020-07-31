@@ -5,8 +5,9 @@
     var STNResource = angular.module('STNResource', ['ngResource']);
 
     // ***** SWITCH BACK AND FORTH DEPENDING ON IF TEST OR PRODUCTION ***
-    var rootURL = "https://stn.wim.usgs.gov/STNServices";
+    //var rootURL = "https://stn.wim.usgs.gov/STNServices";
     //var rootURL = "https://stntest.wim.usgs.gov/stnservices";
+    var rootURL = "http://stnservicesfg.wim.usgs.gov";
     //var rootURL = "http://localhost:36992";
 
     // GEOCODE https://geocoding.geo.census.gov/geocoder/geographies/coordinates?benchmark=4&vintage=4&format=json
