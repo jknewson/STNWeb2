@@ -24,13 +24,13 @@
                 if (Site_Script.getIsScriptRunning() == "true") {
                     showScriptToast();
                 }
-                $scope.$on('siteDFScriptRunning', function (e, runningScript) {
+                /* $scope.$on('siteDFScriptRunning', function (e, runningScript) {
                     if (runningScript == "true") {
                         showScriptToast();
                     } else {
                         toastr.clear();
                     }
-                });
+                }); */
                 $scope.status = {
                     mapOpen: false, siteOpen: true, opOpen: false, sensorOpen: false, hwmOpen: false, filesOpen: false, peakOpen: false
                 };
