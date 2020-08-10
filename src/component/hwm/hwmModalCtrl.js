@@ -431,7 +431,7 @@
                 if ($scope.aHWM.stillwater !== null) {
                     $scope.aHWM.Tranquil = $scope.aHWM.stillwater > 0 ? 'Yes' : 'No';
                 }
-                $scope.aHWM.Marker = $scope.aHWM.marker_id > 0 ? $scope.markerList.filter(function (m) { return m.marker_id == $scope.aHWM.marker_id; })[0].marker1 : '';
+                $scope.aHWM.Marker = $scope.aHWM.marker_id > 0 ? $scope.markerList.filter(function (m) { return m.marker_id == $scope.aHWM.marker_id; })[0].marker : '';
                 $scope.aHWM.Quality = $scope.aHWM.hwm_quality_id > 0 ? $scope.hwmQualList.filter(function (hq) { return hq.hwm_quality_id == $scope.aHWM.hwm_quality_id; })[0].hwm_quality : '';
                 $scope.aHWM.hdatum = $scope.aHWM.hdatum_id > 0 ? $scope.HDatumsList.filter(function (hd) { return hd.datum_id == $scope.aHWM.hdatum_id; })[0].datum_name : '';
                 $scope.aHWM.hCollectMethod = $scope.aHWM.hcollect_method_id > 0 ? $scope.hCollMList.filter(function (hc) { return hc.hcollect_method_id == $scope.aHWM.hcollect_method_id; })[0].hcollect_method : '';
@@ -709,7 +709,7 @@
                             if ($scope.aHWM.stillwater !== null) {
                                 $scope.aHWM.Tranquil = $scope.aHWM.stillwater > 0 ? 'Yes' : 'No';
                             }
-                            $scope.aHWM.Marker = $scope.aHWM.marker_id > 0 ? $scope.markerList.filter(function (m) { return m.marker_id == $scope.aHWM.marker_id; })[0].marker1 : '';
+                            $scope.aHWM.Marker = $scope.aHWM.marker_id > 0 ? $scope.markerList.filter(function (m) { return m.marker_id == $scope.aHWM.marker_id; })[0].marker : '';
                             $scope.aHWM.Quality = $scope.aHWM.hwm_quality_id > 0 ? $scope.hwmQualList.filter(function (hq) { return hq.hwm_quality_id == $scope.aHWM.hwm_quality_id; })[0].hwm_quality : '';
                             $scope.aHWM.hdatum = $scope.aHWM.hdatum_id > 0 ? $scope.HDatumsList.filter(function (hd) { return hd.datum_id == $scope.aHWM.hdatum_id; })[0].datum_name : '';
                             $scope.aHWM.hCollectMethod = $scope.aHWM.hcollect_method_id > 0 ? $scope.hCollMList.filter(function (hc) { return hc.hcollect_method_id == $scope.aHWM.hcollect_method_id; })[0].hcollect_method : '';

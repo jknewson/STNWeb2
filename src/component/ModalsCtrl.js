@@ -48,7 +48,7 @@
                     $scope.nameToRmv = nameToRemove.condition;
                     break;
                 case "Marker":
-                    $scope.nameToRmv = nameToRemove.marker1;
+                    $scope.nameToRmv = nameToRemove.marker;
                     break;
                 case "Network Name":
                     $scope.nameToRmv = nameToRemove.name;
