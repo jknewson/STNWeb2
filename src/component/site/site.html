@@ -265,8 +265,14 @@
                                             </ul>
                                         </p>
                                         <p>Click and drag the point to relocate this site (all related fields will update).</p>
+                                        <span class="radio-inline">
+                                            <input type="radio" id="streetsbmap" name="streetsB" ng-model="bmap" ng-change="changeBasemap(this)" value="st" /> Streets
+                                        </span>
+                                        <span class="radio-inline">
+                                            <input type="radio" id="imagerybmap" name="imageryB" ng-model="bmap" ng-change="changeBasemap(this)" value="img" /> Imagery
+                                        </span>
                                         <div class="panel panel-primary" style="height:inherit">
-                                            <leaflet lf-center="mapCenter" width="100%" height="100%" markers="mapMarkers"></leaflet>
+                                            <leaflet id="siteMap" lf-center="mapCenter" width="100%" height="100%" markers="mapMarkers"></leaflet>
                                         </div>
                                     </div>
                                     <br clear="all" />

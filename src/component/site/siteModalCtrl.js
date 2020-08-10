@@ -3,9 +3,9 @@
 
     var ModalControllers = angular.module('ModalControllers');
 
-    ModalControllers.controller('siteModalCtrl', ['$scope', '$rootScope', '$cookies', '$q', '$location', '$state', '$http', '$sce', '$timeout', '$uibModal', '$uibModalInstance', '$filter', 'leafletMarkerEvents', 'allDropDownParts',
+    ModalControllers.controller('siteModalCtrl', ['$scope', '$rootScope', '$cookies', '$q', '$location', '$state', '$http', '$sce', '$timeout', '$uibModal', '$uibModalInstance', '$filter', 'leafletData', 'leafletMarkerEvents', 'allDropDownParts',
         'fileTypes', 'agencyList', 'latlong', 'thisSiteStuff', 'allMembers', 'SITE', 'SITE_HOUSING', 'Site_Files', 'MEMBER', 'INSTRUMENT', 'INSTRUMENT_STATUS', 'LANDOWNER_CONTACT', 'GEOCODE', 'FILE_STAMP', 'FILE', 'SOURCE', 'SERVER_URL',
-        function ($scope, $rootScope, $cookies, $q, $location, $state, $http, $sce, $timeout, $uibModal, $uibModalInstance, $filter, leafletMarkerEvents, allDropDownParts, fileTypes, agencyList, latlong, thisSiteStuff, allMembers, SITE,
+        function ($scope, $rootScope, $cookies, $q, $location, $state, $http, $sce, $timeout, $uibModal, $uibModalInstance, $filter,leafletData, leafletMarkerEvents, allDropDownParts, fileTypes, agencyList, latlong, thisSiteStuff, allMembers, SITE,
             SITE_HOUSING, Site_Files, MEMBER, INSTRUMENT, INSTRUMENT_STATUS, LANDOWNER_CONTACT, GEOCODE, FILE_STAMP, FILE, SOURCE, SERVER_URL) {
             //dropdowns 
             $scope.HorizontalDatumList = allDropDownParts[0];
@@ -176,6 +176,7 @@
                                         draggable: true
                                     });
                                     $scope.showMap = true;
+                                    document.getElementById('streetsbmap').checked = true;
                                     $rootScope.stateIsLoading.showLoading = false;// loading..
                                 }, function error(errorResponse) {
                                     $rootScope.stateIsLoading.showLoading = false;// loading..
@@ -224,6 +225,7 @@
             }
 
             $scope.aSite.decDegORdms = 'dd';
+            $scope.bmap = 'st';
 
             $scope.originalSiteHousings = [];
             $scope.checked = ""; $scope.checkedName = "Not Defined"; //comparers for disabling network names if 'Not Defined' checked
@@ -678,6 +680,31 @@
                         $scope.DMS.LOMin = longDMSarray[1];
                         $scope.DMS.LOSec = longDMSarray[2];
                     }
+                }
+            };
+
+            $scope.changeBasemap = function (clicked, $event) {
+                console.log(clicked);
+                $scope.bmap = clicked.bmap;
+                if ($scope.bmap == "img") {
+                    document.getElementById('streetsbmap').checked = false;
+                    leafletData.getMap("siteMap").then(function (map) {
+                          var imagery = new L.esri.basemapLayer('Imagery');
+                          map.addLayer(imagery);
+                    });
+                    document.getElementsByClassName( 'leaflet-control-attribution' )[0].style.display = 'none';
+                    document.getElementsByClassName( 'esri-leaflet-logo leaflet-control' )[0].style.display = 'none';
+                } else if ($scope.bmap == "st") {
+                    document.getElementById('imagerybmap').checked = false;
+                    leafletData.getMap("siteMap").then(function (map) {
+                          var streets = L.tileLayer( 'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+                            subdomains: ['a','b','c']
+                        }); 
+                          map.addLayer(streets);
+                    });
+                    document.getElementsByClassName( 'leaflet-control-attribution' )[0].style.display = 'none';
+                    document.getElementsByClassName( 'esri-leaflet-logo leaflet-control' )[0].style.display = 'none';
                 }
             };
 
