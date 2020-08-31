@@ -4739,7 +4739,7 @@
                                     <hc-chart id="chopperChart1" options="chartOptions1"></hc-chart>
                                 </div>
                                 <!-- Good Data Start Time* (data) -->
-                                <div ng-click="previewDataTimeDepFile()" ng-if="aFile.filetype_id === 2" class="form-group" ng-class="{'has-error':DepSenFILEForm.good_start.$invalid && DepSenFILEForm.good_start.$dirty}" style="margin:0;padding:0;padding-top:5px;">
+                                <!-- <div ng-click="previewDataTimeDepFile()" ng-if="aFile.filetype_id === 2" class="form-group" ng-class="{'has-error':DepSenFILEForm.good_start.$invalid && DepSenFILEForm.good_start.$dirty}" style="margin:0;padding:0;padding-top:5px;">
                                     <label class="col-md-4 control-label req" for="good_start" style="margin-top:4%">
                                         Good Data Start Time:
                                         <button type="button" class="help-btn" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Required">
@@ -4754,10 +4754,10 @@
                                     <button style="margin-top:4%" type="button" class="col-md-1 borderLess pull-left" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Used by the processing scripts to clip irrelavent data.">
                                         <span class="glyphicon glyphicon-question-sign"></span>
                                     </button>
-                                </div>
+                                </div> -->
 
                                 <!-- Good Data End Time* (data)-->
-                                <div ng-if="aFile.filetype_id === 2" ng-click="previewDataTimeDepFile()" class="form-group" ng-class="{'has-error':DepSenFILEForm.good_end.$invalid && DepSenFILEForm.good_end.$dirty}" style="margin:0;padding:0;padding-top:5px;">
+                                <!-- <div ng-if="aFile.filetype_id === 2" ng-click="previewDataTimeDepFile()" class="form-group" ng-class="{'has-error':DepSenFILEForm.good_end.$invalid && DepSenFILEForm.good_end.$dirty}" style="margin:0;padding:0;padding-top:5px;">
                                     <label class="col-md-4 control-label req" for="good_end" style="margin-top:4%">
                                         Good Data End Time:
                                         <button type="button" class="help-btn" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Required">
@@ -4774,10 +4774,10 @@
                                         <span class="glyphicon glyphicon-question-sign"></span>
                                     </button>
                                 </div>
-                                <span class="error" ng-show="DepSenFILEForm.good_end.$error.higherThan">Max cannot be lower than min.</span>
+                                <span class="error" ng-show="DepSenFILEForm.good_end.$error.higherThan">Max cannot be lower than min.</span> -->
 
                                 <!-- Timezone*: -->
-                                <div ng-click="previewDataTimeDepFile()" ng-if="aFile.filetype_id === 2" class="form-group" style="margin:0;padding:0;padding-top:5px;">
+                                <!-- <div ng-click="previewDataTimeDepFile()" ng-if="aFile.filetype_id === 2" class="form-group" style="margin:0;padding:0;padding-top:5px;">
                                     <label class="col-md-4 control-label req">
                                         Time Zone:
                                         <button type="button" class="help-btn" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Required">
@@ -4792,10 +4792,10 @@
                                     <button type="button" class="col-md-1 borderLess pull-left" tooltip-placement="right" tooltip-append-to-body="false" uib-tooltip="Date/Time will be stored in UTC.">
                                         <span class="glyphicon glyphicon-question-sign"></span>
                                     </button>
-                                </div>
+                                </div> -->
 
                                 <!-- Time Preview:* -->
-                                <div ng-click="previewDataTimeDepFile()" class="form-group" ng-if="aFile.filetype_id === 2">
+                                <!-- <div ng-click="previewDataTimeDepFile()" class="form-group" ng-if="aFile.filetype_id === 2">
                                     <label class="col-md-4 control-label">
                                         Preview time in UTC:
                                     </label>
@@ -4803,7 +4803,7 @@
                                         Start - {{timePreviewStart}} <br>
                                         End - {{timePreviewEnd}}
                                     </div>
-                                </div>
+                                </div> -->
 
                            <!--  <div class="form-group" ng-if="aFile.filetype_id === 2">
                                     <label class="col-md-4 control-label">
@@ -4980,8 +4980,8 @@
                                     </div>
                                     <!-- Date Collected/Processed* (data)-->
                                     <div class="form-group" ng-class="{'has-error':NWISSenFILEForm.collect_date.$invalid && NWISSenFILEForm.collect_date.$dirty}" style="margin:0;padding:0">
-                                        <label class="col-md-4 control-label req" for="collect_date">
-                                            Date Collected/Processed:
+                                        <label class="col-md-4 control-label req" for="collect_date" style="font-size:">
+                                            Date Collected:
                                             <button type="button" class="help-btn" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Required">
                                                 <span class="glyphicon glyphicon-asterisk" style="color:#d00;font-size:xx-small;"></span>
                                             </button>
@@ -5028,7 +5028,7 @@
                                     </div>
 
                                     <!-- Good Data Start Time* (data) -->
-                                    <div class="form-group" ng-click="previewDataTimeNWISFile()" ng-class="{'has-error':NWISSenFILEForm.good_start.$invalid && NWISSenFILEForm.good_start.$dirty}" style="margin:0;padding:0">
+                                    <!-- <div class="form-group" ng-click="previewDataTimeNWISFile()" ng-class="{'has-error':NWISSenFILEForm.good_start.$invalid && NWISSenFILEForm.good_start.$dirty}" style="margin:0;padding:0">
                                         <label class="col-md-4 control-label req" for="good_start" style="margin-top:4%">
                                             Good Data Start Time:
                                             <button type="button" class="help-btn" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Required">
@@ -5043,10 +5043,10 @@
                                         <button style="margin-top:4%" type="button" class="col-md-1 borderLess pull-left" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Used by the processing scripts to clip irrelavent data.">
                                             <span class="glyphicon glyphicon-question-sign"></span>
                                         </button>
-                                    </div>
+                                    </div> -->
 
                                     <!-- Good Data End Time* (data)-->
-                                    <div class="form-group" ng-click="previewDataTimeNWISFile()" ng-class="{'has-error':NWISSenFILEForm.good_end.$invalid && NWISSenFILEForm.good_end.$dirty}" style="margin:0;padding:0">
+                                    <!-- <div class="form-group" ng-click="previewDataTimeNWISFile()" ng-class="{'has-error':NWISSenFILEForm.good_end.$invalid && NWISSenFILEForm.good_end.$dirty}" style="margin:0;padding:0">
                                         <label class="col-md-4 control-label req" for="good_end" style="margin-top:4%">
                                             Good Data End Time:
                                             <button type="button" class="help-btn" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Required">
@@ -5061,10 +5061,10 @@
                                         <button style="margin-top:4%" type="button" class="col-md-1 borderLess pull-left" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Used by the processing scripts to clip irrelavent data.">
                                             <span class="glyphicon glyphicon-question-sign"></span>
                                         </button>
-                                    </div>
+                                    </div> -->
 
                                     <!-- Timezone*: -->
-                                    <div class="form-group" style="margin:0;padding:0" ng-click="previewDataTimeNWISFile()">
+                                    <!-- <div class="form-group" style="margin:0;padding:0" ng-click="previewDataTimeNWISFile()">
                                         <label class="col-md-4 control-label req">
                                             Time Zone:
                                             <button type="button" class="help-btn" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Required">
@@ -5079,10 +5079,10 @@
                                         <button type="button" class="col-md-1 borderLess pull-left" tooltip-placement="right" tooltip-append-to-body="false" uib-tooltip="Date/Time will be stored in UTC.">
                                             <span class="glyphicon glyphicon-question-sign"></span>
                                         </button>
-                                    </div>
+                                    </div> -->
 
                                     <!-- Time Preview:* -->
-                                    <div class="form-group" ng-click="previewDataTimeNWISFile()">
+                                    <!-- <div class="form-group" ng-click="previewDataTimeNWISFile()">
                                         <label class="col-md-4 control-label">
                                             Preview time in UTC:
                                         </label>
@@ -5090,7 +5090,7 @@
                                             Start - {{timePreviewStart}} <br>
                                             End - {{timePreviewEnd}}
                                         </div>
-                                    </div>
+                                    </div> -->
 
                                     <!-- <div class="form-group">
                                             <label class="col-md-4 control-label">
@@ -6701,7 +6701,7 @@
                                     <hc-chart id="chopperChart2" options="chartOptions2"></hc-chart>
                                 </div>
                                 <!-- Good Data Start Time* (data) -->
-                                <div ng-if="aFile.filetype_id === 2" ng-click="previewDataTimeRetFile()" class="form-group" ng-class="{'has-error':DepSenFILEForm.good_start.$invalid && DepSenFILEForm.good_start.$dirty}" style="margin:0;padding:0">
+                                <!-- <div ng-if="aFile.filetype_id === 2" ng-click="previewDataTimeRetFile()" class="form-group" ng-class="{'has-error':DepSenFILEForm.good_start.$invalid && DepSenFILEForm.good_start.$dirty}" style="margin:0;padding:0">
                                     <label class="col-md-4 control-label req" for="good_start" style="margin-top:4%">
                                         Good Data Start Time:
                                         <button type="button" class="help-btn" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Required">
@@ -6716,10 +6716,10 @@
                                     <button type="button" style="margin-top:4%" class="col-md-1 borderLess pull-left" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Used by the processing scripts to clip irrelavent data.">
                                         <span class="glyphicon glyphicon-question-sign"></span>
                                     </button>
-                                </div>
+                                </div> -->
 
                                 <!-- Good Data End Time* (data)-->
-                                <div ng-if="aFile.filetype_id === 2" class="form-group" ng-click="previewDataTimeRetFile()" ng-class="{'has-error':DepSenFILEForm.good_end.$invalid && DepSenFILEForm.good_end.$dirty}" style="margin:0;padding:0">
+                                <!-- <div ng-if="aFile.filetype_id === 2" class="form-group" ng-click="previewDataTimeRetFile()" ng-class="{'has-error':DepSenFILEForm.good_end.$invalid && DepSenFILEForm.good_end.$dirty}" style="margin:0;padding:0">
                                     <label class="col-md-4 control-label req" for="good_end" style="margin-top:4%">
                                         Good Data End Time:
                                         <button type="button" class="help-btn" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Required">
@@ -6734,10 +6734,10 @@
                                     <button type="button" style="margin-top:4%" class="col-md-1 borderLess pull-left" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Used by the processing scripts to clip irrelavent data.">
                                         <span class="glyphicon glyphicon-question-sign"></span>
                                     </button>
-                                </div>
+                                </div> -->
 
                                 <!-- Timezone*: -->
-                                <div ng-click="previewDataTimeRetFile()" ng-if="aFile.filetype_id === 2" class="form-group" style="margin:0;padding:0">
+                                <!-- <div ng-click="previewDataTimeRetFile()" ng-if="aFile.filetype_id === 2" class="form-group" style="margin:0;padding:0">
                                     <label class="col-md-4 control-label req">
                                         Time Zone:
                                         <button type="button" class="help-btn" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Required">
@@ -6752,10 +6752,10 @@
                                     <button type="button" class="col-md-1 borderLess pull-left" tooltip-placement="right" tooltip-append-to-body="false" uib-tooltip="Date/Time will be stored in UTC.">
                                         <span class="glyphicon glyphicon-question-sign"></span>
                                     </button>
-                                </div>
+                                </div> -->
 
                                 <!-- Time Preview:* -->
-                                <div ng-click="previewDataTimeRetFile()" class="form-group" ng-if="aFile.filetype_id === 2">
+                                <!-- <div ng-click="previewDataTimeRetFile()" class="form-group" ng-if="aFile.filetype_id === 2">
                                     <label class="col-md-4 control-label">
                                         Preview time in UTC:
                                     </label>
@@ -6763,7 +6763,7 @@
                                         Start - {{timePreviewStart}} <br>
                                         End - {{timePreviewEnd}}
                                     </div>
-                                </div>
+                                </div> -->
 
                                 <!-- <div class="form-group" ng-if="aFile.filetype_id === 2">
                                         <label class="col-md-4 control-label">
@@ -7086,7 +7086,7 @@
                                     </div>
 
                                     <!-- Good Data Start Time* (data) -->
-                                    <div ng-click="previewRETNWISTime()" class="form-group" ng-class="{'has-error':NWISSenFILEForm.good_start.$invalid && NWISSenFILEForm.good_start.$dirty}" style="margin:0;padding:0">
+                                    <!-- <div ng-click="previewRETNWISTime()" class="form-group" ng-class="{'has-error':NWISSenFILEForm.good_start.$invalid && NWISSenFILEForm.good_start.$dirty}" style="margin:0;padding:0">
                                         <label class="col-md-4 control-label req" for="good_start" style="margin-top:4%">
                                             Good Data Start Time:
                                             <button type="button" class="help-btn" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Required">
@@ -7101,10 +7101,10 @@
                                         <button type="button" class="col-md-1 borderLess pull-left" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Used by the processing scripts to clip irrelavent data.">
                                             <span class="glyphicon glyphicon-question-sign"></span>
                                         </button>
-                                    </div>
+                                    </div> -->
 
                                     <!-- Good Data End Time* (data)-->
-                                    <div ng-click="previewRETNWISTime()" class="form-group" ng-class="{'has-error':NWISSenFILEForm.good_end.$invalid && NWISSenFILEForm.good_end.$dirty}" style="margin:0;padding:0">
+                                    <!-- <div ng-click="previewRETNWISTime()" class="form-group" ng-class="{'has-error':NWISSenFILEForm.good_end.$invalid && NWISSenFILEForm.good_end.$dirty}" style="margin:0;padding:0">
                                         <label class="col-md-4 control-label req" for="good_end" style="margin-top:4%">
                                             Good Data End Time:
                                             <button type="button" class="help-btn" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Required">
@@ -7119,10 +7119,10 @@
                                         <button type="button" class="col-md-1 borderLess pull-left" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Used by the processing scripts to clip irrelavent data.">
                                             <span class="glyphicon glyphicon-question-sign"></span>
                                         </button>
-                                    </div>
+                                    </div> -->
 
                                     <!-- Timezone*: -->
-                                    <div class="form-group" style="margin:0;padding:0" ng-click="previewRETNWISTime()">
+                                    <!-- <div class="form-group" style="margin:0;padding:0" ng-click="previewRETNWISTime()">
                                         <label class="col-md-4 control-label req">
                                             Time Zone:
                                             <button type="button" class="help-btn" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Required">
@@ -7137,10 +7137,10 @@
                                         <button type="button" class="borderLess pull-left" tooltip-placement="right" tooltip-append-to-body="false" uib-tooltip="Date/Time will be stored in UTC.">
                                             <span class="glyphicon glyphicon-question-sign"></span>
                                         </button>
-                                    </div>
+                                    </div> -->
 
                                     <!-- Time Preview:* -->
-                                    <div class="form-group" ng-click="previewRETNWISTime()">
+                                    <!-- <div class="form-group" ng-click="previewRETNWISTime()">
                                         <label class="col-md-4 control-label">
                                             Preview time in UTC:
                                         </label>
@@ -7148,7 +7148,7 @@
                                             Start - {{timePreviewStart}} <br>
                                             End - {{timePreviewEnd}}
                                         </div>
-                                    </div>
+                                    </div> -->
 
                                     <!-- <div class="form-group">
                                             <label class="col-md-4 control-label">
@@ -7367,7 +7367,7 @@
                 </div>
 
                 <!-- Good Data Start Time* (data) -->
-                <div  ng-click="previewDataTimeRetFile()" ng-if="aFile.filetype_id === 2" class="form-group" ng-class="{'has-error':FILEcreateForm.good_start.$invalid && FILEcreateForm.good_start.$dirty}">
+                <!-- <div  ng-click="previewDataTimeRetFile()" ng-if="aFile.filetype_id === 2" class="form-group" ng-class="{'has-error':FILEcreateForm.good_start.$invalid && FILEcreateForm.good_start.$dirty}">
                     <label class="col-md-3 control-label req" for="good_start">
                         Good Data Start Time:
                         <button type="button" class="help-btn" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Required">
@@ -7382,10 +7382,10 @@
                     <button type="button" class="col-md-1 borderLess pull-left" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Used by the processing scripts to clip irrelavent data.">
                         <span class="glyphicon glyphicon-question-sign"></span>
                     </button>
-                </div>
+                </div> -->
 
                 <!-- Good Data End Time* (data) -->
-                <div  ng-click="previewDataTimeRetFile()" ng-if="aFile.filetype_id === 2" class="form-group" ng-class="{'has-error':FILEcreateForm.good_end.$invalid && FILEcreateForm.good_end.$dirty}">
+                <!-- <div  ng-click="previewDataTimeRetFile()" ng-if="aFile.filetype_id === 2" class="form-group" ng-class="{'has-error':FILEcreateForm.good_end.$invalid && FILEcreateForm.good_end.$dirty}">
                     <label class="col-md-3 control-label req" for="good_end">
                         Good Data End Time:
                         <button type="button" class="help-btn" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Required">
@@ -7400,10 +7400,10 @@
                     <button type="button" class="col-md-1 borderLess pull-left" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Used by the processing scripts to clip irrelavent data.">
                         <span class="glyphicon glyphicon-question-sign"></span>
                     </button>
-                </div>
+                </div> -->
 
                 <!-- Timezone*:-->
-                <div  ng-click="previewDataTimeRetFile()" ng-if="aFile.filetype_id === 2" class="form-group">
+                <!-- <div  ng-click="previewDataTimeRetFile()" ng-if="aFile.filetype_id === 2" class="form-group">
                     <label class="col-md-3 control-label req">
                         Time Zone:
                         <button type="button" class="help-btn" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Required">
@@ -7418,10 +7418,10 @@
                     <button type="button" class="borderLess pull-left" tooltip-placement="right" tooltip-append-to-body="false" uib-tooltip="Date/Time will be stored in UTC.">
                         <span class="glyphicon glyphicon-question-sign"></span>
                     </button>
-                </div>
+                </div> -->
 
                 <!-- Time Preview:* -->
-                <div  ng-click="previewDataTimeRetFile()" class="form-group" ng-if="aFile.filetype_id === 2">
+                <!-- <div  ng-click="previewDataTimeRetFile()" class="form-group" ng-if="aFile.filetype_id === 2">
                     <label class="col-md-4 control-label">
                         Preview time in UTC:
                     </label>
@@ -7429,7 +7429,7 @@
                         Start - {{timePreviewStart}} <br>
                         End - {{timePreviewEnd}}
                     </div>
-                </div>
+                </div> -->
 
                 <!-- <div class="form-group" ng-if="aFile.filetype_id === 2">
                         <label class="col-md-4 control-label">
@@ -7738,12 +7738,12 @@
                 </div>
 
                 <!-- Good Data Start Time* (data) (detail) -->
-                <div ng-if="view.FILEval == 'detail' && aFile.filetype_id === 2" class="col-md-12">
+                <!-- <div ng-if="view.FILEval == 'detail' && aFile.filetype_id === 2" class="col-md-12">
                     <div class="col-md-4"><label>Good Data Start Time:</label></div>
                     <div class="col-md-6">{{datafile.good_start | date: 'MM/dd/yyyy hh:mm a' || '---'}}</div>
-                </div>
+                </div> -->
                 <!-- Good Data Start Time* (data) (edit)-->
-                <div ng-if="view.FILEval == 'edit' && fileCopy.filetype_id === 2" class="form-group" ng-class="{'has-error':FILEForm.good_start.$invalid && FILEForm.good_start.$dirty}">
+                <!-- <div ng-if="view.FILEval == 'edit' && fileCopy.filetype_id === 2" class="form-group" ng-class="{'has-error':FILEForm.good_start.$invalid && FILEForm.good_start.$dirty}">
                     <label class="col-md-4 control-label req" style="padding-top:4em;" for="good_start">
                         Good Data Start Time:
                         <button type="button" class="help-btn" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Required">
@@ -7758,15 +7758,15 @@
                     <button style="padding-top:4em;" type="button" class="col-md-1 borderLess pull-left" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Used by the processing scripts to clip irrelavent data.">
                         <span class="glyphicon glyphicon-question-sign"></span>
                     </button>
-                </div>
+                </div> -->
 
                 <!-- Good Data End Time* (data) (detail) -->
-                <div ng-if="view.FILEval == 'detail' && aFile.filetype_id === 2" class="col-md-12">
+                <!-- <div ng-if="view.FILEval == 'detail' && aFile.filetype_id === 2" class="col-md-12">
                     <div class="col-md-4"><label>Good Data End Time:</label></div>
                     <div class="col-md-6">{{datafile.good_end | date: 'MM/dd/yyyy hh:mm a' || '---'}}</div>
-                </div>
+                </div> -->
                 <!-- Good Data End Time* (data) (edit)-->
-                <div ng-if="view.FILEval == 'edit' && fileCopy.filetype_id === 2" class="form-group" ng-class="{'has-error':FILEForm.good_end.$invalid && FILEForm.good_end.$dirty}">
+                <!-- <div ng-if="view.FILEval == 'edit' && fileCopy.filetype_id === 2" class="form-group" ng-class="{'has-error':FILEForm.good_end.$invalid && FILEForm.good_end.$dirty}">
                     <label class="col-md-4 control-label req" style="padding-top:4em;" for="good_end">
                         Good Data End Time:
                         <button type="button" class="help-btn" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Required">
@@ -7781,15 +7781,15 @@
                     <button style="padding-top:4em;" type="button" class="col-md-1 borderLess pull-left" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Used by the processing scripts to clip irrelavent data.">
                         <span class="glyphicon glyphicon-question-sign"></span>
                     </button>
-                </div>
+                </div> -->
 
                 <!-- Timezone*: (detail) -->
-                <div ng-if="view.FILEval == 'detail' && aFile.filetype_id === 2" class="col-md-12">
+                <!-- <div ng-if="view.FILEval == 'detail' && aFile.filetype_id === 2" class="col-md-12">
                     <div class="col-md-4"><label>Time Zone:</label></div>
                     <div class="col-md-6">{{datafile.time_zone}}</div>
-                </div>
+                </div> -->
                 <!-- Timezone*: (edit)-->
-                <div ng-if="view.FILEval == 'edit' && fileCopy.filetype_id === 2" class="form-group">
+                <!-- <div ng-if="view.FILEval == 'edit' && fileCopy.filetype_id === 2" class="form-group">
                     <label class="col-md-4 control-label req">
                         Time Zone:
                         <button type="button" class="help-btn" tooltip-placement="top" tooltip-append-to-body="false" uib-tooltip="Required">
@@ -7804,17 +7804,17 @@
                     <button type="button" class="col-md-1 borderLess pull-left" tooltip-placement="right" tooltip-append-to-body="false" uib-tooltip="Date/Time will be stored in UTC.">
                         <span class="glyphicon glyphicon-question-sign"></span>
                     </button>
-                </div>
+                </div> -->
 
                 <!-- Time Preview:* -->
-                <div class="form-group" ng-if="view.FILEval == 'detail' && aFile.filetype_id === 2">
+                <!-- <div class="form-group" ng-if="view.FILEval == 'detail' && aFile.filetype_id === 2">
                     <label class="col-md-4 control-label">
                         Preview time in UTC:
                     </label>
                     <div class="col-md-5" style="padding-top:10px;" placeholder="{{test}}">
                         {{timePreview}}
                     </div>
-                </div>
+                </div> -->
 
                 <!-- <div class="form-group" ng-if="view.FILEval == 'detail' && aFile.filetype_id === 2">
                         <label class="col-md-4 control-label">
