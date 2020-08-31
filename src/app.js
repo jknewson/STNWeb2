@@ -11,8 +11,8 @@
     
     //app.constant('SERVER_URL', 'http://localhost:36992');
 
-    //app.constant('ENVIRONMENT', 'Testing');
-    app.constant('ENVIRONMENT', 'Production');
+    app.constant('ENVIRONMENT', 'Testing');
+    //app.constant('ENVIRONMENT', 'Production');
 
     app.run(['$rootScope', '$uibModalStack', '$cookies', '$state', 'ENVIRONMENT', function ($rootScope, $uibModalStack, $cookies, $state, ENVIRONMENT) {
         $rootScope.$on('$stateChangeStart', function (event, toState, toParams, fromState, fromParams) {
