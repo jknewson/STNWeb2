@@ -1085,7 +1085,7 @@
 
                         // Cloning date and changing the timezone
                         correctedDateStart = enteredDateStart.clone();
-                        correctedDatestart.add(1, 'hours');
+                        correctedDateStart.add(1, 'hours');
                         correctedDateStart = correctedDateStart.tz('America/Chicago', true).format();
 
                         correctedDateEnd = enteredDateEnd.clone();
@@ -1125,7 +1125,7 @@
 
                         // Cloning date and changing the timezone
                         correctedDateStart = enteredDateStart.clone();
-                        correctedDatestart.add(1, 'hours');
+                        correctedDateStart.add(1, 'hours');
                         correctedDateStart = correctedDateStart.tz('America/Denver', true).format();
 
                         correctedDateEnd = enteredDateEnd.clone();
@@ -1444,7 +1444,7 @@
 
                         // Cloning date and changing the timezone
                         correctedDateStart = enteredDateStart.clone();
-                        correctedDatestart.add(1, 'hours');
+                        correctedDateStart.add(1, 'hours');
                         correctedDateStart = correctedDateStart.tz('America/Chicago', true).format();
 
                         correctedDateEnd = enteredDateEnd.clone();
@@ -1484,7 +1484,7 @@
 
                         // Cloning date and changing the timezone
                         correctedDateStart = enteredDateStart.clone();
-                        correctedDatestart.add(1, 'hours');
+                        correctedDateStart.add(1, 'hours');
                         correctedDateStart = correctedDateStart.tz('America/Denver', true).format();
 
                         correctedDateEnd = enteredDateEnd.clone();
@@ -4992,7 +4992,7 @@
     
                             // Cloning date and changing the timezone
                             correctedDateStart = enteredDateStart.clone();
-                            correctedDatestart.add(1, 'hours');
+                            correctedDateStart.add(1, 'hours');
                             correctedDateStart = correctedDateStart.tz('America/Chicago', true).format();
     
                             correctedDateEnd = enteredDateEnd.clone();
@@ -5032,7 +5032,7 @@
     
                             // Cloning date and changing the timezone
                             correctedDateStart = enteredDateStart.clone();
-                            correctedDatestart.add(1, 'hours');
+                            correctedDateStart.add(1, 'hours');
                             correctedDateStart = correctedDateStart.tz('America/Denver', true).format();
     
                             correctedDateEnd = enteredDateEnd.clone();
@@ -5351,7 +5351,7 @@
 
                         // Cloning date and changing the timezone
                         correctedDateStart = enteredDateStart.clone();
-                        correctedDatestart.add(1, 'hours');
+                        correctedDateStart.add(1, 'hours');
                         correctedDateStart = correctedDateStart.tz('America/Chicago', true).format();
 
                         correctedDateEnd = enteredDateEnd.clone();
@@ -5391,7 +5391,7 @@
 
                         // Cloning date and changing the timezone
                         correctedDateStart = enteredDateStart.clone();
-                        correctedDatestart.add(1, 'hours');
+                        correctedDateStart.add(1, 'hours');
                         correctedDateStart = correctedDateStart.tz('America/Denver', true).format();
 
                         correctedDateEnd = enteredDateEnd.clone();
@@ -8597,7 +8597,7 @@
 
                         // Cloning date and changing the timezone
                         correctedDateStart = enteredDateStart.clone();
-                        correctedDatestart.add(1, 'hours');
+                        correctedDateStart.add(1, 'hours');
                         correctedDateStart = correctedDateStart.tz('America/Chicago', true).format();
 
                         correctedDateEnd = enteredDateEnd.clone();
@@ -8637,7 +8637,7 @@
 
                         // Cloning date and changing the timezone
                         correctedDateStart = enteredDateStart.clone();
-                        correctedDatestart.add(1, 'hours');
+                        correctedDateStart.add(1, 'hours');
                         correctedDateStart = correctedDateStart.tz('America/Denver', true).format();
 
                         correctedDateEnd = enteredDateEnd.clone();
@@ -9042,7 +9042,7 @@
 
                         // Cloning date and changing the timezone
                         correctedDateStart = enteredDateStart.clone();
-                        correctedDatestart.add(1, 'hours');
+                        correctedDateStart.add(1, 'hours');
                         correctedDateStart = correctedDateStart.tz('America/Chicago', true).format();
 
                         correctedDateEnd = enteredDateEnd.clone();
@@ -9082,7 +9082,7 @@
 
                         // Cloning date and changing the timezone
                         correctedDateStart = enteredDateStart.clone();
-                        correctedDatestart.add(1, 'hours');
+                        correctedDateStart.add(1, 'hours');
                         correctedDateStart = correctedDateStart.tz('America/Denver', true).format();
 
                         correctedDateEnd = enteredDateEnd.clone();
@@ -10920,7 +10920,7 @@
 
                         // Cloning date and changing the timezone
                         correctedDateStart = enteredDateStart.clone();
-                        correctedDatestart.add(1, 'hours');
+                        correctedDateStart.add(1, 'hours');
                         correctedDateStart = correctedDateStart.tz('America/Chicago', true).format();
 
                         correctedDateEnd = enteredDateEnd.clone();
@@ -10960,7 +10960,7 @@
 
                         // Cloning date and changing the timezone
                         correctedDateStart = enteredDateStart.clone();
-                        correctedDatestart.add(1, 'hours');
+                        correctedDateStart.add(1, 'hours');
                         correctedDateStart = correctedDateStart.tz('America/Denver', true).format();
 
                         correctedDateEnd = enteredDateEnd.clone();
@@ -11278,7 +11278,7 @@
 
                         // Cloning date and changing the timezone
                         correctedDateStart = enteredDateStart.clone();
-                        correctedDatestart.add(1, 'hours');
+                        correctedDateStart.add(1, 'hours');
                         correctedDateStart = correctedDateStart.tz('America/Chicago', true).format();
 
                         correctedDateEnd = enteredDateEnd.clone();
@@ -11318,7 +11318,7 @@
 
                         // Cloning date and changing the timezone
                         correctedDateStart = enteredDateStart.clone();
-                        correctedDatestart.add(1, 'hours');
+                        correctedDateStart.add(1, 'hours');
                         correctedDateStart = correctedDateStart.tz('America/Denver', true).format();
 
                         correctedDateEnd = enteredDateEnd.clone();
@@ -12483,7 +12483,7 @@
 
                         // Cloning date and changing the timezone
                         correctedDateStart = enteredDateStart.clone();
-                        correctedDatestart.add(1, 'hours');
+                        correctedDateStart.add(1, 'hours');
                         correctedDateStart = correctedDateStart.tz('America/Chicago', true).format();
 
                         correctedDateEnd = enteredDateEnd.clone();
@@ -12523,7 +12523,7 @@
 
                         // Cloning date and changing the timezone
                         correctedDateStart = enteredDateStart.clone();
-                        correctedDatestart.add(1, 'hours');
+                        correctedDateStart.add(1, 'hours');
                         correctedDateStart = correctedDateStart.tz('America/Denver', true).format();
 
                         correctedDateEnd = enteredDateEnd.clone();

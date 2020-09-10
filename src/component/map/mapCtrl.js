@@ -637,16 +637,16 @@
                                     opacity: 1
                                 }
                             },
-                            /* meow: {
+                            meow: {
                                 name: "MEOW",
                                 type: "agsDynamic",
-                                url: "",
+                                url: "https://gis.wim.usgs.gov/arcgis/rest/services/test_LP/MapServer",
                                 visible: true,
                                 layerOptions: {
                                     layers: [0],
                                     opacity: 1
                                 }
-                            }, */
+                            },
                             // floodThresholds : {
                             //     name: "NWS WFO Coastal Flood Thresholds",
                             //     type: "agsDynamic",
