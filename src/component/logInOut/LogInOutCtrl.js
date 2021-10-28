@@ -10,21 +10,6 @@
             $scope.newsFeed = [];
             $scope.newsFeed = [];
             var areServicesRunning;
-            Login.getNewsFeed({},
-                function success(response) {
-                    $scope.newsTitle = response.title;
-                    var paragraphTags = [];
-                    paragraphTags = response.body.storage.value.split("<p>");
-                    paragraphTags.forEach(function (p) {
-                        $scope.newsFeed.push($sce.trustAsHtml(p));
-                        areServicesRunning = true;
-                    });
-                }, function error(errorResponse) {
-                    $scope.newsTitle = "STN Notices";
-                    $scope.newsFeed.push("Currently not available.");
-                    areServicesRunning = false;
-                }
-            );
             //#region CAP lock Check
             $('[type=password]').keypress(function (e) {
                 var $password = $(this),

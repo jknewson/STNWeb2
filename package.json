@@ -1,6 +1,6 @@
 {
   "name": "stnweb",
-  "version": "2.0.0",
+  "version": "v2.4.0",
   "description": "Data management application for the USGS Short-Term Network database",
   "main": "index.js",
   "scripts": {

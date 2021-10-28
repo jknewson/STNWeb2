@@ -30,15 +30,31 @@
                 <h3 class="panel-title">{{newsTitle}}</h3>
             </div>
             <div class="panel-body" style="height:160px; overflow:auto;">
-                <div ng-repeat="n in newsFeed">
-                    <span ng-bind-html="n"></span>
-                </div>
+                <span style="color: rgb(51,51,51);letter-spacing: 0.0px;">Check out the<span style="color: rgb(51,51,51);"><span
+                            style="color: rgb(0,0,0);"><span style="color: rgb(255,0,0);"><strong><a
+                                        href="https://doimspp.sharepoint.com/sites/usgs-water-mission-area/SitePages/resources_extremeevents_short-term-event-network-stn_stn-and-fev-user-guide.aspx"><span
+                                            style="color: rgb(255,0,0);">&nbsp;<span style="color: rgb(0,0,255);">STN USER
+                                                MANUAL</span></span></a></strong></span></span><span
+                            style="color: rgb(0,0,0);">&nbsp;<span style="color: rgb(51,51,51);">(You must be on USGS network to
+                                view) and the new</span></span></span>&nbsp;<ac:image ac:thumbnail="true" ac:height="20">
+                        <ri:attachment ri:filename="Untitled.png"></ri:attachment>
+                    </ac:image><strong><a href="https://www.youtube.com/watch?v=uZYRQLMcVOA">USGS High Water Mark video</a></strong>
+                    for an introduction to hunting HWMs</span>
+                <br>
+                <br>
+                <br>
+                <span style="color: rgb(51,51,51);">Automated sensor script processin<span style="color: rgb(0,0,0);">g </span><span
+                        style="color: rgb(255,0,0);"><span style="color: rgb(0,0,0);">is NOT currently available.</span>&nbsp;
+                    </span><span style="color: rgb(0,0,0);">Please use offline scripts until further notice.</span>&nbsp;
+                    Contact&nbsp;<a href="mailto:athclark@usgs.gov">athclark@usgs.gov</a>&nbsp;for details.</span>
+                <p></p>
+            
             </div>
         </div>
     </div>
 
     <!-- LOGIN INPUTS -->
-    <form ng-submit="submit()" ng-controller="loginCtrl" class="login-form">
+    <form ng-submit="submit()" ng-controller="loginCtrl" class="login-form" method="post">
         <div class="stn-login-error">{{error}}</div>
 
         <div class="login-form-item pad-r">
