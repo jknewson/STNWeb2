@@ -1,0 +1,35 @@
+site_id,Unique integer ID assigned to each Site in the system
+site_no,Full site number (including State/County abbreviation and site ID)
+site_name,Name of the site
+site_description,Description of Site
+state,State the Site resides in
+county,County the Site resides in
+waterbody,Body of water most likely associated with the site
+latitude_dd,Horizontal location of site (and any associated sensor) in decimal degrees. (HWMs associated with a site may have their own specific locations.)
+longitude_dd,Horizontal location of ( and any associated sensor) in decimal degrees. (HWMs associated with a site may have their own specific locations.)
+hdatum_id,Code for reference datum of horizontal location of site.  Current Possibilities:
+,1 local control point
+,2 NAD83
+,3 NAD27
+,4 WGS84 (from Digital Map)
+,5 NAD 83( CORS96) epoch 2002
+,6 NAD 83 (NSRS2007) epoch 2007
+,7 NAD 83 (2011) epoch 2010
+hcollect_method_id,Method used to find horizontal location of site.  Possible values:
+,1 Handheld GPS
+,2 Static-GNSS
+,3 Phone/Car GPS
+,4 Map (digital or paper)
+,5 Other (Note in Description box)
+,6 RT-GNSS
+last_updated,Date the site was last updated
+last_updated_by,Member who performed the last update to the site
+instruments,Instruments associated with a site
+files,Files associated with a site
+site_housing,Housing type for the site. Possible values:
+,1 Pre-deployed Bracket
+,2 Ruston Steel Pipe
+,3 HIF Stainless Steel
+,4 Tidal CSG
+,5 Quick Deploy RDG
+hwms,HWMs associated with a site
