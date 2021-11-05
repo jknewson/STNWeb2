@@ -21,6 +21,7 @@ const rev = require('gulp-rev');
 var paths = {
     scripts: 'src/**/*.js',
     appStyles: 'src/css/*.css',
+    dataDictionary: 'src/datadictionary/**/*',
     //vendorStyles: '../bower_components/**/**/**/*.css',
     less: 'src/less',
     images: 'src/images/**/*',
@@ -187,6 +188,16 @@ pipes.processedImagesProd = function () {
         .pipe(gulp.dest(paths.dist + '/images/'));
 };
 
+pipes.processedDataDictionaryDev = function () {
+    return gulp.src(paths.dataDictionary)
+        .pipe(gulp.dest(paths.dev + '/datadictionary/'));
+};
+
+pipes.processedDataDictionaryProd = function () {
+    return gulp.src(paths.dataDictionary)
+        .pipe(gulp.dest(paths.dist + '/datadictionary/'));
+};
+
 pipes.processedIconsDev = function () {
     return gulp.src(paths.fonts)
         .pipe(gulp.dest(paths.dev + '/fonts'))
@@ -241,11 +252,11 @@ pipes.builtIndexProd = function () {
 };
 
 pipes.builtAppDev = function () {
-    return es.merge(pipes.builtIndexDev(), pipes.builtPartialsDev(), pipes.processedImagesDev(), pipes.processedIconsDev(), pipes.builtVendorImagesDev());
+    return es.merge(pipes.builtIndexDev(), pipes.builtPartialsDev(), pipes.processedImagesDev(), pipes.processedDataDictionaryDev(), pipes.processedIconsDev(), pipes.builtVendorImagesDev());
 };
 
 pipes.builtAppProd = function () {
-    return es.merge(pipes.builtIndexProd(), pipes.builtPartialsProd(), pipes.processedImagesProd(), pipes.processedIconsProd(), pipes.builtVendorImagesProd());
+    return es.merge(pipes.builtIndexProd(), pipes.builtPartialsProd(), pipes.processedImagesProd(), pipes.processedDataDictionaryProd(), pipes.processedIconsProd(), pipes.builtVendorImagesProd());
 };
 
 // == TASKS ========
@@ -274,6 +285,13 @@ gulp.task('images', function () {
         'src/images/**/*',
         'src/lib/images/*'])
         .pipe(gulp.dest('build/images'))
+        .pipe(plugins.size());
+});
+
+gulp.task('dataDictionary', function () {
+    return gulp.src([
+        'src/datadictionary/**/*'])
+        .pipe(gulp.dest('build/datadictionary'))
         .pipe(plugins.size());
 });
 

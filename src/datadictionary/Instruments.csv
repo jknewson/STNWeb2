@@ -1,0 +1,59 @@
+Field,Definition
+instrument_id,Unique integer ID assigned to each instrument deployment (i.e. an instrument will get assigned a new instrument_id if reused again in a subsequent event)
+sensor_type_id,"Code for type of sensor deployed.  Possibilities include:
+1 Pressure Transducer
+2 Meterological Station
+3 Thermometer
+4 Webcam
+5 Rapid Deployment Gage (telemetered real-time gage height)
+6 Rain Gage"
+deployment_type_id,"Code defining data type collected by sensor.  Possibilities include:
+1 Water Level
+2 Wave Height
+3 Barometric Pressure
+4 Temperature
+5 Windspeed
+6 Humidity
+7 Air Temperature
+8 Water Temperature
+9 Rapid Deployment"
+location_description,Location notes entered at time of sensor deployment
+serial_number,Device manufacturer's serial number
+housing_serial_number,"Mounting bracket serial number (often not assigned, not known, or not recorded)"
+interval,Data recording interval in seconds (e.g. 4Hz = 0.25)
+site_id,Unique integer ID assigned to each Site in the system
+event_id,Unique integer ID assigned to each Event in the system
+inst_collection_id,"Code indicating type/condition of fluid being measured:
+1 Saline Water
+2 Brackish Water
+3 Fresh Water
+4 Air
+5 Not Recorded"
+housing_type_id,"Code indicating type of mounting system used for sensor:
+1 Pre-Deployed Bracket
+2 Ruston Steel Pipe
+3 HIF Stainless Steel
+4 Tidal CSG
+5 Quick Deploy RDG"
+sensor_brand_id,"Code indicating manufacturer of sensor:
+1 Measurement Specialties
+2 USGS Homemade
+3 RBR Solo
+4 Level Troll
+5 Hobo
+61 Unknown"
+vented,"Yes = Vented device
+No = unvented device"
+last_updated,Date (integer) and time (decimal fraction of day) of last update to this sensor
+last_updated_by,Internal STN identifier - no useful info for FEV user
+instr_collection_conditions,currently unused
+sensor_brand,currently unused
+sensor_type,currently unused
+housing_type,currently unused
+deployment_type,currently unused
+instrument_status,Internal STN identifier - no useful info for FEV user
+data_files,Internal STN identifier - no useful info for FEV user
+files,Internal STN identifier - no useful info for FEV user
+event,currently unused
+site,currently unused
+Links,currently unused

@@ -1,0 +1,65 @@
+Field,Definition
+latitude_dd,Horizontal location of Site of common water surface in decimal degrees (Peaks do not have assigned lat/lon)
+longitude_dd,Horizontal location of Site of common water surface in decimal degrees (Peaks do not have assigned lat/lon)
+vdatum,Vertical datum associated with peak elevation.  See vdatum_id for current possibilities.
+member_name,Peak record creator
+site_id,Unique integer ID assigned to each Site in the system
+site_no,Full site number (including State/County abbreviation and site ID)
+description,Description of Site
+networks,"USGS groupings of sites (may overlap).  Possibilities include:
+Coastal Change Hazards (CCH)
+Gulf of Mexico
+North Atlantic
+Not Defined
+SCoRE
+South Atlantic
+SWaTH"
+state,State abbreviation
+county,County name
+waterbody,Body of water most closely associated with the Site
+horizontal_datum,Horizontal datum associated with the Site
+priority,"Site deployment priority (used primarily for sensor deployments).  Possibilities include:
+Network critical
+Secondary development
+Desired but not required"
+zone,USGS water science center zone designation (largely unused)
+horizontal_collection_method,"Method used to find horizontal location of Site.  Possible values:
+Handheld GPS
+Static-GNSS
+Phone/Car GPS
+Map (digital or paper)
+Other (Note in Description box)
+RT-GNSS"
+perm_housing_installed,Indicates established equipment location
+peak_summary_id,Unique integer id assigned to each Peak.  Peaks can be assigned to a selected location for a selected event.  One or more HWM or sensor reading can be associated with a peak as evidence of that peak.
+member_id,System id of Peak record creator
+peak_date,Date and time assigned to peak (may be estimated--see below)
+is_peak_estimated,Whether the date (integer portion) of peak_date was an estimation (1) or data was available to assign a date/time (0)
+is_peak_time_estimated,Whether the time (decimal portion) of peak_date was an estimation (1) or data was available to assign a date/time (0)
+peak_stage,Elevation of Peak in feet above vdatum.  Peaks can be assigned to a selected location for a selected event.  One or more HWM or sensor reading can be associated with a peak as evidence of that peak.
+is_peak_stage_estimated,Whether peak_stage was an estimation (1) or data was available to assign an elevation (0)
+peak_discharge,Discharge in cubic feet per second at time of Peak.
+is_peak_discharge_estimated,Whether peak_discharge was an estimation (1) or data was available to assign a streamflow value (0)
+vdatum_id,"Code for vertical datum of Peak.  Appears to be currently unused, but values would include:
+1 local control point
+2 NAVD88
+3 Above Ground Level
+4 NGVD29
+6 PRVD02
+7 VIVD09
+8 International Great Lakes Datum of 1985"
+height_above_gnd,"Distance from HWM down to ground surface in feet.  Note: use with extreme care; these values are often estimated or rough measurements at the HWM or Sensor loation that could include tree roots, sloping surfaces, etc. immediately beneath the HWM or sensor and may not represent height above ground at the Site lat/lon if the Site lat/lon is slightly different than the contributing HWM(s) or sensor."
+is_hag_estimated,Whether height_above_gnd was an estimation (1) or data was available to assign a value (0)
+time_zone,Time zone of peak_date
+aep,Annual Exceedance Probability (decimal fraction) of peak_discharge
+aep_lowci,Lower confidence limit of aep (see aep_range for percent confidence)
+aep_upperci,Upper confidence limit of aep (see aep_range for percent confidence)
+aep_range,Percent confidence of AEP confidence limits
+calc_notes,Notes describing source(s) and/or computation of Peak elevation
+last_updated,currently unused
+last_updated_by,currently unused
+member,currently unused
+data_file,Internal STN identifier - no useful info for FEV user
+hwms,Internal STN identifier - no useful info for FEV user
+vertical_datums,currently unused
+Links,currently unused
