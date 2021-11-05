@@ -3,7 +3,7 @@
     "name": "STNWeb",
     "organization": "U.S. Geological Survey",
     "description": "Data management application for the USGS Short-Term Network (STN) database",
-    "version": "v2.4.1",
+    "version": "v2.4.2",
     "status": "Production",
 
     "permissions": {
