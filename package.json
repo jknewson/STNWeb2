@@ -61,7 +61,7 @@
     "protractor": "^1.1.1",
     "q": "^1.1.2",
     "rev-del": "^1.0.5",
-    "shelljs": "^0.2.6",
+    "shelljs": "^0.8.5",
     "moment-timezone": "^0.5.23"
   },
   "dependencies": {
