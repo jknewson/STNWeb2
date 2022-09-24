@@ -1439,3 +1439,6 @@ select {
 .whitebginput input {
   background-color: #FFF;
 }
+.handsontable tr:first-child th, .handsontable tr:first-child td {
+  border-top: 7px solid #CCC;
+}
