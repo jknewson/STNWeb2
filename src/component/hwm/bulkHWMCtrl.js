@@ -250,11 +250,11 @@
                         if (d !== null && d !== "" && index !== col)
                             otherDataInRow = true;
                     });
-                    if (((value < 22 || value > 55) || isNaN(value)) && otherDataInRow) {
+                    if (((value < 22 || value > 75) || isNaN(value)) && otherDataInRow) {
                         setTimeout(function () { $scope.hotInstance.deselectCell(); }, 100);
                         toastr.options.timeOut = "6000";
                         toastr.options.closeButton = true;
-                        toastr.error("Latitude must be between 22.0 and 55.0 (dec deg).");
+                        toastr.error("Latitude must be between 22.0 and 75.0 (dec deg).");
                         callback(false);
                     } else if (!value && otherDataInRow) {
                         var whichOne = $scope.hotInstance.getColHeader(col);
@@ -275,11 +275,11 @@
                         if (d !== null && d !== "" && index !== col)
                             otherDataInRow = true;
                     });
-                    if (((value < -130 || value > -55) || isNaN(value)) && otherDataInRow) {
+                    if (((value < -175 || value > -55) || isNaN(value)) && otherDataInRow) {
                         setTimeout(function () { $scope.hotInstance.deselectCell(); }, 100);
                         toastr.options.timeOut = "6000";
                         toastr.options.closeButton = true;
-                        toastr.error("Longitude must be between -130.0 and -55.0 (dec deg).");
+                        toastr.error("Longitude must be between -175.0 and -55.0 (dec deg).");
                         callback(false);
                     } else if (!value && otherDataInRow) {
                         var whichOne = $scope.hotInstance.getColHeader(col);
